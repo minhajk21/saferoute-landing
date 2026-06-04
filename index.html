@@ -432,8 +432,8 @@
 
       <div class="hero-fig reveal" style="--i:3">
         <figure class="figure">
-          <img src="assets/hero-heatmap.webp" alt="SafeRoute showing a walking route through central London with a live crime heatmap overlay" width="700" height="1521" fetchpriority="high">
-          <figcaption class="figcap"><span>FIG.01 — ROUTE + CRIME HEATMAP</span><span>LONDON</span></figcaption>
+          <img src="assets/scoring.webp" alt="SafeRoute showing a scored walking route from Maida Vale to Soho over a live crime heatmap, with a 41 out of 100 safety score and crime breakdown" width="700" height="1521" fetchpriority="high">
+          <figcaption class="figcap"><span>FIG.01 — SCORED ROUTE</span><span>LONDON</span></figcaption>
         </figure>
       </div>
     </div>
@@ -537,11 +537,11 @@
     <div class="sec-head reveal">
       <span class="label"><span class="slash">//</span> 03 — See it work</span>
       <h2>Thirty seconds, end to end.</h2>
-      <p>Plan a route, read the score, share the walk, follow turn-by-turn
-        navigation — on iPhone and Apple Watch.</p>
+      <p>Open the app, check your area, then plan a route and read its
+        safety score — the core flow, start to finish on iPhone.</p>
     </div>
-    <video class="demo-video reveal" controls playsinline
-           poster="assets/poster.webp">
+    <video class="demo-video reveal" muted loop playsinline preload="metadata"
+           poster="assets/poster.webp" controls>
       <source src="assets/demo.mp4" type="video/mp4">
     </video>
   </div>
@@ -884,6 +884,19 @@
     document.querySelectorAll('.hero .reveal').forEach(function(e){
       requestAnimationFrame(function(){e.classList.add('in')});
     });
+  })();
+
+  /* ---- demo video: autoplay+loop when motion is OK, controls + click-to-toggle otherwise ---- */
+  (function(){
+    var v = document.querySelector('.demo-video');
+    if(!v) return;
+    v.addEventListener('click', function(){ v.paused ? v.play() : v.pause(); });
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce) return; // leave controls on, do not autoplay
+    v.removeAttribute('controls');
+    v.muted = true;
+    var p = v.play();
+    if(p && p.catch){ p.catch(function(){ v.setAttribute('controls',''); }); }
   })();
 
 </script>
