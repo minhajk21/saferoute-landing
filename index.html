@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SafeRoute — Crime-aware walking navigation for the UK</title>
-<meta name="description" content="SafeRoute reads live UK police crime data, scores every walking route by real risk, and guides you along the safer one. No accounts. No tracking. Now available on the App Store.">
+<meta name="description" content="SafeRoute reads live UK police crime data — check how safe any area is in a tap, plan a walking route scored by real risk, and share your walk. No accounts. No tracking. Free on the App Store.">
 
 <!-- Open Graph / social preview -->
 <meta property="og:title" content="SafeRoute — Crime-aware walking navigation for the UK">
-<meta property="og:description" content="The walk home, scored street by street. Live police data, a transparent safety score, and a route around the worst of it.">
+<meta property="og:description" content="Check how safe any area is in a tap, plan a route scored street by street, and share your walk. Live UK police data, a transparent safety score. No accounts, no tracking.">
 <meta property="og:type" content="website">
 <!-- og:image — add a 1200x630 preview image to assets/ and uncomment:
 <meta property="og:image" content="https://YOUR-GITHUB-PAGES-URL/assets/og-preview.png"> -->
@@ -219,6 +219,7 @@
   }
   .strip-in b{color:var(--ink);font-weight:600}
   .strip-in .dot{color:var(--green)}
+  .strip.a11y{margin-top:0;border-top:0}
 
   /* ---- section scaffold ---- */
   .sec{padding:clamp(58px,9vw,116px) 0}
@@ -412,9 +413,9 @@
           The walk home,<br><span class="u">scored</span> street by street.
         </h1>
         <p class="lead reveal" style="--i:2">
-          SafeRoute reads live UK police crime data, scores every walking
-          route by real risk — severity, proximity, time of day — and guides
-          you along the safer one. No accounts. No tracking.
+          SafeRoute reads live UK police crime data. Check how safe any area is
+          in a tap, plan a route scored by real risk — severity, proximity, time
+          of day — and walk the safer one. No accounts. No tracking.
         </p>
 
         <a class="appstore-btn reveal" style="--i:3" href="https://apps.apple.com/gb/app/uk-saferoute/id6768244297">
@@ -459,11 +460,52 @@
   </div>
 </div>
 
-<!-- ============ 01 · THE WEDGE ============ -->
+<!-- ============ 01 · NEARBY ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="feat">
+      <div class="feat-media reveal">
+        <div class="duo">
+          <figure class="figure">
+            <img src="assets/nearby-area.webp" alt="SafeRoute Nearby tab showing a 30 out of 100 area safety score for the City of Westminster, a crime heatmap and what's reported nearby" loading="lazy" width="700" height="1521">
+            <figcaption class="figcap"><span>NEARBY — AREA</span></figcaption>
+          </figure>
+          <figure class="figure">
+            <img src="assets/nearby-spaces.webp" alt="SafeRoute Nearby tab showing safe spaces nearby — 24-hour shops, a hospital and police stations — with a time-of-day risk chart" loading="lazy" width="700" height="1521">
+            <figcaption class="figcap"><span>NEARBY — SAFE SPACES</span></figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="feat-body reveal">
+        <span class="label"><span class="slash">//</span> 01 — Nearby</span>
+        <h3>Open the app. Read the street.</h3>
+        <p>You don't always want a route — sometimes you just want to know.
+          Open SafeRoute and the Nearby tab shows how safe where you are is
+          right now: a score, a live heatmap, what's actually being reported,
+          and the safe spaces around you.</p>
+        <ul class="feat-list">
+          <li data-n="01"><span><b>Area safety score.</b> A 0–100 read on your
+            current area, with an at-a-glance Low / Moderate / Elevated band.</span></li>
+          <li data-n="02"><span><b>What's reported here.</b> The real category
+            mix nearby — violence, anti-social behaviour, burglary and more —
+            from the latest published police data.</span></li>
+          <li data-n="03"><span><b>Safe spaces around you.</b> The closest
+            24-hour shops, hospitals and police stations, with distance — tap
+            one to route straight there.</span></li>
+          <li data-n="04"><span><b>Search any area.</b> Checking somewhere
+            before you go? Search it and read the same breakdown for anywhere
+            in England, Wales or Northern Ireland.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 · THE WEDGE ============ -->
 <section class="sec wedge">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="label"><span class="slash">//</span> 01 — Why SafeRoute</span>
+      <span class="label"><span class="slash">//</span> 02 — Why SafeRoute</span>
       <h2>Most safety apps stop at the <span class="strike">map pin</span>.</h2>
       <p class="lead">Seeing where crime happened is not the same as knowing
         which way to walk. SafeRoute does the harder part: it turns the data
@@ -493,7 +535,7 @@
 <section class="sec videosec">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="label"><span class="slash">//</span> 02 — See it work</span>
+      <span class="label"><span class="slash">//</span> 03 — See it work</span>
       <h2>Thirty seconds, end to end.</h2>
       <p>Plan a route, read the score, share the walk, follow turn-by-turn
         navigation — on iPhone and Apple Watch.</p>
@@ -511,12 +553,12 @@
     <div class="feat">
       <div class="feat-media reveal">
         <figure class="figure">
-          <img src="assets/scoring.webp" alt="SafeRoute safety score breakdown showing 48 out of 100, a crime category breakdown, and time-of-day risk" loading="lazy" width="700" height="1521">
-          <figcaption class="figcap"><span>FIG.02 — SAFETY SCORE</span><span>48 / 100</span></figcaption>
+          <img src="assets/scoring.webp" alt="SafeRoute recommended route showing a 41 out of 100 safety score, a crime category breakdown within 150m, and time-of-day risk" loading="lazy" width="700" height="1521">
+          <figcaption class="figcap"><span>FIG.02 — SAFETY SCORE</span><span>41 / 100</span></figcaption>
         </figure>
       </div>
       <div class="feat-body reveal">
-        <span class="label"><span class="slash">//</span> 03 — Transparent scoring</span>
+        <span class="label"><span class="slash">//</span> 04 — Transparent scoring</span>
         <h3>A score you can interrogate, not just trust.</h3>
         <p>Every route shows a 0–100 safety score with the full breakdown
           underneath: how many incidents are nearby, what kind, and how each
@@ -542,12 +584,12 @@
     <div class="feat flip">
       <div class="feat-media reveal">
         <figure class="figure">
-          <img src="assets/route-plain.webp" alt="SafeRoute route view from Trafalgar Square to Regent Street with 5,174 incidents loaded" loading="lazy" width="700" height="1521">
-          <figcaption class="figcap"><span>FIG.03 — ROUTE VIEW</span><span>5,174 INCIDENTS</span></figcaption>
+          <img src="assets/route-plain.webp" alt="SafeRoute route planner from Maida Vale to Soho with four routes found and scored over a crime heatmap, 6,997 incidents in the area" loading="lazy" width="700" height="1521">
+          <figcaption class="figcap"><span>FIG.03 — ROUTE VIEW</span><span>6,997 INCIDENTS</span></figcaption>
         </figure>
       </div>
       <div class="feat-body reveal">
-        <span class="label"><span class="slash">//</span> 04 — Crime heatmap</span>
+        <span class="label"><span class="slash">//</span> 05 — Crime heatmap</span>
         <h3>The data, on the map, whenever you want it.</h3>
         <p>Plan from anywhere in England, Wales or Northern Ireland. Add
           stops, swap start and end, and flip on the crime heatmap overlay to
@@ -577,7 +619,7 @@
         </figure>
       </div>
       <div class="feat-body reveal">
-        <span class="label"><span class="slash">//</span> 05 — Share my walk</span>
+        <span class="label"><span class="slash">//</span> 06 — Share my walk</span>
         <h3>Let someone watch you get home — and nothing more.</h3>
         <p>Send a trusted person a link. They see you reach your destination,
           then the link expires. No app for them to install, no account for
@@ -596,7 +638,37 @@
   </div>
 </section>
 
-<!-- ============ 06 · WATCH + LIVE ACTIVITY ============ -->
+<!-- ============ 07 · AREA SAFETY WIDGET ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="feat flip">
+      <div class="feat-media reveal">
+        <figure class="figure">
+          <img src="assets/widget-iphone.webp" alt="iPhone Home Screen with the SafeRoute Area Safety widget showing an Elevated 30 out of 100 score and 466 incidents within 1 km" loading="lazy" width="700" height="1521">
+          <figcaption class="figcap"><span>FIG.07 — AREA SAFETY WIDGET</span><span>HOME SCREEN</span></figcaption>
+        </figure>
+      </div>
+      <div class="feat-body reveal">
+        <span class="label"><span class="slash">//</span> 07 — Area Safety widget</span>
+        <h3>Your area's score, on your Home Screen.</h3>
+        <p>Add the Area Safety widget to your Home Screen or Lock Screen and the
+          score is there before you even open the app — a glance tells you
+          whether tonight's a normal night or one to stay switched on for.</p>
+        <ul class="feat-list">
+          <li data-n="01"><span><b>Home &amp; Lock Screen.</b> Pick the size that
+            fits; the score sits quietly alongside your other widgets.</span></li>
+          <li data-n="02"><span><b>At-a-glance read.</b> The safety band, the
+            incident count and the force the data comes from — refreshed
+            through the day.</span></li>
+          <li data-n="03"><span><b>Tap to dive in.</b> One tap opens the full
+            Nearby breakdown for wherever you are.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 · WATCH + LIVE ACTIVITY ============ -->
 <section class="sec">
   <div class="wrap">
     <div class="feat flip">
@@ -613,7 +685,7 @@
         </div>
       </div>
       <div class="feat-body reveal">
-        <span class="label"><span class="slash">//</span> 06 — Apple Watch &amp; Live Activity</span>
+        <span class="label"><span class="slash">//</span> 08 — Apple Watch &amp; Live Activity</span>
         <h3>On your wrist, on your lock screen, phone in your pocket.</h3>
         <p>SafeRoute is built natively for Apple Watch and uses Live
           Activities, so the next direction is a glance away — you don't have
@@ -648,7 +720,7 @@
         </div>
       </div>
       <div class="feat-body reveal">
-        <span class="label"><span class="slash">//</span> 07 — If something feels wrong</span>
+        <span class="label"><span class="slash">//</span> 09 — If something feels wrong</span>
         <h3>The nearest open door, one tap away.</h3>
         <p>If a walk stops feeling right, SafeRoute surfaces the closest
           24-hour places that can help — shops, police, hospitals — alongside
@@ -667,23 +739,23 @@
   </div>
 </section>
 
-<!-- ============ 08 · IPAD SHOWCASE ============ -->
+<!-- ============ 10 · IPAD SHOWCASE ============ -->
 <section class="sec ipadsec">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="label"><span class="slash">//</span> 08 — Every screen</span>
+      <span class="label"><span class="slash">//</span> 10 — Every screen</span>
       <h2>Roomier on iPad. Identical underneath.</h2>
-      <p class="lead">The same crime-aware routing, scoring and live
-        navigation — laid out for the bigger display.</p>
+      <p class="lead">The same Nearby checks, crime-aware routing, scoring and
+        live navigation — laid out for the bigger display.</p>
     </div>
     <div class="ipad-strip">
       <figure class="figure reveal">
-        <img src="assets/ipad-planner.webp" alt="SafeRoute route planner on iPad showing the full UK map" loading="lazy" width="1280" height="1707">
-        <figcaption class="figcap"><span>IPAD — PLANNER</span></figcaption>
+        <img src="assets/ipad-nearby.webp" alt="SafeRoute Nearby tab on iPad showing an area safety score, crime heatmap, what's reported and safe spaces nearby" loading="lazy" width="1280" height="1707">
+        <figcaption class="figcap"><span>IPAD — NEARBY</span></figcaption>
       </figure>
       <figure class="figure reveal">
-        <img src="assets/ipad-heatmap.webp" alt="SafeRoute on iPad with a route and crime heatmap across central London" loading="lazy" width="1280" height="1707">
-        <figcaption class="figcap"><span>IPAD — HEATMAP</span></figcaption>
+        <img src="assets/ipad-plan.webp" alt="SafeRoute route planner on iPad with a scored route from Maida Vale to Soho over a crime heatmap" loading="lazy" width="1280" height="1707">
+        <figcaption class="figcap"><span>IPAD — PLAN</span></figcaption>
       </figure>
       <figure class="figure reveal">
         <img src="assets/ipad-nav.webp" alt="SafeRoute 3D navigation on iPad at night" loading="lazy" width="1280" height="1707">
@@ -693,11 +765,23 @@
   </div>
 </section>
 
+<!-- ============ BUILT FOR EVERYONE STRIP ============ -->
+<div class="strip a11y">
+  <div class="strip-in">
+    <span><span class="dot">●</span> <b>Built for everyone</b></span>
+    <span><b>Full Dark Mode</b></span>
+    <span><b>Dynamic Type</b></span>
+    <span><b>VoiceOver</b> throughout</span>
+    <span><b>Reduce Motion</b></span>
+    <span>Recent searches · <b>one-tap Home</b></span>
+  </div>
+</div>
+
 <!-- ============ 09 · PRIVACY ============ -->
 <section class="sec">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="label"><span class="slash">//</span> 09 — Privacy by design</span>
+      <span class="label"><span class="slash">//</span> 11 — Privacy by design</span>
       <h2>The safety app that doesn't watch you back.</h2>
       <p class="lead">A tool that tracked your every walk would be its own
         risk. SafeRoute is built so it can't.</p>
@@ -729,7 +813,7 @@
 <section class="sec finalcta">
   <div class="wrap">
     <div class="reveal">
-      <span class="label" style="display:block;margin-bottom:18px"><span class="slash">//</span> 10 — Available now</span>
+      <span class="label" style="display:block;margin-bottom:18px"><span class="slash">//</span> 12 — Available now</span>
       <h2>Walk smarter. Walk safer. Walk home.</h2>
       <p class="lead">SafeRoute is live on the App Store. Free, no accounts, no trackers —
         just the safer route home.</p>
