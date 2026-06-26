@@ -315,6 +315,15 @@
   .privacy-grid p{font-size:14.5px}
   @media(max-width:720px){.privacy-grid{grid-template-columns:1fr}}
 
+  /* coverage */
+  .coverage-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);margin-top:8px}
+  .coverage-grid>div{background:var(--cream);padding:clamp(20px,3vw,30px)}
+  .cov-country{font-family:var(--mono);font-size:12px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:10px}
+  .cov-list{font-size:15px;color:var(--ink-2);line-height:1.75;margin:0}
+  @media(max-width:680px){.coverage-grid{grid-template-columns:1fr}}
+
   /* final CTA */
   .finalcta{text-align:center;border-top:1px solid var(--line)}
   .finalcta h2{margin-bottom:16px}
@@ -817,11 +826,42 @@
   </div>
 </section>
 
+<!-- ============ COVERAGE ============ -->
+<section class="sec" id="coverage">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="label"><span class="slash">//</span> 12 — Where it works</span>
+      <h2>Live in four countries.</h2>
+      <p class="lead">Safety scoring is built on each place's own official open
+        crime data. Outside a covered area, routing and search still work — the
+        safety score simply waits until you're somewhere we cover.</p>
+    </div>
+    <div class="coverage-grid reveal">
+      <div>
+        <div class="cov-country">United Kingdom</div>
+        <p class="cov-list">England, Wales &amp; Northern Ireland — every territorial police force, via data.police.uk.</p>
+      </div>
+      <div>
+        <div class="cov-country">United States · 26 cities</div>
+        <p class="cov-list">New York · Los Angeles · Chicago · Houston · Dallas · Fort Worth · Philadelphia · San Diego · San Francisco · Washington D.C. · Boston · Seattle · Denver · Detroit · Baltimore · Las Vegas · Memphis · Nashville · Charlotte · Minneapolis · Cleveland · Kansas City · New Orleans · Tucson · Long Beach · Hartford</p>
+      </div>
+      <div>
+        <div class="cov-country">Canada</div>
+        <p class="cov-list">Toronto · Vancouver</p>
+      </div>
+      <div>
+        <div class="cov-country">Mexico</div>
+        <p class="cov-list">Mexico City</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ FINAL CTA ============ -->
 <section class="sec finalcta">
   <div class="wrap">
     <div class="reveal">
-      <span class="label" style="display:block;margin-bottom:18px"><span class="slash">//</span> 12 — Available now</span>
+      <span class="label" style="display:block;margin-bottom:18px"><span class="slash">//</span> 13 — Available now</span>
       <h2>Walk smarter. Walk safer. Walk home.</h2>
       <p class="lead">SafeRoute is live on the App Store. Free, no accounts, no ads —
         just the safer route home.</p>
