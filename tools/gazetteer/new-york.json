@@ -1,0 +1,2964 @@
+{
+ "city": "New York",
+ "citySlug": "new-york",
+ "country": "US",
+ "source": "NYC Open Data — 2020 Neighborhood Tabulation Areas (9nt8-h7nd), residential (ntatype 0)",
+ "generatedAt": "2026-07-02",
+ "areas": [
+  {
+   "name": "Allerton",
+   "slug": "allerton",
+   "borough": "Bronx",
+   "nta": "BX1104",
+   "lat": 40.864015,
+   "lng": -73.864204,
+   "neighbors": [
+    "pelham-gardens",
+    "morris-park",
+    "pelham-parkway-van-nest",
+    "williamsbridge-olinville",
+    "norwood"
+   ]
+  },
+  {
+   "name": "Annadale-Huguenot-Prince's Bay-Woodrow",
+   "slug": "annadale-huguenot-princes-bay-woodrow",
+   "borough": "Staten Island",
+   "nta": "SI0304",
+   "lat": 40.528392,
+   "lng": -74.198041,
+   "neighbors": [
+    "arden-heights-rossville",
+    "tottenville-charleston",
+    "great-kills-eltingville",
+    "oakwood-richmondtown",
+    "new-springville-willowbrook-bulls-head-travis"
+   ]
+  },
+  {
+   "name": "Arden Heights-Rossville",
+   "slug": "arden-heights-rossville",
+   "borough": "Staten Island",
+   "nta": "SI0303",
+   "lat": 40.552642,
+   "lng": -74.196902,
+   "neighbors": [
+    "annadale-huguenot-princes-bay-woodrow",
+    "great-kills-eltingville",
+    "tottenville-charleston",
+    "new-springville-willowbrook-bulls-head-travis",
+    "oakwood-richmondtown"
+   ]
+  },
+  {
+   "name": "Astoria (Central)",
+   "slug": "astoria-central",
+   "borough": "Queens",
+   "nta": "QN0103",
+   "lat": 40.764284,
+   "lng": -73.923057,
+   "neighbors": [
+    "old-astoria-hallets-point",
+    "astoria-east-woodside-north",
+    "queensbridge-ravenswood-dutch-kills",
+    "astoria-north-ditmars-steinway",
+    "upper-east-side-yorkville"
+   ]
+  },
+  {
+   "name": "Astoria (East)-Woodside (North)",
+   "slug": "astoria-east-woodside-north",
+   "borough": "Queens",
+   "nta": "QN0104",
+   "lat": 40.759558,
+   "lng": -73.910313,
+   "neighbors": [
+    "astoria-central",
+    "woodside",
+    "astoria-north-ditmars-steinway",
+    "jackson-heights",
+    "old-astoria-hallets-point"
+   ]
+  },
+  {
+   "name": "Astoria (North)-Ditmars-Steinway",
+   "slug": "astoria-north-ditmars-steinway",
+   "borough": "Queens",
+   "nta": "QN0101",
+   "lat": 40.777408,
+   "lng": -73.905256,
+   "neighbors": [
+    "astoria-east-woodside-north",
+    "astoria-central",
+    "old-astoria-hallets-point",
+    "jackson-heights",
+    "east-elmhurst"
+   ]
+  },
+  {
+   "name": "Auburndale",
+   "slug": "auburndale",
+   "borough": "Queens",
+   "nta": "QN1101",
+   "lat": 40.755257,
+   "lng": -73.786005,
+   "neighbors": [
+    "bayside",
+    "east-flushing",
+    "fresh-meadows-utopia",
+    "murray-hill-broadway-flushing",
+    "bay-terrace-clearview"
+   ]
+  },
+  {
+   "name": "Baisley Park",
+   "slug": "baisley-park",
+   "borough": "Queens",
+   "nta": "QN1203",
+   "lat": 40.679533,
+   "lng": -73.789909,
+   "neighbors": [
+    "south-jamaica",
+    "springfield-gardens-north-rochdale-village",
+    "south-ozone-park",
+    "jamaica",
+    "st-albans"
+   ]
+  },
+  {
+   "name": "Bath Beach",
+   "slug": "bath-beach",
+   "borough": "Brooklyn",
+   "nta": "BK1102",
+   "lat": 40.60426,
+   "lng": -74.007483,
+   "neighbors": [
+    "bensonhurst",
+    "gravesend-west",
+    "dyker-heights",
+    "gravesend-south",
+    "bay-ridge"
+   ]
+  },
+  {
+   "name": "Bay Ridge",
+   "slug": "bay-ridge",
+   "borough": "Brooklyn",
+   "nta": "BK1001",
+   "lat": 40.626672,
+   "lng": -74.029927,
+   "neighbors": [
+    "dyker-heights",
+    "sunset-park-central",
+    "sunset-park-east-borough-park-west",
+    "bath-beach",
+    "sunset-park-west"
+   ]
+  },
+  {
+   "name": "Bay Terrace-Clearview",
+   "slug": "bay-terrace-clearview",
+   "borough": "Queens",
+   "nta": "QN0703",
+   "lat": 40.781861,
+   "lng": -73.787579,
+   "neighbors": [
+    "whitestone-beechhurst",
+    "murray-hill-broadway-flushing",
+    "bayside",
+    "auburndale",
+    "east-flushing"
+   ]
+  },
+  {
+   "name": "Bayside",
+   "slug": "bayside",
+   "borough": "Queens",
+   "nta": "QN1102",
+   "lat": 40.761762,
+   "lng": -73.767598,
+   "neighbors": [
+    "auburndale",
+    "douglaston-little-neck",
+    "oakland-gardens-hollis-hills",
+    "bay-terrace-clearview",
+    "fresh-meadows-utopia"
+   ]
+  },
+  {
+   "name": "Bedford Park",
+   "slug": "bedford-park",
+   "borough": "Bronx",
+   "nta": "BX0702",
+   "lat": 40.873563,
+   "lng": -73.890791,
+   "neighbors": [
+    "kingsbridge-heights-van-cortlandt-village",
+    "norwood",
+    "kingsbridge-marble-hill",
+    "university-heights-north-fordham",
+    "fordham-heights"
+   ]
+  },
+  {
+   "name": "Bedford-Stuyvesant (East)",
+   "slug": "bedford-stuyvesant-east",
+   "borough": "Brooklyn",
+   "nta": "BK0302",
+   "lat": 40.686621,
+   "lng": -73.931792,
+   "neighbors": [
+    "bedford-stuyvesant-west",
+    "crown-heights-north",
+    "bushwick-east",
+    "bushwick-west",
+    "ocean-hill"
+   ]
+  },
+  {
+   "name": "Bedford-Stuyvesant (West)",
+   "slug": "bedford-stuyvesant-west",
+   "borough": "Brooklyn",
+   "nta": "BK0301",
+   "lat": 40.688957,
+   "lng": -73.951002,
+   "neighbors": [
+    "clinton-hill",
+    "bedford-stuyvesant-east",
+    "south-williamsburg",
+    "crown-heights-north",
+    "prospect-heights"
+   ]
+  },
+  {
+   "name": "Bellerose",
+   "slug": "bellerose",
+   "borough": "Queens",
+   "nta": "QN1302",
+   "lat": 40.735492,
+   "lng": -73.726692,
+   "neighbors": [
+    "glen-oaks-floral-park-new-hyde-park",
+    "oakland-gardens-hollis-hills",
+    "queens-village",
+    "douglaston-little-neck",
+    "hollis"
+   ]
+  },
+  {
+   "name": "Belmont",
+   "slug": "belmont",
+   "borough": "Bronx",
+   "nta": "BX0603",
+   "lat": 40.857607,
+   "lng": -73.887053,
+   "neighbors": [
+    "fordham-heights",
+    "tremont",
+    "university-heights-north-fordham",
+    "mount-hope",
+    "bedford-park"
+   ]
+  },
+  {
+   "name": "Bensonhurst",
+   "slug": "bensonhurst",
+   "borough": "Brooklyn",
+   "nta": "BK1101",
+   "lat": 40.613265,
+   "lng": -73.993265,
+   "neighbors": [
+    "bath-beach",
+    "gravesend-west",
+    "mapleton-midwood-west",
+    "dyker-heights",
+    "borough-park"
+   ]
+  },
+  {
+   "name": "Borough Park",
+   "slug": "borough-park",
+   "borough": "Brooklyn",
+   "nta": "BK1202",
+   "lat": 40.632936,
+   "lng": -73.989545,
+   "neighbors": [
+    "sunset-park-east-borough-park-west",
+    "kensington",
+    "sunset-park-central",
+    "flatbush-west-ditmas-park-parkville",
+    "mapleton-midwood-west"
+   ]
+  },
+  {
+   "name": "Breezy Point-Belle Harbor-Rockaway Park-Broad Channel",
+   "slug": "breezy-point-belle-harbor-rockaway-park-broad-channel",
+   "borough": "Queens",
+   "nta": "QN1403",
+   "lat": 40.577217,
+   "lng": -73.84608,
+   "neighbors": [
+    "rockaway-beach-arverne-edgemere",
+    "marine-park-mill-basin-bergen-beach",
+    "far-rockaway-bayswater",
+    "sheepshead-bay-manhattan-beach-gerritsen-beach",
+    "canarsie"
+   ]
+  },
+  {
+   "name": "Brighton Beach",
+   "slug": "brighton-beach",
+   "borough": "Brooklyn",
+   "nta": "BK1303",
+   "lat": 40.579076,
+   "lng": -73.960694,
+   "neighbors": [
+    "gravesend-south",
+    "sheepshead-bay-manhattan-beach-gerritsen-beach",
+    "gravesend-east-homecrest",
+    "coney-island-sea-gate",
+    "madison"
+   ]
+  },
+  {
+   "name": "Brooklyn Heights",
+   "slug": "brooklyn-heights",
+   "borough": "Brooklyn",
+   "nta": "BK0201",
+   "lat": 40.695466,
+   "lng": -73.99483,
+   "neighbors": [
+    "downtown-brooklyn-dumbo-boerum-hill",
+    "fort-greene",
+    "chinatown-two-bridges",
+    "carroll-gardens-cobble-hill-gowanus-red-hook",
+    "financial-district-battery-park-city"
+   ]
+  },
+  {
+   "name": "Brownsville",
+   "slug": "brownsville",
+   "borough": "Brooklyn",
+   "nta": "BK1602",
+   "lat": 40.664047,
+   "lng": -73.909522,
+   "neighbors": [
+    "east-flatbush-remsen-village",
+    "ocean-hill",
+    "east-new-york-new-lots",
+    "east-new-york-north",
+    "east-flatbush-rugby"
+   ]
+  },
+  {
+   "name": "Bushwick (East)",
+   "slug": "bushwick-east",
+   "borough": "Brooklyn",
+   "nta": "BK0402",
+   "lat": 40.691245,
+   "lng": -73.912966,
+   "neighbors": [
+    "bushwick-west",
+    "ocean-hill",
+    "bedford-stuyvesant-east",
+    "ridgewood",
+    "cypress-hills"
+   ]
+  },
+  {
+   "name": "Bushwick (West)",
+   "slug": "bushwick-west",
+   "borough": "Brooklyn",
+   "nta": "BK0401",
+   "lat": 40.700996,
+   "lng": -73.925271,
+   "neighbors": [
+    "bushwick-east",
+    "east-williamsburg",
+    "bedford-stuyvesant-east",
+    "ridgewood",
+    "bedford-stuyvesant-west"
+   ]
+  },
+  {
+   "name": "Cambria Heights",
+   "slug": "cambria-heights",
+   "borough": "Queens",
+   "nta": "QN1304",
+   "lat": 40.694342,
+   "lng": -73.735553,
+   "neighbors": [
+    "laurelton",
+    "st-albans",
+    "queens-village",
+    "hollis",
+    "springfield-gardens-north-rochdale-village"
+   ]
+  },
+  {
+   "name": "Canarsie",
+   "slug": "canarsie",
+   "borough": "Brooklyn",
+   "nta": "BK1803",
+   "lat": 40.639353,
+   "lng": -73.901462,
+   "neighbors": [
+    "east-flatbush-remsen-village",
+    "spring-creek-starrett-city",
+    "east-new-york-new-lots",
+    "east-flatbush-rugby",
+    "flatlands"
+   ]
+  },
+  {
+   "name": "Carroll Gardens-Cobble Hill-Gowanus-Red Hook",
+   "slug": "carroll-gardens-cobble-hill-gowanus-red-hook",
+   "borough": "Brooklyn",
+   "nta": "BK0601",
+   "lat": 40.678122,
+   "lng": -74.000065,
+   "neighbors": [
+    "park-slope",
+    "brooklyn-heights",
+    "downtown-brooklyn-dumbo-boerum-hill",
+    "fort-greene",
+    "prospect-heights"
+   ]
+  },
+  {
+   "name": "Castle Hill-Unionport",
+   "slug": "castle-hill-unionport",
+   "borough": "Bronx",
+   "nta": "BX0903",
+   "lat": 40.824742,
+   "lng": -73.850465,
+   "neighbors": [
+    "soundview-clason-point",
+    "westchester-square",
+    "parkchester",
+    "soundview-bruckner-bronx-river",
+    "throgs-neck-schuylerville"
+   ]
+  },
+  {
+   "name": "Chelsea-Hudson Yards",
+   "slug": "chelsea-hudson-yards",
+   "borough": "Manhattan",
+   "nta": "MN0401",
+   "lat": 40.749383,
+   "lng": -74.001149,
+   "neighbors": [
+    "midtown-south-flatiron-union-square",
+    "west-village",
+    "hells-kitchen",
+    "midtown-times-square",
+    "gramercy"
+   ]
+  },
+  {
+   "name": "Chinatown-Two Bridges",
+   "slug": "chinatown-two-bridges",
+   "borough": "Manhattan",
+   "nta": "MN0301",
+   "lat": 40.712858,
+   "lng": -73.993663,
+   "neighbors": [
+    "lower-east-side",
+    "tribeca-civic-center",
+    "soho-little-italy-hudson-square",
+    "financial-district-battery-park-city",
+    "east-village"
+   ]
+  },
+  {
+   "name": "Claremont Village-Claremont (East)",
+   "slug": "claremont-village-claremont-east",
+   "borough": "Bronx",
+   "nta": "BX0302",
+   "lat": 40.837577,
+   "lng": -73.903536,
+   "neighbors": [
+    "mount-eden-claremont-west",
+    "morrisania",
+    "mount-hope",
+    "crotona-park-east",
+    "tremont"
+   ]
+  },
+  {
+   "name": "Clinton Hill",
+   "slug": "clinton-hill",
+   "borough": "Brooklyn",
+   "nta": "BK0204",
+   "lat": 40.688998,
+   "lng": -73.964462,
+   "neighbors": [
+    "fort-greene",
+    "bedford-stuyvesant-west",
+    "prospect-heights",
+    "south-williamsburg",
+    "downtown-brooklyn-dumbo-boerum-hill"
+   ]
+  },
+  {
+   "name": "Co-op City",
+   "slug": "co-op-city",
+   "borough": "Bronx",
+   "nta": "BX1004",
+   "lat": 40.872313,
+   "lng": -73.826274,
+   "neighbors": [
+    "eastchester-edenwald-baychester",
+    "pelham-gardens",
+    "williamsbridge-olinville",
+    "morris-park",
+    "allerton"
+   ]
+  },
+  {
+   "name": "College Point",
+   "slug": "college-point",
+   "borough": "Queens",
+   "nta": "QN0701",
+   "lat": 40.782601,
+   "lng": -73.839883,
+   "neighbors": [
+    "whitestone-beechhurst",
+    "flushing-willets-point",
+    "murray-hill-broadway-flushing",
+    "east-elmhurst",
+    "north-corona"
+   ]
+  },
+  {
+   "name": "Concourse-Concourse Village",
+   "slug": "concourse-concourse-village",
+   "borough": "Bronx",
+   "nta": "BX0401",
+   "lat": 40.826748,
+   "lng": -73.921724,
+   "neighbors": [
+    "melrose",
+    "highbridge",
+    "morrisania",
+    "mount-eden-claremont-west",
+    "harlem-north"
+   ]
+  },
+  {
+   "name": "Coney Island-Sea Gate",
+   "slug": "coney-island-sea-gate",
+   "borough": "Brooklyn",
+   "nta": "BK1302",
+   "lat": 40.576965,
+   "lng": -73.987966,
+   "neighbors": [
+    "gravesend-south",
+    "brighton-beach",
+    "gravesend-west",
+    "gravesend-east-homecrest",
+    "bath-beach"
+   ]
+  },
+  {
+   "name": "Corona",
+   "slug": "corona",
+   "borough": "Queens",
+   "nta": "QN0402",
+   "lat": 40.743241,
+   "lng": -73.859284,
+   "neighbors": [
+    "north-corona",
+    "elmhurst",
+    "rego-park",
+    "east-elmhurst",
+    "forest-hills"
+   ]
+  },
+  {
+   "name": "Crotona Park East",
+   "slug": "crotona-park-east",
+   "borough": "Bronx",
+   "nta": "BX0303",
+   "lat": 40.832142,
+   "lng": -73.888698,
+   "neighbors": [
+    "west-farms",
+    "soundview-bruckner-bronx-river",
+    "claremont-village-claremont-east",
+    "longwood",
+    "morrisania"
+   ]
+  },
+  {
+   "name": "Crown Heights (North)",
+   "slug": "crown-heights-north",
+   "borough": "Brooklyn",
+   "nta": "BK0802",
+   "lat": 40.673864,
+   "lng": -73.941896,
+   "neighbors": [
+    "crown-heights-south",
+    "prospect-lefferts-gardens-wingate",
+    "bedford-stuyvesant-east",
+    "bedford-stuyvesant-west",
+    "prospect-heights"
+   ]
+  },
+  {
+   "name": "Crown Heights (South)",
+   "slug": "crown-heights-south",
+   "borough": "Brooklyn",
+   "nta": "BK0901",
+   "lat": 40.666746,
+   "lng": -73.94601,
+   "neighbors": [
+    "prospect-lefferts-gardens-wingate",
+    "crown-heights-north",
+    "east-flatbush-erasmus",
+    "east-flatbush-rugby",
+    "prospect-heights"
+   ]
+  },
+  {
+   "name": "Cypress Hills",
+   "slug": "cypress-hills",
+   "borough": "Brooklyn",
+   "nta": "BK0501",
+   "lat": 40.682535,
+   "lng": -73.88206,
+   "neighbors": [
+    "east-new-york-north",
+    "east-new-york-city-line",
+    "woodhaven",
+    "glendale",
+    "east-new-york-new-lots"
+   ]
+  },
+  {
+   "name": "Douglaston-Little Neck",
+   "slug": "douglaston-little-neck",
+   "borough": "Queens",
+   "nta": "QN1103",
+   "lat": 40.763667,
+   "lng": -73.736875,
+   "neighbors": [
+    "bayside",
+    "glen-oaks-floral-park-new-hyde-park",
+    "oakland-gardens-hollis-hills",
+    "bellerose",
+    "auburndale"
+   ]
+  },
+  {
+   "name": "Downtown Brooklyn-DUMBO-Boerum Hill",
+   "slug": "downtown-brooklyn-dumbo-boerum-hill",
+   "borough": "Brooklyn",
+   "nta": "BK0202",
+   "lat": 40.6949,
+   "lng": -73.98583,
+   "neighbors": [
+    "brooklyn-heights",
+    "fort-greene",
+    "clinton-hill",
+    "chinatown-two-bridges",
+    "carroll-gardens-cobble-hill-gowanus-red-hook"
+   ]
+  },
+  {
+   "name": "Dyker Heights",
+   "slug": "dyker-heights",
+   "borough": "Brooklyn",
+   "nta": "BK1002",
+   "lat": 40.623963,
+   "lng": -74.010845,
+   "neighbors": [
+    "bay-ridge",
+    "bensonhurst",
+    "borough-park",
+    "sunset-park-central",
+    "sunset-park-east-borough-park-west"
+   ]
+  },
+  {
+   "name": "East Elmhurst",
+   "slug": "east-elmhurst",
+   "borough": "Queens",
+   "nta": "QN0302",
+   "lat": 40.764075,
+   "lng": -73.872203,
+   "neighbors": [
+    "north-corona",
+    "jackson-heights",
+    "corona",
+    "elmhurst",
+    "astoria-north-ditmars-steinway"
+   ]
+  },
+  {
+   "name": "East Flatbush-Erasmus",
+   "slug": "east-flatbush-erasmus",
+   "borough": "Brooklyn",
+   "nta": "BK1701",
+   "lat": 40.648551,
+   "lng": -73.950138,
+   "neighbors": [
+    "flatbush",
+    "prospect-lefferts-gardens-wingate",
+    "east-flatbush-farragut",
+    "east-flatbush-rugby",
+    "flatbush-west-ditmas-park-parkville"
+   ]
+  },
+  {
+   "name": "East Flatbush-Farragut",
+   "slug": "east-flatbush-farragut",
+   "borough": "Brooklyn",
+   "nta": "BK1702",
+   "lat": 40.639146,
+   "lng": -73.937637,
+   "neighbors": [
+    "east-flatbush-erasmus",
+    "east-flatbush-rugby",
+    "flatlands",
+    "flatbush",
+    "flatbush-west-ditmas-park-parkville"
+   ]
+  },
+  {
+   "name": "East Flatbush-Remsen Village",
+   "slug": "east-flatbush-remsen-village",
+   "borough": "Brooklyn",
+   "nta": "BK1704",
+   "lat": 40.656216,
+   "lng": -73.919169,
+   "neighbors": [
+    "east-flatbush-rugby",
+    "brownsville",
+    "ocean-hill",
+    "canarsie",
+    "east-flatbush-farragut"
+   ]
+  },
+  {
+   "name": "East Flatbush-Rugby",
+   "slug": "east-flatbush-rugby",
+   "borough": "Brooklyn",
+   "nta": "BK1703",
+   "lat": 40.651547,
+   "lng": -73.929753,
+   "neighbors": [
+    "east-flatbush-remsen-village",
+    "east-flatbush-farragut",
+    "east-flatbush-erasmus",
+    "prospect-lefferts-gardens-wingate",
+    "crown-heights-south"
+   ]
+  },
+  {
+   "name": "East Flushing",
+   "slug": "east-flushing",
+   "borough": "Queens",
+   "nta": "QN0705",
+   "lat": 40.753803,
+   "lng": -73.808065,
+   "neighbors": [
+    "queensboro-hill",
+    "murray-hill-broadway-flushing",
+    "auburndale",
+    "flushing-willets-point",
+    "fresh-meadows-utopia"
+   ]
+  },
+  {
+   "name": "East Harlem (North)",
+   "slug": "east-harlem-north",
+   "borough": "Manhattan",
+   "nta": "MN1102",
+   "lat": 40.801614,
+   "lng": -73.937442,
+   "neighbors": [
+    "harlem-south",
+    "east-harlem-south",
+    "mott-haven-port-morris",
+    "harlem-north",
+    "morningside-heights"
+   ]
+  },
+  {
+   "name": "East Harlem (South)",
+   "slug": "east-harlem-south",
+   "borough": "Manhattan",
+   "nta": "MN1101",
+   "lat": 40.79001,
+   "lng": -73.94575,
+   "neighbors": [
+    "upper-east-side-yorkville",
+    "east-harlem-north",
+    "harlem-south",
+    "upper-west-side-manhattan-valley",
+    "upper-east-side-carnegie-hill"
+   ]
+  },
+  {
+   "name": "East Midtown-Turtle Bay",
+   "slug": "east-midtown-turtle-bay",
+   "borough": "Manhattan",
+   "nta": "MN0604",
+   "lat": 40.756134,
+   "lng": -73.968503,
+   "neighbors": [
+    "midtown-times-square",
+    "murray-hill-kips-bay",
+    "upper-east-side-lenox-hill-roosevelt-island",
+    "long-island-city-hunters-point",
+    "upper-east-side-carnegie-hill"
+   ]
+  },
+  {
+   "name": "East New York (North)",
+   "slug": "east-new-york-north",
+   "borough": "Brooklyn",
+   "nta": "BK0502",
+   "lat": 40.672485,
+   "lng": -73.889484,
+   "neighbors": [
+    "cypress-hills",
+    "east-new-york-new-lots",
+    "brownsville",
+    "east-new-york-city-line",
+    "ocean-hill"
+   ]
+  },
+  {
+   "name": "East New York-City Line",
+   "slug": "east-new-york-city-line",
+   "borough": "Brooklyn",
+   "nta": "BK0505",
+   "lat": 40.670541,
+   "lng": -73.866098,
+   "neighbors": [
+    "ozone-park",
+    "cypress-hills",
+    "east-new-york-north",
+    "ozone-park-north",
+    "howard-beach-lindenwood"
+   ]
+  },
+  {
+   "name": "East New York-New Lots",
+   "slug": "east-new-york-new-lots",
+   "borough": "Brooklyn",
+   "nta": "BK0503",
+   "lat": 40.659728,
+   "lng": -73.888045,
+   "neighbors": [
+    "spring-creek-starrett-city",
+    "east-new-york-north",
+    "brownsville",
+    "east-new-york-city-line",
+    "canarsie"
+   ]
+  },
+  {
+   "name": "East Village",
+   "slug": "east-village",
+   "borough": "Manhattan",
+   "nta": "MN0303",
+   "lat": 40.725972,
+   "lng": -73.982125,
+   "neighbors": [
+    "stuyvesant-town-peter-cooper-village",
+    "lower-east-side",
+    "gramercy",
+    "greenwich-village",
+    "soho-little-italy-hudson-square"
+   ]
+  },
+  {
+   "name": "East Williamsburg",
+   "slug": "east-williamsburg",
+   "borough": "Brooklyn",
+   "nta": "BK0104",
+   "lat": 40.7133,
+   "lng": -73.936488,
+   "neighbors": [
+    "bushwick-west",
+    "williamsburg",
+    "south-williamsburg",
+    "greenpoint",
+    "maspeth"
+   ]
+  },
+  {
+   "name": "Eastchester-Edenwald-Baychester",
+   "slug": "eastchester-edenwald-baychester",
+   "borough": "Bronx",
+   "nta": "BX1202",
+   "lat": 40.881542,
+   "lng": -73.836569,
+   "neighbors": [
+    "co-op-city",
+    "williamsbridge-olinville",
+    "pelham-gardens",
+    "wakefield-woodlawn",
+    "allerton"
+   ]
+  },
+  {
+   "name": "Elmhurst",
+   "slug": "elmhurst",
+   "borough": "Queens",
+   "nta": "QN0401",
+   "lat": 40.7394,
+   "lng": -73.879112,
+   "neighbors": [
+    "corona",
+    "jackson-heights",
+    "woodside",
+    "rego-park",
+    "north-corona"
+   ]
+  },
+  {
+   "name": "Far Rockaway-Bayswater",
+   "slug": "far-rockaway-bayswater",
+   "borough": "Queens",
+   "nta": "QN1401",
+   "lat": 40.601698,
+   "lng": -73.756553,
+   "neighbors": [
+    "rockaway-beach-arverne-edgemere",
+    "springfield-gardens-south-brookville",
+    "rosedale",
+    "breezy-point-belle-harbor-rockaway-park-broad-channel",
+    "springfield-gardens-north-rochdale-village"
+   ]
+  },
+  {
+   "name": "Financial District-Battery Park City",
+   "slug": "financial-district-battery-park-city",
+   "borough": "Manhattan",
+   "nta": "MN0101",
+   "lat": 40.708598,
+   "lng": -74.010874,
+   "neighbors": [
+    "tribeca-civic-center",
+    "chinatown-two-bridges",
+    "soho-little-italy-hudson-square",
+    "brooklyn-heights",
+    "lower-east-side"
+   ]
+  },
+  {
+   "name": "Flatbush",
+   "slug": "flatbush",
+   "borough": "Brooklyn",
+   "nta": "BK1401",
+   "lat": 40.640667,
+   "lng": -73.956389,
+   "neighbors": [
+    "flatbush-west-ditmas-park-parkville",
+    "east-flatbush-erasmus",
+    "east-flatbush-farragut",
+    "kensington",
+    "prospect-lefferts-gardens-wingate"
+   ]
+  },
+  {
+   "name": "Flatbush (West)-Ditmas Park-Parkville",
+   "slug": "flatbush-west-ditmas-park-parkville",
+   "borough": "Brooklyn",
+   "nta": "BK1402",
+   "lat": 40.636527,
+   "lng": -73.96619,
+   "neighbors": [
+    "flatbush",
+    "kensington",
+    "east-flatbush-erasmus",
+    "mapleton-midwood-west",
+    "midwood"
+   ]
+  },
+  {
+   "name": "Flatlands",
+   "slug": "flatlands",
+   "borough": "Brooklyn",
+   "nta": "BK1801",
+   "lat": 40.626275,
+   "lng": -73.930097,
+   "neighbors": [
+    "east-flatbush-farragut",
+    "marine-park-mill-basin-bergen-beach",
+    "midwood",
+    "flatbush",
+    "east-flatbush-rugby"
+   ]
+  },
+  {
+   "name": "Flushing-Willets Point",
+   "slug": "flushing-willets-point",
+   "borough": "Queens",
+   "nta": "QN0707",
+   "lat": 40.760213,
+   "lng": -73.831584,
+   "neighbors": [
+    "murray-hill-broadway-flushing",
+    "east-flushing",
+    "queensboro-hill",
+    "college-point",
+    "north-corona"
+   ]
+  },
+  {
+   "name": "Fordham Heights",
+   "slug": "fordham-heights",
+   "borough": "Bronx",
+   "nta": "BX0503",
+   "lat": 40.858733,
+   "lng": -73.899128,
+   "neighbors": [
+    "university-heights-north-fordham",
+    "belmont",
+    "mount-hope",
+    "tremont",
+    "university-heights-south-morris-heights"
+   ]
+  },
+  {
+   "name": "Forest Hills",
+   "slug": "forest-hills",
+   "borough": "Queens",
+   "nta": "QN0602",
+   "lat": 40.721455,
+   "lng": -73.847678,
+   "neighbors": [
+    "rego-park",
+    "kew-gardens",
+    "kew-gardens-hills",
+    "middle-village",
+    "corona"
+   ]
+  },
+  {
+   "name": "Fort Greene",
+   "slug": "fort-greene",
+   "borough": "Brooklyn",
+   "nta": "BK0203",
+   "lat": 40.691169,
+   "lng": -73.974361,
+   "neighbors": [
+    "clinton-hill",
+    "downtown-brooklyn-dumbo-boerum-hill",
+    "prospect-heights",
+    "brooklyn-heights",
+    "bedford-stuyvesant-west"
+   ]
+  },
+  {
+   "name": "Fresh Meadows-Utopia",
+   "slug": "fresh-meadows-utopia",
+   "borough": "Queens",
+   "nta": "QN0803",
+   "lat": 40.734926,
+   "lng": -73.786244,
+   "neighbors": [
+    "pomonok-electchester-hillcrest",
+    "jamaica-estates-holliswood",
+    "auburndale",
+    "oakland-gardens-hollis-hills",
+    "east-flushing"
+   ]
+  },
+  {
+   "name": "Glen Oaks-Floral Park-New Hyde Park",
+   "slug": "glen-oaks-floral-park-new-hyde-park",
+   "borough": "Queens",
+   "nta": "QN1301",
+   "lat": 40.745951,
+   "lng": -73.710962,
+   "neighbors": [
+    "bellerose",
+    "douglaston-little-neck",
+    "oakland-gardens-hollis-hills",
+    "queens-village",
+    "bayside"
+   ]
+  },
+  {
+   "name": "Glendale",
+   "slug": "glendale",
+   "borough": "Queens",
+   "nta": "QN0503",
+   "lat": 40.703537,
+   "lng": -73.875745,
+   "neighbors": [
+    "middle-village",
+    "woodhaven",
+    "ridgewood",
+    "cypress-hills",
+    "rego-park"
+   ]
+  },
+  {
+   "name": "Gramercy",
+   "slug": "gramercy",
+   "borough": "Manhattan",
+   "nta": "MN0602",
+   "lat": 40.736824,
+   "lng": -73.984053,
+   "neighbors": [
+    "stuyvesant-town-peter-cooper-village",
+    "midtown-south-flatiron-union-square",
+    "murray-hill-kips-bay",
+    "greenwich-village",
+    "east-village"
+   ]
+  },
+  {
+   "name": "Grasmere-Arrochar-South Beach-Dongan Hills",
+   "slug": "grasmere-arrochar-south-beach-dongan-hills",
+   "borough": "Staten Island",
+   "nta": "SI0201",
+   "lat": 40.59354,
+   "lng": -74.081273,
+   "neighbors": [
+    "rosebank-shore-acres-park-hill",
+    "new-dorp-midland-beach",
+    "tompkinsville-stapleton-clifton-fox-hills",
+    "todt-hill-emerson-hill-lighthouse-hill-manor-heights",
+    "west-new-brighton-silver-lake-grymes-hill"
+   ]
+  },
+  {
+   "name": "Gravesend (East)-Homecrest",
+   "slug": "gravesend-east-homecrest",
+   "borough": "Brooklyn",
+   "nta": "BK1501",
+   "lat": 40.599082,
+   "lng": -73.965869,
+   "neighbors": [
+    "gravesend-south",
+    "madison",
+    "gravesend-west",
+    "brighton-beach",
+    "mapleton-midwood-west"
+   ]
+  },
+  {
+   "name": "Gravesend (South)",
+   "slug": "gravesend-south",
+   "borough": "Brooklyn",
+   "nta": "BK1301",
+   "lat": 40.587978,
+   "lng": -73.97796,
+   "neighbors": [
+    "gravesend-west",
+    "coney-island-sea-gate",
+    "gravesend-east-homecrest",
+    "brighton-beach",
+    "sheepshead-bay-manhattan-beach-gerritsen-beach"
+   ]
+  },
+  {
+   "name": "Gravesend (West)",
+   "slug": "gravesend-west",
+   "borough": "Brooklyn",
+   "nta": "BK1103",
+   "lat": 40.599293,
+   "lng": -73.985733,
+   "neighbors": [
+    "gravesend-south",
+    "gravesend-east-homecrest",
+    "bensonhurst",
+    "bath-beach",
+    "mapleton-midwood-west"
+   ]
+  },
+  {
+   "name": "Great Kills-Eltingville",
+   "slug": "great-kills-eltingville",
+   "borough": "Staten Island",
+   "nta": "SI0302",
+   "lat": 40.550254,
+   "lng": -74.154971,
+   "neighbors": [
+    "oakwood-richmondtown",
+    "arden-heights-rossville",
+    "annadale-huguenot-princes-bay-woodrow",
+    "todt-hill-emerson-hill-lighthouse-hill-manor-heights",
+    "new-dorp-midland-beach"
+   ]
+  },
+  {
+   "name": "Greenpoint",
+   "slug": "greenpoint",
+   "borough": "Brooklyn",
+   "nta": "BK0101",
+   "lat": 40.7295,
+   "lng": -73.949517,
+   "neighbors": [
+    "long-island-city-hunters-point",
+    "williamsburg",
+    "east-williamsburg",
+    "sunnyside",
+    "stuyvesant-town-peter-cooper-village"
+   ]
+  },
+  {
+   "name": "Greenwich Village",
+   "slug": "greenwich-village",
+   "borough": "Manhattan",
+   "nta": "MN0202",
+   "lat": 40.730682,
+   "lng": -73.995683,
+   "neighbors": [
+    "soho-little-italy-hudson-square",
+    "west-village",
+    "gramercy",
+    "east-village",
+    "midtown-south-flatiron-union-square"
+   ]
+  },
+  {
+   "name": "Hamilton Heights-Sugar Hill",
+   "slug": "hamilton-heights-sugar-hill",
+   "borough": "Manhattan",
+   "nta": "MN0903",
+   "lat": 40.82702,
+   "lng": -73.948465,
+   "neighbors": [
+    "manhattanville-west-harlem",
+    "harlem-north",
+    "washington-heights-south",
+    "highbridge",
+    "concourse-concourse-village"
+   ]
+  },
+  {
+   "name": "Harlem (North)",
+   "slug": "harlem-north",
+   "borough": "Manhattan",
+   "nta": "MN1002",
+   "lat": 40.818927,
+   "lng": -73.940908,
+   "neighbors": [
+    "manhattanville-west-harlem",
+    "hamilton-heights-sugar-hill",
+    "concourse-concourse-village",
+    "harlem-south",
+    "east-harlem-north"
+   ]
+  },
+  {
+   "name": "Harlem (South)",
+   "slug": "harlem-south",
+   "borough": "Manhattan",
+   "nta": "MN1001",
+   "lat": 40.804332,
+   "lng": -73.9513,
+   "neighbors": [
+    "morningside-heights",
+    "east-harlem-north",
+    "upper-west-side-manhattan-valley",
+    "manhattanville-west-harlem",
+    "east-harlem-south"
+   ]
+  },
+  {
+   "name": "Hell's Kitchen",
+   "slug": "hells-kitchen",
+   "borough": "Manhattan",
+   "nta": "MN0402",
+   "lat": 40.764169,
+   "lng": -73.9924,
+   "neighbors": [
+    "midtown-times-square",
+    "upper-west-side-lincoln-square",
+    "chelsea-hudson-yards",
+    "east-midtown-turtle-bay",
+    "midtown-south-flatiron-union-square"
+   ]
+  },
+  {
+   "name": "Highbridge",
+   "slug": "highbridge",
+   "borough": "Bronx",
+   "nta": "BX0402",
+   "lat": 40.836858,
+   "lng": -73.927763,
+   "neighbors": [
+    "mount-eden-claremont-west",
+    "concourse-concourse-village",
+    "washington-heights-south",
+    "university-heights-south-morris-heights",
+    "claremont-village-claremont-east"
+   ]
+  },
+  {
+   "name": "Hollis",
+   "slug": "hollis",
+   "borough": "Queens",
+   "nta": "QN1206",
+   "lat": 40.711865,
+   "lng": -73.762113,
+   "neighbors": [
+    "jamaica-estates-holliswood",
+    "queens-village",
+    "st-albans",
+    "jamaica",
+    "cambria-heights"
+   ]
+  },
+  {
+   "name": "Howard Beach-Lindenwood",
+   "slug": "howard-beach-lindenwood",
+   "borough": "Queens",
+   "nta": "QN1003",
+   "lat": 40.660039,
+   "lng": -73.844039,
+   "neighbors": [
+    "ozone-park",
+    "east-new-york-city-line",
+    "south-ozone-park",
+    "ozone-park-north",
+    "spring-creek-starrett-city"
+   ]
+  },
+  {
+   "name": "Hunts Point",
+   "slug": "hunts-point",
+   "borough": "Bronx",
+   "nta": "BX0201",
+   "lat": 40.810863,
+   "lng": -73.884978,
+   "neighbors": [
+    "longwood",
+    "soundview-clason-point",
+    "soundview-bruckner-bronx-river",
+    "crotona-park-east",
+    "morrisania"
+   ]
+  },
+  {
+   "name": "Inwood",
+   "slug": "inwood",
+   "borough": "Manhattan",
+   "nta": "MN1203",
+   "lat": 40.866054,
+   "lng": -73.919323,
+   "neighbors": [
+    "university-heights-north-fordham",
+    "washington-heights-north",
+    "university-heights-south-morris-heights",
+    "fordham-heights",
+    "kingsbridge-marble-hill"
+   ]
+  },
+  {
+   "name": "Jackson Heights",
+   "slug": "jackson-heights",
+   "borough": "Queens",
+   "nta": "QN0301",
+   "lat": 40.755519,
+   "lng": -73.886345,
+   "neighbors": [
+    "east-elmhurst",
+    "woodside",
+    "elmhurst",
+    "north-corona",
+    "astoria-east-woodside-north"
+   ]
+  },
+  {
+   "name": "Jamaica",
+   "slug": "jamaica",
+   "borough": "Queens",
+   "nta": "QN1201",
+   "lat": 40.704021,
+   "lng": -73.795582,
+   "neighbors": [
+    "south-jamaica",
+    "jamaica-hills-briarwood",
+    "jamaica-estates-holliswood",
+    "pomonok-electchester-hillcrest",
+    "baisley-park"
+   ]
+  },
+  {
+   "name": "Jamaica Estates-Holliswood",
+   "slug": "jamaica-estates-holliswood",
+   "borough": "Queens",
+   "nta": "QN0804",
+   "lat": 40.720732,
+   "lng": -73.77761,
+   "neighbors": [
+    "hollis",
+    "fresh-meadows-utopia",
+    "pomonok-electchester-hillcrest",
+    "jamaica",
+    "jamaica-hills-briarwood"
+   ]
+  },
+  {
+   "name": "Jamaica Hills-Briarwood",
+   "slug": "jamaica-hills-briarwood",
+   "borough": "Queens",
+   "nta": "QN0805",
+   "lat": 40.711887,
+   "lng": -73.808856,
+   "neighbors": [
+    "jamaica",
+    "kew-gardens",
+    "pomonok-electchester-hillcrest",
+    "kew-gardens-hills",
+    "south-jamaica"
+   ]
+  },
+  {
+   "name": "Kensington",
+   "slug": "kensington",
+   "borough": "Brooklyn",
+   "nta": "BK1203",
+   "lat": 40.641136,
+   "lng": -73.976052,
+   "neighbors": [
+    "flatbush-west-ditmas-park-parkville",
+    "borough-park",
+    "flatbush",
+    "windsor-terrace-south-slope",
+    "sunset-park-east-borough-park-west"
+   ]
+  },
+  {
+   "name": "Kew Gardens",
+   "slug": "kew-gardens",
+   "borough": "Queens",
+   "nta": "QN0901",
+   "lat": 40.708034,
+   "lng": -73.828756,
+   "neighbors": [
+    "richmond-hill",
+    "jamaica-hills-briarwood",
+    "south-richmond-hill",
+    "forest-hills",
+    "kew-gardens-hills"
+   ]
+  },
+  {
+   "name": "Kew Gardens Hills",
+   "slug": "kew-gardens-hills",
+   "borough": "Queens",
+   "nta": "QN0801",
+   "lat": 40.726645,
+   "lng": -73.819793,
+   "neighbors": [
+    "pomonok-electchester-hillcrest",
+    "queensboro-hill",
+    "jamaica-hills-briarwood",
+    "kew-gardens",
+    "forest-hills"
+   ]
+  },
+  {
+   "name": "Kingsbridge Heights-Van Cortlandt Village",
+   "slug": "kingsbridge-heights-van-cortlandt-village",
+   "borough": "Bronx",
+   "nta": "BX0801",
+   "lat": 40.87768,
+   "lng": -73.899082,
+   "neighbors": [
+    "kingsbridge-marble-hill",
+    "bedford-park",
+    "university-heights-north-fordham",
+    "norwood",
+    "fordham-heights"
+   ]
+  },
+  {
+   "name": "Kingsbridge-Marble Hill",
+   "slug": "kingsbridge-marble-hill",
+   "borough": "Bronx",
+   "nta": "BX0802",
+   "lat": 40.88084,
+   "lng": -73.90573,
+   "neighbors": [
+    "kingsbridge-heights-van-cortlandt-village",
+    "bedford-park",
+    "riverdale-spuyten-duyvil",
+    "university-heights-north-fordham",
+    "inwood"
+   ]
+  },
+  {
+   "name": "Laurelton",
+   "slug": "laurelton",
+   "borough": "Queens",
+   "nta": "QN1305",
+   "lat": 40.675913,
+   "lng": -73.744505,
+   "neighbors": [
+    "rosedale",
+    "cambria-heights",
+    "springfield-gardens-south-brookville",
+    "springfield-gardens-north-rochdale-village",
+    "st-albans"
+   ]
+  },
+  {
+   "name": "Long Island City-Hunters Point",
+   "slug": "long-island-city-hunters-point",
+   "borough": "Queens",
+   "nta": "QN0201",
+   "lat": 40.74538,
+   "lng": -73.948909,
+   "neighbors": [
+    "queensbridge-ravenswood-dutch-kills",
+    "greenpoint",
+    "east-midtown-turtle-bay",
+    "sunnyside",
+    "murray-hill-kips-bay"
+   ]
+  },
+  {
+   "name": "Longwood",
+   "slug": "longwood",
+   "borough": "Bronx",
+   "nta": "BX0202",
+   "lat": 40.820968,
+   "lng": -73.896563,
+   "neighbors": [
+    "morrisania",
+    "melrose",
+    "crotona-park-east",
+    "hunts-point",
+    "claremont-village-claremont-east"
+   ]
+  },
+  {
+   "name": "Lower East Side",
+   "slug": "lower-east-side",
+   "borough": "Manhattan",
+   "nta": "MN0302",
+   "lat": 40.716968,
+   "lng": -73.983838,
+   "neighbors": [
+    "chinatown-two-bridges",
+    "east-village",
+    "soho-little-italy-hudson-square",
+    "stuyvesant-town-peter-cooper-village",
+    "greenwich-village"
+   ]
+  },
+  {
+   "name": "Madison",
+   "slug": "madison",
+   "borough": "Brooklyn",
+   "nta": "BK1502",
+   "lat": 40.604914,
+   "lng": -73.948136,
+   "neighbors": [
+    "gravesend-east-homecrest",
+    "midwood",
+    "sheepshead-bay-manhattan-beach-gerritsen-beach",
+    "mapleton-midwood-west",
+    "marine-park-mill-basin-bergen-beach"
+   ]
+  },
+  {
+   "name": "Manhattanville-West Harlem",
+   "slug": "manhattanville-west-harlem",
+   "borough": "Manhattan",
+   "nta": "MN0902",
+   "lat": 40.818023,
+   "lng": -73.953822,
+   "neighbors": [
+    "harlem-north",
+    "hamilton-heights-sugar-hill",
+    "morningside-heights",
+    "harlem-south",
+    "east-harlem-north"
+   ]
+  },
+  {
+   "name": "Mapleton-Midwood (West)",
+   "slug": "mapleton-midwood-west",
+   "borough": "Brooklyn",
+   "nta": "BK1204",
+   "lat": 40.619319,
+   "lng": -73.973318,
+   "neighbors": [
+    "midwood",
+    "bensonhurst",
+    "flatbush-west-ditmas-park-parkville",
+    "borough-park",
+    "gravesend-east-homecrest"
+   ]
+  },
+  {
+   "name": "Marine Park-Mill Basin-Bergen Beach",
+   "slug": "marine-park-mill-basin-bergen-beach",
+   "borough": "Brooklyn",
+   "nta": "BK1802",
+   "lat": 40.614975,
+   "lng": -73.918537,
+   "neighbors": [
+    "flatlands",
+    "madison",
+    "canarsie",
+    "east-flatbush-farragut",
+    "midwood"
+   ]
+  },
+  {
+   "name": "Mariner's Harbor-Arlington-Graniteville",
+   "slug": "mariners-harbor-arlington-graniteville",
+   "borough": "Staten Island",
+   "nta": "SI0107",
+   "lat": 40.631238,
+   "lng": -74.167429,
+   "neighbors": [
+    "port-richmond",
+    "new-springville-willowbrook-bulls-head-travis",
+    "westerleigh-castleton-corners",
+    "west-new-brighton-silver-lake-grymes-hill",
+    "todt-hill-emerson-hill-lighthouse-hill-manor-heights"
+   ]
+  },
+  {
+   "name": "Maspeth",
+   "slug": "maspeth",
+   "borough": "Queens",
+   "nta": "QN0501",
+   "lat": 40.723062,
+   "lng": -73.905122,
+   "neighbors": [
+    "ridgewood",
+    "woodside",
+    "middle-village",
+    "sunnyside",
+    "elmhurst"
+   ]
+  },
+  {
+   "name": "Melrose",
+   "slug": "melrose",
+   "borough": "Bronx",
+   "nta": "BX0102",
+   "lat": 40.81826,
+   "lng": -73.91285,
+   "neighbors": [
+    "concourse-concourse-village",
+    "morrisania",
+    "mott-haven-port-morris",
+    "longwood",
+    "claremont-village-claremont-east"
+   ]
+  },
+  {
+   "name": "Middle Village",
+   "slug": "middle-village",
+   "borough": "Queens",
+   "nta": "QN0504",
+   "lat": 40.719222,
+   "lng": -73.878127,
+   "neighbors": [
+    "rego-park",
+    "glendale",
+    "elmhurst",
+    "maspeth",
+    "forest-hills"
+   ]
+  },
+  {
+   "name": "Midtown South-Flatiron-Union Square",
+   "slug": "midtown-south-flatiron-union-square",
+   "borough": "Manhattan",
+   "nta": "MN0501",
+   "lat": 40.744042,
+   "lng": -73.989752,
+   "neighbors": [
+    "gramercy",
+    "chelsea-hudson-yards",
+    "murray-hill-kips-bay",
+    "greenwich-village",
+    "midtown-times-square"
+   ]
+  },
+  {
+   "name": "Midtown-Times Square",
+   "slug": "midtown-times-square",
+   "borough": "Manhattan",
+   "nta": "MN0502",
+   "lat": 40.757801,
+   "lng": -73.981609,
+   "neighbors": [
+    "east-midtown-turtle-bay",
+    "hells-kitchen",
+    "murray-hill-kips-bay",
+    "midtown-south-flatiron-union-square",
+    "chelsea-hudson-yards"
+   ]
+  },
+  {
+   "name": "Midwood",
+   "slug": "midwood",
+   "borough": "Brooklyn",
+   "nta": "BK1403",
+   "lat": 40.620369,
+   "lng": -73.955593,
+   "neighbors": [
+    "mapleton-midwood-west",
+    "madison",
+    "flatbush-west-ditmas-park-parkville",
+    "flatlands",
+    "flatbush"
+   ]
+  },
+  {
+   "name": "Morningside Heights",
+   "slug": "morningside-heights",
+   "borough": "Manhattan",
+   "nta": "MN0901",
+   "lat": 40.809459,
+   "lng": -73.961764,
+   "neighbors": [
+    "harlem-south",
+    "manhattanville-west-harlem",
+    "upper-west-side-manhattan-valley",
+    "harlem-north",
+    "east-harlem-north"
+   ]
+  },
+  {
+   "name": "Morris Park",
+   "slug": "morris-park",
+   "borough": "Bronx",
+   "nta": "BX1102",
+   "lat": 40.851793,
+   "lng": -73.851687,
+   "neighbors": [
+    "pelham-parkway-van-nest",
+    "pelham-gardens",
+    "westchester-square",
+    "parkchester",
+    "allerton"
+   ]
+  },
+  {
+   "name": "Morrisania",
+   "slug": "morrisania",
+   "borough": "Bronx",
+   "nta": "BX0301",
+   "lat": 40.827295,
+   "lng": -73.904742,
+   "neighbors": [
+    "longwood",
+    "claremont-village-claremont-east",
+    "melrose",
+    "concourse-concourse-village",
+    "crotona-park-east"
+   ]
+  },
+  {
+   "name": "Mott Haven-Port Morris",
+   "slug": "mott-haven-port-morris",
+   "borough": "Bronx",
+   "nta": "BX0101",
+   "lat": 40.807525,
+   "lng": -73.917243,
+   "neighbors": [
+    "melrose",
+    "east-harlem-north",
+    "concourse-concourse-village",
+    "longwood",
+    "harlem-north"
+   ]
+  },
+  {
+   "name": "Mount Eden-Claremont (West)",
+   "slug": "mount-eden-claremont-west",
+   "borough": "Bronx",
+   "nta": "BX0403",
+   "lat": 40.84048,
+   "lng": -73.914429,
+   "neighbors": [
+    "claremont-village-claremont-east",
+    "highbridge",
+    "university-heights-south-morris-heights",
+    "mount-hope",
+    "concourse-concourse-village"
+   ]
+  },
+  {
+   "name": "Mount Hope",
+   "slug": "mount-hope",
+   "borough": "Bronx",
+   "nta": "BX0502",
+   "lat": 40.849865,
+   "lng": -73.904417,
+   "neighbors": [
+    "university-heights-south-morris-heights",
+    "fordham-heights",
+    "tremont",
+    "mount-eden-claremont-west",
+    "claremont-village-claremont-east"
+   ]
+  },
+  {
+   "name": "Murray Hill-Broadway Flushing",
+   "slug": "murray-hill-broadway-flushing",
+   "borough": "Queens",
+   "nta": "QN0704",
+   "lat": 40.768871,
+   "lng": -73.81077,
+   "neighbors": [
+    "east-flushing",
+    "flushing-willets-point",
+    "whitestone-beechhurst",
+    "bay-terrace-clearview",
+    "auburndale"
+   ]
+  },
+  {
+   "name": "Murray Hill-Kips Bay",
+   "slug": "murray-hill-kips-bay",
+   "borough": "Manhattan",
+   "nta": "MN0603",
+   "lat": 40.74427,
+   "lng": -73.97597,
+   "neighbors": [
+    "gramercy",
+    "midtown-south-flatiron-union-square",
+    "stuyvesant-town-peter-cooper-village",
+    "east-midtown-turtle-bay",
+    "midtown-times-square"
+   ]
+  },
+  {
+   "name": "New Dorp-Midland Beach",
+   "slug": "new-dorp-midland-beach",
+   "borough": "Staten Island",
+   "nta": "SI0202",
+   "lat": 40.574315,
+   "lng": -74.101586,
+   "neighbors": [
+    "oakwood-richmondtown",
+    "grasmere-arrochar-south-beach-dongan-hills",
+    "todt-hill-emerson-hill-lighthouse-hill-manor-heights",
+    "rosebank-shore-acres-park-hill",
+    "great-kills-eltingville"
+   ]
+  },
+  {
+   "name": "New Springville-Willowbrook-Bulls Head-Travis",
+   "slug": "new-springville-willowbrook-bulls-head-travis",
+   "borough": "Staten Island",
+   "nta": "SI0204",
+   "lat": 40.603725,
+   "lng": -74.175454,
+   "neighbors": [
+    "mariners-harbor-arlington-graniteville",
+    "westerleigh-castleton-corners",
+    "todt-hill-emerson-hill-lighthouse-hill-manor-heights",
+    "port-richmond",
+    "arden-heights-rossville"
+   ]
+  },
+  {
+   "name": "North Corona",
+   "slug": "north-corona",
+   "borough": "Queens",
+   "nta": "QN0303",
+   "lat": 40.754053,
+   "lng": -73.862852,
+   "neighbors": [
+    "corona",
+    "east-elmhurst",
+    "jackson-heights",
+    "elmhurst",
+    "flushing-willets-point"
+   ]
+  },
+  {
+   "name": "Norwood",
+   "slug": "norwood",
+   "borough": "Bronx",
+   "nta": "BX0703",
+   "lat": 40.877141,
+   "lng": -73.879019,
+   "neighbors": [
+    "bedford-park",
+    "williamsbridge-olinville",
+    "kingsbridge-heights-van-cortlandt-village",
+    "allerton",
+    "belmont"
+   ]
+  },
+  {
+   "name": "Oakland Gardens-Hollis Hills",
+   "slug": "oakland-gardens-hollis-hills",
+   "borough": "Queens",
+   "nta": "QN1104",
+   "lat": 40.739306,
+   "lng": -73.754578,
+   "neighbors": [
+    "bellerose",
+    "fresh-meadows-utopia",
+    "bayside",
+    "queens-village",
+    "jamaica-estates-holliswood"
+   ]
+  },
+  {
+   "name": "Oakwood-Richmondtown",
+   "slug": "oakwood-richmondtown",
+   "borough": "Staten Island",
+   "nta": "SI0301",
+   "lat": 40.561998,
+   "lng": -74.122591,
+   "neighbors": [
+    "new-dorp-midland-beach",
+    "great-kills-eltingville",
+    "todt-hill-emerson-hill-lighthouse-hill-manor-heights",
+    "grasmere-arrochar-south-beach-dongan-hills",
+    "westerleigh-castleton-corners"
+   ]
+  },
+  {
+   "name": "Ocean Hill",
+   "slug": "ocean-hill",
+   "borough": "Brooklyn",
+   "nta": "BK1601",
+   "lat": 40.676637,
+   "lng": -73.913647,
+   "neighbors": [
+    "brownsville",
+    "bushwick-east",
+    "bedford-stuyvesant-east",
+    "east-new-york-north",
+    "east-flatbush-remsen-village"
+   ]
+  },
+  {
+   "name": "Old Astoria-Hallets Point",
+   "slug": "old-astoria-hallets-point",
+   "borough": "Queens",
+   "nta": "QN0102",
+   "lat": 40.772088,
+   "lng": -73.931419,
+   "neighbors": [
+    "astoria-central",
+    "upper-east-side-yorkville",
+    "queensbridge-ravenswood-dutch-kills",
+    "astoria-east-woodside-north",
+    "upper-east-side-lenox-hill-roosevelt-island"
+   ]
+  },
+  {
+   "name": "Ozone Park",
+   "slug": "ozone-park",
+   "borough": "Queens",
+   "nta": "QN1002",
+   "lat": 40.675571,
+   "lng": -73.847014,
+   "neighbors": [
+    "ozone-park-north",
+    "east-new-york-city-line",
+    "howard-beach-lindenwood",
+    "woodhaven",
+    "south-ozone-park"
+   ]
+  },
+  {
+   "name": "Ozone Park (North)",
+   "slug": "ozone-park-north",
+   "borough": "Queens",
+   "nta": "QN0904",
+   "lat": 40.684563,
+   "lng": -73.849367,
+   "neighbors": [
+    "ozone-park",
+    "woodhaven",
+    "richmond-hill",
+    "east-new-york-city-line",
+    "south-richmond-hill"
+   ]
+  },
+  {
+   "name": "Park Slope",
+   "slug": "park-slope",
+   "borough": "Brooklyn",
+   "nta": "BK0602",
+   "lat": 40.671831,
+   "lng": -73.97976,
+   "neighbors": [
+    "prospect-heights",
+    "windsor-terrace-south-slope",
+    "carroll-gardens-cobble-hill-gowanus-red-hook",
+    "fort-greene",
+    "clinton-hill"
+   ]
+  },
+  {
+   "name": "Parkchester",
+   "slug": "parkchester",
+   "borough": "Bronx",
+   "nta": "BX0904",
+   "lat": 40.837747,
+   "lng": -73.857989,
+   "neighbors": [
+    "westchester-square",
+    "pelham-parkway-van-nest",
+    "soundview-bruckner-bronx-river",
+    "castle-hill-unionport",
+    "morris-park"
+   ]
+  },
+  {
+   "name": "Pelham Bay-Country Club-City Island",
+   "slug": "pelham-bay-country-club-city-island",
+   "borough": "Bronx",
+   "nta": "BX1003",
+   "lat": 40.841442,
+   "lng": -73.82041,
+   "neighbors": [
+    "throgs-neck-schuylerville",
+    "westchester-square",
+    "morris-park",
+    "castle-hill-unionport",
+    "parkchester"
+   ]
+  },
+  {
+   "name": "Pelham Gardens",
+   "slug": "pelham-gardens",
+   "borough": "Bronx",
+   "nta": "BX1103",
+   "lat": 40.864247,
+   "lng": -73.846693,
+   "neighbors": [
+    "morris-park",
+    "allerton",
+    "co-op-city",
+    "eastchester-edenwald-baychester",
+    "williamsbridge-olinville"
+   ]
+  },
+  {
+   "name": "Pelham Parkway-Van Nest",
+   "slug": "pelham-parkway-van-nest",
+   "borough": "Bronx",
+   "nta": "BX1101",
+   "lat": 40.847897,
+   "lng": -73.864967,
+   "neighbors": [
+    "morris-park",
+    "parkchester",
+    "west-farms",
+    "allerton",
+    "westchester-square"
+   ]
+  },
+  {
+   "name": "Pomonok-Electchester-Hillcrest",
+   "slug": "pomonok-electchester-hillcrest",
+   "borough": "Queens",
+   "nta": "QN0802",
+   "lat": 40.727067,
+   "lng": -73.803422,
+   "neighbors": [
+    "kew-gardens-hills",
+    "fresh-meadows-utopia",
+    "jamaica-hills-briarwood",
+    "queensboro-hill",
+    "jamaica-estates-holliswood"
+   ]
+  },
+  {
+   "name": "Port Richmond",
+   "slug": "port-richmond",
+   "borough": "Staten Island",
+   "nta": "SI0106",
+   "lat": 40.633833,
+   "lng": -74.133177,
+   "neighbors": [
+    "westerleigh-castleton-corners",
+    "west-new-brighton-silver-lake-grymes-hill",
+    "mariners-harbor-arlington-graniteville",
+    "st-george-new-brighton",
+    "tompkinsville-stapleton-clifton-fox-hills"
+   ]
+  },
+  {
+   "name": "Prospect Heights",
+   "slug": "prospect-heights",
+   "borough": "Brooklyn",
+   "nta": "BK0801",
+   "lat": 40.677605,
+   "lng": -73.967572,
+   "neighbors": [
+    "park-slope",
+    "clinton-hill",
+    "fort-greene",
+    "bedford-stuyvesant-west",
+    "crown-heights-south"
+   ]
+  },
+  {
+   "name": "Prospect Lefferts Gardens-Wingate",
+   "slug": "prospect-lefferts-gardens-wingate",
+   "borough": "Brooklyn",
+   "nta": "BK0902",
+   "lat": 40.659757,
+   "lng": -73.947962,
+   "neighbors": [
+    "crown-heights-south",
+    "east-flatbush-erasmus",
+    "crown-heights-north",
+    "east-flatbush-rugby",
+    "flatbush"
+   ]
+  },
+  {
+   "name": "Queens Village",
+   "slug": "queens-village",
+   "borough": "Queens",
+   "nta": "QN1303",
+   "lat": 40.716083,
+   "lng": -73.741755,
+   "neighbors": [
+    "hollis",
+    "cambria-heights",
+    "bellerose",
+    "oakland-gardens-hollis-hills",
+    "jamaica-estates-holliswood"
+   ]
+  },
+  {
+   "name": "Queensboro Hill",
+   "slug": "queensboro-hill",
+   "borough": "Queens",
+   "nta": "QN0706",
+   "lat": 40.743101,
+   "lng": -73.819684,
+   "neighbors": [
+    "east-flushing",
+    "kew-gardens-hills",
+    "flushing-willets-point",
+    "pomonok-electchester-hillcrest",
+    "fresh-meadows-utopia"
+   ]
+  },
+  {
+   "name": "Queensbridge-Ravenswood-Dutch Kills",
+   "slug": "queensbridge-ravenswood-dutch-kills",
+   "borough": "Queens",
+   "nta": "QN0105",
+   "lat": 40.758319,
+   "lng": -73.937932,
+   "neighbors": [
+    "astoria-central",
+    "old-astoria-hallets-point",
+    "long-island-city-hunters-point",
+    "upper-east-side-lenox-hill-roosevelt-island",
+    "upper-east-side-yorkville"
+   ]
+  },
+  {
+   "name": "Rego Park",
+   "slug": "rego-park",
+   "borough": "Queens",
+   "nta": "QN0601",
+   "lat": 40.726237,
+   "lng": -73.86342,
+   "neighbors": [
+    "forest-hills",
+    "middle-village",
+    "corona",
+    "elmhurst",
+    "glendale"
+   ]
+  },
+  {
+   "name": "Richmond Hill",
+   "slug": "richmond-hill",
+   "borough": "Queens",
+   "nta": "QN0902",
+   "lat": 40.697477,
+   "lng": -73.832768,
+   "neighbors": [
+    "south-richmond-hill",
+    "kew-gardens",
+    "ozone-park-north",
+    "woodhaven",
+    "jamaica-hills-briarwood"
+   ]
+  },
+  {
+   "name": "Ridgewood",
+   "slug": "ridgewood",
+   "borough": "Queens",
+   "nta": "QN0502",
+   "lat": 40.705673,
+   "lng": -73.903689,
+   "neighbors": [
+    "bushwick-east",
+    "bushwick-west",
+    "maspeth",
+    "glendale",
+    "middle-village"
+   ]
+  },
+  {
+   "name": "Riverdale-Spuyten Duyvil",
+   "slug": "riverdale-spuyten-duyvil",
+   "borough": "Bronx",
+   "nta": "BX0803",
+   "lat": 40.895717,
+   "lng": -73.908785,
+   "neighbors": [
+    "kingsbridge-marble-hill",
+    "kingsbridge-heights-van-cortlandt-village",
+    "bedford-park",
+    "norwood",
+    "inwood"
+   ]
+  },
+  {
+   "name": "Rockaway Beach-Arverne-Edgemere",
+   "slug": "rockaway-beach-arverne-edgemere",
+   "borough": "Queens",
+   "nta": "QN1402",
+   "lat": 40.591568,
+   "lng": -73.796307,
+   "neighbors": [
+    "far-rockaway-bayswater",
+    "breezy-point-belle-harbor-rockaway-park-broad-channel",
+    "springfield-gardens-south-brookville",
+    "howard-beach-lindenwood",
+    "rosedale"
+   ]
+  },
+  {
+   "name": "Rosebank-Shore Acres-Park Hill",
+   "slug": "rosebank-shore-acres-park-hill",
+   "borough": "Staten Island",
+   "nta": "SI0103",
+   "lat": 40.611686,
+   "lng": -74.072769,
+   "neighbors": [
+    "tompkinsville-stapleton-clifton-fox-hills",
+    "grasmere-arrochar-south-beach-dongan-hills",
+    "west-new-brighton-silver-lake-grymes-hill",
+    "st-george-new-brighton",
+    "bay-ridge"
+   ]
+  },
+  {
+   "name": "Rosedale",
+   "slug": "rosedale",
+   "borough": "Queens",
+   "nta": "QN1307",
+   "lat": 40.65905,
+   "lng": -73.73566,
+   "neighbors": [
+    "laurelton",
+    "springfield-gardens-south-brookville",
+    "springfield-gardens-north-rochdale-village",
+    "cambria-heights",
+    "st-albans"
+   ]
+  },
+  {
+   "name": "Sheepshead Bay-Manhattan Beach-Gerritsen Beach",
+   "slug": "sheepshead-bay-manhattan-beach-gerritsen-beach",
+   "borough": "Brooklyn",
+   "nta": "BK1503",
+   "lat": 40.588299,
+   "lng": -73.941504,
+   "neighbors": [
+    "brighton-beach",
+    "madison",
+    "gravesend-east-homecrest",
+    "gravesend-south",
+    "marine-park-mill-basin-bergen-beach"
+   ]
+  },
+  {
+   "name": "SoHo-Little Italy-Hudson Square",
+   "slug": "soho-little-italy-hudson-square",
+   "borough": "Manhattan",
+   "nta": "MN0201",
+   "lat": 40.723536,
+   "lng": -74.001719,
+   "neighbors": [
+    "tribeca-civic-center",
+    "greenwich-village",
+    "west-village",
+    "chinatown-two-bridges",
+    "east-village"
+   ]
+  },
+  {
+   "name": "Soundview-Bruckner-Bronx River",
+   "slug": "soundview-bruckner-bronx-river",
+   "borough": "Bronx",
+   "nta": "BX0901",
+   "lat": 40.829615,
+   "lng": -73.873218,
+   "neighbors": [
+    "crotona-park-east",
+    "west-farms",
+    "parkchester",
+    "soundview-clason-point",
+    "castle-hill-unionport"
+   ]
+  },
+  {
+   "name": "Soundview-Clason Point",
+   "slug": "soundview-clason-point",
+   "borough": "Bronx",
+   "nta": "BX0902",
+   "lat": 40.816106,
+   "lng": -73.859104,
+   "neighbors": [
+    "castle-hill-unionport",
+    "soundview-bruckner-bronx-river",
+    "hunts-point",
+    "parkchester",
+    "westchester-square"
+   ]
+  },
+  {
+   "name": "South Jamaica",
+   "slug": "south-jamaica",
+   "borough": "Queens",
+   "nta": "QN1202",
+   "lat": 40.694307,
+   "lng": -73.79173,
+   "neighbors": [
+    "jamaica",
+    "baisley-park",
+    "jamaica-hills-briarwood",
+    "st-albans",
+    "south-richmond-hill"
+   ]
+  },
+  {
+   "name": "South Ozone Park",
+   "slug": "south-ozone-park",
+   "borough": "Queens",
+   "nta": "QN1001",
+   "lat": 40.676199,
+   "lng": -73.81952,
+   "neighbors": [
+    "south-richmond-hill",
+    "ozone-park",
+    "baisley-park",
+    "richmond-hill",
+    "ozone-park-north"
+   ]
+  },
+  {
+   "name": "South Richmond Hill",
+   "slug": "south-richmond-hill",
+   "borough": "Queens",
+   "nta": "QN0903",
+   "lat": 40.691328,
+   "lng": -73.824867,
+   "neighbors": [
+    "richmond-hill",
+    "south-ozone-park",
+    "kew-gardens",
+    "ozone-park-north",
+    "ozone-park"
+   ]
+  },
+  {
+   "name": "South Williamsburg",
+   "slug": "south-williamsburg",
+   "borough": "Brooklyn",
+   "nta": "BK0103",
+   "lat": 40.703242,
+   "lng": -73.956659,
+   "neighbors": [
+    "williamsburg",
+    "bedford-stuyvesant-west",
+    "clinton-hill",
+    "fort-greene",
+    "east-williamsburg"
+   ]
+  },
+  {
+   "name": "Spring Creek-Starrett City",
+   "slug": "spring-creek-starrett-city",
+   "borough": "Brooklyn",
+   "nta": "BK0504",
+   "lat": 40.65101,
+   "lng": -73.876384,
+   "neighbors": [
+    "east-new-york-new-lots",
+    "east-new-york-city-line",
+    "canarsie",
+    "east-new-york-north",
+    "howard-beach-lindenwood"
+   ]
+  },
+  {
+   "name": "Springfield Gardens (North)-Rochdale Village",
+   "slug": "springfield-gardens-north-rochdale-village",
+   "borough": "Queens",
+   "nta": "QN1204",
+   "lat": 40.673331,
+   "lng": -73.772053,
+   "neighbors": [
+    "baisley-park",
+    "springfield-gardens-south-brookville",
+    "laurelton",
+    "st-albans",
+    "south-jamaica"
+   ]
+  },
+  {
+   "name": "Springfield Gardens (South)-Brookville",
+   "slug": "springfield-gardens-south-brookville",
+   "borough": "Queens",
+   "nta": "QN1306",
+   "lat": 40.660167,
+   "lng": -73.761481,
+   "neighbors": [
+    "springfield-gardens-north-rochdale-village",
+    "rosedale",
+    "laurelton",
+    "baisley-park",
+    "st-albans"
+   ]
+  },
+  {
+   "name": "St. Albans",
+   "slug": "st-albans",
+   "borough": "Queens",
+   "nta": "QN1205",
+   "lat": 40.693239,
+   "lng": -73.762221,
+   "neighbors": [
+    "hollis",
+    "cambria-heights",
+    "springfield-gardens-north-rochdale-village",
+    "laurelton",
+    "south-jamaica"
+   ]
+  },
+  {
+   "name": "St. George-New Brighton",
+   "slug": "st-george-new-brighton",
+   "borough": "Staten Island",
+   "nta": "SI0101",
+   "lat": 40.642186,
+   "lng": -74.085533,
+   "neighbors": [
+    "tompkinsville-stapleton-clifton-fox-hills",
+    "west-new-brighton-silver-lake-grymes-hill",
+    "rosebank-shore-acres-park-hill",
+    "port-richmond",
+    "westerleigh-castleton-corners"
+   ]
+  },
+  {
+   "name": "Stuyvesant Town-Peter Cooper Village",
+   "slug": "stuyvesant-town-peter-cooper-village",
+   "borough": "Manhattan",
+   "nta": "MN0601",
+   "lat": 40.731821,
+   "lng": -73.976596,
+   "neighbors": [
+    "east-village",
+    "gramercy",
+    "murray-hill-kips-bay",
+    "greenwich-village",
+    "midtown-south-flatiron-union-square"
+   ]
+  },
+  {
+   "name": "Sunnyside",
+   "slug": "sunnyside",
+   "borough": "Queens",
+   "nta": "QN0202",
+   "lat": 40.738418,
+   "lng": -73.926445,
+   "neighbors": [
+    "long-island-city-hunters-point",
+    "woodside",
+    "greenpoint",
+    "queensbridge-ravenswood-dutch-kills",
+    "maspeth"
+   ]
+  },
+  {
+   "name": "Sunset Park (Central)",
+   "slug": "sunset-park-central",
+   "borough": "Brooklyn",
+   "nta": "BK0703",
+   "lat": 40.64239,
+   "lng": -74.00788,
+   "neighbors": [
+    "sunset-park-east-borough-park-west",
+    "sunset-park-west",
+    "borough-park",
+    "dyker-heights",
+    "bay-ridge"
+   ]
+  },
+  {
+   "name": "Sunset Park (East)-Borough Park (West)",
+   "slug": "sunset-park-east-borough-park-west",
+   "borough": "Brooklyn",
+   "nta": "BK1201",
+   "lat": 40.640827,
+   "lng": -73.999387,
+   "neighbors": [
+    "sunset-park-central",
+    "borough-park",
+    "sunset-park-west",
+    "kensington",
+    "dyker-heights"
+   ]
+  },
+  {
+   "name": "Sunset Park (West)",
+   "slug": "sunset-park-west",
+   "borough": "Brooklyn",
+   "nta": "BK0702",
+   "lat": 40.653471,
+   "lng": -74.010114,
+   "neighbors": [
+    "sunset-park-central",
+    "sunset-park-east-borough-park-west",
+    "windsor-terrace-south-slope",
+    "borough-park",
+    "carroll-gardens-cobble-hill-gowanus-red-hook"
+   ]
+  },
+  {
+   "name": "Throgs Neck-Schuylerville",
+   "slug": "throgs-neck-schuylerville",
+   "borough": "Bronx",
+   "nta": "BX1002",
+   "lat": 40.825527,
+   "lng": -73.820604,
+   "neighbors": [
+    "pelham-bay-country-club-city-island",
+    "castle-hill-unionport",
+    "westchester-square",
+    "soundview-clason-point",
+    "parkchester"
+   ]
+  },
+  {
+   "name": "Todt Hill-Emerson Hill-Lighthouse Hill-Manor Heights",
+   "slug": "todt-hill-emerson-hill-lighthouse-hill-manor-heights",
+   "borough": "Staten Island",
+   "nta": "SI0203",
+   "lat": 40.589654,
+   "lng": -74.128266,
+   "neighbors": [
+    "new-dorp-midland-beach",
+    "westerleigh-castleton-corners",
+    "oakwood-richmondtown",
+    "grasmere-arrochar-south-beach-dongan-hills",
+    "new-springville-willowbrook-bulls-head-travis"
+   ]
+  },
+  {
+   "name": "Tompkinsville-Stapleton-Clifton-Fox Hills",
+   "slug": "tompkinsville-stapleton-clifton-fox-hills",
+   "borough": "Staten Island",
+   "nta": "SI0102",
+   "lat": 40.626104,
+   "lng": -74.078836,
+   "neighbors": [
+    "rosebank-shore-acres-park-hill",
+    "st-george-new-brighton",
+    "west-new-brighton-silver-lake-grymes-hill",
+    "grasmere-arrochar-south-beach-dongan-hills",
+    "bay-ridge"
+   ]
+  },
+  {
+   "name": "Tottenville-Charleston",
+   "slug": "tottenville-charleston",
+   "borough": "Staten Island",
+   "nta": "SI0305",
+   "lat": 40.524649,
+   "lng": -74.235482,
+   "neighbors": [
+    "annadale-huguenot-princes-bay-woodrow",
+    "arden-heights-rossville",
+    "great-kills-eltingville",
+    "new-springville-willowbrook-bulls-head-travis",
+    "oakwood-richmondtown"
+   ]
+  },
+  {
+   "name": "Tremont",
+   "slug": "tremont",
+   "borough": "Bronx",
+   "nta": "BX0602",
+   "lat": 40.846923,
+   "lng": -73.891756,
+   "neighbors": [
+    "mount-hope",
+    "belmont",
+    "west-farms",
+    "claremont-village-claremont-east",
+    "fordham-heights"
+   ]
+  },
+  {
+   "name": "Tribeca-Civic Center",
+   "slug": "tribeca-civic-center",
+   "borough": "Manhattan",
+   "nta": "MN0102",
+   "lat": 40.717306,
+   "lng": -74.007233,
+   "neighbors": [
+    "soho-little-italy-hudson-square",
+    "financial-district-battery-park-city",
+    "chinatown-two-bridges",
+    "greenwich-village",
+    "west-village"
+   ]
+  },
+  {
+   "name": "University Heights (North)-Fordham",
+   "slug": "university-heights-north-fordham",
+   "borough": "Bronx",
+   "nta": "BX0701",
+   "lat": 40.864571,
+   "lng": -73.904753,
+   "neighbors": [
+    "fordham-heights",
+    "inwood",
+    "kingsbridge-heights-van-cortlandt-village",
+    "bedford-park",
+    "mount-hope"
+   ]
+  },
+  {
+   "name": "University Heights (South)-Morris Heights",
+   "slug": "university-heights-south-morris-heights",
+   "borough": "Bronx",
+   "nta": "BX0501",
+   "lat": 40.851852,
+   "lng": -73.916124,
+   "neighbors": [
+    "mount-hope",
+    "mount-eden-claremont-west",
+    "washington-heights-north",
+    "inwood",
+    "fordham-heights"
+   ]
+  },
+  {
+   "name": "Upper East Side-Carnegie Hill",
+   "slug": "upper-east-side-carnegie-hill",
+   "borough": "Manhattan",
+   "nta": "MN0802",
+   "lat": 40.77473,
+   "lng": -73.961174,
+   "neighbors": [
+    "upper-east-side-lenox-hill-roosevelt-island",
+    "upper-east-side-yorkville",
+    "upper-west-side-central",
+    "upper-west-side-lincoln-square",
+    "east-harlem-south"
+   ]
+  },
+  {
+   "name": "Upper East Side-Lenox Hill-Roosevelt Island",
+   "slug": "upper-east-side-lenox-hill-roosevelt-island",
+   "borough": "Manhattan",
+   "nta": "MN0801",
+   "lat": 40.766234,
+   "lng": -73.95723,
+   "neighbors": [
+    "upper-east-side-carnegie-hill",
+    "upper-east-side-yorkville",
+    "east-midtown-turtle-bay",
+    "queensbridge-ravenswood-dutch-kills",
+    "midtown-times-square"
+   ]
+  },
+  {
+   "name": "Upper East Side-Yorkville",
+   "slug": "upper-east-side-yorkville",
+   "borough": "Manhattan",
+   "nta": "MN0803",
+   "lat": 40.777295,
+   "lng": -73.948772,
+   "neighbors": [
+    "upper-east-side-carnegie-hill",
+    "upper-east-side-lenox-hill-roosevelt-island",
+    "east-harlem-south",
+    "old-astoria-hallets-point",
+    "queensbridge-ravenswood-dutch-kills"
+   ]
+  },
+  {
+   "name": "Upper West Side (Central)",
+   "slug": "upper-west-side-central",
+   "borough": "Manhattan",
+   "nta": "MN0702",
+   "lat": 40.787703,
+   "lng": -73.975934,
+   "neighbors": [
+    "upper-west-side-manhattan-valley",
+    "upper-west-side-lincoln-square",
+    "upper-east-side-carnegie-hill",
+    "east-harlem-south",
+    "upper-east-side-yorkville"
+   ]
+  },
+  {
+   "name": "Upper West Side-Lincoln Square",
+   "slug": "upper-west-side-lincoln-square",
+   "borough": "Manhattan",
+   "nta": "MN0701",
+   "lat": 40.774848,
+   "lng": -73.984695,
+   "neighbors": [
+    "hells-kitchen",
+    "upper-west-side-central",
+    "midtown-times-square",
+    "upper-east-side-carnegie-hill",
+    "east-midtown-turtle-bay"
+   ]
+  },
+  {
+   "name": "Upper West Side-Manhattan Valley",
+   "slug": "upper-west-side-manhattan-valley",
+   "borough": "Manhattan",
+   "nta": "MN0703",
+   "lat": 40.799247,
+   "lng": -73.967306,
+   "neighbors": [
+    "morningside-heights",
+    "harlem-south",
+    "upper-west-side-central",
+    "east-harlem-south",
+    "manhattanville-west-harlem"
+   ]
+  },
+  {
+   "name": "Wakefield-Woodlawn",
+   "slug": "wakefield-woodlawn",
+   "borough": "Bronx",
+   "nta": "BX1203",
+   "lat": 40.897973,
+   "lng": -73.853967,
+   "neighbors": [
+    "williamsbridge-olinville",
+    "eastchester-edenwald-baychester",
+    "norwood",
+    "co-op-city",
+    "pelham-gardens"
+   ]
+  },
+  {
+   "name": "Washington Heights (North)",
+   "slug": "washington-heights-north",
+   "borough": "Manhattan",
+   "nta": "MN1202",
+   "lat": 40.856474,
+   "lng": -73.933452,
+   "neighbors": [
+    "university-heights-south-morris-heights",
+    "inwood",
+    "washington-heights-south",
+    "highbridge",
+    "mount-eden-claremont-west"
+   ]
+  },
+  {
+   "name": "Washington Heights (South)",
+   "slug": "washington-heights-south",
+   "borough": "Manhattan",
+   "nta": "MN1201",
+   "lat": 40.840903,
+   "lng": -73.941536,
+   "neighbors": [
+    "highbridge",
+    "hamilton-heights-sugar-hill",
+    "washington-heights-north",
+    "mount-eden-claremont-west",
+    "concourse-concourse-village"
+   ]
+  },
+  {
+   "name": "West Farms",
+   "slug": "west-farms",
+   "borough": "Bronx",
+   "nta": "BX0601",
+   "lat": 40.84126,
+   "lng": -73.878628,
+   "neighbors": [
+    "tremont",
+    "crotona-park-east",
+    "pelham-parkway-van-nest",
+    "soundview-bruckner-bronx-river",
+    "parkchester"
+   ]
+  },
+  {
+   "name": "West New Brighton-Silver Lake-Grymes Hill",
+   "slug": "west-new-brighton-silver-lake-grymes-hill",
+   "borough": "Staten Island",
+   "nta": "SI0104",
+   "lat": 40.628066,
+   "lng": -74.101305,
+   "neighbors": [
+    "tompkinsville-stapleton-clifton-fox-hills",
+    "st-george-new-brighton",
+    "westerleigh-castleton-corners",
+    "port-richmond",
+    "rosebank-shore-acres-park-hill"
+   ]
+  },
+  {
+   "name": "West Village",
+   "slug": "west-village",
+   "borough": "Manhattan",
+   "nta": "MN0203",
+   "lat": 40.734839,
+   "lng": -74.005908,
+   "neighbors": [
+    "greenwich-village",
+    "soho-little-italy-hudson-square",
+    "chelsea-hudson-yards",
+    "midtown-south-flatiron-union-square",
+    "gramercy"
+   ]
+  },
+  {
+   "name": "Westchester Square",
+   "slug": "westchester-square",
+   "borough": "Bronx",
+   "nta": "BX1001",
+   "lat": 40.837686,
+   "lng": -73.84594,
+   "neighbors": [
+    "parkchester",
+    "castle-hill-unionport",
+    "morris-park",
+    "pelham-parkway-van-nest",
+    "pelham-bay-country-club-city-island"
+   ]
+  },
+  {
+   "name": "Westerleigh-Castleton Corners",
+   "slug": "westerleigh-castleton-corners",
+   "borough": "Staten Island",
+   "nta": "SI0105",
+   "lat": 40.617,
+   "lng": -74.128796,
+   "neighbors": [
+    "port-richmond",
+    "west-new-brighton-silver-lake-grymes-hill",
+    "todt-hill-emerson-hill-lighthouse-hill-manor-heights",
+    "mariners-harbor-arlington-graniteville",
+    "new-springville-willowbrook-bulls-head-travis"
+   ]
+  },
+  {
+   "name": "Whitestone-Beechhurst",
+   "slug": "whitestone-beechhurst",
+   "borough": "Queens",
+   "nta": "QN0702",
+   "lat": 40.788379,
+   "lng": -73.810889,
+   "neighbors": [
+    "bay-terrace-clearview",
+    "murray-hill-broadway-flushing",
+    "college-point",
+    "flushing-willets-point",
+    "east-flushing"
+   ]
+  },
+  {
+   "name": "Williamsbridge-Olinville",
+   "slug": "williamsbridge-olinville",
+   "borough": "Bronx",
+   "nta": "BX1201",
+   "lat": 40.881017,
+   "lng": -73.860724,
+   "neighbors": [
+    "norwood",
+    "allerton",
+    "wakefield-woodlawn",
+    "eastchester-edenwald-baychester",
+    "pelham-gardens"
+   ]
+  },
+  {
+   "name": "Williamsburg",
+   "slug": "williamsburg",
+   "borough": "Brooklyn",
+   "nta": "BK0102",
+   "lat": 40.714914,
+   "lng": -73.958621,
+   "neighbors": [
+    "south-williamsburg",
+    "greenpoint",
+    "east-williamsburg",
+    "lower-east-side",
+    "east-village"
+   ]
+  },
+  {
+   "name": "Windsor Terrace-South Slope",
+   "slug": "windsor-terrace-south-slope",
+   "borough": "Brooklyn",
+   "nta": "BK0701",
+   "lat": 40.656045,
+   "lng": -73.980025,
+   "neighbors": [
+    "kensington",
+    "park-slope",
+    "sunset-park-east-borough-park-west",
+    "flatbush-west-ditmas-park-parkville",
+    "sunset-park-west"
+   ]
+  },
+  {
+   "name": "Woodhaven",
+   "slug": "woodhaven",
+   "borough": "Queens",
+   "nta": "QN0905",
+   "lat": 40.691475,
+   "lng": -73.857412,
+   "neighbors": [
+    "ozone-park-north",
+    "ozone-park",
+    "glendale",
+    "richmond-hill",
+    "cypress-hills"
+   ]
+  },
+  {
+   "name": "Woodside",
+   "slug": "woodside",
+   "borough": "Queens",
+   "nta": "QN0203",
+   "lat": 40.743104,
+   "lng": -73.90141,
+   "neighbors": [
+    "jackson-heights",
+    "elmhurst",
+    "astoria-east-woodside-north",
+    "sunnyside",
+    "maspeth"
+   ]
+  }
+ ]
+}
