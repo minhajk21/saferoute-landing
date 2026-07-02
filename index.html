@@ -113,6 +113,13 @@
     color:var(--ink-3);text-transform:uppercase;
   }
   .nav-tag .slash{color:var(--teal)}
+  .nav-right{display:flex;align-items:center;gap:18px}
+  .nav-link{
+    font-family:var(--mono);font-size:12px;font-weight:500;
+    letter-spacing:.1em;text-transform:uppercase;text-decoration:none;
+    color:var(--ink);padding:9px 2px;
+  }
+  .nav-link:hover{color:var(--teal-deep);text-decoration:underline}
   .nav-cta{
     font-family:var(--mono);font-size:12px;font-weight:500;
     letter-spacing:.1em;text-transform:uppercase;text-decoration:none;
@@ -409,7 +416,10 @@
       <span class="name">SAFEROUTE</span>
     </a>
     <span class="nav-tag"><span class="slash">//</span> CRIME-AWARE WALKING NAVIGATOR · UK·US·CA·MX</span>
-    <a class="nav-cta" href="https://apps.apple.com/app/id6768244297">Download</a>
+    <div class="nav-right">
+      <a class="nav-link" href="/safety/">Safety index</a>
+      <a class="nav-cta" href="https://apps.apple.com/app/id6768244297">Download</a>
+    </div>
   </div>
 </nav>
 
@@ -857,6 +867,10 @@
         <p class="cov-list">Mexico City</p>
       </div>
     </div>
+    <p class="lead reveal" style="margin-top:26px">Want to browse the data itself?
+      Explore the <a href="/safety/new-york/">neighborhood safety index</a> —
+      every NYC neighborhood scored and mapped from the same live crime data
+      the app uses. More cities on the way.</p>
   </div>
 </section>
 
@@ -900,6 +914,7 @@
       <div class="fcol">
         <h4>Product</h4>
         <a href="https://apps.apple.com/app/id6768244297">Download on the App Store</a>
+        <a href="/safety/">Neighborhood safety index</a>
         <a href="https://minhajk21.github.io/saferoute-support/">Support</a>
         <a href="https://minhajk21.github.io/saferoute-privacy/">Privacy policy</a>
       </div>

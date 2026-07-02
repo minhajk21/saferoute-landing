@@ -1,0 +1,50 @@
+# Rebuilds the /safety/ programmatic pages monthly so they track the crime-data
+# cadence (NYPD YTD refreshes roughly quarterly; a monthly rebuild also keeps
+# lastmod honest for crawlers). Safe against prod: generate-data.mjs paces
+# itself (1 concurrent, 1.2s delay) under the backend's 60/min rate limit, and
+# retries absorb a free-dyno cold start.
+#
+# REQUIRED SECRET (Settings → Secrets and variables → Actions):
+#   SAFEROUTE_API_KEY — same shared secret the app uses.
+name: rebuild-safety-pages
+
+on:
+  schedule:
+    - cron: '17 9 2 * *'   # 2nd of each month, 09:17 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Refresh gazetteer (NTA boundaries rarely change; cheap)
+        run: node tools/build-gazetteer-nyc.mjs
+
+      - name: Refresh safety data (paced against prod backend)
+        env:
+          SAFEROUTE_API_KEY: ${{ secrets.SAFEROUTE_API_KEY }}
+          SAFEROUTE_BASE_URL: https://saferoute-backend-w5yf.onrender.com
+        run: node tools/generate-data.mjs --force
+
+      - name: Refresh basemaps (incremental — only new neighborhoods fetch)
+        run: node tools/fetch-basemap.mjs
+
+      - name: Render pages
+        run: node tools/render-pages.mjs
+
+      - name: Commit + push if anything changed
+        run: |
+          git config user.name "saferoute-bot"
+          git config user.email "minhaj@safe-route.app"
+          git add -A
+          git diff --cached --quiet && { echo "no changes"; exit 0; }
+          git commit -m "safety pages: monthly data refresh"
+          git push
