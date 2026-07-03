@@ -25,17 +25,23 @@ jobs:
         with:
           node-version: 22
 
-      - name: Refresh gazetteer (NTA boundaries rarely change; cheap)
-        run: node tools/build-gazetteer-nyc.mjs
+      - name: Refresh gazetteers (boundaries rarely change; cheap)
+        run: |
+          node tools/build-gazetteer-nyc.mjs
+          node tools/build-gazetteer-london.mjs
 
       - name: Refresh safety data (paced against prod backend)
         env:
           SAFEROUTE_API_KEY: ${{ secrets.SAFEROUTE_API_KEY }}
           SAFEROUTE_BASE_URL: https://saferoute-backend-w5yf.onrender.com
-        run: node tools/generate-data.mjs --force
+        run: |
+          node tools/generate-data.mjs --force --city new-york
+          node tools/generate-data.mjs --force --city london
 
-      - name: Refresh basemaps (incremental — only new neighborhoods fetch)
-        run: node tools/fetch-basemap.mjs
+      - name: Refresh basemaps (incremental — only new areas fetch)
+        run: |
+          node tools/fetch-basemap.mjs
+          node tools/fetch-basemap-london.mjs
 
       - name: Render pages
         run: node tools/render-pages.mjs

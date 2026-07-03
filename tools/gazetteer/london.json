@@ -1,0 +1,3729 @@
+{
+ "city": "London",
+ "citySlug": "london",
+ "country": "UK",
+ "source": "ONS Wards (December 2025) BSC — Inner London boroughs; City of London merged to one area",
+ "generatedAt": "2026-07-02",
+ "areas": [
+  {
+   "name": "Abbey Road",
+   "slug": "abbey-road",
+   "borough": "Westminster",
+   "ward": "E05013792",
+   "lat": 51.53317,
+   "lng": -0.178808,
+   "neighbors": [
+    "maida-vale",
+    "little-venice",
+    "kilburn",
+    "south-hampstead",
+    "church-street"
+   ]
+  },
+  {
+   "name": "Abbey Wood",
+   "slug": "abbey-wood",
+   "borough": "Greenwich",
+   "ward": "E05014072",
+   "lat": 51.48795,
+   "lng": 0.113009,
+   "neighbors": [
+    "plumstead-glyndon",
+    "west-thamesmead",
+    "plumstead-common",
+    "thamesmead-moorings",
+    "woolwich-arsenal"
+   ]
+  },
+  {
+   "name": "Abingdon",
+   "slug": "abingdon",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009388",
+   "lat": 51.49643,
+   "lng": -0.197244,
+   "neighbors": [
+    "earls-court",
+    "queens-gate",
+    "holland",
+    "avonmore",
+    "campden"
+   ]
+  },
+  {
+   "name": "Addison",
+   "slug": "addison",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013733",
+   "lat": 51.50084,
+   "lng": -0.221464,
+   "neighbors": [
+    "brook-green",
+    "grove",
+    "shepherds-bush-green",
+    "holland",
+    "coningham"
+   ]
+  },
+  {
+   "name": "Arsenal",
+   "slug": "arsenal",
+   "borough": "Islington",
+   "ward": "E05013697",
+   "lat": 51.55633,
+   "lng": -0.107138,
+   "neighbors": [
+    "finsbury-park",
+    "highbury",
+    "holloway",
+    "brownswood",
+    "laycock"
+   ]
+  },
+  {
+   "name": "Avonmore",
+   "slug": "avonmore",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013734",
+   "lat": 51.49333,
+   "lng": -0.209756,
+   "neighbors": [
+    "brook-green",
+    "west-kensington",
+    "fulham-reach",
+    "holland",
+    "abingdon"
+   ]
+  },
+  {
+   "name": "Balham",
+   "slug": "balham",
+   "borough": "Wandsworth",
+   "ward": "E05014009",
+   "lat": 51.44897,
+   "lng": -0.154282,
+   "neighbors": [
+    "northcote",
+    "trinity",
+    "clapham-common-abbeville",
+    "south-balham",
+    "lavender"
+   ]
+  },
+  {
+   "name": "Barnsbury",
+   "slug": "barnsbury",
+   "borough": "Islington",
+   "ward": "E05013698",
+   "lat": 51.53799,
+   "lng": -0.111461,
+   "neighbors": [
+    "caledonian",
+    "st-marys-st-james",
+    "laycock",
+    "kings-cross",
+    "clerkenwell"
+   ]
+  },
+  {
+   "name": "Battersea Park",
+   "slug": "battersea-park",
+   "borough": "Wandsworth",
+   "ward": "E05014010",
+   "lat": 51.47696,
+   "lng": -0.159216,
+   "neighbors": [
+    "shaftesbury-queenstown",
+    "st-marys",
+    "chelsea-riverside",
+    "royal-hospital",
+    "nine-elms"
+   ]
+  },
+  {
+   "name": "Bayswater",
+   "slug": "bayswater",
+   "borough": "Westminster",
+   "ward": "E05013793",
+   "lat": 51.51483,
+   "lng": -0.191084,
+   "neighbors": [
+    "pembridge",
+    "westbourne",
+    "colville",
+    "lancaster-gate",
+    "campden"
+   ]
+  },
+  {
+   "name": "Bellingham",
+   "slug": "bellingham",
+   "borough": "Lewisham",
+   "ward": "E05013714",
+   "lat": 51.43034,
+   "lng": -0.023674,
+   "neighbors": [
+    "catford-south",
+    "perry-vale",
+    "rushey-green",
+    "downham",
+    "hither-green"
+   ]
+  },
+  {
+   "name": "Belsize",
+   "slug": "belsize",
+   "borough": "Camden",
+   "ward": "E05013652",
+   "lat": 51.54841,
+   "lng": -0.170554,
+   "neighbors": [
+    "gospel-oak",
+    "primrose-hill",
+    "south-hampstead",
+    "haverstock",
+    "west-hampstead"
+   ]
+  },
+  {
+   "name": "Bethnal Green East",
+   "slug": "bethnal-green-east",
+   "borough": "Tower Hamlets",
+   "ward": "E05009317",
+   "lat": 51.52725,
+   "lng": -0.046539,
+   "neighbors": [
+    "bethnal-green-west",
+    "bow-west",
+    "st-dunstans",
+    "stepney-green",
+    "victoria"
+   ]
+  },
+  {
+   "name": "Bethnal Green West",
+   "slug": "bethnal-green-west",
+   "borough": "Tower Hamlets",
+   "ward": "E05009331",
+   "lat": 51.52804,
+   "lng": -0.057837,
+   "neighbors": [
+    "bethnal-green-east",
+    "weavers",
+    "haggerston",
+    "spitalfields-banglatown",
+    "victoria"
+   ]
+  },
+  {
+   "name": "Blackheath",
+   "slug": "blackheath",
+   "borough": "Lewisham",
+   "ward": "E05013715",
+   "lat": 51.46527,
+   "lng": 0.001086,
+   "neighbors": [
+    "lewisham-central",
+    "blackheath-westcombe",
+    "greenwich-park",
+    "lee-green",
+    "ladywell"
+   ]
+  },
+  {
+   "name": "Blackheath Westcombe",
+   "slug": "blackheath-westcombe",
+   "borough": "Greenwich",
+   "ward": "E05014073",
+   "lat": 51.46413,
+   "lng": 0.014857,
+   "neighbors": [
+    "blackheath",
+    "kidbrooke-village-sutcliffe",
+    "lee-green",
+    "lewisham-central",
+    "kidbrooke-park"
+   ]
+  },
+  {
+   "name": "Blackwall & Cubitt Town",
+   "slug": "blackwall-cubitt-town",
+   "borough": "Tower Hamlets",
+   "ward": "E05009318",
+   "lat": 51.50257,
+   "lng": -0.011674,
+   "neighbors": [
+    "canary-wharf",
+    "poplar",
+    "island-gardens",
+    "lansbury",
+    "limehouse"
+   ]
+  },
+  {
+   "name": "Bloomsbury",
+   "slug": "bloomsbury",
+   "borough": "Camden",
+   "ward": "E05013653",
+   "lat": 51.52283,
+   "lng": -0.132457,
+   "neighbors": [
+    "regents-park-camden",
+    "st-pancras-somers-town",
+    "west-end",
+    "holborn-covent-garden",
+    "kings-cross"
+   ]
+  },
+  {
+   "name": "Borough & Bankside",
+   "slug": "borough-bankside",
+   "borough": "Southwark",
+   "ward": "E05011095",
+   "lat": 51.50309,
+   "lng": -0.098683,
+   "neighbors": [
+    "chaucer",
+    "st-georges",
+    "waterloo-south-bank",
+    "city-of-london",
+    "london-bridge-west-bermondsey"
+   ]
+  },
+  {
+   "name": "Bow East",
+   "slug": "bow-east",
+   "borough": "Tower Hamlets",
+   "ward": "E05009319",
+   "lat": 51.53622,
+   "lng": -0.027107,
+   "neighbors": [
+    "bow-west",
+    "hackney-wick",
+    "bromley-north",
+    "victoria",
+    "bethnal-green-east"
+   ]
+  },
+  {
+   "name": "Bow West",
+   "slug": "bow-west",
+   "borough": "Tower Hamlets",
+   "ward": "E05009320",
+   "lat": 51.53111,
+   "lng": -0.036945,
+   "neighbors": [
+    "bethnal-green-east",
+    "bow-east",
+    "victoria",
+    "st-dunstans",
+    "bromley-north"
+   ]
+  },
+  {
+   "name": "Brixton Acre Lane",
+   "slug": "brixton-acre-lane",
+   "borough": "Lambeth",
+   "ward": "E05014095",
+   "lat": 51.45705,
+   "lng": -0.122548,
+   "neighbors": [
+    "brixton-rush-common",
+    "clapham-east",
+    "clapham-park",
+    "brixton-windrush",
+    "clapham-common-abbeville"
+   ]
+  },
+  {
+   "name": "Brixton North",
+   "slug": "brixton-north",
+   "borough": "Lambeth",
+   "ward": "E05014096",
+   "lat": 51.46689,
+   "lng": -0.112138,
+   "neighbors": [
+    "stockwell-east",
+    "brixton-windrush",
+    "myatts-fields",
+    "herne-hill-loughborough-junction",
+    "brixton-acre-lane"
+   ]
+  },
+  {
+   "name": "Brixton Rush Common",
+   "slug": "brixton-rush-common",
+   "borough": "Lambeth",
+   "ward": "E05014097",
+   "lat": 51.45325,
+   "lng": -0.116745,
+   "neighbors": [
+    "brixton-acre-lane",
+    "brixton-windrush",
+    "clapham-park",
+    "herne-hill-loughborough-junction",
+    "st-martins"
+   ]
+  },
+  {
+   "name": "Brixton Windrush",
+   "slug": "brixton-windrush",
+   "borough": "Lambeth",
+   "ward": "E05014098",
+   "lat": 51.46025,
+   "lng": -0.109288,
+   "neighbors": [
+    "herne-hill-loughborough-junction",
+    "brixton-north",
+    "brixton-rush-common",
+    "brixton-acre-lane",
+    "stockwell-east"
+   ]
+  },
+  {
+   "name": "Brockley",
+   "slug": "brockley",
+   "borough": "Lewisham",
+   "ward": "E05013716",
+   "lat": 51.46772,
+   "lng": -0.028884,
+   "neighbors": [
+    "ladywell",
+    "telegraph-hill",
+    "deptford",
+    "lewisham-central",
+    "greenwich-creekside"
+   ]
+  },
+  {
+   "name": "Bromley North",
+   "slug": "bromley-north",
+   "borough": "Tower Hamlets",
+   "ward": "E05009321",
+   "lat": 51.52649,
+   "lng": -0.017595,
+   "neighbors": [
+    "bromley-south",
+    "mile-end",
+    "lansbury",
+    "bow-east",
+    "bow-west"
+   ]
+  },
+  {
+   "name": "Bromley South",
+   "slug": "bromley-south",
+   "borough": "Tower Hamlets",
+   "ward": "E05009322",
+   "lat": 51.52102,
+   "lng": -0.019014,
+   "neighbors": [
+    "bromley-north",
+    "mile-end",
+    "lansbury",
+    "poplar",
+    "st-dunstans"
+   ]
+  },
+  {
+   "name": "Brompton & Hans Town",
+   "slug": "brompton-hans-town",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009389",
+   "lat": 51.49661,
+   "lng": -0.167573,
+   "neighbors": [
+    "courtfield",
+    "royal-hospital",
+    "knightsbridge-belgravia",
+    "stanley",
+    "queens-gate"
+   ]
+  },
+  {
+   "name": "Brook Green",
+   "slug": "brook-green",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013735",
+   "lat": 51.49754,
+   "lng": -0.216088,
+   "neighbors": [
+    "addison",
+    "avonmore",
+    "holland",
+    "grove",
+    "hammersmith-broadway"
+   ]
+  },
+  {
+   "name": "Brownswood",
+   "slug": "brownswood",
+   "borough": "Hackney",
+   "ward": "E05009367",
+   "lat": 51.56463,
+   "lng": -0.098007,
+   "neighbors": [
+    "woodberry-down",
+    "finsbury-park",
+    "clissold",
+    "arsenal",
+    "stamford-hill-west"
+   ]
+  },
+  {
+   "name": "Bunhill",
+   "slug": "bunhill",
+   "borough": "Islington",
+   "ward": "E05013699",
+   "lat": 51.52358,
+   "lng": -0.093504,
+   "neighbors": [
+    "st-peters-canalside",
+    "hoxton-east-shoreditch",
+    "hoxton-west",
+    "city-of-london",
+    "clerkenwell"
+   ]
+  },
+  {
+   "name": "Caledonian",
+   "slug": "caledonian",
+   "borough": "Islington",
+   "ward": "E05013700",
+   "lat": 51.53885,
+   "lng": -0.120236,
+   "neighbors": [
+    "kings-cross",
+    "barnsbury",
+    "camden-square",
+    "st-pancras-somers-town",
+    "laycock"
+   ]
+  },
+  {
+   "name": "Camberwell Green",
+   "slug": "camberwell-green",
+   "borough": "Southwark",
+   "ward": "E05011096",
+   "lat": 51.47634,
+   "lng": -0.094727,
+   "neighbors": [
+    "myatts-fields",
+    "st-giles",
+    "newington",
+    "faraday",
+    "peckham"
+   ]
+  },
+  {
+   "name": "Camden Square",
+   "slug": "camden-square",
+   "borough": "Camden",
+   "ward": "E05013654",
+   "lat": 51.54413,
+   "lng": -0.131614,
+   "neighbors": [
+    "kentish-town-south",
+    "caledonian",
+    "camden-town",
+    "st-pancras-somers-town",
+    "kings-cross"
+   ]
+  },
+  {
+   "name": "Camden Town",
+   "slug": "camden-town",
+   "borough": "Camden",
+   "ward": "E05013655",
+   "lat": 51.54092,
+   "lng": -0.145056,
+   "neighbors": [
+    "kentish-town-south",
+    "haverstock",
+    "camden-square",
+    "st-pancras-somers-town",
+    "regents-park-camden"
+   ]
+  },
+  {
+   "name": "Campden",
+   "slug": "campden",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009390",
+   "lat": 51.50465,
+   "lng": -0.19375,
+   "neighbors": [
+    "pembridge",
+    "queens-gate",
+    "abingdon",
+    "holland",
+    "lancaster-gate"
+   ]
+  },
+  {
+   "name": "Canary Wharf",
+   "slug": "canary-wharf",
+   "borough": "Tower Hamlets",
+   "ward": "E05009323",
+   "lat": 51.50099,
+   "lng": -0.020561,
+   "neighbors": [
+    "blackwall-cubitt-town",
+    "island-gardens",
+    "limehouse",
+    "surrey-docks",
+    "poplar"
+   ]
+  },
+  {
+   "name": "Canonbury",
+   "slug": "canonbury",
+   "borough": "Islington",
+   "ward": "E05013701",
+   "lat": 51.54287,
+   "lng": -0.092136,
+   "neighbors": [
+    "st-marys-st-james",
+    "de-beauvoir",
+    "highbury",
+    "mildmay",
+    "hoxton-west"
+   ]
+  },
+  {
+   "name": "Catford South",
+   "slug": "catford-south",
+   "borough": "Lewisham",
+   "ward": "E05013717",
+   "lat": 51.43397,
+   "lng": -0.012281,
+   "neighbors": [
+    "bellingham",
+    "hither-green",
+    "rushey-green",
+    "downham",
+    "perry-vale"
+   ]
+  },
+  {
+   "name": "Cazenove",
+   "slug": "cazenove",
+   "borough": "Hackney",
+   "ward": "E05009368",
+   "lat": 51.56682,
+   "lng": -0.065522,
+   "neighbors": [
+    "springfield",
+    "stoke-newington",
+    "stamford-hill-west",
+    "hackney-downs",
+    "lea-bridge"
+   ]
+  },
+  {
+   "name": "Champion Hill",
+   "slug": "champion-hill",
+   "borough": "Southwark",
+   "ward": "E05011097",
+   "lat": 51.4638,
+   "lng": -0.083155,
+   "neighbors": [
+    "goose-green",
+    "rye-lane",
+    "st-giles",
+    "herne-hill-loughborough-junction",
+    "dulwich-village"
+   ]
+  },
+  {
+   "name": "Charlton Hornfair",
+   "slug": "charlton-hornfair",
+   "borough": "Greenwich",
+   "ward": "E05014074",
+   "lat": 51.47889,
+   "lng": 0.035367,
+   "neighbors": [
+    "charlton-village-riverside",
+    "kidbrooke-park",
+    "woolwich-dockyard",
+    "woolwich-common",
+    "east-greenwich"
+   ]
+  },
+  {
+   "name": "Charlton Village & Riverside",
+   "slug": "charlton-village-riverside",
+   "borough": "Greenwich",
+   "ward": "E05014075",
+   "lat": 51.4874,
+   "lng": 0.039131,
+   "neighbors": [
+    "charlton-hornfair",
+    "woolwich-dockyard",
+    "woolwich-common",
+    "kidbrooke-park",
+    "greenwich-peninsula"
+   ]
+  },
+  {
+   "name": "Chaucer",
+   "slug": "chaucer",
+   "borough": "Southwark",
+   "ward": "E05011098",
+   "lat": 51.4985,
+   "lng": -0.090676,
+   "neighbors": [
+    "london-bridge-west-bermondsey",
+    "borough-bankside",
+    "north-walworth",
+    "st-georges",
+    "faraday"
+   ]
+  },
+  {
+   "name": "Chelsea Riverside",
+   "slug": "chelsea-riverside",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009391",
+   "lat": 51.48215,
+   "lng": -0.176262,
+   "neighbors": [
+    "stanley",
+    "redcliffe",
+    "courtfield",
+    "parsons-green-sandford",
+    "battersea-park"
+   ]
+  },
+  {
+   "name": "Church Street",
+   "slug": "church-street",
+   "borough": "Westminster",
+   "ward": "E05013794",
+   "lat": 51.52341,
+   "lng": -0.170461,
+   "neighbors": [
+    "little-venice",
+    "regents-park-westminster",
+    "hyde-park",
+    "marylebone",
+    "abbey-road"
+   ]
+  },
+  {
+   "name": "City of London",
+   "slug": "city-of-london",
+   "borough": "City of London",
+   "ward": "E09000001",
+   "lat": 51.5133,
+   "lng": -0.0898,
+   "neighbors": [
+    "bunhill",
+    "borough-bankside",
+    "spitalfields-banglatown",
+    "chaucer",
+    "london-bridge-west-bermondsey"
+   ]
+  },
+  {
+   "name": "Clapham Common & Abbeville",
+   "slug": "clapham-common-abbeville",
+   "borough": "Lambeth",
+   "ward": "E05014099",
+   "lat": 51.45539,
+   "lng": -0.13927,
+   "neighbors": [
+    "clapham-east",
+    "clapham-park",
+    "brixton-acre-lane",
+    "clapham-town",
+    "balham"
+   ]
+  },
+  {
+   "name": "Clapham East",
+   "slug": "clapham-east",
+   "borough": "Lambeth",
+   "ward": "E05014100",
+   "lat": 51.46169,
+   "lng": -0.132392,
+   "neighbors": [
+    "clapham-town",
+    "clapham-common-abbeville",
+    "brixton-acre-lane",
+    "clapham-park",
+    "stockwell-west-larkhall"
+   ]
+  },
+  {
+   "name": "Clapham Park",
+   "slug": "clapham-park",
+   "borough": "Lambeth",
+   "ward": "E05014101",
+   "lat": 51.44973,
+   "lng": -0.129915,
+   "neighbors": [
+    "streatham-hill-west-thornton",
+    "clapham-common-abbeville",
+    "brixton-acre-lane",
+    "brixton-rush-common",
+    "clapham-east"
+   ]
+  },
+  {
+   "name": "Clapham Town",
+   "slug": "clapham-town",
+   "borough": "Lambeth",
+   "ward": "E05014102",
+   "lat": 51.46632,
+   "lng": -0.139819,
+   "neighbors": [
+    "clapham-east",
+    "shaftesbury-queenstown",
+    "stockwell-west-larkhall",
+    "clapham-common-abbeville",
+    "lavender"
+   ]
+  },
+  {
+   "name": "Clerkenwell",
+   "slug": "clerkenwell",
+   "borough": "Islington",
+   "ward": "E05013702",
+   "lat": 51.52747,
+   "lng": -0.110022,
+   "neighbors": [
+    "st-peters-canalside",
+    "holborn-covent-garden",
+    "barnsbury",
+    "bunhill",
+    "kings-cross"
+   ]
+  },
+  {
+   "name": "Clissold",
+   "slug": "clissold",
+   "borough": "Hackney",
+   "ward": "E05009369",
+   "lat": 51.55902,
+   "lng": -0.085689,
+   "neighbors": [
+    "stoke-newington",
+    "mildmay",
+    "brownswood",
+    "stamford-hill-west",
+    "shacklewell"
+   ]
+  },
+  {
+   "name": "College Park & Old Oak",
+   "slug": "college-park-old-oak",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013736",
+   "lat": 51.52332,
+   "lng": -0.236228,
+   "neighbors": [
+    "dalgarno",
+    "st-helens",
+    "white-city",
+    "wormholt",
+    "notting-dale"
+   ]
+  },
+  {
+   "name": "Colville",
+   "slug": "colville",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009392",
+   "lat": 51.51582,
+   "lng": -0.204492,
+   "neighbors": [
+    "pembridge",
+    "golborne",
+    "notting-dale",
+    "bayswater",
+    "norland"
+   ]
+  },
+  {
+   "name": "Coningham",
+   "slug": "coningham",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013737",
+   "lat": 51.50321,
+   "lng": -0.236731,
+   "neighbors": [
+    "grove",
+    "wendell-park",
+    "wormholt",
+    "white-city",
+    "ravenscourt"
+   ]
+  },
+  {
+   "name": "Courtfield",
+   "slug": "courtfield",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009393",
+   "lat": 51.49126,
+   "lng": -0.178088,
+   "neighbors": [
+    "stanley",
+    "redcliffe",
+    "brompton-hans-town",
+    "queens-gate",
+    "chelsea-riverside"
+   ]
+  },
+  {
+   "name": "Crofton Park",
+   "slug": "crofton-park",
+   "borough": "Lewisham",
+   "ward": "E05013718",
+   "lat": 51.45079,
+   "lng": -0.038465,
+   "neighbors": [
+    "peckham-rye",
+    "rushey-green",
+    "ladywell",
+    "perry-vale",
+    "forest-hill"
+   ]
+  },
+  {
+   "name": "Dalgarno",
+   "slug": "dalgarno",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009394",
+   "lat": 51.52433,
+   "lng": -0.220865,
+   "neighbors": [
+    "st-helens",
+    "golborne",
+    "queens-park",
+    "college-park-old-oak",
+    "notting-dale"
+   ]
+  },
+  {
+   "name": "Dalston",
+   "slug": "dalston",
+   "borough": "Hackney",
+   "ward": "E05009370",
+   "lat": 51.54741,
+   "lng": -0.070585,
+   "neighbors": [
+    "shacklewell",
+    "hackney-central",
+    "london-fields",
+    "de-beauvoir",
+    "mildmay"
+   ]
+  },
+  {
+   "name": "De Beauvoir",
+   "slug": "de-beauvoir",
+   "borough": "Hackney",
+   "ward": "E05009371",
+   "lat": 51.54176,
+   "lng": -0.081121,
+   "neighbors": [
+    "canonbury",
+    "dalston",
+    "london-fields",
+    "mildmay",
+    "haggerston"
+   ]
+  },
+  {
+   "name": "Deptford",
+   "slug": "deptford",
+   "borough": "Lewisham",
+   "ward": "E05013719",
+   "lat": 51.47815,
+   "lng": -0.030854,
+   "neighbors": [
+    "evelyn",
+    "brockley",
+    "greenwich-creekside",
+    "new-cross-gate",
+    "telegraph-hill"
+   ]
+  },
+  {
+   "name": "Downham",
+   "slug": "downham",
+   "borough": "Lewisham",
+   "ward": "E05013720",
+   "lat": 51.42511,
+   "lng": 0.000209,
+   "neighbors": [
+    "catford-south",
+    "hither-green",
+    "bellingham",
+    "grove-park",
+    "rushey-green"
+   ]
+  },
+  {
+   "name": "Dulwich Hill",
+   "slug": "dulwich-hill",
+   "borough": "Southwark",
+   "ward": "E05011099",
+   "lat": 51.45228,
+   "lng": -0.066439,
+   "neighbors": [
+    "goose-green",
+    "peckham-rye",
+    "forest-hill",
+    "dulwich-village",
+    "champion-hill"
+   ]
+  },
+  {
+   "name": "Dulwich Village",
+   "slug": "dulwich-village",
+   "borough": "Southwark",
+   "ward": "E05011100",
+   "lat": 51.45095,
+   "lng": -0.088372,
+   "neighbors": [
+    "west-dulwich",
+    "goose-green",
+    "herne-hill-loughborough-junction",
+    "champion-hill",
+    "dulwich-hill"
+   ]
+  },
+  {
+   "name": "Dulwich Wood",
+   "slug": "dulwich-wood",
+   "borough": "Southwark",
+   "ward": "E05011101",
+   "lat": 51.43164,
+   "lng": -0.078474,
+   "neighbors": [
+    "gipsy-hill",
+    "sydenham",
+    "forest-hill",
+    "knights-hill",
+    "west-dulwich"
+   ]
+  },
+  {
+   "name": "Earl's Court",
+   "slug": "earls-court",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009395",
+   "lat": 51.49102,
+   "lng": -0.19547,
+   "neighbors": [
+    "abingdon",
+    "west-kensington",
+    "redcliffe",
+    "lillie",
+    "avonmore"
+   ]
+  },
+  {
+   "name": "East Greenwich",
+   "slug": "east-greenwich",
+   "borough": "Greenwich",
+   "ward": "E05014076",
+   "lat": 51.48756,
+   "lng": 0.008774,
+   "neighbors": [
+    "greenwich-peninsula",
+    "greenwich-park",
+    "island-gardens",
+    "greenwich-creekside",
+    "charlton-hornfair"
+   ]
+  },
+  {
+   "name": "East Putney",
+   "slug": "east-putney",
+   "borough": "Wandsworth",
+   "ward": "E05014011",
+   "lat": 51.45455,
+   "lng": -0.208236,
+   "neighbors": [
+    "west-hill",
+    "southfields",
+    "west-putney",
+    "wandsworth-town",
+    "thamesfield"
+   ]
+  },
+  {
+   "name": "Eltham Page",
+   "slug": "eltham-page",
+   "borough": "Greenwich",
+   "ward": "E05014077",
+   "lat": 51.45862,
+   "lng": 0.041174,
+   "neighbors": [
+    "kidbrooke-village-sutcliffe",
+    "kidbrooke-park",
+    "middle-park-horn-park",
+    "eltham-park-progress",
+    "blackheath-westcombe"
+   ]
+  },
+  {
+   "name": "Eltham Park & Progress",
+   "slug": "eltham-park-progress",
+   "borough": "Greenwich",
+   "ward": "E05014078",
+   "lat": 51.46302,
+   "lng": 0.063843,
+   "neighbors": [
+    "shooters-hill",
+    "eltham-page",
+    "eltham-town-avery-hill",
+    "kidbrooke-park",
+    "woolwich-common"
+   ]
+  },
+  {
+   "name": "Eltham Town & Avery Hill",
+   "slug": "eltham-town-avery-hill",
+   "borough": "Greenwich",
+   "ward": "E05014079",
+   "lat": 51.44832,
+   "lng": 0.067469,
+   "neighbors": [
+    "eltham-park-progress",
+    "mottingham-coldharbour-new-eltham",
+    "eltham-page",
+    "middle-park-horn-park",
+    "shooters-hill"
+   ]
+  },
+  {
+   "name": "Evelyn",
+   "slug": "evelyn",
+   "borough": "Lewisham",
+   "ward": "E05013721",
+   "lat": 51.48739,
+   "lng": -0.035929,
+   "neighbors": [
+    "new-cross-gate",
+    "deptford",
+    "surrey-docks",
+    "rotherhithe",
+    "island-gardens"
+   ]
+  },
+  {
+   "name": "Falconbrook",
+   "slug": "falconbrook",
+   "borough": "Wandsworth",
+   "ward": "E05014012",
+   "lat": 51.46621,
+   "lng": -0.172002,
+   "neighbors": [
+    "st-marys",
+    "lavender",
+    "sands-end",
+    "wandsworth-town",
+    "battersea-park"
+   ]
+  },
+  {
+   "name": "Faraday",
+   "slug": "faraday",
+   "borough": "Southwark",
+   "ward": "E05011102",
+   "lat": 51.48553,
+   "lng": -0.086191,
+   "neighbors": [
+    "north-walworth",
+    "newington",
+    "camberwell-green",
+    "st-giles",
+    "peckham"
+   ]
+  },
+  {
+   "name": "Finsbury Park",
+   "slug": "finsbury-park",
+   "borough": "Islington",
+   "ward": "E05013703",
+   "lat": 51.56235,
+   "lng": -0.109399,
+   "neighbors": [
+    "arsenal",
+    "tollington",
+    "brownswood",
+    "holloway",
+    "highbury"
+   ]
+  },
+  {
+   "name": "Forest Hill",
+   "slug": "forest-hill",
+   "borough": "Lewisham",
+   "ward": "E05013722",
+   "lat": 51.44016,
+   "lng": -0.059324,
+   "neighbors": [
+    "sydenham",
+    "perry-vale",
+    "dulwich-hill",
+    "dulwich-wood",
+    "peckham-rye"
+   ]
+  },
+  {
+   "name": "Fortune Green",
+   "slug": "fortune-green",
+   "borough": "Camden",
+   "ward": "E05013656",
+   "lat": 51.55305,
+   "lng": -0.200155,
+   "neighbors": [
+    "west-hampstead",
+    "frognal",
+    "south-hampstead",
+    "kilburn",
+    "hampstead-town"
+   ]
+  },
+  {
+   "name": "Frognal",
+   "slug": "frognal",
+   "borough": "Camden",
+   "ward": "E05013657",
+   "lat": 51.55744,
+   "lng": -0.186364,
+   "neighbors": [
+    "hampstead-town",
+    "west-hampstead",
+    "fortune-green",
+    "belsize",
+    "south-hampstead"
+   ]
+  },
+  {
+   "name": "Fulham Reach",
+   "slug": "fulham-reach",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013738",
+   "lat": 51.48654,
+   "lng": -0.215611,
+   "neighbors": [
+    "hammersmith-broadway",
+    "west-kensington",
+    "avonmore",
+    "munster",
+    "lillie"
+   ]
+  },
+  {
+   "name": "Fulham Town",
+   "slug": "fulham-town",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013739",
+   "lat": 51.47493,
+   "lng": -0.20581,
+   "neighbors": [
+    "munster",
+    "walham-green",
+    "palace-hurlingham",
+    "parsons-green-sandford",
+    "lillie"
+   ]
+  },
+  {
+   "name": "Furzedown",
+   "slug": "furzedown",
+   "borough": "Wandsworth",
+   "ward": "E05014013",
+   "lat": 51.42477,
+   "lng": -0.150424,
+   "neighbors": [
+    "tooting-bec",
+    "south-balham",
+    "streatham-st-leonards",
+    "tooting-broadway",
+    "streatham-common-vale"
+   ]
+  },
+  {
+   "name": "Gipsy Hill",
+   "slug": "gipsy-hill",
+   "borough": "Lambeth",
+   "ward": "E05014103",
+   "lat": 51.4266,
+   "lng": -0.089891,
+   "neighbors": [
+    "dulwich-wood",
+    "knights-hill",
+    "st-martins",
+    "west-dulwich",
+    "streatham-wells"
+   ]
+  },
+  {
+   "name": "Golborne",
+   "slug": "golborne",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009396",
+   "lat": 51.52226,
+   "lng": -0.208116,
+   "neighbors": [
+    "colville",
+    "queens-park",
+    "st-helens",
+    "harrow-road",
+    "dalgarno"
+   ]
+  },
+  {
+   "name": "Goose Green",
+   "slug": "goose-green",
+   "borough": "Southwark",
+   "ward": "E05011103",
+   "lat": 51.45685,
+   "lng": -0.075875,
+   "neighbors": [
+    "dulwich-hill",
+    "champion-hill",
+    "dulwich-village",
+    "rye-lane",
+    "peckham-rye"
+   ]
+  },
+  {
+   "name": "Gospel Oak",
+   "slug": "gospel-oak",
+   "borough": "Camden",
+   "ward": "E05013658",
+   "lat": 51.55245,
+   "lng": -0.157641,
+   "neighbors": [
+    "haverstock",
+    "belsize",
+    "kentish-town-north",
+    "highgate",
+    "primrose-hill"
+   ]
+  },
+  {
+   "name": "Greenwich Creekside",
+   "slug": "greenwich-creekside",
+   "borough": "Greenwich",
+   "ward": "E05014080",
+   "lat": 51.48066,
+   "lng": -0.014083,
+   "neighbors": [
+    "greenwich-park",
+    "island-gardens",
+    "deptford",
+    "evelyn",
+    "east-greenwich"
+   ]
+  },
+  {
+   "name": "Greenwich Park",
+   "slug": "greenwich-park",
+   "borough": "Greenwich",
+   "ward": "E05014081",
+   "lat": 51.47628,
+   "lng": -0.005719,
+   "neighbors": [
+    "greenwich-creekside",
+    "blackheath",
+    "lewisham-central",
+    "east-greenwich",
+    "island-gardens"
+   ]
+  },
+  {
+   "name": "Greenwich Peninsula",
+   "slug": "greenwich-peninsula",
+   "borough": "Greenwich",
+   "ward": "E05014082",
+   "lat": 51.49467,
+   "lng": 0.011263,
+   "neighbors": [
+    "east-greenwich",
+    "blackwall-cubitt-town",
+    "island-gardens",
+    "charlton-village-riverside",
+    "poplar"
+   ]
+  },
+  {
+   "name": "Grove",
+   "slug": "grove",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013740",
+   "lat": 51.49817,
+   "lng": -0.229679,
+   "neighbors": [
+    "addison",
+    "coningham",
+    "ravenscourt",
+    "brook-green",
+    "hammersmith-broadway"
+   ]
+  },
+  {
+   "name": "Grove Park",
+   "slug": "grove-park",
+   "borough": "Lewisham",
+   "ward": "E05013723",
+   "lat": 51.43486,
+   "lng": 0.022288,
+   "neighbors": [
+    "hither-green",
+    "middle-park-horn-park",
+    "downham",
+    "lee-green",
+    "catford-south"
+   ]
+  },
+  {
+   "name": "Hackney Central",
+   "slug": "hackney-central",
+   "borough": "Hackney",
+   "ward": "E05009372",
+   "lat": 51.54817,
+   "lng": -0.060471,
+   "neighbors": [
+    "dalston",
+    "homerton",
+    "shacklewell",
+    "hackney-downs",
+    "london-fields"
+   ]
+  },
+  {
+   "name": "Hackney Downs",
+   "slug": "hackney-downs",
+   "borough": "Hackney",
+   "ward": "E05009373",
+   "lat": 51.55745,
+   "lng": -0.062284,
+   "neighbors": [
+    "lea-bridge",
+    "shacklewell",
+    "hackney-central",
+    "stoke-newington",
+    "cazenove"
+   ]
+  },
+  {
+   "name": "Hackney Wick",
+   "slug": "hackney-wick",
+   "borough": "Hackney",
+   "ward": "E05009374",
+   "lat": 51.54676,
+   "lng": -0.029579,
+   "neighbors": [
+    "kings-park",
+    "bow-east",
+    "homerton",
+    "victoria",
+    "bow-west"
+   ]
+  },
+  {
+   "name": "Haggerston",
+   "slug": "haggerston",
+   "borough": "Hackney",
+   "ward": "E05009375",
+   "lat": 51.5337,
+   "lng": -0.069737,
+   "neighbors": [
+    "london-fields",
+    "weavers",
+    "bethnal-green-west",
+    "hoxton-east-shoreditch",
+    "de-beauvoir"
+   ]
+  },
+  {
+   "name": "Hammersmith Broadway",
+   "slug": "hammersmith-broadway",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013741",
+   "lat": 51.49023,
+   "lng": -0.223951,
+   "neighbors": [
+    "fulham-reach",
+    "grove",
+    "brook-green",
+    "avonmore",
+    "addison"
+   ]
+  },
+  {
+   "name": "Hampstead Town",
+   "slug": "hampstead-town",
+   "borough": "Camden",
+   "ward": "E05013659",
+   "lat": 51.56068,
+   "lng": -0.174405,
+   "neighbors": [
+    "frognal",
+    "belsize",
+    "highgate",
+    "gospel-oak",
+    "west-hampstead"
+   ]
+  },
+  {
+   "name": "Harrow Road",
+   "slug": "harrow-road",
+   "borough": "Westminster",
+   "ward": "E05013795",
+   "lat": 51.52708,
+   "lng": -0.198499,
+   "neighbors": [
+    "maida-vale",
+    "queens-park",
+    "golborne",
+    "westbourne",
+    "little-venice"
+   ]
+  },
+  {
+   "name": "Haverstock",
+   "slug": "haverstock",
+   "borough": "Camden",
+   "ward": "E05013660",
+   "lat": 51.54677,
+   "lng": -0.152909,
+   "neighbors": [
+    "gospel-oak",
+    "camden-town",
+    "kentish-town-south",
+    "primrose-hill",
+    "kentish-town-north"
+   ]
+  },
+  {
+   "name": "Herne Hill & Loughborough Junction",
+   "slug": "herne-hill-loughborough-junction",
+   "borough": "Lambeth",
+   "ward": "E05014104",
+   "lat": 51.45916,
+   "lng": -0.102063,
+   "neighbors": [
+    "brixton-windrush",
+    "brixton-north",
+    "brixton-rush-common",
+    "dulwich-village",
+    "champion-hill"
+   ]
+  },
+  {
+   "name": "Highbury",
+   "slug": "highbury",
+   "borough": "Islington",
+   "ward": "E05013704",
+   "lat": 51.55099,
+   "lng": -0.100003,
+   "neighbors": [
+    "arsenal",
+    "laycock",
+    "mildmay",
+    "canonbury",
+    "clissold"
+   ]
+  },
+  {
+   "name": "Highgate",
+   "slug": "highgate",
+   "borough": "Camden",
+   "ward": "E05013661",
+   "lat": 51.56303,
+   "lng": -0.153404,
+   "neighbors": [
+    "gospel-oak",
+    "kentish-town-north",
+    "junction",
+    "hampstead-town",
+    "haverstock"
+   ]
+  },
+  {
+   "name": "Hillrise",
+   "slug": "hillrise",
+   "borough": "Islington",
+   "ward": "E05013705",
+   "lat": 51.57024,
+   "lng": -0.128826,
+   "neighbors": [
+    "junction",
+    "tollington",
+    "finsbury-park",
+    "tufnell-park",
+    "highgate"
+   ]
+  },
+  {
+   "name": "Hither Green",
+   "slug": "hither-green",
+   "borough": "Lewisham",
+   "ward": "E05013724",
+   "lat": 51.44043,
+   "lng": 0.00164,
+   "neighbors": [
+    "catford-south",
+    "lee-green",
+    "grove-park",
+    "rushey-green",
+    "downham"
+   ]
+  },
+  {
+   "name": "Holborn & Covent Garden",
+   "slug": "holborn-covent-garden",
+   "borough": "Camden",
+   "ward": "E05013662",
+   "lat": 51.51895,
+   "lng": -0.113287,
+   "neighbors": [
+    "clerkenwell",
+    "bloomsbury",
+    "bunhill",
+    "st-peters-canalside",
+    "city-of-london"
+   ]
+  },
+  {
+   "name": "Holland",
+   "slug": "holland",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009397",
+   "lat": 51.50134,
+   "lng": -0.20777,
+   "neighbors": [
+    "brook-green",
+    "norland",
+    "avonmore",
+    "abingdon",
+    "addison"
+   ]
+  },
+  {
+   "name": "Holloway",
+   "slug": "holloway",
+   "borough": "Islington",
+   "ward": "E05013706",
+   "lat": 51.55209,
+   "lng": -0.120224,
+   "neighbors": [
+    "tufnell-park",
+    "laycock",
+    "arsenal",
+    "camden-square",
+    "tollington"
+   ]
+  },
+  {
+   "name": "Homerton",
+   "slug": "homerton",
+   "borough": "Hackney",
+   "ward": "E05009376",
+   "lat": 51.54725,
+   "lng": -0.048178,
+   "neighbors": [
+    "hackney-central",
+    "victoria",
+    "hackney-wick",
+    "lea-bridge",
+    "kings-park"
+   ]
+  },
+  {
+   "name": "Hoxton East & Shoreditch",
+   "slug": "hoxton-east-shoreditch",
+   "borough": "Hackney",
+   "ward": "E05009377",
+   "lat": 51.52855,
+   "lng": -0.082772,
+   "neighbors": [
+    "hoxton-west",
+    "weavers",
+    "bunhill",
+    "haggerston",
+    "st-peters-canalside"
+   ]
+  },
+  {
+   "name": "Hoxton West",
+   "slug": "hoxton-west",
+   "borough": "Hackney",
+   "ward": "E05009378",
+   "lat": 51.53193,
+   "lng": -0.089969,
+   "neighbors": [
+    "hoxton-east-shoreditch",
+    "st-peters-canalside",
+    "st-marys-st-james",
+    "bunhill",
+    "canonbury"
+   ]
+  },
+  {
+   "name": "Hyde Park",
+   "slug": "hyde-park",
+   "borough": "Westminster",
+   "ward": "E05013796",
+   "lat": 51.51313,
+   "lng": -0.16838,
+   "neighbors": [
+    "lancaster-gate",
+    "marylebone",
+    "church-street",
+    "little-venice",
+    "bayswater"
+   ]
+  },
+  {
+   "name": "Island Gardens",
+   "slug": "island-gardens",
+   "borough": "Tower Hamlets",
+   "ward": "E05009324",
+   "lat": 51.48989,
+   "lng": -0.014243,
+   "neighbors": [
+    "greenwich-creekside",
+    "canary-wharf",
+    "blackwall-cubitt-town",
+    "evelyn",
+    "east-greenwich"
+   ]
+  },
+  {
+   "name": "Junction",
+   "slug": "junction",
+   "borough": "Islington",
+   "ward": "E05013707",
+   "lat": 51.56252,
+   "lng": -0.13425,
+   "neighbors": [
+    "tufnell-park",
+    "hillrise",
+    "tollington",
+    "kentish-town-north",
+    "highgate"
+   ]
+  },
+  {
+   "name": "Kennington",
+   "slug": "kennington",
+   "borough": "Lambeth",
+   "ward": "E05014105",
+   "lat": 51.48851,
+   "lng": -0.111058,
+   "neighbors": [
+    "newington",
+    "vauxhall",
+    "oval",
+    "st-georges",
+    "north-walworth"
+   ]
+  },
+  {
+   "name": "Kentish Town North",
+   "slug": "kentish-town-north",
+   "borough": "Camden",
+   "ward": "E05013663",
+   "lat": 51.55454,
+   "lng": -0.141025,
+   "neighbors": [
+    "tufnell-park",
+    "kentish-town-south",
+    "junction",
+    "gospel-oak",
+    "haverstock"
+   ]
+  },
+  {
+   "name": "Kentish Town South",
+   "slug": "kentish-town-south",
+   "borough": "Camden",
+   "ward": "E05013664",
+   "lat": 51.54708,
+   "lng": -0.139281,
+   "neighbors": [
+    "camden-square",
+    "camden-town",
+    "kentish-town-north",
+    "haverstock",
+    "tufnell-park"
+   ]
+  },
+  {
+   "name": "Kidbrooke Park",
+   "slug": "kidbrooke-park",
+   "borough": "Greenwich",
+   "ward": "E05014083",
+   "lat": 51.46872,
+   "lng": 0.041034,
+   "neighbors": [
+    "eltham-page",
+    "charlton-hornfair",
+    "kidbrooke-village-sutcliffe",
+    "eltham-park-progress",
+    "blackheath-westcombe"
+   ]
+  },
+  {
+   "name": "Kidbrooke Village & Sutcliffe",
+   "slug": "kidbrooke-village-sutcliffe",
+   "borough": "Greenwich",
+   "ward": "E05014084",
+   "lat": 51.46008,
+   "lng": 0.027807,
+   "neighbors": [
+    "eltham-page",
+    "blackheath-westcombe",
+    "kidbrooke-park",
+    "middle-park-horn-park",
+    "lee-green"
+   ]
+  },
+  {
+   "name": "Kilburn",
+   "slug": "kilburn",
+   "borough": "Camden",
+   "ward": "E05013665",
+   "lat": 51.53856,
+   "lng": -0.19108,
+   "neighbors": [
+    "south-hampstead",
+    "maida-vale",
+    "abbey-road",
+    "west-hampstead",
+    "harrow-road"
+   ]
+  },
+  {
+   "name": "King's Cross",
+   "slug": "kings-cross",
+   "borough": "Camden",
+   "ward": "E05013666",
+   "lat": 51.53458,
+   "lng": -0.125199,
+   "neighbors": [
+    "caledonian",
+    "st-pancras-somers-town",
+    "barnsbury",
+    "camden-square",
+    "regents-park-camden"
+   ]
+  },
+  {
+   "name": "King's Park",
+   "slug": "kings-park",
+   "borough": "Hackney",
+   "ward": "E05009379",
+   "lat": 51.55507,
+   "lng": -0.031788,
+   "neighbors": [
+    "hackney-wick",
+    "lea-bridge",
+    "homerton",
+    "bow-east",
+    "hackney-downs"
+   ]
+  },
+  {
+   "name": "Knight's Hill",
+   "slug": "knights-hill",
+   "borough": "Lambeth",
+   "ward": "E05014106",
+   "lat": 51.42943,
+   "lng": -0.105583,
+   "neighbors": [
+    "gipsy-hill",
+    "streatham-wells",
+    "st-martins",
+    "streatham-hill-east",
+    "west-dulwich"
+   ]
+  },
+  {
+   "name": "Knightsbridge & Belgravia",
+   "slug": "knightsbridge-belgravia",
+   "borough": "Westminster",
+   "ward": "E05013797",
+   "lat": 51.49598,
+   "lng": -0.150584,
+   "neighbors": [
+    "pimlico-north",
+    "royal-hospital",
+    "brompton-hans-town",
+    "pimlico-south",
+    "vincent-square"
+   ]
+  },
+  {
+   "name": "Ladywell",
+   "slug": "ladywell",
+   "borough": "Lewisham",
+   "ward": "E05013725",
+   "lat": 51.45885,
+   "lng": -0.022458,
+   "neighbors": [
+    "lewisham-central",
+    "brockley",
+    "crofton-park",
+    "rushey-green",
+    "blackheath"
+   ]
+  },
+  {
+   "name": "Lancaster Gate",
+   "slug": "lancaster-gate",
+   "borough": "Westminster",
+   "ward": "E05013798",
+   "lat": 51.50946,
+   "lng": -0.1801,
+   "neighbors": [
+    "hyde-park",
+    "bayswater",
+    "campden",
+    "pembridge",
+    "queens-gate"
+   ]
+  },
+  {
+   "name": "Lansbury",
+   "slug": "lansbury",
+   "borough": "Tower Hamlets",
+   "ward": "E05009325",
+   "lat": 51.51653,
+   "lng": -0.010359,
+   "neighbors": [
+    "poplar",
+    "bromley-south",
+    "bromley-north",
+    "mile-end",
+    "blackwall-cubitt-town"
+   ]
+  },
+  {
+   "name": "Lavender",
+   "slug": "lavender",
+   "borough": "Wandsworth",
+   "ward": "E05014014",
+   "lat": 51.46172,
+   "lng": -0.160966,
+   "neighbors": [
+    "northcote",
+    "falconbrook",
+    "st-marys",
+    "balham",
+    "shaftesbury-queenstown"
+   ]
+  },
+  {
+   "name": "Laycock",
+   "slug": "laycock",
+   "borough": "Islington",
+   "ward": "E05013708",
+   "lat": 51.54648,
+   "lng": -0.111369,
+   "neighbors": [
+    "holloway",
+    "highbury",
+    "barnsbury",
+    "caledonian",
+    "arsenal"
+   ]
+  },
+  {
+   "name": "Lea Bridge",
+   "slug": "lea-bridge",
+   "borough": "Hackney",
+   "ward": "E05009380",
+   "lat": 51.5593,
+   "lng": -0.050389,
+   "neighbors": [
+    "hackney-downs",
+    "cazenove",
+    "homerton",
+    "kings-park",
+    "hackney-central"
+   ]
+  },
+  {
+   "name": "Lee Green",
+   "slug": "lee-green",
+   "borough": "Lewisham",
+   "ward": "E05013726",
+   "lat": 51.45204,
+   "lng": 0.006682,
+   "neighbors": [
+    "hither-green",
+    "blackheath-westcombe",
+    "blackheath",
+    "kidbrooke-village-sutcliffe",
+    "lewisham-central"
+   ]
+  },
+  {
+   "name": "Lewisham Central",
+   "slug": "lewisham-central",
+   "borough": "Lewisham",
+   "ward": "E05013727",
+   "lat": 51.46272,
+   "lng": -0.011968,
+   "neighbors": [
+    "ladywell",
+    "blackheath",
+    "brockley",
+    "greenwich-park",
+    "lee-green"
+   ]
+  },
+  {
+   "name": "Lillie",
+   "slug": "lillie",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013742",
+   "lat": 51.4843,
+   "lng": -0.19853,
+   "neighbors": [
+    "walham-green",
+    "west-kensington",
+    "earls-court",
+    "redcliffe",
+    "parsons-green-sandford"
+   ]
+  },
+  {
+   "name": "Limehouse",
+   "slug": "limehouse",
+   "borough": "Tower Hamlets",
+   "ward": "E05009326",
+   "lat": 51.50995,
+   "lng": -0.033791,
+   "neighbors": [
+    "mile-end",
+    "shadwell",
+    "st-dunstans",
+    "stepney-green",
+    "canary-wharf"
+   ]
+  },
+  {
+   "name": "Little Venice",
+   "slug": "little-venice",
+   "borough": "Westminster",
+   "ward": "E05013799",
+   "lat": 51.52427,
+   "lng": -0.182608,
+   "neighbors": [
+    "westbourne",
+    "maida-vale",
+    "church-street",
+    "abbey-road",
+    "harrow-road"
+   ]
+  },
+  {
+   "name": "London Bridge & West Bermondsey",
+   "slug": "london-bridge-west-bermondsey",
+   "borough": "Southwark",
+   "ward": "E05011104",
+   "lat": 51.4993,
+   "lng": -0.081004,
+   "neighbors": [
+    "chaucer",
+    "south-bermondsey",
+    "north-bermondsey",
+    "north-walworth",
+    "borough-bankside"
+   ]
+  },
+  {
+   "name": "London Fields",
+   "slug": "london-fields",
+   "borough": "Hackney",
+   "ward": "E05009381",
+   "lat": 51.5392,
+   "lng": -0.066664,
+   "neighbors": [
+    "haggerston",
+    "dalston",
+    "de-beauvoir",
+    "hackney-central",
+    "victoria"
+   ]
+  },
+  {
+   "name": "Maida Vale",
+   "slug": "maida-vale",
+   "borough": "Westminster",
+   "ward": "E05013800",
+   "lat": 51.53013,
+   "lng": -0.189266,
+   "neighbors": [
+    "harrow-road",
+    "little-venice",
+    "abbey-road",
+    "kilburn",
+    "westbourne"
+   ]
+  },
+  {
+   "name": "Marylebone",
+   "slug": "marylebone",
+   "borough": "Westminster",
+   "ward": "E05013801",
+   "lat": 51.51886,
+   "lng": -0.155293,
+   "neighbors": [
+    "west-end",
+    "hyde-park",
+    "church-street",
+    "regents-park-westminster",
+    "regents-park-camden"
+   ]
+  },
+  {
+   "name": "Middle Park & Horn Park",
+   "slug": "middle-park-horn-park",
+   "borough": "Greenwich",
+   "ward": "E05014085",
+   "lat": 51.44791,
+   "lng": 0.034464,
+   "neighbors": [
+    "eltham-page",
+    "kidbrooke-village-sutcliffe",
+    "grove-park",
+    "lee-green",
+    "blackheath-westcombe"
+   ]
+  },
+  {
+   "name": "Mildmay",
+   "slug": "mildmay",
+   "borough": "Islington",
+   "ward": "E05013709",
+   "lat": 51.55186,
+   "lng": -0.086105,
+   "neighbors": [
+    "clissold",
+    "highbury",
+    "shacklewell",
+    "canonbury",
+    "de-beauvoir"
+   ]
+  },
+  {
+   "name": "Mile End",
+   "slug": "mile-end",
+   "borough": "Tower Hamlets",
+   "ward": "E05009327",
+   "lat": 51.51812,
+   "lng": -0.028509,
+   "neighbors": [
+    "bromley-south",
+    "st-dunstans",
+    "limehouse",
+    "bromley-north",
+    "lansbury"
+   ]
+  },
+  {
+   "name": "Mottingham, Coldharbour & New Eltham",
+   "slug": "mottingham-coldharbour-new-eltham",
+   "borough": "Greenwich",
+   "ward": "E05014086",
+   "lat": 51.43333,
+   "lng": 0.061986,
+   "neighbors": [
+    "eltham-town-avery-hill",
+    "middle-park-horn-park",
+    "grove-park",
+    "eltham-page",
+    "eltham-park-progress"
+   ]
+  },
+  {
+   "name": "Munster",
+   "slug": "munster",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013743",
+   "lat": 51.47779,
+   "lng": -0.211603,
+   "neighbors": [
+    "fulham-town",
+    "palace-hurlingham",
+    "walham-green",
+    "fulham-reach",
+    "lillie"
+   ]
+  },
+  {
+   "name": "Myatt's Fields",
+   "slug": "myatts-fields",
+   "borough": "Lambeth",
+   "ward": "E05014107",
+   "lat": 51.4749,
+   "lng": -0.105975,
+   "neighbors": [
+    "camberwell-green",
+    "stockwell-east",
+    "brixton-north",
+    "oval",
+    "newington"
+   ]
+  },
+  {
+   "name": "New Cross Gate",
+   "slug": "new-cross-gate",
+   "borough": "Lewisham",
+   "ward": "E05013728",
+   "lat": 51.48318,
+   "lng": -0.046927,
+   "neighbors": [
+    "evelyn",
+    "old-kent-road",
+    "deptford",
+    "rotherhithe",
+    "nunhead-queens-road"
+   ]
+  },
+  {
+   "name": "Newington",
+   "slug": "newington",
+   "borough": "Southwark",
+   "ward": "E05011105",
+   "lat": 51.48554,
+   "lng": -0.102035,
+   "neighbors": [
+    "kennington",
+    "north-walworth",
+    "faraday",
+    "camberwell-green",
+    "oval"
+   ]
+  },
+  {
+   "name": "Nine Elms",
+   "slug": "nine-elms",
+   "borough": "Wandsworth",
+   "ward": "E05014015",
+   "lat": 51.48032,
+   "lng": -0.139135,
+   "neighbors": [
+    "pimlico-south",
+    "stockwell-west-larkhall",
+    "shaftesbury-queenstown",
+    "pimlico-north",
+    "battersea-park"
+   ]
+  },
+  {
+   "name": "Norland",
+   "slug": "norland",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009398",
+   "lat": 51.5081,
+   "lng": -0.210488,
+   "neighbors": [
+    "notting-dale",
+    "holland",
+    "shepherds-bush-green",
+    "pembridge",
+    "colville"
+   ]
+  },
+  {
+   "name": "North Bermondsey",
+   "slug": "north-bermondsey",
+   "borough": "Southwark",
+   "ward": "E05011106",
+   "lat": 51.49728,
+   "lng": -0.065169,
+   "neighbors": [
+    "south-bermondsey",
+    "st-katharines-wapping",
+    "rotherhithe",
+    "london-bridge-west-bermondsey",
+    "old-kent-road"
+   ]
+  },
+  {
+   "name": "North Walworth",
+   "slug": "north-walworth",
+   "borough": "Southwark",
+   "ward": "E05011107",
+   "lat": 51.49026,
+   "lng": -0.090833,
+   "neighbors": [
+    "faraday",
+    "chaucer",
+    "newington",
+    "london-bridge-west-bermondsey",
+    "st-georges"
+   ]
+  },
+  {
+   "name": "Northcote",
+   "slug": "northcote",
+   "borough": "Wandsworth",
+   "ward": "E05014016",
+   "lat": 51.45426,
+   "lng": -0.161554,
+   "neighbors": [
+    "balham",
+    "lavender",
+    "trinity",
+    "falconbrook",
+    "clapham-common-abbeville"
+   ]
+  },
+  {
+   "name": "Notting Dale",
+   "slug": "notting-dale",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009399",
+   "lat": 51.51264,
+   "lng": -0.215859,
+   "neighbors": [
+    "norland",
+    "st-helens",
+    "shepherds-bush-green",
+    "colville",
+    "white-city"
+   ]
+  },
+  {
+   "name": "Nunhead & Queen's Road",
+   "slug": "nunhead-queens-road",
+   "borough": "Southwark",
+   "ward": "E05011108",
+   "lat": 51.47006,
+   "lng": -0.05591,
+   "neighbors": [
+    "telegraph-hill",
+    "rye-lane",
+    "peckham",
+    "old-kent-road",
+    "new-cross-gate"
+   ]
+  },
+  {
+   "name": "Old Kent Road",
+   "slug": "old-kent-road",
+   "borough": "Southwark",
+   "ward": "E05011109",
+   "lat": 51.48343,
+   "lng": -0.063494,
+   "neighbors": [
+    "peckham",
+    "south-bermondsey",
+    "new-cross-gate",
+    "north-bermondsey",
+    "nunhead-queens-road"
+   ]
+  },
+  {
+   "name": "Oval",
+   "slug": "oval",
+   "borough": "Lambeth",
+   "ward": "E05014108",
+   "lat": 51.48167,
+   "lng": -0.117894,
+   "neighbors": [
+    "vauxhall",
+    "kennington",
+    "stockwell-east",
+    "myatts-fields",
+    "stockwell-west-larkhall"
+   ]
+  },
+  {
+   "name": "Palace & Hurlingham",
+   "slug": "palace-hurlingham",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013744",
+   "lat": 51.47381,
+   "lng": -0.217461,
+   "neighbors": [
+    "munster",
+    "fulham-town",
+    "thamesfield",
+    "walham-green",
+    "fulham-reach"
+   ]
+  },
+  {
+   "name": "Parsons Green & Sandford",
+   "slug": "parsons-green-sandford",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013745",
+   "lat": 51.47589,
+   "lng": -0.192323,
+   "neighbors": [
+    "walham-green",
+    "sands-end",
+    "fulham-town",
+    "lillie",
+    "redcliffe"
+   ]
+  },
+  {
+   "name": "Peckham",
+   "slug": "peckham",
+   "borough": "Southwark",
+   "ward": "E05011110",
+   "lat": 51.4771,
+   "lng": -0.072575,
+   "neighbors": [
+    "st-giles",
+    "old-kent-road",
+    "rye-lane",
+    "faraday",
+    "nunhead-queens-road"
+   ]
+  },
+  {
+   "name": "Peckham Rye",
+   "slug": "peckham-rye",
+   "borough": "Southwark",
+   "ward": "E05011111",
+   "lat": 51.45542,
+   "lng": -0.054287,
+   "neighbors": [
+    "dulwich-hill",
+    "crofton-park",
+    "goose-green",
+    "telegraph-hill",
+    "nunhead-queens-road"
+   ]
+  },
+  {
+   "name": "Pembridge",
+   "slug": "pembridge",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009400",
+   "lat": 51.51145,
+   "lng": -0.198208,
+   "neighbors": [
+    "bayswater",
+    "colville",
+    "campden",
+    "norland",
+    "westbourne"
+   ]
+  },
+  {
+   "name": "Perry Vale",
+   "slug": "perry-vale",
+   "borough": "Lewisham",
+   "ward": "E05013729",
+   "lat": 51.43546,
+   "lng": -0.040258,
+   "neighbors": [
+    "bellingham",
+    "sydenham",
+    "forest-hill",
+    "rushey-green",
+    "crofton-park"
+   ]
+  },
+  {
+   "name": "Pimlico North",
+   "slug": "pimlico-north",
+   "borough": "Westminster",
+   "ward": "E05013802",
+   "lat": 51.49223,
+   "lng": -0.142395,
+   "neighbors": [
+    "pimlico-south",
+    "knightsbridge-belgravia",
+    "vincent-square",
+    "royal-hospital",
+    "nine-elms"
+   ]
+  },
+  {
+   "name": "Pimlico South",
+   "slug": "pimlico-south",
+   "borough": "Westminster",
+   "ward": "E05013803",
+   "lat": 51.48751,
+   "lng": -0.138756,
+   "neighbors": [
+    "pimlico-north",
+    "vincent-square",
+    "nine-elms",
+    "vauxhall",
+    "knightsbridge-belgravia"
+   ]
+  },
+  {
+   "name": "Plumstead & Glyndon",
+   "slug": "plumstead-glyndon",
+   "borough": "Greenwich",
+   "ward": "E05014087",
+   "lat": 51.48818,
+   "lng": 0.090159,
+   "neighbors": [
+    "west-thamesmead",
+    "plumstead-common",
+    "woolwich-arsenal",
+    "abbey-wood",
+    "woolwich-common"
+   ]
+  },
+  {
+   "name": "Plumstead Common",
+   "slug": "plumstead-common",
+   "borough": "Greenwich",
+   "ward": "E05014088",
+   "lat": 51.47783,
+   "lng": 0.094121,
+   "neighbors": [
+    "plumstead-glyndon",
+    "abbey-wood",
+    "shooters-hill",
+    "west-thamesmead",
+    "woolwich-common"
+   ]
+  },
+  {
+   "name": "Poplar",
+   "slug": "poplar",
+   "borough": "Tower Hamlets",
+   "ward": "E05009328",
+   "lat": 51.51099,
+   "lng": -0.006378,
+   "neighbors": [
+    "lansbury",
+    "blackwall-cubitt-town",
+    "bromley-south",
+    "canary-wharf",
+    "mile-end"
+   ]
+  },
+  {
+   "name": "Primrose Hill",
+   "slug": "primrose-hill",
+   "borough": "Camden",
+   "ward": "E05013667",
+   "lat": 51.54066,
+   "lng": -0.162833,
+   "neighbors": [
+    "haverstock",
+    "belsize",
+    "camden-town",
+    "regents-park-westminster",
+    "gospel-oak"
+   ]
+  },
+  {
+   "name": "Queen's Gate",
+   "slug": "queens-gate",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009401",
+   "lat": 51.49843,
+   "lng": -0.186057,
+   "neighbors": [
+    "abingdon",
+    "campden",
+    "courtfield",
+    "earls-court",
+    "lancaster-gate"
+   ]
+  },
+  {
+   "name": "Queen's Park",
+   "slug": "queens-park",
+   "borough": "Westminster",
+   "ward": "E05013804",
+   "lat": 51.52928,
+   "lng": -0.208763,
+   "neighbors": [
+    "harrow-road",
+    "golborne",
+    "dalgarno",
+    "st-helens",
+    "maida-vale"
+   ]
+  },
+  {
+   "name": "Ravenscourt",
+   "slug": "ravenscourt",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013746",
+   "lat": 51.49489,
+   "lng": -0.239948,
+   "neighbors": [
+    "grove",
+    "wendell-park",
+    "coningham",
+    "hammersmith-broadway",
+    "addison"
+   ]
+  },
+  {
+   "name": "Redcliffe",
+   "slug": "redcliffe",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009402",
+   "lat": 51.48623,
+   "lng": -0.18755,
+   "neighbors": [
+    "earls-court",
+    "lillie",
+    "stanley",
+    "courtfield",
+    "chelsea-riverside"
+   ]
+  },
+  {
+   "name": "Regent's Park",
+   "slug": "regents-park-camden",
+   "borough": "Camden",
+   "ward": "E05013668",
+   "lat": 51.53056,
+   "lng": -0.141844,
+   "neighbors": [
+    "st-pancras-somers-town",
+    "bloomsbury",
+    "camden-town",
+    "kings-cross",
+    "regents-park-westminster"
+   ]
+  },
+  {
+   "name": "Regent's Park",
+   "slug": "regents-park-westminster",
+   "borough": "Westminster",
+   "ward": "E05013805",
+   "lat": 51.5294,
+   "lng": -0.160749,
+   "neighbors": [
+    "church-street",
+    "marylebone",
+    "primrose-hill",
+    "regents-park-camden",
+    "abbey-road"
+   ]
+  },
+  {
+   "name": "Roehampton",
+   "slug": "roehampton",
+   "borough": "Wandsworth",
+   "ward": "E05014017",
+   "lat": 51.44522,
+   "lng": -0.240836,
+   "neighbors": [
+    "west-putney",
+    "west-hill",
+    "east-putney",
+    "thamesfield",
+    "southfields"
+   ]
+  },
+  {
+   "name": "Rotherhithe",
+   "slug": "rotherhithe",
+   "borough": "Southwark",
+   "ward": "E05011112",
+   "lat": 51.49722,
+   "lng": -0.049049,
+   "neighbors": [
+    "surrey-docks",
+    "north-bermondsey",
+    "evelyn",
+    "st-katharines-wapping",
+    "south-bermondsey"
+   ]
+  },
+  {
+   "name": "Royal Hospital",
+   "slug": "royal-hospital",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009403",
+   "lat": 51.48928,
+   "lng": -0.159916,
+   "neighbors": [
+    "brompton-hans-town",
+    "knightsbridge-belgravia",
+    "stanley",
+    "pimlico-north",
+    "courtfield"
+   ]
+  },
+  {
+   "name": "Rushey Green",
+   "slug": "rushey-green",
+   "borough": "Lewisham",
+   "ward": "E05013730",
+   "lat": 51.44427,
+   "lng": -0.021317,
+   "neighbors": [
+    "catford-south",
+    "crofton-park",
+    "bellingham",
+    "ladywell",
+    "perry-vale"
+   ]
+  },
+  {
+   "name": "Rye Lane",
+   "slug": "rye-lane",
+   "borough": "Southwark",
+   "ward": "E05011113",
+   "lat": 51.46815,
+   "lng": -0.068978,
+   "neighbors": [
+    "nunhead-queens-road",
+    "peckham",
+    "champion-hill",
+    "st-giles",
+    "goose-green"
+   ]
+  },
+  {
+   "name": "Sands End",
+   "slug": "sands-end",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013747",
+   "lat": 51.47119,
+   "lng": -0.185827,
+   "neighbors": [
+    "parsons-green-sandford",
+    "st-marys",
+    "falconbrook",
+    "walham-green",
+    "chelsea-riverside"
+   ]
+  },
+  {
+   "name": "Shacklewell",
+   "slug": "shacklewell",
+   "borough": "Hackney",
+   "ward": "E05009382",
+   "lat": 51.55252,
+   "lng": -0.071783,
+   "neighbors": [
+    "dalston",
+    "hackney-downs",
+    "hackney-central",
+    "stoke-newington",
+    "mildmay"
+   ]
+  },
+  {
+   "name": "Shadwell",
+   "slug": "shadwell",
+   "borough": "Tower Hamlets",
+   "ward": "E05009332",
+   "lat": 51.51192,
+   "lng": -0.050251,
+   "neighbors": [
+    "stepney-green",
+    "st-dunstans",
+    "whitechapel",
+    "st-katharines-wapping",
+    "limehouse"
+   ]
+  },
+  {
+   "name": "Shaftesbury & Queenstown",
+   "slug": "shaftesbury-queenstown",
+   "borough": "Wandsworth",
+   "ward": "E05014019",
+   "lat": 51.47188,
+   "lng": -0.146519,
+   "neighbors": [
+    "clapham-town",
+    "battersea-park",
+    "nine-elms",
+    "stockwell-west-larkhall",
+    "clapham-east"
+   ]
+  },
+  {
+   "name": "Shepherd's Bush Green",
+   "slug": "shepherds-bush-green",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013748",
+   "lat": 51.50697,
+   "lng": -0.222954,
+   "neighbors": [
+    "addison",
+    "white-city",
+    "notting-dale",
+    "norland",
+    "coningham"
+   ]
+  },
+  {
+   "name": "Shooters Hill",
+   "slug": "shooters-hill",
+   "borough": "Greenwich",
+   "ward": "E05014089",
+   "lat": 51.47303,
+   "lng": 0.068903,
+   "neighbors": [
+    "eltham-park-progress",
+    "woolwich-common",
+    "plumstead-common",
+    "kidbrooke-park",
+    "woolwich-arsenal"
+   ]
+  },
+  {
+   "name": "South Balham",
+   "slug": "south-balham",
+   "borough": "Wandsworth",
+   "ward": "E05014020",
+   "lat": 51.43676,
+   "lng": -0.148861,
+   "neighbors": [
+    "tooting-bec",
+    "trinity",
+    "streatham-hill-west-thornton",
+    "furzedown",
+    "balham"
+   ]
+  },
+  {
+   "name": "South Bermondsey",
+   "slug": "south-bermondsey",
+   "borough": "Southwark",
+   "ward": "E05011116",
+   "lat": 51.49264,
+   "lng": -0.069759,
+   "neighbors": [
+    "north-bermondsey",
+    "london-bridge-west-bermondsey",
+    "old-kent-road",
+    "faraday",
+    "north-walworth"
+   ]
+  },
+  {
+   "name": "South Hampstead",
+   "slug": "south-hampstead",
+   "borough": "Camden",
+   "ward": "E05013670",
+   "lat": 51.54343,
+   "lng": -0.183864,
+   "neighbors": [
+    "west-hampstead",
+    "kilburn",
+    "belsize",
+    "abbey-road",
+    "primrose-hill"
+   ]
+  },
+  {
+   "name": "Southfields",
+   "slug": "southfields",
+   "borough": "Wandsworth",
+   "ward": "E05014021",
+   "lat": 51.44485,
+   "lng": -0.198859,
+   "neighbors": [
+    "wandle",
+    "west-hill",
+    "east-putney",
+    "wandsworth-common",
+    "wandsworth-town"
+   ]
+  },
+  {
+   "name": "Spitalfields & Banglatown",
+   "slug": "spitalfields-banglatown",
+   "borough": "Tower Hamlets",
+   "ward": "E05009333",
+   "lat": 51.51911,
+   "lng": -0.069893,
+   "neighbors": [
+    "whitechapel",
+    "weavers",
+    "bethnal-green-west",
+    "hoxton-east-shoreditch",
+    "st-katharines-wapping"
+   ]
+  },
+  {
+   "name": "Springfield",
+   "slug": "springfield",
+   "borough": "Hackney",
+   "ward": "E05009383",
+   "lat": 51.57389,
+   "lng": -0.064356,
+   "neighbors": [
+    "cazenove",
+    "stamford-hill-west",
+    "stoke-newington",
+    "hackney-downs",
+    "lea-bridge"
+   ]
+  },
+  {
+   "name": "St Dunstan's",
+   "slug": "st-dunstans",
+   "borough": "Tower Hamlets",
+   "ward": "E05009329",
+   "lat": 51.51942,
+   "lng": -0.041844,
+   "neighbors": [
+    "stepney-green",
+    "bethnal-green-east",
+    "mile-end",
+    "shadwell",
+    "limehouse"
+   ]
+  },
+  {
+   "name": "St George's",
+   "slug": "st-georges",
+   "borough": "Southwark",
+   "ward": "E05011114",
+   "lat": 51.4973,
+   "lng": -0.105134,
+   "neighbors": [
+    "borough-bankside",
+    "waterloo-south-bank",
+    "chaucer",
+    "kennington",
+    "north-walworth"
+   ]
+  },
+  {
+   "name": "St Giles",
+   "slug": "st-giles",
+   "borough": "Southwark",
+   "ward": "E05011115",
+   "lat": 51.47504,
+   "lng": -0.083145,
+   "neighbors": [
+    "peckham",
+    "camberwell-green",
+    "faraday",
+    "rye-lane",
+    "champion-hill"
+   ]
+  },
+  {
+   "name": "St James's",
+   "slug": "st-jamess",
+   "borough": "Westminster",
+   "ward": "E05013806",
+   "lat": 51.5036,
+   "lng": -0.131529,
+   "neighbors": [
+    "vincent-square",
+    "waterloo-south-bank",
+    "pimlico-north",
+    "west-end",
+    "knightsbridge-belgravia"
+   ]
+  },
+  {
+   "name": "St Katharine's & Wapping",
+   "slug": "st-katharines-wapping",
+   "borough": "Tower Hamlets",
+   "ward": "E05009330",
+   "lat": 51.50691,
+   "lng": -0.063953,
+   "neighbors": [
+    "whitechapel",
+    "north-bermondsey",
+    "shadwell",
+    "spitalfields-banglatown",
+    "london-bridge-west-bermondsey"
+   ]
+  },
+  {
+   "name": "St Martin's",
+   "slug": "st-martins",
+   "borough": "Lambeth",
+   "ward": "E05014109",
+   "lat": 51.44113,
+   "lng": -0.109747,
+   "neighbors": [
+    "streatham-hill-east",
+    "west-dulwich",
+    "knights-hill",
+    "streatham-wells",
+    "brixton-rush-common"
+   ]
+  },
+  {
+   "name": "St Mary's",
+   "slug": "st-marys",
+   "borough": "Wandsworth",
+   "ward": "E05014018",
+   "lat": 51.4703,
+   "lng": -0.174876,
+   "neighbors": [
+    "falconbrook",
+    "sands-end",
+    "battersea-park",
+    "chelsea-riverside",
+    "lavender"
+   ]
+  },
+  {
+   "name": "St Mary's & St James'",
+   "slug": "st-marys-st-james",
+   "borough": "Islington",
+   "ward": "E05013710",
+   "lat": 51.53808,
+   "lng": -0.098003,
+   "neighbors": [
+    "canonbury",
+    "st-peters-canalside",
+    "hoxton-west",
+    "barnsbury",
+    "de-beauvoir"
+   ]
+  },
+  {
+   "name": "St Pancras & Somers Town",
+   "slug": "st-pancras-somers-town",
+   "borough": "Camden",
+   "ward": "E05013669",
+   "lat": 51.53472,
+   "lng": -0.133773,
+   "neighbors": [
+    "kings-cross",
+    "regents-park-camden",
+    "camden-town",
+    "caledonian",
+    "camden-square"
+   ]
+  },
+  {
+   "name": "St Peter's & Canalside",
+   "slug": "st-peters-canalside",
+   "borough": "Islington",
+   "ward": "E05013711",
+   "lat": 51.53074,
+   "lng": -0.098843,
+   "neighbors": [
+    "hoxton-west",
+    "st-marys-st-james",
+    "clerkenwell",
+    "bunhill",
+    "hoxton-east-shoreditch"
+   ]
+  },
+  {
+   "name": "St. Helen's",
+   "slug": "st-helens",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009404",
+   "lat": 51.51886,
+   "lng": -0.218296,
+   "neighbors": [
+    "dalgarno",
+    "notting-dale",
+    "golborne",
+    "colville",
+    "white-city"
+   ]
+  },
+  {
+   "name": "Stamford Hill West",
+   "slug": "stamford-hill-west",
+   "borough": "Hackney",
+   "ward": "E05009384",
+   "lat": 51.56928,
+   "lng": -0.080266,
+   "neighbors": [
+    "woodberry-down",
+    "stoke-newington",
+    "cazenove",
+    "clissold",
+    "springfield"
+   ]
+  },
+  {
+   "name": "Stanley",
+   "slug": "stanley",
+   "borough": "Kensington and Chelsea",
+   "ward": "E05009405",
+   "lat": 51.48635,
+   "lng": -0.175964,
+   "neighbors": [
+    "chelsea-riverside",
+    "courtfield",
+    "redcliffe",
+    "royal-hospital",
+    "brompton-hans-town"
+   ]
+  },
+  {
+   "name": "Stepney Green",
+   "slug": "stepney-green",
+   "borough": "Tower Hamlets",
+   "ward": "E05009334",
+   "lat": 51.51706,
+   "lng": -0.048893,
+   "neighbors": [
+    "st-dunstans",
+    "shadwell",
+    "bethnal-green-east",
+    "whitechapel",
+    "limehouse"
+   ]
+  },
+  {
+   "name": "Stockwell East",
+   "slug": "stockwell-east",
+   "borough": "Lambeth",
+   "ward": "E05014110",
+   "lat": 51.47251,
+   "lng": -0.117464,
+   "neighbors": [
+    "brixton-north",
+    "stockwell-west-larkhall",
+    "myatts-fields",
+    "oval",
+    "brixton-windrush"
+   ]
+  },
+  {
+   "name": "Stockwell West & Larkhall",
+   "slug": "stockwell-west-larkhall",
+   "borough": "Lambeth",
+   "ward": "E05014111",
+   "lat": 51.47395,
+   "lng": -0.128911,
+   "neighbors": [
+    "stockwell-east",
+    "nine-elms",
+    "clapham-town",
+    "oval",
+    "shaftesbury-queenstown"
+   ]
+  },
+  {
+   "name": "Stoke Newington",
+   "slug": "stoke-newington",
+   "borough": "Hackney",
+   "ward": "E05009385",
+   "lat": 51.5608,
+   "lng": -0.07641,
+   "neighbors": [
+    "clissold",
+    "shacklewell",
+    "stamford-hill-west",
+    "cazenove",
+    "hackney-downs"
+   ]
+  },
+  {
+   "name": "Streatham Common & Vale",
+   "slug": "streatham-common-vale",
+   "borough": "Lambeth",
+   "ward": "E05014112",
+   "lat": 51.41663,
+   "lng": -0.130403,
+   "neighbors": [
+    "streatham-st-leonards",
+    "furzedown",
+    "streatham-wells",
+    "knights-hill",
+    "streatham-hill-east"
+   ]
+  },
+  {
+   "name": "Streatham Hill East",
+   "slug": "streatham-hill-east",
+   "borough": "Lambeth",
+   "ward": "E05014113",
+   "lat": 51.4384,
+   "lng": -0.118651,
+   "neighbors": [
+    "st-martins",
+    "streatham-wells",
+    "streatham-hill-west-thornton",
+    "knights-hill",
+    "streatham-st-leonards"
+   ]
+  },
+  {
+   "name": "Streatham Hill West & Thornton",
+   "slug": "streatham-hill-west-thornton",
+   "borough": "Lambeth",
+   "ward": "E05014114",
+   "lat": 51.44314,
+   "lng": -0.134544,
+   "neighbors": [
+    "clapham-park",
+    "south-balham",
+    "streatham-hill-east",
+    "clapham-common-abbeville",
+    "balham"
+   ]
+  },
+  {
+   "name": "Streatham St Leonard's",
+   "slug": "streatham-st-leonards",
+   "borough": "Lambeth",
+   "ward": "E05014115",
+   "lat": 51.42907,
+   "lng": -0.132197,
+   "neighbors": [
+    "streatham-wells",
+    "furzedown",
+    "streatham-common-vale",
+    "streatham-hill-east",
+    "south-balham"
+   ]
+  },
+  {
+   "name": "Streatham Wells",
+   "slug": "streatham-wells",
+   "borough": "Lambeth",
+   "ward": "E05014116",
+   "lat": 51.43116,
+   "lng": -0.121912,
+   "neighbors": [
+    "streatham-st-leonards",
+    "streatham-hill-east",
+    "knights-hill",
+    "st-martins",
+    "streatham-hill-west-thornton"
+   ]
+  },
+  {
+   "name": "Surrey Docks",
+   "slug": "surrey-docks",
+   "borough": "Southwark",
+   "ward": "E05011117",
+   "lat": 51.49707,
+   "lng": -0.040483,
+   "neighbors": [
+    "rotherhithe",
+    "evelyn",
+    "canary-wharf",
+    "limehouse",
+    "new-cross-gate"
+   ]
+  },
+  {
+   "name": "Sydenham",
+   "slug": "sydenham",
+   "borough": "Lewisham",
+   "ward": "E05013731",
+   "lat": 51.42817,
+   "lng": -0.05707,
+   "neighbors": [
+    "forest-hill",
+    "perry-vale",
+    "dulwich-wood",
+    "gipsy-hill",
+    "bellingham"
+   ]
+  },
+  {
+   "name": "Telegraph Hill",
+   "slug": "telegraph-hill",
+   "borough": "Lewisham",
+   "ward": "E05013732",
+   "lat": 51.46864,
+   "lng": -0.045201,
+   "neighbors": [
+    "nunhead-queens-road",
+    "brockley",
+    "deptford",
+    "peckham-rye",
+    "new-cross-gate"
+   ]
+  },
+  {
+   "name": "Thamesfield",
+   "slug": "thamesfield",
+   "borough": "Wandsworth",
+   "ward": "E05014022",
+   "lat": 51.46647,
+   "lng": -0.223721,
+   "neighbors": [
+    "palace-hurlingham",
+    "west-putney",
+    "munster",
+    "fulham-town",
+    "east-putney"
+   ]
+  },
+  {
+   "name": "Thamesmead Moorings",
+   "slug": "thamesmead-moorings",
+   "borough": "Greenwich",
+   "ward": "E05014090",
+   "lat": 51.50492,
+   "lng": 0.105062,
+   "neighbors": [
+    "west-thamesmead",
+    "abbey-wood",
+    "plumstead-glyndon",
+    "woolwich-arsenal",
+    "plumstead-common"
+   ]
+  },
+  {
+   "name": "Tollington",
+   "slug": "tollington",
+   "borough": "Islington",
+   "ward": "E05013712",
+   "lat": 51.56324,
+   "lng": -0.119966,
+   "neighbors": [
+    "finsbury-park",
+    "hillrise",
+    "junction",
+    "tufnell-park",
+    "arsenal"
+   ]
+  },
+  {
+   "name": "Tooting Bec",
+   "slug": "tooting-bec",
+   "borough": "Wandsworth",
+   "ward": "E05014023",
+   "lat": 51.43129,
+   "lng": -0.160088,
+   "neighbors": [
+    "furzedown",
+    "south-balham",
+    "tooting-broadway",
+    "trinity",
+    "wandsworth-common"
+   ]
+  },
+  {
+   "name": "Tooting Broadway",
+   "slug": "tooting-broadway",
+   "borough": "Wandsworth",
+   "ward": "E05014024",
+   "lat": 51.42738,
+   "lng": -0.17348,
+   "neighbors": [
+    "tooting-bec",
+    "furzedown",
+    "trinity",
+    "wandsworth-common",
+    "south-balham"
+   ]
+  },
+  {
+   "name": "Trinity",
+   "slug": "trinity",
+   "borough": "Wandsworth",
+   "ward": "E05014025",
+   "lat": 51.44122,
+   "lng": -0.163848,
+   "neighbors": [
+    "wandsworth-common",
+    "balham",
+    "tooting-bec",
+    "south-balham",
+    "northcote"
+   ]
+  },
+  {
+   "name": "Tufnell Park",
+   "slug": "tufnell-park",
+   "borough": "Islington",
+   "ward": "E05013713",
+   "lat": 51.55557,
+   "lng": -0.129746,
+   "neighbors": [
+    "holloway",
+    "kentish-town-north",
+    "junction",
+    "tollington",
+    "kentish-town-south"
+   ]
+  },
+  {
+   "name": "Vauxhall",
+   "slug": "vauxhall",
+   "borough": "Lambeth",
+   "ward": "E05014117",
+   "lat": 51.48757,
+   "lng": -0.121698,
+   "neighbors": [
+    "oval",
+    "kennington",
+    "vincent-square",
+    "pimlico-south",
+    "newington"
+   ]
+  },
+  {
+   "name": "Victoria",
+   "slug": "victoria",
+   "borough": "Hackney",
+   "ward": "E05009386",
+   "lat": 51.53874,
+   "lng": -0.048499,
+   "neighbors": [
+    "homerton",
+    "bow-west",
+    "london-fields",
+    "bethnal-green-east",
+    "hackney-central"
+   ]
+  },
+  {
+   "name": "Vincent Square",
+   "slug": "vincent-square",
+   "borough": "Westminster",
+   "ward": "E05013807",
+   "lat": 51.49285,
+   "lng": -0.131681,
+   "neighbors": [
+    "pimlico-north",
+    "pimlico-south",
+    "vauxhall",
+    "st-jamess",
+    "knightsbridge-belgravia"
+   ]
+  },
+  {
+   "name": "Walham Green",
+   "slug": "walham-green",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013749",
+   "lat": 51.47942,
+   "lng": -0.199946,
+   "neighbors": [
+    "lillie",
+    "fulham-town",
+    "parsons-green-sandford",
+    "munster",
+    "west-kensington"
+   ]
+  },
+  {
+   "name": "Wandle",
+   "slug": "wandle",
+   "borough": "Wandsworth",
+   "ward": "E05014026",
+   "lat": 51.4487,
+   "lng": -0.185323,
+   "neighbors": [
+    "wandsworth-common",
+    "wandsworth-town",
+    "southfields",
+    "trinity",
+    "east-putney"
+   ]
+  },
+  {
+   "name": "Wandsworth Common",
+   "slug": "wandsworth-common",
+   "borough": "Wandsworth",
+   "ward": "E05014027",
+   "lat": 51.44331,
+   "lng": -0.177838,
+   "neighbors": [
+    "wandle",
+    "trinity",
+    "southfields",
+    "wandsworth-town",
+    "northcote"
+   ]
+  },
+  {
+   "name": "Wandsworth Town",
+   "slug": "wandsworth-town",
+   "borough": "Wandsworth",
+   "ward": "E05014028",
+   "lat": 51.45665,
+   "lng": -0.18649,
+   "neighbors": [
+    "wandle",
+    "falconbrook",
+    "east-putney",
+    "southfields",
+    "wandsworth-common"
+   ]
+  },
+  {
+   "name": "Waterloo & South Bank",
+   "slug": "waterloo-south-bank",
+   "borough": "Lambeth",
+   "ward": "E05014118",
+   "lat": 51.50198,
+   "lng": -0.113628,
+   "neighbors": [
+    "st-georges",
+    "borough-bankside",
+    "st-jamess",
+    "kennington",
+    "vincent-square"
+   ]
+  },
+  {
+   "name": "Weavers",
+   "slug": "weavers",
+   "borough": "Tower Hamlets",
+   "ward": "E05009335",
+   "lat": 51.52695,
+   "lng": -0.070556,
+   "neighbors": [
+    "haggerston",
+    "hoxton-east-shoreditch",
+    "spitalfields-banglatown",
+    "bethnal-green-west",
+    "london-fields"
+   ]
+  },
+  {
+   "name": "Wendell Park",
+   "slug": "wendell-park",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013750",
+   "lat": 51.50187,
+   "lng": -0.247431,
+   "neighbors": [
+    "coningham",
+    "ravenscourt",
+    "wormholt",
+    "grove",
+    "white-city"
+   ]
+  },
+  {
+   "name": "West Dulwich",
+   "slug": "west-dulwich",
+   "borough": "Lambeth",
+   "ward": "E05014119",
+   "lat": 51.44471,
+   "lng": -0.099957,
+   "neighbors": [
+    "st-martins",
+    "dulwich-village",
+    "streatham-hill-east",
+    "brixton-rush-common",
+    "herne-hill-loughborough-junction"
+   ]
+  },
+  {
+   "name": "West End",
+   "slug": "west-end",
+   "borough": "Westminster",
+   "ward": "E05013808",
+   "lat": 51.51382,
+   "lng": -0.145408,
+   "neighbors": [
+    "marylebone",
+    "bloomsbury",
+    "st-jamess",
+    "hyde-park",
+    "regents-park-camden"
+   ]
+  },
+  {
+   "name": "West Hampstead",
+   "slug": "west-hampstead",
+   "borough": "Camden",
+   "ward": "E05013671",
+   "lat": 51.54852,
+   "lng": -0.189315,
+   "neighbors": [
+    "south-hampstead",
+    "fortune-green",
+    "frognal",
+    "kilburn",
+    "belsize"
+   ]
+  },
+  {
+   "name": "West Hill",
+   "slug": "west-hill",
+   "borough": "Wandsworth",
+   "ward": "E05014029",
+   "lat": 51.44525,
+   "lng": -0.214255,
+   "neighbors": [
+    "southfields",
+    "east-putney",
+    "west-putney",
+    "roehampton",
+    "wandle"
+   ]
+  },
+  {
+   "name": "West Kensington",
+   "slug": "west-kensington",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013751",
+   "lat": 51.48807,
+   "lng": -0.205223,
+   "neighbors": [
+    "lillie",
+    "avonmore",
+    "fulham-reach",
+    "earls-court",
+    "walham-green"
+   ]
+  },
+  {
+   "name": "West Putney",
+   "slug": "west-putney",
+   "borough": "Wandsworth",
+   "ward": "E05014030",
+   "lat": 51.45501,
+   "lng": -0.229377,
+   "neighbors": [
+    "thamesfield",
+    "roehampton",
+    "east-putney",
+    "west-hill",
+    "palace-hurlingham"
+   ]
+  },
+  {
+   "name": "West Thamesmead",
+   "slug": "west-thamesmead",
+   "borough": "Greenwich",
+   "ward": "E05014091",
+   "lat": 51.49749,
+   "lng": 0.094807,
+   "neighbors": [
+    "plumstead-glyndon",
+    "thamesmead-moorings",
+    "abbey-wood",
+    "woolwich-arsenal",
+    "plumstead-common"
+   ]
+  },
+  {
+   "name": "Westbourne",
+   "slug": "westbourne",
+   "borough": "Westminster",
+   "ward": "E05013809",
+   "lat": 51.52071,
+   "lng": -0.19062,
+   "neighbors": [
+    "bayswater",
+    "little-venice",
+    "harrow-road",
+    "maida-vale",
+    "colville"
+   ]
+  },
+  {
+   "name": "White City",
+   "slug": "white-city",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013752",
+   "lat": 51.5105,
+   "lng": -0.231492,
+   "neighbors": [
+    "shepherds-bush-green",
+    "wormholt",
+    "coningham",
+    "notting-dale",
+    "addison"
+   ]
+  },
+  {
+   "name": "Whitechapel",
+   "slug": "whitechapel",
+   "borough": "Tower Hamlets",
+   "ward": "E05009336",
+   "lat": 51.51364,
+   "lng": -0.06485,
+   "neighbors": [
+    "spitalfields-banglatown",
+    "st-katharines-wapping",
+    "shadwell",
+    "stepney-green",
+    "weavers"
+   ]
+  },
+  {
+   "name": "Woodberry Down",
+   "slug": "woodberry-down",
+   "borough": "Hackney",
+   "ward": "E05009387",
+   "lat": 51.56985,
+   "lng": -0.09118,
+   "neighbors": [
+    "brownswood",
+    "stamford-hill-west",
+    "clissold",
+    "stoke-newington",
+    "finsbury-park"
+   ]
+  },
+  {
+   "name": "Woolwich Arsenal",
+   "slug": "woolwich-arsenal",
+   "borough": "Greenwich",
+   "ward": "E05014092",
+   "lat": 51.49138,
+   "lng": 0.069734,
+   "neighbors": [
+    "woolwich-common",
+    "woolwich-dockyard",
+    "plumstead-glyndon",
+    "west-thamesmead",
+    "shooters-hill"
+   ]
+  },
+  {
+   "name": "Woolwich Common",
+   "slug": "woolwich-common",
+   "borough": "Greenwich",
+   "ward": "E05014093",
+   "lat": 51.48308,
+   "lng": 0.063266,
+   "neighbors": [
+    "woolwich-dockyard",
+    "woolwich-arsenal",
+    "shooters-hill",
+    "charlton-village-riverside",
+    "plumstead-glyndon"
+   ]
+  },
+  {
+   "name": "Woolwich Dockyard",
+   "slug": "woolwich-dockyard",
+   "borough": "Greenwich",
+   "ward": "E05014094",
+   "lat": 51.48987,
+   "lng": 0.05382,
+   "neighbors": [
+    "woolwich-common",
+    "charlton-village-riverside",
+    "woolwich-arsenal",
+    "charlton-hornfair",
+    "shooters-hill"
+   ]
+  },
+  {
+   "name": "Wormholt",
+   "slug": "wormholt",
+   "borough": "Hammersmith and Fulham",
+   "ward": "E05013753",
+   "lat": 51.51051,
+   "lng": -0.241782,
+   "neighbors": [
+    "white-city",
+    "coningham",
+    "wendell-park",
+    "shepherds-bush-green",
+    "college-park-old-oak"
+   ]
+  }
+ ]
+}
