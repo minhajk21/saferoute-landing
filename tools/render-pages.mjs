@@ -488,6 +488,7 @@ ${cta(cfg.name)}
 
 <h2>Methodology</h2>
 <p style="font-size:15.5px;color:var(--ink-2)">${cfg.hub.methodology}</p>
+<p style="font-size:15.5px;color:var(--ink-2)">The index compares areas <strong>within ${esc(cfg.hubName)}</strong>. It is not comparable between cities: each police force publishes a different set of offences over a different period — ${esc(cfg.name)}'s figures cannot be read against another city's on the same 0–100 scale.</p>
 ${footer(cfg, areas[0], citySlug)}
 <script>
 const IDX=${JSON.stringify(idx)};
