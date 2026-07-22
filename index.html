@@ -128,7 +128,17 @@
     transition:background .15s,color .15s;
   }
   .nav-cta:hover{background:transparent;color:var(--ink)}
-  @media(max-width:720px){.nav-tag{display:none}}
+  /* Secondary nav action: the safety index is the only thing a visitor can use
+     without installing, so it gets a button shape — outlined, so it reads as
+     secondary to Download rather than competing with it. */
+  .nav-2nd{
+    font-family:var(--mono);font-size:12px;font-weight:500;
+    letter-spacing:.1em;text-transform:uppercase;text-decoration:none;
+    color:var(--ink);padding:9px 14px;border:1px solid var(--ink-3);
+    transition:border-color .15s,background .15s;
+  }
+  .nav-2nd:hover{border-color:var(--ink);background:rgba(0,0,0,.03)}
+  @media(max-width:720px){.nav-tag{display:none}.nav-2nd{padding:9px 10px}}
 
   /* ---- hero ---- */
   .hero{padding:clamp(48px,8vw,104px) 0 0}
@@ -335,6 +345,41 @@
   @media(max-width:680px){.coverage-grid{grid-template-columns:1fr}}
 
   /* final CTA */
+  /* ---- neighborhood safety index lookup ---- */
+  .lookup{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .lookup-box{max-width:640px}
+  .lookup-box input{
+    width:100%;font-family:var(--sans);font-size:17px;color:var(--ink);
+    background:var(--cream);border:1px solid var(--line);
+    padding:16px 18px;outline:none;transition:border-color .15s;
+    -webkit-appearance:none;appearance:none;border-radius:0;
+  }
+  .lookup-box input:focus{border-color:var(--teal)}
+  .lookup-box input::placeholder{color:var(--ink-3)}
+  #hl-out{list-style:none;margin:0;padding:0}
+  #hl-out:not(:empty){border:1px solid var(--line);border-top:none;background:var(--cream)}
+  #hl-out li+li{border-top:1px solid var(--line)}
+  #hl-out a{
+    display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+    padding:12px 18px;text-decoration:none;color:var(--ink);font-size:16px;
+  }
+  #hl-out a:hover{background:var(--cream-deep)}
+  .lk-where{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);letter-spacing:.04em}
+  .lk-score{font-family:var(--mono);font-size:14px;font-weight:600;white-space:nowrap}
+  .lookup-note{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;
+    color:var(--ink-3);margin-top:12px;text-transform:uppercase;
+  }
+  .lookup-cities{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+  .lookup-cities a{
+    display:flex;flex-direction:column;gap:3px;text-decoration:none;
+    padding:14px 20px;border:1px solid var(--line);background:var(--cream);
+    color:var(--ink);transition:border-color .15s,transform .15s;
+  }
+  .lookup-cities a:hover{border-color:var(--teal);transform:translateY(-2px)}
+  .lookup-cities .lk-city{font-size:17px;font-weight:600;letter-spacing:-.01em}
+  .lookup-cities .lk-n{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);letter-spacing:.05em}
+
   .finalcta{text-align:center;border-top:1px solid var(--line)}
   .finalcta h2{margin-bottom:16px}
   .finalcta .lead{max-width:50ch;margin:0 auto 32px}
@@ -417,7 +462,7 @@
     </a>
     <span class="nav-tag"><span class="slash">//</span> CRIME-AWARE WALKING NAVIGATOR · UK·US·CA·MX</span>
     <div class="nav-right">
-      <a class="nav-link" href="/safety/">Safety index</a>
+      <a class="nav-2nd" href="/safety/">Safety index</a>
       <a class="nav-cta" href="https://apps.apple.com/app/id6768244297">Download</a>
     </div>
   </div>
@@ -867,10 +912,33 @@
         <p class="cov-list">Mexico City</p>
       </div>
     </div>
-    <p class="lead reveal" style="margin-top:26px">Want to browse the data itself?
-      Explore the <a href="/safety/new-york/">neighborhood safety index</a> —
-      every NYC neighborhood scored and mapped from the same live crime data
-      the app uses. More cities on the way.</p>
+  </div>
+</section>
+
+<!-- ============ SAFETY INDEX LOOKUP ============ -->
+<section class="sec lookup" id="safety-index">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="label"><span class="slash">//</span> 13 — Look it up</span>
+      <h2>Check a neighborhood right now. No app needed.</h2>
+      <p class="lead">Every area we've published, scored 0–100 from the same
+        official police data the app routes on — with a crime map, what actually
+        gets reported there, and when it happens. Free, in your browser.</p>
+    </div>
+
+    <div class="lookup-box reveal">
+      <input id="hl-q" type="search" autocomplete="off" spellcheck="false"
+             aria-label="Search neighborhoods in the SafeRoute safety index"
+             placeholder="Try Harlem, Brixton, Hyde Park…">
+      <ul id="hl-out"></ul>
+      <p class="lookup-note" id="hl-note">522 areas · New York · London · Chicago</p>
+    </div>
+
+    <div class="lookup-cities reveal">
+      <a href="/safety/new-york/"><span class="lk-city">New York</span><span class="lk-n">197 neighborhoods</span></a>
+      <a href="/safety/london/"><span class="lk-city">London</span><span class="lk-n">248 wards</span></a>
+      <a href="/safety/chicago/"><span class="lk-city">Chicago</span><span class="lk-n">77 community areas</span></a>
+    </div>
   </div>
 </section>
 
@@ -963,6 +1031,52 @@
     v.muted = true;
     var p = v.play();
     if(p && p.catch){ p.catch(function(){ v.setAttribute('controls',''); }); }
+  })();
+
+  /* Safety-index lookup. The index covers every published area across all
+     cities, so it is fetched lazily — on first focus/keystroke — rather than
+     shipped in the page. Degrades to the city links below if the fetch fails. */
+  (function(){
+    var inp = document.getElementById('hl-q');
+    if(!inp) return;
+    var out  = document.getElementById('hl-out');
+    var note = document.getElementById('hl-note');
+    var noteDefault = note.textContent;
+    var BAND = { low:'var(--green)', moderate:'var(--amber)', elevated:'#9C5220', high:'var(--red)' };
+    var IDX = null, loading = false, failed = false;
+
+    function load(){
+      if(IDX || loading || failed) return Promise.resolve();
+      loading = true;
+      return fetch('/safety/search-index.json')
+        .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function(j){ IDX = j; loading = false; render(); })
+        .catch(function(){ failed = true; loading = false; note.textContent = 'Search unavailable — browse by city below.'; });
+    }
+
+    function render(){
+      var q = inp.value.trim().toLowerCase();
+      out.innerHTML = '';
+      if(q.length < 2){ note.textContent = noteDefault; return; }
+      if(!IDX){ if(!failed) note.textContent = 'Loading…'; return; }
+      var hits = IDX.filter(function(a){ return a.n.toLowerCase().indexOf(q) > -1; });
+      // Prefer names that start with the query — "hyde" should surface Hyde Park.
+      hits.sort(function(x,y){
+        var xs = x.n.toLowerCase().indexOf(q) === 0, ys = y.n.toLowerCase().indexOf(q) === 0;
+        return xs === ys ? y.v - x.v : (xs ? -1 : 1);
+      });
+      note.textContent = hits.length ? hits.length + ' match' + (hits.length === 1 ? '' : 'es') : 'No match — try another spelling.';
+      hits.slice(0, 6).forEach(function(a){
+        var li = document.createElement('li'), el = document.createElement('a');
+        el.href = '/safety/' + a.c + '/' + a.s + '/';
+        el.innerHTML = '<span>' + a.n + ' <span class="lk-where">' + a.cn + '</span></span>' +
+                       '<span class="lk-score" style="color:' + (BAND[a.b] || 'var(--ink)') + '">' + a.v + '/100</span>';
+        li.appendChild(el); out.appendChild(li);
+      });
+    }
+
+    inp.addEventListener('focus', load, { once: true });
+    inp.addEventListener('input', function(){ load(); render(); });
   })();
 
 </script>

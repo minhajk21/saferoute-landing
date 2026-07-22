@@ -42,7 +42,6 @@ const CITIES = {
     medianLabel: 'citywide median',
     forCity: 'for New York City',
     acrossCity: 'across NYC',
-    boroughWord: 'borough',
     faqCalc: (name) => `SafeRoute weights each incident reported to the NYPD by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
     sources: (dateLine) => `Crime data: NYPD complaint data via <a href="https://opendata.cityofnewyork.us/">NYC Open Data</a>${dateLine}. Neighborhood boundaries: NYC 2020 Neighborhood Tabulation Areas. Basemap (streets, parks, shoreline): NYC Open Data. Analysis © SafeRoute.`,
     basemapCredit: 'basemap: NYC Open Data',
@@ -67,7 +66,6 @@ const CITIES = {
     medianLabel: 'Inner London median',
     forCity: 'for Inner London',
     acrossCity: 'across Inner London',
-    boroughWord: 'borough',
     faqCalc: (name) => `SafeRoute weights each police-recorded incident by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} centre, and normalises against national crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
     sources: (dateLine) => `Crime data: street-level crime via <a href="https://data.police.uk/">data.police.uk</a> (Open Government Licence v3.0)${dateLine}. Ward boundaries: ONS, December 2025. Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
     basemapCredit: 'basemap © OpenStreetMap contributors',
@@ -79,6 +77,34 @@ const CITIES = {
       placeholder: 'Check an area — e.g. Camden Town, Brixton, Shoreditch…',
       notice: (median) => `These figures describe <strong>reported</strong> crime around each area's centre — they are informational, not a judgment of any community. Note: data.police.uk anonymises incident locations to the nearest of ~750k snap points, so dots mark streets, not addresses. Inner London median index: <strong>${median}/100</strong>.`,
       methodology: `Each incident published by the police (via data.police.uk, Open Government Licence) is weighted by severity — violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre (ONS December 2025 ward centroids), and normalise onto a 0–100 index, higher&nbsp;=&nbsp;safer. Incident locations are anonymised by the police to nearby snap points, so the maps show streets rather than exact addresses. Pages regenerate as new data is published.`,
+    },
+  },
+  'chicago': {
+    name: 'Chicago',
+    hubName: 'Chicago',
+    rankPool: 'Chicago community areas',
+    // Chicago's official unit is the "community area", but people search
+    // "neighborhood" — so the prose says neighborhood and the methodology
+    // states plainly that the boundaries are the city's 77 community areas.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    reportedTo: 'reported to the Chicago Police Department',
+    dataName: 'Chicago PD data',
+    medianLabel: 'citywide median',
+    forCity: 'for Chicago',
+    acrossCity: 'across Chicago',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Chicago Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Chicago Police Department "Crimes — 2001 to Present" via the <a href="https://data.cityofchicago.org/">Chicago Data Portal</a>${dateLine}. Neighborhood boundaries: City of Chicago community areas (all 77). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
+    basemapCredit: 'basemap © OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Chicago Neighborhood Safety Map & Rankings (${n} community areas) — SafeRoute`,
+      desc: (n, date) => `How safe is your Chicago neighborhood? Safety index (0–100) for all ${n} Chicago community areas from Chicago PD reported-crime data through ${date} — ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Chicago neighborhood?',
+      lead: `SafeRoute scores all 77 Chicago community areas 0–100 from incidents reported to the Chicago Police Department — severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood — e.g. Lincoln Park, Hyde Park, Logan Square…',
+      rankHeading: (n) => `All ${n} community areas, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center — they are informational, not a judgment of any community. Note: to protect victims' privacy, the Chicago Police Department publishes incident locations at block level, so dots mark blocks, not addresses. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the Chicago Police Department (via the Chicago Data Portal) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of Chicago's 77 official community areas, the stable units the city itself reports on. Time-of-day charts use Chicago PD incident timestamps, severity-weighted. Locations are published at block level for victim privacy. Pages regenerate as new data is published.`,
     },
   },
 };
@@ -213,12 +239,19 @@ function makeProse(a, ctx) {
   const night = tod.length >= 6 ? (tod[2] + tod[5]) : null;
   const evening = tod.length >= 6 ? (tod[1] + tod[4]) : null;
 
-  const bandLead = {
-    low: `${a.name} sits at the safer end of ${cfg.hubName} by reported crime.`,
-    moderate: `${a.name} shows a typical level of reported crime ${cfg.forCity}.`,
-    elevated: `${a.name} records more reported crime than most ${cfg.name} ${cfg.areaWordPlural}.`,
-    high: `${a.name} records a high level of reported crime ${cfg.forCity}.`,
-  }[a.band];
+  // This sentence makes a COMPARATIVE claim ("than most X"), so it has to come
+  // from rank within the city — not from the band, which is absolute incident
+  // density. The bands are wide (elevated spans ~25–49) and straddle every city
+  // median, so band-driven copy contradicted the very next clause: areas
+  // ranking in the top quarter were told they had "more crime than most", then
+  // "16 points above the median, ranking 12th of 197". The band badge still
+  // shows the absolute reading, which is what it is labelled as.
+  const pct = rank / count;                       // rank 1 = safest
+  const bandLead =
+    pct <= 0.25 ? `${a.name} sits at the safer end of ${cfg.hubName} by reported crime.`
+    : pct <= 0.60 ? `${a.name} shows a typical level of reported crime ${cfg.forCity}.`
+    : pct <= 0.85 ? `${a.name} records more reported crime than most ${cfg.name} ${cfg.areaWordPlural}.`
+    : `${a.name} records a high level of reported crime ${cfg.forCity}.`;
 
   const cmp = Math.abs(diff) <= 3
     ? `right at the ${cfg.medianLabel} of ${median}`
@@ -318,6 +351,7 @@ function renderCity(citySlug) {
   const areas = readdirSync(cacheDir).filter(f => f.endsWith('.json'))
     .map(f => JSON.parse(readFileSync(join(cacheDir, f))));
   if (!areas.length) return null;
+  const noBasemap = [];
 
   const bySlug = new Map(areas.map(a => [a.slug, a]));
   const gazBySlug = new Map(gaz.areas.map(a => [a.slug, a]));
@@ -335,6 +369,11 @@ function renderCity(citySlug) {
       : '';
     const bmFile = join(ROOT, 'tools', 'data-cache', `${citySlug}-basemap`, `${a.slug}.json`);
     const bm = existsSync(bmFile) ? JSON.parse(readFileSync(bmFile)) : null;
+    // A basemap with no geometry renders as blank paper. That has happened for
+    // real (a regional Overpass mirror answering 200 with zero elements), so
+    // count them here — the last gate before publish — and fail the run below.
+    if (!bm || !((bm.water?.length || 0) + (bm.parks?.length || 0) +
+                 (bm.stMinor?.length || 0) + (bm.stMajor?.length || 0))) noBasemap.push(a.slug);
 
     const url = `${SITE}/safety/${citySlug}/${a.slug}/`;
     const title = `Is ${a.name} Safe? Crime Map & Safety Index — SafeRoute`;
@@ -365,7 +404,7 @@ function renderCity(citySlug) {
 </section>` : '';
 
     const html = `${head(title, desc, url, jsonld)}${chrome(`<a href="/safety/">Safety</a> › <a href="/safety/${citySlug}/">${cfg.name}</a> › ${esc(a.name)}`)}
-<p class="eyebrow">Safety index · ${esc(a.borough)}, ${cfg.name} · data through ${monthName(a.crimeDate)}</p>
+<p class="eyebrow">Safety index · ${a.borough === cfg.name ? '' : esc(a.borough) + ', '}${cfg.name} · data through ${monthName(a.crimeDate)}</p>
 <h1>Is ${esc(a.name)} safe?</h1>
 <p class="lead">${p.lead}</p>
 
@@ -418,7 +457,11 @@ ${footer(cfg, a, citySlug)}`;
     const tables = boroughs.map(b => {
       const rows = ranked.filter(a => a.borough === b).map(a =>
         `<tr><td><a href="/safety/${citySlug}/${a.slug}/">${esc(a.name)}</a></td><td class="n" style="color:${bandColor[a.band]}">${a.safetyScore}/100</td><td><span class="band ${a.band}">${bandWord[a.band]}</span></td><td class="n">${fmt(a.totalIncidents)}</td></tr>`).join('');
-      return `<h2 id="${b.toLowerCase().replace(/\s+/g, '-')}">${esc(b)}</h2>
+      // Cities with no sub-city tier (Chicago: 77 community areas, one pool)
+      // group into a single table — label it usefully instead of repeating the
+      // city name under the h1.
+      const heading = boroughs.length === 1 && cfg.hub.rankHeading ? cfg.hub.rankHeading(areas.length) : esc(b);
+      return `<h2 id="${b.toLowerCase().replace(/\s+/g, '-')}">${heading}</h2>
 <table class="rank"><thead><tr><th>${cfg.areaWord.replace(/^./, c => c.toUpperCase())} (safest first)</th><th style="text-align:right">Index</th><th>Band</th><th style="text-align:right">Incidents</th></tr></thead><tbody>${rows}</tbody></table>`;
     }).join('\n');
 
@@ -462,7 +505,7 @@ inp.addEventListener('input',()=>{
     writeFileSync(join(ROOT, 'safety', citySlug, 'index.html'), html);
   }
 
-  return { citySlug, cfg, count: areas.length, median, ranked, sample: areas[0] };
+  return { citySlug, cfg, count: areas.length, median, ranked, sample: areas[0], noBasemap };
 }
 
 // ── render all cities, then root + sitemap + robots ──────────────────────────
@@ -481,11 +524,21 @@ if (!rendered.length) throw new Error('no cities with data');
 <table class="rank"><tbody>
 ${rows}
 </tbody></table>
-<p style="font-size:15px;color:var(--ink-2)">More cities from SafeRoute's 30-city coverage (Chicago, Toronto, Mexico City…) are on the way.</p>
+<p style="font-size:15px;color:var(--ink-2)">More cities from SafeRoute's 30-city coverage (Los Angeles, Toronto, Mexico City…) are on the way.</p>
 ${cta('your city')}
 ${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug)}`;
   mkdirSync(join(ROOT, 'safety'), { recursive: true });
   writeFileSync(join(ROOT, 'safety', 'index.html'), html);
+}
+
+{
+  // Cross-city search index for the marketing homepage's "look up your
+  // neighborhood" box — lazy-fetched on first keystroke, so it costs nothing on
+  // page load. Kept terse (short keys) because it ships every area in every city.
+  const idx = rendered.flatMap(r => r.ranked.map(a => ({
+    n: a.name, s: a.slug, c: r.citySlug, cn: r.cfg.name, v: a.safetyScore, b: a.band,
+  })));
+  writeFileSync(join(ROOT, 'safety', 'search-index.json'), JSON.stringify(idx));
 }
 
 {
@@ -509,3 +562,14 @@ ${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug)}`;
 
 console.log(rendered.map(r => `${r.citySlug}: ${r.count} pages (median ${r.median})`).join(' · ') +
   ` · sitemap ${rendered.reduce((s, r) => s + r.count + 1, 2)} urls`);
+
+// Blank maps look like a broken page, so treat widespread absence as a build
+// failure rather than publishing them. A handful of gaps is tolerated (an area
+// genuinely mid-fetch); more than 10% of a city means something is wrong.
+for (const r of rendered) {
+  if (!r.noBasemap.length) continue;
+  const pct = Math.round(r.noBasemap.length / r.count * 100);
+  const msg = `${r.citySlug}: ${r.noBasemap.length}/${r.count} (${pct}%) areas have no basemap — ${r.noBasemap.slice(0, 8).join(', ')}${r.noBasemap.length > 8 ? '…' : ''}`;
+  if (pct > 10) { console.error(`FAIL ${msg}`); process.exitCode = 1; }
+  else console.warn(`warn ${msg}`);
+}

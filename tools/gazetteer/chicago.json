@@ -1,0 +1,1164 @@
+{
+ "city": "Chicago",
+ "citySlug": "chicago",
+ "country": "US",
+ "source": "Chicago Data Portal — Boundaries: Community Areas (igwz-8jzy), all 77",
+ "generatedAt": "2026-07-22",
+ "areas": [
+  {
+   "name": "Albany Park",
+   "slug": "albany-park",
+   "borough": "Chicago",
+   "areaNum": "14",
+   "lat": 41.968069,
+   "lng": -87.72156,
+   "neighbors": [
+    "irving-park",
+    "north-park",
+    "lincoln-square",
+    "avondale",
+    "portage-park"
+   ]
+  },
+  {
+   "name": "Archer Heights",
+   "slug": "archer-heights",
+   "borough": "Chicago",
+   "areaNum": "57",
+   "lat": 41.81088,
+   "lng": -87.726363,
+   "neighbors": [
+    "west-elsdon",
+    "brighton-park",
+    "gage-park",
+    "south-lawndale",
+    "garfield-ridge"
+   ]
+  },
+  {
+   "name": "Armour Square",
+   "slug": "armour-square",
+   "borough": "Chicago",
+   "areaNum": "34",
+   "lat": 41.842077,
+   "lng": -87.633974,
+   "neighbors": [
+    "bridgeport",
+    "douglas",
+    "near-south-side",
+    "lower-west-side",
+    "oakland"
+   ]
+  },
+  {
+   "name": "Ashburn",
+   "slug": "ashburn",
+   "borough": "Chicago",
+   "areaNum": "70",
+   "lat": 41.745757,
+   "lng": -87.708365,
+   "neighbors": [
+    "west-lawn",
+    "chicago-lawn",
+    "auburn-gresham",
+    "beverly",
+    "west-englewood"
+   ]
+  },
+  {
+   "name": "Auburn Gresham",
+   "slug": "auburn-gresham",
+   "borough": "Chicago",
+   "areaNum": "71",
+   "lat": 41.744205,
+   "lng": -87.656307,
+   "neighbors": [
+    "washington-heights",
+    "chatham",
+    "west-englewood",
+    "beverly",
+    "englewood"
+   ]
+  },
+  {
+   "name": "Austin",
+   "slug": "austin",
+   "borough": "Chicago",
+   "areaNum": "25",
+   "lat": 41.894101,
+   "lng": -87.763112,
+   "neighbors": [
+    "west-garfield-park",
+    "humboldt-park",
+    "belmont-cragin",
+    "hermosa",
+    "montclare"
+   ]
+  },
+  {
+   "name": "Avalon Park",
+   "slug": "avalon-park",
+   "borough": "Chicago",
+   "areaNum": "45",
+   "lat": 41.7442,
+   "lng": -87.586349,
+   "neighbors": [
+    "burnside",
+    "calumet-heights",
+    "south-shore",
+    "chatham",
+    "south-chicago"
+   ]
+  },
+  {
+   "name": "Avondale",
+   "slug": "avondale",
+   "borough": "Chicago",
+   "areaNum": "21",
+   "lat": 41.938666,
+   "lng": -87.711211,
+   "neighbors": [
+    "irving-park",
+    "logan-square",
+    "north-center",
+    "hermosa",
+    "albany-park"
+   ]
+  },
+  {
+   "name": "Belmont Cragin",
+   "slug": "belmont-cragin",
+   "borough": "Chicago",
+   "areaNum": "19",
+   "lat": 41.927261,
+   "lng": -87.765502,
+   "neighbors": [
+    "hermosa",
+    "montclare",
+    "portage-park",
+    "austin",
+    "dunning"
+   ]
+  },
+  {
+   "name": "Beverly",
+   "slug": "beverly",
+   "borough": "Chicago",
+   "areaNum": "72",
+   "lat": 41.71315,
+   "lng": -87.675075,
+   "neighbors": [
+    "washington-heights",
+    "morgan-park",
+    "mount-greenwood",
+    "auburn-gresham",
+    "roseland"
+   ]
+  },
+  {
+   "name": "Bridgeport",
+   "slug": "bridgeport",
+   "borough": "Chicago",
+   "areaNum": "60",
+   "lat": 41.836151,
+   "lng": -87.648788,
+   "neighbors": [
+    "armour-square",
+    "mckinley-park",
+    "lower-west-side",
+    "douglas",
+    "new-city"
+   ]
+  },
+  {
+   "name": "Brighton Park",
+   "slug": "brighton-park",
+   "borough": "Chicago",
+   "areaNum": "58",
+   "lat": 41.817367,
+   "lng": -87.698861,
+   "neighbors": [
+    "archer-heights",
+    "gage-park",
+    "mckinley-park",
+    "south-lawndale",
+    "new-city"
+   ]
+  },
+  {
+   "name": "Burnside",
+   "slug": "burnside",
+   "borough": "Chicago",
+   "areaNum": "47",
+   "lat": 41.728182,
+   "lng": -87.596476,
+   "neighbors": [
+    "avalon-park",
+    "calumet-heights",
+    "chatham",
+    "pullman",
+    "roseland"
+   ]
+  },
+  {
+   "name": "Calumet Heights",
+   "slug": "calumet-heights",
+   "borough": "Chicago",
+   "areaNum": "48",
+   "lat": 41.729676,
+   "lng": -87.572718,
+   "neighbors": [
+    "avalon-park",
+    "burnside",
+    "south-chicago",
+    "pullman",
+    "south-shore"
+   ]
+  },
+  {
+   "name": "Chatham",
+   "slug": "chatham",
+   "borough": "Chicago",
+   "areaNum": "44",
+   "lat": 41.740206,
+   "lng": -87.61597,
+   "neighbors": [
+    "burnside",
+    "avalon-park",
+    "greater-grand-crossing",
+    "auburn-gresham",
+    "washington-heights"
+   ]
+  },
+  {
+   "name": "Chicago Lawn",
+   "slug": "chicago-lawn",
+   "borough": "Chicago",
+   "areaNum": "66",
+   "lat": 41.771849,
+   "lng": -87.695666,
+   "neighbors": [
+    "west-englewood",
+    "west-lawn",
+    "gage-park",
+    "ashburn",
+    "west-elsdon"
+   ]
+  },
+  {
+   "name": "Clearing",
+   "slug": "clearing",
+   "borough": "Chicago",
+   "areaNum": "64",
+   "lat": 41.779581,
+   "lng": -87.768511,
+   "neighbors": [
+    "garfield-ridge",
+    "west-lawn",
+    "west-elsdon",
+    "archer-heights",
+    "chicago-lawn"
+   ]
+  },
+  {
+   "name": "Douglas",
+   "slug": "douglas",
+   "borough": "Chicago",
+   "areaNum": "35",
+   "lat": 41.835118,
+   "lng": -87.618678,
+   "neighbors": [
+    "armour-square",
+    "oakland",
+    "near-south-side",
+    "grand-boulevard",
+    "bridgeport"
+   ]
+  },
+  {
+   "name": "Dunning",
+   "slug": "dunning",
+   "borough": "Chicago",
+   "areaNum": "17",
+   "lat": 41.946511,
+   "lng": -87.80602,
+   "neighbors": [
+    "montclare",
+    "portage-park",
+    "belmont-cragin",
+    "norwood-park",
+    "jefferson-park"
+   ]
+  },
+  {
+   "name": "East Garfield Park",
+   "slug": "east-garfield-park",
+   "borough": "Chicago",
+   "areaNum": "27",
+   "lat": 41.878915,
+   "lng": -87.705897,
+   "neighbors": [
+    "west-garfield-park",
+    "north-lawndale",
+    "humboldt-park",
+    "west-town",
+    "near-west-side"
+   ]
+  },
+  {
+   "name": "East Side",
+   "slug": "east-side",
+   "borough": "Chicago",
+   "areaNum": "52",
+   "lat": 41.707314,
+   "lng": -87.534902,
+   "neighbors": [
+    "south-deering",
+    "calumet-heights",
+    "south-chicago",
+    "pullman",
+    "hegewisch"
+   ]
+  },
+  {
+   "name": "Edgewater",
+   "slug": "edgewater",
+   "borough": "Chicago",
+   "areaNum": "77",
+   "lat": 41.986712,
+   "lng": -87.663416,
+   "neighbors": [
+    "lincoln-square",
+    "uptown",
+    "rogers-park",
+    "west-ridge",
+    "north-center"
+   ]
+  },
+  {
+   "name": "Edison Park",
+   "slug": "edison-park",
+   "borough": "Chicago",
+   "areaNum": "9",
+   "lat": 42.007613,
+   "lng": -87.813781,
+   "neighbors": [
+    "norwood-park",
+    "jefferson-park",
+    "forest-glen",
+    "dunning",
+    "portage-park"
+   ]
+  },
+  {
+   "name": "Englewood",
+   "slug": "englewood",
+   "borough": "Chicago",
+   "areaNum": "68",
+   "lat": 41.777198,
+   "lng": -87.642497,
+   "neighbors": [
+    "west-englewood",
+    "washington-park",
+    "greater-grand-crossing",
+    "fuller-park",
+    "new-city"
+   ]
+  },
+  {
+   "name": "Forest Glen",
+   "slug": "forest-glen",
+   "borough": "Chicago",
+   "areaNum": "12",
+   "lat": 41.993931,
+   "lng": -87.758356,
+   "neighbors": [
+    "jefferson-park",
+    "north-park",
+    "norwood-park",
+    "albany-park",
+    "portage-park"
+   ]
+  },
+  {
+   "name": "Fuller Park",
+   "slug": "fuller-park",
+   "borough": "Chicago",
+   "areaNum": "37",
+   "lat": 41.809086,
+   "lng": -87.632425,
+   "neighbors": [
+    "grand-boulevard",
+    "washington-park",
+    "new-city",
+    "oakland",
+    "kenwood"
+   ]
+  },
+  {
+   "name": "Gage Park",
+   "slug": "gage-park",
+   "borough": "Chicago",
+   "areaNum": "63",
+   "lat": 41.795431,
+   "lng": -87.696435,
+   "neighbors": [
+    "west-elsdon",
+    "brighton-park",
+    "chicago-lawn",
+    "archer-heights",
+    "west-englewood"
+   ]
+  },
+  {
+   "name": "Garfield Ridge",
+   "slug": "garfield-ridge",
+   "borough": "Chicago",
+   "areaNum": "56",
+   "lat": 41.796186,
+   "lng": -87.76424,
+   "neighbors": [
+    "clearing",
+    "west-elsdon",
+    "archer-heights",
+    "west-lawn",
+    "gage-park"
+   ]
+  },
+  {
+   "name": "Grand Boulevard",
+   "slug": "grand-boulevard",
+   "borough": "Chicago",
+   "areaNum": "38",
+   "lat": 41.812949,
+   "lng": -87.61786,
+   "neighbors": [
+    "fuller-park",
+    "oakland",
+    "kenwood",
+    "washington-park",
+    "douglas"
+   ]
+  },
+  {
+   "name": "Greater Grand Crossing",
+   "slug": "greater-grand-crossing",
+   "borough": "Chicago",
+   "areaNum": "69",
+   "lat": 41.763247,
+   "lng": -87.616134,
+   "neighbors": [
+    "woodlawn",
+    "chatham",
+    "englewood",
+    "washington-park",
+    "avalon-park"
+   ]
+  },
+  {
+   "name": "Hegewisch",
+   "slug": "hegewisch",
+   "borough": "Chicago",
+   "areaNum": "55",
+   "lat": 41.660535,
+   "lng": -87.546575,
+   "neighbors": [
+    "south-deering",
+    "riverdale",
+    "east-side",
+    "pullman",
+    "west-pullman"
+   ]
+  },
+  {
+   "name": "Hermosa",
+   "slug": "hermosa",
+   "borough": "Chicago",
+   "areaNum": "20",
+   "lat": 41.924348,
+   "lng": -87.73474,
+   "neighbors": [
+    "avondale",
+    "belmont-cragin",
+    "humboldt-park",
+    "logan-square",
+    "irving-park"
+   ]
+  },
+  {
+   "name": "Humboldt Park",
+   "slug": "humboldt-park",
+   "borough": "Chicago",
+   "areaNum": "23",
+   "lat": 41.90007,
+   "lng": -87.720919,
+   "neighbors": [
+    "west-garfield-park",
+    "east-garfield-park",
+    "hermosa",
+    "logan-square",
+    "austin"
+   ]
+  },
+  {
+   "name": "Hyde Park",
+   "slug": "hyde-park",
+   "borough": "Chicago",
+   "areaNum": "41",
+   "lat": 41.79409,
+   "lng": -87.592311,
+   "neighbors": [
+    "kenwood",
+    "woodlawn",
+    "washington-park",
+    "grand-boulevard",
+    "oakland"
+   ]
+  },
+  {
+   "name": "Irving Park",
+   "slug": "irving-park",
+   "borough": "Chicago",
+   "areaNum": "16",
+   "lat": 41.953582,
+   "lng": -87.723452,
+   "neighbors": [
+    "albany-park",
+    "avondale",
+    "portage-park",
+    "north-center",
+    "north-park"
+   ]
+  },
+  {
+   "name": "Jefferson Park",
+   "slug": "jefferson-park",
+   "borough": "Chicago",
+   "areaNum": "11",
+   "lat": 41.97883,
+   "lng": -87.771167,
+   "neighbors": [
+    "forest-glen",
+    "portage-park",
+    "norwood-park",
+    "north-park",
+    "albany-park"
+   ]
+  },
+  {
+   "name": "Kenwood",
+   "slug": "kenwood",
+   "borough": "Chicago",
+   "areaNum": "39",
+   "lat": 41.808916,
+   "lng": -87.596183,
+   "neighbors": [
+    "hyde-park",
+    "oakland",
+    "grand-boulevard",
+    "washington-park",
+    "fuller-park"
+   ]
+  },
+  {
+   "name": "Lake View",
+   "slug": "lake-view",
+   "borough": "Chicago",
+   "areaNum": "6",
+   "lat": 41.944227,
+   "lng": -87.655999,
+   "neighbors": [
+    "north-center",
+    "uptown",
+    "lincoln-park",
+    "logan-square",
+    "lincoln-square"
+   ]
+  },
+  {
+   "name": "Lincoln Park",
+   "slug": "lincoln-park",
+   "borough": "Chicago",
+   "areaNum": "7",
+   "lat": 41.922686,
+   "lng": -87.64949,
+   "neighbors": [
+    "lake-view",
+    "near-north-side",
+    "west-town",
+    "north-center",
+    "logan-square"
+   ]
+  },
+  {
+   "name": "Lincoln Square",
+   "slug": "lincoln-square",
+   "borough": "Chicago",
+   "areaNum": "4",
+   "lat": 41.975171,
+   "lng": -87.687515,
+   "neighbors": [
+    "edgewater",
+    "uptown",
+    "albany-park",
+    "west-ridge",
+    "north-center"
+   ]
+  },
+  {
+   "name": "Logan Square",
+   "slug": "logan-square",
+   "borough": "Chicago",
+   "areaNum": "22",
+   "lat": 41.92276,
+   "lng": -87.699156,
+   "neighbors": [
+    "avondale",
+    "hermosa",
+    "west-town",
+    "north-center",
+    "humboldt-park"
+   ]
+  },
+  {
+   "name": "Lower West Side",
+   "slug": "lower-west-side",
+   "borough": "Chicago",
+   "areaNum": "31",
+   "lat": 41.850266,
+   "lng": -87.667568,
+   "neighbors": [
+    "bridgeport",
+    "mckinley-park",
+    "near-west-side",
+    "armour-square",
+    "near-south-side"
+   ]
+  },
+  {
+   "name": "McKinley Park",
+   "slug": "mckinley-park",
+   "borough": "Chicago",
+   "areaNum": "59",
+   "lat": 41.829922,
+   "lng": -87.672503,
+   "neighbors": [
+    "bridgeport",
+    "lower-west-side",
+    "new-city",
+    "brighton-park",
+    "armour-square"
+   ]
+  },
+  {
+   "name": "Montclare",
+   "slug": "montclare",
+   "borough": "Chicago",
+   "areaNum": "18",
+   "lat": 41.929298,
+   "lng": -87.798033,
+   "neighbors": [
+    "dunning",
+    "belmont-cragin",
+    "portage-park",
+    "austin",
+    "hermosa"
+   ]
+  },
+  {
+   "name": "Morgan Park",
+   "slug": "morgan-park",
+   "borough": "Chicago",
+   "areaNum": "75",
+   "lat": 41.68973,
+   "lng": -87.669054,
+   "neighbors": [
+    "beverly",
+    "west-pullman",
+    "washington-heights",
+    "mount-greenwood",
+    "roseland"
+   ]
+  },
+  {
+   "name": "Mount Greenwood",
+   "slug": "mount-greenwood",
+   "borough": "Chicago",
+   "areaNum": "74",
+   "lat": 41.69488,
+   "lng": -87.713192,
+   "neighbors": [
+    "morgan-park",
+    "beverly",
+    "ashburn",
+    "washington-heights",
+    "west-pullman"
+   ]
+  },
+  {
+   "name": "Near North Side",
+   "slug": "near-north-side",
+   "borough": "Chicago",
+   "areaNum": "8",
+   "lat": 41.899602,
+   "lng": -87.633309,
+   "neighbors": [
+    "the-loop",
+    "lincoln-park",
+    "west-town",
+    "near-west-side",
+    "near-south-side"
+   ]
+  },
+  {
+   "name": "Near South Side",
+   "slug": "near-south-side",
+   "borough": "Chicago",
+   "areaNum": "33",
+   "lat": 41.857184,
+   "lng": -87.620335,
+   "neighbors": [
+    "armour-square",
+    "the-loop",
+    "douglas",
+    "bridgeport",
+    "oakland"
+   ]
+  },
+  {
+   "name": "Near West Side",
+   "slug": "near-west-side",
+   "borough": "Chicago",
+   "areaNum": "28",
+   "lat": 41.874005,
+   "lng": -87.663518,
+   "neighbors": [
+    "lower-west-side",
+    "west-town",
+    "the-loop",
+    "east-garfield-park",
+    "near-north-side"
+   ]
+  },
+  {
+   "name": "New City",
+   "slug": "new-city",
+   "borough": "Chicago",
+   "areaNum": "61",
+   "lat": 41.809019,
+   "lng": -87.659167,
+   "neighbors": [
+    "fuller-park",
+    "mckinley-park",
+    "bridgeport",
+    "brighton-park",
+    "gage-park"
+   ]
+  },
+  {
+   "name": "North Center",
+   "slug": "north-center",
+   "borough": "Chicago",
+   "areaNum": "5",
+   "lat": 41.947792,
+   "lng": -87.683835,
+   "neighbors": [
+    "lake-view",
+    "avondale",
+    "logan-square",
+    "uptown",
+    "lincoln-square"
+   ]
+  },
+  {
+   "name": "North Lawndale",
+   "slug": "north-lawndale",
+   "borough": "Chicago",
+   "areaNum": "29",
+   "lat": 41.86019,
+   "lng": -87.717219,
+   "neighbors": [
+    "east-garfield-park",
+    "west-garfield-park",
+    "south-lawndale",
+    "lower-west-side",
+    "humboldt-park"
+   ]
+  },
+  {
+   "name": "North Park",
+   "slug": "north-park",
+   "borough": "Chicago",
+   "areaNum": "13",
+   "lat": 41.983636,
+   "lng": -87.723583,
+   "neighbors": [
+    "albany-park",
+    "west-ridge",
+    "forest-glen",
+    "lincoln-square",
+    "irving-park"
+   ]
+  },
+  {
+   "name": "Norwood Park",
+   "slug": "norwood-park",
+   "borough": "Chicago",
+   "areaNum": "10",
+   "lat": 41.985015,
+   "lng": -87.804531,
+   "neighbors": [
+    "edison-park",
+    "jefferson-park",
+    "forest-glen",
+    "dunning",
+    "portage-park"
+   ]
+  },
+  {
+   "name": "O'Hare",
+   "slug": "ohare",
+   "borough": "Chicago",
+   "areaNum": "76",
+   "lat": 41.975555,
+   "lng": -87.893495,
+   "neighbors": [
+    "norwood-park",
+    "edison-park",
+    "dunning",
+    "montclare",
+    "jefferson-park"
+   ]
+  },
+  {
+   "name": "Oakland",
+   "slug": "oakland",
+   "borough": "Chicago",
+   "areaNum": "36",
+   "lat": 41.82375,
+   "lng": -87.603216,
+   "neighbors": [
+    "grand-boulevard",
+    "kenwood",
+    "douglas",
+    "fuller-park",
+    "armour-square"
+   ]
+  },
+  {
+   "name": "Portage Park",
+   "slug": "portage-park",
+   "borough": "Chicago",
+   "areaNum": "15",
+   "lat": 41.954028,
+   "lng": -87.7634,
+   "neighbors": [
+    "jefferson-park",
+    "belmont-cragin",
+    "irving-park",
+    "dunning",
+    "albany-park"
+   ]
+  },
+  {
+   "name": "Pullman",
+   "slug": "pullman",
+   "borough": "Chicago",
+   "areaNum": "50",
+   "lat": 41.706127,
+   "lng": -87.598255,
+   "neighbors": [
+    "roseland",
+    "burnside",
+    "south-deering",
+    "calumet-heights",
+    "chatham"
+   ]
+  },
+  {
+   "name": "Riverdale",
+   "slug": "riverdale",
+   "borough": "Chicago",
+   "areaNum": "54",
+   "lat": 41.660137,
+   "lng": -87.602849,
+   "neighbors": [
+    "west-pullman",
+    "south-deering",
+    "hegewisch",
+    "pullman",
+    "roseland"
+   ]
+  },
+  {
+   "name": "Rogers Park",
+   "slug": "rogers-park",
+   "borough": "Chicago",
+   "areaNum": "1",
+   "lat": 42.009624,
+   "lng": -87.670168,
+   "neighbors": [
+    "west-ridge",
+    "edgewater",
+    "lincoln-square",
+    "uptown",
+    "north-park"
+   ]
+  },
+  {
+   "name": "Roseland",
+   "slug": "roseland",
+   "borough": "Chicago",
+   "areaNum": "49",
+   "lat": 41.70659,
+   "lng": -87.623366,
+   "neighbors": [
+    "pullman",
+    "washington-heights",
+    "burnside",
+    "west-pullman",
+    "chatham"
+   ]
+  },
+  {
+   "name": "South Chicago",
+   "slug": "south-chicago",
+   "borough": "Chicago",
+   "areaNum": "46",
+   "lat": 41.741243,
+   "lng": -87.551429,
+   "neighbors": [
+    "calumet-heights",
+    "south-shore",
+    "avalon-park",
+    "burnside",
+    "east-side"
+   ]
+  },
+  {
+   "name": "South Deering",
+   "slug": "south-deering",
+   "borough": "Chicago",
+   "areaNum": "51",
+   "lat": 41.690637,
+   "lng": -87.570057,
+   "neighbors": [
+    "pullman",
+    "east-side",
+    "hegewisch",
+    "calumet-heights",
+    "riverdale"
+   ]
+  },
+  {
+   "name": "South Lawndale",
+   "slug": "south-lawndale",
+   "borough": "Chicago",
+   "areaNum": "30",
+   "lat": 41.839087,
+   "lng": -87.714002,
+   "neighbors": [
+    "north-lawndale",
+    "brighton-park",
+    "archer-heights",
+    "mckinley-park",
+    "lower-west-side"
+   ]
+  },
+  {
+   "name": "South Shore",
+   "slug": "south-shore",
+   "borough": "Chicago",
+   "areaNum": "43",
+   "lat": 41.761578,
+   "lng": -87.572783,
+   "neighbors": [
+    "avalon-park",
+    "woodlawn",
+    "south-chicago",
+    "calumet-heights",
+    "greater-grand-crossing"
+   ]
+  },
+  {
+   "name": "The Loop",
+   "slug": "the-loop",
+   "borough": "Chicago",
+   "areaNum": "32",
+   "lat": 41.878866,
+   "lng": -87.625192,
+   "neighbors": [
+    "near-north-side",
+    "near-south-side",
+    "near-west-side",
+    "armour-square",
+    "lower-west-side"
+   ]
+  },
+  {
+   "name": "Uptown",
+   "slug": "uptown",
+   "borough": "Chicago",
+   "areaNum": "3",
+   "lat": 41.965812,
+   "lng": -87.655879,
+   "neighbors": [
+    "lake-view",
+    "edgewater",
+    "lincoln-square",
+    "north-center",
+    "lincoln-park"
+   ]
+  },
+  {
+   "name": "Washington Heights",
+   "slug": "washington-heights",
+   "borough": "Chicago",
+   "areaNum": "73",
+   "lat": 41.717494,
+   "lng": -87.648896,
+   "neighbors": [
+    "beverly",
+    "roseland",
+    "auburn-gresham",
+    "morgan-park",
+    "chatham"
+   ]
+  },
+  {
+   "name": "Washington Park",
+   "slug": "washington-park",
+   "borough": "Chicago",
+   "areaNum": "40",
+   "lat": 41.792358,
+   "lng": -87.617931,
+   "neighbors": [
+    "hyde-park",
+    "fuller-park",
+    "grand-boulevard",
+    "woodlawn",
+    "kenwood"
+   ]
+  },
+  {
+   "name": "West Elsdon",
+   "slug": "west-elsdon",
+   "borough": "Chicago",
+   "areaNum": "62",
+   "lat": 41.792982,
+   "lng": -87.724208,
+   "neighbors": [
+    "archer-heights",
+    "gage-park",
+    "west-lawn",
+    "chicago-lawn",
+    "garfield-ridge"
+   ]
+  },
+  {
+   "name": "West Englewood",
+   "slug": "west-englewood",
+   "borough": "Chicago",
+   "areaNum": "67",
+   "lat": 41.77593,
+   "lng": -87.666596,
+   "neighbors": [
+    "englewood",
+    "chicago-lawn",
+    "gage-park",
+    "auburn-gresham",
+    "new-city"
+   ]
+  },
+  {
+   "name": "West Garfield Park",
+   "slug": "west-garfield-park",
+   "borough": "Chicago",
+   "areaNum": "26",
+   "lat": 41.878595,
+   "lng": -87.730232,
+   "neighbors": [
+    "east-garfield-park",
+    "north-lawndale",
+    "humboldt-park",
+    "austin",
+    "south-lawndale"
+   ]
+  },
+  {
+   "name": "West Lawn",
+   "slug": "west-lawn",
+   "borough": "Chicago",
+   "areaNum": "65",
+   "lat": 41.769779,
+   "lng": -87.726929,
+   "neighbors": [
+    "west-elsdon",
+    "chicago-lawn",
+    "ashburn",
+    "clearing",
+    "gage-park"
+   ]
+  },
+  {
+   "name": "West Pullman",
+   "slug": "west-pullman",
+   "borough": "Chicago",
+   "areaNum": "53",
+   "lat": 41.67382,
+   "lng": -87.63574,
+   "neighbors": [
+    "riverdale",
+    "morgan-park",
+    "roseland",
+    "pullman",
+    "washington-heights"
+   ]
+  },
+  {
+   "name": "West Ridge",
+   "slug": "west-ridge",
+   "borough": "Chicago",
+   "areaNum": "2",
+   "lat": 42.001572,
+   "lng": -87.695013,
+   "neighbors": [
+    "rogers-park",
+    "lincoln-square",
+    "edgewater",
+    "north-park",
+    "albany-park"
+   ]
+  },
+  {
+   "name": "West Town",
+   "slug": "west-town",
+   "borough": "Chicago",
+   "areaNum": "24",
+   "lat": 41.901207,
+   "lng": -87.676357,
+   "neighbors": [
+    "logan-square",
+    "near-west-side",
+    "lincoln-park",
+    "east-garfield-park",
+    "near-north-side"
+   ]
+  },
+  {
+   "name": "Woodlawn",
+   "slug": "woodlawn",
+   "borough": "Chicago",
+   "areaNum": "42",
+   "lat": 41.778876,
+   "lng": -87.594925,
+   "neighbors": [
+    "hyde-park",
+    "washington-park",
+    "greater-grand-crossing",
+    "south-shore",
+    "kenwood"
+   ]
+  }
+ ]
+}
