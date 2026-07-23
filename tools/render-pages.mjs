@@ -107,6 +107,36 @@ const CITIES = {
       methodology: `Each incident reported to the Chicago Police Department (via the Chicago Data Portal) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of Chicago's 77 official community areas, the stable units the city itself reports on. Time-of-day charts use Chicago PD incident timestamps, severity-weighted. Locations are published at block level for victim privacy. Pages regenerate as new data is published.`,
     },
   },
+  'la': {
+    name: 'Los Angeles',
+    hubName: 'Los Angeles',
+    rankPool: 'LA neighborhoods',
+    // Boundaries are the City of LA's 99 Neighborhood Councils, chosen because —
+    // unlike the LA Times "Mapping L.A." set — they sit only inside city limits,
+    // so no page covers Santa Monica / Beverly Hills / Culver City, each policed
+    // by its own department (LAPD data is near-empty there; see the backend
+    // enclave exclusions). People search "neighborhood", so the prose says so.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    reportedTo: 'reported to the LAPD',
+    dataName: 'LAPD data',
+    medianLabel: 'citywide median',
+    forCity: 'for Los Angeles',
+    acrossCity: 'across LA',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the LAPD by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: LAPD crime incidents via <a href="https://data.lacity.org/">Los Angeles Open Data</a>${dateLine}. Neighborhood boundaries: City of Los Angeles Neighborhood Councils (EmpowerLA), all 99. Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
+    basemapCredit: 'basemap © OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Los Angeles Neighborhood Safety Map & Rankings (${n} neighborhoods) — SafeRoute`,
+      desc: (n, date) => `How safe is your LA neighborhood? Safety index (0–100) for ${n} Los Angeles neighborhoods from LAPD reported-crime data through ${date} — ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Los Angeles neighborhood?',
+      lead: `SafeRoute scores every City of LA neighborhood 0–100 from incidents reported to the LAPD — severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood — e.g. Silver Lake, Venice, Highland Park…',
+      rankHeading: (n) => `All ${n} LA neighborhoods, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center — they are informational, not a judgment of any community. Note: the LAPD publishes incident locations to the nearest hundred block for privacy, so dots mark blocks, not addresses. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the LAPD (via LA Open Data) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of LA's 99 Neighborhood Councils; neighboring cities with their own police (Santa Monica, Beverly Hills, Culver City and others) are outside LAPD's data and are not scored. Where a council spans large parkland, the map centers on its populated core rather than its geometric middle. Time-of-day charts use LAPD incident timestamps, severity-weighted. Locations are published to the nearest hundred block for privacy. Pages regenerate as new data is published.`,
+    },
+  },
 };
 
 // ── helpers ──────────────────────────────────────────────────────────────────
