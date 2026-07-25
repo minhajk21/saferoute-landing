@@ -137,6 +137,33 @@ const CITIES = {
       methodology: `Each incident reported to the LAPD (via LA Open Data) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of LA's 99 Neighborhood Councils; neighboring cities with their own police (Santa Monica, Beverly Hills, Culver City and others) are outside LAPD's data and are not scored. Where a council spans large parkland, the map centers on its populated core rather than its geometric middle. Time-of-day charts use LAPD incident timestamps, severity-weighted. Locations are published to the nearest hundred block for privacy. Pages regenerate as new data is published.`,
     },
   },
+  'sf': {
+    name: 'San Francisco',
+    hubName: 'San Francisco',
+    rankPool: 'SF neighborhoods',
+    // Boundaries are DataSF's 41 "Analysis Neighborhoods" — the same unit SFPD
+    // tags every incident with, so the map and the score describe the same area.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    reportedTo: 'reported to the SFPD',
+    dataName: 'SFPD data',
+    medianLabel: 'citywide median',
+    forCity: 'for San Francisco',
+    acrossCity: 'across SF',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the SFPD by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: SFPD incident reports via <a href="https://data.sfgov.org/">DataSF</a>${dateLine}. Neighborhood boundaries: DataSF Analysis Neighborhoods (all 41). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
+    basemapCredit: 'basemap © OpenStreetMap contributors',
+    hub: {
+      title: (n) => `San Francisco Neighborhood Safety Map & Rankings (${n} neighborhoods) — SafeRoute`,
+      desc: (n, date) => `How safe is your SF neighborhood? Safety index (0–100) for all ${n} San Francisco neighborhoods from SFPD reported-crime data through ${date} — ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your San Francisco neighborhood?',
+      lead: `SafeRoute scores all 41 San Francisco neighborhoods 0–100 from incidents reported to the SFPD — severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood — e.g. the Mission, Sunset, North Beach…',
+      rankHeading: (n) => `All ${n} SF neighborhoods, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center — they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the SFPD (via DataSF) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are DataSF's 41 Analysis Neighborhoods, the same unit SFPD tags each report with. Because San Francisco's dense downtown far outweighs its residential west side, the index is calibrated to the citywide median so a typical neighborhood reads mid-scale. Time-of-day charts use SFPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
+    },
+  },
 };
 
 // ── helpers ──────────────────────────────────────────────────────────────────

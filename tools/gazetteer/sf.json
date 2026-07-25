@@ -1,0 +1,587 @@
+{
+ "city": "San Francisco",
+ "citySlug": "sf",
+ "country": "US",
+ "source": "DataSF — Analysis Neighborhoods (41), via ArcGIS Online mirror",
+ "generatedAt": "2026-07-23",
+ "areas": [
+  {
+   "name": "Bayview Hunters Point",
+   "slug": "bayview-hunters-point",
+   "borough": "San Francisco",
+   "lat": 37.730894,
+   "lng": -122.386029,
+   "neighbors": [
+    "portola",
+    "bernal-heights",
+    "visitacion-valley",
+    "potrero-hill",
+    "mclaren-park"
+   ]
+  },
+  {
+   "name": "Bernal Heights",
+   "slug": "bernal-heights",
+   "borough": "San Francisco",
+   "lat": 37.740369,
+   "lng": -122.415677,
+   "neighbors": [
+    "portola",
+    "glen-park",
+    "noe-valley",
+    "mission",
+    "mclaren-park"
+   ]
+  },
+  {
+   "name": "Castro/Upper Market",
+   "slug": "castro-upper-market",
+   "borough": "San Francisco",
+   "lat": 37.762324,
+   "lng": -122.43523,
+   "neighbors": [
+    "haight-ashbury",
+    "hayes-valley",
+    "noe-valley",
+    "twin-peaks",
+    "mission"
+   ]
+  },
+  {
+   "name": "Chinatown",
+   "slug": "chinatown",
+   "borough": "San Francisco",
+   "lat": 37.796145,
+   "lng": -122.407094,
+   "neighbors": [
+    "nob-hill",
+    "north-beach",
+    "financial-district-south-beach",
+    "russian-hill",
+    "tenderloin"
+   ]
+  },
+  {
+   "name": "Excelsior",
+   "slug": "excelsior",
+   "borough": "San Francisco",
+   "lat": 37.718567,
+   "lng": -122.43182,
+   "neighbors": [
+    "outer-mission",
+    "mclaren-park",
+    "visitacion-valley",
+    "portola",
+    "glen-park"
+   ]
+  },
+  {
+   "name": "Financial District/South Beach",
+   "slug": "financial-district-south-beach",
+   "borough": "San Francisco",
+   "lat": 37.790423,
+   "lng": -122.397067,
+   "neighbors": [
+    "chinatown",
+    "nob-hill",
+    "south-of-market",
+    "tenderloin",
+    "north-beach"
+   ]
+  },
+  {
+   "name": "Glen Park",
+   "slug": "glen-park",
+   "borough": "San Francisco",
+   "lat": 37.739609,
+   "lng": -122.436337,
+   "neighbors": [
+    "noe-valley",
+    "bernal-heights",
+    "twin-peaks",
+    "west-of-twin-peaks",
+    "outer-mission"
+   ]
+  },
+  {
+   "name": "Golden Gate Park",
+   "slug": "golden-gate-park",
+   "borough": "San Francisco",
+   "lat": 37.769034,
+   "lng": -122.481935,
+   "parkLike": true,
+   "neighbors": [
+    "outer-richmond",
+    "inner-sunset",
+    "inner-richmond",
+    "seacliff",
+    "lincoln-park"
+   ]
+  },
+  {
+   "name": "Haight Ashbury",
+   "slug": "haight-ashbury",
+   "borough": "San Francisco",
+   "lat": 37.768379,
+   "lng": -122.44448,
+   "neighbors": [
+    "castro-upper-market",
+    "lone-mountain-usf",
+    "hayes-valley",
+    "twin-peaks",
+    "western-addition"
+   ]
+  },
+  {
+   "name": "Hayes Valley",
+   "slug": "hayes-valley",
+   "borough": "San Francisco",
+   "lat": 37.774792,
+   "lng": -122.429056,
+   "neighbors": [
+    "western-addition",
+    "japantown",
+    "castro-upper-market",
+    "tenderloin",
+    "haight-ashbury"
+   ]
+  },
+  {
+   "name": "Inner Richmond",
+   "slug": "inner-richmond",
+   "borough": "San Francisco",
+   "lat": 37.780955,
+   "lng": -122.465447,
+   "neighbors": [
+    "presidio-heights",
+    "lone-mountain-usf",
+    "presidio",
+    "golden-gate-park",
+    "seacliff"
+   ]
+  },
+  {
+   "name": "Inner Sunset",
+   "slug": "inner-sunset",
+   "borough": "San Francisco",
+   "lat": 37.758478,
+   "lng": -122.464745,
+   "neighbors": [
+    "twin-peaks",
+    "golden-gate-park",
+    "haight-ashbury",
+    "inner-richmond",
+    "lone-mountain-usf"
+   ]
+  },
+  {
+   "name": "Japantown",
+   "slug": "japantown",
+   "borough": "San Francisco",
+   "lat": 37.785097,
+   "lng": -122.434148,
+   "neighbors": [
+    "western-addition",
+    "pacific-heights",
+    "hayes-valley",
+    "presidio-heights",
+    "lone-mountain-usf"
+   ]
+  },
+  {
+   "name": "Lakeshore",
+   "slug": "lakeshore",
+   "borough": "San Francisco",
+   "lat": 37.720214,
+   "lng": -122.490365,
+   "neighbors": [
+    "oceanview-merced-ingleside",
+    "sunset-parkside",
+    "west-of-twin-peaks",
+    "outer-mission",
+    "inner-sunset"
+   ]
+  },
+  {
+   "name": "Lincoln Park",
+   "slug": "lincoln-park",
+   "borough": "San Francisco",
+   "lat": 37.784489,
+   "lng": -122.501419,
+   "parkLike": true,
+   "neighbors": [
+    "outer-richmond",
+    "seacliff",
+    "golden-gate-park",
+    "inner-richmond",
+    "presidio"
+   ]
+  },
+  {
+   "name": "Lone Mountain/USF",
+   "slug": "lone-mountain-usf",
+   "borough": "San Francisco",
+   "lat": 37.777624,
+   "lng": -122.449613,
+   "neighbors": [
+    "presidio-heights",
+    "haight-ashbury",
+    "inner-richmond",
+    "japantown",
+    "western-addition"
+   ]
+  },
+  {
+   "name": "Marina",
+   "slug": "marina",
+   "borough": "San Francisco",
+   "lat": 37.801447,
+   "lng": -122.436379,
+   "neighbors": [
+    "pacific-heights",
+    "russian-hill",
+    "japantown",
+    "presidio-heights",
+    "nob-hill"
+   ]
+  },
+  {
+   "name": "McLaren Park",
+   "slug": "mclaren-park",
+   "borough": "San Francisco",
+   "lat": 37.717942,
+   "lng": -122.418707,
+   "parkLike": true,
+   "neighbors": [
+    "visitacion-valley",
+    "excelsior",
+    "portola",
+    "outer-mission",
+    "bernal-heights"
+   ]
+  },
+  {
+   "name": "Mission",
+   "slug": "mission",
+   "borough": "San Francisco",
+   "lat": 37.760131,
+   "lng": -122.415517,
+   "neighbors": [
+    "castro-upper-market",
+    "potrero-hill",
+    "noe-valley",
+    "hayes-valley",
+    "south-of-market"
+   ]
+  },
+  {
+   "name": "Mission Bay",
+   "slug": "mission-bay",
+   "borough": "San Francisco",
+   "lat": 37.771664,
+   "lng": -122.393578,
+   "neighbors": [
+    "south-of-market",
+    "potrero-hill",
+    "financial-district-south-beach",
+    "tenderloin",
+    "mission"
+   ]
+  },
+  {
+   "name": "Nob Hill",
+   "slug": "nob-hill",
+   "borough": "San Francisco",
+   "lat": 37.791808,
+   "lng": -122.414964,
+   "neighbors": [
+    "chinatown",
+    "tenderloin",
+    "russian-hill",
+    "north-beach",
+    "financial-district-south-beach"
+   ]
+  },
+  {
+   "name": "Noe Valley",
+   "slug": "noe-valley",
+   "borough": "San Francisco",
+   "lat": 37.748923,
+   "lng": -122.433338,
+   "neighbors": [
+    "glen-park",
+    "twin-peaks",
+    "castro-upper-market",
+    "bernal-heights",
+    "mission"
+   ]
+  },
+  {
+   "name": "North Beach",
+   "slug": "north-beach",
+   "borough": "San Francisco",
+   "lat": 37.804649,
+   "lng": -122.409652,
+   "neighbors": [
+    "chinatown",
+    "russian-hill",
+    "nob-hill",
+    "financial-district-south-beach",
+    "marina"
+   ]
+  },
+  {
+   "name": "Oceanview/Merced/Ingleside",
+   "slug": "oceanview-merced-ingleside",
+   "borough": "San Francisco",
+   "lat": 37.717003,
+   "lng": -122.460927,
+   "neighbors": [
+    "outer-mission",
+    "west-of-twin-peaks",
+    "excelsior",
+    "lakeshore",
+    "glen-park"
+   ]
+  },
+  {
+   "name": "Outer Mission",
+   "slug": "outer-mission",
+   "borough": "San Francisco",
+   "lat": 37.720654,
+   "lng": -122.443934,
+   "neighbors": [
+    "excelsior",
+    "oceanview-merced-ingleside",
+    "west-of-twin-peaks",
+    "glen-park",
+    "mclaren-park"
+   ]
+  },
+  {
+   "name": "Outer Richmond",
+   "slug": "outer-richmond",
+   "borough": "San Francisco",
+   "lat": 37.77807,
+   "lng": -122.491836,
+   "neighbors": [
+    "seacliff",
+    "lincoln-park",
+    "golden-gate-park",
+    "inner-richmond",
+    "presidio"
+   ]
+  },
+  {
+   "name": "Pacific Heights",
+   "slug": "pacific-heights",
+   "borough": "San Francisco",
+   "lat": 37.791025,
+   "lng": -122.43484,
+   "neighbors": [
+    "japantown",
+    "western-addition",
+    "marina",
+    "presidio-heights",
+    "russian-hill"
+   ]
+  },
+  {
+   "name": "Portola",
+   "slug": "portola",
+   "borough": "San Francisco",
+   "lat": 37.726797,
+   "lng": -122.409007,
+   "neighbors": [
+    "mclaren-park",
+    "visitacion-valley",
+    "bernal-heights",
+    "bayview-hunters-point",
+    "excelsior"
+   ]
+  },
+  {
+   "name": "Potrero Hill",
+   "slug": "potrero-hill",
+   "borough": "San Francisco",
+   "lat": 37.758877,
+   "lng": -122.393614,
+   "neighbors": [
+    "mission-bay",
+    "mission",
+    "south-of-market",
+    "bernal-heights",
+    "bayview-hunters-point"
+   ]
+  },
+  {
+   "name": "Presidio",
+   "slug": "presidio",
+   "borough": "San Francisco",
+   "lat": 37.797381,
+   "lng": -122.466383,
+   "parkLike": true,
+   "neighbors": [
+    "presidio-heights",
+    "inner-richmond",
+    "seacliff",
+    "lone-mountain-usf",
+    "marina"
+   ]
+  },
+  {
+   "name": "Presidio Heights",
+   "slug": "presidio-heights",
+   "borough": "San Francisco",
+   "lat": 37.786318,
+   "lng": -122.451671,
+   "neighbors": [
+    "lone-mountain-usf",
+    "inner-richmond",
+    "japantown",
+    "pacific-heights",
+    "presidio"
+   ]
+  },
+  {
+   "name": "Russian Hill",
+   "slug": "russian-hill",
+   "borough": "San Francisco",
+   "lat": 37.800443,
+   "lng": -122.419825,
+   "neighbors": [
+    "north-beach",
+    "nob-hill",
+    "chinatown",
+    "marina",
+    "pacific-heights"
+   ]
+  },
+  {
+   "name": "Seacliff",
+   "slug": "seacliff",
+   "borough": "San Francisco",
+   "lat": 37.78669,
+   "lng": -122.486881,
+   "neighbors": [
+    "outer-richmond",
+    "lincoln-park",
+    "inner-richmond",
+    "golden-gate-park",
+    "presidio"
+   ]
+  },
+  {
+   "name": "South of Market",
+   "slug": "south-of-market",
+   "borough": "San Francisco",
+   "lat": 37.777254,
+   "lng": -122.405941,
+   "neighbors": [
+    "tenderloin",
+    "mission-bay",
+    "financial-district-south-beach",
+    "nob-hill",
+    "hayes-valley"
+   ]
+  },
+  {
+   "name": "Sunset/Parkside",
+   "slug": "sunset-parkside",
+   "borough": "San Francisco",
+   "lat": 37.74839,
+   "lng": -122.492564,
+   "neighbors": [
+    "golden-gate-park",
+    "inner-sunset",
+    "lakeshore",
+    "west-of-twin-peaks",
+    "outer-richmond"
+   ]
+  },
+  {
+   "name": "Tenderloin",
+   "slug": "tenderloin",
+   "borough": "San Francisco",
+   "lat": 37.783162,
+   "lng": -122.415277,
+   "neighbors": [
+    "nob-hill",
+    "south-of-market",
+    "western-addition",
+    "hayes-valley",
+    "chinatown"
+   ]
+  },
+  {
+   "name": "Treasure Island",
+   "slug": "treasure-island",
+   "borough": "San Francisco",
+   "lat": 37.82066,
+   "lng": -122.369552,
+   "neighbors": [
+    "north-beach",
+    "financial-district-south-beach",
+    "chinatown",
+    "russian-hill",
+    "nob-hill"
+   ]
+  },
+  {
+   "name": "Twin Peaks",
+   "slug": "twin-peaks",
+   "borough": "San Francisco",
+   "lat": 37.752118,
+   "lng": -122.449811,
+   "neighbors": [
+    "noe-valley",
+    "inner-sunset",
+    "castro-upper-market",
+    "glen-park",
+    "haight-ashbury"
+   ]
+  },
+  {
+   "name": "Visitacion Valley",
+   "slug": "visitacion-valley",
+   "borough": "San Francisco",
+   "lat": 37.712873,
+   "lng": -122.410119,
+   "neighbors": [
+    "mclaren-park",
+    "portola",
+    "excelsior",
+    "bayview-hunters-point",
+    "bernal-heights"
+   ]
+  },
+  {
+   "name": "West of Twin Peaks",
+   "slug": "west-of-twin-peaks",
+   "borough": "San Francisco",
+   "lat": 37.735186,
+   "lng": -122.459951,
+   "neighbors": [
+    "oceanview-merced-ingleside",
+    "twin-peaks",
+    "glen-park",
+    "outer-mission",
+    "inner-sunset"
+   ]
+  },
+  {
+   "name": "Western Addition",
+   "slug": "western-addition",
+   "borough": "San Francisco",
+   "lat": 37.781836,
+   "lng": -122.430643,
+   "neighbors": [
+    "japantown",
+    "hayes-valley",
+    "pacific-heights",
+    "tenderloin",
+    "lone-mountain-usf"
+   ]
+  }
+ ]
+}

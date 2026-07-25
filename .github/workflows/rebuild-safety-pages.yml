@@ -34,6 +34,7 @@ jobs:
           node tools/build-gazetteer-london.mjs
           node tools/build-gazetteer-chicago.mjs
           node tools/build-gazetteer-la.mjs
+          node tools/build-gazetteer-sf.mjs
 
       - name: Refresh safety data (paced against prod backend)
         env:
@@ -44,6 +45,7 @@ jobs:
           node tools/generate-data.mjs --force --city london
           node tools/generate-data.mjs --force --city chicago
           node tools/generate-data.mjs --force --city la
+          node tools/generate-data.mjs --force --city sf
 
       # Incremental — cached areas are skipped, so a normal run fetches nothing
       # and never touches Overpass. Only genuinely new areas cost a request.
@@ -53,6 +55,7 @@ jobs:
           node tools/fetch-basemap-osm.mjs --city london
           node tools/fetch-basemap-osm.mjs --city chicago
           node tools/fetch-basemap-osm.mjs --city la
+          node tools/fetch-basemap-osm.mjs --city sf
 
       - name: Render pages
         run: node tools/render-pages.mjs

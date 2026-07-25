@@ -1,0 +1,1241 @@
+{
+ "city": "Houston",
+ "citySlug": "houston",
+ "country": "US",
+ "source": "City of Houston — Super Neighborhoods (COH GIS), all 88",
+ "generatedAt": "2026-07-23",
+ "areas": [
+  {
+   "name": "Acres Home",
+   "slug": "acres-home",
+   "borough": "Houston",
+   "lat": 29.864097,
+   "lng": -95.436267,
+   "neighbors": [
+    "hidden-valley",
+    "central-northwest",
+    "greater-inwood",
+    "northside-northline",
+    "independence-heights"
+   ]
+  },
+  {
+   "name": "Addicks Park Ten",
+   "slug": "addicks-park-ten",
+   "borough": "Houston",
+   "lat": 29.81315,
+   "lng": -95.62979,
+   "neighbors": [
+    "memorial",
+    "spring-branch-west",
+    "westbranch",
+    "spring-branch-north",
+    "eldridge-west-oaks"
+   ]
+  },
+  {
+   "name": "Afton Oaks / River Oaks Area",
+   "slug": "afton-oaks-river-oaks-area",
+   "borough": "Houston",
+   "lat": 29.747921,
+   "lng": -95.435636,
+   "neighbors": [
+    "greenway-upper-kirby-area",
+    "washington-avenue-coalition-memorial-park",
+    "neartown-montrose",
+    "greater-uptown",
+    "university-place"
+   ]
+  },
+  {
+   "name": "Alief",
+   "slug": "alief",
+   "borough": "Houston",
+   "lat": 29.686317,
+   "lng": -95.586392,
+   "neighbors": [
+    "westwood",
+    "westchase",
+    "sharpstown",
+    "brays-oaks",
+    "braeburn"
+   ]
+  },
+  {
+   "name": "Astrodome Area",
+   "slug": "astrodome-area",
+   "borough": "Houston",
+   "lat": 29.68793,
+   "lng": -95.394966,
+   "neighbors": [
+    "medical-center-area",
+    "south-main",
+    "university-place",
+    "braeswood",
+    "macgregor"
+   ]
+  },
+  {
+   "name": "Braeburn",
+   "slug": "braeburn",
+   "borough": "Houston",
+   "lat": 29.681566,
+   "lng": -95.515667,
+   "neighbors": [
+    "sharpstown",
+    "brays-oaks",
+    "westwood",
+    "meyerland-area",
+    "westbury"
+   ]
+  },
+  {
+   "name": "Braeswood",
+   "slug": "braeswood",
+   "borough": "Houston",
+   "lat": 29.692977,
+   "lng": -95.432595,
+   "neighbors": [
+    "south-main",
+    "near-southwest",
+    "astrodome-area",
+    "university-place",
+    "medical-center-area"
+   ]
+  },
+  {
+   "name": "Brays Oaks",
+   "slug": "brays-oaks",
+   "borough": "Houston",
+   "lat": 29.654755,
+   "lng": -95.525802,
+   "neighbors": [
+    "braeburn",
+    "westwood",
+    "fondren-gardens",
+    "westbury",
+    "meyerland-area"
+   ]
+  },
+  {
+   "name": "Briar Forest",
+   "slug": "briar-forest",
+   "borough": "Houston",
+   "lat": 29.749193,
+   "lng": -95.574395,
+   "neighbors": [
+    "westchase",
+    "memorial",
+    "spring-branch-west",
+    "mid-west",
+    "sharpstown"
+   ]
+  },
+  {
+   "name": "Carverdale",
+   "slug": "carverdale",
+   "borough": "Houston",
+   "lat": 29.85509,
+   "lng": -95.550278,
+   "neighbors": [
+    "westbranch",
+    "fairbanks-northwest-crossing",
+    "spring-branch-north",
+    "spring-branch-central",
+    "spring-branch-west"
+   ]
+  },
+  {
+   "name": "Central Northwest",
+   "slug": "central-northwest",
+   "borough": "Houston",
+   "lat": 29.829097,
+   "lng": -95.444859,
+   "neighbors": [
+    "lazybrook-timbergrove",
+    "acres-home",
+    "spring-branch-east",
+    "langwood",
+    "independence-heights"
+   ]
+  },
+  {
+   "name": "Central Southwest",
+   "slug": "central-southwest",
+   "borough": "Houston",
+   "lat": 29.630323,
+   "lng": -95.432339,
+   "neighbors": [
+    "near-southwest",
+    "south-main",
+    "westbury",
+    "fort-bend-houston",
+    "fondren-gardens"
+   ]
+  },
+  {
+   "name": "Clear Lake",
+   "slug": "clear-lake",
+   "borough": "Houston",
+   "lat": 29.578332,
+   "lng": -95.134998,
+   "neighbors": [
+    "south-belt-ellington",
+    "edgebrook-area",
+    "greater-hobby-area",
+    "meadowbrook-allendale",
+    "park-place"
+   ]
+  },
+  {
+   "name": "Clinton Park Tri - Community",
+   "slug": "clinton-park-tri-community",
+   "borough": "Houston",
+   "lat": 29.748397,
+   "lng": -95.262714,
+   "neighbors": [
+    "magnolia-park",
+    "harrisburg-manchester-smith-addition",
+    "pleasantville-area",
+    "denver-harbor-port-houston",
+    "lawndale-wayside"
+   ]
+  },
+  {
+   "name": "Denver Harbor / Port Houston",
+   "slug": "denver-harbor-port-houston",
+   "borough": "Houston",
+   "lat": 29.766369,
+   "lng": -95.293949,
+   "neighbors": [
+    "pleasantville-area",
+    "magnolia-park",
+    "clinton-park-tri-community",
+    "greater-fifth-ward",
+    "second-ward"
+   ]
+  },
+  {
+   "name": "Downtown",
+   "slug": "downtown",
+   "borough": "Houston",
+   "lat": 29.756689,
+   "lng": -95.359096,
+   "neighbors": [
+    "fourth-ward",
+    "midtown",
+    "second-ward",
+    "greater-third-ward",
+    "greater-eastwood"
+   ]
+  },
+  {
+   "name": "East Houston",
+   "slug": "east-houston",
+   "borough": "Houston",
+   "lat": 29.843108,
+   "lng": -95.257753,
+   "neighbors": [
+    "settegast",
+    "el-dorado-oates-prairie",
+    "east-little-york-homestead",
+    "hunterwood",
+    "trinity-houston-gardens"
+   ]
+  },
+  {
+   "name": "East Little York / Homestead",
+   "slug": "east-little-york-homestead",
+   "borough": "Houston",
+   "lat": 29.871777,
+   "lng": -95.297036,
+   "neighbors": [
+    "east-houston",
+    "trinity-houston-gardens",
+    "eastex-jensen-area",
+    "settegast",
+    "kashmere-gardens"
+   ]
+  },
+  {
+   "name": "Eastex - Jensen Area",
+   "slug": "eastex-jensen-area",
+   "borough": "Houston",
+   "lat": 29.846523,
+   "lng": -95.342538,
+   "neighbors": [
+    "northside-northline",
+    "trinity-houston-gardens",
+    "east-little-york-homestead",
+    "kashmere-gardens",
+    "independence-heights"
+   ]
+  },
+  {
+   "name": "Edgebrook Area",
+   "slug": "edgebrook-area",
+   "borough": "Houston",
+   "lat": 29.642663,
+   "lng": -95.227092,
+   "neighbors": [
+    "south-belt-ellington",
+    "greater-hobby-area",
+    "meadowbrook-allendale",
+    "park-place",
+    "golfcrest-bellfort-reveille"
+   ]
+  },
+  {
+   "name": "El Dorado / Oates Prairie",
+   "slug": "el-dorado-oates-prairie",
+   "borough": "Houston",
+   "lat": 29.805655,
+   "lng": -95.245986,
+   "neighbors": [
+    "hunterwood",
+    "settegast",
+    "northshore",
+    "pleasantville-area",
+    "east-houston"
+   ]
+  },
+  {
+   "name": "Eldridge / West Oaks",
+   "slug": "eldridge-west-oaks",
+   "borough": "Houston",
+   "lat": 29.741726,
+   "lng": -95.667038,
+   "neighbors": [
+    "memorial",
+    "addicks-park-ten",
+    "briar-forest",
+    "westchase",
+    "alief"
+   ]
+  },
+  {
+   "name": "Fairbanks / Northwest Crossing",
+   "slug": "fairbanks-northwest-crossing",
+   "borough": "Houston",
+   "lat": 29.849347,
+   "lng": -95.512603,
+   "neighbors": [
+    "langwood",
+    "carverdale",
+    "spring-branch-central",
+    "greater-inwood",
+    "spring-branch-north"
+   ]
+  },
+  {
+   "name": "Fondren Gardens",
+   "slug": "fondren-gardens",
+   "borough": "Houston",
+   "lat": 29.625244,
+   "lng": -95.503068,
+   "neighbors": [
+    "westbury",
+    "fort-bend-houston",
+    "brays-oaks",
+    "braeburn",
+    "meyerland-area"
+   ]
+  },
+  {
+   "name": "Fort Bend Houston",
+   "slug": "fort-bend-houston",
+   "borough": "Houston",
+   "lat": 29.59361,
+   "lng": -95.486898,
+   "neighbors": [
+    "fondren-gardens",
+    "central-southwest",
+    "westbury",
+    "brays-oaks",
+    "near-southwest"
+   ]
+  },
+  {
+   "name": "Fourth Ward",
+   "slug": "fourth-ward",
+   "borough": "Houston",
+   "lat": 29.757115,
+   "lng": -95.380766,
+   "neighbors": [
+    "midtown",
+    "neartown-montrose",
+    "downtown",
+    "museum-park",
+    "washington-avenue-coalition-memorial-park"
+   ]
+  },
+  {
+   "name": "Golfcrest / Bellfort / Reveille",
+   "slug": "golfcrest-bellfort-reveille",
+   "borough": "Houston",
+   "lat": 29.672904,
+   "lng": -95.294512,
+   "neighbors": [
+    "park-place",
+    "south-park",
+    "pecan-park",
+    "gulfgate-riverview-pine-valley",
+    "meadowbrook-allendale"
+   ]
+  },
+  {
+   "name": "Greater Eastwood",
+   "slug": "greater-eastwood",
+   "borough": "Houston",
+   "lat": 29.735719,
+   "lng": -95.333601,
+   "neighbors": [
+    "second-ward",
+    "greater-third-ward",
+    "lawndale-wayside",
+    "downtown",
+    "gulfgate-riverview-pine-valley"
+   ]
+  },
+  {
+   "name": "Greater Fifth Ward",
+   "slug": "greater-fifth-ward",
+   "borough": "Houston",
+   "lat": 29.777657,
+   "lng": -95.330012,
+   "neighbors": [
+    "kashmere-gardens",
+    "second-ward",
+    "downtown",
+    "near-northside",
+    "denver-harbor-port-houston"
+   ]
+  },
+  {
+   "name": "Greater Greenspoint",
+   "slug": "greater-greenspoint",
+   "borough": "Houston",
+   "lat": 29.940435,
+   "lng": -95.410059,
+   "neighbors": [
+    "hidden-valley",
+    "acres-home",
+    "iah-airport-area",
+    "northside-northline",
+    "greater-inwood"
+   ]
+  },
+  {
+   "name": "Greater Heights",
+   "slug": "greater-heights",
+   "borough": "Houston",
+   "lat": 29.797332,
+   "lng": -95.39735,
+   "neighbors": [
+    "near-northside",
+    "independence-heights",
+    "washington-avenue-coalition-memorial-park",
+    "lazybrook-timbergrove",
+    "fourth-ward"
+   ]
+  },
+  {
+   "name": "Greater Hobby Area",
+   "slug": "greater-hobby-area",
+   "borough": "Houston",
+   "lat": 29.629654,
+   "lng": -95.278045,
+   "neighbors": [
+    "minnetex",
+    "golfcrest-bellfort-reveille",
+    "edgebrook-area",
+    "south-park",
+    "meadowbrook-allendale"
+   ]
+  },
+  {
+   "name": "Greater Inwood",
+   "slug": "greater-inwood",
+   "borough": "Houston",
+   "lat": 29.874411,
+   "lng": -95.481183,
+   "neighbors": [
+    "fairbanks-northwest-crossing",
+    "acres-home",
+    "langwood",
+    "central-northwest",
+    "hidden-valley"
+   ]
+  },
+  {
+   "name": "Greater OST / South Union",
+   "slug": "greater-ost-south-union",
+   "borough": "Houston",
+   "lat": 29.693468,
+   "lng": -95.353214,
+   "neighbors": [
+    "macgregor",
+    "south-park",
+    "gulfgate-riverview-pine-valley",
+    "greater-third-ward",
+    "sunnyside"
+   ]
+  },
+  {
+   "name": "Greater Third Ward",
+   "slug": "greater-third-ward",
+   "borough": "Houston",
+   "lat": 29.728188,
+   "lng": -95.354953,
+   "neighbors": [
+    "macgregor",
+    "greater-eastwood",
+    "midtown",
+    "museum-park",
+    "downtown"
+   ]
+  },
+  {
+   "name": "Greater Uptown",
+   "slug": "greater-uptown",
+   "borough": "Houston",
+   "lat": 29.756552,
+   "lng": -95.475614,
+   "neighbors": [
+    "afton-oaks-river-oaks-area",
+    "mid-west",
+    "greenway-upper-kirby-area",
+    "gulfton",
+    "spring-branch-east"
+   ]
+  },
+  {
+   "name": "Greenway / Upper Kirby Area",
+   "slug": "greenway-upper-kirby-area",
+   "borough": "Houston",
+   "lat": 29.73237,
+   "lng": -95.434314,
+   "neighbors": [
+    "afton-oaks-river-oaks-area",
+    "university-place",
+    "neartown-montrose",
+    "braeswood",
+    "washington-avenue-coalition-memorial-park"
+   ]
+  },
+  {
+   "name": "Gulfgate Riverview / Pine Valley",
+   "slug": "gulfgate-riverview-pine-valley",
+   "borough": "Houston",
+   "lat": 29.706825,
+   "lng": -95.317484,
+   "neighbors": [
+    "lawndale-wayside",
+    "pecan-park",
+    "greater-eastwood",
+    "greater-ost-south-union",
+    "magnolia-park"
+   ]
+  },
+  {
+   "name": "Gulfton",
+   "slug": "gulfton",
+   "borough": "Houston",
+   "lat": 29.713116,
+   "lng": -95.481885,
+   "neighbors": [
+    "mid-west",
+    "meyerland-area",
+    "sharpstown",
+    "braeburn",
+    "greater-uptown"
+   ]
+  },
+  {
+   "name": "Harrisburg / Manchester / Smith Addition",
+   "slug": "harrisburg-manchester-smith-addition",
+   "borough": "Houston",
+   "lat": 29.718863,
+   "lng": -95.265653,
+   "neighbors": [
+    "pecan-park",
+    "park-place",
+    "clinton-park-tri-community",
+    "magnolia-park",
+    "meadowbrook-allendale"
+   ]
+  },
+  {
+   "name": "Hidden Valley",
+   "slug": "hidden-valley",
+   "borough": "Houston",
+   "lat": 29.891505,
+   "lng": -95.417324,
+   "neighbors": [
+    "acres-home",
+    "northside-northline",
+    "greater-greenspoint",
+    "greater-inwood",
+    "independence-heights"
+   ]
+  },
+  {
+   "name": "Hunterwood",
+   "slug": "hunterwood",
+   "borough": "Houston",
+   "lat": 29.817515,
+   "lng": -95.215163,
+   "neighbors": [
+    "el-dorado-oates-prairie",
+    "northshore",
+    "east-houston",
+    "settegast",
+    "pleasantville-area"
+   ]
+  },
+  {
+   "name": "Iah / Airport Area",
+   "slug": "iah-airport-area",
+   "borough": "Houston",
+   "lat": 29.973157,
+   "lng": -95.323496,
+   "neighbors": [
+    "greater-greenspoint",
+    "east-little-york-homestead",
+    "hidden-valley",
+    "eastex-jensen-area",
+    "northside-northline"
+   ]
+  },
+  {
+   "name": "Independence Heights",
+   "slug": "independence-heights",
+   "borough": "Houston",
+   "lat": 29.829166,
+   "lng": -95.396065,
+   "neighbors": [
+    "northside-northline",
+    "greater-heights",
+    "central-northwest",
+    "near-northside",
+    "lazybrook-timbergrove"
+   ]
+  },
+  {
+   "name": "Kashmere Gardens",
+   "slug": "kashmere-gardens",
+   "borough": "Houston",
+   "lat": 29.802721,
+   "lng": -95.322484,
+   "neighbors": [
+    "greater-fifth-ward",
+    "trinity-houston-gardens",
+    "near-northside",
+    "settegast",
+    "denver-harbor-port-houston"
+   ]
+  },
+  {
+   "name": "Kingwood Area",
+   "slug": "kingwood-area",
+   "borough": "Houston",
+   "lat": 30.05107,
+   "lng": -95.198536,
+   "neighbors": [
+    "lake-houston",
+    "iah-airport-area",
+    "east-little-york-homestead",
+    "greater-greenspoint",
+    "east-houston"
+   ]
+  },
+  {
+   "name": "Lake Houston",
+   "slug": "lake-houston",
+   "borough": "Houston",
+   "lat": 29.983309,
+   "lng": -95.149111,
+   "neighbors": [
+    "kingwood-area",
+    "iah-airport-area",
+    "east-houston",
+    "east-little-york-homestead",
+    "hunterwood"
+   ]
+  },
+  {
+   "name": "Langwood",
+   "slug": "langwood",
+   "borough": "Houston",
+   "lat": 29.826409,
+   "lng": -95.490932,
+   "neighbors": [
+    "spring-branch-central",
+    "spring-branch-east",
+    "fairbanks-northwest-crossing",
+    "central-northwest",
+    "spring-branch-north"
+   ]
+  },
+  {
+   "name": "Lawndale / Wayside",
+   "slug": "lawndale-wayside",
+   "borough": "Houston",
+   "lat": 29.723172,
+   "lng": -95.306654,
+   "neighbors": [
+    "gulfgate-riverview-pine-valley",
+    "magnolia-park",
+    "pecan-park",
+    "greater-eastwood",
+    "second-ward"
+   ]
+  },
+  {
+   "name": "Lazybrook / Timbergrove",
+   "slug": "lazybrook-timbergrove",
+   "borough": "Houston",
+   "lat": 29.797797,
+   "lng": -95.437531,
+   "neighbors": [
+    "washington-avenue-coalition-memorial-park",
+    "central-northwest",
+    "spring-branch-east",
+    "greater-heights",
+    "independence-heights"
+   ]
+  },
+  {
+   "name": "MacGregor",
+   "slug": "macgregor",
+   "borough": "Houston",
+   "lat": 29.711377,
+   "lng": -95.363256,
+   "neighbors": [
+    "greater-third-ward",
+    "greater-ost-south-union",
+    "museum-park",
+    "medical-center-area",
+    "midtown"
+   ]
+  },
+  {
+   "name": "Magnolia Park",
+   "slug": "magnolia-park",
+   "borough": "Houston",
+   "lat": 29.738742,
+   "lng": -95.293816,
+   "neighbors": [
+    "lawndale-wayside",
+    "denver-harbor-port-houston",
+    "clinton-park-tri-community",
+    "harrisburg-manchester-smith-addition",
+    "pecan-park"
+   ]
+  },
+  {
+   "name": "Meadowbrook / Allendale",
+   "slug": "meadowbrook-allendale",
+   "borough": "Houston",
+   "lat": 29.688478,
+   "lng": -95.246746,
+   "neighbors": [
+    "park-place",
+    "harrisburg-manchester-smith-addition",
+    "pecan-park",
+    "golfcrest-bellfort-reveille",
+    "edgebrook-area"
+   ]
+  },
+  {
+   "name": "Medical Center Area",
+   "slug": "medical-center-area",
+   "borough": "Houston",
+   "lat": 29.708646,
+   "lng": -95.393353,
+   "neighbors": [
+    "university-place",
+    "museum-park",
+    "astrodome-area",
+    "macgregor",
+    "midtown"
+   ]
+  },
+  {
+   "name": "Memorial",
+   "slug": "memorial",
+   "borough": "Houston",
+   "lat": 29.773037,
+   "lng": -95.584429,
+   "neighbors": [
+    "briar-forest",
+    "spring-branch-west",
+    "westchase",
+    "addicks-park-ten",
+    "spring-branch-north"
+   ]
+  },
+  {
+   "name": "Meyerland Area",
+   "slug": "meyerland-area",
+   "borough": "Houston",
+   "lat": 29.679287,
+   "lng": -95.477616,
+   "neighbors": [
+    "westbury",
+    "near-southwest",
+    "braeburn",
+    "gulfton",
+    "braeswood"
+   ]
+  },
+  {
+   "name": "Mid West",
+   "slug": "mid-west",
+   "borough": "Houston",
+   "lat": 29.733285,
+   "lng": -95.512917,
+   "neighbors": [
+    "sharpstown",
+    "gulfton",
+    "greater-uptown",
+    "westchase",
+    "braeburn"
+   ]
+  },
+  {
+   "name": "Midtown",
+   "slug": "midtown",
+   "borough": "Houston",
+   "lat": 29.742253,
+   "lng": -95.375334,
+   "neighbors": [
+    "fourth-ward",
+    "museum-park",
+    "neartown-montrose",
+    "downtown",
+    "greater-third-ward"
+   ]
+  },
+  {
+   "name": "Minnetex",
+   "slug": "minnetex",
+   "borough": "Houston",
+   "lat": 29.615914,
+   "lng": -95.32582,
+   "neighbors": [
+    "south-acres-crestmont-park",
+    "greater-hobby-area",
+    "south-park",
+    "sunnyside",
+    "golfcrest-bellfort-reveille"
+   ]
+  },
+  {
+   "name": "Museum Park",
+   "slug": "museum-park",
+   "borough": "Houston",
+   "lat": 29.725881,
+   "lng": -95.382603,
+   "neighbors": [
+    "midtown",
+    "medical-center-area",
+    "macgregor",
+    "university-place",
+    "neartown-montrose"
+   ]
+  },
+  {
+   "name": "Near Northside",
+   "slug": "near-northside",
+   "borough": "Houston",
+   "lat": 29.796894,
+   "lng": -95.360912,
+   "neighbors": [
+    "greater-heights",
+    "greater-fifth-ward",
+    "kashmere-gardens",
+    "downtown",
+    "fourth-ward"
+   ]
+  },
+  {
+   "name": "Near Southwest",
+   "slug": "near-southwest",
+   "borough": "Houston",
+   "lat": 29.667265,
+   "lng": -95.449731,
+   "neighbors": [
+    "meyerland-area",
+    "south-main",
+    "braeswood",
+    "westbury",
+    "central-southwest"
+   ]
+  },
+  {
+   "name": "Neartown - Montrose",
+   "slug": "neartown-montrose",
+   "borough": "Houston",
+   "lat": 29.746212,
+   "lng": -95.397217,
+   "neighbors": [
+    "fourth-ward",
+    "midtown",
+    "museum-park",
+    "university-place",
+    "washington-avenue-coalition-memorial-park"
+   ]
+  },
+  {
+   "name": "Northshore",
+   "slug": "northshore",
+   "borough": "Houston",
+   "lat": 29.779982,
+   "lng": -95.220746,
+   "neighbors": [
+    "el-dorado-oates-prairie",
+    "hunterwood",
+    "pleasantville-area",
+    "clinton-park-tri-community",
+    "settegast"
+   ]
+  },
+  {
+   "name": "Northside / Northline",
+   "slug": "northside-northline",
+   "borough": "Houston",
+   "lat": 29.854133,
+   "lng": -95.381932,
+   "neighbors": [
+    "independence-heights",
+    "eastex-jensen-area",
+    "acres-home",
+    "hidden-valley",
+    "greater-heights"
+   ]
+  },
+  {
+   "name": "Park Place",
+   "slug": "park-place",
+   "borough": "Houston",
+   "lat": 29.696043,
+   "lng": -95.271545,
+   "neighbors": [
+    "pecan-park",
+    "meadowbrook-allendale",
+    "harrisburg-manchester-smith-addition",
+    "golfcrest-bellfort-reveille",
+    "lawndale-wayside"
+   ]
+  },
+  {
+   "name": "Pecan Park",
+   "slug": "pecan-park",
+   "borough": "Houston",
+   "lat": 29.707712,
+   "lng": -95.287175,
+   "neighbors": [
+    "park-place",
+    "harrisburg-manchester-smith-addition",
+    "lawndale-wayside",
+    "gulfgate-riverview-pine-valley",
+    "magnolia-park"
+   ]
+  },
+  {
+   "name": "Pleasantville Area",
+   "slug": "pleasantville-area",
+   "borough": "Houston",
+   "lat": 29.777972,
+   "lng": -95.27518,
+   "neighbors": [
+    "denver-harbor-port-houston",
+    "clinton-park-tri-community",
+    "el-dorado-oates-prairie",
+    "settegast",
+    "magnolia-park"
+   ]
+  },
+  {
+   "name": "Second Ward",
+   "slug": "second-ward",
+   "borough": "Houston",
+   "lat": 29.750962,
+   "lng": -95.327939,
+   "neighbors": [
+    "greater-eastwood",
+    "greater-fifth-ward",
+    "downtown",
+    "magnolia-park",
+    "greater-third-ward"
+   ]
+  },
+  {
+   "name": "Settegast",
+   "slug": "settegast",
+   "borough": "Houston",
+   "lat": 29.817209,
+   "lng": -95.279048,
+   "neighbors": [
+    "trinity-houston-gardens",
+    "el-dorado-oates-prairie",
+    "east-houston",
+    "pleasantville-area",
+    "kashmere-gardens"
+   ]
+  },
+  {
+   "name": "Sharpstown",
+   "slug": "sharpstown",
+   "borough": "Houston",
+   "lat": 29.703853,
+   "lng": -95.524952,
+   "neighbors": [
+    "braeburn",
+    "mid-west",
+    "westwood",
+    "gulfton",
+    "westchase"
+   ]
+  },
+  {
+   "name": "South Acres / Crestmont Park",
+   "slug": "south-acres-crestmont-park",
+   "borough": "Houston",
+   "lat": 29.628829,
+   "lng": -95.358987,
+   "neighbors": [
+    "sunnyside",
+    "minnetex",
+    "south-park",
+    "central-southwest",
+    "greater-ost-south-union"
+   ]
+  },
+  {
+   "name": "South Belt / Ellington",
+   "slug": "south-belt-ellington",
+   "borough": "Houston",
+   "lat": 29.608477,
+   "lng": -95.205141,
+   "neighbors": [
+    "edgebrook-area",
+    "greater-hobby-area",
+    "clear-lake",
+    "meadowbrook-allendale",
+    "golfcrest-bellfort-reveille"
+   ]
+  },
+  {
+   "name": "South Main",
+   "slug": "south-main",
+   "borough": "Houston",
+   "lat": 29.67287,
+   "lng": -95.418071,
+   "neighbors": [
+    "braeswood",
+    "astrodome-area",
+    "near-southwest",
+    "medical-center-area",
+    "central-southwest"
+   ]
+  },
+  {
+   "name": "South Park",
+   "slug": "south-park",
+   "borough": "Houston",
+   "lat": 29.668322,
+   "lng": -95.333128,
+   "neighbors": [
+    "greater-ost-south-union",
+    "sunnyside",
+    "golfcrest-bellfort-reveille",
+    "gulfgate-riverview-pine-valley",
+    "south-acres-crestmont-park"
+   ]
+  },
+  {
+   "name": "Spring Branch Central",
+   "slug": "spring-branch-central",
+   "borough": "Houston",
+   "lat": 29.812867,
+   "lng": -95.514277,
+   "neighbors": [
+    "langwood",
+    "spring-branch-north",
+    "spring-branch-east",
+    "fairbanks-northwest-crossing",
+    "spring-branch-west"
+   ]
+  },
+  {
+   "name": "Spring Branch East",
+   "slug": "spring-branch-east",
+   "borough": "Houston",
+   "lat": 29.802936,
+   "lng": -95.477236,
+   "neighbors": [
+    "langwood",
+    "spring-branch-central",
+    "lazybrook-timbergrove",
+    "central-northwest",
+    "greater-uptown"
+   ]
+  },
+  {
+   "name": "Spring Branch North",
+   "slug": "spring-branch-north",
+   "borough": "Houston",
+   "lat": 29.821121,
+   "lng": -95.543666,
+   "neighbors": [
+    "westbranch",
+    "spring-branch-west",
+    "spring-branch-central",
+    "carverdale",
+    "fairbanks-northwest-crossing"
+   ]
+  },
+  {
+   "name": "Spring Branch West",
+   "slug": "spring-branch-west",
+   "borough": "Houston",
+   "lat": 29.798845,
+   "lng": -95.560603,
+   "neighbors": [
+    "spring-branch-north",
+    "memorial",
+    "westbranch",
+    "spring-branch-central",
+    "briar-forest"
+   ]
+  },
+  {
+   "name": "Sunnyside",
+   "slug": "sunnyside",
+   "borough": "Houston",
+   "lat": 29.659005,
+   "lng": -95.367446,
+   "neighbors": [
+    "south-acres-crestmont-park",
+    "south-park",
+    "greater-ost-south-union",
+    "astrodome-area",
+    "south-main"
+   ]
+  },
+  {
+   "name": "Trinity / Houston Gardens",
+   "slug": "trinity-houston-gardens",
+   "borough": "Houston",
+   "lat": 29.828119,
+   "lng": -95.308015,
+   "neighbors": [
+    "settegast",
+    "kashmere-gardens",
+    "eastex-jensen-area",
+    "east-little-york-homestead",
+    "east-houston"
+   ]
+  },
+  {
+   "name": "University Place",
+   "slug": "university-place",
+   "borough": "Houston",
+   "lat": 29.71832,
+   "lng": -95.406745,
+   "neighbors": [
+    "medical-center-area",
+    "museum-park",
+    "greenway-upper-kirby-area",
+    "neartown-montrose",
+    "astrodome-area"
+   ]
+  },
+  {
+   "name": "Washington Avenue Coalition / Memorial Park",
+   "slug": "washington-avenue-coalition-memorial-park",
+   "borough": "Houston",
+   "lat": 29.771182,
+   "lng": -95.418402,
+   "neighbors": [
+    "afton-oaks-river-oaks-area",
+    "neartown-montrose",
+    "lazybrook-timbergrove",
+    "greater-heights",
+    "fourth-ward"
+   ]
+  },
+  {
+   "name": "Westbranch",
+   "slug": "westbranch",
+   "borough": "Houston",
+   "lat": 29.838073,
+   "lng": -95.559613,
+   "neighbors": [
+    "carverdale",
+    "spring-branch-north",
+    "spring-branch-west",
+    "fairbanks-northwest-crossing",
+    "spring-branch-central"
+   ]
+  },
+  {
+   "name": "Westbury",
+   "slug": "westbury",
+   "borough": "Houston",
+   "lat": 29.653772,
+   "lng": -95.4823,
+   "neighbors": [
+    "meyerland-area",
+    "near-southwest",
+    "fondren-gardens",
+    "brays-oaks",
+    "braeburn"
+   ]
+  },
+  {
+   "name": "Westchase",
+   "slug": "westchase",
+   "borough": "Houston",
+   "lat": 29.726979,
+   "lng": -95.56668,
+   "neighbors": [
+    "briar-forest",
+    "sharpstown",
+    "alief",
+    "mid-west",
+    "memorial"
+   ]
+  },
+  {
+   "name": "Westwood",
+   "slug": "westwood",
+   "borough": "Houston",
+   "lat": 29.67608,
+   "lng": -95.550073,
+   "neighbors": [
+    "brays-oaks",
+    "braeburn",
+    "alief",
+    "sharpstown",
+    "westchase"
+   ]
+  },
+  {
+   "name": "Willowbrook",
+   "slug": "willowbrook",
+   "borough": "Houston",
+   "lat": 29.953919,
+   "lng": -95.543023,
+   "neighbors": [
+    "greater-inwood",
+    "carverdale",
+    "fairbanks-northwest-crossing",
+    "greater-greenspoint",
+    "westbranch"
+   ]
+  }
+ ]
+}
