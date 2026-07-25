@@ -95,6 +95,138 @@ function simplify(pts, minGap = 1.3) {
 
 const nice = (s) => String(s || '').trim(); // OSM names are already cased ("Camden High Street")
 
+// ── Coastline → water polygons ────────────────────────────────────────────
+// Open oceans/sounds (Puget Sound, the Pacific, SF Bay's outer edge) are mapped
+// in OSM as natural=coastline LINES, not natural=water polygons, so the water
+// query alone leaves waterfront neighbourhoods (Alki, Ocean Beach) with a blank
+// sea. OSM's rule: walking a coastline in node order, land is on the LEFT and
+// water on the RIGHT. We merge the coastline ways into chains, clip each to a
+// frame slightly larger than the visible viewBox, and close it back along the
+// frame edge on the water side — picking the closing that actually encloses a
+// point on the water side of the line, which sidesteps winding-sign confusion.
+const FR = { x0: -60, y0: -60, x1: W + 60, y1: H + 60 };
+
+// Merge chains that share endpoints (coastlines arrive split into many ways).
+function mergeChains(ways) {
+  const chains = ways.map(w => w.slice());
+  const key = p => `${Math.round(p[0])},${Math.round(p[1])}`;
+  let merged = true;
+  while (merged) {
+    merged = false;
+    for (let i = 0; i < chains.length; i++) {
+      for (let j = i + 1; j < chains.length; j++) {
+        const a = chains[i], b = chains[j];
+        if (!a.length || !b.length) continue;
+        if (key(a[a.length - 1]) === key(b[0])) { chains[i] = a.concat(b.slice(1)); chains.splice(j, 1); merged = true; break; }
+        if (key(a[a.length - 1]) === key(b[b.length - 1])) { chains[i] = a.concat(b.slice().reverse().slice(1)); chains.splice(j, 1); merged = true; break; }
+        if (key(a[0]) === key(b[b.length - 1])) { chains[i] = b.concat(a.slice(1)); chains.splice(j, 1); merged = true; break; }
+        if (key(a[0]) === key(b[0])) { chains[i] = b.slice().reverse().concat(a.slice(1)); chains.splice(j, 1); merged = true; break; }
+      }
+      if (merged) break;
+    }
+  }
+  return chains;
+}
+
+const inFrame = p => p[0] >= FR.x0 && p[0] <= FR.x1 && p[1] >= FR.y0 && p[1] <= FR.y1;
+
+// Split a chain into runs that lie inside the frame. Each run BEGINS and ENDS
+// exactly on the frame boundary (the real segment/edge intersection), which is
+// what lets perim() recognise the endpoints and close the ring correctly — a
+// chain that enters from outside (e.g. Alki, whose coast starts NE of frame)
+// must get its entry crossing inserted, not just its first interior vertex.
+function clipRuns(chain) {
+  const runs = [];
+  let cur = null;
+  for (let i = 0; i < chain.length; i++) {
+    const p = chain[i], pin = inFrame(p), prev = chain[i - 1];
+    if (pin) {
+      if (!cur) { cur = []; if (prev) cur.push(intersectFrame(p, prev)); } // entry crossing
+      cur.push(p);
+    } else if (cur) {
+      cur.push(intersectFrame(prev, p)); // exit crossing (prev is inside)
+      runs.push(cur); cur = null;
+    }
+  }
+  if (cur) runs.push(cur);
+  return runs.filter(r => r.length >= 2);
+}
+// Point where segment inside→outside crosses the frame rectangle (smallest t>0).
+function intersectFrame(inside, outside) {
+  const [x0, y0] = inside, dx = outside[0] - x0, dy = outside[1] - y0;
+  let t = 1;
+  for (const [num, den] of [[FR.x0 - x0, dx], [FR.x1 - x0, dx], [FR.y0 - y0, dy], [FR.y1 - y0, dy]]) {
+    if (Math.abs(den) < 1e-9) continue;
+    const tt = num / den;
+    if (tt > 1e-9 && tt < t) {
+      const px = x0 + dx * tt, py = y0 + dy * tt;
+      if (px >= FR.x0 - 0.5 && px <= FR.x1 + 0.5 && py >= FR.y0 - 0.5 && py <= FR.y1 + 0.5) t = tt;
+    }
+  }
+  // Snap exactly onto the nearest edge so perim() recognises it.
+  let x = x0 + dx * t, y = y0 + dy * t;
+  const d = [[Math.abs(x - FR.x0), 'x0'], [Math.abs(x - FR.x1), 'x1'], [Math.abs(y - FR.y0), 'y0'], [Math.abs(y - FR.y1), 'y1']].sort((a, b) => a[0] - b[0])[0][1];
+  if (d === 'x0') x = FR.x0; else if (d === 'x1') x = FR.x1; else if (d === 'y0') y = FR.y0; else y = FR.y1;
+  return [x, y];
+}
+
+// Parameterise the frame perimeter clockwise, 0..4, so we can walk from one
+// border point to another collecting the corners in between.
+function perim(p) {
+  const { x0, y0, x1, y1 } = FR;
+  if (Math.abs(p[1] - y0) < 1e-6) return (p[0] - x0) / (x1 - x0);              // top L→R
+  if (Math.abs(p[0] - x1) < 1e-6) return 1 + (p[1] - y0) / (y1 - y0);          // right T→B
+  if (Math.abs(p[1] - y1) < 1e-6) return 2 + (x1 - p[0]) / (x1 - x0);          // bottom R→L
+  return 3 + (y1 - p[1]) / (y1 - y0);                                          // left B→T
+}
+const CORNERS = [[FR.x1, FR.y0], [FR.x1, FR.y1], [FR.x0, FR.y1], [FR.x0, FR.y0]]; // t=1,2,3,4
+function walkPerim(fromT, toT, dir) {
+  // Collect corner points from fromT to toT going in `dir` (+1 CW, -1 CCW).
+  const pts = [];
+  let t = fromT;
+  for (let n = 0; n < 5; n++) {
+    t = dir > 0 ? Math.floor(t + 1) : Math.ceil(t - 1);
+    let tt = ((t % 4) + 4) % 4;
+    const reached = dir > 0 ? crossedCW(fromT, toT, t) : crossedCCW(fromT, toT, t);
+    if (reached) break;
+    pts.push(CORNERS[(Math.round(tt) + 3) % 4]);
+  }
+  return pts;
+}
+function crossedCW(a, b, t) { const span = ((b - a) % 4 + 4) % 4; return ((t - a) % 4 + 4) % 4 >= span; }
+function crossedCCW(a, b, t) { const span = ((a - b) % 4 + 4) % 4; return ((a - t) % 4 + 4) % 4 >= span; }
+
+function pointInRing(pt, ring) {
+  let hit = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i], [xj, yj] = ring[j];
+    if (((yi > pt[1]) !== (yj > pt[1])) && (pt[0] < (xj - xi) * (pt[1] - yi) / (yj - yi) + xi)) hit = !hit;
+  }
+  return hit;
+}
+
+function coastlineToWater(ways) {
+  const out = [];
+  for (const chain of mergeChains(ways)) {
+    for (const run of clipRuns(chain)) {
+      const A = run[0], B = run[run.length - 1];
+      // Fully-closed island already: keep as a ring.
+      if (Math.hypot(A[0] - B[0], A[1] - B[1]) < 2 && run.length >= 4) { out.push(run); continue; }
+      // Water-side test point: just to the RIGHT of the run's midpoint.
+      const m = Math.floor(run.length / 2);
+      const a = run[Math.max(0, m - 1)], b = run[Math.min(run.length - 1, m + 1)];
+      const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1;
+      const test = [run[m][0] - dy / L * 10, run[m][1] + dx / L * 10]; // right = (-dy,dx) in screen coords
+      const tB = perim(B), tA = perim(A);
+      const cw = run.concat(walkPerim(tB, tA, +1), [A]);
+      const ccw = run.concat(walkPerim(tB, tA, -1), [A]);
+      const ring = pointInRing(test, cw) ? cw : (pointInRing(test, ccw) ? ccw : null);
+      if (ring && ring.length >= 3) out.push(ring.map(p => [Math.round(p[0] * 10) / 10, Math.round(p[1] * 10) / 10]));
+    }
+  }
+  return out;
+}
+
 async function buildArea(a, seed = 0) {
   const c = { lng: a.lng, lat: a.lat, cos: Math.cos(a.lat * Math.PI / 180) };
   const px = project(c);
@@ -105,6 +237,7 @@ async function buildArea(a, seed = 0) {
 (
   way["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|pedestrian)$"](${bbox});
   way["natural"="water"](${bbox});
+  way["natural"="coastline"](${bbox});
   way["waterway"="riverbank"](${bbox});
   way["landuse"~"^(reservoir|basin)$"](${bbox});
   way["leisure"~"^(park|garden|common|recreation_ground|nature_reserve)$"](${bbox});
@@ -114,6 +247,7 @@ out geom;`;
 
   const elements = await overpass(q, seed);
   const water = [], parks = [], stMinor = [], stMajor = [];
+  const coast = []; // natural=coastline ways (open lines) — see coastlineToWater
   const byName = new Map();
 
   const pushRing = (arr, coords) => {
@@ -131,7 +265,11 @@ out geom;`;
       continue;
     }
     if (!el.geometry) continue;
-    if (t.natural === 'water' || t.waterway === 'riverbank' || t.landuse === 'reservoir' || t.landuse === 'basin') {
+    if (t.natural === 'coastline') {
+      // Open line, land on the LEFT / water on the RIGHT of node order. Kept
+      // raw (projected but unsimplified) so chains can be merged before closing.
+      coast.push(el.geometry.map(g => px(g.lon, g.lat)));
+    } else if (t.natural === 'water' || t.waterway === 'riverbank' || t.landuse === 'reservoir' || t.landuse === 'basin') {
       pushRing(water, el.geometry);
     } else if (t.leisure) {
       pushRing(parks, el.geometry);
@@ -151,6 +289,10 @@ out geom;`;
       }
     }
   }
+
+  // Fold closed ocean/sound polygons in FIRST so they draw behind lakes/rivers
+  // (which are already precise natural=water polygons).
+  if (coast.length) water.unshift(...coastlineToWater(coast));
 
   const labels = [...byName.entries()]
     .sort((x, y) => y[1].len - x[1].len)

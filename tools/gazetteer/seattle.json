@@ -1,0 +1,1325 @@
+{
+ "city": "Seattle",
+ "citySlug": "seattle",
+ "country": "US",
+ "source": "Seattle City GIS — Neighborhood Map Atlas neighborhoods (94), grouped by district",
+ "generatedAt": "2026-07-25",
+ "areas": [
+  {
+   "name": "Ballard",
+   "slug": "ballard",
+   "borough": "Ballard",
+   "lat": 47.670068,
+   "lng": -122.386357,
+   "neighbors": [
+    "west-woodland",
+    "loyal-heights",
+    "sunset-hill",
+    "whittier-heights",
+    "lawton-park"
+   ]
+  },
+  {
+   "name": "Loyal Heights",
+   "slug": "loyal-heights",
+   "borough": "Ballard",
+   "lat": 47.683276,
+   "lng": -122.384898,
+   "neighbors": [
+    "whittier-heights",
+    "sunset-hill",
+    "ballard",
+    "crown-hill",
+    "north-beach-blue-ridge"
+   ]
+  },
+  {
+   "name": "Sunset Hill",
+   "slug": "sunset-hill",
+   "borough": "Ballard",
+   "lat": 47.681307,
+   "lng": -122.400275,
+   "neighbors": [
+    "loyal-heights",
+    "ballard",
+    "whittier-heights",
+    "north-beach-blue-ridge",
+    "lawton-park"
+   ]
+  },
+  {
+   "name": "West Woodland",
+   "slug": "west-woodland",
+   "borough": "Ballard",
+   "lat": 47.667871,
+   "lng": -122.368547,
+   "neighbors": [
+    "phinney-ridge",
+    "ballard",
+    "fremont",
+    "whittier-heights",
+    "loyal-heights"
+   ]
+  },
+  {
+   "name": "Whittier Heights",
+   "slug": "whittier-heights",
+   "borough": "Ballard",
+   "lat": 47.683305,
+   "lng": -122.371397,
+   "neighbors": [
+    "loyal-heights",
+    "crown-hill",
+    "phinney-ridge",
+    "greenwood",
+    "west-woodland"
+   ]
+  },
+  {
+   "name": "Holly Park",
+   "slug": "holly-park",
+   "borough": "Beacon Hill",
+   "lat": 47.539503,
+   "lng": -122.288353,
+   "neighbors": [
+    "brighton",
+    "south-beacon-hill",
+    "dunlap",
+    "mid-beacon-hill",
+    "columbia-city"
+   ]
+  },
+  {
+   "name": "Mid-Beacon Hill",
+   "slug": "mid-beacon-hill",
+   "borough": "Beacon Hill",
+   "lat": 47.554237,
+   "lng": -122.304681,
+   "neighbors": [
+    "columbia-city",
+    "georgetown",
+    "holly-park",
+    "industrial-district",
+    "north-beacon-hill"
+   ]
+  },
+  {
+   "name": "North Beacon Hill",
+   "slug": "north-beacon-hill",
+   "borough": "Beacon Hill",
+   "lat": 47.578363,
+   "lng": -122.309773,
+   "neighbors": [
+    "mount-baker",
+    "sodo",
+    "atlantic",
+    "international-district",
+    "industrial-district"
+   ]
+  },
+  {
+   "name": "South Beacon Hill",
+   "slug": "south-beacon-hill",
+   "borough": "Beacon Hill",
+   "lat": 47.52712,
+   "lng": -122.289837,
+   "neighbors": [
+    "holly-park",
+    "dunlap",
+    "brighton",
+    "rainier-beach",
+    "georgetown"
+   ]
+  },
+  {
+   "name": "Broadway",
+   "slug": "broadway",
+   "borough": "Capitol Hill",
+   "lat": 47.624262,
+   "lng": -122.320275,
+   "neighbors": [
+    "stevens",
+    "south-lake-union",
+    "denny-triangle",
+    "first-hill",
+    "westlake"
+   ]
+  },
+  {
+   "name": "Madison Park",
+   "slug": "madison-park",
+   "borough": "Capitol Hill",
+   "lat": 47.635685,
+   "lng": -122.287,
+   "neighbors": [
+    "harrison-denny-blaine",
+    "montlake",
+    "stevens",
+    "madrona",
+    "university-of-washington"
+   ]
+  },
+  {
+   "name": "Montlake",
+   "slug": "montlake",
+   "borough": "Capitol Hill",
+   "lat": 47.640346,
+   "lng": -122.307062,
+   "neighbors": [
+    "portage-bay",
+    "eastlake",
+    "stevens",
+    "madison-park",
+    "university-of-washington"
+   ]
+  },
+  {
+   "name": "Portage Bay",
+   "slug": "portage-bay",
+   "borough": "Capitol Hill",
+   "lat": 47.646373,
+   "lng": -122.319758,
+   "neighbors": [
+    "eastlake",
+    "montlake",
+    "university-of-washington",
+    "university-district",
+    "wallingford"
+   ]
+  },
+  {
+   "name": "Stevens",
+   "slug": "stevens",
+   "borough": "Capitol Hill",
+   "lat": 47.626855,
+   "lng": -122.305442,
+   "neighbors": [
+    "broadway",
+    "harrison-denny-blaine",
+    "montlake",
+    "madison-park",
+    "mann"
+   ]
+  },
+  {
+   "name": "Eastlake",
+   "slug": "eastlake",
+   "borough": "Cascade",
+   "lat": 47.642191,
+   "lng": -122.325457,
+   "neighbors": [
+    "portage-bay",
+    "montlake",
+    "westlake",
+    "east-queen-anne",
+    "broadway"
+   ]
+  },
+  {
+   "name": "South Lake Union",
+   "slug": "south-lake-union",
+   "borough": "Cascade",
+   "lat": 47.624088,
+   "lng": -122.335668,
+   "neighbors": [
+    "denny-triangle",
+    "westlake",
+    "broadway",
+    "belltown",
+    "lower-queen-anne"
+   ]
+  },
+  {
+   "name": "Westlake",
+   "slug": "westlake",
+   "borough": "Cascade",
+   "lat": 47.632504,
+   "lng": -122.341648,
+   "neighbors": [
+    "east-queen-anne",
+    "south-lake-union",
+    "lower-queen-anne",
+    "eastlake",
+    "denny-triangle"
+   ]
+  },
+  {
+   "name": "Atlantic",
+   "slug": "atlantic",
+   "borough": "Central Area",
+   "lat": 47.593589,
+   "lng": -122.303872,
+   "neighbors": [
+    "leschi",
+    "international-district",
+    "yesler-terrace",
+    "minor",
+    "north-beacon-hill"
+   ]
+  },
+  {
+   "name": "Harrison/Denny-Blaine",
+   "slug": "harrison-denny-blaine",
+   "borough": "Central Area",
+   "lat": 47.623605,
+   "lng": -122.287207,
+   "neighbors": [
+    "madrona",
+    "madison-park",
+    "stevens",
+    "mann",
+    "minor"
+   ]
+  },
+  {
+   "name": "Leschi",
+   "slug": "leschi",
+   "borough": "Central Area",
+   "lat": 47.600021,
+   "lng": -122.291118,
+   "neighbors": [
+    "atlantic",
+    "mann",
+    "madrona",
+    "minor",
+    "yesler-terrace"
+   ]
+  },
+  {
+   "name": "Madrona",
+   "slug": "madrona",
+   "borough": "Central Area",
+   "lat": 47.613306,
+   "lng": -122.288933,
+   "neighbors": [
+    "mann",
+    "harrison-denny-blaine",
+    "leschi",
+    "minor",
+    "stevens"
+   ]
+  },
+  {
+   "name": "Mann",
+   "slug": "mann",
+   "borough": "Central Area",
+   "lat": 47.611746,
+   "lng": -122.29937,
+   "neighbors": [
+    "madrona",
+    "minor",
+    "leschi",
+    "harrison-denny-blaine",
+    "stevens"
+   ]
+  },
+  {
+   "name": "Minor",
+   "slug": "minor",
+   "borough": "Central Area",
+   "lat": 47.608831,
+   "lng": -122.309213,
+   "neighbors": [
+    "mann",
+    "yesler-terrace",
+    "first-hill",
+    "international-district",
+    "madrona"
+   ]
+  },
+  {
+   "name": "High Point",
+   "slug": "high-point",
+   "borough": "Delridge",
+   "lat": 47.544359,
+   "lng": -122.368783,
+   "neighbors": [
+    "riverview",
+    "gatewood",
+    "fairmount-park",
+    "roxhill",
+    "north-delridge"
+   ]
+  },
+  {
+   "name": "Highland Park",
+   "slug": "highland-park",
+   "borough": "Delridge",
+   "lat": 47.526263,
+   "lng": -122.343237,
+   "neighbors": [
+    "south-delridge",
+    "south-park",
+    "roxhill",
+    "riverview",
+    "georgetown"
+   ]
+  },
+  {
+   "name": "North Delridge",
+   "slug": "north-delridge",
+   "borough": "Delridge",
+   "lat": 47.562496,
+   "lng": -122.3648,
+   "neighbors": [
+    "fairmount-park",
+    "genesee",
+    "riverview",
+    "high-point",
+    "harbor-island"
+   ]
+  },
+  {
+   "name": "Riverview",
+   "slug": "riverview",
+   "borough": "Delridge",
+   "lat": 47.546518,
+   "lng": -122.353707,
+   "neighbors": [
+    "high-point",
+    "north-delridge",
+    "fairmount-park",
+    "south-delridge",
+    "highland-park"
+   ]
+  },
+  {
+   "name": "Roxhill",
+   "slug": "roxhill",
+   "borough": "Delridge",
+   "lat": 47.527175,
+   "lng": -122.371399,
+   "neighbors": [
+    "south-delridge",
+    "fauntleroy",
+    "gatewood",
+    "high-point",
+    "arbor-heights"
+   ]
+  },
+  {
+   "name": "South Delridge",
+   "slug": "south-delridge",
+   "borough": "Delridge",
+   "lat": 47.526194,
+   "lng": -122.360434,
+   "neighbors": [
+    "roxhill",
+    "highland-park",
+    "high-point",
+    "fauntleroy",
+    "gatewood"
+   ]
+  },
+  {
+   "name": "Belltown",
+   "slug": "belltown",
+   "borough": "Downtown",
+   "lat": 47.615024,
+   "lng": -122.348466,
+   "neighbors": [
+    "pike-market",
+    "denny-triangle",
+    "lower-queen-anne",
+    "central-business-district",
+    "south-lake-union"
+   ]
+  },
+  {
+   "name": "Central Business District",
+   "slug": "central-business-district",
+   "borough": "Downtown",
+   "lat": 47.608184,
+   "lng": -122.334878,
+   "neighbors": [
+    "pike-market",
+    "first-hill",
+    "denny-triangle",
+    "pioneer-square",
+    "yesler-terrace"
+   ]
+  },
+  {
+   "name": "Denny Triangle",
+   "slug": "denny-triangle",
+   "borough": "Downtown",
+   "lat": 47.616443,
+   "lng": -122.336219,
+   "neighbors": [
+    "south-lake-union",
+    "pike-market",
+    "central-business-district",
+    "belltown",
+    "first-hill"
+   ]
+  },
+  {
+   "name": "First Hill",
+   "slug": "first-hill",
+   "borough": "Downtown",
+   "lat": 47.609914,
+   "lng": -122.323974,
+   "neighbors": [
+    "yesler-terrace",
+    "central-business-district",
+    "minor",
+    "denny-triangle",
+    "international-district"
+   ]
+  },
+  {
+   "name": "International District",
+   "slug": "international-district",
+   "borough": "Downtown",
+   "lat": 47.598073,
+   "lng": -122.321894,
+   "neighbors": [
+    "yesler-terrace",
+    "pioneer-square",
+    "first-hill",
+    "atlantic",
+    "central-business-district"
+   ]
+  },
+  {
+   "name": "Pike-Market",
+   "slug": "pike-market",
+   "borough": "Downtown",
+   "lat": 47.609462,
+   "lng": -122.342308,
+   "neighbors": [
+    "central-business-district",
+    "belltown",
+    "denny-triangle",
+    "first-hill",
+    "pioneer-square"
+   ]
+  },
+  {
+   "name": "Pioneer Square",
+   "slug": "pioneer-square",
+   "borough": "Downtown",
+   "lat": 47.598989,
+   "lng": -122.332018,
+   "neighbors": [
+    "international-district",
+    "yesler-terrace",
+    "central-business-district",
+    "first-hill",
+    "pike-market"
+   ]
+  },
+  {
+   "name": "Yesler Terrace",
+   "slug": "yesler-terrace",
+   "borough": "Downtown",
+   "lat": 47.603178,
+   "lng": -122.321042,
+   "neighbors": [
+    "international-district",
+    "first-hill",
+    "pioneer-square",
+    "minor",
+    "central-business-district"
+   ]
+  },
+  {
+   "name": "Georgetown",
+   "slug": "georgetown",
+   "borough": "Greater Duwamish",
+   "lat": 47.541412,
+   "lng": -122.318074,
+   "neighbors": [
+    "south-park",
+    "mid-beacon-hill",
+    "holly-park",
+    "highland-park",
+    "industrial-district"
+   ]
+  },
+  {
+   "name": "Harbor Island",
+   "slug": "harbor-island",
+   "borough": "Greater Duwamish",
+   "lat": 47.579628,
+   "lng": -122.351392,
+   "neighbors": [
+    "sodo",
+    "north-delridge",
+    "industrial-district",
+    "pioneer-square",
+    "north-admiral"
+   ]
+  },
+  {
+   "name": "Industrial District",
+   "slug": "industrial-district",
+   "borough": "Greater Duwamish",
+   "lat": 47.563152,
+   "lng": -122.332158,
+   "neighbors": [
+    "sodo",
+    "mid-beacon-hill",
+    "harbor-island",
+    "north-beacon-hill",
+    "north-delridge"
+   ]
+  },
+  {
+   "name": "SODO",
+   "slug": "sodo",
+   "borough": "Greater Duwamish",
+   "lat": 47.583542,
+   "lng": -122.331525,
+   "neighbors": [
+    "harbor-island",
+    "pioneer-square",
+    "north-beacon-hill",
+    "international-district",
+    "industrial-district"
+   ]
+  },
+  {
+   "name": "South Park",
+   "slug": "south-park",
+   "borough": "Greater Duwamish",
+   "lat": 47.528277,
+   "lng": -122.326008,
+   "neighbors": [
+    "highland-park",
+    "georgetown",
+    "south-delridge",
+    "south-beacon-hill",
+    "riverview"
+   ]
+  },
+  {
+   "name": "Interbay",
+   "slug": "interbay",
+   "borough": "Interbay",
+   "lat": 47.641735,
+   "lng": -122.381072,
+   "neighbors": [
+    "southeast-magnolia",
+    "west-queen-anne",
+    "north-queen-anne",
+    "briarcliff",
+    "east-queen-anne"
+   ]
+  },
+  {
+   "name": "Cedar Park",
+   "slug": "cedar-park",
+   "borough": "Lake City",
+   "lat": 47.723803,
+   "lng": -122.287298,
+   "neighbors": [
+    "olympic-hills",
+    "victory-heights",
+    "meadowbrook",
+    "matthews-beach",
+    "pinehurst"
+   ]
+  },
+  {
+   "name": "Matthews Beach",
+   "slug": "matthews-beach",
+   "borough": "Lake City",
+   "lat": 47.704704,
+   "lng": -122.281698,
+   "neighbors": [
+    "meadowbrook",
+    "wedgwood",
+    "victory-heights",
+    "cedar-park",
+    "view-ridge"
+   ]
+  },
+  {
+   "name": "Meadowbrook",
+   "slug": "meadowbrook",
+   "borough": "Lake City",
+   "lat": 47.705565,
+   "lng": -122.296225,
+   "neighbors": [
+    "victory-heights",
+    "matthews-beach",
+    "wedgwood",
+    "maple-leaf",
+    "cedar-park"
+   ]
+  },
+  {
+   "name": "Olympic Hills",
+   "slug": "olympic-hills",
+   "borough": "Lake City",
+   "lat": 47.726735,
+   "lng": -122.302757,
+   "neighbors": [
+    "cedar-park",
+    "pinehurst",
+    "victory-heights",
+    "meadowbrook",
+    "haller-lake"
+   ]
+  },
+  {
+   "name": "Victory Heights",
+   "slug": "victory-heights",
+   "borough": "Lake City",
+   "lat": 47.710785,
+   "lng": -122.305978,
+   "neighbors": [
+    "meadowbrook",
+    "pinehurst",
+    "maple-leaf",
+    "olympic-hills",
+    "matthews-beach"
+   ]
+  },
+  {
+   "name": "Briarcliff",
+   "slug": "briarcliff",
+   "borough": "Magnolia",
+   "lat": 47.644282,
+   "lng": -122.408215,
+   "neighbors": [
+    "southeast-magnolia",
+    "lawton-park",
+    "interbay",
+    "north-queen-anne",
+    "west-queen-anne"
+   ]
+  },
+  {
+   "name": "Lawton Park",
+   "slug": "lawton-park",
+   "borough": "Magnolia",
+   "lat": 47.658729,
+   "lng": -122.407068,
+   "neighbors": [
+    "briarcliff",
+    "ballard",
+    "southeast-magnolia",
+    "sunset-hill",
+    "interbay"
+   ]
+  },
+  {
+   "name": "Southeast Magnolia",
+   "slug": "southeast-magnolia",
+   "borough": "Magnolia",
+   "lat": 47.641738,
+   "lng": -122.392529,
+   "neighbors": [
+    "interbay",
+    "briarcliff",
+    "west-queen-anne",
+    "north-queen-anne",
+    "lawton-park"
+   ]
+  },
+  {
+   "name": "Fremont",
+   "slug": "fremont",
+   "borough": "North Central",
+   "lat": 47.656823,
+   "lng": -122.352789,
+   "neighbors": [
+    "north-queen-anne",
+    "wallingford",
+    "west-woodland",
+    "phinney-ridge",
+    "east-queen-anne"
+   ]
+  },
+  {
+   "name": "Green Lake",
+   "slug": "green-lake",
+   "borough": "North Central",
+   "lat": 47.680356,
+   "lng": -122.334048,
+   "neighbors": [
+    "roosevelt",
+    "phinney-ridge",
+    "university-heights",
+    "licton-springs",
+    "greenwood"
+   ]
+  },
+  {
+   "name": "Phinney Ridge",
+   "slug": "phinney-ridge",
+   "borough": "North Central",
+   "lat": 47.674045,
+   "lng": -122.353324,
+   "neighbors": [
+    "west-woodland",
+    "green-lake",
+    "whittier-heights",
+    "fremont",
+    "wallingford"
+   ]
+  },
+  {
+   "name": "Wallingford",
+   "slug": "wallingford",
+   "borough": "North Central",
+   "lat": 47.659995,
+   "lng": -122.333068,
+   "neighbors": [
+    "fremont",
+    "university-district",
+    "university-heights",
+    "portage-bay",
+    "eastlake"
+   ]
+  },
+  {
+   "name": "Bryant",
+   "slug": "bryant",
+   "borough": "Northeast",
+   "lat": 47.671629,
+   "lng": -122.285984,
+   "neighbors": [
+    "ravenna",
+    "windermere",
+    "laurelhurst",
+    "view-ridge",
+    "university-heights"
+   ]
+  },
+  {
+   "name": "Laurelhurst",
+   "slug": "laurelhurst",
+   "borough": "Northeast",
+   "lat": 47.659474,
+   "lng": -122.278866,
+   "neighbors": [
+    "windermere",
+    "bryant",
+    "university-of-washington",
+    "ravenna",
+    "university-district"
+   ]
+  },
+  {
+   "name": "Ravenna",
+   "slug": "ravenna",
+   "borough": "Northeast",
+   "lat": 47.675131,
+   "lng": -122.299979,
+   "neighbors": [
+    "bryant",
+    "university-heights",
+    "roosevelt",
+    "university-district",
+    "wedgwood"
+   ]
+  },
+  {
+   "name": "Roosevelt",
+   "slug": "roosevelt",
+   "borough": "Northeast",
+   "lat": 47.683075,
+   "lng": -122.316417,
+   "neighbors": [
+    "green-lake",
+    "ravenna",
+    "university-heights",
+    "maple-leaf",
+    "wedgwood"
+   ]
+  },
+  {
+   "name": "Sand Point",
+   "slug": "sand-point",
+   "borough": "Northeast",
+   "lat": 47.6813,
+   "lng": -122.256113,
+   "neighbors": [
+    "view-ridge",
+    "windermere",
+    "bryant",
+    "wedgwood",
+    "laurelhurst"
+   ]
+  },
+  {
+   "name": "View Ridge",
+   "slug": "view-ridge",
+   "borough": "Northeast",
+   "lat": 47.682955,
+   "lng": -122.273637,
+   "neighbors": [
+    "sand-point",
+    "windermere",
+    "bryant",
+    "wedgwood",
+    "ravenna"
+   ]
+  },
+  {
+   "name": "Wedgwood",
+   "slug": "wedgwood",
+   "borough": "Northeast",
+   "lat": 47.690608,
+   "lng": -122.291891,
+   "neighbors": [
+    "view-ridge",
+    "meadowbrook",
+    "matthews-beach",
+    "ravenna",
+    "roosevelt"
+   ]
+  },
+  {
+   "name": "Windermere",
+   "slug": "windermere",
+   "borough": "Northeast",
+   "lat": 47.669623,
+   "lng": -122.267696,
+   "neighbors": [
+    "bryant",
+    "laurelhurst",
+    "view-ridge",
+    "sand-point",
+    "ravenna"
+   ]
+  },
+  {
+   "name": "Haller Lake",
+   "slug": "haller-lake",
+   "borough": "Northgate",
+   "lat": 47.721117,
+   "lng": -122.335439,
+   "neighbors": [
+    "bitter-lake",
+    "pinehurst",
+    "broadview",
+    "victory-heights",
+    "licton-springs"
+   ]
+  },
+  {
+   "name": "Licton Springs",
+   "slug": "licton-springs",
+   "borough": "Northgate",
+   "lat": 47.69857,
+   "lng": -122.336713,
+   "neighbors": [
+    "maple-leaf",
+    "greenwood",
+    "green-lake",
+    "roosevelt",
+    "haller-lake"
+   ]
+  },
+  {
+   "name": "Maple Leaf",
+   "slug": "maple-leaf",
+   "borough": "Northgate",
+   "lat": 47.698858,
+   "lng": -122.318852,
+   "neighbors": [
+    "licton-springs",
+    "victory-heights",
+    "roosevelt",
+    "meadowbrook",
+    "wedgwood"
+   ]
+  },
+  {
+   "name": "Pinehurst",
+   "slug": "pinehurst",
+   "borough": "Northgate",
+   "lat": 47.720387,
+   "lng": -122.319192,
+   "neighbors": [
+    "haller-lake",
+    "olympic-hills",
+    "victory-heights",
+    "bitter-lake",
+    "meadowbrook"
+   ]
+  },
+  {
+   "name": "Bitter Lake",
+   "slug": "bitter-lake",
+   "borough": "Northwest",
+   "lat": 47.719531,
+   "lng": -122.350223,
+   "neighbors": [
+    "haller-lake",
+    "broadview",
+    "pinehurst",
+    "licton-springs",
+    "greenwood"
+   ]
+  },
+  {
+   "name": "Broadview",
+   "slug": "broadview",
+   "borough": "Northwest",
+   "lat": 47.720199,
+   "lng": -122.365547,
+   "neighbors": [
+    "bitter-lake",
+    "haller-lake",
+    "crown-hill",
+    "north-beach-blue-ridge",
+    "greenwood"
+   ]
+  },
+  {
+   "name": "Crown Hill",
+   "slug": "crown-hill",
+   "borough": "Northwest",
+   "lat": 47.696986,
+   "lng": -122.372498,
+   "neighbors": [
+    "north-beach-blue-ridge",
+    "greenwood",
+    "whittier-heights",
+    "loyal-heights",
+    "broadview"
+   ]
+  },
+  {
+   "name": "Greenwood",
+   "slug": "greenwood",
+   "borough": "Northwest",
+   "lat": 47.694175,
+   "lng": -122.355316,
+   "neighbors": [
+    "crown-hill",
+    "licton-springs",
+    "whittier-heights",
+    "green-lake",
+    "phinney-ridge"
+   ]
+  },
+  {
+   "name": "North Beach/Blue Ridge",
+   "slug": "north-beach-blue-ridge",
+   "borough": "Northwest",
+   "lat": 47.69968,
+   "lng": -122.384209,
+   "neighbors": [
+    "crown-hill",
+    "loyal-heights",
+    "whittier-heights",
+    "greenwood",
+    "sunset-hill"
+   ]
+  },
+  {
+   "name": "East Queen Anne",
+   "slug": "east-queen-anne",
+   "borough": "Queen Anne",
+   "lat": 47.636109,
+   "lng": -122.349527,
+   "neighbors": [
+    "westlake",
+    "lower-queen-anne",
+    "west-queen-anne",
+    "south-lake-union",
+    "north-queen-anne"
+   ]
+  },
+  {
+   "name": "Lower Queen Anne",
+   "slug": "lower-queen-anne",
+   "borough": "Queen Anne",
+   "lat": 47.624823,
+   "lng": -122.355084,
+   "neighbors": [
+    "belltown",
+    "westlake",
+    "east-queen-anne",
+    "west-queen-anne",
+    "south-lake-union"
+   ]
+  },
+  {
+   "name": "North Queen Anne",
+   "slug": "north-queen-anne",
+   "borough": "Queen Anne",
+   "lat": 47.647136,
+   "lng": -122.365292,
+   "neighbors": [
+    "interbay",
+    "west-queen-anne",
+    "fremont",
+    "east-queen-anne",
+    "southeast-magnolia"
+   ]
+  },
+  {
+   "name": "West Queen Anne",
+   "slug": "west-queen-anne",
+   "borough": "Queen Anne",
+   "lat": 47.63446,
+   "lng": -122.367157,
+   "neighbors": [
+    "interbay",
+    "east-queen-anne",
+    "lower-queen-anne",
+    "north-queen-anne",
+    "westlake"
+   ]
+  },
+  {
+   "name": "Brighton",
+   "slug": "brighton",
+   "borough": "Rainier Valley",
+   "lat": 47.538875,
+   "lng": -122.275337,
+   "neighbors": [
+    "holly-park",
+    "dunlap",
+    "south-beacon-hill",
+    "seward-park",
+    "columbia-city"
+   ]
+  },
+  {
+   "name": "Columbia City",
+   "slug": "columbia-city",
+   "borough": "Rainier Valley",
+   "lat": 47.558958,
+   "lng": -122.286185,
+   "neighbors": [
+    "mid-beacon-hill",
+    "seward-park",
+    "mount-baker",
+    "holly-park",
+    "brighton"
+   ]
+  },
+  {
+   "name": "Dunlap",
+   "slug": "dunlap",
+   "borough": "Rainier Valley",
+   "lat": 47.525634,
+   "lng": -122.270648,
+   "neighbors": [
+    "south-beacon-hill",
+    "brighton",
+    "rainier-beach",
+    "holly-park",
+    "rainier-view"
+   ]
+  },
+  {
+   "name": "Mount Baker",
+   "slug": "mount-baker",
+   "borough": "Rainier Valley",
+   "lat": 47.578016,
+   "lng": -122.289064,
+   "neighbors": [
+    "north-beacon-hill",
+    "atlantic",
+    "columbia-city",
+    "leschi",
+    "mid-beacon-hill"
+   ]
+  },
+  {
+   "name": "Rainier Beach",
+   "slug": "rainier-beach",
+   "borough": "Rainier Valley",
+   "lat": 47.51292,
+   "lng": -122.263251,
+   "neighbors": [
+    "rainier-view",
+    "dunlap",
+    "south-beacon-hill",
+    "brighton",
+    "holly-park"
+   ]
+  },
+  {
+   "name": "Rainier View",
+   "slug": "rainier-view",
+   "borough": "Rainier Valley",
+   "lat": 47.502167,
+   "lng": -122.25817,
+   "neighbors": [
+    "rainier-beach",
+    "dunlap",
+    "south-beacon-hill",
+    "brighton",
+    "holly-park"
+   ]
+  },
+  {
+   "name": "Seward Park",
+   "slug": "seward-park",
+   "borough": "Seward Park",
+   "lat": 47.553216,
+   "lng": -122.26446,
+   "neighbors": [
+    "columbia-city",
+    "brighton",
+    "holly-park",
+    "mid-beacon-hill",
+    "dunlap"
+   ]
+  },
+  {
+   "name": "University District",
+   "slug": "university-district",
+   "borough": "University District",
+   "lat": 47.661693,
+   "lng": -122.312945,
+   "neighbors": [
+    "university-heights",
+    "university-of-washington",
+    "wallingford",
+    "portage-bay",
+    "ravenna"
+   ]
+  },
+  {
+   "name": "University Heights",
+   "slug": "university-heights",
+   "borough": "University District",
+   "lat": 47.668516,
+   "lng": -122.314004,
+   "neighbors": [
+    "university-district",
+    "ravenna",
+    "roosevelt",
+    "university-of-washington",
+    "wallingford"
+   ]
+  },
+  {
+   "name": "University of Washington",
+   "slug": "university-of-washington",
+   "borough": "University District",
+   "lat": 47.655211,
+   "lng": -122.303594,
+   "neighbors": [
+    "university-district",
+    "portage-bay",
+    "university-heights",
+    "montlake",
+    "laurelhurst"
+   ]
+  },
+  {
+   "name": "Alki",
+   "slug": "alki",
+   "borough": "West Seattle",
+   "lat": 47.574519,
+   "lng": -122.404347,
+   "neighbors": [
+    "north-admiral",
+    "genesee",
+    "seaview",
+    "fairmount-park",
+    "north-delridge"
+   ]
+  },
+  {
+   "name": "Arbor Heights",
+   "slug": "arbor-heights",
+   "borough": "West Seattle",
+   "lat": 47.509209,
+   "lng": -122.379557,
+   "neighbors": [
+    "fauntleroy",
+    "roxhill",
+    "south-delridge",
+    "gatewood",
+    "highland-park"
+   ]
+  },
+  {
+   "name": "Fairmount Park",
+   "slug": "fairmount-park",
+   "borough": "West Seattle",
+   "lat": 47.5551,
+   "lng": -122.380526,
+   "neighbors": [
+    "seaview",
+    "genesee",
+    "north-delridge",
+    "high-point",
+    "gatewood"
+   ]
+  },
+  {
+   "name": "Fauntleroy",
+   "slug": "fauntleroy",
+   "borough": "West Seattle",
+   "lat": 47.522606,
+   "lng": -122.388688,
+   "neighbors": [
+    "roxhill",
+    "arbor-heights",
+    "gatewood",
+    "south-delridge",
+    "high-point"
+   ]
+  },
+  {
+   "name": "Gatewood",
+   "slug": "gatewood",
+   "borough": "West Seattle",
+   "lat": 47.537945,
+   "lng": -122.384234,
+   "neighbors": [
+    "high-point",
+    "roxhill",
+    "seaview",
+    "fauntleroy",
+    "fairmount-park"
+   ]
+  },
+  {
+   "name": "Genesee",
+   "slug": "genesee",
+   "borough": "West Seattle",
+   "lat": 47.565243,
+   "lng": -122.387596,
+   "neighbors": [
+    "fairmount-park",
+    "north-admiral",
+    "seaview",
+    "alki",
+    "north-delridge"
+   ]
+  },
+  {
+   "name": "North Admiral",
+   "slug": "north-admiral",
+   "borough": "West Seattle",
+   "lat": 47.579122,
+   "lng": -122.387064,
+   "neighbors": [
+    "alki",
+    "genesee",
+    "north-delridge",
+    "harbor-island",
+    "fairmount-park"
+   ]
+  },
+  {
+   "name": "Seaview",
+   "slug": "seaview",
+   "borough": "West Seattle",
+   "lat": 47.551753,
+   "lng": -122.393725,
+   "neighbors": [
+    "fairmount-park",
+    "genesee",
+    "gatewood",
+    "high-point",
+    "north-delridge"
+   ]
+  }
+ ]
+}

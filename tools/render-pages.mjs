@@ -164,6 +164,33 @@ const CITIES = {
       methodology: `Each incident reported to the SFPD (via DataSF) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are DataSF's 41 Analysis Neighborhoods, the same unit SFPD tags each report with. Because San Francisco's dense downtown far outweighs its residential west side, the index is calibrated to the citywide median so a typical neighborhood reads mid-scale. Time-of-day charts use SFPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
     },
   },
+  'seattle': {
+    name: 'Seattle',
+    hubName: 'Seattle',
+    rankPool: 'Seattle neighborhoods',
+    // Multi-district city (like NYC/London): 94 Neighborhood Map Atlas
+    // neighborhoods grouped under 20 districts, so the hub ranks within each
+    // district. No rankHeading → default borough-grouped tables.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    reportedTo: 'reported to the SPD',
+    dataName: 'SPD data',
+    medianLabel: 'citywide median',
+    forCity: 'for Seattle',
+    acrossCity: 'across Seattle',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Seattle Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: SPD Crime Data (2008–present) via <a href="https://data.seattle.gov/">Seattle Open Data</a>${dateLine}. Neighborhood boundaries: Seattle City GIS Neighborhood Map Atlas (94 neighborhoods, 20 districts). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
+    basemapCredit: 'basemap © OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Seattle Neighborhood Safety Map & Rankings (${n} neighborhoods) — SafeRoute`,
+      desc: (n, date) => `How safe is your Seattle neighborhood? Safety index (0–100) for ${n} Seattle neighborhoods from SPD reported-crime data through ${date} — ranked by district, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Seattle neighborhood?',
+      lead: `SafeRoute scores every Seattle neighborhood 0–100 from incidents reported to the Seattle Police Department — severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood — e.g. Ballard, Fremont, Belltown…',
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center — they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the Seattle Police Department (via Seattle Open Data) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the Seattle City GIS Neighborhood Map Atlas — 94 neighborhoods grouped into 20 districts (so Capitol Hill and West Seattle, which are districts, appear as section headings). Because Seattle's dense downtown far outweighs its residential neighborhoods, the index is calibrated to the citywide median so a typical neighborhood reads mid-scale. Time-of-day charts use SPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
+    },
+  },
 };
 
 // ── helpers ──────────────────────────────────────────────────────────────────
