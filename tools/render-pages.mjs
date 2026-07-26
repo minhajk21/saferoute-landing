@@ -619,10 +619,13 @@ ${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug)}`;
 
 {
   // Cross-city search index for the marketing homepage's "look up your
-  // neighborhood" box — lazy-fetched on first keystroke, so it costs nothing on
-  // page load. Kept terse (short keys) because it ships every area in every city.
+  // neighborhood" box and the /check/ page's reverse link (matching a
+  // looked-up point to its published page). Lazy-fetched, so no page-load cost.
+  // Terse short keys — la/lo are the centroid, rounded to ~11m — because it
+  // ships every area in every city.
   const idx = rendered.flatMap(r => r.ranked.map(a => ({
     n: a.name, s: a.slug, c: r.citySlug, cn: r.cfg.name, v: a.safetyScore, b: a.band,
+    la: +a.lat.toFixed(4), lo: +a.lng.toFixed(4),
   })));
   writeFileSync(join(ROOT, 'safety', 'search-index.json'), JSON.stringify(idx));
 }

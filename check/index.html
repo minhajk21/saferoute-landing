@@ -93,8 +93,14 @@
   .spinner{width:22px;height:22px;border:2.5px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
   .note{font-size:13.5px;color:var(--ink-2);line-height:1.55;background:var(--cream-deep);padding:14px 16px;border-radius:3px}
+  #pub:empty{display:none}
+  .publink{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.03em;color:var(--teal-deep);text-decoration:none;border:1px solid var(--line);padding:9px 14px;border-radius:9px;transition:border-color .15s,background .15s}
+  .publink:hover{border-color:var(--teal);background:var(--cream-deep)}
+  .publink .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex:none}
   .leaflet-container{background:var(--cream-deep);font-family:var(--sans)}
   .leaflet-control-attribution{font-size:10px}
+  .leaflet-popup-content{font-family:var(--sans);font-size:13.5px;color:var(--ink);margin:11px 14px}
+  .leaflet-popup-content-wrapper{border-radius:8px}
 </style>
 </head>
 <body>
@@ -229,7 +235,8 @@ async function lookup(lat, lng, name, address){
     if(!r.ok) throw 0;
     const d = await r.json();
     if(reqId!==lastReqId) return; // a newer search superseded this
-    render(d, name, address); drawIncidents(d);
+    render(d, name, address);
+    if(d.covered){ drawHex(d); addPubLink(lat, lng, reqId); }
   }catch{
     if(reqId===lastReqId) panel.innerHTML=`<p class="note">Something went wrong looking that up. Please try again.</p>`;
   }
@@ -254,6 +261,7 @@ function render(d, name, address){
       <span class="band" style="background:${b.c}">${b.t}</span>
     </div>
     <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported within 1&nbsp;km, ${esc(d.reportedTo||'to police')} — higher index = safer. ${d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
+    <div id="pub"></div>
     <div class="divider"></div>
     ${cats.length?`<div><p class="h3">What's reported here</p>${cats.map(c=>`<div class="cat"><span class="bar" style="width:${Math.round(c.count/maxCat*46)+8}px"></span><span class="lbl">${catName(c.category)}</span><span class="n">${fmt(c.count)}</span></div>`).join('')}</div>`:''}
     ${tod?`<div class="divider"></div><div><p class="h3">When it happens</p><div class="tod">${tod.map(v=>`<div class="b" style="height:${Math.max(4,Math.round(v/maxTod*52))}px"></div>`).join('')}</div><div class="tod-x">${TOD.map(t=>`<span>${t}</span>`).join('')}</div></div>`:''}
@@ -262,20 +270,72 @@ function render(d, name, address){
     <a class="cta" href="https://apps.apple.com/app/id6768244297">Route here safely with the app</a>`;
 }
 
-// ── map incident layers (Leaflet) ──
-const incColor = w => w>=8?'#7E1410':w>=4?'#C0453B':'#E89286';
 function flyTo(lat,lng){ map.invalidateSize(); map.flyTo([lat,lng], 14, { duration:1.1 }); }
-function drawIncidents(d){
+
+// ── hexagon heat map (matches the app) ──────────────────────────────
+// Incidents are binned into a pointy-top hex grid and each hex is shaded by its
+// severity-weighted total — coral → deep red, the app's heatmap palette. Tap a
+// hex to see how many reports fall in it. Same idea as the app's hex snapshot.
+const HEX_M = 90; // hex circumradius in metres (~180 m across)
+function hexRound(q, r){ // cube-round a fractional axial coord to the nearest hex
+  let x=q, z=r, y=-x-z;
+  let rx=Math.round(x), ry=Math.round(y), rz=Math.round(z);
+  const dx=Math.abs(rx-x), dy=Math.abs(ry-y), dz=Math.abs(rz-z);
+  if(dx>dy && dx>dz) rx=-ry-rz; else if(dy>dz) ry=-rx-rz; else rz=-rx-ry;
+  return [rx, rz];
+}
+function heatColor(t){ // t 0..1 → coral → deep red
+  const s=[[0,[238,178,150]],[0.5,[201,79,68]],[1,[126,20,16]]];
+  let a=s[0], b=s[s.length-1];
+  for(let i=0;i<s.length-1;i++){ if(t>=s[i][0] && t<=s[i+1][0]){ a=s[i]; b=s[i+1]; break; } }
+  const f=(t-a[0])/((b[0]-a[0])||1), c=a[1].map((v,i)=>Math.round(v+(b[1][i]-v)*f));
+  return `rgb(${c[0]},${c[1]},${c[2]})`;
+}
+function drawHex(d){
   if(incLayer) map.removeLayer(incLayer);
   if(ringLayer) map.removeLayer(ringLayer);
   if(ctrLayer) map.removeLayer(ctrLayer);
-  incLayer = L.layerGroup((d.incidents||[]).map(p =>
-    L.circleMarker([p.lat, p.lng], { radius:3.5, color:incColor(p.w||1), weight:0, fillOpacity:0.72 })
-  )).addTo(map);
-  ringLayer = L.circle([d.lat, d.lng], {
-    radius:(d.radiusMetres||1000), color:'#14564C', weight:1.4, dashArray:'3 4', fill:false, opacity:0.6,
-  }).addTo(map);
-  ctrLayer = L.circleMarker([d.lat, d.lng], { radius:6, color:'#fff', weight:2, fillColor:'#14564C', fillOpacity:1 }).addTo(map);
+  const cLat=d.lat, cLng=d.lng, cos=Math.cos(cLat*Math.PI/180), S3=Math.sqrt(3);
+  const toM=(lat,lng)=>[(lng-cLng)*111320*cos,(lat-cLat)*111320];
+  const toLL=(x,y)=>[cLat+y/111320, cLng+x/(111320*cos)];
+  const bins=new Map();
+  for(const p of (d.incidents||[])){
+    const [x,y]=toM(p.lat,p.lng);
+    const [q,r]=hexRound((S3/3*x - 1/3*y)/HEX_M, (2/3*y)/HEX_M);
+    const k=q+','+r, b=bins.get(k)||{q,r,n:0,w:0}; b.n++; b.w+=(p.w||1); bins.set(k,b);
+  }
+  const maxW=Math.max(1,...[...bins.values()].map(b=>b.w));
+  const hexes=[];
+  for(const b of bins.values()){
+    const cx=HEX_M*S3*(b.q+b.r/2), cy=HEX_M*1.5*b.r, corners=[];
+    for(let i=0;i<6;i++){ const a=Math.PI/180*(60*i-30); corners.push(toLL(cx+HEX_M*Math.cos(a), cy+HEX_M*Math.sin(a))); }
+    const poly=L.polygon(corners, { color:'#ffffff', weight:0.6, opacity:0.5, fillColor:heatColor(b.w/maxW), fillOpacity:0.6 });
+    poly.on('mouseover', function(){ this.setStyle({weight:1.6, opacity:1, color:'#14564C'}); });
+    poly.on('mouseout',  function(){ this.setStyle({weight:0.6, opacity:0.5, color:'#ffffff'}); });
+    poly.bindPopup(`<b>${b.n}</b> report${b.n===1?'':'s'} in this block<br><span style="color:#717F7A;font-size:11px">darker hexes = more, and more severe</span>`);
+    hexes.push(poly);
+  }
+  incLayer=L.layerGroup(hexes).addTo(map);
+  ringLayer=L.circle([cLat,cLng],{radius:(d.radiusMetres||1000),color:'#14564C',weight:1.4,dashArray:'3 4',fill:false,opacity:0.55}).addTo(map);
+  ctrLayer=L.circleMarker([cLat,cLng],{radius:6,color:'#fff',weight:2,fillColor:'#14564C',fillOpacity:1}).addTo(map);
+}
+
+// ── reverse link: the nearest published in-depth neighborhood page ──
+let PUB=null, pubP=null;
+function loadPub(){
+  if(PUB) return Promise.resolve(PUB);
+  if(pubP) return pubP;
+  pubP = fetch('/safety/search-index.json').then(r=>r.ok?r.json():[]).then(j=>PUB=(j||[]).filter(x=>x.la!=null)).catch(()=>PUB=[]);
+  return pubP;
+}
+function distKm(a,b,c,e){ const R=6371, tr=x=>x*Math.PI/180, dl=tr(c-a), dg=tr(e-b); const s=Math.sin(dl/2)**2+Math.cos(tr(a))*Math.cos(tr(c))*Math.sin(dg/2)**2; return 2*R*Math.asin(Math.sqrt(s)); }
+async function addPubLink(lat,lng,reqId){
+  const idx = await loadPub(); if(!idx.length || reqId!==lastReqId) return;
+  let best=null, bd=1e9;
+  for(const p of idx){ const dd=distKm(lat,lng,p.la,p.lo); if(dd<bd){ bd=dd; best=p; } }
+  if(!best || bd>3 || reqId!==lastReqId) return; // >3km = not in a published neighborhood
+  const el=document.getElementById('pub'); if(!el) return;
+  el.innerHTML = `<a class="publink" href="/safety/${best.c}/${best.s}/"><span class="dot"></span>Read the in-depth ${esc(best.n)} safety report →</a>`;
 }
 
 // ── utils ──
