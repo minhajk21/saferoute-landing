@@ -46,14 +46,14 @@
   .lead{font-size:clamp(16px,2vw,18px);color:var(--ink-2);max-width:60ch;margin:0}
 
   /* search */
-  .search{position:relative;max-width:640px;margin:22px 0 0}
+  .search{position:relative;max-width:640px;margin:22px 0 0;z-index:1200}
   .search-row{display:flex;gap:10px}
   #q{flex:1;font-family:var(--sans);font-size:17px;color:var(--ink);background:var(--paper);border:1px solid var(--line);padding:15px 16px;outline:none;-webkit-appearance:none;border-radius:0;transition:border-color .15s}
   #q:focus{border-color:var(--teal)}
   #q::placeholder{color:var(--ink-3)}
   #geo{flex:none;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--cream-deep);border:1px solid var(--line);padding:0 15px;cursor:pointer;white-space:nowrap}
   #geo:hover{border-color:var(--teal)}
-  #ac{list-style:none;margin:0;padding:0;position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;background:var(--paper);border:1px solid var(--line);max-height:320px;overflow:auto;box-shadow:0 12px 28px rgba(5,41,38,.12)}
+  #ac{list-style:none;margin:0;padding:0;position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:1200;background:var(--paper);border:1px solid var(--line);max-height:340px;overflow:auto;box-shadow:0 14px 32px rgba(5,41,38,.16)}
   #ac:empty{display:none}
   #ac li a{display:flex;flex-direction:column;gap:2px;padding:11px 16px;text-decoration:none;color:var(--ink);cursor:pointer}
   #ac li a:hover,#ac li a.on{background:var(--cream-deep)}
@@ -61,7 +61,7 @@
   #ac .ad{font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
 
   /* layout */
-  .layout{display:grid;grid-template-columns:1fr 380px;gap:0;border:1px solid var(--line);margin:22px 0 60px;min-height:560px;background:var(--paper)}
+  .layout{position:relative;z-index:1;display:grid;grid-template-columns:1fr 380px;gap:0;border:1px solid var(--line);margin:22px 0 60px;min-height:560px;background:var(--paper)}
   @media(max-width:860px){.layout{grid-template-columns:1fr;min-height:0}}
   #map{width:100%;height:100%;min-height:560px;background:var(--cream-deep)}
   @media(max-width:860px){#map{min-height:340px}}
@@ -83,10 +83,16 @@
   .cat .bar{height:8px;background:var(--teal);opacity:.5;border-radius:2px;flex:none}
   .cat .lbl{flex:1;color:var(--ink-2)}
   .cat .n{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
-  .tod{display:flex;align-items:flex-end;gap:5px;height:56px;margin-top:4px}
-  .tod .b{flex:1;background:var(--elevated);opacity:.75;border-radius:2px 2px 0 0;min-height:2px}
-  .tod-x{display:flex;gap:5px;margin-top:5px}
-  .tod-x span{flex:1;font-family:var(--mono);font-size:9px;color:var(--ink-3);text-align:center}
+  .todwrap{display:flex;gap:18px;margin-top:6px}
+  .todgrp{flex:1}
+  .tod{display:flex;align-items:flex-end;gap:6px;height:54px}
+  .tod .b{flex:1;background:var(--elevated);opacity:.8;border-radius:2px 2px 0 0;min-height:2px}
+  .tod-x{display:flex;gap:6px;margin-top:5px}
+  .tod-x span{flex:1;font-family:var(--mono);font-size:9.5px;color:var(--ink-3);text-align:center}
+  .todlbl{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);text-align:center;margin-top:7px;border-top:1px solid var(--line);padding-top:6px}
+  .tiny{font-size:11.5px;color:var(--ink-3);margin:9px 0 0}
+  .hexpop{display:flex;justify-content:space-between;gap:16px;font-size:12.5px;margin-top:3px}
+  .hexpop span:last-child{color:#717F7A;font-family:var(--mono)}
   .src{font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.5}
   .cta{display:inline-block;margin-top:2px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;background:var(--ink);color:var(--cream);padding:11px 16px;text-align:center}
   .cta:hover{background:var(--teal-deep)}
@@ -155,7 +161,10 @@ const API = 'https://saferoute-backend-w5yf.onrender.com';
 const BAND = { low:{c:'#2E8B40',t:'Low risk'}, moderate:{c:'#B0703C',t:'Moderate'}, elevated:{c:'#9C5220',t:'Elevated'}, high:{c:'#BC3B2E',t:'High risk'} };
 const CAT = { 'violent-crime':'Violent crime','sexual-offences':'Sexual offences','robbery':'Robbery','possession-of-weapons':'Weapons','burglary':'Burglary','criminal-damage-arson':'Damage & arson','public-order':'Public order','theft-from-the-person':'Theft from a person','drugs':'Drugs','anti-social-behaviour':'Anti-social behaviour','vehicle-crime':'Vehicle crime','other-theft':'Other theft','other-crime':'Other','shoplifting':'Shoplifting','bicycle-theft':'Bicycle theft' };
 const catName = c => CAT[c] || c.replace(/-/g,' ').replace(/^./,x=>x.toUpperCase());
-const TOD = ['Wknd day','Wk eve','Wk night','Wknd day','Wknd eve','Wknd night'];
+// Backend timeOfDay is [wkDay, wkEve, wkNight, wkndDay, wkndEve, wkndNight].
+// The old flat label row mislabelled bucket 0 and repeated "Wknd day"; it is
+// now two clearly-headed weekday/weekend groups of Day / Eve / Night.
+const TOD3 = ["Day","Eve","Night"];
 
 // Leaflet + CARTO "Positron" raster tiles: no WebGL (works on every browser,
 // including ones with WebGL disabled), lightweight, and CARTO's muted light
@@ -173,6 +182,20 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 if(window.ResizeObserver){ new ResizeObserver(()=>map.invalidateSize()).observe(document.getElementById('map')); }
 setTimeout(()=>map.invalidateSize(), 200);
 let incLayer=null, ringLayer=null, ctrLayer=null;
+
+// Auto-update on pan/zoom (like the app): when the user moves the map, re-fetch
+// the area under the new center and redraw. A flag suppresses our own animated
+// flyTo, and we ignore moves smaller than ~250 m so a pure zoom doesn't refetch.
+let suppressMove=false, panTmr=null, lastCenter=null, lastData=null;
+map.on('moveend', () => {
+  if(suppressMove){ suppressMove=false; return; }
+  clearTimeout(panTmr);
+  panTmr=setTimeout(()=>{
+    const c=map.getCenter();
+    if(lastCenter && distKm(c.lat,c.lng,lastCenter[0],lastCenter[1])<0.25) return;
+    refetchAt(c.lat, c.lng);
+  }, 500);
+});
 
 const $ = s => document.querySelector(s);
 const q=$('#q'), ac=$('#ac'), panel=$('#panel');
@@ -235,6 +258,7 @@ async function lookup(lat, lng, name, address){
     if(!r.ok) throw 0;
     const d = await r.json();
     if(reqId!==lastReqId) return; // a newer search superseded this
+    lastCenter=[lat,lng]; lastName=name; // so a later pan compares/labels correctly
     render(d, name, address);
     if(d.covered){ drawHex(d); addPubLink(lat, lng, reqId); }
   }catch{
@@ -264,13 +288,29 @@ function render(d, name, address){
     <div id="pub"></div>
     <div class="divider"></div>
     ${cats.length?`<div><p class="h3">What's reported here</p>${cats.map(c=>`<div class="cat"><span class="bar" style="width:${Math.round(c.count/maxCat*46)+8}px"></span><span class="lbl">${catName(c.category)}</span><span class="n">${fmt(c.count)}</span></div>`).join('')}</div>`:''}
-    ${tod?`<div class="divider"></div><div><p class="h3">When it happens</p><div class="tod">${tod.map(v=>`<div class="b" style="height:${Math.max(4,Math.round(v/maxTod*52))}px"></div>`).join('')}</div><div class="tod-x">${TOD.map(t=>`<span>${t}</span>`).join('')}</div></div>`:''}
+    ${tod?`<div class="divider"></div><div><p class="h3">When it happens</p><div class="todwrap">${[['Weekday',tod.slice(0,3)],['Weekend',tod.slice(3,6)]].map(g=>`<div class="todgrp"><div class="tod">${g[1].map(v=>`<div class="b" style="height:${Math.max(3,Math.round(v/maxTod*50))}px"></div>`).join('')}</div><div class="tod-x">${TOD3.map(t=>`<span>${t}</span>`).join('')}</div><div class="todlbl">${g[0]}</div></div>`).join('')}</div><p class="tiny">Severity-weighted share of reported incidents by time of day.</p></div>`:''}
     <div class="divider"></div>
     <p class="src">${esc(d.dataSource||'Police open data')}${d.crimeDate?` · through ${monthName(d.crimeDate)}`:''}. Locations are anonymised by the source. Informational only.</p>
     <a class="cta" href="https://apps.apple.com/app/id6768244297">Route here safely with the app</a>`;
 }
 
-function flyTo(lat,lng){ map.invalidateSize(); map.flyTo([lat,lng], 14, { duration:1.1 }); }
+function flyTo(lat,lng){ map.invalidateSize(); suppressMove=true; map.flyTo([lat,lng], 14, { duration:1.1 }); }
+
+// Pan/zoom refetch: same as lookup() but keeps the current view (no flyTo) and
+// labels the result "This area" since we don't reverse-geocode on every move.
+let lastName='This area';
+async function refetchAt(lat, lng){
+  const reqId = ++lastReqId;
+  lastCenter=[lat,lng];
+  try{
+    const r = await fetch(`${API}/public/area?lat=${lat}&lng=${lng}`);
+    if(r.status===429 || !r.ok) return;      // stay quiet on pan throttling
+    const d = await r.json();
+    if(reqId!==lastReqId) return;
+    render(d, d.covered ? lastName : 'This area', '');
+    if(d.covered){ drawHex(d); addPubLink(lat, lng, reqId); }
+  }catch{}
+}
 
 // ── hexagon heat map (matches the app) ──────────────────────────────
 // Incidents are binned into a pointy-top hex grid and each hex is shaded by its
@@ -302,7 +342,9 @@ function drawHex(d){
   for(const p of (d.incidents||[])){
     const [x,y]=toM(p.lat,p.lng);
     const [q,r]=hexRound((S3/3*x - 1/3*y)/HEX_M, (2/3*y)/HEX_M);
-    const k=q+','+r, b=bins.get(k)||{q,r,n:0,w:0}; b.n++; b.w+=(p.w||1); bins.set(k,b);
+    const k=q+','+r, b=bins.get(k)||{q,r,n:0,w:0,cats:{}}; b.n++; b.w+=(p.w||1);
+    if(p.cat) b.cats[p.cat]=(b.cats[p.cat]||0)+1; // per-hex crime breakdown
+    bins.set(k,b);
   }
   const maxW=Math.max(1,...[...bins.values()].map(b=>b.w));
   const hexes=[];
@@ -312,7 +354,10 @@ function drawHex(d){
     const poly=L.polygon(corners, { color:'#ffffff', weight:0.6, opacity:0.5, fillColor:heatColor(b.w/maxW), fillOpacity:0.6 });
     poly.on('mouseover', function(){ this.setStyle({weight:1.6, opacity:1, color:'#14564C'}); });
     poly.on('mouseout',  function(){ this.setStyle({weight:0.6, opacity:0.5, color:'#ffffff'}); });
-    poly.bindPopup(`<b>${b.n}</b> report${b.n===1?'':'s'} in this block<br><span style="color:#717F7A;font-size:11px">darker hexes = more, and more severe</span>`);
+    // Click a hex → what was reported in that block, by category.
+    const top=Object.entries(b.cats).sort((x,y)=>y[1]-x[1]);
+    const rows=top.map(([c,n])=>`<div class="hexpop"><span>${catName(c)}</span><span>${n}</span></div>`).join('');
+    poly.bindPopup(`<b>${b.n}</b> report${b.n===1?'':'s'} in this block${rows?`<div style="margin-top:6px">${rows}</div>`:''}`, { maxWidth:240 });
     hexes.push(poly);
   }
   incLayer=L.layerGroup(hexes).addTo(map);
