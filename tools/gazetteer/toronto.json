@@ -1,0 +1,2221 @@
+{
+ "city": "Toronto",
+ "citySlug": "toronto",
+ "country": "CA",
+ "source": "City of Toronto Open Data — 158 neighbourhoods, grouped by former municipality",
+ "generatedAt": "2026-07-26",
+ "areas": [
+  {
+   "name": "Broadview North",
+   "slug": "broadview-north",
+   "borough": "East York",
+   "lat": 43.688825,
+   "lng": -79.355629,
+   "neighbors": [
+    "playter-estates-danforth",
+    "old-east-york",
+    "leaside-bennington",
+    "north-riverdale",
+    "danforth-east-york"
+   ]
+  },
+  {
+   "name": "Danforth East York",
+   "slug": "danforth-east-york",
+   "borough": "East York",
+   "lat": 43.689468,
+   "lng": -79.331403,
+   "neighbors": [
+    "danforth",
+    "old-east-york",
+    "blake-jones",
+    "woodbine-lumsden",
+    "woodbine-corridor"
+   ]
+  },
+  {
+   "name": "Leaside-Bennington",
+   "slug": "leaside-bennington",
+   "borough": "East York",
+   "lat": 43.703798,
+   "lng": -79.366072,
+   "neighbors": [
+    "thorncliffe-park",
+    "mount-pleasant-east",
+    "broadview-north",
+    "south-eglinton-davisville",
+    "north-toronto"
+   ]
+  },
+  {
+   "name": "O'Connor-Parkview",
+   "slug": "oconnor-parkview",
+   "borough": "East York",
+   "lat": 43.7068,
+   "lng": -79.312228,
+   "neighbors": [
+    "woodbine-lumsden",
+    "taylor-massey",
+    "flemingdon-park",
+    "old-east-york",
+    "victoria-village"
+   ]
+  },
+  {
+   "name": "Old East York",
+   "slug": "old-east-york",
+   "borough": "East York",
+   "lat": 43.696781,
+   "lng": -79.335488,
+   "neighbors": [
+    "danforth-east-york",
+    "danforth",
+    "thorncliffe-park",
+    "broadview-north",
+    "woodbine-lumsden"
+   ]
+  },
+  {
+   "name": "Taylor-Massey",
+   "slug": "taylor-massey",
+   "borough": "East York",
+   "lat": 43.694998,
+   "lng": -79.295901,
+   "neighbors": [
+    "woodbine-lumsden",
+    "east-end-danforth",
+    "oakridge",
+    "oconnor-parkview",
+    "clairlea-birchmount"
+   ]
+  },
+  {
+   "name": "Thorncliffe Park",
+   "slug": "thorncliffe-park",
+   "borough": "East York",
+   "lat": 43.70775,
+   "lng": -79.349984,
+   "neighbors": [
+    "leaside-bennington",
+    "flemingdon-park",
+    "old-east-york",
+    "broadview-north",
+    "danforth-east-york"
+   ]
+  },
+  {
+   "name": "Woodbine-Lumsden",
+   "slug": "woodbine-lumsden",
+   "borough": "East York",
+   "lat": 43.694107,
+   "lng": -79.311164,
+   "neighbors": [
+    "taylor-massey",
+    "oconnor-parkview",
+    "east-end-danforth",
+    "danforth-east-york",
+    "danforth"
+   ]
+  },
+  {
+   "name": "Alderwood",
+   "slug": "alderwood",
+   "borough": "Etobicoke",
+   "lat": 43.604937,
+   "lng": -79.541611,
+   "neighbors": [
+    "long-branch",
+    "etobicoke-city-centre",
+    "new-toronto",
+    "mimico-queensway",
+    "markland-wood"
+   ]
+  },
+  {
+   "name": "Edenbridge-Humber Valley",
+   "slug": "edenbridge-humber-valley",
+   "borough": "Etobicoke",
+   "lat": 43.670887,
+   "lng": -79.522458,
+   "neighbors": [
+    "princess-rosethorn",
+    "kingsway-south",
+    "rockcliffe-smythe",
+    "humber-heights-westmount",
+    "lambton-baby-point"
+   ]
+  },
+  {
+   "name": "Elms-Old Rexdale",
+   "slug": "elms-old-rexdale",
+   "borough": "Etobicoke",
+   "lat": 43.72152,
+   "lng": -79.548982,
+   "neighbors": [
+    "rexdale-kipling",
+    "pelmo-park-humberlea",
+    "thistletown-beaumond-heights",
+    "humbermede",
+    "kingsview-village-the-westway"
+   ]
+  },
+  {
+   "name": "Eringate-Centennial-West Deane",
+   "slug": "eringate-centennial-west-deane",
+   "borough": "Etobicoke",
+   "lat": 43.658017,
+   "lng": -79.580443,
+   "neighbors": [
+    "etobicoke-west-mall",
+    "markland-wood",
+    "islington",
+    "princess-rosethorn",
+    "willowridge-martingrove-richview"
+   ]
+  },
+  {
+   "name": "Etobicoke City Centre",
+   "slug": "etobicoke-city-centre",
+   "borough": "Etobicoke",
+   "lat": 43.625709,
+   "lng": -79.540778,
+   "neighbors": [
+    "alderwood",
+    "islington",
+    "markland-wood",
+    "mimico-queensway",
+    "etobicoke-west-mall"
+   ]
+  },
+  {
+   "name": "Etobicoke West Mall",
+   "slug": "etobicoke-west-mall",
+   "borough": "Etobicoke",
+   "lat": 43.645063,
+   "lng": -79.568939,
+   "neighbors": [
+    "markland-wood",
+    "eringate-centennial-west-deane",
+    "islington",
+    "princess-rosethorn",
+    "etobicoke-city-centre"
+   ]
+  },
+  {
+   "name": "Humber Bay Shores",
+   "slug": "humber-bay-shores",
+   "borough": "Etobicoke",
+   "lat": 43.622391,
+   "lng": -79.480639,
+   "neighbors": [
+    "stonegate-queensway",
+    "mimico-queensway",
+    "high-park-swansea",
+    "new-toronto",
+    "south-parkdale"
+   ]
+  },
+  {
+   "name": "Humber Heights-Westmount",
+   "slug": "humber-heights-westmount",
+   "borough": "Etobicoke",
+   "lat": 43.692233,
+   "lng": -79.522417,
+   "neighbors": [
+    "weston",
+    "mount-dennis",
+    "kingsview-village-the-westway",
+    "edenbridge-humber-valley",
+    "willowridge-martingrove-richview"
+   ]
+  },
+  {
+   "name": "Islington",
+   "slug": "islington",
+   "borough": "Etobicoke",
+   "lat": 43.646336,
+   "lng": -79.547528,
+   "neighbors": [
+    "etobicoke-west-mall",
+    "princess-rosethorn",
+    "etobicoke-city-centre",
+    "markland-wood",
+    "eringate-centennial-west-deane"
+   ]
+  },
+  {
+   "name": "Kingsview Village-The Westway",
+   "slug": "kingsview-village-the-westway",
+   "borough": "Etobicoke",
+   "lat": 43.698993,
+   "lng": -79.547863,
+   "neighbors": [
+    "willowridge-martingrove-richview",
+    "humber-heights-westmount",
+    "elms-old-rexdale",
+    "pelmo-park-humberlea",
+    "weston"
+   ]
+  },
+  {
+   "name": "Kingsway South",
+   "slug": "kingsway-south",
+   "borough": "Etobicoke",
+   "lat": 43.65352,
+   "lng": -79.510577,
+   "neighbors": [
+    "lambton-baby-point",
+    "runnymede-bloor-west-village",
+    "stonegate-queensway",
+    "edenbridge-humber-valley",
+    "rockcliffe-smythe"
+   ]
+  },
+  {
+   "name": "Long Branch",
+   "slug": "long-branch",
+   "borough": "Etobicoke",
+   "lat": 43.592362,
+   "lng": -79.533345,
+   "neighbors": [
+    "alderwood",
+    "new-toronto",
+    "mimico-queensway",
+    "etobicoke-city-centre",
+    "humber-bay-shores"
+   ]
+  },
+  {
+   "name": "Markland Wood",
+   "slug": "markland-wood",
+   "borough": "Etobicoke",
+   "lat": 43.633542,
+   "lng": -79.573431,
+   "neighbors": [
+    "etobicoke-west-mall",
+    "islington",
+    "etobicoke-city-centre",
+    "eringate-centennial-west-deane",
+    "alderwood"
+   ]
+  },
+  {
+   "name": "Mimico-Queensway",
+   "slug": "mimico-queensway",
+   "borough": "Etobicoke",
+   "lat": 43.614061,
+   "lng": -79.505751,
+   "neighbors": [
+    "new-toronto",
+    "humber-bay-shores",
+    "stonegate-queensway",
+    "alderwood",
+    "etobicoke-city-centre"
+   ]
+  },
+  {
+   "name": "Mount Olive-Silverstone-Jamestown",
+   "slug": "mount-olive-silverstone-jamestown",
+   "borough": "Etobicoke",
+   "lat": 43.746869,
+   "lng": -79.58726,
+   "neighbors": [
+    "thistletown-beaumond-heights",
+    "humber-summit",
+    "rexdale-kipling",
+    "west-humber-clairville",
+    "humbermede"
+   ]
+  },
+  {
+   "name": "New Toronto",
+   "slug": "new-toronto",
+   "borough": "Etobicoke",
+   "lat": 43.600582,
+   "lng": -79.510361,
+   "neighbors": [
+    "mimico-queensway",
+    "long-branch",
+    "alderwood",
+    "humber-bay-shores",
+    "etobicoke-city-centre"
+   ]
+  },
+  {
+   "name": "Princess-Rosethorn",
+   "slug": "princess-rosethorn",
+   "borough": "Etobicoke",
+   "lat": 43.666051,
+   "lng": -79.54456,
+   "neighbors": [
+    "edenbridge-humber-valley",
+    "willowridge-martingrove-richview",
+    "islington",
+    "eringate-centennial-west-deane",
+    "etobicoke-west-mall"
+   ]
+  },
+  {
+   "name": "Rexdale-Kipling",
+   "slug": "rexdale-kipling",
+   "borough": "Etobicoke",
+   "lat": 43.723726,
+   "lng": -79.566229,
+   "neighbors": [
+    "elms-old-rexdale",
+    "thistletown-beaumond-heights",
+    "west-humber-clairville",
+    "humbermede",
+    "mount-olive-silverstone-jamestown"
+   ]
+  },
+  {
+   "name": "Stonegate-Queensway",
+   "slug": "stonegate-queensway",
+   "borough": "Etobicoke",
+   "lat": 43.635518,
+   "lng": -79.501128,
+   "neighbors": [
+    "kingsway-south",
+    "humber-bay-shores",
+    "mimico-queensway",
+    "lambton-baby-point",
+    "high-park-swansea"
+   ]
+  },
+  {
+   "name": "Thistletown-Beaumond Heights",
+   "slug": "thistletown-beaumond-heights",
+   "borough": "Etobicoke",
+   "lat": 43.737988,
+   "lng": -79.563492,
+   "neighbors": [
+    "rexdale-kipling",
+    "humbermede",
+    "mount-olive-silverstone-jamestown",
+    "elms-old-rexdale",
+    "humber-summit"
+   ]
+  },
+  {
+   "name": "West Humber-Clairville",
+   "slug": "west-humber-clairville",
+   "borough": "Etobicoke",
+   "lat": 43.716186,
+   "lng": -79.596363,
+   "neighbors": [
+    "rexdale-kipling",
+    "mount-olive-silverstone-jamestown",
+    "thistletown-beaumond-heights",
+    "elms-old-rexdale",
+    "kingsview-village-the-westway"
+   ]
+  },
+  {
+   "name": "Willowridge-Martingrove-Richview",
+   "slug": "willowridge-martingrove-richview",
+   "borough": "Etobicoke",
+   "lat": 43.683645,
+   "lng": -79.55422,
+   "neighbors": [
+    "kingsview-village-the-westway",
+    "princess-rosethorn",
+    "humber-heights-westmount",
+    "edenbridge-humber-valley",
+    "eringate-centennial-west-deane"
+   ]
+  },
+  {
+   "name": "Avondale",
+   "slug": "avondale",
+   "borough": "North York",
+   "lat": 43.760964,
+   "lng": -79.400841,
+   "neighbors": [
+    "east-willowdale",
+    "yonge-doris",
+    "standrew-windfields",
+    "lansing-westgate",
+    "willowdale-west"
+   ]
+  },
+  {
+   "name": "Banbury-Don Mills",
+   "slug": "banbury-don-mills",
+   "borough": "North York",
+   "lat": 43.737659,
+   "lng": -79.34972,
+   "neighbors": [
+    "parkwoods-oconnor-hills",
+    "bridle-path-sunnybrook-york-mills",
+    "flemingdon-park",
+    "victoria-village",
+    "fenside-parkwoods"
+   ]
+  },
+  {
+   "name": "Bathurst Manor",
+   "slug": "bathurst-manor",
+   "borough": "North York",
+   "lat": 43.764814,
+   "lng": -79.456057,
+   "neighbors": [
+    "westminster-branson",
+    "willowdale-west",
+    "york-university-heights",
+    "clanton-park",
+    "lansing-westgate"
+   ]
+  },
+  {
+   "name": "Bayview Village",
+   "slug": "bayview-village",
+   "borough": "North York",
+   "lat": 43.776361,
+   "lng": -79.377117,
+   "neighbors": [
+    "east-willowdale",
+    "don-valley-village",
+    "standrew-windfields",
+    "bayview-woods-steeles",
+    "avondale"
+   ]
+  },
+  {
+   "name": "Bayview Woods-Steeles",
+   "slug": "bayview-woods-steeles",
+   "borough": "North York",
+   "lat": 43.796802,
+   "lng": -79.382118,
+   "neighbors": [
+    "newtonbrook-east",
+    "hillcrest-village",
+    "bayview-village",
+    "don-valley-village",
+    "east-willowdale"
+   ]
+  },
+  {
+   "name": "Bedford Park-Nortown",
+   "slug": "bedford-park-nortown",
+   "borough": "North York",
+   "lat": 43.731488,
+   "lng": -79.420226,
+   "neighbors": [
+    "lawrence-park-north",
+    "englemount-lawrence",
+    "lawrence-park-south",
+    "clanton-park",
+    "lansing-westgate"
+   ]
+  },
+  {
+   "name": "Black Creek",
+   "slug": "black-creek",
+   "borough": "North York",
+   "lat": 43.76489,
+   "lng": -79.521979,
+   "neighbors": [
+    "glenfield-jane-heights",
+    "york-university-heights",
+    "humber-summit",
+    "humbermede",
+    "oakdale-beverley-heights"
+   ]
+  },
+  {
+   "name": "Bridle Path-Sunnybrook-York Mills",
+   "slug": "bridle-path-sunnybrook-york-mills",
+   "borough": "North York",
+   "lat": 43.731013,
+   "lng": -79.378903,
+   "neighbors": [
+    "lawrence-park-north",
+    "banbury-don-mills",
+    "north-toronto",
+    "lawrence-park-south",
+    "standrew-windfields"
+   ]
+  },
+  {
+   "name": "Brookhaven-Amesbury",
+   "slug": "brookhaven-amesbury",
+   "borough": "North York",
+   "lat": 43.701326,
+   "lng": -79.485589,
+   "neighbors": [
+    "beechborough-greenbrook",
+    "rustic",
+    "maple-leaf",
+    "mount-dennis",
+    "keelesdale-eglinton-west"
+   ]
+  },
+  {
+   "name": "Clanton Park",
+   "slug": "clanton-park",
+   "borough": "North York",
+   "lat": 43.741976,
+   "lng": -79.446371,
+   "neighbors": [
+    "lansing-westgate",
+    "downsview",
+    "bedford-park-nortown",
+    "englemount-lawrence",
+    "bathurst-manor"
+   ]
+  },
+  {
+   "name": "Don Valley Village",
+   "slug": "don-valley-village",
+   "borough": "North York",
+   "lat": 43.783294,
+   "lng": -79.353644,
+   "neighbors": [
+    "pleasant-view",
+    "henry-farm",
+    "bayview-village",
+    "hillcrest-village",
+    "lamoreaux-west"
+   ]
+  },
+  {
+   "name": "Downsview",
+   "slug": "downsview",
+   "borough": "North York",
+   "lat": 43.738702,
+   "lng": -79.474245,
+   "neighbors": [
+    "clanton-park",
+    "maple-leaf",
+    "yorkdale-glen-park",
+    "york-university-heights",
+    "oakdale-beverley-heights"
+   ]
+  },
+  {
+   "name": "East Willowdale",
+   "slug": "east-willowdale",
+   "borough": "North York",
+   "lat": 43.77345,
+   "lng": -79.400311,
+   "neighbors": [
+    "yonge-doris",
+    "avondale",
+    "bayview-village",
+    "newtonbrook-east",
+    "willowdale-west"
+   ]
+  },
+  {
+   "name": "Englemount-Lawrence",
+   "slug": "englemount-lawrence",
+   "borough": "North York",
+   "lat": 43.720345,
+   "lng": -79.437409,
+   "neighbors": [
+    "yorkdale-glen-park",
+    "bedford-park-nortown",
+    "forest-hill-north",
+    "clanton-park",
+    "lawrence-park-south"
+   ]
+  },
+  {
+   "name": "Fenside-Parkwoods",
+   "slug": "fenside-parkwoods",
+   "borough": "North York",
+   "lat": 43.761574,
+   "lng": -79.330922,
+   "neighbors": [
+    "parkwoods-oconnor-hills",
+    "henry-farm",
+    "pleasant-view",
+    "wexford-maryvale",
+    "don-valley-village"
+   ]
+  },
+  {
+   "name": "Flemingdon Park",
+   "slug": "flemingdon-park",
+   "borough": "North York",
+   "lat": 43.71593,
+   "lng": -79.332646,
+   "neighbors": [
+    "thorncliffe-park",
+    "oconnor-parkview",
+    "victoria-village",
+    "old-east-york",
+    "banbury-don-mills"
+   ]
+  },
+  {
+   "name": "Glenfield-Jane Heights",
+   "slug": "glenfield-jane-heights",
+   "borough": "North York",
+   "lat": 43.745635,
+   "lng": -79.513463,
+   "neighbors": [
+    "oakdale-beverley-heights",
+    "black-creek",
+    "humbermede",
+    "york-university-heights",
+    "downsview"
+   ]
+  },
+  {
+   "name": "Henry Farm",
+   "slug": "henry-farm",
+   "borough": "North York",
+   "lat": 43.771143,
+   "lng": -79.341238,
+   "neighbors": [
+    "fenside-parkwoods",
+    "don-valley-village",
+    "pleasant-view",
+    "parkwoods-oconnor-hills",
+    "lamoreaux-west"
+   ]
+  },
+  {
+   "name": "Hillcrest Village",
+   "slug": "hillcrest-village",
+   "borough": "North York",
+   "lat": 43.802988,
+   "lng": -79.354803,
+   "neighbors": [
+    "don-valley-village",
+    "bayview-woods-steeles",
+    "pleasant-view",
+    "lamoreaux-west",
+    "steeles"
+   ]
+  },
+  {
+   "name": "Humber Summit",
+   "slug": "humber-summit",
+   "borough": "North York",
+   "lat": 43.758919,
+   "lng": -79.556174,
+   "neighbors": [
+    "humbermede",
+    "thistletown-beaumond-heights",
+    "black-creek",
+    "mount-olive-silverstone-jamestown",
+    "glenfield-jane-heights"
+   ]
+  },
+  {
+   "name": "Humbermede",
+   "slug": "humbermede",
+   "borough": "North York",
+   "lat": 43.74343,
+   "lng": -79.542367,
+   "neighbors": [
+    "thistletown-beaumond-heights",
+    "humber-summit",
+    "glenfield-jane-heights",
+    "elms-old-rexdale",
+    "black-creek"
+   ]
+  },
+  {
+   "name": "Lansing-Westgate",
+   "slug": "lansing-westgate",
+   "borough": "North York",
+   "lat": 43.754272,
+   "lng": -79.424747,
+   "neighbors": [
+    "willowdale-west",
+    "avondale",
+    "yonge-doris",
+    "clanton-park",
+    "bedford-park-nortown"
+   ]
+  },
+  {
+   "name": "Maple Leaf",
+   "slug": "maple-leaf",
+   "borough": "North York",
+   "lat": 43.715574,
+   "lng": -79.480758,
+   "neighbors": [
+    "rustic",
+    "brookhaven-amesbury",
+    "yorkdale-glen-park",
+    "beechborough-greenbrook",
+    "downsview"
+   ]
+  },
+  {
+   "name": "Newtonbrook East",
+   "slug": "newtonbrook-east",
+   "borough": "North York",
+   "lat": 43.791536,
+   "lng": -79.405937,
+   "neighbors": [
+    "bayview-woods-steeles",
+    "east-willowdale",
+    "newtonbrook-west",
+    "yonge-doris",
+    "willowdale-west"
+   ]
+  },
+  {
+   "name": "Newtonbrook West",
+   "slug": "newtonbrook-west",
+   "borough": "North York",
+   "lat": 43.78583,
+   "lng": -79.431421,
+   "neighbors": [
+    "willowdale-west",
+    "westminster-branson",
+    "newtonbrook-east",
+    "yonge-doris",
+    "east-willowdale"
+   ]
+  },
+  {
+   "name": "Oakdale-Beverley Heights",
+   "slug": "oakdale-beverley-heights",
+   "borough": "North York",
+   "lat": 43.726557,
+   "lng": -79.510743,
+   "neighbors": [
+    "pelmo-park-humberlea",
+    "rustic",
+    "glenfield-jane-heights",
+    "weston",
+    "maple-leaf"
+   ]
+  },
+  {
+   "name": "Parkwoods-O'Connor Hills",
+   "slug": "parkwoods-oconnor-hills",
+   "borough": "North York",
+   "lat": 43.7498,
+   "lng": -79.329576,
+   "neighbors": [
+    "fenside-parkwoods",
+    "banbury-don-mills",
+    "wexford-maryvale",
+    "henry-farm",
+    "victoria-village"
+   ]
+  },
+  {
+   "name": "Pelmo Park-Humberlea",
+   "slug": "pelmo-park-humberlea",
+   "borough": "North York",
+   "lat": 43.717515,
+   "lng": -79.528284,
+   "neighbors": [
+    "elms-old-rexdale",
+    "oakdale-beverley-heights",
+    "weston",
+    "rustic",
+    "kingsview-village-the-westway"
+   ]
+  },
+  {
+   "name": "Pleasant View",
+   "slug": "pleasant-view",
+   "borough": "North York",
+   "lat": 43.786983,
+   "lng": -79.334949,
+   "neighbors": [
+    "lamoreaux-west",
+    "don-valley-village",
+    "henry-farm",
+    "hillcrest-village",
+    "tam-oshanter-sullivan"
+   ]
+  },
+  {
+   "name": "Rustic",
+   "slug": "rustic",
+   "borough": "North York",
+   "lat": 43.711609,
+   "lng": -79.498092,
+   "neighbors": [
+    "maple-leaf",
+    "brookhaven-amesbury",
+    "weston",
+    "oakdale-beverley-heights",
+    "pelmo-park-humberlea"
+   ]
+  },
+  {
+   "name": "St.Andrew-Windfields",
+   "slug": "standrew-windfields",
+   "borough": "North York",
+   "lat": 43.756264,
+   "lng": -79.379144,
+   "neighbors": [
+    "avondale",
+    "bayview-village",
+    "east-willowdale",
+    "bridle-path-sunnybrook-york-mills",
+    "yonge-doris"
+   ]
+  },
+  {
+   "name": "Victoria Village",
+   "slug": "victoria-village",
+   "borough": "North York",
+   "lat": 43.72849,
+   "lng": -79.314874,
+   "neighbors": [
+    "flemingdon-park",
+    "oconnor-parkview",
+    "wexford-maryvale",
+    "parkwoods-oconnor-hills",
+    "banbury-don-mills"
+   ]
+  },
+  {
+   "name": "Westminster-Branson",
+   "slug": "westminster-branson",
+   "borough": "North York",
+   "lat": 43.778814,
+   "lng": -79.452419,
+   "neighbors": [
+    "bathurst-manor",
+    "newtonbrook-west",
+    "willowdale-west",
+    "york-university-heights",
+    "yonge-doris"
+   ]
+  },
+  {
+   "name": "Willowdale West",
+   "slug": "willowdale-west",
+   "borough": "North York",
+   "lat": 43.77121,
+   "lng": -79.427557,
+   "neighbors": [
+    "yonge-doris",
+    "newtonbrook-west",
+    "lansing-westgate",
+    "westminster-branson",
+    "east-willowdale"
+   ]
+  },
+  {
+   "name": "Yonge-Doris",
+   "slug": "yonge-doris",
+   "borough": "North York",
+   "lat": 43.771544,
+   "lng": -79.41191,
+   "neighbors": [
+    "east-willowdale",
+    "willowdale-west",
+    "avondale",
+    "lansing-westgate",
+    "newtonbrook-west"
+   ]
+  },
+  {
+   "name": "York University Heights",
+   "slug": "york-university-heights",
+   "borough": "North York",
+   "lat": 43.765738,
+   "lng": -79.488883,
+   "neighbors": [
+    "bathurst-manor",
+    "black-creek",
+    "glenfield-jane-heights",
+    "downsview",
+    "westminster-branson"
+   ]
+  },
+  {
+   "name": "Yorkdale-Glen Park",
+   "slug": "yorkdale-glen-park",
+   "borough": "North York",
+   "lat": 43.714672,
+   "lng": -79.457108,
+   "neighbors": [
+    "englemount-lawrence",
+    "briar-hill-belgravia",
+    "maple-leaf",
+    "forest-hill-north",
+    "brookhaven-amesbury"
+   ]
+  },
+  {
+   "name": "Annex",
+   "slug": "annex",
+   "borough": "Old Toronto",
+   "lat": 43.671585,
+   "lng": -79.404,
+   "neighbors": [
+    "university",
+    "casa-loma",
+    "bay-cloverhill",
+    "palmerston-little-italy",
+    "wychwood"
+   ]
+  },
+  {
+   "name": "Bay-Cloverhill",
+   "slug": "bay-cloverhill",
+   "borough": "Old Toronto",
+   "lat": 43.664899,
+   "lng": -79.388951,
+   "neighbors": [
+    "church-wellesley",
+    "university",
+    "north-stjames-town",
+    "yonge-bay-corridor",
+    "annex"
+   ]
+  },
+  {
+   "name": "Blake-Jones",
+   "slug": "blake-jones",
+   "borough": "Old Toronto",
+   "lat": 43.676173,
+   "lng": -79.337394,
+   "neighbors": [
+    "danforth",
+    "greenwood-coxwell",
+    "north-riverdale",
+    "playter-estates-danforth",
+    "danforth-east-york"
+   ]
+  },
+  {
+   "name": "Cabbagetown-South St.James Town",
+   "slug": "cabbagetown-south-stjames-town",
+   "borough": "Old Toronto",
+   "lat": 43.667648,
+   "lng": -79.366106,
+   "neighbors": [
+    "north-stjames-town",
+    "regent-park",
+    "moss-park",
+    "church-wellesley",
+    "north-riverdale"
+   ]
+  },
+  {
+   "name": "Casa Loma",
+   "slug": "casa-loma",
+   "borough": "Old Toronto",
+   "lat": 43.681852,
+   "lng": -79.408007,
+   "neighbors": [
+    "yonge-stclair",
+    "annex",
+    "forest-hill-south",
+    "wychwood",
+    "humewood-cedarvale"
+   ]
+  },
+  {
+   "name": "Church-Wellesley",
+   "slug": "church-wellesley",
+   "borough": "Old Toronto",
+   "lat": 43.666354,
+   "lng": -79.381764,
+   "neighbors": [
+    "bay-cloverhill",
+    "north-stjames-town",
+    "cabbagetown-south-stjames-town",
+    "downtown-yonge-east",
+    "yonge-bay-corridor"
+   ]
+  },
+  {
+   "name": "Corso Italia-Davenport",
+   "slug": "corso-italia-davenport",
+   "borough": "Old Toronto",
+   "lat": 43.677663,
+   "lng": -79.447496,
+   "neighbors": [
+    "weston-pelham-park",
+    "oakwood-village",
+    "caledonia-fairbank",
+    "junction-wallace-emerson",
+    "wychwood"
+   ]
+  },
+  {
+   "name": "Danforth",
+   "slug": "danforth",
+   "borough": "Old Toronto",
+   "lat": 43.684025,
+   "lng": -79.329819,
+   "neighbors": [
+    "danforth-east-york",
+    "blake-jones",
+    "greenwood-coxwell",
+    "woodbine-corridor",
+    "old-east-york"
+   ]
+  },
+  {
+   "name": "Dovercourt Village",
+   "slug": "dovercourt-village",
+   "borough": "Old Toronto",
+   "lat": 43.666228,
+   "lng": -79.428805,
+   "neighbors": [
+    "palmerston-little-italy",
+    "wychwood",
+    "junction-wallace-emerson",
+    "dufferin-grove",
+    "corso-italia-davenport"
+   ]
+  },
+  {
+   "name": "Downtown Yonge East",
+   "slug": "downtown-yonge-east",
+   "borough": "Old Toronto",
+   "lat": 43.655035,
+   "lng": -79.377128,
+   "neighbors": [
+    "yonge-bay-corridor",
+    "moss-park",
+    "church-wellesley",
+    "regent-park",
+    "bay-cloverhill"
+   ]
+  },
+  {
+   "name": "Dufferin Grove",
+   "slug": "dufferin-grove",
+   "borough": "Old Toronto",
+   "lat": 43.655428,
+   "lng": -79.437341,
+   "neighbors": [
+    "little-portugal",
+    "roncesvalles",
+    "junction-wallace-emerson",
+    "dovercourt-village",
+    "palmerston-little-italy"
+   ]
+  },
+  {
+   "name": "East End-Danforth",
+   "slug": "east-end-danforth",
+   "borough": "Old Toronto",
+   "lat": 43.684174,
+   "lng": -79.299358,
+   "neighbors": [
+    "taylor-massey",
+    "woodbine-lumsden",
+    "the-beaches",
+    "woodbine-corridor",
+    "oakridge"
+   ]
+  },
+  {
+   "name": "Forest Hill North",
+   "slug": "forest-hill-north",
+   "borough": "Old Toronto",
+   "lat": 43.704209,
+   "lng": -79.428162,
+   "neighbors": [
+    "humewood-cedarvale",
+    "forest-hill-south",
+    "englemount-lawrence",
+    "oakwood-village",
+    "yonge-eglinton"
+   ]
+  },
+  {
+   "name": "Forest Hill South",
+   "slug": "forest-hill-south",
+   "borough": "Old Toronto",
+   "lat": 43.694526,
+   "lng": -79.414318,
+   "neighbors": [
+    "humewood-cedarvale",
+    "yonge-eglinton",
+    "casa-loma",
+    "yonge-stclair",
+    "forest-hill-north"
+   ]
+  },
+  {
+   "name": "Fort York-Liberty Village",
+   "slug": "fort-york-liberty-village",
+   "borough": "Old Toronto",
+   "lat": 43.634273,
+   "lng": -79.413002,
+   "neighbors": [
+    "west-queen-west",
+    "trinity-bellwoods",
+    "harbourfront-cityplace",
+    "wellington-place",
+    "little-portugal"
+   ]
+  },
+  {
+   "name": "Greenwood-Coxwell",
+   "slug": "greenwood-coxwell",
+   "borough": "Old Toronto",
+   "lat": 43.672613,
+   "lng": -79.324319,
+   "neighbors": [
+    "woodbine-corridor",
+    "blake-jones",
+    "danforth",
+    "danforth-east-york",
+    "the-beaches"
+   ]
+  },
+  {
+   "name": "Harbourfront-CityPlace",
+   "slug": "harbourfront-cityplace",
+   "borough": "Old Toronto",
+   "lat": 43.640122,
+   "lng": -79.390379,
+   "neighbors": [
+    "wellington-place",
+    "yonge-bay-corridor",
+    "st-lawrence-east-bayfront-the-islands",
+    "kensington-chinatown",
+    "west-queen-west"
+   ]
+  },
+  {
+   "name": "High Park North",
+   "slug": "high-park-north",
+   "borough": "Old Toronto",
+   "lat": 43.657565,
+   "lng": -79.466302,
+   "neighbors": [
+    "junction-area",
+    "high-park-swansea",
+    "runnymede-bloor-west-village",
+    "weston-pelham-park",
+    "junction-wallace-emerson"
+   ]
+  },
+  {
+   "name": "High Park-Swansea",
+   "slug": "high-park-swansea",
+   "borough": "Old Toronto",
+   "lat": 43.645064,
+   "lng": -79.467871,
+   "neighbors": [
+    "high-park-north",
+    "roncesvalles",
+    "runnymede-bloor-west-village",
+    "south-parkdale",
+    "junction-area"
+   ]
+  },
+  {
+   "name": "Junction Area",
+   "slug": "junction-area",
+   "borough": "Old Toronto",
+   "lat": 43.667888,
+   "lng": -79.471441,
+   "neighbors": [
+    "weston-pelham-park",
+    "high-park-north",
+    "runnymede-bloor-west-village",
+    "keelesdale-eglinton-west",
+    "rockcliffe-smythe"
+   ]
+  },
+  {
+   "name": "Junction-Wallace Emerson",
+   "slug": "junction-wallace-emerson",
+   "borough": "Old Toronto",
+   "lat": 43.665304,
+   "lng": -79.445123,
+   "neighbors": [
+    "dufferin-grove",
+    "dovercourt-village",
+    "corso-italia-davenport",
+    "weston-pelham-park",
+    "high-park-north"
+   ]
+  },
+  {
+   "name": "Kensington-Chinatown",
+   "slug": "kensington-chinatown",
+   "borough": "Old Toronto",
+   "lat": 43.653554,
+   "lng": -79.39724,
+   "neighbors": [
+    "wellington-place",
+    "university",
+    "yonge-bay-corridor",
+    "bay-cloverhill",
+    "trinity-bellwoods"
+   ]
+  },
+  {
+   "name": "Lawrence Park North",
+   "slug": "lawrence-park-north",
+   "borough": "Old Toronto",
+   "lat": 43.73006,
+   "lng": -79.403978,
+   "neighbors": [
+    "bedford-park-nortown",
+    "lawrence-park-south",
+    "bridle-path-sunnybrook-york-mills",
+    "north-toronto",
+    "yonge-eglinton"
+   ]
+  },
+  {
+   "name": "Lawrence Park South",
+   "slug": "lawrence-park-south",
+   "borough": "Old Toronto",
+   "lat": 43.717212,
+   "lng": -79.406038,
+   "neighbors": [
+    "north-toronto",
+    "yonge-eglinton",
+    "lawrence-park-north",
+    "bedford-park-nortown",
+    "south-eglinton-davisville"
+   ]
+  },
+  {
+   "name": "Little Portugal",
+   "slug": "little-portugal",
+   "borough": "Old Toronto",
+   "lat": 43.647536,
+   "lng": -79.430323,
+   "neighbors": [
+    "roncesvalles",
+    "dufferin-grove",
+    "trinity-bellwoods",
+    "south-parkdale",
+    "palmerston-little-italy"
+   ]
+  },
+  {
+   "name": "Moss Park",
+   "slug": "moss-park",
+   "borough": "Old Toronto",
+   "lat": 43.656528,
+   "lng": -79.367454,
+   "neighbors": [
+    "regent-park",
+    "downtown-yonge-east",
+    "cabbagetown-south-stjames-town",
+    "yonge-bay-corridor",
+    "north-stjames-town"
+   ]
+  },
+  {
+   "name": "Mount Pleasant East",
+   "slug": "mount-pleasant-east",
+   "borough": "Old Toronto",
+   "lat": 43.704828,
+   "lng": -79.384935,
+   "neighbors": [
+    "south-eglinton-davisville",
+    "north-toronto",
+    "yonge-eglinton",
+    "leaside-bennington",
+    "yonge-stclair"
+   ]
+  },
+  {
+   "name": "North Riverdale",
+   "slug": "north-riverdale",
+   "borough": "Old Toronto",
+   "lat": 43.671995,
+   "lng": -79.351261,
+   "neighbors": [
+    "playter-estates-danforth",
+    "blake-jones",
+    "cabbagetown-south-stjames-town",
+    "regent-park",
+    "broadview-north"
+   ]
+  },
+  {
+   "name": "North St.James Town",
+   "slug": "north-stjames-town",
+   "borough": "Old Toronto",
+   "lat": 43.669622,
+   "lng": -79.375247,
+   "neighbors": [
+    "church-wellesley",
+    "cabbagetown-south-stjames-town",
+    "bay-cloverhill",
+    "rosedale-moore-park",
+    "moss-park"
+   ]
+  },
+  {
+   "name": "North Toronto",
+   "slug": "north-toronto",
+   "borough": "Old Toronto",
+   "lat": 43.710254,
+   "lng": -79.395074,
+   "neighbors": [
+    "yonge-eglinton",
+    "south-eglinton-davisville",
+    "mount-pleasant-east",
+    "lawrence-park-south",
+    "lawrence-park-north"
+   ]
+  },
+  {
+   "name": "Palmerston-Little Italy",
+   "slug": "palmerston-little-italy",
+   "borough": "Old Toronto",
+   "lat": 43.659157,
+   "lng": -79.418409,
+   "neighbors": [
+    "trinity-bellwoods",
+    "dovercourt-village",
+    "university",
+    "dufferin-grove",
+    "little-portugal"
+   ]
+  },
+  {
+   "name": "Playter Estates-Danforth",
+   "slug": "playter-estates-danforth",
+   "borough": "Old Toronto",
+   "lat": 43.6797,
+   "lng": -79.354887,
+   "neighbors": [
+    "north-riverdale",
+    "broadview-north",
+    "blake-jones",
+    "cabbagetown-south-stjames-town",
+    "north-stjames-town"
+   ]
+  },
+  {
+   "name": "Regent Park",
+   "slug": "regent-park",
+   "borough": "Old Toronto",
+   "lat": 43.659992,
+   "lng": -79.360508,
+   "neighbors": [
+    "moss-park",
+    "cabbagetown-south-stjames-town",
+    "downtown-yonge-east",
+    "north-riverdale",
+    "north-stjames-town"
+   ]
+  },
+  {
+   "name": "Roncesvalles",
+   "slug": "roncesvalles",
+   "borough": "Old Toronto",
+   "lat": 43.646123,
+   "lng": -79.442993,
+   "neighbors": [
+    "little-portugal",
+    "south-parkdale",
+    "dufferin-grove",
+    "high-park-swansea",
+    "junction-wallace-emerson"
+   ]
+  },
+  {
+   "name": "Rosedale-Moore Park",
+   "slug": "rosedale-moore-park",
+   "borough": "Old Toronto",
+   "lat": 43.682806,
+   "lng": -79.37965,
+   "neighbors": [
+    "north-stjames-town",
+    "yonge-stclair",
+    "church-wellesley",
+    "cabbagetown-south-stjames-town",
+    "playter-estates-danforth"
+   ]
+  },
+  {
+   "name": "South Eglinton-Davisville",
+   "slug": "south-eglinton-davisville",
+   "borough": "Old Toronto",
+   "lat": 43.701932,
+   "lng": -79.392623,
+   "neighbors": [
+    "mount-pleasant-east",
+    "yonge-eglinton",
+    "north-toronto",
+    "yonge-stclair",
+    "forest-hill-south"
+   ]
+  },
+  {
+   "name": "South Parkdale",
+   "slug": "south-parkdale",
+   "borough": "Old Toronto",
+   "lat": 43.636699,
+   "lng": -79.439338,
+   "neighbors": [
+    "roncesvalles",
+    "little-portugal",
+    "dufferin-grove",
+    "fort-york-liberty-village",
+    "west-queen-west"
+   ]
+  },
+  {
+   "name": "South Riverdale",
+   "slug": "south-riverdale",
+   "borough": "Old Toronto",
+   "lat": 43.649203,
+   "lng": -79.335618,
+   "neighbors": [
+    "regent-park",
+    "moss-park",
+    "greenwood-coxwell",
+    "north-riverdale",
+    "blake-jones"
+   ]
+  },
+  {
+   "name": "St Lawrence-East Bayfront-The Islands",
+   "slug": "st-lawrence-east-bayfront-the-islands",
+   "borough": "Old Toronto",
+   "lat": 43.632242,
+   "lng": -79.37435,
+   "neighbors": [
+    "harbourfront-cityplace",
+    "wellington-place",
+    "yonge-bay-corridor",
+    "downtown-yonge-east",
+    "moss-park"
+   ]
+  },
+  {
+   "name": "The Beaches",
+   "slug": "the-beaches",
+   "borough": "Old Toronto",
+   "lat": 43.67105,
+   "lng": -79.2996,
+   "neighbors": [
+    "woodbine-corridor",
+    "east-end-danforth",
+    "greenwood-coxwell",
+    "taylor-massey",
+    "woodbine-lumsden"
+   ]
+  },
+  {
+   "name": "Trinity-Bellwoods",
+   "slug": "trinity-bellwoods",
+   "borough": "Old Toronto",
+   "lat": 43.650176,
+   "lng": -79.415342,
+   "neighbors": [
+    "west-queen-west",
+    "palmerston-little-italy",
+    "little-portugal",
+    "kensington-chinatown",
+    "wellington-place"
+   ]
+  },
+  {
+   "name": "University",
+   "slug": "university",
+   "borough": "Old Toronto",
+   "lat": 43.662506,
+   "lng": -79.40118,
+   "neighbors": [
+    "bay-cloverhill",
+    "annex",
+    "kensington-chinatown",
+    "palmerston-little-italy",
+    "church-wellesley"
+   ]
+  },
+  {
+   "name": "Wellington Place",
+   "slug": "wellington-place",
+   "borough": "Old Toronto",
+   "lat": 43.645851,
+   "lng": -79.394628,
+   "neighbors": [
+    "harbourfront-cityplace",
+    "kensington-chinatown",
+    "yonge-bay-corridor",
+    "west-queen-west",
+    "trinity-bellwoods"
+   ]
+  },
+  {
+   "name": "West Queen West",
+   "slug": "west-queen-west",
+   "borough": "Old Toronto",
+   "lat": 43.642928,
+   "lng": -79.410911,
+   "neighbors": [
+    "trinity-bellwoods",
+    "fort-york-liberty-village",
+    "wellington-place",
+    "kensington-chinatown",
+    "little-portugal"
+   ]
+  },
+  {
+   "name": "Weston-Pelham Park",
+   "slug": "weston-pelham-park",
+   "borough": "Old Toronto",
+   "lat": 43.673948,
+   "lng": -79.460251,
+   "neighbors": [
+    "corso-italia-davenport",
+    "junction-area",
+    "junction-wallace-emerson",
+    "keelesdale-eglinton-west",
+    "caledonia-fairbank"
+   ]
+  },
+  {
+   "name": "Woodbine Corridor",
+   "slug": "woodbine-corridor",
+   "borough": "Old Toronto",
+   "lat": 43.676773,
+   "lng": -79.315407,
+   "neighbors": [
+    "greenwood-coxwell",
+    "danforth",
+    "the-beaches",
+    "east-end-danforth",
+    "blake-jones"
+   ]
+  },
+  {
+   "name": "Wychwood",
+   "slug": "wychwood",
+   "borough": "Old Toronto",
+   "lat": 43.676919,
+   "lng": -79.425515,
+   "neighbors": [
+    "dovercourt-village",
+    "casa-loma",
+    "humewood-cedarvale",
+    "oakwood-village",
+    "corso-italia-davenport"
+   ]
+  },
+  {
+   "name": "Yonge-Bay Corridor",
+   "slug": "yonge-bay-corridor",
+   "borough": "Old Toronto",
+   "lat": 43.652952,
+   "lng": -79.383728,
+   "neighbors": [
+    "downtown-yonge-east",
+    "kensington-chinatown",
+    "wellington-place",
+    "moss-park",
+    "bay-cloverhill"
+   ]
+  },
+  {
+   "name": "Yonge-Eglinton",
+   "slug": "yonge-eglinton",
+   "borough": "Old Toronto",
+   "lat": 43.70469,
+   "lng": -79.403591,
+   "neighbors": [
+    "north-toronto",
+    "south-eglinton-davisville",
+    "lawrence-park-south",
+    "forest-hill-south",
+    "mount-pleasant-east"
+   ]
+  },
+  {
+   "name": "Yonge-St.Clair",
+   "slug": "yonge-stclair",
+   "borough": "Old Toronto",
+   "lat": 43.68786,
+   "lng": -79.397871,
+   "neighbors": [
+    "casa-loma",
+    "forest-hill-south",
+    "rosedale-moore-park",
+    "south-eglinton-davisville",
+    "annex"
+   ]
+  },
+  {
+   "name": "Agincourt North",
+   "slug": "agincourt-north",
+   "borough": "Scarborough",
+   "lat": 43.805441,
+   "lng": -79.266712,
+   "neighbors": [
+    "milliken",
+    "agincourt-south-malvern-west",
+    "malvern-west",
+    "east-lamoreaux",
+    "tam-oshanter-sullivan"
+   ]
+  },
+  {
+   "name": "Agincourt South-Malvern West",
+   "slug": "agincourt-south-malvern-west",
+   "borough": "Scarborough",
+   "lat": 43.788657,
+   "lng": -79.265611,
+   "neighbors": [
+    "agincourt-north",
+    "bendale-glen-andrew",
+    "woburn-north",
+    "tam-oshanter-sullivan",
+    "malvern-west"
+   ]
+  },
+  {
+   "name": "Bendale South",
+   "slug": "bendale-south",
+   "borough": "Scarborough",
+   "lat": 43.748653,
+   "lng": -79.252444,
+   "neighbors": [
+    "eglinton-east",
+    "bendale-glen-andrew",
+    "ionview",
+    "dorset-park",
+    "kennedy-park"
+   ]
+  },
+  {
+   "name": "Bendale-Glen Andrew",
+   "slug": "bendale-glen-andrew",
+   "borough": "Scarborough",
+   "lat": 43.766432,
+   "lng": -79.259967,
+   "neighbors": [
+    "dorset-park",
+    "woburn-north",
+    "bendale-south",
+    "agincourt-south-malvern-west",
+    "eglinton-east"
+   ]
+  },
+  {
+   "name": "Birchcliffe-Cliffside",
+   "slug": "birchcliffe-cliffside",
+   "borough": "Scarborough",
+   "lat": 43.694683,
+   "lng": -79.265089,
+   "neighbors": [
+    "oakridge",
+    "clairlea-birchmount",
+    "taylor-massey",
+    "east-end-danforth",
+    "kennedy-park"
+   ]
+  },
+  {
+   "name": "Centennial Scarborough",
+   "slug": "centennial-scarborough",
+   "borough": "Scarborough",
+   "lat": 43.782377,
+   "lng": -79.150843,
+   "neighbors": [
+    "west-rouge",
+    "highland-creek",
+    "west-hill",
+    "morningside",
+    "guildwood"
+   ]
+  },
+  {
+   "name": "Clairlea-Birchmount",
+   "slug": "clairlea-birchmount",
+   "borough": "Scarborough",
+   "lat": 43.713592,
+   "lng": -79.281382,
+   "neighbors": [
+    "oakridge",
+    "kennedy-park",
+    "taylor-massey",
+    "birchcliffe-cliffside",
+    "ionview"
+   ]
+  },
+  {
+   "name": "Cliffcrest",
+   "slug": "cliffcrest",
+   "borough": "Scarborough",
+   "lat": 43.721122,
+   "lng": -79.23553,
+   "neighbors": [
+    "kennedy-park",
+    "eglinton-east",
+    "scarborough-village",
+    "bendale-south",
+    "ionview"
+   ]
+  },
+  {
+   "name": "Dorset Park",
+   "slug": "dorset-park",
+   "borough": "Scarborough",
+   "lat": 43.759276,
+   "lng": -79.278909,
+   "neighbors": [
+    "bendale-glen-andrew",
+    "wexford-maryvale",
+    "bendale-south",
+    "ionview",
+    "tam-oshanter-sullivan"
+   ]
+  },
+  {
+   "name": "East L'Amoreaux",
+   "slug": "east-lamoreaux",
+   "borough": "Scarborough",
+   "lat": 43.798966,
+   "lng": -79.305672,
+   "neighbors": [
+    "lamoreaux-west",
+    "steeles",
+    "tam-oshanter-sullivan",
+    "pleasant-view",
+    "agincourt-north"
+   ]
+  },
+  {
+   "name": "Eglinton East",
+   "slug": "eglinton-east",
+   "borough": "Scarborough",
+   "lat": 43.740922,
+   "lng": -79.245597,
+   "neighbors": [
+    "bendale-south",
+    "kennedy-park",
+    "ionview",
+    "scarborough-village",
+    "cliffcrest"
+   ]
+  },
+  {
+   "name": "Golfdale-Cedarbrae-Woburn",
+   "slug": "golfdale-cedarbrae-woburn",
+   "borough": "Scarborough",
+   "lat": 43.760023,
+   "lng": -79.219998,
+   "neighbors": [
+    "woburn-north",
+    "guildwood",
+    "scarborough-village",
+    "morningside",
+    "bendale-south"
+   ]
+  },
+  {
+   "name": "Guildwood",
+   "slug": "guildwood",
+   "borough": "Scarborough",
+   "lat": 43.748833,
+   "lng": -79.195043,
+   "neighbors": [
+    "scarborough-village",
+    "golfdale-cedarbrae-woburn",
+    "west-hill",
+    "morningside",
+    "eglinton-east"
+   ]
+  },
+  {
+   "name": "Highland Creek",
+   "slug": "highland-creek",
+   "borough": "Scarborough",
+   "lat": 43.790775,
+   "lng": -79.177472,
+   "neighbors": [
+    "centennial-scarborough",
+    "west-rouge",
+    "morningside",
+    "west-hill",
+    "malvern-east"
+   ]
+  },
+  {
+   "name": "Ionview",
+   "slug": "ionview",
+   "borough": "Scarborough",
+   "lat": 43.735365,
+   "lng": -79.27247,
+   "neighbors": [
+    "kennedy-park",
+    "bendale-south",
+    "eglinton-east",
+    "clairlea-birchmount",
+    "wexford-maryvale"
+   ]
+  },
+  {
+   "name": "Kennedy Park",
+   "slug": "kennedy-park",
+   "borough": "Scarborough",
+   "lat": 43.725556,
+   "lng": -79.260382,
+   "neighbors": [
+    "ionview",
+    "cliffcrest",
+    "eglinton-east",
+    "clairlea-birchmount",
+    "bendale-south"
+   ]
+  },
+  {
+   "name": "L'Amoreaux West",
+   "slug": "lamoreaux-west",
+   "borough": "Scarborough",
+   "lat": 43.792248,
+   "lng": -79.323064,
+   "neighbors": [
+    "pleasant-view",
+    "east-lamoreaux",
+    "tam-oshanter-sullivan",
+    "steeles",
+    "don-valley-village"
+   ]
+  },
+  {
+   "name": "Malvern East",
+   "slug": "malvern-east",
+   "borough": "Scarborough",
+   "lat": 43.802025,
+   "lng": -79.215647,
+   "neighbors": [
+    "malvern-west",
+    "morningside",
+    "morningside-heights",
+    "highland-creek",
+    "woburn-north"
+   ]
+  },
+  {
+   "name": "Malvern West",
+   "slug": "malvern-west",
+   "borough": "Scarborough",
+   "lat": 43.805604,
+   "lng": -79.230751,
+   "neighbors": [
+    "malvern-east",
+    "agincourt-north",
+    "morningside",
+    "agincourt-south-malvern-west",
+    "morningside-heights"
+   ]
+  },
+  {
+   "name": "Milliken",
+   "slug": "milliken",
+   "borough": "Scarborough",
+   "lat": 43.82069,
+   "lng": -79.275007,
+   "neighbors": [
+    "agincourt-north",
+    "east-lamoreaux",
+    "agincourt-south-malvern-west",
+    "steeles",
+    "malvern-west"
+   ]
+  },
+  {
+   "name": "Morningside",
+   "slug": "morningside",
+   "borough": "Scarborough",
+   "lat": 43.782399,
+   "lng": -79.207041,
+   "neighbors": [
+    "malvern-east",
+    "highland-creek",
+    "woburn-north",
+    "golfdale-cedarbrae-woburn",
+    "west-hill"
+   ]
+  },
+  {
+   "name": "Morningside Heights",
+   "slug": "morningside-heights",
+   "borough": "Scarborough",
+   "lat": 43.827899,
+   "lng": -79.197719,
+   "neighbors": [
+    "malvern-east",
+    "malvern-west",
+    "highland-creek",
+    "morningside",
+    "west-rouge"
+   ]
+  },
+  {
+   "name": "Oakridge",
+   "slug": "oakridge",
+   "borough": "Scarborough",
+   "lat": 43.697408,
+   "lng": -79.279709,
+   "neighbors": [
+    "birchcliffe-cliffside",
+    "taylor-massey",
+    "clairlea-birchmount",
+    "east-end-danforth",
+    "woodbine-lumsden"
+   ]
+  },
+  {
+   "name": "Scarborough Village",
+   "slug": "scarborough-village",
+   "borough": "Scarborough",
+   "lat": 43.738651,
+   "lng": -79.216813,
+   "neighbors": [
+    "guildwood",
+    "eglinton-east",
+    "golfdale-cedarbrae-woburn",
+    "cliffcrest",
+    "bendale-south"
+   ]
+  },
+  {
+   "name": "Steeles",
+   "slug": "steeles",
+   "borough": "Scarborough",
+   "lat": 43.812959,
+   "lng": -79.321207,
+   "neighbors": [
+    "east-lamoreaux",
+    "lamoreaux-west",
+    "hillcrest-village",
+    "pleasant-view",
+    "milliken"
+   ]
+  },
+  {
+   "name": "Tam O'Shanter-Sullivan",
+   "slug": "tam-oshanter-sullivan",
+   "borough": "Scarborough",
+   "lat": 43.780131,
+   "lng": -79.302917,
+   "neighbors": [
+    "lamoreaux-west",
+    "east-lamoreaux",
+    "pleasant-view",
+    "dorset-park",
+    "fenside-parkwoods"
+   ]
+  },
+  {
+   "name": "West Hill",
+   "slug": "west-hill",
+   "borough": "Scarborough",
+   "lat": 43.76749,
+   "lng": -79.176676,
+   "neighbors": [
+    "guildwood",
+    "highland-creek",
+    "centennial-scarborough",
+    "morningside",
+    "golfdale-cedarbrae-woburn"
+   ]
+  },
+  {
+   "name": "West Rouge",
+   "slug": "west-rouge",
+   "borough": "Scarborough",
+   "lat": 43.7986,
+   "lng": -79.148023,
+   "neighbors": [
+    "centennial-scarborough",
+    "highland-creek",
+    "west-hill",
+    "morningside",
+    "morningside-heights"
+   ]
+  },
+  {
+   "name": "Wexford/Maryvale",
+   "slug": "wexford-maryvale",
+   "borough": "Scarborough",
+   "lat": 43.748574,
+   "lng": -79.298638,
+   "neighbors": [
+    "dorset-park",
+    "parkwoods-oconnor-hills",
+    "ionview",
+    "victoria-village",
+    "fenside-parkwoods"
+   ]
+  },
+  {
+   "name": "Woburn North",
+   "slug": "woburn-north",
+   "borough": "Scarborough",
+   "lat": 43.773177,
+   "lng": -79.236815,
+   "neighbors": [
+    "golfdale-cedarbrae-woburn",
+    "bendale-glen-andrew",
+    "morningside",
+    "agincourt-south-malvern-west",
+    "bendale-south"
+   ]
+  },
+  {
+   "name": "Beechborough-Greenbrook",
+   "slug": "beechborough-greenbrook",
+   "borough": "York",
+   "lat": 43.693216,
+   "lng": -79.479472,
+   "neighbors": [
+    "brookhaven-amesbury",
+    "keelesdale-eglinton-west",
+    "mount-dennis",
+    "caledonia-fairbank",
+    "briar-hill-belgravia"
+   ]
+  },
+  {
+   "name": "Briar Hill-Belgravia",
+   "slug": "briar-hill-belgravia",
+   "borough": "York",
+   "lat": 43.699024,
+   "lng": -79.45287,
+   "neighbors": [
+    "caledonia-fairbank",
+    "oakwood-village",
+    "yorkdale-glen-park",
+    "forest-hill-north",
+    "keelesdale-eglinton-west"
+   ]
+  },
+  {
+   "name": "Caledonia-Fairbank",
+   "slug": "caledonia-fairbank",
+   "borough": "York",
+   "lat": 43.688568,
+   "lng": -79.455213,
+   "neighbors": [
+    "briar-hill-belgravia",
+    "oakwood-village",
+    "keelesdale-eglinton-west",
+    "corso-italia-davenport",
+    "weston-pelham-park"
+   ]
+  },
+  {
+   "name": "Humewood-Cedarvale",
+   "slug": "humewood-cedarvale",
+   "borough": "York",
+   "lat": 43.69137,
+   "lng": -79.427684,
+   "neighbors": [
+    "oakwood-village",
+    "forest-hill-south",
+    "forest-hill-north",
+    "wychwood",
+    "casa-loma"
+   ]
+  },
+  {
+   "name": "Keelesdale-Eglinton West",
+   "slug": "keelesdale-eglinton-west",
+   "borough": "York",
+   "lat": 43.685727,
+   "lng": -79.471438,
+   "neighbors": [
+    "beechborough-greenbrook",
+    "caledonia-fairbank",
+    "weston-pelham-park",
+    "junction-area",
+    "brookhaven-amesbury"
+   ]
+  },
+  {
+   "name": "Lambton Baby Point",
+   "slug": "lambton-baby-point",
+   "borough": "York",
+   "lat": 43.657419,
+   "lng": -79.496044,
+   "neighbors": [
+    "runnymede-bloor-west-village",
+    "kingsway-south",
+    "rockcliffe-smythe",
+    "junction-area",
+    "high-park-north"
+   ]
+  },
+  {
+   "name": "Mount Dennis",
+   "slug": "mount-dennis",
+   "borough": "York",
+   "lat": 43.688144,
+   "lng": -79.499989,
+   "neighbors": [
+    "rockcliffe-smythe",
+    "beechborough-greenbrook",
+    "humber-heights-westmount",
+    "brookhaven-amesbury",
+    "weston"
+   ]
+  },
+  {
+   "name": "Oakwood Village",
+   "slug": "oakwood-village",
+   "borough": "York",
+   "lat": 43.688566,
+   "lng": -79.439786,
+   "neighbors": [
+    "humewood-cedarvale",
+    "caledonia-fairbank",
+    "corso-italia-davenport",
+    "briar-hill-belgravia",
+    "wychwood"
+   ]
+  },
+  {
+   "name": "Rockcliffe-Smythe",
+   "slug": "rockcliffe-smythe",
+   "borough": "York",
+   "lat": 43.674791,
+   "lng": -79.494419,
+   "neighbors": [
+    "mount-dennis",
+    "runnymede-bloor-west-village",
+    "lambton-baby-point",
+    "junction-area",
+    "keelesdale-eglinton-west"
+   ]
+  },
+  {
+   "name": "Runnymede-Bloor West Village",
+   "slug": "runnymede-bloor-west-village",
+   "borough": "York",
+   "lat": 43.659268,
+   "lng": -79.485709,
+   "neighbors": [
+    "lambton-baby-point",
+    "junction-area",
+    "high-park-north",
+    "rockcliffe-smythe",
+    "kingsway-south"
+   ]
+  },
+  {
+   "name": "Weston",
+   "slug": "weston",
+   "borough": "York",
+   "lat": 43.702716,
+   "lng": -79.515723,
+   "neighbors": [
+    "humber-heights-westmount",
+    "rustic",
+    "pelmo-park-humberlea",
+    "mount-dennis",
+    "brookhaven-amesbury"
+   ]
+  }
+ ]
+}

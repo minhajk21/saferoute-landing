@@ -191,6 +191,35 @@ const CITIES = {
       methodology: `Each incident reported to the Seattle Police Department (via Seattle Open Data) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the Seattle City GIS Neighborhood Map Atlas — 94 neighborhoods grouped into 20 districts (so Capitol Hill and West Seattle, which are districts, appear as section headings). Because Seattle's dense downtown far outweighs its residential neighborhoods, the index is calibrated to the citywide median so a typical neighborhood reads mid-scale. Time-of-day charts use SPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
     },
   },
+  'toronto': {
+    name: 'Toronto',
+    hubName: 'Toronto',
+    rankPool: 'Toronto neighbourhoods',
+    // First Canadian SEO city. Boundaries are the City of Toronto's 158 official
+    // neighbourhoods, grouped under the six former municipalities (Old Toronto,
+    // North York, Scarborough, Etobicoke, East York, York) — a multi-district
+    // hub like NYC/London/Seattle. No rankHeading → district-grouped tables.
+    // Canadian spelling: neighbourhood/centre, but -ize endings (normalize).
+    areaWord: 'neighbourhood', areaWordPlural: 'neighbourhoods',
+    centre: 'centre', centreLabel: 'neighbourhood centre',
+    reportedTo: 'reported to the Toronto Police Service',
+    dataName: 'Toronto Police data',
+    medianLabel: 'citywide median',
+    forCity: 'for Toronto',
+    acrossCity: 'across Toronto',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Toronto Police Service by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} centre, and normalizes against citywide crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Toronto Police Service Major Crime Indicators via the <a href="https://data.torontopolice.on.ca/">TPS Public Safety Data Portal</a>${dateLine}. Neighbourhood and former-municipality boundaries: <a href="https://open.toronto.ca/">City of Toronto Open Data</a> (158 neighbourhoods). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
+    basemapCredit: 'basemap © OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Toronto Neighbourhood Safety Map & Rankings (${n} neighbourhoods) — SafeRoute`,
+      desc: (n, date) => `How safe is your Toronto neighbourhood? Safety index (0–100) for all ${n} Toronto neighbourhoods from Toronto Police Service reported-crime data through ${date} — ranked by district, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Toronto neighbourhood?',
+      lead: `SafeRoute scores all 158 City of Toronto neighbourhoods 0–100 from incidents reported to the Toronto Police Service — severity-weighted, within 1 km of each area's centre, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighbourhood — e.g. The Annex, Leslieville, Liberty Village…',
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighbourhood's centre — they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the Toronto Police Service (Major Crime Indicators — assault, robbery, break &amp; enter, auto theft and theft over, via the TPS Public Safety Data Portal) is weighted by severity — violence counts for more than shoplifting. For every neighbourhood we sum weighted incidents within 1 km of its centre, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of Toronto's 158 official neighbourhoods, grouped under the six former municipalities (Old Toronto, North York, Scarborough, Etobicoke, East York and York) that people still use as districts. Time-of-day charts use TPS occurrence timestamps, severity-weighted. Pages regenerate as new data is published.`,
+    },
+  },
 };
 
 // ── helpers ──────────────────────────────────────────────────────────────────
@@ -610,7 +639,7 @@ if (!rendered.length) throw new Error('no cities with data');
 <table class="rank"><tbody>
 ${rows}
 </tbody></table>
-<p style="font-size:15px;color:var(--ink-2)">More cities from SafeRoute's 30-city coverage (Los Angeles, Toronto, Mexico City…) are on the way.</p>
+<p style="font-size:15px;color:var(--ink-2)">More cities from SafeRoute's 30-city coverage (Vancouver, Washington DC, Mexico City…) are on the way.</p>
 ${cta('your city')}
 ${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug)}`;
   mkdirSync(join(ROOT, 'safety'), { recursive: true });

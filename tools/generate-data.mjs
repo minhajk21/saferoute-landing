@@ -24,7 +24,12 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.SAFEROUTE_BASE_URL || 'http://localhost:3111';
 const KEY = process.env.SAFEROUTE_API_KEY;
-if (!KEY) { console.error('SAFEROUTE_API_KEY required'); process.exit(1); }
+// Keyless mode: with no API key, fall back to the public read-only endpoint
+// (/public/area) — it returns every field the /safety/ pages need, so local
+// regeneration needs no secret. CI still passes the key and uses /area-safety.
+// The public endpoint is rate-limited to 30/min per IP, so pace above ~2 s
+// between requests (GEN_DELAY_MS) when running keyless.
+if (!KEY) console.warn('[generate-data] no SAFEROUTE_API_KEY — using keyless /public/area (keep GEN_DELAY_MS ≥ 2100 to stay under its 30/min limit)');
 
 const FORCE = process.argv.includes('--force');
 const cityArg = process.argv[process.argv.indexOf('--city') + 1];
@@ -52,11 +57,15 @@ function samplePoints(incidents) {
 
 async function fetchArea(a, attempt = 1) {
   try {
-    const res = await fetch(`${BASE}/area-safety?lat=${a.lat}&lng=${a.lng}&radius=${RADIUS}`,
-      { headers: { 'X-SafeRoute-Key': KEY }, signal: AbortSignal.timeout(45_000) });
+    const url = KEY
+      ? `${BASE}/area-safety?lat=${a.lat}&lng=${a.lng}&radius=${RADIUS}`
+      : `${BASE}/public/area?lat=${a.lat}&lng=${a.lng}`;   // keyless: public endpoint is fixed at 1 km
+    const res = await fetch(url,
+      { headers: KEY ? { 'X-SafeRoute-Key': KEY } : {}, signal: AbortSignal.timeout(45_000) });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const j = await res.json();
-    if (j.dataUnavailable || !(j.totalIncidents >= 0)) throw new Error('dataUnavailable');
+    // /area-safety flags gaps with dataUnavailable; /public/area with covered:false.
+    if (j.dataUnavailable || j.covered === false || !(j.totalIncidents >= 0)) throw new Error('dataUnavailable');
     return j;
   } catch (e) {
     if (attempt < 3) { await new Promise(r => setTimeout(r, 1500 * attempt)); return fetchArea(a, attempt + 1); }
@@ -86,7 +95,7 @@ async function worker() {
         breakdown: j.breakdown,
         timeOfDay: j.timeOfDay, timeOfDayIsRealData: j.timeOfDayIsRealData,
         dataSource: j.dataSource, policeForce: j.policeForce,
-        incidents: samplePoints(j.incidents).map(p => ({ lat: +p.lat.toFixed(5), lng: +p.lng.toFixed(5), w: p.weight })),
+        incidents: samplePoints(j.incidents).map(p => ({ lat: +p.lat.toFixed(5), lng: +p.lng.toFixed(5), w: p.weight ?? p.w })),
         fetchedAt: new Date().toISOString().slice(0, 10),
       }));
       done++;
