@@ -30,8 +30,8 @@
   header{border-bottom:1px solid var(--line);background:var(--cream)}
   .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
-  .brand .shield{width:26px;height:30px;flex:none}
-  .brand b{font-size:19px;letter-spacing:.14em;font-weight:600}
+  .brand .shield{width:20px;height:24px;flex:none}
+  .brand b{font-family:var(--mono);font-size:16px;letter-spacing:.16em;font-weight:600}
   .nav-right{display:flex;align-items:center;gap:16px}
   .nav-link{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--ink);padding:9px 2px}
   .nav-link:hover{color:var(--teal-deep);text-decoration:underline}
@@ -114,7 +114,7 @@
   <div class="wrap">
     <nav class="nav">
       <a class="brand" href="/">
-        <svg class="shield" viewBox="0 0 26 30" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 1 24 5v9c0 7-5 12-11 15C7 26 2 21 2 14V5L13 1Z" fill="#14564C" stroke="#14564C"/><path d="M8.5 14.5 12 18l6-7" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <b>SAFEROUTE</b>
       </a>
       <div class="nav-right">
@@ -192,7 +192,14 @@ map.on('moveend', () => {
   clearTimeout(panTmr);
   panTmr=setTimeout(()=>{
     const c=map.getCenter();
-    if(lastCenter && distKm(c.lat,c.lng,lastCenter[0],lastCenter[1])<0.25) return;
+    // Don't auto-refetch until something has actually been looked up: the map
+    // boots at a wide US view ([39,-98], reverse-geocodes to "Lincoln, Kansas")
+    // and an invalidateSize() moveend must never query that default. Once we
+    // have a reference point, only human-scale pans refetch — sub-250 m moves
+    // are just zoom, and >15 km jumps are programmatic flyTo (handled by lookup).
+    if(!lastCenter) return;
+    const dk=distKm(c.lat,c.lng,lastCenter[0],lastCenter[1]);
+    if(dk<0.25 || dk>15) return;
     refetchAt(c.lat, c.lng);
   }, 500);
 });
@@ -297,17 +304,23 @@ function render(d, name, address){
 function flyTo(lat,lng){ map.invalidateSize(); suppressMove=true; map.flyTo([lat,lng], 14, { duration:1.1 }); }
 
 // Pan/zoom refetch: same as lookup() but keeps the current view (no flyTo) and
-// labels the result "This area" since we don't reverse-geocode on every move.
+// names the area by reverse-geocoding the new centre, fired in parallel with the
+// crime data so the label follows the map as you pan.
 let lastName='This area';
 async function refetchAt(lat, lng){
   const reqId = ++lastReqId;
   lastCenter=[lat,lng];
   try{
-    const r = await fetch(`${API}/public/area?lat=${lat}&lng=${lng}`);
+    const [r, rev] = await Promise.all([
+      fetch(`${API}/public/area?lat=${lat}&lng=${lng}`),
+      fetch(`${API}/public/reverse?lat=${lat}&lng=${lng}`).then(x=>x.ok?x.json():null).catch(()=>null)
+    ]);
     if(r.status===429 || !r.ok) return;      // stay quiet on pan throttling
     const d = await r.json();
     if(reqId!==lastReqId) return;
-    render(d, d.covered ? lastName : 'This area', '');
+    const name = (rev && rev.name) ? rev.name : 'This area';
+    lastName = name;
+    render(d, name, '');
     if(d.covered){ drawHex(d); addPubLink(lat, lng, reqId); }
   }catch{}
 }
