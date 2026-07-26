@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check any address — SafeRoute neighborhood safety</title>
+<meta name="description" content="Type any address, neighborhood or landmark and get its SafeRoute safety index (0–100) from official police crime data — a live crime map for anywhere SafeRoute covers.">
+<link rel="canonical" href="https://safe-route.app/check/">
+<meta name="apple-itunes-app" content="app-id=6768244297">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+  :root{
+    --cream:#F4F0E6; --cream-deep:#EAE3D0; --paper:#FBF9F2;
+    --ink:#052926; --ink-2:#3C514C; --ink-3:#717F7A;
+    --teal:#3B7E76; --teal-deep:#14564C;
+    --green:#2E8B40; --amber:#B0703C; --elevated:#9C5220; --red:#BC3B2E;
+    --line:#D6CDB8;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --sans:'IBM Plex Sans',-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:var(--sans);color:var(--ink);background:var(--cream);-webkit-font-smoothing:antialiased}
+  a{color:var(--teal-deep)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,72px)}
+
+  header{border-bottom:1px solid var(--line);background:var(--cream)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+  .brand .shield{width:26px;height:30px;flex:none}
+  .brand b{font-size:19px;letter-spacing:.14em;font-weight:600}
+  .nav-right{display:flex;align-items:center;gap:16px}
+  .nav-link{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--ink);padding:9px 2px}
+  .nav-link:hover{color:var(--teal-deep);text-decoration:underline}
+  .nav-cta{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;background:var(--ink);color:var(--cream);padding:9px 16px;border:1px solid var(--ink)}
+  .nav-cta:hover{background:transparent;color:var(--ink)}
+  @media(max-width:640px){.nav-link{display:none}}
+
+  .head{padding:clamp(28px,5vw,52px) 0 20px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  .eyebrow .slash{color:var(--teal)}
+  h1{font-size:clamp(28px,4.5vw,44px);line-height:1.05;letter-spacing:-.02em;margin:12px 0 10px}
+  .lead{font-size:clamp(16px,2vw,18px);color:var(--ink-2);max-width:60ch;margin:0}
+
+  /* search */
+  .search{position:relative;max-width:640px;margin:22px 0 0}
+  .search-row{display:flex;gap:10px}
+  #q{flex:1;font-family:var(--sans);font-size:17px;color:var(--ink);background:var(--paper);border:1px solid var(--line);padding:15px 16px;outline:none;-webkit-appearance:none;border-radius:0;transition:border-color .15s}
+  #q:focus{border-color:var(--teal)}
+  #q::placeholder{color:var(--ink-3)}
+  #geo{flex:none;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--cream-deep);border:1px solid var(--line);padding:0 15px;cursor:pointer;white-space:nowrap}
+  #geo:hover{border-color:var(--teal)}
+  #ac{list-style:none;margin:0;padding:0;position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;background:var(--paper);border:1px solid var(--line);max-height:320px;overflow:auto;box-shadow:0 12px 28px rgba(5,41,38,.12)}
+  #ac:empty{display:none}
+  #ac li a{display:flex;flex-direction:column;gap:2px;padding:11px 16px;text-decoration:none;color:var(--ink);cursor:pointer}
+  #ac li a:hover,#ac li a.on{background:var(--cream-deep)}
+  #ac .nm{font-size:15.5px;font-weight:500}
+  #ac .ad{font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
+
+  /* layout */
+  .layout{display:grid;grid-template-columns:1fr 380px;gap:0;border:1px solid var(--line);margin:22px 0 60px;min-height:560px;background:var(--paper)}
+  @media(max-width:860px){.layout{grid-template-columns:1fr;min-height:0}}
+  #map{width:100%;height:100%;min-height:560px;background:var(--cream-deep)}
+  @media(max-width:860px){#map{min-height:340px}}
+  aside{border-left:1px solid var(--line);padding:26px 24px;display:flex;flex-direction:column;gap:18px}
+  @media(max-width:860px){aside{border-left:none;border-top:1px solid var(--line)}}
+
+  .empty{color:var(--ink-3);font-size:15px;line-height:1.5}
+  .place{font-size:20px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
+  .place small{display:block;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);font-weight:400;letter-spacing:.03em;margin-top:3px}
+  .scorebox{display:flex;align-items:baseline;gap:10px}
+  .score{font-size:56px;font-weight:700;letter-spacing:-.03em;line-height:1}
+  .score .of{font-size:22px;color:var(--ink-3);font-weight:500}
+  .band{align-self:center;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;color:#fff;border-radius:2px}
+  .meta{font-size:14px;color:var(--ink-2);line-height:1.5}
+  .meta b{color:var(--ink)}
+  .divider{height:1px;background:var(--line)}
+  .h3{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px}
+  .cat{display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:14px}
+  .cat .bar{height:8px;background:var(--teal);opacity:.5;border-radius:2px;flex:none}
+  .cat .lbl{flex:1;color:var(--ink-2)}
+  .cat .n{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+  .tod{display:flex;align-items:flex-end;gap:5px;height:56px;margin-top:4px}
+  .tod .b{flex:1;background:var(--elevated);opacity:.75;border-radius:2px 2px 0 0;min-height:2px}
+  .tod-x{display:flex;gap:5px;margin-top:5px}
+  .tod-x span{flex:1;font-family:var(--mono);font-size:9px;color:var(--ink-3);text-align:center}
+  .src{font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.5}
+  .cta{display:inline-block;margin-top:2px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;background:var(--ink);color:var(--cream);padding:11px 16px;text-align:center}
+  .cta:hover{background:var(--teal-deep)}
+  .spinner{width:22px;height:22px;border:2.5px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .note{font-size:13.5px;color:var(--ink-2);line-height:1.55;background:var(--cream-deep);padding:14px 16px;border-radius:3px}
+  .leaflet-container{background:var(--cream-deep);font-family:var(--sans)}
+  .leaflet-control-attribution{font-size:10px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="brand" href="/">
+        <svg class="shield" viewBox="0 0 26 30" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 1 24 5v9c0 7-5 12-11 15C7 26 2 21 2 14V5L13 1Z" fill="#14564C" stroke="#14564C"/><path d="M8.5 14.5 12 18l6-7" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <b>SAFEROUTE</b>
+      </a>
+      <div class="nav-right">
+        <a class="nav-link" href="/safety/">Safety index</a>
+        <a class="nav-cta" href="https://apps.apple.com/app/id6768244297">Get the app</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="head">
+    <span class="eyebrow"><span class="slash">//</span> Live crime lookup</span>
+    <h1>How safe is any address?</h1>
+    <p class="lead">Type a street, neighborhood or landmark and get its SafeRoute safety index — scored 0–100 from official police crime data, the same engine behind the app's walking routes.</p>
+    <div class="search">
+      <div class="search-row">
+        <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="e.g. Ballard, Seattle · Wicker Park, Chicago · Camden, London" aria-label="Search an address or neighborhood">
+        <button id="geo" title="Use my current location">◎ My location</button>
+      </div>
+      <ul id="ac"></ul>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div id="map"></div>
+    <aside id="panel">
+      <p class="empty">Search an address above, or use your location, to see its safety index and a live crime map.<br><br>SafeRoute covers the UK, 26 US cities, Toronto, Vancouver and Mexico City.</p>
+    </aside>
+  </div>
+</main>
+
+<footer style="border-top:1px solid var(--line);padding:26px 0">
+  <div class="wrap" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3);display:flex;gap:20px;flex-wrap:wrap">
+    <a href="/" style="color:var(--ink-3);text-decoration:none">← safe-route.app</a>
+    <a href="/safety/" style="color:var(--ink-3);text-decoration:none">Neighborhood safety index</a>
+    <span>Crime data from official police / open-data sources. Informational only.</span>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+const API = 'https://saferoute-backend-w5yf.onrender.com';
+const BAND = { low:{c:'#2E8B40',t:'Low risk'}, moderate:{c:'#B0703C',t:'Moderate'}, elevated:{c:'#9C5220',t:'Elevated'}, high:{c:'#BC3B2E',t:'High risk'} };
+const CAT = { 'violent-crime':'Violent crime','sexual-offences':'Sexual offences','robbery':'Robbery','possession-of-weapons':'Weapons','burglary':'Burglary','criminal-damage-arson':'Damage & arson','public-order':'Public order','theft-from-the-person':'Theft from a person','drugs':'Drugs','anti-social-behaviour':'Anti-social behaviour','vehicle-crime':'Vehicle crime','other-theft':'Other theft','other-crime':'Other','shoplifting':'Shoplifting','bicycle-theft':'Bicycle theft' };
+const catName = c => CAT[c] || c.replace(/-/g,' ').replace(/^./,x=>x.toUpperCase());
+const TOD = ['Wknd day','Wk eve','Wk night','Wknd day','Wknd eve','Wknd night'];
+
+// Leaflet + CARTO "Positron" raster tiles: no WebGL (works on every browser,
+// including ones with WebGL disabled), lightweight, and CARTO's muted light
+// palette matches the site. Incidents/ring/marker are plain Leaflet layers.
+// fadeAnimation:false — the invalidateSize() calls below (needed because the
+// map lives in a still-resolving CSS grid) interrupt Leaflet's tile fade-in and
+// leave tiles stuck at opacity 0. Disabling the fade paints them immediately.
+const map = L.map('map', { zoomControl:true, attributionControl:true, scrollWheelZoom:true, fadeAnimation:false }).setView([39,-98], 4);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  subdomains:'abcd', maxZoom:19, detectRetina:true,
+  attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>',
+}).addTo(map);
+// Leaflet measures the container on init; inside a grid that's still resolving,
+// invalidateSize once layout settles fixes a clipped/greyed map.
+if(window.ResizeObserver){ new ResizeObserver(()=>map.invalidateSize()).observe(document.getElementById('map')); }
+setTimeout(()=>map.invalidateSize(), 200);
+let incLayer=null, ringLayer=null, ctrLayer=null;
+
+const $ = s => document.querySelector(s);
+const q=$('#q'), ac=$('#ac'), panel=$('#panel');
+let acItems=[], acIdx=-1, tmr=null, lastReqId=0;
+
+// ── autocomplete ──
+q.addEventListener('input', ()=>{
+  clearTimeout(tmr); const val=q.value.trim();
+  if(val.length<2){ ac.innerHTML=''; return; }
+  tmr=setTimeout(()=>geocode(val), 220);
+});
+q.addEventListener('keydown', e=>{
+  if(!acItems.length) return;
+  if(e.key==='ArrowDown'){e.preventDefault(); acIdx=Math.min(acIdx+1,acItems.length-1); paintAc();}
+  else if(e.key==='ArrowUp'){e.preventDefault(); acIdx=Math.max(acIdx-1,0); paintAc();}
+  else if(e.key==='Enter'){e.preventDefault(); pick(acItems[acIdx>=0?acIdx:0]);}
+  else if(e.key==='Escape'){ ac.innerHTML=''; }
+});
+document.addEventListener('click', e=>{ if(!$('.search').contains(e.target)) ac.innerHTML=''; });
+
+async function geocode(val){
+  try{
+    const r = await fetch(`${API}/public/search?q=${encodeURIComponent(val)}`);
+    if(!r.ok) throw 0;
+    const j = await r.json();
+    acItems = j.results||[]; acIdx=-1; paintAc();
+  }catch{ ac.innerHTML=''; }
+}
+function paintAc(){
+  ac.innerHTML='';
+  acItems.forEach((r,i)=>{
+    const li=document.createElement('li'), a=document.createElement('a');
+    a.className = i===acIdx?'on':'';
+    a.innerHTML = `<span class="nm">${esc(r.name)}</span>${r.address?`<span class="ad">${esc(r.address)}</span>`:''}`;
+    a.onclick = ()=>pick(r);
+    li.appendChild(a); ac.appendChild(li);
+  });
+}
+function pick(r){ if(!r) return; ac.innerHTML=''; q.value=r.name; lookup(r.lat, r.lng, r.name, r.address); }
+
+// ── my location ──
+$('#geo').addEventListener('click', ()=>{
+  if(!navigator.geolocation){ return; }
+  $('#geo').textContent='…';
+  navigator.geolocation.getCurrentPosition(
+    p=>{ $('#geo').textContent='◎ My location'; lookup(p.coords.latitude, p.coords.longitude, 'Your location', ''); },
+    ()=>{ $('#geo').textContent='◎ My location'; },
+    { enableHighAccuracy:true, timeout:8000 }
+  );
+});
+
+// ── lookup + render ──
+async function lookup(lat, lng, name, address){
+  const reqId = ++lastReqId;
+  panel.innerHTML = `<div style="display:flex;align-items:center;gap:12px;color:var(--ink-3)"><div class="spinner"></div> Checking ${esc(name)}…</div>`;
+  flyTo(lat,lng);
+  try{
+    const r = await fetch(`${API}/public/area?lat=${lat}&lng=${lng}`);
+    if(r.status===429){ panel.innerHTML=`<p class="note">You're checking a lot of places quickly — give it a few seconds and try again.</p>`; return; }
+    if(!r.ok) throw 0;
+    const d = await r.json();
+    if(reqId!==lastReqId) return; // a newer search superseded this
+    render(d, name, address); drawIncidents(d);
+  }catch{
+    if(reqId===lastReqId) panel.innerHTML=`<p class="note">Something went wrong looking that up. Please try again.</p>`;
+  }
+}
+
+function render(d, name, address){
+  if(!d.covered){
+    panel.innerHTML = `<div class="place">${esc(name)}${address?`<small>${esc(address)}</small>`:''}</div>
+      <p class="note">SafeRoute doesn't have crime data for this location yet. It currently covers the <b>UK</b>, <b>26 US cities</b>, <b>Toronto</b>, <b>Vancouver</b> and <b>Mexico City</b>.</p>
+      <a class="cta" href="https://apps.apple.com/app/id6768244297">Get SafeRoute</a>`;
+    return;
+  }
+  const b = BAND[d.band]||BAND.moderate;
+  const cats = (d.breakdown||[]).slice().sort((a,c)=>c.count-a.count).slice(0,5);
+  const maxCat = Math.max(1,...cats.map(c=>c.count));
+  const tod = d.timeOfDayIsRealData && (d.timeOfDay||[]).some(x=>x>0) ? d.timeOfDay : null;
+  const maxTod = tod?Math.max(...tod):1;
+  panel.innerHTML = `
+    <div class="place">${esc(name)}${address?`<small>${esc(address)}</small>`:''}</div>
+    <div class="scorebox">
+      <span class="score" style="color:${b.c}">${d.safetyScore}<span class="of">/100</span></span>
+      <span class="band" style="background:${b.c}">${b.t}</span>
+    </div>
+    <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported within 1&nbsp;km, ${esc(d.reportedTo||'to police')} — higher index = safer. ${d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
+    <div class="divider"></div>
+    ${cats.length?`<div><p class="h3">What's reported here</p>${cats.map(c=>`<div class="cat"><span class="bar" style="width:${Math.round(c.count/maxCat*46)+8}px"></span><span class="lbl">${catName(c.category)}</span><span class="n">${fmt(c.count)}</span></div>`).join('')}</div>`:''}
+    ${tod?`<div class="divider"></div><div><p class="h3">When it happens</p><div class="tod">${tod.map(v=>`<div class="b" style="height:${Math.max(4,Math.round(v/maxTod*52))}px"></div>`).join('')}</div><div class="tod-x">${TOD.map(t=>`<span>${t}</span>`).join('')}</div></div>`:''}
+    <div class="divider"></div>
+    <p class="src">${esc(d.dataSource||'Police open data')}${d.crimeDate?` · through ${monthName(d.crimeDate)}`:''}. Locations are anonymised by the source. Informational only.</p>
+    <a class="cta" href="https://apps.apple.com/app/id6768244297">Route here safely with the app</a>`;
+}
+
+// ── map incident layers (Leaflet) ──
+const incColor = w => w>=8?'#7E1410':w>=4?'#C0453B':'#E89286';
+function flyTo(lat,lng){ map.invalidateSize(); map.flyTo([lat,lng], 14, { duration:1.1 }); }
+function drawIncidents(d){
+  if(incLayer) map.removeLayer(incLayer);
+  if(ringLayer) map.removeLayer(ringLayer);
+  if(ctrLayer) map.removeLayer(ctrLayer);
+  incLayer = L.layerGroup((d.incidents||[]).map(p =>
+    L.circleMarker([p.lat, p.lng], { radius:3.5, color:incColor(p.w||1), weight:0, fillOpacity:0.72 })
+  )).addTo(map);
+  ringLayer = L.circle([d.lat, d.lng], {
+    radius:(d.radiusMetres||1000), color:'#14564C', weight:1.4, dashArray:'3 4', fill:false, opacity:0.6,
+  }).addTo(map);
+  ctrLayer = L.circleMarker([d.lat, d.lng], { radius:6, color:'#fff', weight:2, fillColor:'#14564C', fillOpacity:1 }).addTo(map);
+}
+
+// ── utils ──
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function fmt(n){ return Number(n||0).toLocaleString('en-US'); }
+function monthName(ym){ const [y,m]=String(ym).split('-').map(Number); return new Date(Date.UTC(y,(m||1)-1,1)).toLocaleString('en-US',{month:'long',year:'numeric',timeZone:'UTC'}); }
+
+// Deep link: /check/?q=... or ?lat=&lng=
+(function(){
+  const p=new URLSearchParams(location.search);
+  if(p.get('lat')&&p.get('lng')){ lookup(parseFloat(p.get('lat')),parseFloat(p.get('lng')),p.get('name')||'Location',''); }
+  else if(p.get('q')){ q.value=p.get('q'); geocode(p.get('q')).then(()=>{ if(acItems[0]) pick(acItems[0]); }); }
+})();
+</script>
+</body>
+</html>
