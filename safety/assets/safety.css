@@ -37,9 +37,12 @@ p.lead{font-size:18.5px;color:var(--ink-2)}
 .band.high{background:#F6DEDC;color:var(--red)}
 .gaugebar{height:8px;background:var(--cream-deep);border-radius:999px;overflow:hidden;margin-top:10px}
 .gaugebar i{display:block;height:100%;border-radius:999px}
-figure.map{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;margin:22px 0}
+figure.map{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;margin:22px 0 12px}
 figure.map svg{display:block;width:100%;height:auto}
 figcaption{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-top:10px}
+a.checkmap{display:inline-flex;align-items:center;gap:8px;margin:0 0 10px;font-family:var(--mono);font-size:12.5px;font-weight:500;letter-spacing:.04em;color:var(--teal-deep);text-decoration:none;border:1px solid var(--line);padding:10px 16px;border-radius:10px;transition:border-color .15s,background .15s}
+a.checkmap:hover{border-color:var(--teal);background:var(--paper)}
+a.checkmap .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex:none}
 table.cats{width:100%;border-collapse:collapse;margin:14px 0 6px;font-size:15.5px}
 table.cats td{padding:8px 10px 8px 0;border-bottom:1px solid var(--line);vertical-align:middle}
 table.cats td.n{font-family:var(--mono);text-align:right;white-space:nowrap;color:var(--ink-2)}

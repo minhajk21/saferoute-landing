@@ -509,6 +509,7 @@ ${p.when ? `<p>${p.when}</p>` : ''}
 ${mapSVG(a, shape, bm, cfg)}
 <figcaption>${fmt(a.totalIncidents)} incidents reported within 1 km of the ${esc(a.name)} ${cfg.centre}${(a.incidents || []).length < a.totalIncidents ? ` (${fmt((a.incidents || []).length)} shown)` : ''} · ${cfg.dataName} through ${monthName(a.crimeDate)}${bm ? ` · ${cfg.basemapCredit}` : ''}.${clusterNote}</figcaption>
 </figure>
+<a class="checkmap" href="/check/?lat=${a.lat}&lng=${a.lng}&name=${encodeURIComponent(a.name)}"><span class="dot"></span>Open ${esc(a.name)} on the live interactive map →</a>
 
 <div class="grid2">
 <section>
