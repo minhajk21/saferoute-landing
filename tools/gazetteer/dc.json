@@ -1,0 +1,1857 @@
+{
+ "city": "Washington, D.C.",
+ "citySlug": "dc",
+ "country": "US",
+ "source": "DCGIS Open Data — 132 named neighbourhoods (Neighborhood Names), grouped by Ward",
+ "generatedAt": "2026-07-30",
+ "areas": [
+  {
+   "name": "Adams Morgan",
+   "slug": "adams-morgan",
+   "borough": "Ward 1",
+   "lat": 38.920472,
+   "lng": -77.042391,
+   "neighbors": [
+    "lanier-heights",
+    "kalorama-heights",
+    "dupont-circle",
+    "mount-pleasant",
+    "columbia-heights"
+   ]
+  },
+  {
+   "name": "Cardozo/Shaw",
+   "slug": "cardozo-shaw",
+   "borough": "Ward 1",
+   "lat": 38.917168,
+   "lng": -77.02755,
+   "neighbors": [
+    "logan-circle-shaw",
+    "le-droit-park",
+    "howard-university",
+    "columbia-heights",
+    "dupont-circle"
+   ]
+  },
+  {
+   "name": "Columbia Heights",
+   "slug": "columbia-heights",
+   "borough": "Ward 1",
+   "lat": 38.928008,
+   "lng": -77.030586,
+   "neighbors": [
+    "pleasant-plains",
+    "mount-pleasant",
+    "park-view",
+    "lanier-heights",
+    "howard-university"
+   ]
+  },
+  {
+   "name": "Howard University",
+   "slug": "howard-university",
+   "borough": "Ward 1",
+   "lat": 38.922355,
+   "lng": -77.01961,
+   "neighbors": [
+    "le-droit-park",
+    "pleasant-plains",
+    "bloomingdale",
+    "cardozo-shaw",
+    "stronghold"
+   ]
+  },
+  {
+   "name": "Lanier Heights",
+   "slug": "lanier-heights",
+   "borough": "Ward 1",
+   "lat": 38.925249,
+   "lng": -77.042694,
+   "neighbors": [
+    "adams-morgan",
+    "mount-pleasant",
+    "columbia-heights",
+    "kalorama-heights",
+    "woodley-park"
+   ]
+  },
+  {
+   "name": "Le Droit Park",
+   "slug": "le-droit-park",
+   "borough": "Ward 1",
+   "lat": 38.916832,
+   "lng": -77.017605,
+   "neighbors": [
+    "bloomingdale",
+    "howard-university",
+    "cardozo-shaw",
+    "truxton-circle",
+    "logan-circle-shaw"
+   ]
+  },
+  {
+   "name": "Mount Pleasant",
+   "slug": "mount-pleasant",
+   "borough": "Ward 1",
+   "lat": 38.931741,
+   "lng": -77.040656,
+   "neighbors": [
+    "lanier-heights",
+    "columbia-heights",
+    "adams-morgan",
+    "crestwood",
+    "woodley-park"
+   ]
+  },
+  {
+   "name": "Park View",
+   "slug": "park-view",
+   "borough": "Ward 1",
+   "lat": 38.934604,
+   "lng": -77.021444,
+   "neighbors": [
+    "pleasant-plains",
+    "petworth",
+    "columbia-heights",
+    "howard-university",
+    "stronghold"
+   ]
+  },
+  {
+   "name": "Pleasant Plains",
+   "slug": "pleasant-plains",
+   "borough": "Ward 1",
+   "lat": 38.929473,
+   "lng": -77.023101,
+   "neighbors": [
+    "park-view",
+    "columbia-heights",
+    "howard-university",
+    "stronghold",
+    "cardozo-shaw"
+   ]
+  },
+  {
+   "name": "Burleith/Hillandale",
+   "slug": "burleith-hillandale",
+   "borough": "Ward 2",
+   "lat": 38.915003,
+   "lng": -77.074566,
+   "neighbors": [
+    "glover-park",
+    "foxhall-village",
+    "georgetown",
+    "mass-ave-heights",
+    "woodland-normanstone"
+   ]
+  },
+  {
+   "name": "Chinatown",
+   "slug": "chinatown",
+   "borough": "Ward 2",
+   "lat": 38.899151,
+   "lng": -77.020135,
+   "neighbors": [
+    "penn-quarter",
+    "mount-vernon-triangle",
+    "mount-vernon-square",
+    "downtown-east",
+    "downtown"
+   ]
+  },
+  {
+   "name": "Connecticut Avenue/K Street",
+   "slug": "connecticut-avenue-k-street",
+   "borough": "Ward 2",
+   "lat": 38.902952,
+   "lng": -77.041134,
+   "neighbors": [
+    "george-washington-university",
+    "west-end",
+    "dupont-circle",
+    "downtown",
+    "foggy-bottom"
+   ]
+  },
+  {
+   "name": "Downtown",
+   "slug": "downtown",
+   "borough": "Ward 2",
+   "lat": 38.900526,
+   "lng": -77.029175,
+   "neighbors": [
+    "mount-vernon-square",
+    "chinatown",
+    "penn-quarter",
+    "connecticut-avenue-k-street",
+    "mount-vernon-triangle"
+   ]
+  },
+  {
+   "name": "Dupont Circle",
+   "slug": "dupont-circle",
+   "borough": "Ward 2",
+   "lat": 38.912128,
+   "lng": -77.040984,
+   "neighbors": [
+    "adams-morgan",
+    "kalorama-heights",
+    "connecticut-avenue-k-street",
+    "west-end",
+    "cardozo-shaw"
+   ]
+  },
+  {
+   "name": "Foggy Bottom",
+   "slug": "foggy-bottom",
+   "borough": "Ward 2",
+   "lat": 38.899022,
+   "lng": -77.052436,
+   "neighbors": [
+    "george-washington-university",
+    "west-end",
+    "connecticut-avenue-k-street",
+    "georgetown",
+    "dupont-circle"
+   ]
+  },
+  {
+   "name": "George Washington University",
+   "slug": "george-washington-university",
+   "borough": "Ward 2",
+   "lat": 38.899628,
+   "lng": -77.047928,
+   "neighbors": [
+    "foggy-bottom",
+    "connecticut-avenue-k-street",
+    "west-end",
+    "dupont-circle",
+    "downtown"
+   ]
+  },
+  {
+   "name": "Georgetown",
+   "slug": "georgetown",
+   "borough": "Ward 2",
+   "lat": 38.909556,
+   "lng": -77.064796,
+   "neighbors": [
+    "burleith-hillandale",
+    "west-end",
+    "kalorama-heights",
+    "woodland-normanstone",
+    "foggy-bottom"
+   ]
+  },
+  {
+   "name": "Kalorama Heights",
+   "slug": "kalorama-heights",
+   "borough": "Ward 2",
+   "lat": 38.91566,
+   "lng": -77.051195,
+   "neighbors": [
+    "adams-morgan",
+    "dupont-circle",
+    "west-end",
+    "woodland-normanstone",
+    "lanier-heights"
+   ]
+  },
+  {
+   "name": "Logan Circle/Shaw",
+   "slug": "logan-circle-shaw",
+   "borough": "Ward 2",
+   "lat": 38.909816,
+   "lng": -77.02534,
+   "neighbors": [
+    "mount-vernon-square",
+    "cardozo-shaw",
+    "le-droit-park",
+    "downtown",
+    "mount-vernon-triangle"
+   ]
+  },
+  {
+   "name": "Monumental Core",
+   "slug": "monumental-core",
+   "borough": "Ward 2",
+   "lat": 38.884463,
+   "lng": -77.037334,
+   "neighbors": [
+    "southwest-employment-area",
+    "penn-quarter",
+    "southwest-waterfront",
+    "george-washington-university",
+    "downtown"
+   ]
+  },
+  {
+   "name": "Mount Vernon Square",
+   "slug": "mount-vernon-square",
+   "borough": "Ward 2",
+   "lat": 38.90434,
+   "lng": -77.023313,
+   "neighbors": [
+    "mount-vernon-triangle",
+    "logan-circle-shaw",
+    "chinatown",
+    "downtown",
+    "penn-quarter"
+   ]
+  },
+  {
+   "name": "Penn Quarter",
+   "slug": "penn-quarter",
+   "borough": "Ward 2",
+   "lat": 38.89537,
+   "lng": -77.022181,
+   "neighbors": [
+    "chinatown",
+    "downtown-east",
+    "downtown",
+    "mount-vernon-triangle",
+    "mount-vernon-square"
+   ]
+  },
+  {
+   "name": "West End",
+   "slug": "west-end",
+   "borough": "Ward 2",
+   "lat": 38.90555,
+   "lng": -77.051882,
+   "neighbors": [
+    "foggy-bottom",
+    "george-washington-university",
+    "connecticut-avenue-k-street",
+    "kalorama-heights",
+    "dupont-circle"
+   ]
+  },
+  {
+   "name": "American University Park",
+   "slug": "american-university-park",
+   "borough": "Ward 3",
+   "lat": 38.947612,
+   "lng": -77.09025,
+   "neighbors": [
+    "tenleytown",
+    "spring-valley",
+    "friendship-heights",
+    "north-cleveland-park",
+    "cathedral-heights"
+   ]
+  },
+  {
+   "name": "Cathedral Heights",
+   "slug": "cathedral-heights",
+   "borough": "Ward 3",
+   "lat": 38.934272,
+   "lng": -77.07986,
+   "neighbors": [
+    "mclean-gardens",
+    "wesley-heights",
+    "mass-ave-heights",
+    "cleveland-park",
+    "tenleytown"
+   ]
+  },
+  {
+   "name": "Cleveland Park",
+   "slug": "cleveland-park",
+   "borough": "Ward 3",
+   "lat": 38.936098,
+   "lng": -77.064402,
+   "neighbors": [
+    "van-ness",
+    "mclean-gardens",
+    "woodley-park",
+    "mass-ave-heights",
+    "forest-hills"
+   ]
+  },
+  {
+   "name": "Forest Hills",
+   "slug": "forest-hills",
+   "borough": "Ward 3",
+   "lat": 38.946893,
+   "lng": -77.058462,
+   "neighbors": [
+    "van-ness",
+    "north-cleveland-park",
+    "cleveland-park",
+    "crestwood",
+    "tenleytown"
+   ]
+  },
+  {
+   "name": "Foxhall Crescents",
+   "slug": "foxhall-crescents",
+   "borough": "Ward 3",
+   "lat": 38.920486,
+   "lng": -77.092767,
+   "neighbors": [
+    "foxhall-village",
+    "wesley-heights",
+    "georgetown-reservoir",
+    "palisades",
+    "glover-park"
+   ]
+  },
+  {
+   "name": "Foxhall Village",
+   "slug": "foxhall-village",
+   "borough": "Ward 3",
+   "lat": 38.913247,
+   "lng": -77.084407,
+   "neighbors": [
+    "georgetown-reservoir",
+    "burleith-hillandale",
+    "foxhall-crescents",
+    "glover-park",
+    "georgetown"
+   ]
+  },
+  {
+   "name": "Friendship Heights",
+   "slug": "friendship-heights",
+   "borough": "Ward 3",
+   "lat": 38.956907,
+   "lng": -77.083854,
+   "neighbors": [
+    "tenleytown",
+    "american-university-park",
+    "north-cleveland-park",
+    "chevy-chase",
+    "van-ness"
+   ]
+  },
+  {
+   "name": "Georgetown Reservoir",
+   "slug": "georgetown-reservoir",
+   "borough": "Ward 3",
+   "lat": 38.909637,
+   "lng": -77.090677,
+   "neighbors": [
+    "foxhall-village",
+    "foxhall-crescents",
+    "burleith-hillandale",
+    "glover-park",
+    "georgetown"
+   ]
+  },
+  {
+   "name": "Glover Park",
+   "slug": "glover-park",
+   "borough": "Ward 3",
+   "lat": 38.921531,
+   "lng": -77.075738,
+   "neighbors": [
+    "mass-ave-heights",
+    "burleith-hillandale",
+    "foxhall-village",
+    "woodland-normanstone",
+    "wesley-heights"
+   ]
+  },
+  {
+   "name": "Mass. Ave. Heights",
+   "slug": "mass-ave-heights",
+   "borough": "Ward 3",
+   "lat": 38.925399,
+   "lng": -77.070075,
+   "neighbors": [
+    "glover-park",
+    "woodland-normanstone",
+    "woodley-park",
+    "burleith-hillandale",
+    "mclean-gardens"
+   ]
+  },
+  {
+   "name": "McLean Gardens",
+   "slug": "mclean-gardens",
+   "borough": "Ward 3",
+   "lat": 38.936151,
+   "lng": -77.075296,
+   "neighbors": [
+    "cathedral-heights",
+    "cleveland-park",
+    "van-ness",
+    "mass-ave-heights",
+    "tenleytown"
+   ]
+  },
+  {
+   "name": "North Cleveland Park",
+   "slug": "north-cleveland-park",
+   "borough": "Ward 3",
+   "lat": 38.947879,
+   "lng": -77.071774,
+   "neighbors": [
+    "van-ness",
+    "tenleytown",
+    "forest-hills",
+    "mclean-gardens",
+    "friendship-heights"
+   ]
+  },
+  {
+   "name": "Palisades",
+   "slug": "palisades",
+   "borough": "Ward 3",
+   "lat": 38.929808,
+   "lng": -77.10352,
+   "neighbors": [
+    "spring-valley",
+    "wesley-heights",
+    "foxhall-crescents",
+    "cathedral-heights",
+    "american-university-park"
+   ]
+  },
+  {
+   "name": "Spring Valley",
+   "slug": "spring-valley",
+   "borough": "Ward 3",
+   "lat": 38.939311,
+   "lng": -77.096724,
+   "neighbors": [
+    "american-university-park",
+    "palisades",
+    "wesley-heights",
+    "cathedral-heights",
+    "tenleytown"
+   ]
+  },
+  {
+   "name": "Tenleytown",
+   "slug": "tenleytown",
+   "borough": "Ward 3",
+   "lat": 38.947127,
+   "lng": -77.080163,
+   "neighbors": [
+    "north-cleveland-park",
+    "american-university-park",
+    "friendship-heights",
+    "van-ness",
+    "mclean-gardens"
+   ]
+  },
+  {
+   "name": "Van Ness",
+   "slug": "van-ness",
+   "borough": "Ward 3",
+   "lat": 38.943391,
+   "lng": -77.066106,
+   "neighbors": [
+    "north-cleveland-park",
+    "forest-hills",
+    "cleveland-park",
+    "mclean-gardens",
+    "tenleytown"
+   ]
+  },
+  {
+   "name": "Wesley Heights",
+   "slug": "wesley-heights",
+   "borough": "Ward 3",
+   "lat": 38.929981,
+   "lng": -77.088325,
+   "neighbors": [
+    "cathedral-heights",
+    "foxhall-crescents",
+    "spring-valley",
+    "palisades",
+    "mclean-gardens"
+   ]
+  },
+  {
+   "name": "Woodland-Normanstone",
+   "slug": "woodland-normanstone",
+   "borough": "Ward 3",
+   "lat": 38.92285,
+   "lng": -77.060753,
+   "neighbors": [
+    "woodley-park",
+    "mass-ave-heights",
+    "kalorama-heights",
+    "glover-park",
+    "burleith-hillandale"
+   ]
+  },
+  {
+   "name": "Woodley Park",
+   "slug": "woodley-park",
+   "borough": "Ward 3",
+   "lat": 38.927265,
+   "lng": -77.057483,
+   "neighbors": [
+    "woodland-normanstone",
+    "mass-ave-heights",
+    "cleveland-park",
+    "lanier-heights",
+    "kalorama-heights"
+   ]
+  },
+  {
+   "name": "16th Street Heights",
+   "slug": "16th-street-heights",
+   "borough": "Ward 4",
+   "lat": 38.950315,
+   "lng": -77.033559,
+   "neighbors": [
+    "brightwood-park",
+    "crestwood",
+    "petworth",
+    "brightwood",
+    "park-view"
+   ]
+  },
+  {
+   "name": "Barnaby Woods",
+   "slug": "barnaby-woods",
+   "borough": "Ward 4",
+   "lat": 38.975433,
+   "lng": -77.060174,
+   "neighbors": [
+    "hawthorne",
+    "chevy-chase",
+    "colonial-village",
+    "north-portal-estates",
+    "shepherd-park"
+   ]
+  },
+  {
+   "name": "Brightwood",
+   "slug": "brightwood",
+   "borough": "Ward 4",
+   "lat": 38.966379,
+   "lng": -77.026874,
+   "neighbors": [
+    "brightwood-park",
+    "takoma",
+    "manor-park",
+    "lamond-riggs",
+    "16th-street-heights"
+   ]
+  },
+  {
+   "name": "Brightwood Park",
+   "slug": "brightwood-park",
+   "borough": "Ward 4",
+   "lat": 38.955748,
+   "lng": -77.024871,
+   "neighbors": [
+    "16th-street-heights",
+    "brightwood",
+    "manor-park",
+    "petworth",
+    "fort-totten"
+   ]
+  },
+  {
+   "name": "Chevy Chase",
+   "slug": "chevy-chase",
+   "borough": "Ward 4",
+   "lat": 38.963146,
+   "lng": -77.066478,
+   "neighbors": [
+    "barnaby-woods",
+    "friendship-heights",
+    "north-cleveland-park",
+    "forest-hills",
+    "tenleytown"
+   ]
+  },
+  {
+   "name": "Colonial Village",
+   "slug": "colonial-village",
+   "borough": "Ward 4",
+   "lat": 38.98679,
+   "lng": -77.041094,
+   "neighbors": [
+    "north-portal-estates",
+    "shepherd-park",
+    "hawthorne",
+    "takoma",
+    "barnaby-woods"
+   ]
+  },
+  {
+   "name": "Crestwood",
+   "slug": "crestwood",
+   "borough": "Ward 4",
+   "lat": 38.943327,
+   "lng": -77.041097,
+   "neighbors": [
+    "16th-street-heights",
+    "mount-pleasant",
+    "petworth",
+    "forest-hills",
+    "columbia-heights"
+   ]
+  },
+  {
+   "name": "Hawthorne",
+   "slug": "hawthorne",
+   "borough": "Ward 4",
+   "lat": 38.980883,
+   "lng": -77.055934,
+   "neighbors": [
+    "barnaby-woods",
+    "colonial-village",
+    "north-portal-estates",
+    "shepherd-park",
+    "chevy-chase"
+   ]
+  },
+  {
+   "name": "Lamond Riggs",
+   "slug": "lamond-riggs",
+   "borough": "Ward 4",
+   "lat": 38.96507,
+   "lng": -77.006445,
+   "neighbors": [
+    "manor-park",
+    "queens-chapel",
+    "fort-totten",
+    "brightwood",
+    "takoma"
+   ]
+  },
+  {
+   "name": "Manor Park",
+   "slug": "manor-park",
+   "borough": "Ward 4",
+   "lat": 38.962062,
+   "lng": -77.012657,
+   "neighbors": [
+    "lamond-riggs",
+    "brightwood-park",
+    "brightwood",
+    "fort-totten",
+    "queens-chapel"
+   ]
+  },
+  {
+   "name": "North Portal Estates",
+   "slug": "north-portal-estates",
+   "borough": "Ward 4",
+   "lat": 38.991765,
+   "lng": -77.040877,
+   "neighbors": [
+    "colonial-village",
+    "shepherd-park",
+    "hawthorne",
+    "takoma",
+    "barnaby-woods"
+   ]
+  },
+  {
+   "name": "Petworth",
+   "slug": "petworth",
+   "borough": "Ward 4",
+   "lat": 38.943039,
+   "lng": -77.024017,
+   "neighbors": [
+    "park-view",
+    "16th-street-heights",
+    "brightwood-park",
+    "crestwood",
+    "pleasant-plains"
+   ]
+  },
+  {
+   "name": "Shepherd Park",
+   "slug": "shepherd-park",
+   "borough": "Ward 4",
+   "lat": 38.98298,
+   "lng": -77.032126,
+   "neighbors": [
+    "colonial-village",
+    "takoma",
+    "north-portal-estates",
+    "brightwood",
+    "hawthorne"
+   ]
+  },
+  {
+   "name": "Takoma",
+   "slug": "takoma",
+   "borough": "Ward 4",
+   "lat": 38.976462,
+   "lng": -77.021558,
+   "neighbors": [
+    "shepherd-park",
+    "brightwood",
+    "manor-park",
+    "lamond-riggs",
+    "colonial-village"
+   ]
+  },
+  {
+   "name": "Arboretum",
+   "slug": "arboretum",
+   "borough": "Ward 5",
+   "lat": 38.91486,
+   "lng": -76.97249,
+   "neighbors": [
+    "gateway",
+    "langdon",
+    "trinidad",
+    "south-central",
+    "brentwood"
+   ]
+  },
+  {
+   "name": "Bloomingdale",
+   "slug": "bloomingdale",
+   "borough": "Ward 5",
+   "lat": 38.918226,
+   "lng": -77.011159,
+   "neighbors": [
+    "le-droit-park",
+    "howard-university",
+    "stronghold",
+    "truxton-circle",
+    "eckington"
+   ]
+  },
+  {
+   "name": "Brentwood",
+   "slug": "brentwood",
+   "borough": "Ward 5",
+   "lat": 38.918977,
+   "lng": -76.987035,
+   "neighbors": [
+    "ivy-city",
+    "langdon",
+    "trinidad",
+    "eckington",
+    "arboretum"
+   ]
+  },
+  {
+   "name": "Brookland",
+   "slug": "brookland",
+   "borough": "Ward 5",
+   "lat": 38.931404,
+   "lng": -76.984414,
+   "neighbors": [
+    "langdon",
+    "university-heights",
+    "woodridge",
+    "brentwood",
+    "edgewood"
+   ]
+  },
+  {
+   "name": "Carver",
+   "slug": "carver",
+   "borough": "Ward 5",
+   "lat": 38.902465,
+   "lng": -76.97785,
+   "neighbors": [
+    "langston",
+    "trinidad",
+    "kingman-park",
+    "arboretum",
+    "ivy-city"
+   ]
+  },
+  {
+   "name": "Eckington",
+   "slug": "eckington",
+   "borough": "Ward 5",
+   "lat": 38.915202,
+   "lng": -77.000425,
+   "neighbors": [
+    "ivy-city",
+    "bloomingdale",
+    "edgewood",
+    "truxton-circle",
+    "brentwood"
+   ]
+  },
+  {
+   "name": "Edgewood",
+   "slug": "edgewood",
+   "borough": "Ward 5",
+   "lat": 38.925199,
+   "lng": -77.000739,
+   "neighbors": [
+    "stronghold",
+    "eckington",
+    "bloomingdale",
+    "brentwood",
+    "university-heights"
+   ]
+  },
+  {
+   "name": "Fort Lincoln",
+   "slug": "fort-lincoln",
+   "borough": "Ward 5",
+   "lat": 38.92361,
+   "lng": -76.954749,
+   "neighbors": [
+    "south-central",
+    "gateway",
+    "woodridge",
+    "langdon",
+    "arboretum"
+   ]
+  },
+  {
+   "name": "Fort Totten",
+   "slug": "fort-totten",
+   "borough": "Ward 5",
+   "lat": 38.94943,
+   "lng": -77.008128,
+   "neighbors": [
+    "pleasant-hill",
+    "queens-chapel",
+    "north-michigan-park",
+    "manor-park",
+    "petworth"
+   ]
+  },
+  {
+   "name": "Gateway",
+   "slug": "gateway",
+   "borough": "Ward 5",
+   "lat": 38.919757,
+   "lng": -76.963846,
+   "neighbors": [
+    "south-central",
+    "fort-lincoln",
+    "arboretum",
+    "langdon",
+    "woodridge"
+   ]
+  },
+  {
+   "name": "Ivy City",
+   "slug": "ivy-city",
+   "borough": "Ward 5",
+   "lat": 38.910389,
+   "lng": -76.991627,
+   "neighbors": [
+    "trinidad",
+    "eckington",
+    "brentwood",
+    "near-northeast",
+    "carver"
+   ]
+  },
+  {
+   "name": "Langdon",
+   "slug": "langdon",
+   "borough": "Ward 5",
+   "lat": 38.924017,
+   "lng": -76.974689,
+   "neighbors": [
+    "south-central",
+    "arboretum",
+    "gateway",
+    "brookland",
+    "brentwood"
+   ]
+  },
+  {
+   "name": "Langston",
+   "slug": "langston",
+   "borough": "Ward 5",
+   "lat": 38.901336,
+   "lng": -76.972367,
+   "neighbors": [
+    "carver",
+    "kingman-park",
+    "trinidad",
+    "arboretum",
+    "river-terrace"
+   ]
+  },
+  {
+   "name": "Michigan Park",
+   "slug": "michigan-park",
+   "borough": "Ward 5",
+   "lat": 38.946934,
+   "lng": -76.983772,
+   "neighbors": [
+    "north-michigan-park",
+    "university-heights",
+    "queens-chapel",
+    "brookland",
+    "pleasant-hill"
+   ]
+  },
+  {
+   "name": "North Michigan Park",
+   "slug": "north-michigan-park",
+   "borough": "Ward 5",
+   "lat": 38.945644,
+   "lng": -76.993666,
+   "neighbors": [
+    "university-heights",
+    "michigan-park",
+    "pleasant-hill",
+    "queens-chapel",
+    "fort-totten"
+   ]
+  },
+  {
+   "name": "Pleasant Hill",
+   "slug": "pleasant-hill",
+   "borough": "Ward 5",
+   "lat": 38.941079,
+   "lng": -77.004804,
+   "neighbors": [
+    "university-heights",
+    "fort-totten",
+    "north-michigan-park",
+    "park-view",
+    "petworth"
+   ]
+  },
+  {
+   "name": "Queens Chapel",
+   "slug": "queens-chapel",
+   "borough": "Ward 5",
+   "lat": 38.95607,
+   "lng": -76.996591,
+   "neighbors": [
+    "north-michigan-park",
+    "fort-totten",
+    "lamond-riggs",
+    "michigan-park",
+    "manor-park"
+   ]
+  },
+  {
+   "name": "South Central",
+   "slug": "south-central",
+   "borough": "Ward 5",
+   "lat": 38.923985,
+   "lng": -76.965043,
+   "neighbors": [
+    "gateway",
+    "langdon",
+    "fort-lincoln",
+    "woodridge",
+    "arboretum"
+   ]
+  },
+  {
+   "name": "Stronghold",
+   "slug": "stronghold",
+   "borough": "Ward 5",
+   "lat": 38.925776,
+   "lng": -77.007767,
+   "neighbors": [
+    "edgewood",
+    "bloomingdale",
+    "howard-university",
+    "le-droit-park",
+    "eckington"
+   ]
+  },
+  {
+   "name": "Trinidad",
+   "slug": "trinidad",
+   "borough": "Ward 5",
+   "lat": 38.908462,
+   "lng": -76.982737,
+   "neighbors": [
+    "carver",
+    "ivy-city",
+    "arboretum",
+    "langston",
+    "brentwood"
+   ]
+  },
+  {
+   "name": "Truxton Circle",
+   "slug": "truxton-circle",
+   "borough": "Ward 5",
+   "lat": 38.909667,
+   "lng": -77.012394,
+   "neighbors": [
+    "north-capitol-street",
+    "mount-vernon-triangle",
+    "le-droit-park",
+    "bloomingdale",
+    "mount-vernon-square"
+   ]
+  },
+  {
+   "name": "University Heights",
+   "slug": "university-heights",
+   "borough": "Ward 5",
+   "lat": 38.938249,
+   "lng": -76.995761,
+   "neighbors": [
+    "north-michigan-park",
+    "pleasant-hill",
+    "brookland",
+    "michigan-park",
+    "edgewood"
+   ]
+  },
+  {
+   "name": "Woodridge",
+   "slug": "woodridge",
+   "borough": "Ward 5",
+   "lat": 38.934021,
+   "lng": -76.96864,
+   "neighbors": [
+    "south-central",
+    "langdon",
+    "brookland",
+    "gateway",
+    "fort-lincoln"
+   ]
+  },
+  {
+   "name": "Buzzard Point",
+   "slug": "buzzard-point",
+   "borough": "Ward 6",
+   "lat": 38.8683,
+   "lng": -77.011425,
+   "neighbors": [
+    "fort-mcnair",
+    "southwest-waterfront",
+    "navy-yard",
+    "near-southeast",
+    "barry-farm"
+   ]
+  },
+  {
+   "name": "Capitol Hill",
+   "slug": "capitol-hill",
+   "borough": "Ward 6",
+   "lat": 38.883621,
+   "lng": -76.998477,
+   "neighbors": [
+    "near-southeast",
+    "lincoln-park",
+    "navy-yard",
+    "stanton-park",
+    "hill-east"
+   ]
+  },
+  {
+   "name": "Downtown East",
+   "slug": "downtown-east",
+   "borough": "Ward 6",
+   "lat": 38.895428,
+   "lng": -77.014234,
+   "neighbors": [
+    "chinatown",
+    "penn-quarter",
+    "mount-vernon-triangle",
+    "north-capitol-street",
+    "mount-vernon-square"
+   ]
+  },
+  {
+   "name": "Fort McNair",
+   "slug": "fort-mcnair",
+   "borough": "Ward 6",
+   "lat": 38.866943,
+   "lng": -77.016438,
+   "neighbors": [
+    "buzzard-point",
+    "southwest-waterfront",
+    "navy-yard",
+    "barry-farm",
+    "near-southeast"
+   ]
+  },
+  {
+   "name": "Lincoln Park",
+   "slug": "lincoln-park",
+   "borough": "Ward 6",
+   "lat": 38.887211,
+   "lng": -76.98971,
+   "neighbors": [
+    "capitol-hill",
+    "stanton-park",
+    "hill-east",
+    "kingman-park",
+    "near-southeast"
+   ]
+  },
+  {
+   "name": "Mount Vernon Triangle",
+   "slug": "mount-vernon-triangle",
+   "borough": "Ward 6",
+   "lat": 38.902417,
+   "lng": -77.016879,
+   "neighbors": [
+    "chinatown",
+    "north-capitol-street",
+    "mount-vernon-square",
+    "downtown-east",
+    "truxton-circle"
+   ]
+  },
+  {
+   "name": "Near Northeast",
+   "slug": "near-northeast",
+   "borough": "Ward 6",
+   "lat": 38.902375,
+   "lng": -76.999734,
+   "neighbors": [
+    "stanton-park",
+    "north-capitol-street",
+    "ivy-city",
+    "truxton-circle",
+    "eckington"
+   ]
+  },
+  {
+   "name": "North Capitol Street",
+   "slug": "north-capitol-street",
+   "borough": "Ward 6",
+   "lat": 38.902532,
+   "lng": -77.011275,
+   "neighbors": [
+    "mount-vernon-triangle",
+    "truxton-circle",
+    "downtown-east",
+    "chinatown",
+    "near-northeast"
+   ]
+  },
+  {
+   "name": "Southwest Employment Area",
+   "slug": "southwest-employment-area",
+   "borough": "Ward 6",
+   "lat": 38.885017,
+   "lng": -77.020317,
+   "neighbors": [
+    "southwest-waterfront",
+    "penn-quarter",
+    "downtown-east",
+    "monumental-core",
+    "chinatown"
+   ]
+  },
+  {
+   "name": "Southwest/Waterfront",
+   "slug": "southwest-waterfront",
+   "borough": "Ward 6",
+   "lat": 38.877908,
+   "lng": -77.016903,
+   "neighbors": [
+    "southwest-employment-area",
+    "buzzard-point",
+    "fort-mcnair",
+    "near-southeast",
+    "navy-yard"
+   ]
+  },
+  {
+   "name": "Stanton Park",
+   "slug": "stanton-park",
+   "borough": "Ward 6",
+   "lat": 38.894898,
+   "lng": -76.994242,
+   "neighbors": [
+    "lincoln-park",
+    "near-northeast",
+    "capitol-hill",
+    "kingman-park",
+    "carver"
+   ]
+  },
+  {
+   "name": "Benning",
+   "slug": "benning",
+   "borough": "Ward 7",
+   "lat": 38.891885,
+   "lng": -76.948884,
+   "neighbors": [
+    "fort-dupont",
+    "river-terrace",
+    "central-ne",
+    "mayfair",
+    "greenway"
+   ]
+  },
+  {
+   "name": "Benning Ridge",
+   "slug": "benning-ridge",
+   "borough": "Ward 7",
+   "lat": 38.881162,
+   "lng": -76.938203,
+   "neighbors": [
+    "marshall-heights",
+    "fort-dupont",
+    "capitol-view",
+    "fort-davis-park",
+    "benning"
+   ]
+  },
+  {
+   "name": "Burrville",
+   "slug": "burrville",
+   "borough": "Ward 7",
+   "lat": 38.900243,
+   "lng": -76.921802,
+   "neighbors": [
+    "ne-boundary",
+    "grant-park",
+    "lincoln-heights",
+    "deanwood",
+    "capitol-view"
+   ]
+  },
+  {
+   "name": "Capitol View",
+   "slug": "capitol-view",
+   "borough": "Ward 7",
+   "lat": 38.889978,
+   "lng": -76.927086,
+   "neighbors": [
+    "grant-park",
+    "marshall-heights",
+    "lincoln-heights",
+    "ne-boundary",
+    "burrville"
+   ]
+  },
+  {
+   "name": "Central NE",
+   "slug": "central-ne",
+   "borough": "Ward 7",
+   "lat": 38.897035,
+   "lng": -76.942277,
+   "neighbors": [
+    "benning",
+    "mayfair",
+    "eastland-gardens",
+    "lincoln-heights",
+    "deanwood"
+   ]
+  },
+  {
+   "name": "Deanwood",
+   "slug": "deanwood",
+   "borough": "Ward 7",
+   "lat": 38.904107,
+   "lng": -76.932801,
+   "neighbors": [
+    "kenilworth",
+    "eastland-gardens",
+    "lincoln-heights",
+    "burrville",
+    "central-ne"
+   ]
+  },
+  {
+   "name": "Dupont Park",
+   "slug": "dupont-park",
+   "borough": "Ward 7",
+   "lat": 38.87263,
+   "lng": -76.962818,
+   "neighbors": [
+    "twining",
+    "randle-highlands",
+    "penn-branch",
+    "hillcrest",
+    "fairlawn"
+   ]
+  },
+  {
+   "name": "Eastland Gardens",
+   "slug": "eastland-gardens",
+   "borough": "Ward 7",
+   "lat": 38.905329,
+   "lng": -76.94307,
+   "neighbors": [
+    "kenilworth",
+    "mayfair",
+    "deanwood",
+    "central-ne",
+    "lincoln-heights"
+   ]
+  },
+  {
+   "name": "Fairfax Village",
+   "slug": "fairfax-village",
+   "borough": "Ward 7",
+   "lat": 38.863453,
+   "lng": -76.95163,
+   "neighbors": [
+    "penn-branch",
+    "hillcrest",
+    "fort-davis-park",
+    "naylor-gardens",
+    "randle-highlands"
+   ]
+  },
+  {
+   "name": "Fort Davis Park",
+   "slug": "fort-davis-park",
+   "borough": "Ward 7",
+   "lat": 38.868901,
+   "lng": -76.94467,
+   "neighbors": [
+    "penn-branch",
+    "fairfax-village",
+    "benning-ridge",
+    "twining",
+    "hillcrest"
+   ]
+  },
+  {
+   "name": "Fort Dupont",
+   "slug": "fort-dupont",
+   "borough": "Ward 7",
+   "lat": 38.886017,
+   "lng": -76.950685,
+   "neighbors": [
+    "benning",
+    "greenway",
+    "river-terrace",
+    "benning-ridge",
+    "central-ne"
+   ]
+  },
+  {
+   "name": "Grant Park",
+   "slug": "grant-park",
+   "borough": "Ward 7",
+   "lat": 38.892706,
+   "lng": -76.920638,
+   "neighbors": [
+    "ne-boundary",
+    "capitol-view",
+    "burrville",
+    "lincoln-heights",
+    "marshall-heights"
+   ]
+  },
+  {
+   "name": "Greenway",
+   "slug": "greenway",
+   "borough": "Ward 7",
+   "lat": 38.884788,
+   "lng": -76.960181,
+   "neighbors": [
+    "fort-dupont",
+    "river-terrace",
+    "twining",
+    "benning",
+    "dupont-park"
+   ]
+  },
+  {
+   "name": "Hill East",
+   "slug": "hill-east",
+   "borough": "Ward 7",
+   "lat": 38.88333,
+   "lng": -76.979951,
+   "neighbors": [
+    "lincoln-park",
+    "kingman-park",
+    "fairlawn",
+    "capitol-hill",
+    "greenway"
+   ]
+  },
+  {
+   "name": "Hillcrest",
+   "slug": "hillcrest",
+   "borough": "Ward 7",
+   "lat": 38.861794,
+   "lng": -76.960688,
+   "neighbors": [
+    "naylor-gardens",
+    "fairfax-village",
+    "randle-highlands",
+    "skyland",
+    "penn-branch"
+   ]
+  },
+  {
+   "name": "Kenilworth",
+   "slug": "kenilworth",
+   "borough": "Ward 7",
+   "lat": 38.910679,
+   "lng": -76.938586,
+   "neighbors": [
+    "eastland-gardens",
+    "deanwood",
+    "mayfair",
+    "central-ne",
+    "lincoln-heights"
+   ]
+  },
+  {
+   "name": "Kingman Park",
+   "slug": "kingman-park",
+   "borough": "Ward 7",
+   "lat": 38.894887,
+   "lng": -76.978437,
+   "neighbors": [
+    "carver",
+    "langston",
+    "hill-east",
+    "lincoln-park",
+    "stanton-park"
+   ]
+  },
+  {
+   "name": "Lincoln Heights",
+   "slug": "lincoln-heights",
+   "borough": "Ward 7",
+   "lat": 38.895805,
+   "lng": -76.931097,
+   "neighbors": [
+    "capitol-view",
+    "deanwood",
+    "burrville",
+    "grant-park",
+    "central-ne"
+   ]
+  },
+  {
+   "name": "Marshall Heights",
+   "slug": "marshall-heights",
+   "borough": "Ward 7",
+   "lat": 38.884372,
+   "lng": -76.929122,
+   "neighbors": [
+    "capitol-view",
+    "benning-ridge",
+    "grant-park",
+    "lincoln-heights",
+    "ne-boundary"
+   ]
+  },
+  {
+   "name": "Mayfair",
+   "slug": "mayfair",
+   "borough": "Ward 7",
+   "lat": 38.901116,
+   "lng": -76.951295,
+   "neighbors": [
+    "eastland-gardens",
+    "central-ne",
+    "river-terrace",
+    "benning",
+    "kenilworth"
+   ]
+  },
+  {
+   "name": "Naylor Gardens",
+   "slug": "naylor-gardens",
+   "borough": "Ward 7",
+   "lat": 38.856724,
+   "lng": -76.963046,
+   "neighbors": [
+    "knox-hill-buena-vista",
+    "hillcrest",
+    "garfield-heights",
+    "skyland",
+    "woodland"
+   ]
+  },
+  {
+   "name": "NE Boundary",
+   "slug": "ne-boundary",
+   "borough": "Ward 7",
+   "lat": 38.895451,
+   "lng": -76.917389,
+   "neighbors": [
+    "grant-park",
+    "burrville",
+    "capitol-view",
+    "lincoln-heights",
+    "marshall-heights"
+   ]
+  },
+  {
+   "name": "Penn Branch",
+   "slug": "penn-branch",
+   "borough": "Ward 7",
+   "lat": 38.86956,
+   "lng": -76.953424,
+   "neighbors": [
+    "fairfax-village",
+    "fort-davis-park",
+    "dupont-park",
+    "twining",
+    "hillcrest"
+   ]
+  },
+  {
+   "name": "Randle Highlands",
+   "slug": "randle-highlands",
+   "borough": "Ward 7",
+   "lat": 38.869336,
+   "lng": -76.965804,
+   "neighbors": [
+    "dupont-park",
+    "twining",
+    "hillcrest",
+    "fairlawn",
+    "penn-branch"
+   ]
+  },
+  {
+   "name": "River Terrace",
+   "slug": "river-terrace",
+   "borough": "Ward 7",
+   "lat": 38.893705,
+   "lng": -76.957681,
+   "neighbors": [
+    "benning",
+    "mayfair",
+    "greenway",
+    "fort-dupont",
+    "central-ne"
+   ]
+  },
+  {
+   "name": "Twining",
+   "slug": "twining",
+   "borough": "Ward 7",
+   "lat": 38.875588,
+   "lng": -76.960847,
+   "neighbors": [
+    "dupont-park",
+    "randle-highlands",
+    "penn-branch",
+    "greenway",
+    "fort-dupont"
+   ]
+  },
+  {
+   "name": "Barry Farm",
+   "slug": "barry-farm",
+   "borough": "Ward 8",
+   "lat": 38.859255,
+   "lng": -76.997281,
+   "neighbors": [
+    "hillsdale",
+    "historic-anacostia",
+    "fort-stanton",
+    "buzzard-point",
+    "navy-yard"
+   ]
+  },
+  {
+   "name": "Bellevue",
+   "slug": "bellevue",
+   "borough": "Ward 8",
+   "lat": 38.826952,
+   "lng": -77.009271,
+   "neighbors": [
+    "washington-highlands",
+    "congress-heights",
+    "douglass",
+    "barry-farm",
+    "shipley"
+   ]
+  },
+  {
+   "name": "Congress Heights",
+   "slug": "congress-heights",
+   "borough": "Ward 8",
+   "lat": 38.841077,
+   "lng": -76.99795,
+   "neighbors": [
+    "washington-highlands",
+    "douglass",
+    "bellevue",
+    "barry-farm",
+    "hillsdale"
+   ]
+  },
+  {
+   "name": "Douglass",
+   "slug": "douglass",
+   "borough": "Ward 8",
+   "lat": 38.847571,
+   "lng": -76.979645,
+   "neighbors": [
+    "shipley",
+    "fort-stanton",
+    "garfield-heights",
+    "woodland",
+    "knox-hill-buena-vista"
+   ]
+  },
+  {
+   "name": "Fairlawn",
+   "slug": "fairlawn",
+   "borough": "Ward 8",
+   "lat": 38.869158,
+   "lng": -76.977452,
+   "neighbors": [
+    "historic-anacostia",
+    "randle-highlands",
+    "skyland",
+    "dupont-park",
+    "woodland"
+   ]
+  },
+  {
+   "name": "Fort Stanton",
+   "slug": "fort-stanton",
+   "borough": "Ward 8",
+   "lat": 38.855658,
+   "lng": -76.980348,
+   "neighbors": [
+    "woodland",
+    "garfield-heights",
+    "douglass",
+    "skyland",
+    "historic-anacostia"
+   ]
+  },
+  {
+   "name": "Garfield Heights",
+   "slug": "garfield-heights",
+   "borough": "Ward 8",
+   "lat": 38.854085,
+   "lng": -76.972213,
+   "neighbors": [
+    "woodland",
+    "knox-hill-buena-vista",
+    "skyland",
+    "fort-stanton",
+    "shipley"
+   ]
+  },
+  {
+   "name": "Hillsdale",
+   "slug": "hillsdale",
+   "borough": "Ward 8",
+   "lat": 38.858423,
+   "lng": -76.990561,
+   "neighbors": [
+    "barry-farm",
+    "historic-anacostia",
+    "fort-stanton",
+    "woodland",
+    "douglass"
+   ]
+  },
+  {
+   "name": "Historic Anacostia",
+   "slug": "historic-anacostia",
+   "borough": "Ward 8",
+   "lat": 38.863186,
+   "lng": -76.984678,
+   "neighbors": [
+    "hillsdale",
+    "fairlawn",
+    "fort-stanton",
+    "skyland",
+    "barry-farm"
+   ]
+  },
+  {
+   "name": "Knox Hill/Buena Vista",
+   "slug": "knox-hill-buena-vista",
+   "borough": "Ward 8",
+   "lat": 38.853688,
+   "lng": -76.96766,
+   "neighbors": [
+    "garfield-heights",
+    "naylor-gardens",
+    "woodland",
+    "skyland",
+    "shipley"
+   ]
+  },
+  {
+   "name": "Navy Yard",
+   "slug": "navy-yard",
+   "borough": "Ward 8",
+   "lat": 38.874268,
+   "lng": -76.998462,
+   "neighbors": [
+    "near-southeast",
+    "capitol-hill",
+    "buzzard-point",
+    "lincoln-park",
+    "southwest-waterfront"
+   ]
+  },
+  {
+   "name": "Near Southeast",
+   "slug": "near-southeast",
+   "borough": "Ward 8",
+   "lat": 38.878384,
+   "lng": -77.000627,
+   "neighbors": [
+    "navy-yard",
+    "capitol-hill",
+    "lincoln-park",
+    "southwest-waterfront",
+    "buzzard-point"
+   ]
+  },
+  {
+   "name": "Shipley",
+   "slug": "shipley",
+   "borough": "Ward 8",
+   "lat": 38.84686,
+   "lng": -76.972902,
+   "neighbors": [
+    "douglass",
+    "garfield-heights",
+    "knox-hill-buena-vista",
+    "woodland",
+    "fort-stanton"
+   ]
+  },
+  {
+   "name": "Skyland",
+   "slug": "skyland",
+   "borough": "Ward 8",
+   "lat": 38.860267,
+   "lng": -76.971703,
+   "neighbors": [
+    "woodland",
+    "garfield-heights",
+    "knox-hill-buena-vista",
+    "naylor-gardens",
+    "fort-stanton"
+   ]
+  },
+  {
+   "name": "Washington Highlands",
+   "slug": "washington-highlands",
+   "borough": "Ward 8",
+   "lat": 38.830237,
+   "lng": -76.995636,
+   "neighbors": [
+    "congress-heights",
+    "bellevue",
+    "douglass",
+    "shipley",
+    "fort-stanton"
+   ]
+  },
+  {
+   "name": "Woodland",
+   "slug": "woodland",
+   "borough": "Ward 8",
+   "lat": 38.856554,
+   "lng": -76.973926,
+   "neighbors": [
+    "garfield-heights",
+    "skyland",
+    "fort-stanton",
+    "knox-hill-buena-vista",
+    "naylor-gardens"
+   ]
+  }
+ ]
+}

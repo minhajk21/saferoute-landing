@@ -220,6 +220,32 @@ const CITIES = {
       methodology: `Each incident reported to the Toronto Police Service (Major Crime Indicators — assault, robbery, break &amp; enter, auto theft and theft over, via the TPS Public Safety Data Portal) is weighted by severity — violence counts for more than shoplifting. For every neighbourhood we sum weighted incidents within 1 km of its centre, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of Toronto's 158 official neighbourhoods, grouped under the six former municipalities (Old Toronto, North York, Scarborough, Etobicoke, East York and York) that people still use as districts. Time-of-day charts use TPS occurrence timestamps, severity-weighted. Pages regenerate as new data is published.`,
     },
   },
+  'dc': {
+    name: 'Washington, D.C.',
+    hubName: 'Washington, D.C.',
+    rankPool: 'D.C. neighborhoods',
+    // 132 named neighbourhoods (DCGIS "Neighborhood Names") grouped by the 8
+    // city Wards — a multi-district hub like NYC/Toronto. No rankHeading.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    reportedTo: 'reported to the DC Metropolitan Police',
+    dataName: 'DC Police data',
+    medianLabel: 'citywide median',
+    forCity: 'for Washington, D.C.',
+    acrossCity: 'across D.C.',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the DC Metropolitan Police by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: DC Metropolitan Police crime incidents via <a href="https://opendata.dc.gov/">Open Data DC</a>${dateLine}. Neighborhood and ward boundaries: DCGIS Open Data (132 named neighborhoods, 8 wards). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
+    basemapCredit: 'basemap © OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Washington DC Neighborhood Safety Map & Rankings (${n} neighborhoods) — SafeRoute`,
+      desc: (n, date) => `How safe is your DC neighborhood? Safety index (0–100) for all ${n} Washington, D.C. neighborhoods from Metropolitan Police reported-crime data through ${date} — ranked by ward, with crime maps and night-time patterns.`,
+      h1: 'How safe is your DC neighborhood?',
+      lead: `SafeRoute scores every Washington, D.C. neighborhood 0–100 from incidents reported to the DC Metropolitan Police — severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood — e.g. Georgetown, Columbia Heights, Anacostia…',
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center — they are informational, not a judgment of any community. Note: the Metropolitan Police publish incident locations at block level for privacy, so dots mark blocks, not addresses. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the DC Metropolitan Police (via Open Data DC) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are DCGIS's 132 named neighborhoods, grouped by the 8 city wards. Time-of-day charts use MPD report timestamps, severity-weighted. Locations are published at block level for privacy. Pages regenerate as new data is published.`,
+    },
+  },
 };
 
 // ── helpers ──────────────────────────────────────────────────────────────────
