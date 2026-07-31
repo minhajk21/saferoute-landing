@@ -686,18 +686,27 @@ ${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug)}`;
 }
 
 {
-  const today = new Date().toISOString().slice(0, 10);
+  // lastmod tracks the DATA, not the build. Stamping every URL with today's
+  // date on each monthly rebuild tells crawlers all 1000+ pages changed when
+  // most did not, and Google learns to discount the signal. A page's content is
+  // a function of its crime data, so lastmod = first of the month the data runs
+  // through; it only moves when the page genuinely changes. Hubs/root take the
+  // newest date among their areas.
+  const lastmodOf = ym => `${ym || '2026-01'}-01`;
+  const newest = dates => dates.slice().sort().pop();
+  const cityDate = r => newest(r.ranked.map(a => a.crimeDate).filter(Boolean)) || '2026-01';
+  const siteDate = newest(rendered.map(cityDate));
   const urls = [
-    { loc: `${SITE}/`, pri: '1.0' },
-    { loc: `${SITE}/safety/`, pri: '0.8' },
+    { loc: `${SITE}/`, pri: '1.0', mod: lastmodOf(siteDate) },
+    { loc: `${SITE}/safety/`, pri: '0.8', mod: lastmodOf(siteDate) },
     ...rendered.flatMap(r => [
-      { loc: `${SITE}/safety/${r.citySlug}/`, pri: '0.9' },
-      ...r.ranked.map(a => ({ loc: `${SITE}/safety/${r.citySlug}/${a.slug}/`, pri: '0.7' })),
+      { loc: `${SITE}/safety/${r.citySlug}/`, pri: '0.9', mod: lastmodOf(cityDate(r)) },
+      ...r.ranked.map(a => ({ loc: `${SITE}/safety/${r.citySlug}/${a.slug}/`, pri: '0.7', mod: lastmodOf(a.crimeDate) })),
     ]),
   ];
   writeFileSync(join(ROOT, 'sitemap.xml'),
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    urls.map(u => `<url><loc>${u.loc}</loc><lastmod>${today}</lastmod><priority>${u.pri}</priority></url>`).join('\n') +
+    urls.map(u => `<url><loc>${u.loc}</loc><lastmod>${u.mod}</lastmod><priority>${u.pri}</priority></url>`).join('\n') +
     `\n</urlset>\n`);
   if (!existsSync(join(ROOT, 'robots.txt')))
     writeFileSync(join(ROOT, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
