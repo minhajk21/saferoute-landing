@@ -246,6 +246,33 @@ const CITIES = {
       methodology: `Each incident reported to the DC Metropolitan Police (via Open Data DC) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are DCGIS's 132 named neighborhoods, grouped by the 8 city wards. Time-of-day charts use MPD report timestamps, severity-weighted. Locations are published at block level for privacy. Pages regenerate as new data is published.`,
     },
   },
+  'boston': {
+    name: 'Boston',
+    hubName: 'Boston',
+    rankPool: 'Boston neighborhoods',
+    // Compact city, small official set (25 BPDA neighbourhoods after excluding
+    // the uninhabited Harbor Islands) → ONE ranked table, no district tier.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    reportedTo: 'reported to the Boston Police',
+    dataName: 'Boston Police data',
+    medianLabel: 'citywide median',
+    forCity: 'for Boston',
+    acrossCity: 'across Boston',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Boston Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Boston Police Department incident reports via <a href="https://data.boston.gov/">Analyze Boston</a>${dateLine}. Neighborhood boundaries: BPDA Neighborhood Boundaries (25 neighborhoods; the uninhabited Harbor Islands are excluded). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
+    basemapCredit: 'basemap © OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Boston Neighborhood Safety Map & Rankings (${n} neighborhoods) — SafeRoute`,
+      desc: (n, date) => `How safe is your Boston neighborhood? Safety index (0–100) for all ${n} Boston neighborhoods from Boston Police reported-crime data through ${date} — ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Boston neighborhood?',
+      lead: `SafeRoute scores every Boston neighborhood 0–100 from incidents reported to the Boston Police Department — severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood — e.g. Back Bay, South End, Jamaica Plain…',
+      rankHeading: (n) => `All ${n} Boston neighborhoods, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center — they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the Boston Police Department (via Analyze Boston) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the BPDA's official neighborhood set; the Harbor Islands are excluded because the uninhabited park has no reported crime and would read as falsely "safe". Because Boston is compact and densely built, neighborhood centers sit close together and their 1&nbsp;km circles overlap — adjacent areas will show similar figures. Time-of-day charts use BPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
+    },
+  },
 };
 
 // ── helpers ──────────────────────────────────────────────────────────────────
@@ -441,6 +468,18 @@ function makeProse(a, ctx) {
 }
 
 // ── page chrome ──────────────────────────────────────────────────────────────
+// Cloudflare Web Analytics — cookieless, collects no personal data and sets no
+// identifiers, so it needs no consent banner (the site serves UK/EU visitors)
+// and keeps the project's PII-free stance. The beacon token is PUBLIC by design
+// (it ships in the page source and only identifies which site a hit belongs to)
+// — it is not a secret and must not be treated as one.
+// Set it here, or override per-build with CF_BEACON_TOKEN=... node render-pages.mjs
+// While unset, no script is emitted at all — pages stay clean.
+const CF_BEACON_TOKEN = process.env.CF_BEACON_TOKEN || '';
+const analytics = () => CF_BEACON_TOKEN
+  ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${CF_BEACON_TOKEN}"}'></script>\n`
+  : '';
+
 const head = (title, desc, canonical, jsonld) => `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -459,7 +498,7 @@ const head = (title, desc, canonical, jsonld) => `<!DOCTYPE html>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/safety/assets/safety.css">
 ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>` : ''}
-</head>
+${analytics()}</head>
 <body>`;
 
 const chrome = crumbs => `<header class="site"><div class="wrap">
