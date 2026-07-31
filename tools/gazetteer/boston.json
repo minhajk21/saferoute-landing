@@ -1,0 +1,359 @@
+{
+ "city": "Boston",
+ "citySlug": "boston",
+ "country": "US",
+ "source": "Analyze Boston — BPDA Neighborhood Boundaries (Harbor Islands excluded: uninhabited, no feed)",
+ "generatedAt": "2026-07-31",
+ "areas": [
+  {
+   "name": "Allston",
+   "slug": "allston",
+   "borough": "Boston",
+   "lat": 42.358396,
+   "lng": -71.128562,
+   "neighbors": [
+    "brighton",
+    "longwood",
+    "fenway",
+    "mission-hill",
+    "back-bay"
+   ]
+  },
+  {
+   "name": "Back Bay",
+   "slug": "back-bay",
+   "borough": "Boston",
+   "lat": 42.349852,
+   "lng": -71.080535,
+   "neighbors": [
+    "bay-village",
+    "south-end",
+    "beacon-hill",
+    "fenway",
+    "chinatown"
+   ]
+  },
+  {
+   "name": "Bay Village",
+   "slug": "bay-village",
+   "borough": "Boston",
+   "lat": 42.349094,
+   "lng": -71.06903,
+   "neighbors": [
+    "chinatown",
+    "south-end",
+    "beacon-hill",
+    "leather-district",
+    "back-bay"
+   ]
+  },
+  {
+   "name": "Beacon Hill",
+   "slug": "beacon-hill",
+   "borough": "Boston",
+   "lat": 42.357041,
+   "lng": -71.068262,
+   "neighbors": [
+    "west-end",
+    "bay-village",
+    "downtown",
+    "chinatown",
+    "leather-district"
+   ]
+  },
+  {
+   "name": "Brighton",
+   "slug": "brighton",
+   "borough": "Boston",
+   "lat": 42.348348,
+   "lng": -71.154935,
+   "neighbors": [
+    "allston",
+    "longwood",
+    "mission-hill",
+    "fenway",
+    "jamaica-plain"
+   ]
+  },
+  {
+   "name": "Charlestown",
+   "slug": "charlestown",
+   "borough": "Boston",
+   "lat": 42.379045,
+   "lng": -71.063665,
+   "neighbors": [
+    "west-end",
+    "north-end",
+    "east-boston",
+    "beacon-hill",
+    "downtown"
+   ]
+  },
+  {
+   "name": "Chinatown",
+   "slug": "chinatown",
+   "borough": "Boston",
+   "lat": 42.349018,
+   "lng": -71.061661,
+   "neighbors": [
+    "leather-district",
+    "bay-village",
+    "downtown",
+    "beacon-hill",
+    "south-end"
+   ]
+  },
+  {
+   "name": "Dorchester",
+   "slug": "dorchester",
+   "borough": "Boston",
+   "lat": 42.298454,
+   "lng": -71.063456,
+   "neighbors": [
+    "roxbury",
+    "mattapan",
+    "jamaica-plain",
+    "south-boston",
+    "south-end"
+   ]
+  },
+  {
+   "name": "Downtown",
+   "slug": "downtown",
+   "borough": "Boston",
+   "lat": 42.355585,
+   "lng": -71.05765,
+   "neighbors": [
+    "leather-district",
+    "chinatown",
+    "beacon-hill",
+    "north-end",
+    "bay-village"
+   ]
+  },
+  {
+   "name": "East Boston",
+   "slug": "east-boston",
+   "borough": "Boston",
+   "lat": 42.375,
+   "lng": -71.039,
+   "neighbors": [
+    "north-end",
+    "charlestown",
+    "west-end",
+    "downtown",
+    "leather-district"
+   ]
+  },
+  {
+   "name": "Fenway",
+   "slug": "fenway",
+   "borough": "Boston",
+   "lat": 42.344759,
+   "lng": -71.096115,
+   "neighbors": [
+    "longwood",
+    "back-bay",
+    "mission-hill",
+    "south-end",
+    "bay-village"
+   ]
+  },
+  {
+   "name": "Hyde Park",
+   "slug": "hyde-park",
+   "borough": "Boston",
+   "lat": 42.255026,
+   "lng": -71.126298,
+   "neighbors": [
+    "roslindale",
+    "mattapan",
+    "west-roxbury",
+    "jamaica-plain",
+    "dorchester"
+   ]
+  },
+  {
+   "name": "Jamaica Plain",
+   "slug": "jamaica-plain",
+   "borough": "Boston",
+   "lat": 42.307761,
+   "lng": -71.115096,
+   "neighbors": [
+    "roxbury",
+    "mission-hill",
+    "roslindale",
+    "longwood",
+    "mattapan"
+   ]
+  },
+  {
+   "name": "Leather District",
+   "slug": "leather-district",
+   "borough": "Boston",
+   "lat": 42.350976,
+   "lng": -71.05783,
+   "neighbors": [
+    "chinatown",
+    "downtown",
+    "bay-village",
+    "beacon-hill",
+    "south-boston-waterfront"
+   ]
+  },
+  {
+   "name": "Longwood",
+   "slug": "longwood",
+   "borough": "Boston",
+   "lat": 42.3386,
+   "lng": -71.105103,
+   "neighbors": [
+    "mission-hill",
+    "fenway",
+    "back-bay",
+    "roxbury",
+    "south-end"
+   ]
+  },
+  {
+   "name": "Mattapan",
+   "slug": "mattapan",
+   "borough": "Boston",
+   "lat": 42.276997,
+   "lng": -71.091446,
+   "neighbors": [
+    "roslindale",
+    "dorchester",
+    "hyde-park",
+    "jamaica-plain",
+    "roxbury"
+   ]
+  },
+  {
+   "name": "Mission Hill",
+   "slug": "mission-hill",
+   "borough": "Boston",
+   "lat": 42.331733,
+   "lng": -71.102606,
+   "neighbors": [
+    "longwood",
+    "fenway",
+    "roxbury",
+    "back-bay",
+    "south-end"
+   ]
+  },
+  {
+   "name": "North End",
+   "slug": "north-end",
+   "borough": "Boston",
+   "lat": 42.365456,
+   "lng": -71.053857,
+   "neighbors": [
+    "west-end",
+    "downtown",
+    "beacon-hill",
+    "east-boston",
+    "leather-district"
+   ]
+  },
+  {
+   "name": "Roslindale",
+   "slug": "roslindale",
+   "borough": "Boston",
+   "lat": 42.282515,
+   "lng": -71.126662,
+   "neighbors": [
+    "west-roxbury",
+    "mattapan",
+    "jamaica-plain",
+    "hyde-park",
+    "roxbury"
+   ]
+  },
+  {
+   "name": "Roxbury",
+   "slug": "roxbury",
+   "borough": "Boston",
+   "lat": 42.31851,
+   "lng": -71.086643,
+   "neighbors": [
+    "mission-hill",
+    "jamaica-plain",
+    "longwood",
+    "south-end",
+    "dorchester"
+   ]
+  },
+  {
+   "name": "South Boston",
+   "slug": "south-boston",
+   "borough": "Boston",
+   "lat": 42.33491,
+   "lng": -71.042192,
+   "neighbors": [
+    "south-boston-waterfront",
+    "leather-district",
+    "chinatown",
+    "south-end",
+    "downtown"
+   ]
+  },
+  {
+   "name": "South Boston Waterfront",
+   "slug": "south-boston-waterfront",
+   "borough": "Boston",
+   "lat": 42.346408,
+   "lng": -71.041726,
+   "neighbors": [
+    "south-boston",
+    "leather-district",
+    "downtown",
+    "chinatown",
+    "bay-village"
+   ]
+  },
+  {
+   "name": "South End",
+   "slug": "south-end",
+   "borough": "Boston",
+   "lat": 42.341342,
+   "lng": -71.071369,
+   "neighbors": [
+    "bay-village",
+    "chinatown",
+    "back-bay",
+    "leather-district",
+    "beacon-hill"
+   ]
+  },
+  {
+   "name": "West End",
+   "slug": "west-end",
+   "borough": "Boston",
+   "lat": 42.364539,
+   "lng": -71.065427,
+   "neighbors": [
+    "beacon-hill",
+    "north-end",
+    "downtown",
+    "charlestown",
+    "leather-district"
+   ]
+  },
+  {
+   "name": "West Roxbury",
+   "slug": "west-roxbury",
+   "borough": "Boston",
+   "lat": 42.280634,
+   "lng": -71.160026,
+   "neighbors": [
+    "roslindale",
+    "hyde-park",
+    "jamaica-plain",
+    "mattapan",
+    "roxbury"
+   ]
+  }
+ ]
+}
