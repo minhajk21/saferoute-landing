@@ -475,9 +475,9 @@ function makeProse(a, ctx) {
 // — it is not a secret and must not be treated as one.
 // Set it here, or override per-build with CF_BEACON_TOKEN=... node render-pages.mjs
 // While unset, no script is emitted at all — pages stay clean.
-const CF_BEACON_TOKEN = process.env.CF_BEACON_TOKEN || '';
+const CF_BEACON_TOKEN = process.env.CF_BEACON_TOKEN || 'a7d4a481ed8b4512a43225404078e7ab';
 const analytics = () => CF_BEACON_TOKEN
-  ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${CF_BEACON_TOKEN}"}'></script>\n`
+  ? `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "${CF_BEACON_TOKEN}"}'></script>\n`
   : '';
 
 const head = (title, desc, canonical, jsonld) => `<!DOCTYPE html>
