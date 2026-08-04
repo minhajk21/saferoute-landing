@@ -38,6 +38,24 @@ mkdirSync(outDir, { recursive: true });
 // it answers 200 with zero elements for anything outside Switzerland, which
 // silently cached 28 blank Chicago basemaps before it was caught. Only add a
 // mirror here after checking it returns data for a non-European bbox.
+// Re-probed 2026-08-04 while building Philadelphia (152 fresh areas), with a
+// real Philly bbox — the non-European check this list requires. Result: still
+// exactly one usable mirror.
+//   overpass-api.de          KEEP. Intermittent under load, but it is CHEAP when
+//                            it fails: 504 in ~8s, and it will then serve the
+//                            identical query a few seconds later.
+//   overpass.private.coffee  REJECTED, and note this is not the same failure as
+//                            "unreachable". It answers, and a single idle probe
+//                            looked fine (200/57.1s/1589 elements) — but under
+//                            sustained use it took 92-96s to return a 504. One
+//                            slow mirror in the rotation costs more than no
+//                            mirror, because every retry that lands on it burns
+//                            a minute and a half. Timing a mirror once, idle, is
+//                            not enough; time it under load before adding it.
+//   kumi.systems             connect timeout (unchanged since July).
+//   overpass.osm.jp          fetch failed (unchanged since July).
+//   overpass.osm.ch          200 with ZERO elements again — the Switzerland-only
+//                            extract. Do not add it.
 const OVERPASS = [
   'https://overpass-api.de/api/interpreter',
 ];
@@ -50,7 +68,7 @@ async function overpass(query, seed = 0) {
   // Fixed attempt count, not one-per-mirror: with a single healthy mirror the
   // retries still matter (it returns 504 under load). Seed staggers the start
   // point when there is more than one.
-  for (let attempt = 0; attempt < 5; attempt++) {
+  for (let attempt = 0; attempt < 8; attempt++) {
     const url = OVERPASS[(seed + attempt) % OVERPASS.length];
     try {
       const r = await fetch(url, {
@@ -59,13 +77,19 @@ async function overpass(query, seed = 0) {
         body: 'data=' + encodeURIComponent(query),
         signal: AbortSignal.timeout(100_000),
       });
-      // 429 = no free slot, 504 = the query timed out server-side under load.
-      // Both mean "come back later", so wait out a full slot window rather than
-      // retrying straight into the same wall.
-      if (r.status === 429 || r.status === 504) {
+      // 429 and 504 look alike but have different causes, and treating them the
+      // same is expensive. 429 means our per-IP slots really are exhausted, and
+      // only time returns them — wait out a full slot window. 504 is the server
+      // shedding load; measured over a 152-area Philadelphia build (Aug 2026),
+      // overpass-api.de returned 504 in ~8s and then answered the SAME query
+      // within seconds on a later attempt, while /api/status reported both our
+      // slots free. Charging that a 30s penalty turned a cheap, retryable
+      // failure into the dominant cost of the run — hours per city.
+      if (r.status === 429) {
         await new Promise(res => setTimeout(res, 30_000));
-        throw new Error(`HTTP ${r.status}`);
+        throw new Error('HTTP 429');
       }
+      if (r.status === 504) throw new Error('HTTP 504');
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const elements = (await r.json()).elements || [];
       // A populated city area always has streets. An empty 200 means the mirror
@@ -73,7 +97,9 @@ async function overpass(query, seed = 0) {
       // fail it so another attempt runs, rather than caching a blank map.
       if (!elements.length) throw new Error('empty result (mirror lacks this region?)');
       return elements;
-    } catch (e) { last = e; await new Promise(res => setTimeout(res, 2500 * (attempt + 1))); }
+      // Escalating but capped: with 8 attempts an uncapped 2500*(attempt+1)
+      // would put 90s of sleep on the tail of a run that is mostly cheap 504s.
+    } catch (e) { last = e; await new Promise(res => setTimeout(res, Math.min(2500 * (attempt + 1), 10_000))); }
   }
   throw last;
 }
