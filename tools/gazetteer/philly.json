@@ -1,0 +1,2123 @@
+{
+ "city": "Philadelphia",
+ "citySlug": "philly",
+ "country": "US",
+ "source": "City of Philadelphia / OpenDataPhilly — 158 neighbourhoods, grouped by PCPC Planning District",
+ "generatedAt": "2026-08-04",
+ "areas": [
+  {
+   "name": "Bella Vista",
+   "slug": "bella-vista",
+   "borough": "Central",
+   "lat": 39.939163,
+   "lng": -75.156122,
+   "neighbors": [
+    "hawthorne",
+    "queen-village",
+    "passyunk-square",
+    "society-hill",
+    "washington-square-west"
+   ]
+  },
+  {
+   "name": "Callowhill",
+   "slug": "callowhill",
+   "borough": "Central",
+   "lat": 39.95952,
+   "lng": -75.155311,
+   "neighbors": [
+    "chinatown",
+    "center-city-east",
+    "west-poplar",
+    "east-poplar",
+    "old-city"
+   ]
+  },
+  {
+   "name": "Center City East",
+   "slug": "center-city-east",
+   "borough": "Central",
+   "lat": 39.95424,
+   "lng": -75.160183,
+   "neighbors": [
+    "chinatown",
+    "callowhill",
+    "washington-square-west",
+    "old-city",
+    "logan-square"
+   ]
+  },
+  {
+   "name": "Chinatown",
+   "slug": "chinatown",
+   "borough": "Central",
+   "lat": 39.955518,
+   "lng": -75.156084,
+   "neighbors": [
+    "center-city-east",
+    "callowhill",
+    "old-city",
+    "washington-square-west",
+    "west-poplar"
+   ]
+  },
+  {
+   "name": "East Poplar",
+   "slug": "east-poplar",
+   "borough": "Central",
+   "lat": 39.96595,
+   "lng": -75.149631,
+   "neighbors": [
+    "west-poplar",
+    "callowhill",
+    "northern-liberties",
+    "ludlow",
+    "old-kensington"
+   ]
+  },
+  {
+   "name": "Fairmount",
+   "slug": "fairmount",
+   "borough": "Central",
+   "lat": 39.970907,
+   "lng": -75.177946,
+   "neighbors": [
+    "sharswood",
+    "brewerytown",
+    "spring-garden",
+    "francisville",
+    "logan-square"
+   ]
+  },
+  {
+   "name": "Fitler Square",
+   "slug": "fitler-square",
+   "borough": "Central",
+   "lat": 39.946943,
+   "lng": -75.182831,
+   "neighbors": [
+    "graduate-hospital",
+    "rittenhouse",
+    "university-city",
+    "point-breeze",
+    "logan-square"
+   ]
+  },
+  {
+   "name": "Francisville",
+   "slug": "francisville",
+   "borough": "Central",
+   "lat": 39.96981,
+   "lng": -75.165653,
+   "neighbors": [
+    "spring-garden",
+    "west-poplar",
+    "sharswood",
+    "fairmount",
+    "north-central"
+   ]
+  },
+  {
+   "name": "Graduate Hospital",
+   "slug": "graduate-hospital",
+   "borough": "Central",
+   "lat": 39.942102,
+   "lng": -75.178129,
+   "neighbors": [
+    "fitler-square",
+    "point-breeze",
+    "rittenhouse",
+    "hawthorne",
+    "grays-ferry"
+   ]
+  },
+  {
+   "name": "Hawthorne",
+   "slug": "hawthorne",
+   "borough": "Central",
+   "lat": 39.940322,
+   "lng": -75.162742,
+   "neighbors": [
+    "bella-vista",
+    "passyunk-square",
+    "washington-square-west",
+    "queen-village",
+    "society-hill"
+   ]
+  },
+  {
+   "name": "Logan Square",
+   "slug": "logan-square",
+   "borough": "Central",
+   "lat": 39.958814,
+   "lng": -75.171616,
+   "neighbors": [
+    "spring-garden",
+    "rittenhouse",
+    "center-city-east",
+    "francisville",
+    "chinatown"
+   ]
+  },
+  {
+   "name": "Northern Liberties",
+   "slug": "northern-liberties",
+   "borough": "Central",
+   "lat": 39.963121,
+   "lng": -75.139459,
+   "neighbors": [
+    "east-poplar",
+    "old-kensington",
+    "old-city",
+    "callowhill",
+    "ludlow"
+   ]
+  },
+  {
+   "name": "Old City",
+   "slug": "old-city",
+   "borough": "Central",
+   "lat": 39.952338,
+   "lng": -75.147912,
+   "neighbors": [
+    "chinatown",
+    "society-hill",
+    "callowhill",
+    "center-city-east",
+    "washington-square-west"
+   ]
+  },
+  {
+   "name": "Queen Village",
+   "slug": "queen-village",
+   "borough": "Central",
+   "lat": 39.93773,
+   "lng": -75.148758,
+   "neighbors": [
+    "bella-vista",
+    "society-hill",
+    "dickinson-narrows",
+    "pennsport",
+    "passyunk-square"
+   ]
+  },
+  {
+   "name": "Rittenhouse",
+   "slug": "rittenhouse",
+   "borough": "Central",
+   "lat": 39.949183,
+   "lng": -75.172776,
+   "neighbors": [
+    "fitler-square",
+    "graduate-hospital",
+    "logan-square",
+    "washington-square-west",
+    "center-city-east"
+   ]
+  },
+  {
+   "name": "Society Hill",
+   "slug": "society-hill",
+   "borough": "Central",
+   "lat": 39.944527,
+   "lng": -75.149163,
+   "neighbors": [
+    "queen-village",
+    "bella-vista",
+    "old-city",
+    "washington-square-west",
+    "hawthorne"
+   ]
+  },
+  {
+   "name": "Spring Garden",
+   "slug": "spring-garden",
+   "borough": "Central",
+   "lat": 39.96534,
+   "lng": -75.168787,
+   "neighbors": [
+    "francisville",
+    "logan-square",
+    "fairmount",
+    "west-poplar",
+    "sharswood"
+   ]
+  },
+  {
+   "name": "Washington Square West",
+   "slug": "washington-square-west",
+   "borough": "Central",
+   "lat": 39.947353,
+   "lng": -75.159548,
+   "neighbors": [
+    "center-city-east",
+    "hawthorne",
+    "society-hill",
+    "chinatown",
+    "bella-vista"
+   ]
+  },
+  {
+   "name": "West Poplar",
+   "slug": "west-poplar",
+   "borough": "Central",
+   "lat": 39.966314,
+   "lng": -75.156168,
+   "neighbors": [
+    "east-poplar",
+    "callowhill",
+    "francisville",
+    "yorktown",
+    "spring-garden"
+   ]
+  },
+  {
+   "name": "Burholme",
+   "slug": "burholme",
+   "borough": "Central Northeast",
+   "lat": 40.063218,
+   "lng": -75.088727,
+   "neighbors": [
+    "fox-chase",
+    "oxford-circle",
+    "lawndale",
+    "rhawnhurst",
+    "crescentville"
+   ]
+  },
+  {
+   "name": "Fox Chase",
+   "slug": "fox-chase",
+   "borough": "Central Northeast",
+   "lat": 40.072255,
+   "lng": -75.076621,
+   "neighbors": [
+    "burholme",
+    "rhawnhurst",
+    "oxford-circle",
+    "lexington-park",
+    "bustleton"
+   ]
+  },
+  {
+   "name": "Lexington Park",
+   "slug": "lexington-park",
+   "borough": "Central Northeast",
+   "lat": 40.05521,
+   "lng": -75.043984,
+   "neighbors": [
+    "winchester-park",
+    "rhawnhurst",
+    "pennypack",
+    "pennypack-woods",
+    "mayfair"
+   ]
+  },
+  {
+   "name": "Oxford Circle",
+   "slug": "oxford-circle",
+   "borough": "Central Northeast",
+   "lat": 40.044902,
+   "lng": -75.075089,
+   "neighbors": [
+    "mayfair",
+    "crescentville",
+    "summerdale",
+    "lawndale",
+    "burholme"
+   ]
+  },
+  {
+   "name": "Rhawnhurst",
+   "slug": "rhawnhurst",
+   "borough": "Central Northeast",
+   "lat": 40.061272,
+   "lng": -75.056554,
+   "neighbors": [
+    "lexington-park",
+    "fox-chase",
+    "oxford-circle",
+    "winchester-park",
+    "pennypack"
+   ]
+  },
+  {
+   "name": "Academy Gardens",
+   "slug": "academy-gardens",
+   "borough": "Lower Far Northeast",
+   "lat": 40.061194,
+   "lng": -75.003106,
+   "neighbors": [
+    "west-torresdale",
+    "aston-woodbridge",
+    "pennypack-woods",
+    "morrell-park",
+    "torresdale"
+   ]
+  },
+  {
+   "name": "Aston-Woodbridge",
+   "slug": "aston-woodbridge",
+   "borough": "Lower Far Northeast",
+   "lat": 40.063459,
+   "lng": -75.013703,
+   "neighbors": [
+    "academy-gardens",
+    "pennypack-woods",
+    "west-torresdale",
+    "pennypack",
+    "winchester-park"
+   ]
+  },
+  {
+   "name": "Crestmont Farms",
+   "slug": "crestmont-farms",
+   "borough": "Lower Far Northeast",
+   "lat": 40.069851,
+   "lng": -74.979218,
+   "neighbors": [
+    "morrell-park",
+    "millbrook",
+    "modena",
+    "west-torresdale",
+    "academy-gardens"
+   ]
+  },
+  {
+   "name": "Franklin Mills",
+   "slug": "franklin-mills",
+   "borough": "Lower Far Northeast",
+   "lat": 40.087117,
+   "lng": -74.96287,
+   "neighbors": [
+    "millbrook",
+    "parkwood-manor",
+    "modena",
+    "mechanicsville",
+    "crestmont-farms"
+   ]
+  },
+  {
+   "name": "Mechanicsville",
+   "slug": "mechanicsville",
+   "borough": "Lower Far Northeast",
+   "lat": 40.107745,
+   "lng": -74.96634,
+   "neighbors": [
+    "parkwood-manor",
+    "byberry",
+    "franklin-mills",
+    "normandy-village",
+    "modena"
+   ]
+  },
+  {
+   "name": "Millbrook",
+   "slug": "millbrook",
+   "borough": "Lower Far Northeast",
+   "lat": 40.078676,
+   "lng": -74.972548,
+   "neighbors": [
+    "modena",
+    "crestmont-farms",
+    "franklin-mills",
+    "morrell-park",
+    "parkwood-manor"
+   ]
+  },
+  {
+   "name": "Modena",
+   "slug": "modena",
+   "borough": "Lower Far Northeast",
+   "lat": 40.083076,
+   "lng": -74.982285,
+   "neighbors": [
+    "millbrook",
+    "crestmont-farms",
+    "morrell-park",
+    "franklin-mills",
+    "parkwood-manor"
+   ]
+  },
+  {
+   "name": "Morrell Park",
+   "slug": "morrell-park",
+   "borough": "Lower Far Northeast",
+   "lat": 40.070666,
+   "lng": -74.991292,
+   "neighbors": [
+    "west-torresdale",
+    "crestmont-farms",
+    "academy-gardens",
+    "modena",
+    "millbrook"
+   ]
+  },
+  {
+   "name": "Normandy Village",
+   "slug": "normandy-village",
+   "borough": "Lower Far Northeast",
+   "lat": 40.10199,
+   "lng": -74.994178,
+   "neighbors": [
+    "byberry",
+    "parkwood-manor",
+    "modena",
+    "mechanicsville",
+    "somerton"
+   ]
+  },
+  {
+   "name": "Parkwood Manor",
+   "slug": "parkwood-manor",
+   "borough": "Lower Far Northeast",
+   "lat": 40.100273,
+   "lng": -74.972931,
+   "neighbors": [
+    "mechanicsville",
+    "franklin-mills",
+    "byberry",
+    "normandy-village",
+    "modena"
+   ]
+  },
+  {
+   "name": "Pennypack",
+   "slug": "pennypack",
+   "borough": "Lower Far Northeast",
+   "lat": 40.069128,
+   "lng": -75.027382,
+   "neighbors": [
+    "aston-woodbridge",
+    "winchester-park",
+    "pennypack-woods",
+    "lexington-park",
+    "academy-gardens"
+   ]
+  },
+  {
+   "name": "Pennypack Woods",
+   "slug": "pennypack-woods",
+   "borough": "Lower Far Northeast",
+   "lat": 40.054545,
+   "lng": -75.017469,
+   "neighbors": [
+    "aston-woodbridge",
+    "winchester-park",
+    "academy-gardens",
+    "pennypack",
+    "torresdale"
+   ]
+  },
+  {
+   "name": "West Torresdale",
+   "slug": "west-torresdale",
+   "borough": "Lower Far Northeast",
+   "lat": 40.069108,
+   "lng": -75.000591,
+   "neighbors": [
+    "morrell-park",
+    "academy-gardens",
+    "aston-woodbridge",
+    "crestmont-farms",
+    "pennypack-woods"
+   ]
+  },
+  {
+   "name": "Winchester Park",
+   "slug": "winchester-park",
+   "borough": "Lower Far Northeast",
+   "lat": 40.054005,
+   "lng": -75.029756,
+   "neighbors": [
+    "pennypack-woods",
+    "lexington-park",
+    "pennypack",
+    "aston-woodbridge",
+    "academy-gardens"
+   ]
+  },
+  {
+   "name": "Brewerytown",
+   "slug": "brewerytown",
+   "borough": "Lower North",
+   "lat": 39.979459,
+   "lng": -75.181005,
+   "neighbors": [
+    "sharswood",
+    "fairmount",
+    "strawberry-mansion",
+    "north-central",
+    "francisville"
+   ]
+  },
+  {
+   "name": "Hartranft",
+   "slug": "hartranft",
+   "borough": "Lower North",
+   "lat": 39.989499,
+   "lng": -75.148869,
+   "neighbors": [
+    "west-kensington",
+    "stanton",
+    "fairhill",
+    "glenwood",
+    "mcguire"
+   ]
+  },
+  {
+   "name": "Ludlow",
+   "slug": "ludlow",
+   "borough": "Lower North",
+   "lat": 39.974607,
+   "lng": -75.147941,
+   "neighbors": [
+    "yorktown",
+    "old-kensington",
+    "east-poplar",
+    "west-poplar",
+    "west-kensington"
+   ]
+  },
+  {
+   "name": "North Central",
+   "slug": "north-central",
+   "borough": "Lower North",
+   "lat": 39.980094,
+   "lng": -75.165483,
+   "neighbors": [
+    "sharswood",
+    "stanton",
+    "yorktown",
+    "francisville",
+    "brewerytown"
+   ]
+  },
+  {
+   "name": "Old Kensington",
+   "slug": "old-kensington",
+   "borough": "Lower North",
+   "lat": 39.973056,
+   "lng": -75.140595,
+   "neighbors": [
+    "ludlow",
+    "east-poplar",
+    "northern-liberties",
+    "yorktown",
+    "west-kensington"
+   ]
+  },
+  {
+   "name": "Sharswood",
+   "slug": "sharswood",
+   "borough": "Lower North",
+   "lat": 39.975642,
+   "lng": -75.173005,
+   "neighbors": [
+    "fairmount",
+    "brewerytown",
+    "north-central",
+    "francisville",
+    "spring-garden"
+   ]
+  },
+  {
+   "name": "Stanton",
+   "slug": "stanton",
+   "borough": "Lower North",
+   "lat": 39.989599,
+   "lng": -75.162404,
+   "neighbors": [
+    "glenwood",
+    "north-central",
+    "hartranft",
+    "strawberry-mansion",
+    "yorktown"
+   ]
+  },
+  {
+   "name": "Strawberry Mansion",
+   "slug": "strawberry-mansion",
+   "borough": "Lower North",
+   "lat": 39.991075,
+   "lng": -75.179252,
+   "neighbors": [
+    "brewerytown",
+    "allegheny-west",
+    "stanton",
+    "north-central",
+    "sharswood"
+   ]
+  },
+  {
+   "name": "West Kensington",
+   "slug": "west-kensington",
+   "borough": "Lower North",
+   "lat": 39.98436,
+   "lng": -75.13752,
+   "neighbors": [
+    "east-kensington",
+    "mcguire",
+    "hartranft",
+    "old-kensington",
+    "ludlow"
+   ]
+  },
+  {
+   "name": "Yorktown",
+   "slug": "yorktown",
+   "borough": "Lower North",
+   "lat": 39.975306,
+   "lng": -75.154237,
+   "neighbors": [
+    "ludlow",
+    "west-poplar",
+    "north-central",
+    "east-poplar",
+    "francisville"
+   ]
+  },
+  {
+   "name": "Crescentville",
+   "slug": "crescentville",
+   "borough": "Lower Northeast",
+   "lat": 40.037092,
+   "lng": -75.095982,
+   "neighbors": [
+    "summerdale",
+    "lawndale",
+    "northwood",
+    "oxford-circle",
+    "melrose-park-gardens"
+   ]
+  },
+  {
+   "name": "Frankford",
+   "slug": "frankford",
+   "borough": "Lower Northeast",
+   "lat": 40.012498,
+   "lng": -75.082128,
+   "neighbors": [
+    "northwood",
+    "wissinoming",
+    "juniata-park",
+    "bridesburg",
+    "summerdale"
+   ]
+  },
+  {
+   "name": "Lawndale",
+   "slug": "lawndale",
+   "borough": "Lower Northeast",
+   "lat": 40.043979,
+   "lng": -75.101373,
+   "neighbors": [
+    "crescentville",
+    "melrose-park-gardens",
+    "summerdale",
+    "oxford-circle",
+    "olney"
+   ]
+  },
+  {
+   "name": "Northwood",
+   "slug": "northwood",
+   "borough": "Lower Northeast",
+   "lat": 40.023037,
+   "lng": -75.097117,
+   "neighbors": [
+    "summerdale",
+    "juniata-park",
+    "crescentville",
+    "frankford",
+    "feltonville"
+   ]
+  },
+  {
+   "name": "Summerdale",
+   "slug": "summerdale",
+   "borough": "Lower Northeast",
+   "lat": 40.031346,
+   "lng": -75.091372,
+   "neighbors": [
+    "crescentville",
+    "northwood",
+    "lawndale",
+    "oxford-circle",
+    "frankford"
+   ]
+  },
+  {
+   "name": "Andorra",
+   "slug": "andorra",
+   "borough": "Lower Northwest",
+   "lat": 40.071639,
+   "lng": -75.23373,
+   "neighbors": [
+    "upper-roxborough",
+    "chestnut-hill",
+    "dearnley-park",
+    "roxborough-park",
+    "wissahickon-hills"
+   ]
+  },
+  {
+   "name": "Dearnley Park",
+   "slug": "dearnley-park",
+   "borough": "Lower Northwest",
+   "lat": 40.044594,
+   "lng": -75.241911,
+   "neighbors": [
+    "roxborough-park",
+    "upper-roxborough",
+    "germany-hill",
+    "wissahickon-hills",
+    "manayunk"
+   ]
+  },
+  {
+   "name": "East Falls",
+   "slug": "east-falls",
+   "borough": "Lower Northwest",
+   "lat": 40.017121,
+   "lng": -75.189896,
+   "neighbors": [
+    "germantown-westside",
+    "wissahickon",
+    "allegheny-west",
+    "southwest-germantown",
+    "germantown-penn-knox"
+   ]
+  },
+  {
+   "name": "Germany Hill",
+   "slug": "germany-hill",
+   "borough": "Lower Northwest",
+   "lat": 40.036123,
+   "lng": -75.230423,
+   "neighbors": [
+    "roxborough-park",
+    "manayunk",
+    "wissahickon-hills",
+    "dearnley-park",
+    "roxborough"
+   ]
+  },
+  {
+   "name": "Manayunk",
+   "slug": "manayunk",
+   "borough": "Lower Northwest",
+   "lat": 40.028642,
+   "lng": -75.224421,
+   "neighbors": [
+    "roxborough",
+    "germany-hill",
+    "wissahickon-hills",
+    "roxborough-park",
+    "wissahickon"
+   ]
+  },
+  {
+   "name": "Roxborough",
+   "slug": "roxborough",
+   "borough": "Lower Northwest",
+   "lat": 40.030897,
+   "lng": -75.213462,
+   "neighbors": [
+    "manayunk",
+    "wissahickon-hills",
+    "wissahickon",
+    "germany-hill",
+    "roxborough-park"
+   ]
+  },
+  {
+   "name": "Roxborough Park",
+   "slug": "roxborough-park",
+   "borough": "Lower Northwest",
+   "lat": 40.0395,
+   "lng": -75.234714,
+   "neighbors": [
+    "germany-hill",
+    "dearnley-park",
+    "wissahickon-hills",
+    "manayunk",
+    "upper-roxborough"
+   ]
+  },
+  {
+   "name": "Upper Roxborough",
+   "slug": "upper-roxborough",
+   "borough": "Lower Northwest",
+   "lat": 40.055301,
+   "lng": -75.241665,
+   "neighbors": [
+    "dearnley-park",
+    "roxborough-park",
+    "andorra",
+    "germany-hill",
+    "wissahickon-hills"
+   ]
+  },
+  {
+   "name": "Wissahickon",
+   "slug": "wissahickon",
+   "borough": "Lower Northwest",
+   "lat": 40.019634,
+   "lng": -75.209672,
+   "neighbors": [
+    "roxborough",
+    "manayunk",
+    "east-falls",
+    "wynnefield-heights",
+    "wissahickon-hills"
+   ]
+  },
+  {
+   "name": "Wissahickon Hills",
+   "slug": "wissahickon-hills",
+   "borough": "Lower Northwest",
+   "lat": 40.040253,
+   "lng": -75.219076,
+   "neighbors": [
+    "germany-hill",
+    "roxborough",
+    "roxborough-park",
+    "manayunk",
+    "dearnley-park"
+   ]
+  },
+  {
+   "name": "Navy Yard",
+   "slug": "navy-yard",
+   "borough": "Lower South",
+   "lat": 39.889651,
+   "lng": -75.169558,
+   "neighbors": [
+    "stadium-district",
+    "packer-park",
+    "girard-estates",
+    "lower-moyamensing",
+    "whitman"
+   ]
+  },
+  {
+   "name": "Packer Park",
+   "slug": "packer-park",
+   "borough": "Lower South",
+   "lat": 39.905679,
+   "lng": -75.183284,
+   "neighbors": [
+    "girard-estates",
+    "stadium-district",
+    "navy-yard",
+    "lower-moyamensing",
+    "west-passyunk"
+   ]
+  },
+  {
+   "name": "Stadium District",
+   "slug": "stadium-district",
+   "borough": "Lower South",
+   "lat": 39.905953,
+   "lng": -75.161586,
+   "neighbors": [
+    "lower-moyamensing",
+    "whitman",
+    "packer-park",
+    "navy-yard",
+    "greenwich"
+   ]
+  },
+  {
+   "name": "Clearview",
+   "slug": "clearview",
+   "borough": "Lower Southwest",
+   "lat": 39.909702,
+   "lng": -75.247299,
+   "neighbors": [
+    "penrose",
+    "elmwood",
+    "eastwick",
+    "paschall",
+    "kingsessing"
+   ]
+  },
+  {
+   "name": "Eastwick",
+   "slug": "eastwick",
+   "borough": "Lower Southwest",
+   "lat": 39.893282,
+   "lng": -75.245919,
+   "neighbors": [
+    "clearview",
+    "penrose",
+    "elmwood",
+    "paschall",
+    "bartram-village"
+   ]
+  },
+  {
+   "name": "Elmwood",
+   "slug": "elmwood",
+   "borough": "Lower Southwest",
+   "lat": 39.919704,
+   "lng": -75.230461,
+   "neighbors": [
+    "paschall",
+    "penrose",
+    "clearview",
+    "bartram-village",
+    "kingsessing"
+   ]
+  },
+  {
+   "name": "Paschall",
+   "slug": "paschall",
+   "borough": "Lower Southwest",
+   "lat": 39.925524,
+   "lng": -75.23725,
+   "neighbors": [
+    "elmwood",
+    "kingsessing",
+    "penrose",
+    "clearview",
+    "bartram-village"
+   ]
+  },
+  {
+   "name": "Penrose",
+   "slug": "penrose",
+   "borough": "Lower Southwest",
+   "lat": 39.91005,
+   "lng": -75.237317,
+   "neighbors": [
+    "clearview",
+    "elmwood",
+    "paschall",
+    "eastwick",
+    "bartram-village"
+   ]
+  },
+  {
+   "name": "Allegheny West",
+   "slug": "allegheny-west",
+   "borough": "North",
+   "lat": 40.003867,
+   "lng": -75.179114,
+   "neighbors": [
+    "strawberry-mansion",
+    "tioga",
+    "glenwood",
+    "east-falls",
+    "stanton"
+   ]
+  },
+  {
+   "name": "Fairhill",
+   "slug": "fairhill",
+   "borough": "North",
+   "lat": 39.998026,
+   "lng": -75.137801,
+   "neighbors": [
+    "mcguire",
+    "franklinville",
+    "upper-kensington",
+    "hartranft",
+    "west-kensington"
+   ]
+  },
+  {
+   "name": "Feltonville",
+   "slug": "feltonville",
+   "borough": "North",
+   "lat": 40.019512,
+   "lng": -75.121963,
+   "neighbors": [
+    "hunting-park",
+    "olney",
+    "juniata-park",
+    "northwood",
+    "upper-kensington"
+   ]
+  },
+  {
+   "name": "Franklinville",
+   "slug": "franklinville",
+   "borough": "North",
+   "lat": 40.004158,
+   "lng": -75.145177,
+   "neighbors": [
+    "fairhill",
+    "hunting-park",
+    "glenwood",
+    "mcguire",
+    "hartranft"
+   ]
+  },
+  {
+   "name": "Glenwood",
+   "slug": "glenwood",
+   "borough": "North",
+   "lat": 39.998906,
+   "lng": -75.160564,
+   "neighbors": [
+    "stanton",
+    "tioga",
+    "franklinville",
+    "hartranft",
+    "allegheny-west"
+   ]
+  },
+  {
+   "name": "Hunting Park",
+   "slug": "hunting-park",
+   "borough": "North",
+   "lat": 40.01193,
+   "lng": -75.132887,
+   "neighbors": [
+    "feltonville",
+    "franklinville",
+    "fairhill",
+    "upper-kensington",
+    "mcguire"
+   ]
+  },
+  {
+   "name": "Juniata Park",
+   "slug": "juniata-park",
+   "borough": "North",
+   "lat": 40.010295,
+   "lng": -75.103602,
+   "neighbors": [
+    "harrowgate",
+    "northwood",
+    "frankford",
+    "feltonville",
+    "upper-kensington"
+   ]
+  },
+  {
+   "name": "McGuire",
+   "slug": "mcguire",
+   "borough": "North",
+   "lat": 39.993178,
+   "lng": -75.132052,
+   "neighbors": [
+    "fairhill",
+    "upper-kensington",
+    "east-kensington",
+    "west-kensington",
+    "hartranft"
+   ]
+  },
+  {
+   "name": "Nicetown",
+   "slug": "nicetown",
+   "borough": "North",
+   "lat": 40.017432,
+   "lng": -75.156747,
+   "neighbors": [
+    "tioga",
+    "southwest-germantown",
+    "logan",
+    "franklinville",
+    "wister"
+   ]
+  },
+  {
+   "name": "Tioga",
+   "slug": "tioga",
+   "borough": "North",
+   "lat": 40.010686,
+   "lng": -75.16286,
+   "neighbors": [
+    "nicetown",
+    "glenwood",
+    "southwest-germantown",
+    "allegheny-west",
+    "franklinville"
+   ]
+  },
+  {
+   "name": "Upper Kensington",
+   "slug": "upper-kensington",
+   "borough": "North",
+   "lat": 39.998823,
+   "lng": -75.124562,
+   "neighbors": [
+    "mcguire",
+    "fairhill",
+    "east-kensington",
+    "hunting-park",
+    "franklinville"
+   ]
+  },
+  {
+   "name": "Holmesburg",
+   "slug": "holmesburg",
+   "borough": "North Delaware",
+   "lat": 40.033718,
+   "lng": -75.019362,
+   "neighbors": [
+    "pennypack-woods",
+    "tacony",
+    "winchester-park",
+    "torresdale",
+    "lexington-park"
+   ]
+  },
+  {
+   "name": "Mayfair",
+   "slug": "mayfair",
+   "borough": "North Delaware",
+   "lat": 40.035548,
+   "lng": -75.058428,
+   "neighbors": [
+    "oxford-circle",
+    "tacony",
+    "wissinoming",
+    "lexington-park",
+    "summerdale"
+   ]
+  },
+  {
+   "name": "Tacony",
+   "slug": "tacony",
+   "borough": "North Delaware",
+   "lat": 40.022493,
+   "lng": -75.042944,
+   "neighbors": [
+    "wissinoming",
+    "mayfair",
+    "holmesburg",
+    "frankford",
+    "bridesburg"
+   ]
+  },
+  {
+   "name": "Torresdale",
+   "slug": "torresdale",
+   "borough": "North Delaware",
+   "lat": 40.04828,
+   "lng": -74.993518,
+   "neighbors": [
+    "academy-gardens",
+    "pennypack-woods",
+    "west-torresdale",
+    "aston-woodbridge",
+    "morrell-park"
+   ]
+  },
+  {
+   "name": "Wissinoming",
+   "slug": "wissinoming",
+   "borough": "North Delaware",
+   "lat": 40.016774,
+   "lng": -75.06197,
+   "neighbors": [
+    "tacony",
+    "frankford",
+    "mayfair",
+    "bridesburg",
+    "summerdale"
+   ]
+  },
+  {
+   "name": "Bridesburg",
+   "slug": "bridesburg",
+   "borough": "River Wards",
+   "lat": 39.997288,
+   "lng": -75.069367,
+   "neighbors": [
+    "frankford",
+    "wissinoming",
+    "richmond",
+    "harrowgate",
+    "juniata-park"
+   ]
+  },
+  {
+   "name": "East Kensington",
+   "slug": "east-kensington",
+   "borough": "River Wards",
+   "lat": 39.984468,
+   "lng": -75.127566,
+   "neighbors": [
+    "west-kensington",
+    "mcguire",
+    "fishtown-lower-kensington",
+    "upper-kensington",
+    "old-kensington"
+   ]
+  },
+  {
+   "name": "Fishtown - Lower Kensington",
+   "slug": "fishtown-lower-kensington",
+   "borough": "River Wards",
+   "lat": 39.972896,
+   "lng": -75.124714,
+   "neighbors": [
+    "east-kensington",
+    "old-kensington",
+    "port-richmond",
+    "northern-liberties",
+    "west-kensington"
+   ]
+  },
+  {
+   "name": "Harrowgate",
+   "slug": "harrowgate",
+   "borough": "River Wards",
+   "lat": 39.997468,
+   "lng": -75.102109,
+   "neighbors": [
+    "richmond",
+    "juniata-park",
+    "upper-kensington",
+    "frankford",
+    "port-richmond"
+   ]
+  },
+  {
+   "name": "Port Richmond",
+   "slug": "port-richmond",
+   "borough": "River Wards",
+   "lat": 39.975269,
+   "lng": -75.106355,
+   "neighbors": [
+    "richmond",
+    "fishtown-lower-kensington",
+    "east-kensington",
+    "harrowgate",
+    "west-kensington"
+   ]
+  },
+  {
+   "name": "Richmond",
+   "slug": "richmond",
+   "borough": "River Wards",
+   "lat": 39.985849,
+   "lng": -75.095239,
+   "neighbors": [
+    "harrowgate",
+    "port-richmond",
+    "bridesburg",
+    "east-kensington",
+    "juniata-park"
+   ]
+  },
+  {
+   "name": "Dickinson Narrows",
+   "slug": "dickinson-narrows",
+   "borough": "South",
+   "lat": 39.929963,
+   "lng": -75.154229,
+   "neighbors": [
+    "pennsport",
+    "greenwich",
+    "passyunk-square",
+    "east-passyunk",
+    "queen-village"
+   ]
+  },
+  {
+   "name": "East Passyunk",
+   "slug": "east-passyunk",
+   "borough": "South",
+   "lat": 39.926969,
+   "lng": -75.163675,
+   "neighbors": [
+    "greenwich",
+    "passyunk-square",
+    "newbold",
+    "lower-moyamensing",
+    "dickinson-narrows"
+   ]
+  },
+  {
+   "name": "Girard Estates",
+   "slug": "girard-estates",
+   "borough": "South",
+   "lat": 39.918128,
+   "lng": -75.179983,
+   "neighbors": [
+    "west-passyunk",
+    "newbold",
+    "lower-moyamensing",
+    "packer-park",
+    "east-passyunk"
+   ]
+  },
+  {
+   "name": "Grays Ferry",
+   "slug": "grays-ferry",
+   "borough": "South",
+   "lat": 39.933752,
+   "lng": -75.1945,
+   "neighbors": [
+    "west-passyunk",
+    "point-breeze",
+    "bartram-village",
+    "graduate-hospital",
+    "fitler-square"
+   ]
+  },
+  {
+   "name": "Greenwich",
+   "slug": "greenwich",
+   "borough": "South",
+   "lat": 39.923995,
+   "lng": -75.157132,
+   "neighbors": [
+    "east-passyunk",
+    "dickinson-narrows",
+    "whitman",
+    "lower-moyamensing",
+    "pennsport"
+   ]
+  },
+  {
+   "name": "Lower Moyamensing",
+   "slug": "lower-moyamensing",
+   "borough": "South",
+   "lat": 39.919742,
+   "lng": -75.163949,
+   "neighbors": [
+    "greenwich",
+    "east-passyunk",
+    "whitman",
+    "newbold",
+    "girard-estates"
+   ]
+  },
+  {
+   "name": "Newbold",
+   "slug": "newbold",
+   "borough": "South",
+   "lat": 39.926595,
+   "lng": -75.172451,
+   "neighbors": [
+    "east-passyunk",
+    "west-passyunk",
+    "point-breeze",
+    "lower-moyamensing",
+    "girard-estates"
+   ]
+  },
+  {
+   "name": "Passyunk Square",
+   "slug": "passyunk-square",
+   "borough": "South",
+   "lat": 39.933358,
+   "lng": -75.161935,
+   "neighbors": [
+    "east-passyunk",
+    "dickinson-narrows",
+    "hawthorne",
+    "bella-vista",
+    "greenwich"
+   ]
+  },
+  {
+   "name": "Pennsport",
+   "slug": "pennsport",
+   "borough": "South",
+   "lat": 39.927811,
+   "lng": -75.149575,
+   "neighbors": [
+    "dickinson-narrows",
+    "greenwich",
+    "whitman",
+    "queen-village",
+    "east-passyunk"
+   ]
+  },
+  {
+   "name": "Point Breeze",
+   "slug": "point-breeze",
+   "borough": "South",
+   "lat": 39.934522,
+   "lng": -75.177385,
+   "neighbors": [
+    "graduate-hospital",
+    "west-passyunk",
+    "newbold",
+    "passyunk-square",
+    "hawthorne"
+   ]
+  },
+  {
+   "name": "Riverfront",
+   "slug": "riverfront",
+   "borough": "South",
+   "lat": 39.919816,
+   "lng": -75.139644,
+   "neighbors": [
+    "whitman",
+    "pennsport",
+    "greenwich",
+    "dickinson-narrows",
+    "lower-moyamensing"
+   ]
+  },
+  {
+   "name": "West Passyunk",
+   "slug": "west-passyunk",
+   "borough": "South",
+   "lat": 39.926397,
+   "lng": -75.181374,
+   "neighbors": [
+    "newbold",
+    "girard-estates",
+    "point-breeze",
+    "grays-ferry",
+    "east-passyunk"
+   ]
+  },
+  {
+   "name": "Whitman",
+   "slug": "whitman",
+   "borough": "South",
+   "lat": 39.918195,
+   "lng": -75.15274,
+   "neighbors": [
+    "greenwich",
+    "lower-moyamensing",
+    "pennsport",
+    "riverfront",
+    "dickinson-narrows"
+   ]
+  },
+  {
+   "name": "Bartram Village",
+   "slug": "bartram-village",
+   "borough": "University Southwest",
+   "lat": 39.932867,
+   "lng": -75.213273,
+   "neighbors": [
+    "southwest-schuylkill",
+    "grays-ferry",
+    "kingsessing",
+    "cedar-park",
+    "woodland-terrace"
+   ]
+  },
+  {
+   "name": "Cedar Park",
+   "slug": "cedar-park",
+   "borough": "University Southwest",
+   "lat": 39.947746,
+   "lng": -75.219908,
+   "neighbors": [
+    "garden-court",
+    "walnut-hill",
+    "spruce-hill",
+    "southwest-schuylkill",
+    "woodland-terrace"
+   ]
+  },
+  {
+   "name": "Garden Court",
+   "slug": "garden-court",
+   "borough": "University Southwest",
+   "lat": 39.952574,
+   "lng": -75.220349,
+   "neighbors": [
+    "walnut-hill",
+    "cedar-park",
+    "spruce-hill",
+    "dunlap",
+    "woodland-terrace"
+   ]
+  },
+  {
+   "name": "Kingsessing",
+   "slug": "kingsessing",
+   "borough": "University Southwest",
+   "lat": 39.939851,
+   "lng": -75.2316,
+   "neighbors": [
+    "cedar-park",
+    "southwest-schuylkill",
+    "paschall",
+    "cobbs-creek",
+    "garden-court"
+   ]
+  },
+  {
+   "name": "Powelton",
+   "slug": "powelton",
+   "borough": "University Southwest",
+   "lat": 39.9604,
+   "lng": -75.191805,
+   "neighbors": [
+    "mantua",
+    "university-city",
+    "west-powelton",
+    "haverford-north",
+    "belmont"
+   ]
+  },
+  {
+   "name": "Southwest Schuylkill",
+   "slug": "southwest-schuylkill",
+   "borough": "University Southwest",
+   "lat": 39.938645,
+   "lng": -75.216013,
+   "neighbors": [
+    "bartram-village",
+    "cedar-park",
+    "woodland-terrace",
+    "kingsessing",
+    "garden-court"
+   ]
+  },
+  {
+   "name": "Spruce Hill",
+   "slug": "spruce-hill",
+   "borough": "University Southwest",
+   "lat": 39.952782,
+   "lng": -75.210017,
+   "neighbors": [
+    "woodland-terrace",
+    "garden-court",
+    "west-powelton",
+    "walnut-hill",
+    "cedar-park"
+   ]
+  },
+  {
+   "name": "University City",
+   "slug": "university-city",
+   "borough": "University Southwest",
+   "lat": 39.952212,
+   "lng": -75.193309,
+   "neighbors": [
+    "powelton",
+    "fitler-square",
+    "woodland-terrace",
+    "west-powelton",
+    "spruce-hill"
+   ]
+  },
+  {
+   "name": "Walnut Hill",
+   "slug": "walnut-hill",
+   "borough": "University Southwest",
+   "lat": 39.956565,
+   "lng": -75.219513,
+   "neighbors": [
+    "garden-court",
+    "dunlap",
+    "spruce-hill",
+    "cedar-park",
+    "mill-creek"
+   ]
+  },
+  {
+   "name": "West Powelton",
+   "slug": "west-powelton",
+   "borough": "University Southwest",
+   "lat": 39.960205,
+   "lng": -75.205979,
+   "neighbors": [
+    "haverford-north",
+    "spruce-hill",
+    "belmont",
+    "powelton",
+    "walnut-hill"
+   ]
+  },
+  {
+   "name": "Woodland Terrace",
+   "slug": "woodland-terrace",
+   "borough": "University Southwest",
+   "lat": 39.948357,
+   "lng": -75.207072,
+   "neighbors": [
+    "spruce-hill",
+    "cedar-park",
+    "garden-court",
+    "university-city",
+    "west-powelton"
+   ]
+  },
+  {
+   "name": "Bustleton",
+   "slug": "bustleton",
+   "borough": "Upper Far Northeast",
+   "lat": 40.0934,
+   "lng": -75.042232,
+   "neighbors": [
+    "pennypack",
+    "somerton",
+    "fox-chase",
+    "rhawnhurst",
+    "aston-woodbridge"
+   ]
+  },
+  {
+   "name": "Byberry",
+   "slug": "byberry",
+   "borough": "Upper Far Northeast",
+   "lat": 40.113019,
+   "lng": -74.985752,
+   "neighbors": [
+    "normandy-village",
+    "mechanicsville",
+    "parkwood-manor",
+    "somerton",
+    "modena"
+   ]
+  },
+  {
+   "name": "Somerton",
+   "slug": "somerton",
+   "borough": "Upper Far Northeast",
+   "lat": 40.116453,
+   "lng": -75.016889,
+   "neighbors": [
+    "normandy-village",
+    "byberry",
+    "bustleton",
+    "parkwood-manor",
+    "mechanicsville"
+   ]
+  },
+  {
+   "name": "Cedarbrook",
+   "slug": "cedarbrook",
+   "borough": "Upper North",
+   "lat": 40.074942,
+   "lng": -75.175963,
+   "neighbors": [
+    "east-mount-airy",
+    "west-oak-lane",
+    "chestnut-hill",
+    "east-germantown",
+    "west-mount-airy"
+   ]
+  },
+  {
+   "name": "East Oak Lane",
+   "slug": "east-oak-lane",
+   "borough": "Upper North",
+   "lat": 40.052615,
+   "lng": -75.133111,
+   "neighbors": [
+    "fern-rock",
+    "melrose-park-gardens",
+    "ogontz",
+    "olney",
+    "west-oak-lane"
+   ]
+  },
+  {
+   "name": "Fern Rock",
+   "slug": "fern-rock",
+   "borough": "Upper North",
+   "lat": 40.042396,
+   "lng": -75.139347,
+   "neighbors": [
+    "ogontz",
+    "east-oak-lane",
+    "olney",
+    "logan",
+    "melrose-park-gardens"
+   ]
+  },
+  {
+   "name": "Logan",
+   "slug": "logan",
+   "borough": "Upper North",
+   "lat": 40.029359,
+   "lng": -75.148874,
+   "neighbors": [
+    "wister",
+    "nicetown",
+    "fern-rock",
+    "southwest-germantown",
+    "ogontz"
+   ]
+  },
+  {
+   "name": "Melrose Park Gardens",
+   "slug": "melrose-park-gardens",
+   "borough": "Upper North",
+   "lat": 40.047424,
+   "lng": -75.117951,
+   "neighbors": [
+    "east-oak-lane",
+    "lawndale",
+    "olney",
+    "fern-rock",
+    "crescentville"
+   ]
+  },
+  {
+   "name": "Ogontz",
+   "slug": "ogontz",
+   "borough": "Upper North",
+   "lat": 40.045808,
+   "lng": -75.151479,
+   "neighbors": [
+    "east-germantown",
+    "fern-rock",
+    "wister",
+    "east-oak-lane",
+    "logan"
+   ]
+  },
+  {
+   "name": "Olney",
+   "slug": "olney",
+   "borough": "Upper North",
+   "lat": 40.03447,
+   "lng": -75.125656,
+   "neighbors": [
+    "fern-rock",
+    "melrose-park-gardens",
+    "feltonville",
+    "logan",
+    "east-oak-lane"
+   ]
+  },
+  {
+   "name": "West Oak Lane",
+   "slug": "west-oak-lane",
+   "borough": "Upper North",
+   "lat": 40.062991,
+   "lng": -75.155659,
+   "neighbors": [
+    "ogontz",
+    "east-germantown",
+    "cedarbrook",
+    "east-mount-airy",
+    "east-oak-lane"
+   ]
+  },
+  {
+   "name": "Chestnut Hill",
+   "slug": "chestnut-hill",
+   "borough": "Upper Northwest",
+   "lat": 40.071553,
+   "lng": -75.210577,
+   "neighbors": [
+    "andorra",
+    "west-mount-airy",
+    "east-mount-airy",
+    "cedarbrook",
+    "upper-roxborough"
+   ]
+  },
+  {
+   "name": "East Germantown",
+   "slug": "east-germantown",
+   "borough": "Upper Northwest",
+   "lat": 40.046796,
+   "lng": -75.164279,
+   "neighbors": [
+    "germantown-morton",
+    "ogontz",
+    "wister",
+    "germantown-penn-knox",
+    "west-oak-lane"
+   ]
+  },
+  {
+   "name": "East Mount Airy",
+   "slug": "east-mount-airy",
+   "borough": "Upper Northwest",
+   "lat": 40.059464,
+   "lng": -75.181128,
+   "neighbors": [
+    "west-mount-airy",
+    "cedarbrook",
+    "germantown-morton",
+    "east-germantown",
+    "west-oak-lane"
+   ]
+  },
+  {
+   "name": "Germantown - Morton",
+   "slug": "germantown-morton",
+   "borough": "Upper Northwest",
+   "lat": 40.043676,
+   "lng": -75.174324,
+   "neighbors": [
+    "east-germantown",
+    "west-central-germantown",
+    "germantown-penn-knox",
+    "wister",
+    "east-mount-airy"
+   ]
+  },
+  {
+   "name": "Germantown - Penn Knox",
+   "slug": "germantown-penn-knox",
+   "borough": "Upper Northwest",
+   "lat": 40.031442,
+   "lng": -75.172858,
+   "neighbors": [
+    "germantown-westside",
+    "wister",
+    "southwest-germantown",
+    "west-central-germantown",
+    "germantown-morton"
+   ]
+  },
+  {
+   "name": "Germantown - Westside",
+   "slug": "germantown-westside",
+   "borough": "Upper Northwest",
+   "lat": 40.026861,
+   "lng": -75.177463,
+   "neighbors": [
+    "germantown-penn-knox",
+    "southwest-germantown",
+    "west-central-germantown",
+    "wister",
+    "east-falls"
+   ]
+  },
+  {
+   "name": "Southwest Germantown",
+   "slug": "southwest-germantown",
+   "borough": "Upper Northwest",
+   "lat": 40.0236,
+   "lng": -75.167376,
+   "neighbors": [
+    "germantown-westside",
+    "germantown-penn-knox",
+    "nicetown",
+    "wister",
+    "tioga"
+   ]
+  },
+  {
+   "name": "West Central Germantown",
+   "slug": "west-central-germantown",
+   "borough": "Upper Northwest",
+   "lat": 40.036167,
+   "lng": -75.183682,
+   "neighbors": [
+    "germantown-penn-knox",
+    "germantown-morton",
+    "germantown-westside",
+    "wister",
+    "west-mount-airy"
+   ]
+  },
+  {
+   "name": "West Mount Airy",
+   "slug": "west-mount-airy",
+   "borough": "Upper Northwest",
+   "lat": 40.048591,
+   "lng": -75.196396,
+   "neighbors": [
+    "west-central-germantown",
+    "east-mount-airy",
+    "germantown-morton",
+    "wissahickon-hills",
+    "roxborough"
+   ]
+  },
+  {
+   "name": "Wister",
+   "slug": "wister",
+   "borough": "Upper Northwest",
+   "lat": 40.033711,
+   "lng": -75.163965,
+   "neighbors": [
+    "germantown-penn-knox",
+    "southwest-germantown",
+    "logan",
+    "germantown-westside",
+    "germantown-morton"
+   ]
+  },
+  {
+   "name": "Belmont",
+   "slug": "belmont",
+   "borough": "West",
+   "lat": 39.969081,
+   "lng": -75.20708,
+   "neighbors": [
+    "haverford-north",
+    "east-parkside",
+    "mill-creek",
+    "west-powelton",
+    "mantua"
+   ]
+  },
+  {
+   "name": "Carroll Park",
+   "slug": "carroll-park",
+   "borough": "West",
+   "lat": 39.97364,
+   "lng": -75.233041,
+   "neighbors": [
+    "haddington",
+    "west-parkside",
+    "mill-creek",
+    "dunlap",
+    "wynnefield"
+   ]
+  },
+  {
+   "name": "Cobbs Creek",
+   "slug": "cobbs-creek",
+   "borough": "West",
+   "lat": 39.95379,
+   "lng": -75.239031,
+   "neighbors": [
+    "haddington",
+    "garden-court",
+    "kingsessing",
+    "walnut-hill",
+    "dunlap"
+   ]
+  },
+  {
+   "name": "Dunlap",
+   "slug": "dunlap",
+   "borough": "West",
+   "lat": 39.961862,
+   "lng": -75.222031,
+   "neighbors": [
+    "walnut-hill",
+    "mill-creek",
+    "garden-court",
+    "haverford-north",
+    "haddington"
+   ]
+  },
+  {
+   "name": "Haddington",
+   "slug": "haddington",
+   "borough": "West",
+   "lat": 39.966307,
+   "lng": -75.235808,
+   "neighbors": [
+    "carroll-park",
+    "dunlap",
+    "cobbs-creek",
+    "mill-creek",
+    "walnut-hill"
+   ]
+  },
+  {
+   "name": "Haverford North",
+   "slug": "haverford-north",
+   "borough": "West",
+   "lat": 39.964609,
+   "lng": -75.207941,
+   "neighbors": [
+    "belmont",
+    "west-powelton",
+    "mill-creek",
+    "east-parkside",
+    "mantua"
+   ]
+  },
+  {
+   "name": "Mantua",
+   "slug": "mantua",
+   "borough": "West",
+   "lat": 39.967392,
+   "lng": -75.194919,
+   "neighbors": [
+    "powelton",
+    "belmont",
+    "haverford-north",
+    "east-parkside",
+    "west-powelton"
+   ]
+  },
+  {
+   "name": "Mill Creek",
+   "slug": "mill-creek",
+   "borough": "West",
+   "lat": 39.966848,
+   "lng": -75.21753,
+   "neighbors": [
+    "dunlap",
+    "haverford-north",
+    "belmont",
+    "west-parkside",
+    "walnut-hill"
+   ]
+  },
+  {
+   "name": "Overbrook",
+   "slug": "overbrook",
+   "borough": "West",
+   "lat": 39.978668,
+   "lng": -75.253488,
+   "neighbors": [
+    "carroll-park",
+    "haddington",
+    "wynnefield",
+    "west-parkside",
+    "cobbs-creek"
+   ]
+  },
+  {
+   "name": "East Parkside",
+   "slug": "east-parkside",
+   "borough": "West Park",
+   "lat": 39.973976,
+   "lng": -75.206406,
+   "neighbors": [
+    "belmont",
+    "haverford-north",
+    "west-parkside",
+    "mantua",
+    "mill-creek"
+   ]
+  },
+  {
+   "name": "West Parkside",
+   "slug": "west-parkside",
+   "borough": "West Park",
+   "lat": 39.976793,
+   "lng": -75.219251,
+   "neighbors": [
+    "mill-creek",
+    "east-parkside",
+    "carroll-park",
+    "belmont",
+    "wynnefield"
+   ]
+  },
+  {
+   "name": "Wynnefield",
+   "slug": "wynnefield",
+   "borough": "West Park",
+   "lat": 39.989286,
+   "lng": -75.229845,
+   "neighbors": [
+    "west-parkside",
+    "carroll-park",
+    "wynnefield-heights",
+    "overbrook",
+    "haddington"
+   ]
+  },
+  {
+   "name": "Wynnefield Heights",
+   "slug": "wynnefield-heights",
+   "borough": "West Park",
+   "lat": 40.002555,
+   "lng": -75.21172,
+   "neighbors": [
+    "wissahickon",
+    "wynnefield",
+    "east-falls",
+    "allegheny-west",
+    "west-parkside"
+   ]
+  }
+ ]
+}

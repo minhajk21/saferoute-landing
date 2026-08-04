@@ -273,6 +273,33 @@ const CITIES = {
       methodology: `Each incident reported to the Boston Police Department (via Analyze Boston) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the BPDA's official neighborhood set; the Harbor Islands are excluded because the uninhabited park has no reported crime and would read as falsely "safe". Because Boston is compact and densely built, neighborhood centers sit close together and their 1&nbsp;km circles overlap — adjacent areas will show similar figures. Time-of-day charts use BPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
     },
   },
+  'philly': {
+    name: 'Philadelphia',
+    hubName: 'Philadelphia',
+    rankPool: 'Philadelphia neighborhoods',
+    // Multi-district city (like NYC/DC/Toronto/Seattle): the city's 158 published
+    // neighbourhoods — minus six with no residents — grouped under the 18 PCPC
+    // Planning Districts, so the hub ranks within each district. No rankHeading.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    reportedTo: 'reported to the Philadelphia Police',
+    dataName: 'Philadelphia Police data',
+    medianLabel: 'citywide median',
+    forCity: 'for Philadelphia',
+    acrossCity: 'across Philadelphia',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Philadelphia Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Philadelphia Police Department crime incidents via <a href="https://opendataphilly.org/">OpenDataPhilly</a>${dateLine}. Neighborhood boundaries: City of Philadelphia neighborhoods (151 of 158; parkland, airfields and one industrial zone are excluded), grouped by Philadelphia City Planning Commission Planning Districts. Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
+    basemapCredit: 'basemap © OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Philadelphia Neighborhood Safety Map & Rankings (${n} neighborhoods) — SafeRoute`,
+      desc: (n, date) => `How safe is your Philadelphia neighborhood? Safety index (0–100) for ${n} Philly neighborhoods from Philadelphia Police reported-crime data through ${date} — ranked by planning district, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Philadelphia neighborhood?',
+      lead: `SafeRoute scores every Philadelphia neighborhood 0–100 from incidents reported to the Philadelphia Police Department — severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood — e.g. Rittenhouse, Fishtown, Old City…',
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center — they are informational, not a judgment of any community. Note: the Philadelphia Police publish incident locations at block level for privacy, so dots mark blocks, not addresses. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the Philadelphia Police Department (via OpenDataPhilly) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the 158 neighborhoods the city publishes, grouped by the 18 Planning Districts the City Planning Commission uses; six are not scored because nobody lives in them — both halves of Fairmount Park, Wissahickon and Pennypack Parks, and the two airports — where near-zero reported crime would read as falsely "safe" rather than as empty land. Time-of-day charts use PPD dispatch timestamps, severity-weighted. Locations are published at block level for privacy. Pages regenerate as new data is published.`,
+    },
+  },
 };
 
 // ── helpers ──────────────────────────────────────────────────────────────────
@@ -704,7 +731,7 @@ if (!rendered.length) throw new Error('no cities with data');
 <table class="rank"><tbody>
 ${rows}
 </tbody></table>
-<p style="font-size:15px;color:var(--ink-2)">More cities from SafeRoute's 30-city coverage (Vancouver, Washington DC, Mexico City…) are on the way.</p>
+<p style="font-size:15px;color:var(--ink-2)">More cities from SafeRoute's 30-city coverage (Vancouver, Denver, Mexico City…) are on the way.</p>
 ${cta('your city')}
 ${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug)}`;
   mkdirSync(join(ROOT, 'safety'), { recursive: true });
