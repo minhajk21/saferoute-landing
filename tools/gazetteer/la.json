@@ -3,7 +3,7 @@
  "citySlug": "la",
  "country": "US",
  "source": "EmpowerLA — Neighborhood Council Boundaries (2018), City of Los Angeles, all 99",
- "generatedAt": "2026-07-22",
+ "generatedAt": "2026-08-04",
  "areas": [
   {
    "name": "Arleta",
@@ -11,18 +11,18 @@
    "borough": "Los Angeles",
    "lat": 34.246299,
    "lng": -118.445435,
-   "neighbors": [
-    "panorama-city",
-    "north-hills-east",
-    "pacoima",
-    "mission-hills",
-    "north-hollywood-west"
-   ],
    "centroidOrig": {
     "lat": 34.240932,
     "lng": -118.431461
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "north-hills-east",
+    "mission-hills",
+    "panorama-city",
+    "north-hills-west",
+    "pacoima"
+   ]
   },
   {
    "name": "Arroyo Seco",
@@ -58,18 +58,18 @@
    "borough": "Los Angeles",
    "lat": 34.113738,
    "lng": -118.255798,
-   "neighbors": [
-    "los-feliz",
-    "hollywood-united",
-    "east-hollywood",
-    "silver-lake",
-    "hollywood-hills-west"
-   ],
    "centroidOrig": {
     "lat": 34.133579,
     "lng": -118.290551
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "elysian-valley-riverside",
+    "glassell-park",
+    "silver-lake",
+    "greater-cypress-park",
+    "echo-park"
+   ]
   },
   {
    "name": "Bel Air - Beverly Crest",
@@ -77,18 +77,18 @@
    "borough": "Los Angeles",
    "lat": 34.0816,
    "lng": -118.46607,
-   "neighbors": [
-    "north-westwood",
-    "westwood",
-    "sherman-oaks",
-    "studio-city",
-    "westside"
-   ],
    "centroidOrig": {
     "lat": 34.106318,
     "lng": -118.43334
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "north-westwood",
+    "westwood",
+    "west-la-sawtelle",
+    "westside",
+    "sherman-oaks"
+   ]
   },
   {
    "name": "Boyle Heights",
@@ -129,7 +129,7 @@
     "west-hills",
     "chatsworth",
     "woodland-hills-warner-center",
-    "reseda"
+    "northridge-west"
    ]
   },
   {
@@ -153,11 +153,11 @@
    "lat": 34.093799,
    "lng": -118.333572,
    "neighbors": [
-    "hollywood-studio-district",
-    "greater-wilshire",
-    "mid-city-west",
     "hollywood-hills-west",
-    "east-hollywood"
+    "hollywood-studio-district",
+    "hollywood-united",
+    "los-feliz",
+    "mid-city-west"
    ]
   },
   {
@@ -167,8 +167,8 @@
    "lat": 33.741733,
    "lng": -118.286584,
    "neighbors": [
-    "northwest-san-pedro",
     "coastal-san-pedro",
+    "northwest-san-pedro",
     "wilmington",
     "harbor-city",
     "harbor-gateway-south"
@@ -181,11 +181,11 @@
    "lat": 34.254695,
    "lng": -118.597853,
    "neighbors": [
+    "porter-ranch",
     "northridge-west",
     "canoga-park",
-    "porter-ranch",
     "winnetka",
-    "west-hills"
+    "northridge-east"
    ]
   },
   {
@@ -194,18 +194,18 @@
    "borough": "Los Angeles",
    "lat": 33.730335,
    "lng": -118.282608,
+   "centroidOrig": {
+    "lat": 33.719132,
+    "lng": -118.294776
+   },
+   "centroidSnapped": true,
    "neighbors": [
     "central-san-pedro",
     "northwest-san-pedro",
     "wilmington",
     "harbor-city",
     "harbor-gateway-south"
-   ],
-   "centroidOrig": {
-    "lat": 33.719132,
-    "lng": -118.294776
-   },
-   "centroidSnapped": true
+   ]
   },
   {
    "name": "Del Rey",
@@ -214,10 +214,10 @@
    "lat": 33.988274,
    "lng": -118.421621,
    "neighbors": [
-    "mar-vista",
     "venice",
-    "westchester-playa",
+    "mar-vista",
     "palms",
+    "westchester-playa",
     "westside"
    ]
   },
@@ -241,18 +241,18 @@
    "borough": "Los Angeles",
    "lat": 34.136487,
    "lng": -118.215504,
-   "neighbors": [
-    "historic-highland-park",
-    "glassell-park",
-    "arroyo-seco",
-    "hermon",
-    "greater-cypress-park"
-   ],
    "centroidOrig": {
     "lat": 34.136598,
     "lng": -118.207714
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "glassell-park",
+    "historic-highland-park",
+    "arroyo-seco",
+    "hermon",
+    "atwater-village"
+   ]
   },
   {
    "name": "East Hollywood",
@@ -261,11 +261,11 @@
    "lat": 34.091641,
    "lng": -118.295512,
    "neighbors": [
+    "los-feliz",
     "hollywood-studio-district",
     "silver-lake",
     "rampart-village",
-    "wilshire-center-koreatown",
-    "central-hollywood"
+    "wilshire-center-koreatown"
    ]
   },
   {
@@ -276,10 +276,10 @@
    "lng": -118.251387,
    "neighbors": [
     "historic-cultural-north",
-    "elysian-valley-riverside",
     "silver-lake",
     "westlake-north",
-    "greater-cypress-park"
+    "greater-cypress-park",
+    "elysian-valley-riverside"
    ]
   },
   {
@@ -288,18 +288,18 @@
    "borough": "Los Angeles",
    "lat": 34.104982,
    "lng": -118.252454,
-   "neighbors": [
-    "greater-cypress-park",
-    "glassell-park",
-    "echo-park",
-    "silver-lake",
-    "arroyo-seco"
-   ],
    "centroidOrig": {
     "lat": 34.09749,
     "lng": -118.241783
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "atwater-village",
+    "silver-lake",
+    "glassell-park",
+    "greater-cypress-park",
+    "echo-park"
+   ]
   },
   {
    "name": "Empowerment Congress Central",
@@ -377,18 +377,18 @@
    "borough": "Los Angeles",
    "lat": 34.160741,
    "lng": -118.478181,
-   "neighbors": [
-    "lake-balboa",
-    "tarzana",
-    "sherman-oaks",
-    "van-nuys",
-    "reseda"
-   ],
    "centroidOrig": {
     "lat": 34.157254,
     "lng": -118.500179
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "sherman-oaks",
+    "lake-balboa",
+    "van-nuys",
+    "tarzana",
+    "greater-valley-glen"
+   ]
   },
   {
    "name": "Foothill Trails District",
@@ -396,18 +396,18 @@
    "borough": "Los Angeles",
    "lat": 34.274493,
    "lng": -118.387964,
-   "neighbors": [
-    "sun-valley",
-    "sunland-tujunga",
-    "pacoima",
-    "north-hollywood-northeast",
-    "arleta"
-   ],
    "centroidOrig": {
     "lat": 34.255128,
     "lng": -118.34399
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "pacoima",
+    "sylmar",
+    "arleta",
+    "sun-valley",
+    "mission-hills"
+   ]
   },
   {
    "name": "Glassell Park",
@@ -416,11 +416,11 @@
    "lat": 34.117014,
    "lng": -118.235675,
    "neighbors": [
+    "atwater-village",
     "elysian-valley-riverside",
     "greater-cypress-park",
-    "arroyo-seco",
     "eagle-rock",
-    "historic-highland-park"
+    "arroyo-seco"
    ]
   },
   {
@@ -429,18 +429,18 @@
    "borough": "Los Angeles",
    "lat": 34.275771,
    "lng": -118.490247,
-   "neighbors": [
-    "granada-hills-south",
-    "porter-ranch",
-    "sylmar",
-    "northridge-east",
-    "mission-hills"
-   ],
    "centroidOrig": {
     "lat": 34.298145,
     "lng": -118.505372
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "granada-hills-south",
+    "mission-hills",
+    "northridge-east",
+    "north-hills-west",
+    "north-hills-east"
+   ]
   },
   {
    "name": "Granada Hills South",
@@ -449,10 +449,10 @@
    "lat": 34.264016,
    "lng": -118.500998,
    "neighbors": [
-    "northridge-east",
-    "north-hills-west",
     "granada-hills-north",
+    "northridge-east",
     "mission-hills",
+    "north-hills-west",
     "north-hills-east"
    ]
   },
@@ -463,8 +463,8 @@
    "lat": 34.094187,
    "lng": -118.226987,
    "neighbors": [
-    "elysian-valley-riverside",
     "arroyo-seco",
+    "elysian-valley-riverside",
     "glassell-park",
     "echo-park",
     "lincoln-heights"
@@ -479,9 +479,9 @@
    "neighbors": [
     "noho",
     "studio-city",
-    "hollywood-hills-west",
     "valley-village",
-    "hollywood-united"
+    "hollywood-united",
+    "hollywood-hills-west"
    ]
   },
   {
@@ -504,18 +504,18 @@
    "borough": "Los Angeles",
    "lat": 34.057428,
    "lng": -118.314368,
-   "neighbors": [
-    "olympic-park",
-    "wilshire-center-koreatown",
-    "hollywood-studio-district",
-    "central-hollywood",
-    "mid-city-west"
-   ],
    "centroidOrig": {
     "lat": 34.07004,
     "lng": -118.327108
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "olympic-park",
+    "wilshire-center-koreatown",
+    "united-neighborhoods",
+    "pico-union",
+    "macarthur-park"
+   ]
   },
   {
    "name": "Harbor City",
@@ -524,8 +524,8 @@
    "lat": 33.793173,
    "lng": -118.297781,
    "neighbors": [
-    "northwest-san-pedro",
     "wilmington",
+    "northwest-san-pedro",
     "central-san-pedro",
     "harbor-gateway-south",
     "coastal-san-pedro"
@@ -551,18 +551,18 @@
    "borough": "Los Angeles",
    "lat": 33.85589,
    "lng": -118.297492,
-   "neighbors": [
-    "harbor-city",
-    "harbor-gateway-north",
-    "wilmington",
-    "northwest-san-pedro",
-    "empowerment-congress-southeast"
-   ],
    "centroidOrig": {
     "lat": 33.848168,
     "lng": -118.299067
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "harbor-gateway-north",
+    "harbor-city",
+    "wilmington",
+    "empowerment-congress-southeast",
+    "watts"
+   ]
   },
   {
    "name": "Hermon",
@@ -570,18 +570,18 @@
    "borough": "Los Angeles",
    "lat": 34.101071,
    "lng": -118.194724,
+   "centroidOrig": {
+    "lat": 34.100116,
+    "lng": -118.18952
+   },
+   "centroidSnapped": true,
    "neighbors": [
     "arroyo-seco",
     "historic-highland-park",
     "la32",
     "greater-cypress-park",
     "lincoln-heights"
-   ],
-   "centroidOrig": {
-    "lat": 34.100116,
-    "lng": -118.18952
-   },
-   "centroidSnapped": true
+   ]
   },
   {
    "name": "Historic Cultural North",
@@ -617,18 +617,18 @@
    "borough": "Los Angeles",
    "lat": 34.103201,
    "lng": -118.337909,
-   "neighbors": [
-    "greater-toluca-lake",
-    "central-hollywood",
-    "hollywood-united",
-    "hollywood-studio-district",
-    "los-feliz"
-   ],
    "centroidOrig": {
     "lat": 34.123886,
     "lng": -118.345007
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "central-hollywood",
+    "hollywood-united",
+    "hollywood-studio-district",
+    "los-feliz",
+    "mid-city-west"
+   ]
   },
   {
    "name": "Hollywood Studio District",
@@ -639,9 +639,9 @@
    "neighbors": [
     "central-hollywood",
     "east-hollywood",
-    "greater-wilshire",
-    "wilshire-center-koreatown",
-    "rampart-village"
+    "los-feliz",
+    "hollywood-united",
+    "hollywood-hills-west"
    ]
   },
   {
@@ -650,18 +650,18 @@
    "borough": "Los Angeles",
    "lat": 34.110164,
    "lng": -118.327325,
-   "neighbors": [
-    "los-feliz",
-    "atwater-village",
-    "hollywood-hills-west",
-    "east-hollywood",
-    "hollywood-studio-district"
-   ],
    "centroidOrig": {
     "lat": 34.130613,
     "lng": -118.304712
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "hollywood-hills-west",
+    "central-hollywood",
+    "los-feliz",
+    "hollywood-studio-district",
+    "east-hollywood"
+   ]
   },
   {
    "name": "LA32",
@@ -688,7 +688,7 @@
     "encino",
     "reseda",
     "north-hills-west",
-    "northridge-south"
+    "tarzana"
    ]
   },
   {
@@ -711,18 +711,18 @@
    "borough": "Los Angeles",
    "lat": 34.105175,
    "lng": -118.303107,
-   "neighbors": [
-    "atwater-village",
-    "hollywood-united",
-    "east-hollywood",
-    "hollywood-studio-district",
-    "silver-lake"
-   ],
    "centroidOrig": {
     "lat": 34.128177,
     "lng": -118.295323
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "east-hollywood",
+    "hollywood-studio-district",
+    "hollywood-united",
+    "central-hollywood",
+    "hollywood-hills-west"
+   ]
   },
   {
    "name": "MacArthur Park",
@@ -744,18 +744,18 @@
    "borough": "Los Angeles",
    "lat": 34.021356,
    "lng": -118.41653,
-   "neighbors": [
-    "palms",
-    "del-rey",
-    "west-la-sawtelle",
-    "westside",
-    "venice"
-   ],
    "centroidOrig": {
     "lat": 34.014127,
     "lng": -118.433663
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "palms",
+    "westside",
+    "del-rey",
+    "west-la-sawtelle",
+    "south-robertson"
+   ]
   },
   {
    "name": "Mid City West",
@@ -765,10 +765,10 @@
    "lng": -118.361104,
    "neighbors": [
     "pico",
-    "greater-wilshire",
+    "south-robertson",
     "central-hollywood",
     "mid-city",
-    "olympic-park"
+    "hollywood-hills-west"
    ]
   },
   {
@@ -782,7 +782,7 @@
     "pico",
     "olympic-park",
     "united-neighborhoods",
-    "empowerment-congress-west"
+    "south-robertson"
    ]
   },
   {
@@ -791,18 +791,18 @@
    "borough": "Los Angeles",
    "lat": 34.255899,
    "lng": -118.466812,
-   "neighbors": [
-    "north-hills-east",
-    "arleta",
-    "granada-hills-south",
-    "north-hills-west",
-    "pacoima"
-   ],
    "centroidOrig": {
     "lat": 34.267352,
     "lng": -118.457992
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "arleta",
+    "north-hills-east",
+    "north-hills-west",
+    "granada-hills-north",
+    "granada-hills-south"
+   ]
   },
   {
    "name": "NoHo",
@@ -814,8 +814,8 @@
     "valley-village",
     "greater-toluca-lake",
     "north-hollywood-northeast",
-    "studio-city",
-    "greater-valley-glen"
+    "sun-valley",
+    "studio-city"
    ]
   },
   {
@@ -826,8 +826,8 @@
    "lng": -118.465232,
    "neighbors": [
     "north-hills-west",
-    "panorama-city",
     "arleta",
+    "panorama-city",
     "mission-hills",
     "granada-hills-south"
    ]
@@ -840,10 +840,10 @@
    "lng": -118.484157,
    "neighbors": [
     "north-hills-east",
-    "northridge-east",
+    "mission-hills",
     "granada-hills-south",
     "panorama-city",
-    "northridge-south"
+    "arleta"
    ]
   },
   {
@@ -853,8 +853,8 @@
    "lat": 34.201578,
    "lng": -118.388069,
    "neighbors": [
-    "north-hollywood-west",
     "sun-valley",
+    "north-hollywood-west",
     "noho",
     "greater-valley-glen",
     "valley-village"
@@ -882,10 +882,10 @@
    "lng": -118.446045,
    "neighbors": [
     "westwood",
+    "bel-air-beverly-crest",
     "west-la-sawtelle",
     "westside",
-    "bel-air-beverly-crest",
-    "south-robertson"
+    "mar-vista"
    ]
   },
   {
@@ -894,18 +894,18 @@
    "borough": "Los Angeles",
    "lat": 34.25378,
    "lng": -118.52894,
-   "neighbors": [
-    "granada-hills-south",
-    "northridge-south",
-    "northridge-west",
-    "north-hills-west",
-    "north-hills-east"
-   ],
    "centroidOrig": {
     "lat": 34.249425,
     "lng": -118.517171
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "granada-hills-south",
+    "northridge-south",
+    "northridge-west",
+    "granada-hills-north",
+    "north-hills-west"
+   ]
   },
   {
    "name": "Northridge South",
@@ -914,9 +914,9 @@
    "lat": 34.226886,
    "lng": -118.529046,
    "neighbors": [
-    "northridge-east",
     "reseda",
     "northridge-west",
+    "northridge-east",
     "north-hills-west",
     "winnetka"
    ]
@@ -927,18 +927,18 @@
    "borough": "Los Angeles",
    "lat": 34.238149,
    "lng": -118.556249,
-   "neighbors": [
-    "northridge-east",
-    "northridge-south",
-    "porter-ranch",
-    "chatsworth",
-    "granada-hills-south"
-   ],
    "centroidOrig": {
     "lat": 34.25436,
     "lng": -118.549419
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "northridge-south",
+    "northridge-east",
+    "winnetka",
+    "reseda",
+    "chatsworth"
+   ]
   },
   {
    "name": "Northwest San Pedro",
@@ -946,18 +946,18 @@
    "borough": "Los Angeles",
    "lat": 33.758523,
    "lng": -118.298563,
+   "centroidOrig": {
+    "lat": 33.754557,
+    "lng": -118.303265
+   },
+   "centroidSnapped": true,
    "neighbors": [
     "central-san-pedro",
     "coastal-san-pedro",
     "wilmington",
     "harbor-city",
     "harbor-gateway-south"
-   ],
-   "centroidOrig": {
-    "lat": 33.754557,
-    "lng": -118.303265
-   },
-   "centroidSnapped": true
+   ]
   },
   {
    "name": "Olympic Park",
@@ -966,8 +966,8 @@
    "lat": 34.051265,
    "lng": -118.326065,
    "neighbors": [
-    "united-neighborhoods",
     "greater-wilshire",
+    "united-neighborhoods",
     "mid-city",
     "wilshire-center-koreatown",
     "pico"
@@ -980,8 +980,8 @@
    "lat": 34.049601,
    "lng": -118.363085,
    "neighbors": [
-    "mid-city",
     "south-robertson",
+    "mid-city",
     "mid-city-west",
     "west-adams",
     "olympic-park"
@@ -994,11 +994,11 @@
    "lat": 34.265635,
    "lng": -118.409313,
    "neighbors": [
+    "foothill-trails-district",
     "arleta",
     "mission-hills",
-    "sun-valley",
-    "panorama-city",
-    "foothill-trails-district"
+    "sylmar",
+    "panorama-city"
    ]
   },
   {
@@ -1008,8 +1008,8 @@
    "lat": 34.023394,
    "lng": -118.407005,
    "neighbors": [
-    "westside",
     "mar-vista",
+    "westside",
     "south-robertson",
     "del-rey",
     "west-la-sawtelle"
@@ -1063,18 +1063,18 @@
    "borough": "Los Angeles",
    "lat": 34.281218,
    "lng": -118.573137,
-   "neighbors": [
-    "northridge-west",
-    "chatsworth",
-    "granada-hills-north",
-    "northridge-east",
-    "granada-hills-south"
-   ],
    "centroidOrig": {
     "lat": 34.28588,
     "lng": -118.562016
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "chatsworth",
+    "northridge-west",
+    "northridge-east",
+    "granada-hills-south",
+    "northridge-south"
+   ]
   },
   {
    "name": "Rampart Village",
@@ -1099,9 +1099,9 @@
    "neighbors": [
     "northridge-south",
     "winnetka",
-    "lake-balboa",
     "tarzana",
-    "northridge-east"
+    "northridge-west",
+    "lake-balboa"
    ]
   },
   {
@@ -1111,11 +1111,11 @@
    "lat": 34.15137,
    "lng": -118.443272,
    "neighbors": [
+    "encino",
     "greater-valley-glen",
     "valley-village",
     "studio-city",
-    "van-nuys",
-    "bel-air-beverly-crest"
+    "van-nuys"
    ]
   },
   {
@@ -1125,11 +1125,11 @@
    "lat": 34.093096,
    "lng": -118.269294,
    "neighbors": [
+    "elysian-valley-riverside",
     "echo-park",
     "east-hollywood",
-    "elysian-valley-riverside",
-    "rampart-village",
-    "westlake-north"
+    "atwater-village",
+    "rampart-village"
    ]
   },
   {
@@ -1152,18 +1152,18 @@
    "borough": "Los Angeles",
    "lat": 34.047886,
    "lng": -118.379913,
-   "neighbors": [
-    "pico",
-    "westside",
-    "palms",
-    "mid-city",
-    "west-adams"
-   ],
    "centroidOrig": {
     "lat": 34.044926,
     "lng": -118.390059
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "pico",
+    "mid-city",
+    "mid-city-west",
+    "west-adams",
+    "palms"
+   ]
   },
   {
    "name": "Studio City",
@@ -1175,8 +1175,8 @@
     "valley-village",
     "greater-toluca-lake",
     "noho",
-    "hollywood-hills-west",
-    "sherman-oaks"
+    "sherman-oaks",
+    "greater-valley-glen"
    ]
   },
   {
@@ -1185,18 +1185,18 @@
    "borough": "Los Angeles",
    "lat": 34.209248,
    "lng": -118.372301,
-   "neighbors": [
-    "north-hollywood-northeast",
-    "north-hollywood-west",
-    "foothill-trails-district",
-    "arleta",
-    "pacoima"
-   ],
    "centroidOrig": {
     "lat": 34.227492,
     "lng": -118.379776
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "north-hollywood-northeast",
+    "north-hollywood-west",
+    "noho",
+    "greater-valley-glen",
+    "valley-village"
+   ]
   },
   {
    "name": "Sunland-Tujunga",
@@ -1204,18 +1204,18 @@
    "borough": "Los Angeles",
    "lat": 34.257367,
    "lng": -118.293082,
-   "neighbors": [
-    "foothill-trails-district",
-    "sun-valley",
-    "pacoima",
-    "north-hollywood-northeast",
-    "noho"
-   ],
    "centroidOrig": {
     "lat": 34.260502,
     "lng": -118.286564
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "foothill-trails-district",
+    "sun-valley",
+    "north-hollywood-northeast",
+    "pacoima",
+    "noho"
+   ]
   },
   {
    "name": "Sylmar",
@@ -1223,18 +1223,18 @@
    "borough": "Los Angeles",
    "lat": 34.312465,
    "lng": -118.428043,
-   "neighbors": [
-    "mission-hills",
-    "granada-hills-north",
-    "pacoima",
-    "granada-hills-south",
-    "arleta"
-   ],
    "centroidOrig": {
     "lat": 34.31288,
     "lng": -118.448449
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "pacoima",
+    "foothill-trails-district",
+    "granada-hills-north",
+    "mission-hills",
+    "arleta"
+   ]
   },
   {
    "name": "Tarzana",
@@ -1242,18 +1242,18 @@
    "borough": "Los Angeles",
    "lat": 34.16926,
    "lng": -118.533469,
-   "neighbors": [
-    "encino",
-    "reseda",
-    "woodland-hills-warner-center",
-    "winnetka",
-    "lake-balboa"
-   ],
    "centroidOrig": {
     "lat": 34.15813,
     "lng": -118.547224
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "reseda",
+    "lake-balboa",
+    "encino",
+    "winnetka",
+    "northridge-south"
+   ]
   },
   {
    "name": "United Neighborhoods",
@@ -1264,9 +1264,9 @@
    "neighbors": [
     "olympic-park",
     "empowerment-congress-north",
+    "greater-wilshire",
     "mid-city",
-    "pico-union",
-    "west-adams"
+    "pico-union"
    ]
   },
   {
@@ -1294,7 +1294,7 @@
     "panorama-city",
     "lake-balboa",
     "north-hollywood-west",
-    "north-hills-east"
+    "encino"
    ]
   },
   {
@@ -1304,11 +1304,11 @@
    "lat": 33.99125,
    "lng": -118.461402,
    "neighbors": [
-    "mar-vista",
     "del-rey",
+    "mar-vista",
     "west-la-sawtelle",
     "palms",
-    "westchester-playa"
+    "westside"
    ]
   },
   {
@@ -1350,7 +1350,7 @@
     "empowerment-congress-west",
     "pico",
     "united-neighborhoods",
-    "olympic-park"
+    "south-robertson"
    ]
   },
   {
@@ -1359,18 +1359,18 @@
    "borough": "Los Angeles",
    "lat": 34.191155,
    "lng": -118.62142,
-   "neighbors": [
-    "canoga-park",
-    "woodland-hills-warner-center",
-    "winnetka",
-    "chatsworth",
-    "reseda"
-   ],
    "centroidOrig": {
     "lat": 34.210055,
     "lng": -118.636317
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "woodland-hills-warner-center",
+    "canoga-park",
+    "winnetka",
+    "chatsworth",
+    "reseda"
+   ]
   },
   {
    "name": "West LA - Sawtelle",
@@ -1381,8 +1381,8 @@
    "neighbors": [
     "westside",
     "north-westwood",
-    "mar-vista",
     "westwood",
+    "mar-vista",
     "palms"
    ]
   },
@@ -1392,18 +1392,18 @@
    "borough": "Los Angeles",
    "lat": 33.945366,
    "lng": -118.402201,
-   "neighbors": [
-    "del-rey",
-    "venice",
-    "mar-vista",
-    "palms",
-    "park-mesa-heights"
-   ],
    "centroidOrig": {
     "lat": 33.953967,
     "lng": -118.408641
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "del-rey",
+    "venice",
+    "park-mesa-heights",
+    "mar-vista",
+    "palms"
+   ]
   },
   {
    "name": "Westlake North",
@@ -1440,11 +1440,11 @@
    "lat": 34.043353,
    "lng": -118.420889,
    "neighbors": [
+    "mar-vista",
     "palms",
     "westwood",
-    "south-robertson",
     "west-la-sawtelle",
-    "mar-vista"
+    "north-westwood"
    ]
   },
   {
@@ -1458,7 +1458,7 @@
     "westside",
     "west-la-sawtelle",
     "bel-air-beverly-crest",
-    "south-robertson"
+    "mar-vista"
    ]
   },
   {
@@ -1467,18 +1467,18 @@
    "borough": "Los Angeles",
    "lat": 33.776174,
    "lng": -118.264408,
-   "neighbors": [
-    "central-san-pedro",
-    "northwest-san-pedro",
-    "harbor-city",
-    "coastal-san-pedro",
-    "harbor-gateway-south"
-   ],
    "centroidOrig": {
     "lat": 33.763059,
     "lng": -118.258686
    },
-   "centroidSnapped": true
+   "centroidSnapped": true,
+   "neighbors": [
+    "harbor-city",
+    "northwest-san-pedro",
+    "central-san-pedro",
+    "coastal-san-pedro",
+    "harbor-gateway-south"
+   ]
   },
   {
    "name": "Wilshire Center Koreatown",
@@ -1488,8 +1488,8 @@
    "lng": -118.300645,
    "neighbors": [
     "rampart-village",
-    "macarthur-park",
     "greater-wilshire",
+    "macarthur-park",
     "pico-union",
     "east-hollywood"
    ]
@@ -1503,9 +1503,9 @@
    "neighbors": [
     "canoga-park",
     "reseda",
-    "northridge-south",
-    "chatsworth",
-    "woodland-hills-warner-center"
+    "northridge-west",
+    "west-hills",
+    "northridge-south"
    ]
   },
   {
@@ -1515,10 +1515,10 @@
    "lat": 34.167935,
    "lng": -118.604733,
    "neighbors": [
-    "canoga-park",
-    "tarzana",
-    "winnetka",
     "west-hills",
+    "canoga-park",
+    "winnetka",
+    "tarzana",
     "reseda"
    ]
   },
