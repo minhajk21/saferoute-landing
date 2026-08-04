@@ -68,7 +68,20 @@ async function fetchArea(a, attempt = 1) {
     if (j.dataUnavailable || j.covered === false || !(j.totalIncidents >= 0)) throw new Error('dataUnavailable');
     return j;
   } catch (e) {
-    if (attempt < 3) { await new Promise(r => setTimeout(r, 1500 * attempt)); return fetchArea(a, attempt + 1); }
+    // A 5xx or a timeout from the backend is almost always the free Render dyno
+    // cold-starting or restarting, which takes ~30s — far longer than the old
+    // 1.5s/3s backoff could ride out. That is exactly how the 2026-08-02 monthly
+    // rebuild died: two London areas got HTTP 503, and the whole 27-minute job
+    // aborted. Transient failures now get more attempts and a much longer wait;
+    // everything else (a 4xx, a genuine dataUnavailable) still fails fast,
+    // because waiting will not fix those.
+    const transient = /HTTP 5\d\d|timeout|aborted|fetch failed|network/i.test(e.message || '');
+    const maxAttempts = transient ? 5 : 3;
+    if (attempt < maxAttempts) {
+      const wait = transient ? Math.min(8000 * attempt, 30_000) : 1500 * attempt;
+      await new Promise(r => setTimeout(r, wait));
+      return fetchArea(a, attempt + 1);
+    }
     throw e;
   }
 }
@@ -124,4 +137,20 @@ writeFileSync(join(outDir, 'index.json'), JSON.stringify({
 }));
 
 console.log(`done: ${done} fetched, ${skipped} cached, ${failed.length} failed · index: ${index.length} areas`);
-if (failed.length) { console.log('failed:', JSON.stringify(failed)); process.exitCode = 1; }
+if (failed.length) {
+  console.log('failed:', JSON.stringify(failed));
+  // Tolerate a few stragglers. An area that fails KEEPS its previous cached
+  // file, so the render still has data for it — just a little staler — and the
+  // index above already counts it. Failing the whole run over that trades a
+  // couple of slightly-stale areas for ZERO refreshed areas across every city,
+  // which is what happened on 2026-08-02: two London 503s out of 1,222 fetches
+  // aborted the pipeline before it rendered or pushed anything, and the site
+  // then sat unrefreshed for a month. Still fails loudly on a real outage.
+  const tolerated = Math.max(3, Math.ceil(gaz.areas.length * 0.02));
+  if (failed.length > tolerated) {
+    console.log(`FAILING: ${failed.length} failures exceeds the ${tolerated} tolerated for ${gaz.areas.length} areas.`);
+    process.exitCode = 1;
+  } else {
+    console.log(`Tolerating ${failed.length}/${tolerated} failures — those areas keep their previous data.`);
+  }
+}
