@@ -27,7 +27,26 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://safe-route.app';
 const APP_ID = '6768244297';
-const APP_URL = `https://apps.apple.com/app/id${APP_ID}`;
+
+// App Store campaign attribution. Without a campaign token, an install that
+// started on safe-route.app is indistinguishable in App Analytics from one that
+// started in App Store search — which is exactly the hole found on 2026-08-05:
+// "Web Referrer" was the ONLY source type with no data at all, while the site
+// was serving ~2,500 views a month. That could have meant nobody clicks the CTA
+// OR that clicks simply aren't attributed, and there was no way to tell.
+//
+// `pt` is the provider token from the App Store Connect campaign-link generator
+// (Analytics → Acquisition → Campaigns); it is not a secret — it appears in
+// every public campaign URL. `mt=8` is the media type (apps).
+//
+// DELIBERATELY COARSE: three campaigns for the whole site, not one per city.
+// Apple hides a campaign until at least FIVE individual Apple Accounts install
+// from it, and the app takes ~72 installs a MONTH in total — so per-city tokens
+// would guarantee every one stayed below the threshold and reported nothing.
+const APP_PT = '128877797';
+const appStoreURL = (campaign) =>
+  `https://apps.apple.com/app/apple-store/id${APP_ID}?pt=${APP_PT}&ct=${campaign}&mt=8`;
+const APP_URL = appStoreURL('web-safety-pages');
 
 // ── per-city configuration ───────────────────────────────────────────────────
 const CITIES = {

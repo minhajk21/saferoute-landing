@@ -124,7 +124,7 @@
       </a>
       <div class="nav-right">
         <a class="nav-link" href="/safety/">Safety index</a>
-        <a class="nav-cta" href="https://apps.apple.com/app/id6768244297">Get the app</a>
+        <a class="nav-cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-check&mt=8">Get the app</a>
       </div>
     </nav>
   </div>
@@ -282,7 +282,7 @@ function render(d, name, address){
   if(!d.covered){
     panel.innerHTML = `<div class="place">${esc(name)}${address?`<small>${esc(address)}</small>`:''}</div>
       <p class="note">SafeRoute doesn't have crime data for this location yet. It currently covers the <b>UK</b>, <b>26 US cities</b>, <b>Toronto</b>, <b>Vancouver</b> and <b>Mexico City</b>.</p>
-      <a class="cta" href="https://apps.apple.com/app/id6768244297">Get SafeRoute</a>`;
+      <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-check&mt=8">Get SafeRoute</a>`;
     return;
   }
   const b = BAND[d.band]||BAND.moderate;
@@ -303,7 +303,7 @@ function render(d, name, address){
     ${tod?`<div class="divider"></div><div><p class="h3">When it happens</p><div class="todwrap">${[['Weekday',tod.slice(0,3)],['Weekend',tod.slice(3,6)]].map(g=>`<div class="todgrp"><div class="tod">${g[1].map(v=>`<div class="b" style="height:${Math.max(3,Math.round(v/maxTod*50))}px"></div>`).join('')}</div><div class="tod-x">${TOD3.map(t=>`<span>${t}</span>`).join('')}</div><div class="todlbl">${g[0]}</div></div>`).join('')}</div><p class="tiny">Severity-weighted share of reported incidents by time of day.</p></div>`:''}
     <div class="divider"></div>
     <p class="src">${esc(d.dataSource||'Police open data')}${d.crimeDate?` · through ${monthName(d.crimeDate)}`:''}. Locations are anonymised by the source. Informational only.</p>
-    <a class="cta" href="https://apps.apple.com/app/id6768244297">Route here safely with the app</a>`;
+    <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-check&mt=8">Route here safely with the app</a>`;
 }
 
 function flyTo(lat,lng){ map.invalidateSize(); suppressMove=true; map.flyTo([lat,lng], 14, { duration:1.1 }); }
