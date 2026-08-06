@@ -72,6 +72,14 @@ jobs:
           node tools/fetch-basemap-osm.mjs --city boston
           node tools/fetch-basemap-osm.mjs --city philly
 
+      # The homepage states "Requires iOS X+" by hand, and it went stale the day
+      # 1.2.3 dropped the floor from 26.4 to 16.4 — telling older iPhones they
+      # could not install an app they could. This copies the App Store's own
+      # answer; the commit step below picks up any correction. It never fails
+      # the run (an unreachable lookup is not a content error).
+      - name: Keep App Store facts on the site true
+        run: node tools/check-app-facts.mjs
+
       - name: Render pages
         run: node tools/render-pages.mjs
 

@@ -289,6 +289,7 @@ function render(d, name, address){
   const cats = (d.breakdown||[]).slice().sort((a,c)=>c.count-a.count).slice(0,5);
   const maxCat = Math.max(1,...cats.map(c=>c.count));
   const tod = d.timeOfDayIsRealData && (d.timeOfDay||[]).some(x=>x>0) ? d.timeOfDay : null;
+  const span = windowPhrase(d.windowDays);
   const maxTod = tod?Math.max(...tod):1;
   panel.innerHTML = `
     <div class="place">${esc(name)}${address?`<small>${esc(address)}</small>`:''}</div>
@@ -296,7 +297,7 @@ function render(d, name, address){
       <span class="score" style="color:${b.c}">${d.safetyScore}<span class="of">/100</span></span>
       <span class="band" style="background:${b.c}">${b.t}</span>
     </div>
-    <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported within 1&nbsp;km, ${esc(d.reportedTo||'to police')} — higher index = safer. ${d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
+    <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported within 1&nbsp;km${span?` over ${span}${d.crimeDate?` to ${monthName(d.crimeDate)}`:''}`:''}, ${esc(d.reportedTo||'to police')} — higher index = safer. ${d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
     <div id="pub"></div>
     <div class="divider"></div>
     ${cats.length?`<div><p class="h3">What's reported here</p>${cats.map(c=>`<div class="cat"><span class="bar" style="width:${Math.round(c.count/maxCat*46)+8}px"></span><span class="lbl">${catName(c.category)}</span><span class="n">${fmt(c.count)}</span></div>`).join('')}</div>`:''}
@@ -405,6 +406,11 @@ async function addPubLink(lat,lng,reqId){
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function fmt(n){ return Number(n||0).toLocaleString('en-US'); }
 function monthName(ym){ const [y,m]=String(ym).split('-').map(Number); return new Date(Date.UTC(y,(m||1)-1,1)).toLocaleString('en-US',{month:'long',year:'numeric',timeZone:'UTC'}); }
+// How long a period the incident count covers. Feeds differ enormously — a
+// rolling month in the UK, year-to-date in New York — so a bare count is not
+// readable on its own. Null outside a fortnight-to-two-years band, and on any
+// region whose provider reports no observed span: say nothing rather than guess.
+function windowPhrase(days){ if(!(days>0)||days<14||days>760) return null; const m=Math.max(1,Math.round(days/30.44)); return m===1?'the month':`the ${m} months`; }
 
 // Deep link: /check/?q=... or ?lat=&lng=
 (function(){

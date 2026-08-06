@@ -329,6 +329,24 @@ const monthName = ym => {
 };
 const ord = n => n + (n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][Math.min(n % 10, 4)] || 'th');
 const fmt = n => Number(n).toLocaleString('en-US');
+
+// How long a period a page's incident counts cover, in words.
+//
+// A raw count is unreadable without this. The feeds genuinely differ — the UK
+// publishes a rolling month, NYPD runs year-to-date, Las Vegas a trailing
+// twelve — so "3,228 incidents" says nothing about how busy an area is until
+// you know whether that is a month's worth or a year's. Every page states a
+// count; none of them stated the span.
+//
+// Null outside a fortnight-to-two-years band: below that a rounded month
+// overstates the period, above it the feed is something other than the recent
+// window the copy implies, and in both cases saying nothing beats saying
+// something wrong.
+const windowPhrase = days => {
+  if (!(days > 0) || days < 14 || days > 760) return null;
+  const months = Math.max(1, Math.round(days / 30.44));
+  return months === 1 ? 'the month' : `the ${months} months`;
+};
 const CAT_NAMES = {
   'violent-crime': 'Violent crime', 'sexual-offences': 'Sexual offences', 'robbery': 'Robbery',
   'possession-of-weapons': 'Weapons possession', 'burglary': 'Burglary',
@@ -441,7 +459,7 @@ function todSVG(a) {
 
 // ── prose (deterministic from data — the content IS the data) ───────────────
 function makeProse(a, ctx) {
-  const { cfg, gazBySlug, bySlug, rankOf, median, count } = ctx;
+  const { cfg, gazBySlug, bySlug, rankOf, median, count, windowDays } = ctx;
   const g = gazBySlug.get(a.slug) || {};
   const rank = rankOf.get(a.slug);
   const diff = a.safetyScore - median;
@@ -469,7 +487,12 @@ function makeProse(a, ctx) {
     ? `right at the ${cfg.medianLabel} of ${median}`
     : `${Math.abs(diff)} points ${diff > 0 ? 'above' : 'below'} the ${cfg.medianLabel} of ${median}`;
 
-  const lead = `${bandLead} Its SafeRoute safety index is <strong>${a.safetyScore} out of 100</strong> — ${cmp}, ranking ${ord(rank)} of ${count} ${cfg.rankPool} — based on ${fmt(a.totalIncidents)} incidents ${cfg.reportedTo} within 1 km of the ${cfg.areaWord} ${cfg.centre} (data through ${monthName(a.crimeDate)}).`;
+  // State the span alongside the count wherever the feed reports one: "3,228
+  // incidents ... over the 7 months to August 2026" is a claim a reader can
+  // actually judge, where the bare count plus an end date was not.
+  const span = windowPhrase(windowDays);
+  const period = span ? `over ${span} to ${monthName(a.crimeDate)}` : `(data through ${monthName(a.crimeDate)})`;
+  const lead = `${bandLead} Its SafeRoute safety index is <strong>${a.safetyScore} out of 100</strong> — ${cmp}, ranking ${ord(rank)} of ${count} ${cfg.rankPool} — based on ${fmt(a.totalIncidents)} incidents ${cfg.reportedTo} within 1 km of the ${cfg.areaWord} ${cfg.centre} ${period}.`;
 
   let mix = '';
   if (top) {
@@ -501,12 +524,17 @@ function makeProse(a, ctx) {
     {
       q: `What is the most common crime in ${a.name}?`,
       a: top
-        ? `${catName(top.category)} — ${fmt(top.count)} of ${fmt(a.totalIncidents)} incidents (${topShare}%) reported within 1 km of the ${cfg.areaWord} ${cfg.centre} through ${monthName(a.crimeDate)}.`
+        ? `${catName(top.category)} — ${fmt(top.count)} of ${fmt(a.totalIncidents)} incidents (${topShare}%) reported within 1 km of the ${cfg.areaWord} ${cfg.centre} ${span ? `over ${span} to` : 'through'} ${monthName(a.crimeDate)}.`
         : `No dominant category in the current data.`,
     },
     {
       q: `How is the ${a.name} safety index calculated?`,
-      a: cfg.faqCalc(cfg.areaWord),
+      // The scale is calibrated per city (a typical area reads mid-scale), so a
+      // score only means something against other areas in the same city. The hub
+      // says this under Methodology, but almost nobody arrives via the hub —
+      // search drops readers straight onto an area page. Appending it here puts
+      // it on every page AND inside the FAQPage structured data.
+      a: `${cfg.faqCalc(cfg.areaWord)} The scale is calibrated within ${cfg.name}, so scores compare ${cfg.areaWordPlural} to each other and cannot be read against another city's.`,
     },
   ];
 
@@ -552,8 +580,10 @@ const chrome = crumbs => `<header class="site"><div class="wrap">
 <nav class="crumbs">${crumbs}</nav>
 </div></header><main><div class="wrap">`;
 
-const footer = (cfg, a, citySlug) => `</div></main><footer class="site"><div class="wrap">
-<p><strong>Sources.</strong> ${cfg.sources(a ? `, data through ${monthName(a.crimeDate)}` : '')}</p>
+const footer = (cfg, a, citySlug, windowDays) => `</div></main><footer class="site"><div class="wrap">
+<p><strong>Sources.</strong> ${cfg.sources(!a ? ''
+  : windowPhrase(windowDays) ? `, covering ${windowPhrase(windowDays)} to ${monthName(a.crimeDate)}`
+  : `, data through ${monthName(a.crimeDate)}`)}</p>
 <p><strong>About this data.</strong> Figures are incidents <em>reported</em> to police within 1&nbsp;km of each ${cfg.areaWord}'s ${cfg.centre} — reporting practices vary and not all crime is reported. This is informational only and not a guarantee of safety, a prediction, or a judgment of any community. Use it the way the app does: to pick better-lit, lower-incident routes and times.</p>
 <p><a href="/safety/${citySlug}/">All ${cfg.name} ${cfg.areaWordPlural}</a> · <a href="/">SafeRoute app</a> · <a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></p>
 </div></footer></body></html>`;
@@ -583,7 +613,16 @@ function renderCity(citySlug) {
   const median = scores[Math.floor(scores.length / 2)];
   const ranked = [...areas].sort((a, b) => b.safetyScore - a.safetyScore);
   const rankOf = new Map(ranked.map((a, i) => [a.slug, i + 1]));
-  const ctx = { cfg, gazBySlug, bySlug, rankOf, median, count: areas.length };
+  // The feed's span is a property of the CITY's feed, not of any one area, so
+  // derive one number and use it on every page. Median of whatever the cached
+  // records carry: a full rebuild fills it in everywhere, but a partial refresh
+  // (or a provider that reports no span at all) must not leave most pages
+  // silent while a handful claim a period. Null when nothing reports one — the
+  // copy then falls back to the old "data through <month>" wording rather than
+  // inventing a window.
+  const windows = areas.map(a => a.windowDays).filter(w => w > 0).sort((x, y) => x - y);
+  const windowDays = windows.length ? windows[Math.floor(windows.length / 2)] : null;
+  const ctx = { cfg, gazBySlug, bySlug, rankOf, median, count: areas.length, windowDays };
 
   for (const a of areas) {
     const p = makeProse(a, ctx);
@@ -640,6 +679,7 @@ function renderCity(citySlug) {
     <div class="gaugebar"><i style="width:${a.safetyScore}%;background:${bandColor[a.band]}"></i></div>
   </div>
 </div>
+<p style="font-size:14px;color:var(--ink-3);margin-top:-6px">The 0–100 scale is calibrated to ${esc(cfg.name)} — a typical ${esc(cfg.name)} ${cfg.areaWord} sits near ${median}. It ranks ${esc(a.name)} against other ${cfg.areaWordPlural} here, and cannot be read against a score in another city.</p>
 
 ${p.mix ? `<p>${p.mix}</p>` : ''}
 ${p.when ? `<p>${p.when}</p>` : ''}
@@ -665,7 +705,7 @@ ${cta(a.name)}
 
 <h2>Common questions</h2>
 ${p.faq.map(f => `<details><summary>${esc(f.q)}</summary><p>${f.a}</p></details>`).join('\n')}
-${footer(cfg, a, citySlug)}`;
+${footer(cfg, a, citySlug, windowDays)}`;
 
     const dir = join(ROOT, 'safety', citySlug, a.slug);
     mkdirSync(dir, { recursive: true });
@@ -714,7 +754,7 @@ ${cta(cfg.name)}
 <h2>Methodology</h2>
 <p style="font-size:15.5px;color:var(--ink-2)">${cfg.hub.methodology}</p>
 <p style="font-size:15.5px;color:var(--ink-2)">The index compares areas <strong>within ${esc(cfg.hubName)}</strong>. It is not comparable between cities: each police force publishes a different set of offences over a different period — ${esc(cfg.name)}'s figures cannot be read against another city's on the same 0–100 scale.</p>
-${footer(cfg, areas[0], citySlug)}
+${footer(cfg, areas[0], citySlug, windowDays)}
 <script>
 const IDX=${JSON.stringify(idx)};
 const inp=document.getElementById('ckr'),out=document.getElementById('ckr-out');
@@ -731,7 +771,7 @@ inp.addEventListener('input',()=>{
     writeFileSync(join(ROOT, 'safety', citySlug, 'index.html'), html);
   }
 
-  return { citySlug, cfg, count: areas.length, median, ranked, sample: areas[0], noBasemap };
+  return { citySlug, cfg, count: areas.length, median, ranked, sample: areas[0], noBasemap, windowDays };
 }
 
 // ── render all cities, then root + sitemap + robots ──────────────────────────
@@ -752,7 +792,7 @@ ${rows}
 </tbody></table>
 <p style="font-size:15px;color:var(--ink-2)">More cities from SafeRoute's 30-city coverage (Vancouver, Denver, Mexico City…) are on the way.</p>
 ${cta('your city')}
-${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug)}`;
+${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug, rendered[0].windowDays)}`;
   mkdirSync(join(ROOT, 'safety'), { recursive: true });
   writeFileSync(join(ROOT, 'safety', 'index.html'), html);
 }

@@ -102,6 +102,12 @@ async function worker() {
         slug: a.slug, name: a.name, borough: a.borough,
         lat: a.lat, lng: a.lng, radiusMetres: j.radiusMetres,
         crimeDate: j.crimeDate,
+        // How many days of incidents that count covers. The renderer needs it to
+        // say "over the 7 months to August" instead of leaving a reader to guess
+        // whether a number is a month's worth or a year's. Null on older cached
+        // records and on providers with no observed span; the renderer then says
+        // nothing rather than inventing a period.
+        windowDays: j.windowDays ?? null,
         safetyScore: j.safetyScore, band: j.band,
         totalIncidents: j.totalIncidents, weightedIncidents: j.weightedIncidents,
         densityPerKm2: j.densityPerKm2,
