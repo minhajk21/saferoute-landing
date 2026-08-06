@@ -297,7 +297,7 @@ function render(d, name, address){
       <span class="score" style="color:${b.c}">${d.safetyScore}<span class="of">/100</span></span>
       <span class="band" style="background:${b.c}">${b.t}</span>
     </div>
-    <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported within 1&nbsp;km${span?` over ${span}${d.crimeDate?` to ${monthName(d.crimeDate)}`:''}`:''}, ${esc(d.reportedTo||'to police')} — higher index = safer. ${d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
+    <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported ${esc(d.reportedTo||'to police')} within 1&nbsp;km${span?` over ${span}${d.crimeDate?` to ${monthName(d.crimeDate)}`:''}`:''} — higher index = safer. ${d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
     <div id="pub"></div>
     <div class="divider"></div>
     ${cats.length?`<div><p class="h3">What's reported here</p>${cats.map(c=>`<div class="cat"><span class="bar" style="width:${Math.round(c.count/maxCat*46)+8}px"></span><span class="lbl">${catName(c.category)}</span><span class="n">${fmt(c.count)}</span></div>`).join('')}</div>`:''}
