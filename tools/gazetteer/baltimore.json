@@ -1,0 +1,1546 @@
+{
+ "city": "Baltimore",
+ "citySlug": "baltimore",
+ "country": "US",
+ "source": "Baltimore City — neighbourhood statistical areas (populated only)",
+ "purpose": "CALIBRATION ONLY — no /safety/ pages are generated from this set",
+ "generatedAt": "2026-08-06",
+ "areas": [
+  {
+   "name": "Abell",
+   "slug": "abell",
+   "lat": 39.325955,
+   "lng": -76.611396
+  },
+  {
+   "name": "Allendale",
+   "slug": "allendale",
+   "lat": 39.289934,
+   "lng": -76.681547
+  },
+  {
+   "name": "Arcadia",
+   "slug": "arcadia",
+   "lat": 39.333861,
+   "lng": -76.567737
+  },
+  {
+   "name": "Arlington",
+   "slug": "arlington",
+   "lat": 39.348639,
+   "lng": -76.68274
+  },
+  {
+   "name": "Armistead Gardens",
+   "slug": "armistead-gardens",
+   "lat": 39.30735,
+   "lng": -76.551453
+  },
+  {
+   "name": "Ashburton",
+   "slug": "ashburton",
+   "lat": 39.328238,
+   "lng": -76.671703
+  },
+  {
+   "name": "Baltimore Highlands",
+   "slug": "baltimore-highlands",
+   "lat": 39.293425,
+   "lng": -76.566101
+  },
+  {
+   "name": "Barclay",
+   "slug": "barclay",
+   "lat": 39.314724,
+   "lng": -76.61233
+  },
+  {
+   "name": "Barre Circle",
+   "slug": "barre-circle",
+   "lat": 39.284987,
+   "lng": -76.627879
+  },
+  {
+   "name": "Bayview",
+   "slug": "bayview",
+   "lat": 39.288958,
+   "lng": -76.541628
+  },
+  {
+   "name": "Beechfield",
+   "slug": "beechfield",
+   "lat": 39.276701,
+   "lng": -76.700053
+  },
+  {
+   "name": "Belair-Edison",
+   "slug": "belair-edison",
+   "lat": 39.320678,
+   "lng": -76.567782
+  },
+  {
+   "name": "Belair-Parkside",
+   "slug": "belair-parkside",
+   "lat": 39.330145,
+   "lng": -76.567921
+  },
+  {
+   "name": "Bellona-Gittings",
+   "slug": "bellona-gittings",
+   "lat": 39.369172,
+   "lng": -76.622012
+  },
+  {
+   "name": "Belvedere",
+   "slug": "belvedere",
+   "lat": 39.361503,
+   "lng": -76.606723
+  },
+  {
+   "name": "Berea",
+   "slug": "berea",
+   "lat": 39.309616,
+   "lng": -76.578016
+  },
+  {
+   "name": "Better Waverly",
+   "slug": "better-waverly",
+   "lat": 39.324396,
+   "lng": -76.605175
+  },
+  {
+   "name": "Beverly Hills",
+   "slug": "beverly-hills",
+   "lat": 39.339116,
+   "lng": -76.569114
+  },
+  {
+   "name": "Biddle Street",
+   "slug": "biddle-street",
+   "lat": 39.30368,
+   "lng": -76.579002
+  },
+  {
+   "name": "Blythewood",
+   "slug": "blythewood",
+   "lat": 39.351156,
+   "lng": -76.625259
+  },
+  {
+   "name": "Bolton Hill",
+   "slug": "bolton-hill",
+   "lat": 39.307829,
+   "lng": -76.625733
+  },
+  {
+   "name": "Boyd-Booth",
+   "slug": "boyd-booth",
+   "lat": 39.287154,
+   "lng": -76.649821
+  },
+  {
+   "name": "Brewers Hill",
+   "slug": "brewers-hill",
+   "lat": 39.284176,
+   "lng": -76.564621
+  },
+  {
+   "name": "Bridgeview/Greenlawn",
+   "slug": "bridgeview-greenlawn",
+   "lat": 39.301516,
+   "lng": -76.654662
+  },
+  {
+   "name": "Broadway East",
+   "slug": "broadway-east",
+   "lat": 39.308472,
+   "lng": -76.588817
+  },
+  {
+   "name": "Broening Manor",
+   "slug": "broening-manor",
+   "lat": 39.274247,
+   "lng": -76.537832
+  },
+  {
+   "name": "Brooklyn",
+   "slug": "brooklyn",
+   "lat": 39.232761,
+   "lng": -76.603348
+  },
+  {
+   "name": "Burleith-Leighton",
+   "slug": "burleith-leighton",
+   "lat": 39.319255,
+   "lng": -76.660715
+  },
+  {
+   "name": "Butcher's Hill",
+   "slug": "butchers-hill",
+   "lat": 39.291865,
+   "lng": -76.586937
+  },
+  {
+   "name": "Callaway-Garrison",
+   "slug": "callaway-garrison",
+   "lat": 39.33157,
+   "lng": -76.679628
+  },
+  {
+   "name": "Cameron Village",
+   "slug": "cameron-village",
+   "lat": 39.356672,
+   "lng": -76.599579
+  },
+  {
+   "name": "Canton",
+   "slug": "canton",
+   "lat": 39.282051,
+   "lng": -76.57523
+  },
+  {
+   "name": "CARE",
+   "slug": "care",
+   "lat": 39.296274,
+   "lng": -76.587597
+  },
+  {
+   "name": "Carroll-South Hilton",
+   "slug": "carroll-south-hilton",
+   "lat": 39.285802,
+   "lng": -76.666914
+  },
+  {
+   "name": "Carrollton Ridge",
+   "slug": "carrollton-ridge",
+   "lat": 39.282329,
+   "lng": -76.648859
+  },
+  {
+   "name": "Cedarcroft",
+   "slug": "cedarcroft",
+   "lat": 39.369839,
+   "lng": -76.613771
+  },
+  {
+   "name": "Cedmont",
+   "slug": "cedmont",
+   "lat": 39.346686,
+   "lng": -76.534524
+  },
+  {
+   "name": "Cedonia",
+   "slug": "cedonia",
+   "lat": 39.328547,
+   "lng": -76.532512
+  },
+  {
+   "name": "Central Forest Park",
+   "slug": "central-forest-park",
+   "lat": 39.326777,
+   "lng": -76.688335
+  },
+  {
+   "name": "Central Park Heights",
+   "slug": "central-park-heights",
+   "lat": 39.343686,
+   "lng": -76.67106
+  },
+  {
+   "name": "Charles North",
+   "slug": "charles-north",
+   "lat": 39.310586,
+   "lng": -76.617095
+  },
+  {
+   "name": "Charles Village",
+   "slug": "charles-village",
+   "lat": 39.323809,
+   "lng": -76.616124
+  },
+  {
+   "name": "Cherry Hill",
+   "slug": "cherry-hill",
+   "lat": 39.248901,
+   "lng": -76.628355
+  },
+  {
+   "name": "Cheswolde",
+   "slug": "cheswolde",
+   "lat": 39.367626,
+   "lng": -76.680413
+  },
+  {
+   "name": "Chinquapin Park",
+   "slug": "chinquapin-park",
+   "lat": 39.363151,
+   "lng": -76.602287
+  },
+  {
+   "name": "Coldspring",
+   "slug": "coldspring",
+   "lat": 39.350536,
+   "lng": -76.653505
+  },
+  {
+   "name": "Coldstream Homestead Montebello",
+   "slug": "coldstream-homestead-montebello",
+   "lat": 39.322949,
+   "lng": -76.595475
+  },
+  {
+   "name": "Concerned Citizens Of Forest Park",
+   "slug": "concerned-citizens-of-forest-park",
+   "lat": 39.32315,
+   "lng": -76.683688
+  },
+  {
+   "name": "Coppin Heights/Ash-Co-East",
+   "slug": "coppin-heights-ash-co-east",
+   "lat": 39.307009,
+   "lng": -76.657255
+  },
+  {
+   "name": "Cross Country",
+   "slug": "cross-country",
+   "lat": 39.366129,
+   "lng": -76.69797
+  },
+  {
+   "name": "Cross Keys",
+   "slug": "cross-keys",
+   "lat": 39.352876,
+   "lng": -76.645605
+  },
+  {
+   "name": "Curtis Bay",
+   "slug": "curtis-bay",
+   "lat": 39.22365,
+   "lng": -76.590752
+  },
+  {
+   "name": "Cylburn",
+   "slug": "cylburn",
+   "lat": 39.347624,
+   "lng": -76.664087
+  },
+  {
+   "name": "Darley Park",
+   "slug": "darley-park",
+   "lat": 39.315437,
+   "lng": -76.593743
+  },
+  {
+   "name": "Dickeyville",
+   "slug": "dickeyville",
+   "lat": 39.316047,
+   "lng": -76.707717
+  },
+  {
+   "name": "Dolfield",
+   "slug": "dolfield",
+   "lat": 39.337729,
+   "lng": -76.680309
+  },
+  {
+   "name": "Dorchester",
+   "slug": "dorchester",
+   "lat": 39.331787,
+   "lng": -76.686326
+  },
+  {
+   "name": "Downtown",
+   "slug": "downtown",
+   "lat": 39.291073,
+   "lng": -76.615181
+  },
+  {
+   "name": "Downtown West",
+   "slug": "downtown-west",
+   "lat": 39.286084,
+   "lng": -76.618
+  },
+  {
+   "name": "Druid Heights",
+   "slug": "druid-heights",
+   "lat": 39.308304,
+   "lng": -76.637079
+  },
+  {
+   "name": "Dunbar-Broadway",
+   "slug": "dunbar-broadway",
+   "lat": 39.296023,
+   "lng": -76.595202
+  },
+  {
+   "name": "East Arlington",
+   "slug": "east-arlington",
+   "lat": 39.331479,
+   "lng": -76.668481
+  },
+  {
+   "name": "East Baltimore Midway",
+   "slug": "east-baltimore-midway",
+   "lat": 39.314853,
+   "lng": -76.60323
+  },
+  {
+   "name": "Easterwood",
+   "slug": "easterwood",
+   "lat": 39.307449,
+   "lng": -76.650295
+  },
+  {
+   "name": "Eastwood",
+   "slug": "eastwood",
+   "lat": 39.290163,
+   "lng": -76.530621
+  },
+  {
+   "name": "Edgewood",
+   "slug": "edgewood",
+   "lat": 39.295997,
+   "lng": -76.676776
+  },
+  {
+   "name": "Edmondson Village",
+   "slug": "edmondson-village",
+   "lat": 39.297838,
+   "lng": -76.683427
+  },
+  {
+   "name": "Ednor Gardens-Lakeside",
+   "slug": "ednor-gardens-lakeside",
+   "lat": 39.333146,
+   "lng": -76.596706
+  },
+  {
+   "name": "Ellwood Park/Monument",
+   "slug": "ellwood-park-monument",
+   "lat": 39.297173,
+   "lng": -76.572192
+  },
+  {
+   "name": "Evergreen",
+   "slug": "evergreen",
+   "lat": 39.346603,
+   "lng": -76.629163
+  },
+  {
+   "name": "Evergreen Lawn",
+   "slug": "evergreen-lawn",
+   "lat": 39.296696,
+   "lng": -76.656621
+  },
+  {
+   "name": "Evesham Park",
+   "slug": "evesham-park",
+   "lat": 39.365971,
+   "lng": -76.604945
+  },
+  {
+   "name": "Fairfield Area",
+   "slug": "fairfield-area",
+   "lat": 39.238188,
+   "lng": -76.581337
+  },
+  {
+   "name": "Fairmont",
+   "slug": "fairmont",
+   "lat": 39.308582,
+   "lng": -76.679377
+  },
+  {
+   "name": "Fallstaff",
+   "slug": "fallstaff",
+   "lat": 39.364067,
+   "lng": -76.706962
+  },
+  {
+   "name": "Federal Hill",
+   "slug": "federal-hill",
+   "lat": 39.278281,
+   "lng": -76.611615
+  },
+  {
+   "name": "Fells Point",
+   "slug": "fells-point",
+   "lat": 39.283246,
+   "lng": -76.593626
+  },
+  {
+   "name": "Forest Park",
+   "slug": "forest-park",
+   "lat": 39.323811,
+   "lng": -76.67716
+  },
+  {
+   "name": "Forest Park Golf Course",
+   "slug": "forest-park-golf-course",
+   "lat": 39.323683,
+   "lng": -76.695068
+  },
+  {
+   "name": "Four By Four",
+   "slug": "four-by-four",
+   "lat": 39.315445,
+   "lng": -76.576932
+  },
+  {
+   "name": "Frankford",
+   "slug": "frankford",
+   "lat": 39.329286,
+   "lng": -76.544635
+  },
+  {
+   "name": "Franklin Square",
+   "slug": "franklin-square",
+   "lat": 39.290411,
+   "lng": -76.642772
+  },
+  {
+   "name": "Franklintown",
+   "slug": "franklintown",
+   "lat": 39.305844,
+   "lng": -76.701454
+  },
+  {
+   "name": "Franklintown Road",
+   "slug": "franklintown-road",
+   "lat": 39.297383,
+   "lng": -76.667582
+  },
+  {
+   "name": "Garwyn Oaks",
+   "slug": "garwyn-oaks",
+   "lat": 39.317861,
+   "lng": -76.679331
+  },
+  {
+   "name": "Gay Street",
+   "slug": "gay-street",
+   "lat": 39.301242,
+   "lng": -76.596828
+  },
+  {
+   "name": "Glen",
+   "slug": "glen",
+   "lat": 39.356333,
+   "lng": -76.690666
+  },
+  {
+   "name": "Glen Oaks",
+   "slug": "glen-oaks",
+   "lat": 39.364836,
+   "lng": -76.596476
+  },
+  {
+   "name": "Glenham-Belhar",
+   "slug": "glenham-belhar",
+   "lat": 39.350035,
+   "lng": -76.548578
+  },
+  {
+   "name": "Graceland Park",
+   "slug": "graceland-park",
+   "lat": 39.281197,
+   "lng": -76.533142
+  },
+  {
+   "name": "Greektown",
+   "slug": "greektown",
+   "lat": 39.28543,
+   "lng": -76.554247
+  },
+  {
+   "name": "Greenmount West",
+   "slug": "greenmount-west",
+   "lat": 39.30875,
+   "lng": -76.6116
+  },
+  {
+   "name": "Greenspring",
+   "slug": "greenspring",
+   "lat": 39.337064,
+   "lng": -76.660226
+  },
+  {
+   "name": "Grove Park",
+   "slug": "grove-park",
+   "lat": 39.340425,
+   "lng": -76.702577
+  },
+  {
+   "name": "Guilford",
+   "slug": "guilford",
+   "lat": 39.339511,
+   "lng": -76.615644
+  },
+  {
+   "name": "Gwynns Falls",
+   "slug": "gwynns-falls",
+   "lat": 39.277828,
+   "lng": -76.667204
+  },
+  {
+   "name": "Hamilton Hills",
+   "slug": "hamilton-hills",
+   "lat": 39.362778,
+   "lng": -76.565053
+  },
+  {
+   "name": "Hampden",
+   "slug": "hampden",
+   "lat": 39.331145,
+   "lng": -76.634048
+  },
+  {
+   "name": "Hanlon-Longwood",
+   "slug": "hanlon-longwood",
+   "lat": 39.318219,
+   "lng": -76.669461
+  },
+  {
+   "name": "Harlem Park",
+   "slug": "harlem-park",
+   "lat": 39.295981,
+   "lng": -76.640106
+  },
+  {
+   "name": "Harwood",
+   "slug": "harwood",
+   "lat": 39.320792,
+   "lng": -76.611253
+  },
+  {
+   "name": "Heritage Crossing",
+   "slug": "heritage-crossing",
+   "lat": 39.296268,
+   "lng": -76.628433
+  },
+  {
+   "name": "Highlandtown",
+   "slug": "highlandtown",
+   "lat": 39.288427,
+   "lng": -76.567805
+  },
+  {
+   "name": "Hillen",
+   "slug": "hillen",
+   "lat": 39.341882,
+   "lng": -76.59019
+  },
+  {
+   "name": "Hoes Heights",
+   "slug": "hoes-heights",
+   "lat": 39.340479,
+   "lng": -76.637072
+  },
+  {
+   "name": "Hollins Market",
+   "slug": "hollins-market",
+   "lat": 39.287342,
+   "lng": -76.633192
+  },
+  {
+   "name": "Homeland",
+   "slug": "homeland",
+   "lat": 39.359609,
+   "lng": -76.61863
+  },
+  {
+   "name": "Hopkins Bayview",
+   "slug": "hopkins-bayview",
+   "lat": 39.292229,
+   "lng": -76.544527
+  },
+  {
+   "name": "Howard Park",
+   "slug": "howard-park",
+   "lat": 39.329751,
+   "lng": -76.701505
+  },
+  {
+   "name": "Hunting Ridge",
+   "slug": "hunting-ridge",
+   "lat": 39.29674,
+   "lng": -76.698143
+  },
+  {
+   "name": "Idlewood",
+   "slug": "idlewood",
+   "lat": 39.369438,
+   "lng": -76.588564
+  },
+  {
+   "name": "Inner Harbor",
+   "slug": "inner-harbor",
+   "lat": 39.283572,
+   "lng": -76.606303
+  },
+  {
+   "name": "Irvington",
+   "slug": "irvington",
+   "lat": 39.278413,
+   "lng": -76.683714
+  },
+  {
+   "name": "Johns Hopkins Homewood",
+   "slug": "johns-hopkins-homewood",
+   "lat": 39.329354,
+   "lng": -76.621295
+  },
+  {
+   "name": "Johnston Square",
+   "slug": "johnston-square",
+   "lat": 39.30349,
+   "lng": -76.606241
+  },
+  {
+   "name": "Jonestown",
+   "slug": "jonestown",
+   "lat": 39.290865,
+   "lng": -76.603659
+  },
+  {
+   "name": "Kenilworth Park",
+   "slug": "kenilworth-park",
+   "lat": 39.349777,
+   "lng": -76.601139
+  },
+  {
+   "name": "Kernewood",
+   "slug": "kernewood",
+   "lat": 39.346365,
+   "lng": -76.613283
+  },
+  {
+   "name": "Keswick",
+   "slug": "keswick",
+   "lat": 39.343381,
+   "lng": -76.630399
+  },
+  {
+   "name": "Kresson",
+   "slug": "kresson",
+   "lat": 39.296061,
+   "lng": -76.557028
+  },
+  {
+   "name": "Lake Evesham",
+   "slug": "lake-evesham",
+   "lat": 39.36644,
+   "lng": -76.614038
+  },
+  {
+   "name": "Lake Walker",
+   "slug": "lake-walker",
+   "lat": 39.369621,
+   "lng": -76.604344
+  },
+  {
+   "name": "Lakeland",
+   "slug": "lakeland",
+   "lat": 39.255114,
+   "lng": -76.64739
+  },
+  {
+   "name": "Langston Hughes",
+   "slug": "langston-hughes",
+   "lat": 39.34356,
+   "lng": -76.680255
+  },
+  {
+   "name": "Lauraville",
+   "slug": "lauraville",
+   "lat": 39.346557,
+   "lng": -76.572704
+  },
+  {
+   "name": "Levindale",
+   "slug": "levindale",
+   "lat": 39.352965,
+   "lng": -76.664664
+  },
+  {
+   "name": "Liberty Square",
+   "slug": "liberty-square",
+   "lat": 39.321893,
+   "lng": -76.658002
+  },
+  {
+   "name": "Little Italy",
+   "slug": "little-italy",
+   "lat": 39.286575,
+   "lng": -76.600826
+  },
+  {
+   "name": "Loch Raven",
+   "slug": "loch-raven",
+   "lat": 39.361424,
+   "lng": -76.581831
+  },
+  {
+   "name": "Locust Point",
+   "slug": "locust-point",
+   "lat": 39.26946,
+   "lng": -76.592039
+  },
+  {
+   "name": "Locust Point Industrial Area",
+   "slug": "locust-point-industrial-area",
+   "lat": 39.267844,
+   "lng": -76.591804
+  },
+  {
+   "name": "Lower Edmondson Village",
+   "slug": "lower-edmondson-village",
+   "lat": 39.292925,
+   "lng": -76.674062
+  },
+  {
+   "name": "Loyola/Notre Dame",
+   "slug": "loyola-notre-dame",
+   "lat": 39.349304,
+   "lng": -76.621164
+  },
+  {
+   "name": "Lucille Park",
+   "slug": "lucille-park",
+   "lat": 39.340015,
+   "lng": -76.675818
+  },
+  {
+   "name": "Madison Park",
+   "slug": "madison-park",
+   "lat": 39.304494,
+   "lng": -76.627223
+  },
+  {
+   "name": "Madison-Eastend",
+   "slug": "madison-eastend",
+   "lat": 39.300776,
+   "lng": -76.576911
+  },
+  {
+   "name": "Mayfield",
+   "slug": "mayfield",
+   "lat": 39.328688,
+   "lng": -76.579897
+  },
+  {
+   "name": "McElderry Park",
+   "slug": "mcelderry-park",
+   "lat": 39.296867,
+   "lng": -76.580466
+  },
+  {
+   "name": "Medfield",
+   "slug": "medfield",
+   "lat": 39.34027,
+   "lng": -76.643265
+  },
+  {
+   "name": "Medford",
+   "slug": "medford",
+   "lat": 39.27873,
+   "lng": -76.547335
+  },
+  {
+   "name": "Mid-Govans",
+   "slug": "mid-govans",
+   "lat": 39.357436,
+   "lng": -76.60582
+  },
+  {
+   "name": "Mid-Town Belvedere",
+   "slug": "mid-town-belvedere",
+   "lat": 39.304072,
+   "lng": -76.616594
+  },
+  {
+   "name": "Middle East",
+   "slug": "middle-east",
+   "lat": 39.30152,
+   "lng": -76.589826
+  },
+  {
+   "name": "Midtown-Edmondson",
+   "slug": "midtown-edmondson",
+   "lat": 39.296278,
+   "lng": -76.650141
+  },
+  {
+   "name": "Millhill",
+   "slug": "millhill",
+   "lat": 39.279286,
+   "lng": -76.65683
+  },
+  {
+   "name": "Milton-Montford",
+   "slug": "milton-montford",
+   "lat": 39.300625,
+   "lng": -76.583119
+  },
+  {
+   "name": "Mondawmin",
+   "slug": "mondawmin",
+   "lat": 39.313635,
+   "lng": -76.65392
+  },
+  {
+   "name": "Montebello",
+   "slug": "montebello",
+   "lat": 39.334709,
+   "lng": -76.583205
+  },
+  {
+   "name": "Moravia-Walther",
+   "slug": "moravia-walther",
+   "lat": 39.340329,
+   "lng": -76.564718
+  },
+  {
+   "name": "Morgan Park",
+   "slug": "morgan-park",
+   "lat": 39.347536,
+   "lng": -76.579157
+  },
+  {
+   "name": "Morgan State University",
+   "slug": "morgan-state-university",
+   "lat": 39.346095,
+   "lng": -76.582016
+  },
+  {
+   "name": "Morrell Park",
+   "slug": "morrell-park",
+   "lat": 39.263958,
+   "lng": -76.655975
+  },
+  {
+   "name": "Mosher",
+   "slug": "mosher",
+   "lat": 39.297355,
+   "lng": -76.662404
+  },
+  {
+   "name": "Mount Holly",
+   "slug": "mount-holly",
+   "lat": 39.312146,
+   "lng": -76.678645
+  },
+  {
+   "name": "Mount Vernon",
+   "slug": "mount-vernon",
+   "lat": 39.29785,
+   "lng": -76.616084
+  },
+  {
+   "name": "Mount Washington",
+   "slug": "mount-washington",
+   "lat": 39.363068,
+   "lng": -76.662889
+  },
+  {
+   "name": "Mount Winans",
+   "slug": "mount-winans",
+   "lat": 39.261831,
+   "lng": -76.644761
+  },
+  {
+   "name": "New Northwood",
+   "slug": "new-northwood",
+   "lat": 39.348838,
+   "lng": -76.594961
+  },
+  {
+   "name": "New Southwest/Mount Clare",
+   "slug": "new-southwest-mount-clare",
+   "lat": 39.283037,
+   "lng": -76.641738
+  },
+  {
+   "name": "North Harford Road",
+   "slug": "north-harford-road",
+   "lat": 39.36618,
+   "lng": -76.54612
+  },
+  {
+   "name": "North Roland Park/Poplar Hill",
+   "slug": "north-roland-park-poplar-hill",
+   "lat": 39.366949,
+   "lng": -76.639624
+  },
+  {
+   "name": "Northwest Community Action",
+   "slug": "northwest-community-action",
+   "lat": 39.306481,
+   "lng": -76.665291
+  },
+  {
+   "name": "O'Donnell Heights",
+   "slug": "odonnell-heights",
+   "lat": 39.278432,
+   "lng": -76.538992
+  },
+  {
+   "name": "Oakenshawe",
+   "slug": "oakenshawe",
+   "lat": 39.33035,
+   "lng": -76.612464
+  },
+  {
+   "name": "Oaklee",
+   "slug": "oaklee",
+   "lat": 39.268327,
+   "lng": -76.6851
+  },
+  {
+   "name": "Old Goucher",
+   "slug": "old-goucher",
+   "lat": 39.316025,
+   "lng": -76.61744
+  },
+  {
+   "name": "Oldtown",
+   "slug": "oldtown",
+   "lat": 39.298194,
+   "lng": -76.602965
+  },
+  {
+   "name": "Oliver",
+   "slug": "oliver",
+   "lat": 39.308033,
+   "lng": -76.599302
+  },
+  {
+   "name": "Orangeville",
+   "slug": "orangeville",
+   "lat": 39.301951,
+   "lng": -76.560214
+  },
+  {
+   "name": "Orchard Ridge",
+   "slug": "orchard-ridge",
+   "lat": 39.31325,
+   "lng": -76.558282
+  },
+  {
+   "name": "Original Northwood",
+   "slug": "original-northwood",
+   "lat": 39.339823,
+   "lng": -76.596781
+  },
+  {
+   "name": "Otterbein",
+   "slug": "otterbein",
+   "lat": 39.28196,
+   "lng": -76.616145
+  },
+  {
+   "name": "Overlea",
+   "slug": "overlea",
+   "lat": 39.361933,
+   "lng": -76.534399
+  },
+  {
+   "name": "Panway/Braddish Avenue",
+   "slug": "panway-braddish-avenue",
+   "lat": 39.312874,
+   "lng": -76.662673
+  },
+  {
+   "name": "Park Circle",
+   "slug": "park-circle",
+   "lat": 39.328779,
+   "lng": -76.660129
+  },
+  {
+   "name": "Parklane",
+   "slug": "parklane",
+   "lat": 39.342684,
+   "lng": -76.662246
+  },
+  {
+   "name": "Parkside",
+   "slug": "parkside",
+   "lat": 39.323114,
+   "lng": -76.556279
+  },
+  {
+   "name": "Parkview/Woodbrook",
+   "slug": "parkview-woodbrook",
+   "lat": 39.316811,
+   "lng": -76.648051
+  },
+  {
+   "name": "Patterson Park Neighborhood",
+   "slug": "patterson-park-neighborhood",
+   "lat": 39.292697,
+   "lng": -76.574709
+  },
+  {
+   "name": "Patterson Place",
+   "slug": "patterson-place",
+   "lat": 39.29377,
+   "lng": -76.583402
+  },
+  {
+   "name": "Pen Lucy",
+   "slug": "pen-lucy",
+   "lat": 39.339748,
+   "lng": -76.604981
+  },
+  {
+   "name": "Penn North",
+   "slug": "penn-north",
+   "lat": 39.312126,
+   "lng": -76.642595
+  },
+  {
+   "name": "Penn-Fallsway",
+   "slug": "penn-fallsway",
+   "lat": 39.297542,
+   "lng": -76.608669
+  },
+  {
+   "name": "Penrose/Fayette Street Outreach",
+   "slug": "penrose-fayette-street-outreach",
+   "lat": 39.291127,
+   "lng": -76.657396
+  },
+  {
+   "name": "Perkins Homes",
+   "slug": "perkins-homes",
+   "lat": 39.287799,
+   "lng": -76.596554
+  },
+  {
+   "name": "Perring Loch",
+   "slug": "perring-loch",
+   "lat": 39.352703,
+   "lng": -76.584782
+  },
+  {
+   "name": "Pimlico Good Neighbors",
+   "slug": "pimlico-good-neighbors",
+   "lat": 39.353238,
+   "lng": -76.675335
+  },
+  {
+   "name": "Pleasant View Gardens",
+   "slug": "pleasant-view-gardens",
+   "lat": 39.29355,
+   "lng": -76.602031
+  },
+  {
+   "name": "Poppleton",
+   "slug": "poppleton",
+   "lat": 39.291105,
+   "lng": -76.632933
+  },
+  {
+   "name": "Pulaski Industrial Area",
+   "slug": "pulaski-industrial-area",
+   "lat": 39.301078,
+   "lng": -76.539883
+  },
+  {
+   "name": "Purnell",
+   "slug": "purnell",
+   "lat": 39.320527,
+   "lng": -76.707364
+  },
+  {
+   "name": "Radnor-Winston",
+   "slug": "radnor-winston",
+   "lat": 39.349695,
+   "lng": -76.612138
+  },
+  {
+   "name": "Ramblewood",
+   "slug": "ramblewood",
+   "lat": 39.363597,
+   "lng": -76.590337
+  },
+  {
+   "name": "Reisterstown Station",
+   "slug": "reisterstown-station",
+   "lat": 39.353122,
+   "lng": -76.703333
+  },
+  {
+   "name": "Remington",
+   "slug": "remington",
+   "lat": 39.320159,
+   "lng": -76.622828
+  },
+  {
+   "name": "Reservoir Hill",
+   "slug": "reservoir-hill",
+   "lat": 39.313641,
+   "lng": -76.63316
+  },
+  {
+   "name": "Richnor Springs",
+   "slug": "richnor-springs",
+   "lat": 39.346803,
+   "lng": -76.606896
+  },
+  {
+   "name": "Ridgely's Delight",
+   "slug": "ridgelys-delight",
+   "lat": 39.284165,
+   "lng": -76.62493
+  },
+  {
+   "name": "Riverside",
+   "slug": "riverside",
+   "lat": 39.272526,
+   "lng": -76.606877
+  },
+  {
+   "name": "Rognel Heights",
+   "slug": "rognel-heights",
+   "lat": 39.296351,
+   "lng": -76.690009
+  },
+  {
+   "name": "Roland Park",
+   "slug": "roland-park",
+   "lat": 39.349955,
+   "lng": -76.635995
+  },
+  {
+   "name": "Rosebank",
+   "slug": "rosebank",
+   "lat": 39.362904,
+   "lng": -76.611741
+  },
+  {
+   "name": "Rosemont",
+   "slug": "rosemont",
+   "lat": 39.304433,
+   "lng": -76.670545
+  },
+  {
+   "name": "Rosemont East",
+   "slug": "rosemont-east",
+   "lat": 39.355582,
+   "lng": -76.53841
+  },
+  {
+   "name": "Rosemont Homeowners/Tenants",
+   "slug": "rosemont-homeowners-tenants",
+   "lat": 39.294345,
+   "lng": -76.657595
+  },
+  {
+   "name": "Sabina-Mattfeldt",
+   "slug": "sabina-mattfeldt",
+   "lat": 39.366321,
+   "lng": -76.649381
+  },
+  {
+   "name": "Saint Agnes",
+   "slug": "saint-agnes",
+   "lat": 39.274488,
+   "lng": -76.674656
+  },
+  {
+   "name": "Saint Helena",
+   "slug": "saint-helena",
+   "lat": 39.260526,
+   "lng": -76.531077
+  },
+  {
+   "name": "Saint Josephs",
+   "slug": "saint-josephs",
+   "lat": 39.285362,
+   "lng": -76.675167
+  },
+  {
+   "name": "Saint Paul",
+   "slug": "saint-paul",
+   "lat": 39.268111,
+   "lng": -76.643332
+  },
+  {
+   "name": "Sandtown-Winchester",
+   "slug": "sandtown-winchester",
+   "lat": 39.30377,
+   "lng": -76.642585
+  },
+  {
+   "name": "Seton Hill",
+   "slug": "seton-hill",
+   "lat": 39.296724,
+   "lng": -76.623708
+  },
+  {
+   "name": "Sharp-Leadenhall",
+   "slug": "sharp-leadenhall",
+   "lat": 39.276824,
+   "lng": -76.617691
+  },
+  {
+   "name": "Shipley Hill",
+   "slug": "shipley-hill",
+   "lat": 39.286314,
+   "lng": -76.657117
+  },
+  {
+   "name": "South Baltimore",
+   "slug": "south-baltimore",
+   "lat": 39.271298,
+   "lng": -76.614252
+  },
+  {
+   "name": "South Clifton Park",
+   "slug": "south-clifton-park",
+   "lat": 39.313417,
+   "lng": -76.589973
+  },
+  {
+   "name": "Stonewood-Pentwood-Winston",
+   "slug": "stonewood-pentwood-winston",
+   "lat": 39.348044,
+   "lng": -76.588854
+  },
+  {
+   "name": "Taylor Heights",
+   "slug": "taylor-heights",
+   "lat": 39.368887,
+   "lng": -76.53342
+  },
+  {
+   "name": "Ten Hills",
+   "slug": "ten-hills",
+   "lat": 39.287688,
+   "lng": -76.700838
+  },
+  {
+   "name": "The Orchards",
+   "slug": "the-orchards",
+   "lat": 39.367638,
+   "lng": -76.628724
+  },
+  {
+   "name": "Towanda-Grantley",
+   "slug": "towanda-grantley",
+   "lat": 39.336026,
+   "lng": -76.668587
+  },
+  {
+   "name": "Tremont",
+   "slug": "tremont",
+   "lat": 39.283228,
+   "lng": -76.694487
+  },
+  {
+   "name": "Tuscany-Canterbury",
+   "slug": "tuscany-canterbury",
+   "lat": 39.33785,
+   "lng": -76.621502
+  },
+  {
+   "name": "Union Square",
+   "slug": "union-square",
+   "lat": 39.28669,
+   "lng": -76.641545
+  },
+  {
+   "name": "University Of Maryland",
+   "slug": "university-of-maryland",
+   "lat": 39.290378,
+   "lng": -76.625288
+  },
+  {
+   "name": "Uplands",
+   "slug": "uplands",
+   "lat": 39.289947,
+   "lng": -76.692886
+  },
+  {
+   "name": "Upper Fells Point",
+   "slug": "upper-fells-point",
+   "lat": 39.287968,
+   "lng": -76.588884
+  },
+  {
+   "name": "Upton",
+   "slug": "upton",
+   "lat": 39.301498,
+   "lng": -76.631524
+  },
+  {
+   "name": "Villages Of Homeland",
+   "slug": "villages-of-homeland",
+   "lat": 39.35279,
+   "lng": -76.614253
+  },
+  {
+   "name": "Violetville",
+   "slug": "violetville",
+   "lat": 39.266275,
+   "lng": -76.673805
+  },
+  {
+   "name": "Wakefield",
+   "slug": "wakefield",
+   "lat": 39.312801,
+   "lng": -76.69971
+  },
+  {
+   "name": "Walbrook",
+   "slug": "walbrook",
+   "lat": 39.31141,
+   "lng": -76.668926
+  },
+  {
+   "name": "Waltherson",
+   "slug": "waltherson",
+   "lat": 39.342,
+   "lng": -76.557806
+  },
+  {
+   "name": "Washington Hill",
+   "slug": "washington-hill",
+   "lat": 39.291525,
+   "lng": -76.594667
+  },
+  {
+   "name": "Washington Village/Pigtown",
+   "slug": "washington-village-pigtown",
+   "lat": 39.281665,
+   "lng": -76.632301
+  },
+  {
+   "name": "Waverly",
+   "slug": "waverly",
+   "lat": 39.332028,
+   "lng": -76.606766
+  },
+  {
+   "name": "West Arlington",
+   "slug": "west-arlington",
+   "lat": 39.339446,
+   "lng": -76.69016
+  },
+  {
+   "name": "West Forest Park",
+   "slug": "west-forest-park",
+   "lat": 39.318586,
+   "lng": -76.694125
+  },
+  {
+   "name": "West Hills",
+   "slug": "west-hills",
+   "lat": 39.297369,
+   "lng": -76.706626
+  },
+  {
+   "name": "Westfield",
+   "slug": "westfield",
+   "lat": 39.359178,
+   "lng": -76.551483
+  },
+  {
+   "name": "Westgate",
+   "slug": "westgate",
+   "lat": 39.284461,
+   "lng": -76.706728
+  },
+  {
+   "name": "Westport",
+   "slug": "westport",
+   "lat": 39.262869,
+   "lng": -76.63528
+  },
+  {
+   "name": "Wilhelm Park",
+   "slug": "wilhelm-park",
+   "lat": 39.271922,
+   "lng": -76.662283
+  },
+  {
+   "name": "Wilson Park",
+   "slug": "wilson-park",
+   "lat": 39.343513,
+   "lng": -76.605396
+  },
+  {
+   "name": "Winchester",
+   "slug": "winchester",
+   "lat": 39.301958,
+   "lng": -76.66427
+  },
+  {
+   "name": "Windsor Hills",
+   "slug": "windsor-hills",
+   "lat": 39.317114,
+   "lng": -76.685998
+  },
+  {
+   "name": "Winston-Govans",
+   "slug": "winston-govans",
+   "lat": 39.350066,
+   "lng": -76.606518
+  },
+  {
+   "name": "Woodberry",
+   "slug": "woodberry",
+   "lat": 39.336718,
+   "lng": -76.65059
+  },
+  {
+   "name": "Woodbourne Heights",
+   "slug": "woodbourne-heights",
+   "lat": 39.357416,
+   "lng": -76.592482
+  },
+  {
+   "name": "Woodbourne-McCabe",
+   "slug": "woodbourne-mccabe",
+   "lat": 39.35373,
+   "lng": -76.606135
+  },
+  {
+   "name": "Woodmere",
+   "slug": "woodmere",
+   "lat": 39.345439,
+   "lng": -76.689106
+  },
+  {
+   "name": "Wrenlane",
+   "slug": "wrenlane",
+   "lat": 39.345223,
+   "lng": -76.606597
+  },
+  {
+   "name": "Wyman Park",
+   "slug": "wyman-park",
+   "lat": 39.331971,
+   "lng": -76.626145
+  },
+  {
+   "name": "Wyndhurst",
+   "slug": "wyndhurst",
+   "lat": 39.357404,
+   "lng": -76.630032
+  },
+  {
+   "name": "Yale Heights",
+   "slug": "yale-heights",
+   "lat": 39.276133,
+   "lng": -76.690569
+  },
+  {
+   "name": "York-Homeland",
+   "slug": "york-homeland",
+   "lat": 39.353017,
+   "lng": -76.611127
+  }
+ ]
+}

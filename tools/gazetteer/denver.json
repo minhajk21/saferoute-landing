@@ -1,0 +1,466 @@
+{
+ "city": "Denver",
+ "citySlug": "denver",
+ "country": "US",
+ "source": "City and County of Denver — 78 official statistical neighborhoods",
+ "purpose": "CALIBRATION ONLY — no /safety/ pages are generated from this set",
+ "generatedAt": "2026-08-06",
+ "areas": [
+  {
+   "name": "Athmar Park",
+   "slug": "athmar-park",
+   "lat": 39.703574,
+   "lng": -105.010408
+  },
+  {
+   "name": "Auraria",
+   "slug": "auraria",
+   "lat": 39.745827,
+   "lng": -105.008277
+  },
+  {
+   "name": "Baker",
+   "slug": "baker",
+   "lat": 39.715227,
+   "lng": -104.996222
+  },
+  {
+   "name": "Barnum",
+   "slug": "barnum",
+   "lat": 39.718397,
+   "lng": -105.032396
+  },
+  {
+   "name": "Barnum West",
+   "slug": "barnum-west",
+   "lat": 39.718549,
+   "lng": -105.046473
+  },
+  {
+   "name": "Bear Valley",
+   "slug": "bear-valley",
+   "lat": 39.661105,
+   "lng": -105.065549
+  },
+  {
+   "name": "Belcaro",
+   "slug": "belcaro",
+   "lat": 39.70505,
+   "lng": -104.950487
+  },
+  {
+   "name": "Berkeley",
+   "slug": "berkeley",
+   "lat": 39.776718,
+   "lng": -105.03939
+  },
+  {
+   "name": "Capitol Hill",
+   "slug": "capitol-hill",
+   "lat": 39.733654,
+   "lng": -104.980208
+  },
+  {
+   "name": "CBD",
+   "slug": "cbd",
+   "lat": 39.745129,
+   "lng": -104.99317
+  },
+  {
+   "name": "Central Park",
+   "slug": "central-park",
+   "lat": 39.77664,
+   "lng": -104.879122
+  },
+  {
+   "name": "Chaffee Park",
+   "slug": "chaffee-park",
+   "lat": 39.787631,
+   "lng": -105.012055
+  },
+  {
+   "name": "Cheesman Park",
+   "slug": "cheesman-park",
+   "lat": 39.734587,
+   "lng": -104.966438
+  },
+  {
+   "name": "Cherry Creek",
+   "slug": "cherry-creek",
+   "lat": 39.719407,
+   "lng": -104.949291
+  },
+  {
+   "name": "City Park",
+   "slug": "city-park",
+   "lat": 39.74563,
+   "lng": -104.95018
+  },
+  {
+   "name": "City Park West",
+   "slug": "city-park-west",
+   "lat": 39.745368,
+   "lng": -104.96658
+  },
+  {
+   "name": "Civic Center",
+   "slug": "civic-center",
+   "lat": 39.735383,
+   "lng": -104.991208
+  },
+  {
+   "name": "Clayton",
+   "slug": "clayton",
+   "lat": 39.767414,
+   "lng": -104.950154
+  },
+  {
+   "name": "Cole",
+   "slug": "cole",
+   "lat": 39.767192,
+   "lng": -104.966211
+  },
+  {
+   "name": "College View - South Platte",
+   "slug": "college-view-south-platte",
+   "lat": 39.672408,
+   "lng": -105.013203
+  },
+  {
+   "name": "Congress Park",
+   "slug": "congress-park",
+   "lat": 39.732858,
+   "lng": -104.950316
+  },
+  {
+   "name": "Cory - Merrill",
+   "slug": "cory-merrill",
+   "lat": 39.690468,
+   "lng": -104.949832
+  },
+  {
+   "name": "Country Club",
+   "slug": "country-club",
+   "lat": 39.72231,
+   "lng": -104.966014
+  },
+  {
+   "name": "East Colfax",
+   "slug": "east-colfax",
+   "lat": 39.740689,
+   "lng": -104.894468
+  },
+  {
+   "name": "Elyria Swansea",
+   "slug": "elyria-swansea",
+   "lat": 39.782527,
+   "lng": -104.957569
+  },
+  {
+   "name": "Five Points",
+   "slug": "five-points",
+   "lat": 39.759139,
+   "lng": -104.983371
+  },
+  {
+   "name": "Fort Logan",
+   "slug": "fort-logan",
+   "lat": 39.641561,
+   "lng": -105.047987
+  },
+  {
+   "name": "Globeville",
+   "slug": "globeville",
+   "lat": 39.780554,
+   "lng": -104.986839
+  },
+  {
+   "name": "Goldsmith",
+   "slug": "goldsmith",
+   "lat": 39.673792,
+   "lng": -104.914704
+  },
+  {
+   "name": "Hale",
+   "slug": "hale",
+   "lat": 39.732917,
+   "lng": -104.931572
+  },
+  {
+   "name": "Hampden",
+   "slug": "hampden",
+   "lat": 39.660972,
+   "lng": -104.890811
+  },
+  {
+   "name": "Hampden South",
+   "slug": "hampden-south",
+   "lat": 39.640743,
+   "lng": -104.896945
+  },
+  {
+   "name": "Harvey Park",
+   "slug": "harvey-park",
+   "lat": 39.675317,
+   "lng": -105.041077
+  },
+  {
+   "name": "Harvey Park South",
+   "slug": "harvey-park-south",
+   "lat": 39.661043,
+   "lng": -105.039914
+  },
+  {
+   "name": "Highland",
+   "slug": "highland",
+   "lat": 39.76327,
+   "lng": -105.01232
+  },
+  {
+   "name": "Hilltop",
+   "slug": "hilltop",
+   "lat": 39.718695,
+   "lng": -104.924352
+  },
+  {
+   "name": "Indian Creek",
+   "slug": "indian-creek",
+   "lat": 39.684795,
+   "lng": -104.897614
+  },
+  {
+   "name": "Jefferson Park",
+   "slug": "jefferson-park",
+   "lat": 39.752172,
+   "lng": -105.01923
+  },
+  {
+   "name": "Kennedy",
+   "slug": "kennedy",
+   "lat": 39.653931,
+   "lng": -104.863537
+  },
+  {
+   "name": "Lincoln Park",
+   "slug": "lincoln-park",
+   "lat": 39.732546,
+   "lng": -105.004865
+  },
+  {
+   "name": "Lowry Field",
+   "slug": "lowry-field",
+   "lat": 39.719413,
+   "lng": -104.890635
+  },
+  {
+   "name": "Mar Lee",
+   "slug": "mar-lee",
+   "lat": 39.68952,
+   "lng": -105.039142
+  },
+  {
+   "name": "Marston",
+   "slug": "marston",
+   "lat": 39.627473,
+   "lng": -105.078934
+  },
+  {
+   "name": "Montbello",
+   "slug": "montbello",
+   "lat": 39.786028,
+   "lng": -104.837284
+  },
+  {
+   "name": "Montclair",
+   "slug": "montclair",
+   "lat": 39.732866,
+   "lng": -104.912962
+  },
+  {
+   "name": "North Capitol Hill",
+   "slug": "north-capitol-hill",
+   "lat": 39.743557,
+   "lng": -104.980906
+  },
+  {
+   "name": "North Park Hill",
+   "slug": "north-park-hill",
+   "lat": 39.756527,
+   "lng": -104.922021
+  },
+  {
+   "name": "Northeast Park Hill",
+   "slug": "northeast-park-hill",
+   "lat": 39.77446,
+   "lng": -104.923319
+  },
+  {
+   "name": "Overland",
+   "slug": "overland",
+   "lat": 39.681413,
+   "lng": -104.993112
+  },
+  {
+   "name": "Platt Park",
+   "slug": "platt-park",
+   "lat": 39.686615,
+   "lng": -104.981065
+  },
+  {
+   "name": "Regis",
+   "slug": "regis",
+   "lat": 39.787617,
+   "lng": -105.044004
+  },
+  {
+   "name": "Rosedale",
+   "slug": "rosedale",
+   "lat": 39.673127,
+   "lng": -104.980533
+  },
+  {
+   "name": "Ruby Hill",
+   "slug": "ruby-hill",
+   "lat": 39.689996,
+   "lng": -105.011201
+  },
+  {
+   "name": "Skyland",
+   "slug": "skyland",
+   "lat": 39.756516,
+   "lng": -104.950256
+  },
+  {
+   "name": "Sloan Lake",
+   "slug": "sloan-lake",
+   "lat": 39.75164,
+   "lng": -105.039826
+  },
+  {
+   "name": "South Park Hill",
+   "slug": "south-park-hill",
+   "lat": 39.745604,
+   "lng": -104.92207
+  },
+  {
+   "name": "Southmoor Park",
+   "slug": "southmoor-park",
+   "lat": 39.640297,
+   "lng": -104.91669
+  },
+  {
+   "name": "Speer",
+   "slug": "speer",
+   "lat": 39.719251,
+   "lng": -104.980304
+  },
+  {
+   "name": "Sun Valley",
+   "slug": "sun-valley",
+   "lat": 39.735845,
+   "lng": -105.021087
+  },
+  {
+   "name": "Sunnyside",
+   "slug": "sunnyside",
+   "lat": 39.776458,
+   "lng": -105.011904
+  },
+  {
+   "name": "Union Station",
+   "slug": "union-station",
+   "lat": 39.753436,
+   "lng": -105.000454
+  },
+  {
+   "name": "University",
+   "slug": "university",
+   "lat": 39.674511,
+   "lng": -104.966422
+  },
+  {
+   "name": "University Hills",
+   "slug": "university-hills",
+   "lat": 39.664475,
+   "lng": -104.932563
+  },
+  {
+   "name": "University Park",
+   "slug": "university-park",
+   "lat": 39.67594,
+   "lng": -104.950185
+  },
+  {
+   "name": "Valverde",
+   "slug": "valverde",
+   "lat": 39.71718,
+   "lng": -105.015233
+  },
+  {
+   "name": "Villa Park",
+   "slug": "villa-park",
+   "lat": 39.730468,
+   "lng": -105.039166
+  },
+  {
+   "name": "Virginia Village",
+   "slug": "virginia-village",
+   "lat": 39.686794,
+   "lng": -104.92417
+  },
+  {
+   "name": "Washington Park",
+   "slug": "washington-park",
+   "lat": 39.701245,
+   "lng": -104.966277
+  },
+  {
+   "name": "Washington Park West",
+   "slug": "washington-park-west",
+   "lat": 39.702582,
+   "lng": -104.979914
+  },
+  {
+   "name": "Washington Virginia Vale",
+   "slug": "washington-virginia-vale",
+   "lat": 39.701496,
+   "lng": -104.915187
+  },
+  {
+   "name": "Wellshire",
+   "slug": "wellshire",
+   "lat": 39.660647,
+   "lng": -104.94956
+  },
+  {
+   "name": "West Colfax",
+   "slug": "west-colfax",
+   "lat": 39.740049,
+   "lng": -105.038602
+  },
+  {
+   "name": "West Highland",
+   "slug": "west-highland",
+   "lat": 39.763957,
+   "lng": -105.039249
+  },
+  {
+   "name": "Westwood",
+   "slug": "westwood",
+   "lat": 39.704024,
+   "lng": -105.039216
+  },
+  {
+   "name": "Whittier",
+   "slug": "whittier",
+   "lat": 39.756364,
+   "lng": -104.966569
+  },
+  {
+   "name": "Windsor",
+   "slug": "windsor",
+   "lat": 39.703318,
+   "lng": -104.885839
+  }
+ ]
+}
