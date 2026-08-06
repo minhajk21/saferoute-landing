@@ -21,6 +21,19 @@
 // published area set is the only input that settles it.
 //
 // NOT INCLUDED, deliberately:
+//   nashville   Metro Nashville publishes 14 Community Planning Areas, which are
+//               official and DO tile the county — but they average ~93 km², and
+//               the calibrator measures a 1km disc (3.14 km²) at each centroid.
+//               That samples 3% of each area, and in a sprawling subarea the
+//               centroid sits in the quiet middle rather than the dense core, so
+//               it would read systematically LOW and hand Nashville a too-
+//               generous constant. Compare: the disc covers 60% of a Denver
+//               neighbourhood and 304% of a Long Beach one. A tiling set is not
+//               automatically a usable set — the areas have to be the right SIZE
+//               for the measurement.
+//   fortworth   No city-wide neighbourhood layer exists in its ArcGIS org.
+//               "Neighborhood_Boundaries" does not respond and
+//               "Neighborhoods_24_03_25" holds 10 features (a study area).
 //   kansascity  Its only boundary layer is "Registered Neighborhood/Homes
 //               Associations" (Socrata pvda-3rmd) — self-registered association
 //               polygons, which over-represent organised (typically affluent)
@@ -60,6 +73,14 @@ const CITIES = {
     populationField: 'Population',
     bbox: { minLat: 39.20, maxLat: 39.37, minLng: -76.71, maxLng: -76.53 },
     source: 'Baltimore City — neighbourhood statistical areas (populated only)',
+  },
+  longbeach: {
+    city: 'Long Beach', country: 'US',
+    kind: 'arcgis',
+    url: 'https://services6.arcgis.com/yCArG7wGXGyWLqav/arcgis/rest/services/Neighborhoods/FeatureServer/0',
+    nameField: 'NEIGHBOR_NAME',
+    bbox: { minLat: 33.74, maxLat: 33.88, minLng: -118.25, maxLng: -118.06 },
+    source: 'City of Long Beach — 126 neighbourhoods',
   },
   vancouver: {
     city: 'Vancouver', country: 'CA',

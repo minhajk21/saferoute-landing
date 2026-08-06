@@ -1,0 +1,748 @@
+{
+ "city": "Long Beach",
+ "citySlug": "longbeach",
+ "country": "US",
+ "source": "City of Long Beach — 126 neighbourhoods",
+ "purpose": "CALIBRATION ONLY — no /safety/ pages are generated from this set",
+ "generatedAt": "2026-08-06",
+ "areas": [
+  {
+   "name": "Addams",
+   "slug": "addams",
+   "lat": 33.849917,
+   "lng": -118.190061
+  },
+  {
+   "name": "Airport Area",
+   "slug": "airport-area",
+   "lat": 33.815679,
+   "lng": -118.152776
+  },
+  {
+   "name": "Alamitos Beach",
+   "slug": "alamitos-beach",
+   "lat": 33.765979,
+   "lng": -118.174951
+  },
+  {
+   "name": "Alamitos Heights",
+   "slug": "alamitos-heights",
+   "lat": 33.772796,
+   "lng": -118.126363
+  },
+  {
+   "name": "Alamitos Ridge",
+   "slug": "alamitos-ridge",
+   "lat": 33.795527,
+   "lng": -118.153788
+  },
+  {
+   "name": "AOC7",
+   "slug": "aoc7",
+   "lat": 33.779583,
+   "lng": -118.171278
+  },
+  {
+   "name": "AOC7/Craftsman Village",
+   "slug": "aoc7-craftsman-village",
+   "lat": 33.77716,
+   "lng": -118.174176
+  },
+  {
+   "name": "Arlington",
+   "slug": "arlington",
+   "lat": 33.820718,
+   "lng": -118.219065
+  },
+  {
+   "name": "Artcraft Manor",
+   "slug": "artcraft-manor",
+   "lat": 33.799053,
+   "lng": -118.142718
+  },
+  {
+   "name": "Atherton South",
+   "slug": "atherton-south",
+   "lat": 33.785089,
+   "lng": -118.100094
+  },
+  {
+   "name": "Atherton South/College Park Estates",
+   "slug": "atherton-south-college-park-estates",
+   "lat": 33.781691,
+   "lng": -118.097476
+  },
+  {
+   "name": "Bay Harbor/Spinnaker Bay/Spinnaker Coves",
+   "slug": "bay-harbor-spinnaker-bay-spinnaker-coves",
+   "lat": 33.765412,
+   "lng": -118.119031
+  },
+  {
+   "name": "Bay Shore",
+   "slug": "bay-shore",
+   "lat": 33.768978,
+   "lng": -118.122607
+  },
+  {
+   "name": "Belmont Heights",
+   "slug": "belmont-heights",
+   "lat": 33.767552,
+   "lng": -118.143954
+  },
+  {
+   "name": "Belmont Mobile Estates",
+   "slug": "belmont-mobile-estates",
+   "lat": 33.766913,
+   "lng": -118.111834
+  },
+  {
+   "name": "Belmont Park",
+   "slug": "belmont-park",
+   "lat": 33.763578,
+   "lng": -118.128335
+  },
+  {
+   "name": "Belmont Shore",
+   "slug": "belmont-shore",
+   "lat": 33.758486,
+   "lng": -118.13678
+  },
+  {
+   "name": "Bixby Hill",
+   "slug": "bixby-hill",
+   "lat": 33.777706,
+   "lng": -118.107403
+  },
+  {
+   "name": "Bixby Knolls",
+   "slug": "bixby-knolls",
+   "lat": 33.837893,
+   "lng": -118.178322
+  },
+  {
+   "name": "Bixby Village",
+   "slug": "bixby-village",
+   "lat": 33.77196,
+   "lng": -118.115283
+  },
+  {
+   "name": "Bluff Heights",
+   "slug": "bluff-heights",
+   "lat": 33.768289,
+   "lng": -118.157475
+  },
+  {
+   "name": "Bluff Park",
+   "slug": "bluff-park",
+   "lat": 33.763416,
+   "lng": -118.158961
+  },
+  {
+   "name": "Bryant",
+   "slug": "bryant",
+   "lat": 33.785335,
+   "lng": -118.145303
+  },
+  {
+   "name": "California Heights",
+   "slug": "california-heights",
+   "lat": 33.82239,
+   "lng": -118.178952
+  },
+  {
+   "name": "Carmelitos",
+   "slug": "carmelitos",
+   "lat": 33.849882,
+   "lng": -118.181617
+  },
+  {
+   "name": "Carroll Park",
+   "slug": "carroll-park",
+   "lat": 33.769795,
+   "lng": -118.163309
+  },
+  {
+   "name": "Carson Park",
+   "slug": "carson-park",
+   "lat": 33.826854,
+   "lng": -118.101091
+  },
+  {
+   "name": "Central",
+   "slug": "central",
+   "lat": 33.790762,
+   "lng": -118.178872
+  },
+  {
+   "name": "College Park Estates",
+   "slug": "college-park-estates",
+   "lat": 33.778103,
+   "lng": -118.101221
+  },
+  {
+   "name": "College Square",
+   "slug": "college-square",
+   "lat": 33.87764,
+   "lng": -118.206105
+  },
+  {
+   "name": "Collins",
+   "slug": "collins",
+   "lat": 33.864618,
+   "lng": -118.148938
+  },
+  {
+   "name": "Coolidge Triangle",
+   "slug": "coolidge-triangle",
+   "lat": 33.869809,
+   "lng": -118.196939
+  },
+  {
+   "name": "Craftsman Village",
+   "slug": "craftsman-village",
+   "lat": 33.777055,
+   "lng": -118.178001
+  },
+  {
+   "name": "CSULB",
+   "slug": "csulb",
+   "lat": 33.782615,
+   "lng": -118.115828
+  },
+  {
+   "name": "Dairy",
+   "slug": "dairy",
+   "lat": 33.85744,
+   "lng": -118.191478
+  },
+  {
+   "name": "DeForest Park",
+   "slug": "deforest-park",
+   "lat": 33.866031,
+   "lng": -118.189703
+  },
+  {
+   "name": "Del Lago",
+   "slug": "del-lago",
+   "lat": 33.768367,
+   "lng": -118.119247
+  },
+  {
+   "name": "Dorado",
+   "slug": "dorado",
+   "lat": 33.82298,
+   "lng": -118.073048
+  },
+  {
+   "name": "Downtown",
+   "slug": "downtown",
+   "lat": 33.767553,
+   "lng": -118.193348
+  },
+  {
+   "name": "East Village",
+   "slug": "east-village",
+   "lat": 33.771186,
+   "lng": -118.185381
+  },
+  {
+   "name": "El Dorado Lakes",
+   "slug": "el-dorado-lakes",
+   "lat": 33.809022,
+   "lng": -118.080068
+  },
+  {
+   "name": "El Dorado Park Estates",
+   "slug": "el-dorado-park-estates",
+   "lat": 33.817687,
+   "lng": -118.077227
+  },
+  {
+   "name": "El Dorado Park South",
+   "slug": "el-dorado-park-south",
+   "lat": 33.79228,
+   "lng": -118.095377
+  },
+  {
+   "name": "El Dorado West",
+   "slug": "el-dorado-west",
+   "lat": 33.802004,
+   "lng": -118.103284
+  },
+  {
+   "name": "Hamilton",
+   "slug": "hamilton",
+   "lat": 33.879296,
+   "lng": -118.179394
+  },
+  {
+   "name": "Houghton Park",
+   "slug": "houghton-park",
+   "lat": 33.86752,
+   "lng": -118.181373
+  },
+  {
+   "name": "Imperial Estates",
+   "slug": "imperial-estates",
+   "lat": 33.820466,
+   "lng": -118.06803
+  },
+  {
+   "name": "Island Village",
+   "slug": "island-village",
+   "lat": 33.758514,
+   "lng": -118.094528
+  },
+  {
+   "name": "La Marina Estates",
+   "slug": "la-marina-estates",
+   "lat": 33.785116,
+   "lng": -118.105764
+  },
+  {
+   "name": "Lakewood Village",
+   "slug": "lakewood-village",
+   "lat": 33.839577,
+   "lng": -118.133798
+  },
+  {
+   "name": "Lindbergh",
+   "slug": "lindbergh",
+   "lat": 33.85559,
+   "lng": -118.176325
+  },
+  {
+   "name": "Longwood",
+   "slug": "longwood",
+   "lat": 33.867371,
+   "lng": -118.202886
+  },
+  {
+   "name": "Los Altos North",
+   "slug": "los-altos-north",
+   "lat": 33.806038,
+   "lng": -118.119888
+  },
+  {
+   "name": "Los Altos South",
+   "slug": "los-altos-south",
+   "lat": 33.794951,
+   "lng": -118.119689
+  },
+  {
+   "name": "Los Cerritos",
+   "slug": "los-cerritos",
+   "lat": 33.831488,
+   "lng": -118.196271
+  },
+  {
+   "name": "Lower Westside",
+   "slug": "lower-westside",
+   "lat": 33.792227,
+   "lng": -118.210315
+  },
+  {
+   "name": "Magnolia District",
+   "slug": "magnolia-district",
+   "lat": 33.786025,
+   "lng": -118.201398
+  },
+  {
+   "name": "Marina Pacifica",
+   "slug": "marina-pacifica",
+   "lat": 33.759799,
+   "lng": -118.115886
+  },
+  {
+   "name": "Mc Kinley",
+   "slug": "mc-kinley",
+   "lat": 33.878373,
+   "lng": -118.160057
+  },
+  {
+   "name": "Memorial Heights",
+   "slug": "memorial-heights",
+   "lat": 33.813208,
+   "lng": -118.189493
+  },
+  {
+   "name": "Naples",
+   "slug": "naples",
+   "lat": 33.755377,
+   "lng": -118.122494
+  },
+  {
+   "name": "Nehyam",
+   "slug": "nehyam",
+   "lat": 33.867392,
+   "lng": -118.16864
+  },
+  {
+   "name": "North Alamitos Beach",
+   "slug": "north-alamitos-beach",
+   "lat": 33.771751,
+   "lng": -118.173224
+  },
+  {
+   "name": "North Wrigley",
+   "slug": "north-wrigley",
+   "lat": 33.810924,
+   "lng": -118.197829
+  },
+  {
+   "name": "Old Lakewood City",
+   "slug": "old-lakewood-city",
+   "lat": 33.82871,
+   "lng": -118.125186
+  },
+  {
+   "name": "Pacific Villas",
+   "slug": "pacific-villas",
+   "lat": 33.767598,
+   "lng": -118.122379
+  },
+  {
+   "name": "Paramount",
+   "slug": "paramount",
+   "lat": 33.857138,
+   "lng": -118.160182
+  },
+  {
+   "name": "Park Estates",
+   "slug": "park-estates",
+   "lat": 33.783433,
+   "lng": -118.127455
+  },
+  {
+   "name": "Peninsula",
+   "slug": "peninsula",
+   "lat": 33.749232,
+   "lng": -118.125085
+  },
+  {
+   "name": "Plaza",
+   "slug": "plaza",
+   "lat": 33.817546,
+   "lng": -118.108047
+  },
+  {
+   "name": "Port of Long Beach",
+   "slug": "port-of-long-beach",
+   "lat": 33.759774,
+   "lng": -118.216322
+  },
+  {
+   "name": "Ramona Park",
+   "slug": "ramona-park",
+   "lat": 33.871701,
+   "lng": -118.155593
+  },
+  {
+   "name": "Rancho Estates",
+   "slug": "rancho-estates",
+   "lat": 33.814597,
+   "lng": -118.095207
+  },
+  {
+   "name": "Recreation Park",
+   "slug": "recreation-park",
+   "lat": 33.778809,
+   "lng": -118.146085
+  },
+  {
+   "name": "Rose Park",
+   "slug": "rose-park",
+   "lat": 33.775339,
+   "lng": -118.160042
+  },
+  {
+   "name": "Saint Francis",
+   "slug": "saint-francis",
+   "lat": 33.864431,
+   "lng": -118.155617
+  },
+  {
+   "name": "Saint Mary's",
+   "slug": "saint-marys",
+   "lat": 33.779066,
+   "lng": -118.186375
+  },
+  {
+   "name": "Shoreline",
+   "slug": "shoreline",
+   "lat": 33.76151,
+   "lng": -118.193695
+  },
+  {
+   "name": "South of Conant",
+   "slug": "south-of-conant",
+   "lat": 33.817668,
+   "lng": -118.125031
+  },
+  {
+   "name": "South Wrigley",
+   "slug": "south-wrigley",
+   "lat": 33.797132,
+   "lng": -118.199149
+  },
+  {
+   "name": "Southeast Wrigley",
+   "slug": "southeast-wrigley",
+   "lat": 33.797122,
+   "lng": -118.191552
+  },
+  {
+   "name": "Spinnaker Bay",
+   "slug": "spinnaker-bay",
+   "lat": 33.765049,
+   "lng": -118.123857
+  },
+  {
+   "name": "Spinnaker Coves",
+   "slug": "spinnaker-coves",
+   "lat": 33.768485,
+   "lng": -118.125016
+  },
+  {
+   "name": "Starr King",
+   "slug": "starr-king",
+   "lat": 33.878012,
+   "lng": -118.197031
+  },
+  {
+   "name": "Stoney Brook",
+   "slug": "stoney-brook",
+   "lat": 33.77145,
+   "lng": -118.119772
+  },
+  {
+   "name": "Sunrise",
+   "slug": "sunrise",
+   "lat": 33.803114,
+   "lng": -118.183111
+  },
+  {
+   "name": "Sutter",
+   "slug": "sutter",
+   "lat": 33.848262,
+   "lng": -118.198495
+  },
+  {
+   "name": "Traffic Circle",
+   "slug": "traffic-circle",
+   "lat": 33.790725,
+   "lng": -118.141822
+  },
+  {
+   "name": "Unassigned (AES Alamitos)",
+   "slug": "unassigned-aes-alamitos",
+   "lat": 33.766738,
+   "lng": -118.100902
+  },
+  {
+   "name": "Unassigned (Alamitos Bay Marina)",
+   "slug": "unassigned-alamitos-bay-marina",
+   "lat": 33.751995,
+   "lng": -118.112035
+  },
+  {
+   "name": "Unassigned (Alamitos Bay)",
+   "slug": "unassigned-alamitos-bay",
+   "lat": 33.752388,
+   "lng": -118.119143
+  },
+  {
+   "name": "Unassigned (Central)",
+   "slug": "unassigned-central",
+   "lat": 33.780791,
+   "lng": -118.165483
+  },
+  {
+   "name": "Unassigned (Claire Del Gardens)",
+   "slug": "unassigned-claire-del-gardens",
+   "lat": 33.837287,
+   "lng": -118.165962
+  },
+  {
+   "name": "Unassigned (Coyote Creek)",
+   "slug": "unassigned-coyote-creek",
+   "lat": 33.799072,
+   "lng": -118.086551
+  },
+  {
+   "name": "Unassigned (Douglas Park)",
+   "slug": "unassigned-douglas-park",
+   "lat": 33.82865,
+   "lng": -118.147083
+  },
+  {
+   "name": "Unassigned (El Dorado Regional Park)",
+   "slug": "unassigned-el-dorado-regional-park",
+   "lat": 33.81689,
+   "lng": -118.086659
+  },
+  {
+   "name": "Unassigned (Entrance Channel)",
+   "slug": "unassigned-entrance-channel",
+   "lat": 33.7442,
+   "lng": -118.11631
+  },
+  {
+   "name": "Unassigned (Haynes Steam Plant)",
+   "slug": "unassigned-haynes-steam-plant",
+   "lat": 33.764998,
+   "lng": -118.095158
+  },
+  {
+   "name": "Unassigned (Industrial Institutional)",
+   "slug": "unassigned-industrial-institutional",
+   "lat": 33.806055,
+   "lng": -118.155913
+  },
+  {
+   "name": "Unassigned (Industrial/Fountain View)",
+   "slug": "unassigned-industrial-fountain-view",
+   "lat": 33.857237,
+   "lng": -118.16632
+  },
+  {
+   "name": "Unassigned (Kilroy)",
+   "slug": "unassigned-kilroy",
+   "lat": 33.808637,
+   "lng": -118.148509
+  },
+  {
+   "name": "Unassigned (LA River)",
+   "slug": "unassigned-la-river",
+   "lat": 33.829586,
+   "lng": -118.206579
+  },
+  {
+   "name": "Unassigned (LBCC)",
+   "slug": "unassigned-lbcc",
+   "lat": 33.828715,
+   "lng": -118.138228
+  },
+  {
+   "name": "Unassigned (Lincoln)",
+   "slug": "unassigned-lincoln",
+   "lat": 33.780635,
+   "lng": -118.177446
+  },
+  {
+   "name": "Unassigned (Los Cerritos Channel)",
+   "slug": "unassigned-los-cerritos-channel",
+   "lat": 33.766111,
+   "lng": -118.109009
+  },
+  {
+   "name": "Unassigned (Los Cerritos Wetlands)",
+   "slug": "unassigned-los-cerritos-wetlands",
+   "lat": 33.755398,
+   "lng": -118.099836
+  },
+  {
+   "name": "Unassigned (Marina Shores)",
+   "slug": "unassigned-marina-shores",
+   "lat": 33.756718,
+   "lng": -118.106129
+  },
+  {
+   "name": "Unassigned (Marine Stadium)",
+   "slug": "unassigned-marine-stadium",
+   "lat": 33.762199,
+   "lng": -118.122157
+  },
+  {
+   "name": "Unassigned (Recreation Park Golf Course)",
+   "slug": "unassigned-recreation-park-golf-course",
+   "lat": 33.777144,
+   "lng": -118.134224
+  },
+  {
+   "name": "Unassigned (San Gabriel River)",
+   "slug": "unassigned-san-gabriel-river",
+   "lat": 33.780074,
+   "lng": -118.096867
+  },
+  {
+   "name": "Unassigned (Skylinks Golf Course)",
+   "slug": "unassigned-skylinks-golf-course",
+   "lat": 33.818922,
+   "lng": -118.13699
+  },
+  {
+   "name": "Unassigned (Willow Springs Park)",
+   "slug": "unassigned-willow-springs-park",
+   "lat": 33.808048,
+   "lng": -118.178502
+  },
+  {
+   "name": "Unassigned (Willow St Center)",
+   "slug": "unassigned-willow-st-center",
+   "lat": 33.804956,
+   "lng": -118.14575
+  },
+  {
+   "name": "University Park Estates",
+   "slug": "university-park-estates",
+   "lat": 33.771194,
+   "lng": -118.107478
+  },
+  {
+   "name": "Upper Westside",
+   "slug": "upper-westside",
+   "lat": 33.813137,
+   "lng": -118.213369
+  },
+  {
+   "name": "Washington School",
+   "slug": "washington-school",
+   "lat": 33.786233,
+   "lng": -118.193731
+  },
+  {
+   "name": "West Village",
+   "slug": "west-village",
+   "lat": 33.772402,
+   "lng": -118.199239
+  },
+  {
+   "name": "Westside",
+   "slug": "westside",
+   "lat": 33.797457,
+   "lng": -118.216886
+  },
+  {
+   "name": "Westside South",
+   "slug": "westside-south",
+   "lat": 33.786526,
+   "lng": -118.215389
+  },
+  {
+   "name": "Willmore",
+   "slug": "willmore",
+   "lat": 33.778892,
+   "lng": -118.198973
+  },
+  {
+   "name": "Winward Pointe",
+   "slug": "winward-pointe",
+   "lat": 33.769352,
+   "lng": -118.125545
+  },
+  {
+   "name": "Wrigley Heights",
+   "slug": "wrigley-heights",
+   "lat": 33.821629,
+   "lng": -118.201219
+  },
+  {
+   "name": "Zaferia",
+   "slug": "zaferia",
+   "lat": 33.784428,
+   "lng": -118.157863
+  }
+ ]
+}
