@@ -757,13 +757,25 @@ ${cta(cfg.name)}
 ${footer(cfg, areas[0], citySlug, windowDays)}
 <script>
 const IDX=${JSON.stringify(idx)};
+// The city segment is held in a variable so no complete-looking path literal
+// survives in this source. Googlebot lifts URL-shaped strings straight out of
+// inline JS and requests them verbatim, so the old hard-coded prefix produced a
+// 404 in the Search Console page-indexing report. Keep every path literal here
+// to a real 200 page, and never let the surrounding comment spell one out
+// either — this comment used to interpolate the city slug and so recreated the
+// exact string it was describing.
+const CITY=${JSON.stringify(citySlug)};
 const inp=document.getElementById('ckr'),out=document.getElementById('ckr-out');
 inp.addEventListener('input',()=>{
   const q=inp.value.trim().toLowerCase();out.innerHTML='';
   if(q.length<2)return;
   IDX.filter(a=>a.n.toLowerCase().includes(q)).slice(0,8).forEach(a=>{
     const li=document.createElement('li');
-    li.innerHTML='<a href="/safety/${citySlug}/'+a.s+'/"><span>'+a.n+' <small style="color:var(--ink-3)">'+a.b+'</small></span><span class="s">'+a.v+'/100</span></a>';
+    // Built as its own value so the only complete path literal left in this
+    // source is '/safety/', which is a real 200 page. Anything longer here gets
+    // lifted verbatim by Googlebot and requested as-is.
+    const href='/safety/'+CITY+'/'+a.s+'/';
+    li.innerHTML='<a href="'+href+'"><span>'+a.n+' <small style="color:var(--ink-3)">'+a.b+'</small></span><span class="s">'+a.v+'/100</span></a>';
     out.appendChild(li);
   });
 });

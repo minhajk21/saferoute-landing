@@ -52,13 +52,25 @@
 </div></footer></body></html>
 <script>
 const IDX=[{"s":"allston","n":"Allston","b":"Boston","v":75,"band":"low"},{"s":"back-bay","n":"Back Bay","b":"Boston","v":43,"band":"elevated"},{"s":"bay-village","n":"Bay Village","b":"Boston","v":34,"band":"elevated"},{"s":"beacon-hill","n":"Beacon Hill","b":"Boston","v":33,"band":"elevated"},{"s":"brighton","n":"Brighton","b":"Boston","v":58,"band":"moderate"},{"s":"charlestown","n":"Charlestown","b":"Boston","v":77,"band":"low"},{"s":"chinatown","n":"Chinatown","b":"Boston","v":37,"band":"elevated"},{"s":"dorchester","n":"Dorchester","b":"Boston","v":35,"band":"elevated"},{"s":"downtown","n":"Downtown","b":"Boston","v":32,"band":"elevated"},{"s":"east-boston","n":"East Boston","b":"Boston","v":65,"band":"moderate"},{"s":"fenway","n":"Fenway","b":"Boston","v":61,"band":"moderate"},{"s":"hyde-park","n":"Hyde Park","b":"Boston","v":65,"band":"moderate"},{"s":"jamaica-plain","n":"Jamaica Plain","b":"Boston","v":55,"band":"moderate"},{"s":"leather-district","n":"Leather District","b":"Boston","v":36,"band":"elevated"},{"s":"longwood","n":"Longwood","b":"Boston","v":66,"band":"moderate"},{"s":"mattapan","n":"Mattapan","b":"Boston","v":48,"band":"elevated"},{"s":"mission-hill","n":"Mission Hill","b":"Boston","v":63,"band":"moderate"},{"s":"north-end","n":"North End","b":"Boston","v":52,"band":"moderate"},{"s":"roslindale","n":"Roslindale","b":"Boston","v":86,"band":"low"},{"s":"roxbury","n":"Roxbury","b":"Boston","v":47,"band":"elevated"},{"s":"south-boston-waterfront","n":"South Boston Waterfront","b":"Boston","v":87,"band":"low"},{"s":"south-boston","n":"South Boston","b":"Boston","v":67,"band":"moderate"},{"s":"south-end","n":"South End","b":"Boston","v":31,"band":"elevated"},{"s":"west-end","n":"West End","b":"Boston","v":48,"band":"elevated"},{"s":"west-roxbury","n":"West Roxbury","b":"Boston","v":91,"band":"low"}];
+// The city segment is held in a variable so no complete-looking path literal
+// survives in this source. Googlebot lifts URL-shaped strings straight out of
+// inline JS and requests them verbatim, so the old hard-coded prefix produced a
+// 404 in the Search Console page-indexing report. Keep every path literal here
+// to a real 200 page, and never let the surrounding comment spell one out
+// either — this comment used to interpolate the city slug and so recreated the
+// exact string it was describing.
+const CITY="boston";
 const inp=document.getElementById('ckr'),out=document.getElementById('ckr-out');
 inp.addEventListener('input',()=>{
   const q=inp.value.trim().toLowerCase();out.innerHTML='';
   if(q.length<2)return;
   IDX.filter(a=>a.n.toLowerCase().includes(q)).slice(0,8).forEach(a=>{
     const li=document.createElement('li');
-    li.innerHTML='<a href="/safety/boston/'+a.s+'/"><span>'+a.n+' <small style="color:var(--ink-3)">'+a.b+'</small></span><span class="s">'+a.v+'/100</span></a>';
+    // Built as its own value so the only complete path literal left in this
+    // source is '/safety/', which is a real 200 page. Anything longer here gets
+    // lifted verbatim by Googlebot and requested as-is.
+    const href='/safety/'+CITY+'/'+a.s+'/';
+    li.innerHTML='<a href="'+href+'"><span>'+a.n+' <small style="color:var(--ink-3)">'+a.b+'</small></span><span class="s">'+a.v+'/100</span></a>';
     out.appendChild(li);
   });
 });

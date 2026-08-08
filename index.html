@@ -6,8 +6,14 @@
 <title>SafeRoute — Crime-aware walking navigation for the UK, US, Canada &amp; Mexico</title>
 <meta name="description" content="SafeRoute reads live crime data — UK police, US city, Canadian, and Mexico City crime data — so you can check how safe any area is in a tap, plan a walking route scored by real risk, and share your walk. No accounts. No ads. Free on the App Store.">
 
+<!-- Every /safety/ page declares a canonical; the homepage was the one page that
+     did not, leaving Google to pick between /, /index.html and any parameterised
+     variant it finds (ad and referral tags arrive on the homepage most of all). -->
+<link rel="canonical" href="https://safe-route.app/">
+
 <!-- iOS Safari smart app banner — native "open in App Store" strip -->
 <meta name="apple-itunes-app" content="app-id=6768244297">
+<meta property="og:url" content="https://safe-route.app/">
 
 <!-- Open Graph / social preview -->
 <meta property="og:title" content="SafeRoute — Crime-aware walking navigation for the UK, US, Canada &amp; Mexico">
