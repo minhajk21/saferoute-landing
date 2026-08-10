@@ -281,7 +281,13 @@ async function lookup(lat, lng, name, address){
 function render(d, name, address){
   if(!d.covered){
     panel.innerHTML = `<div class="place">${esc(name)}${address?`<small>${esc(address)}</small>`:''}</div>
-      <p class="note">SafeRoute doesn't have crime data for this location yet. It currently covers the <b>UK</b>, <b>26 US cities</b>, <b>Toronto</b>, <b>Vancouver</b> and <b>Mexico City</b>.</p>
+      <!-- "most of the UK", not "the UK": a few forces (Greater Manchester and
+           Gloucestershire today) publish no street-level crime to data.police.uk,
+           so a real UK address can legitimately land here. Saying "the UK" told
+           those users we cover them while refusing their address. Kept generic
+           rather than naming the forces — the backend regenerates that list
+           monthly and any names typed here would go stale silently. -->
+      <p class="note">SafeRoute doesn't have crime data for this location yet. It currently covers <b>most of the UK</b> — a few police forces don't publish street-level crime data — plus <b>26 US cities</b>, <b>Toronto</b>, <b>Vancouver</b> and <b>Mexico City</b>.</p>
       <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-check&mt=8">Get SafeRoute</a>`;
     return;
   }
