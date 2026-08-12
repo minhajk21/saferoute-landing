@@ -24,18 +24,20 @@
    "categoryCount": 12,
    "hasCoordinates": true,
    "hasIncidentTime": true,
-   "latestIncident": "2026-08",
-   "latestIncidentPrecision": "month",
-   "freshnessMeasured": false,
-   "lagDays": null,
-   "latestIncidentMonth": "2026-08",
+   "latestIncident": "2026-08-11",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 1,
+   "latestIncidentMonth": null,
    "total": 99,
    "parts": {
+    "freshness": 25,
     "detail": 25,
     "breadth": 25,
     "history": 24
    },
    "scoredOn": [
+    "freshness",
     "detail",
     "breadth",
     "history"
@@ -72,6 +74,66 @@
    ]
   },
   {
+   "id": "sf",
+   "name": "San Francisco",
+   "country": "US",
+   "dataSource": "DataSF",
+   "incidentsInProbe": 16603,
+   "windowDays": 211,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-10",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 2,
+   "latestIncidentMonth": null,
+   "total": 89,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 25,
+    "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "seattle",
+   "name": "Seattle",
+   "country": "US",
+   "dataSource": "Seattle Open Data",
+   "incidentsInProbe": 11268,
+   "windowDays": 211,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-10",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 2,
+   "latestIncidentMonth": null,
+   "total": 89,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 25,
+    "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
    "id": "cleveland",
    "name": "Cleveland",
    "country": "US",
@@ -93,6 +155,96 @@
     "detail": 25,
     "breadth": 25,
     "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "chicago",
+   "name": "Chicago",
+   "country": "US",
+   "dataSource": "Chicago Data Portal",
+   "incidentsInProbe": 10952,
+   "windowDays": 204,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-03",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 9,
+   "latestIncidentMonth": null,
+   "total": 88,
+   "parts": {
+    "freshness": 24,
+    "detail": 25,
+    "breadth": 25,
+    "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "kansascity",
+   "name": "Kansas City",
+   "country": "US",
+   "dataSource": "Kansas City Open Data",
+   "incidentsInProbe": 3791,
+   "windowDays": 204,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-03",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 9,
+   "latestIncidentMonth": null,
+   "total": 88,
+   "parts": {
+    "freshness": 24,
+    "detail": 25,
+    "breadth": 25,
+    "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "neworleans",
+   "name": "New Orleans",
+   "country": "US",
+   "dataSource": "City of New Orleans / OPCD",
+   "incidentsInProbe": 6991,
+   "windowDays": 212,
+   "publishes": true,
+   "categoryCount": 11,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-11",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 1,
+   "latestIncidentMonth": null,
+   "total": 88,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 23,
+    "history": 15
    },
    "scoredOn": [
     "freshness",
@@ -162,56 +314,30 @@
    ]
   },
   {
-   "id": "chicago",
-   "name": "Chicago",
+   "id": "la",
+   "name": "Los Angeles",
    "country": "US",
-   "dataSource": "Chicago Data Portal",
-   "incidentsInProbe": 10952,
-   "windowDays": 204,
+   "dataSource": "LA City Open Data",
+   "incidentsInProbe": 10001,
+   "windowDays": 207,
    "publishes": true,
    "categoryCount": 13,
    "hasCoordinates": true,
    "hasIncidentTime": true,
-   "latestIncident": "2026-08",
-   "latestIncidentPrecision": "month",
-   "freshnessMeasured": false,
-   "lagDays": null,
-   "latestIncidentMonth": "2026-08",
-   "total": 85,
+   "latestIncident": "2026-07-25",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 18,
+   "latestIncidentMonth": null,
+   "total": 86,
    "parts": {
+    "freshness": 22,
     "detail": 25,
     "breadth": 25,
     "history": 14
    },
    "scoredOn": [
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
-   "id": "sf",
-   "name": "San Francisco",
-   "country": "US",
-   "dataSource": "DataSF",
-   "incidentsInProbe": 16603,
-   "windowDays": 211,
-   "publishes": true,
-   "categoryCount": 13,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-08",
-   "latestIncidentPrecision": "month",
-   "freshnessMeasured": false,
-   "lagDays": null,
-   "latestIncidentMonth": "2026-08",
-   "total": 85,
-   "parts": {
-    "detail": 25,
-    "breadth": 25,
-    "history": 14
-   },
-   "scoredOn": [
+    "freshness",
     "detail",
     "breadth",
     "history"
@@ -233,62 +359,6 @@
    "freshnessMeasured": false,
    "lagDays": null,
    "latestIncidentMonth": "2026-08",
-   "total": 85,
-   "parts": {
-    "detail": 25,
-    "breadth": 25,
-    "history": 14
-   },
-   "scoredOn": [
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
-   "id": "seattle",
-   "name": "Seattle",
-   "country": "US",
-   "dataSource": "Seattle Open Data",
-   "incidentsInProbe": 11268,
-   "windowDays": 211,
-   "publishes": true,
-   "categoryCount": 13,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-08",
-   "latestIncidentPrecision": "month",
-   "freshnessMeasured": false,
-   "lagDays": null,
-   "latestIncidentMonth": "2026-08",
-   "total": 85,
-   "parts": {
-    "detail": 25,
-    "breadth": 25,
-    "history": 14
-   },
-   "scoredOn": [
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
-   "id": "la",
-   "name": "Los Angeles",
-   "country": "US",
-   "dataSource": "LA City Open Data",
-   "incidentsInProbe": 10001,
-   "windowDays": 207,
-   "publishes": true,
-   "categoryCount": 13,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-07",
-   "latestIncidentPrecision": "month",
-   "freshnessMeasured": false,
-   "lagDays": null,
-   "latestIncidentMonth": "2026-07",
    "total": 85,
    "parts": {
     "detail": 25,
@@ -360,34 +430,6 @@
    ]
   },
   {
-   "id": "kansascity",
-   "name": "Kansas City",
-   "country": "US",
-   "dataSource": "Kansas City Open Data",
-   "incidentsInProbe": 3791,
-   "windowDays": 204,
-   "publishes": true,
-   "categoryCount": 13,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-08",
-   "latestIncidentPrecision": "month",
-   "freshnessMeasured": false,
-   "lagDays": null,
-   "latestIncidentMonth": "2026-08",
-   "total": 85,
-   "parts": {
-    "detail": 25,
-    "breadth": 25,
-    "history": 14
-   },
-   "scoredOn": [
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
    "id": "mexicocity",
    "name": "Mexico City",
    "country": "MX",
@@ -408,34 +450,6 @@
     "detail": 25,
     "breadth": 15,
     "history": 24
-   },
-   "scoredOn": [
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
-   "id": "neworleans",
-   "name": "New Orleans",
-   "country": "US",
-   "dataSource": "City of New Orleans / OPCD",
-   "incidentsInProbe": 7058,
-   "windowDays": 213,
-   "publishes": true,
-   "categoryCount": 11,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-08",
-   "latestIncidentPrecision": "month",
-   "freshnessMeasured": false,
-   "lagDays": null,
-   "latestIncidentMonth": "2026-08",
-   "total": 84,
-   "parts": {
-    "detail": 25,
-    "breadth": 23,
-    "history": 15
    },
    "scoredOn": [
     "detail",
@@ -474,34 +488,6 @@
    ]
   },
   {
-   "id": "nyc",
-   "name": "New York",
-   "country": "US",
-   "dataSource": "NYC Open Data",
-   "incidentsInProbe": 18668,
-   "windowDays": 177,
-   "publishes": true,
-   "categoryCount": 12,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-06",
-   "latestIncidentPrecision": "month",
-   "freshnessMeasured": false,
-   "lagDays": null,
-   "latestIncidentMonth": "2026-06",
-   "total": 83,
-   "parts": {
-    "detail": 25,
-    "breadth": 25,
-    "history": 12
-   },
-   "scoredOn": [
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
    "id": "philly",
    "name": "Philadelphia",
    "country": "US",
@@ -534,16 +520,16 @@
    "name": "Denver",
    "country": "US",
    "dataSource": "Open Data Denver",
-   "incidentsInProbe": 10160,
-   "windowDays": 210,
+   "incidentsInProbe": 10192,
+   "windowDays": 211,
    "publishes": true,
    "categoryCount": 9,
    "hasCoordinates": true,
    "hasIncidentTime": true,
-   "latestIncident": "2026-08-09",
+   "latestIncident": "2026-08-10",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
-   "lagDays": 3,
+   "lagDays": 2,
    "latestIncidentMonth": null,
    "total": 83,
    "parts": {
@@ -581,6 +567,36 @@
     "detail": 25,
     "breadth": 13,
     "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "nyc",
+   "name": "New York",
+   "country": "US",
+   "dataSource": "NYC Open Data",
+   "incidentsInProbe": 18668,
+   "windowDays": 177,
+   "publishes": true,
+   "categoryCount": 12,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-06-30",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 43,
+   "latestIncidentMonth": null,
+   "total": 76,
+   "parts": {
+    "freshness": 14,
+    "detail": 25,
+    "breadth": 25,
+    "history": 12
    },
    "scoredOn": [
     "freshness",
