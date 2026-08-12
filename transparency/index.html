@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which cities publish their crime data? — SafeRoute Transparency Index</title>
+<meta name="description" content="We measured how well 30 cities publish crime data — freshness, detail, breadth and history. Scores run 49 to 90. Two British police forces publish essentially nothing.">
+<link rel="canonical" href="https://safe-route.app/transparency/">
+<meta name="apple-itunes-app" content="app-id=6768244297">
+<meta property="og:title" content="Which cities publish their crime data? — SafeRoute Transparency Index">
+<meta property="og:description" content="We measured how well 30 cities publish crime data — freshness, detail, breadth and history. Scores run 49 to 90. Two British police forces publish essentially nothing.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://safe-route.app/transparency/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/safety/assets/safety.css">
+<style>
+/* Page-specific only — everything else comes from the shared sheet. */
+/* The shared sheet resets all margins and only restores them for headings and
+   .lead, which is fine on /safety/ pages where body paragraphs sit alone
+   between headings. This page runs several in a row, so they need separating. */
+main p + p{margin-top:15px}
+main ul li + li{margin-top:5px}
+.headline{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:12px;padding:20px 24px;margin:26px 0}
+.headline h2{margin:0 0 8px;font-size:19px}
+.headline ul{list-style:none;margin:12px 0 0}
+.headline li{display:flex;justify-content:space-between;gap:16px;padding:7px 0;border-top:1px solid var(--line);font-size:15px}
+.headline li span{font-family:var(--mono);font-size:13px;color:var(--ink-3);text-align:right}
+table.idx{width:100%;border-collapse:collapse;margin:14px 0 6px;font-size:15px}
+table.idx th{text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);font-weight:500;padding:0 8px 8px 0;border-bottom:1px solid var(--line)}
+table.idx td{padding:11px 8px 11px 0;border-bottom:1px solid var(--line);vertical-align:middle}
+td.rank{font-family:var(--mono);font-size:12px;color:var(--ink-3);width:26px}
+td.city{font-weight:500;line-height:1.3}
+td.city .flag{margin-right:5px}
+td.city .src{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-3);font-weight:400}
+td.sc{font-family:var(--mono);font-weight:600;font-size:19px;text-align:right;width:46px}
+td.bars{width:44%;padding-left:14px}
+.cbar{display:flex;height:9px;border-radius:999px;overflow:hidden;background:var(--cream-deep)}
+.cbar i{display:block;height:100%}
+.cbar i.nm{background:repeating-linear-gradient(45deg,var(--cream-deep),var(--cream-deep) 3px,var(--line) 3px,var(--line) 6px)}
+.notes{display:block;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);margin-top:5px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-family:var(--mono);font-size:11px;color:var(--ink-2);margin:18px 0 2px}
+.legend b{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.tablewrap{overflow-x:auto}
+@media(max-width:620px){td.bars{width:34%}td.city .src{display:none}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Dataset","name":"SafeRoute Crime-Data Transparency Index","description":"We measured how well 30 cities publish crime data — freshness, detail, breadth and history. Scores run 49 to 90. Two British police forces publish essentially nothing.","url":"https://safe-route.app/transparency/","creator":{"@type":"Organization","name":"SafeRoute"},"dateModified":"2026-08-12","measurementTechnique":"2000m box at each city's central coordinate"}</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a7d4a481ed8b4512a43225404078e7ab"}'></script>
+</head>
+<body>
+<header class="site"><div class="wrap">
+<a class="wordmark" href="/"><svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>SAFEROUTE</span></a>
+<nav class="crumbs"><a href="/">Home</a> › <a href="/safety/">Safety index</a> › Transparency</nav>
+</div></header><main><div class="wrap">
+
+<p class="eyebrow">Crime-data transparency · 30 cities · 4 countries · 2026-08-12</p>
+<h1>Which cities let you see their crime?</h1>
+<p class="lead">This is <strong>not</strong> a ranking of how safe places are. It measures something different and rarely looked at: how well each police force actually publishes its crime data — how current it is, how much detail each record carries, how much of the criminal code is visible, and how far back you can look.</p>
+
+<div class="headline">
+<h2>Two British police forces publish essentially nothing</h2>
+<p style="font-size:15.5px;color:var(--ink-2)">Both appear in the national open-data service. Both have force pages, neighbourhood listings and a published API. Neither supplies meaningful street-level crime, in their own city centres or anywhere else.</p>
+<ul><li><strong>Gloucestershire Constabulary</strong><span>1 crime in the busiest neighbourhood sampled</span></li><li><strong>Greater Manchester Police</strong><span>6 crimes in the busiest neighbourhood sampled</span></li></ul>
+<p style="font-size:14px;color:var(--ink-3);margin-top:12px">Measured across 44 UK forces. For comparison, a point a few miles outside Greater Manchester — in Lancashire — returns 260 crimes for the same month, and Bristol returns 1,691.</p>
+</div>
+
+<h2>Why this matters more than it sounds</h2>
+<p>Anyone building a "safest cities" ranking from open data — and plenty of people do — is quietly ranking <em>publishing practice</em> alongside crime. A city that releases nothing looks flawless. Greater Manchester and Gloucestershire would top a British safety league table built this way, purely because there is nothing to count.</p>
+<p>The same problem runs through the detail. Washington D.C. publishes only Part I offences, so no simple assault, drugs, vandalism or public-order incidents appear at all. Toronto publishes five categories. New Orleans publishes 911 dispatches rather than confirmed reports. London's feed covers a rolling month; Dallas's covers a year. Put those side by side on one scale and the narrower feed always wins.</p>
+<p>That is why SafeRoute's own <a href="/safety/">safety index</a> is calibrated <strong>within</strong> each city and never across them — and why the honest thing to publish globally is this: not who is safest, but who lets you check.</p>
+
+<h2>The index</h2>
+<p style="font-size:15.5px;color:var(--ink-2)">Scored out of 100 across four equally weighted measures. Every bar below is the score taken apart — a number you cannot decompose is exactly what this page argues against.</p>
+
+<div class="legend">
+<span><b style="background:var(--teal-deep)"></b>Freshness</span><span><b style="background:var(--teal)"></b>Detail</span><span><b style="background:var(--amber)"></b>Breadth</span><span><b style="background:var(--coral)"></b>History</span>
+<span><b style="background:repeating-linear-gradient(45deg,var(--cream-deep),var(--cream-deep) 3px,var(--line) 3px,var(--line) 6px)"></b>Not measurable — excluded</span>
+</div>
+
+<h3 style="font-size:17px;margin:26px 0 4px">Measured on all four</h3>
+<p style="font-size:14.5px;color:var(--ink-3);margin-bottom:6px">16 cities whose feeds could be tested on every measure. Nashville leads on 90; Tucson is lowest of this group on 63.</p>
+<div class="tablewrap"><table class="idx">
+<thead><tr><th></th><th>City</th><th style="text-align:right">Score</th><th style="padding-left:14px">How it breaks down</th></tr></thead>
+<tbody><tr>
+<td class="rank">1</td>
+<td class="city"><span class="flag">🇺🇸</span> Nashville<span class="src">Nashville Open Data</span></td>
+<td class="sc" style="color:var(--green)">90</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:15.0%;background:var(--coral)" title="history: 15 of 25"></i></div></td>
+</tr>
+<tr>
+<td class="rank">2</td>
+<td class="city"><span class="flag">🇺🇸</span> Cleveland<span class="src">City of Cleveland Open Data</span></td>
+<td class="sc" style="color:var(--green)">89</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i></div></td>
+</tr>
+<tr>
+<td class="rank">3</td>
+<td class="city"><span class="flag">🇺🇸</span> Detroit<span class="src">City of Detroit Open Data</span></td>
+<td class="sc" style="color:var(--green)">87</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:23.0%;background:var(--amber)" title="breadth: 23 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i></div></td>
+</tr>
+<tr>
+<td class="rank">4</td>
+<td class="city"><span class="flag">🇺🇸</span> Memphis<span class="src">City of Memphis Open Data</span></td>
+<td class="sc" style="color:var(--green)">87</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:23.0%;background:var(--amber)" title="breadth: 23 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i></div></td>
+</tr>
+<tr>
+<td class="rank">5</td>
+<td class="city"><span class="flag">🇺🇸</span> Baltimore<span class="src">Open Baltimore</span></td>
+<td class="sc" style="color:var(--green)">85</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:21.0%;background:var(--amber)" title="breadth: 21 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i></div></td>
+</tr>
+<tr>
+<td class="rank">6</td>
+<td class="city"><span class="flag">🇺🇸</span> Las Vegas<span class="src">LVMPD Open Data</span></td>
+<td class="sc" style="color:var(--amber)">84</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:10.0%;background:var(--teal)" title="detail: 10 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:24.0%;background:var(--coral)" title="history: 24 of 25"></i></div><span class="notes">no incident time</span></td>
+</tr>
+<tr>
+<td class="rank">7</td>
+<td class="city"><span class="flag">🇺🇸</span> Denver<span class="src">Open Data Denver</span></td>
+<td class="sc" style="color:var(--amber)">83</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:19.0%;background:var(--amber)" title="breadth: 19 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i></div></td>
+</tr>
+<tr>
+<td class="rank">8</td>
+<td class="city"><span class="flag">🇺🇸</span> Washington DC<span class="src">Open Data DC</span></td>
+<td class="sc" style="color:var(--amber)">77</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:13.0%;background:var(--amber)" title="breadth: 13 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i></div><span class="notes">only 6 offence categories</span></td>
+</tr>
+<tr>
+<td class="rank">9</td>
+<td class="city"><span class="flag">🇺🇸</span> Charlotte<span class="src">City of Charlotte Open Data</span></td>
+<td class="sc" style="color:var(--amber)">75</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:10.0%;background:var(--teal)" title="detail: 10 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:15.0%;background:var(--coral)" title="history: 15 of 25"></i></div><span class="notes">no incident time</span></td>
+</tr>
+<tr>
+<td class="rank">10</td>
+<td class="city"><span class="flag">🇺🇸</span> Houston<span class="src">City of Houston / HPD</span></td>
+<td class="sc" style="color:var(--amber)">75</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:23.0%;background:var(--amber)" title="breadth: 23 of 25"></i><i style="width:2.0%;background:var(--coral)" title="history: 2 of 25"></i></div><span class="notes">30-day window</span></td>
+</tr>
+<tr>
+<td class="rank">11</td>
+<td class="city"><span class="flag">🇨🇦</span> Vancouver<span class="src">Vancouver Police Department</span></td>
+<td class="sc" style="color:var(--amber)">74</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:10.0%;background:var(--teal)" title="detail: 10 of 25"></i><i style="width:15.0%;background:var(--amber)" title="breadth: 15 of 25"></i><i style="width:24.0%;background:var(--coral)" title="history: 24 of 25"></i></div><span class="notes">only 7 offence categories · no incident time</span></td>
+</tr>
+<tr>
+<td class="rank">12</td>
+<td class="city"><span class="flag">🇺🇸</span> Hartford<span class="src">City of Hartford</span></td>
+<td class="sc" style="color:var(--amber)">73</td>
+<td class="bars"><div class="cbar"><i style="width:24.0%;background:var(--teal-deep)" title="freshness: 24 of 25"></i><i style="width:10.0%;background:var(--teal)" title="detail: 10 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i></div><span class="notes">no incident time</span></td>
+</tr>
+<tr>
+<td class="rank">13</td>
+<td class="city"><span class="flag">🇺🇸</span> Minneapolis<span class="src">City of Minneapolis Open Data</span></td>
+<td class="sc" style="color:var(--amber)">70</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:10.0%;background:var(--teal)" title="detail: 10 of 25"></i><i style="width:21.0%;background:var(--amber)" title="breadth: 21 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i></div><span class="notes">no incident time</span></td>
+</tr>
+<tr>
+<td class="rank">14</td>
+<td class="city"><span class="flag">🇨🇦</span> Toronto<span class="src">Toronto Police Service</span></td>
+<td class="sc" style="color:var(--amber)">70</td>
+<td class="bars"><div class="cbar"><i style="width:14.0%;background:var(--teal-deep)" title="freshness: 14 of 25"></i><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:10.0%;background:var(--amber)" title="breadth: 10 of 25"></i><i style="width:21.0%;background:var(--coral)" title="history: 21 of 25"></i></div><span class="notes">only 5 offence categories</span></td>
+</tr>
+<tr>
+<td class="rank">15</td>
+<td class="city"><span class="flag">🇺🇸</span> Long Beach<span class="src">City of Long Beach</span></td>
+<td class="sc" style="color:var(--red)">68</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:10.0%;background:var(--teal)" title="detail: 10 of 25"></i><i style="width:21.0%;background:var(--amber)" title="breadth: 21 of 25"></i><i style="width:12.0%;background:var(--coral)" title="history: 12 of 25"></i></div><span class="notes">no incident time</span></td>
+</tr>
+<tr>
+<td class="rank">16</td>
+<td class="city"><span class="flag">🇺🇸</span> Tucson<span class="src">City of Tucson</span></td>
+<td class="sc" style="color:var(--red)">63</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal-deep)" title="freshness: 25 of 25"></i><i style="width:10.0%;background:var(--teal)" title="detail: 10 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:3.0%;background:var(--coral)" title="history: 3 of 25"></i></div><span class="notes">40-day window · no incident time</span></td>
+</tr></tbody></table></div>
+
+<h3 style="font-size:17px;margin:30px 0 4px">Measured on three of four</h3>
+<p style="font-size:14.5px;color:var(--ink-3);margin-bottom:6px">These 14 feeds report only the <em>month</em> of their newest record, not the date, so freshness could not be tested. They are scored on the other three and shown separately — <strong>ranking them against the group above would compare different measurements</strong>, which is the error this page exists to point out.</p>
+<div class="tablewrap"><table class="idx">
+<thead><tr><th></th><th>City</th><th style="text-align:right">Score</th><th style="padding-left:14px">How it breaks down</th></tr></thead>
+<tbody><tr>
+<td class="rank">1</td>
+<td class="city"><span class="flag">🇺🇸</span> Dallas<span class="src">Dallas Open Data</span></td>
+<td class="sc" style="color:var(--green)">99</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:24.0%;background:var(--coral)" title="history: 24 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable</span></td>
+</tr>
+<tr>
+<td class="rank">2</td>
+<td class="city"><span class="flag">🇺🇸</span> Chicago<span class="src">Chicago Data Portal</span></td>
+<td class="sc" style="color:var(--green)">85</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable</span></td>
+</tr>
+<tr>
+<td class="rank">3</td>
+<td class="city"><span class="flag">🇺🇸</span> San Francisco<span class="src">DataSF</span></td>
+<td class="sc" style="color:var(--green)">85</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable</span></td>
+</tr>
+<tr>
+<td class="rank">4</td>
+<td class="city"><span class="flag">🇺🇸</span> Boston<span class="src">Analyze Boston</span></td>
+<td class="sc" style="color:var(--green)">85</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable</span></td>
+</tr>
+<tr>
+<td class="rank">5</td>
+<td class="city"><span class="flag">🇺🇸</span> Seattle<span class="src">Seattle Open Data</span></td>
+<td class="sc" style="color:var(--green)">85</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable</span></td>
+</tr>
+<tr>
+<td class="rank">6</td>
+<td class="city"><span class="flag">🇺🇸</span> Los Angeles<span class="src">LA City Open Data</span></td>
+<td class="sc" style="color:var(--green)">85</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable</span></td>
+</tr>
+<tr>
+<td class="rank">7</td>
+<td class="city"><span class="flag">🇺🇸</span> Fort Worth<span class="src">City of Fort Worth Open Data</span></td>
+<td class="sc" style="color:var(--green)">85</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable</span></td>
+</tr>
+<tr>
+<td class="rank">8</td>
+<td class="city"><span class="flag">🇺🇸</span> Kansas City<span class="src">Kansas City Open Data</span></td>
+<td class="sc" style="color:var(--green)">85</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable</span></td>
+</tr>
+<tr>
+<td class="rank">9</td>
+<td class="city"><span class="flag">🇲🇽</span> Mexico City<span class="src">Hoyo de Crimen (api.hoyodecrimen.com) · CDMX FGJ</span></td>
+<td class="sc" style="color:var(--green)">85</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:15.0%;background:var(--amber)" title="breadth: 15 of 25"></i><i style="width:24.0%;background:var(--coral)" title="history: 24 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable · only 7 offence categories</span></td>
+</tr>
+<tr>
+<td class="rank">10</td>
+<td class="city"><span class="flag">🇺🇸</span> New Orleans<span class="src">City of New Orleans / OPCD</span></td>
+<td class="sc" style="color:var(--amber)">84</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:23.0%;background:var(--amber)" title="breadth: 23 of 25"></i><i style="width:15.0%;background:var(--coral)" title="history: 15 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable</span></td>
+</tr>
+<tr>
+<td class="rank">11</td>
+<td class="city"><span class="flag">🇺🇸</span> New York<span class="src">NYC Open Data</span></td>
+<td class="sc" style="color:var(--amber)">83</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:12.0%;background:var(--coral)" title="history: 12 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable</span></td>
+</tr>
+<tr>
+<td class="rank">12</td>
+<td class="city"><span class="flag">🇺🇸</span> Philadelphia<span class="src">OpenDataPhilly</span></td>
+<td class="sc" style="color:var(--amber)">83</td>
+<td class="bars"><div class="cbar"><i style="width:25.0%;background:var(--teal)" title="detail: 25 of 25"></i><i style="width:23.0%;background:var(--amber)" title="breadth: 23 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable</span></td>
+</tr>
+<tr>
+<td class="rank">13</td>
+<td class="city"><span class="flag">🇺🇸</span> San Diego<span class="src">City of San Diego</span></td>
+<td class="sc" style="color:var(--red)">63</td>
+<td class="bars"><div class="cbar"><i style="width:10.0%;background:var(--teal)" title="detail: 10 of 25"></i><i style="width:23.0%;background:var(--amber)" title="breadth: 23 of 25"></i><i style="width:14.0%;background:var(--coral)" title="history: 14 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable · no incident time</span></td>
+</tr>
+<tr>
+<td class="rank">14</td>
+<td class="city"><span class="flag">🇬🇧</span> London<span class="src">data.police.uk</span></td>
+<td class="sc" style="color:var(--red)">49</td>
+<td class="bars"><div class="cbar"><i style="width:10.0%;background:var(--teal)" title="detail: 10 of 25"></i><i style="width:25.0%;background:var(--amber)" title="breadth: 25 of 25"></i><i style="width:2.0%;background:var(--coral)" title="history: 2 of 25"></i><i class="nm" style="width:25%" title="not measurable — excluded from the score"></i></div><span class="notes">freshness not measurable · 30-day window · no incident time</span></td>
+</tr></tbody></table></div>
+
+<h2>How it is measured</h2>
+<p>Each city's live feed is queried directly — a 2000m box at each city's central coordinate. Nothing here is taken on trust or from documentation; every value comes from asking the feed what it actually returns today.</p>
+<ul style="font-size:15.5px;color:var(--ink-2);padding-left:20px;margin:10px 0">
+<li><strong>Freshness</strong> — how many days since the newest incident.</li>
+<li><strong>Detail</strong> — whether a record carries a clock time as well as a date, and a usable coordinate.</li>
+<li><strong>Breadth</strong> — how many distinct offence categories appear. Twelve or more indicates an all-crime feed.</li>
+<li><strong>History</strong> — how long a period the feed covers, up to a year.</li>
+</ul>
+<p><strong>Publishing at all is a gate, not a scored category.</strong> A force that releases nothing is not "40% of a good feed" — it is the headline above, and it is excluded from the table rather than given a low score.</p>
+<p><strong>Where something could not be measured, it is excluded and the score normalised over the rest</strong>, marked with a hatched segment. 14 of the 30 feeds report only the month of their newest record rather than the date, so freshness is not scored for those — scoring it would rank cities on our own summarising rather than on their data.</p>
+<p style="font-size:15px;color:var(--ink-3)">Weights: freshness 25 · detail 25 · breadth 25 · history 25. Disagree with them? The underlying components are all shown, so any row can be recomputed by hand.</p>
+
+<div class="cta">
+<h2>Walking somewhere tonight?</h2>
+<p>SafeRoute scores every walking route against this same live crime data, and shows how much of each route runs on lit streets. Free, no account.</p>
+<a class="btn" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-transparency&mt=8">Get SafeRoute on the App Store</a>
+</div>
+
+</div></main><footer class="site"><div class="wrap">
+<p><strong>Sources.</strong> Each city's official police or municipal open-data service, queried live on 2026-08-12; UK forces via <a href="https://data.police.uk/">data.police.uk</a>. Full method and the raw measurements are in the SafeRoute backend repository.</p>
+<p><strong>About this data.</strong> This page measures data publishing, not public safety. A low score means a force publishes little about crime — not that a place is dangerous, and not that its police are ineffective. Feeds change; this is a snapshot and is re-measured periodically.</p>
+<p><a href="/safety/">Neighbourhood safety index</a> · <a href="/check/">Check any address</a> · <a href="/">SafeRoute app</a> · <a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></p>
+</div></footer></body></html>

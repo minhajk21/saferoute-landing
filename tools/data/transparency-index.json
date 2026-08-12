@@ -1,0 +1,1166 @@
+{
+ "generatedAt": "2026-08-12",
+ "method": {
+  "probe": "2000m box at each city's central coordinate",
+  "weights": {
+   "freshness": 25,
+   "detail": 25,
+   "breadth": 25,
+   "history": 25
+  },
+  "note": "Measures how well crime data is PUBLISHED, not how safe a place is. The two are unrelated: a city that publishes nothing is unrankable here and would top any index built from open feeds.",
+  "gate": "Publishing at all is pass/fail, not a scored category; non-publishers are listed separately.",
+  "freshnessCaveat": "Scored only for providers with a day-precision upstream probe. The rest report a month, and scoring that would rank cities on our summarising rather than their feed."
+ },
+ "regions": [
+  {
+   "id": "dallas",
+   "name": "Dallas",
+   "country": "US",
+   "dataSource": "Dallas Open Data",
+   "incidentsInProbe": 14410,
+   "windowDays": 348,
+   "publishes": true,
+   "categoryCount": 12,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-08",
+   "total": 99,
+   "parts": {
+    "detail": 25,
+    "breadth": 25,
+    "history": 24
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "nashville",
+   "name": "Nashville",
+   "country": "US",
+   "dataSource": "Nashville Open Data",
+   "incidentsInProbe": 8988,
+   "windowDays": 213,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-11",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 1,
+   "latestIncidentMonth": null,
+   "total": 90,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 25,
+    "history": 15
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "cleveland",
+   "name": "Cleveland",
+   "country": "US",
+   "dataSource": "City of Cleveland Open Data",
+   "incidentsInProbe": 3698,
+   "windowDays": 210,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-11",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 1,
+   "latestIncidentMonth": null,
+   "total": 89,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 25,
+    "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "detroit",
+   "name": "Detroit",
+   "country": "US",
+   "dataSource": "City of Detroit Open Data",
+   "incidentsInProbe": 3901,
+   "windowDays": 209,
+   "publishes": true,
+   "categoryCount": 11,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-11",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 1,
+   "latestIncidentMonth": null,
+   "total": 87,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 23,
+    "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "memphis",
+   "name": "Memphis",
+   "country": "US",
+   "dataSource": "City of Memphis Open Data",
+   "incidentsInProbe": 2425,
+   "windowDays": 208,
+   "publishes": true,
+   "categoryCount": 11,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-10",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 2,
+   "latestIncidentMonth": null,
+   "total": 87,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 23,
+    "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "chicago",
+   "name": "Chicago",
+   "country": "US",
+   "dataSource": "Chicago Data Portal",
+   "incidentsInProbe": 10952,
+   "windowDays": 204,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-08",
+   "total": 85,
+   "parts": {
+    "detail": 25,
+    "breadth": 25,
+    "history": 14
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "sf",
+   "name": "San Francisco",
+   "country": "US",
+   "dataSource": "DataSF",
+   "incidentsInProbe": 16603,
+   "windowDays": 211,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-08",
+   "total": 85,
+   "parts": {
+    "detail": 25,
+    "breadth": 25,
+    "history": 14
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "boston",
+   "name": "Boston",
+   "country": "US",
+   "dataSource": "Analyze Boston",
+   "incidentsInProbe": 3660,
+   "windowDays": 208,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-08",
+   "total": 85,
+   "parts": {
+    "detail": 25,
+    "breadth": 25,
+    "history": 14
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "seattle",
+   "name": "Seattle",
+   "country": "US",
+   "dataSource": "Seattle Open Data",
+   "incidentsInProbe": 11268,
+   "windowDays": 211,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-08",
+   "total": 85,
+   "parts": {
+    "detail": 25,
+    "breadth": 25,
+    "history": 14
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "la",
+   "name": "Los Angeles",
+   "country": "US",
+   "dataSource": "LA City Open Data",
+   "incidentsInProbe": 10001,
+   "windowDays": 207,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-07",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-07",
+   "total": 85,
+   "parts": {
+    "detail": 25,
+    "breadth": 25,
+    "history": 14
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "baltimore",
+   "name": "Baltimore",
+   "country": "US",
+   "dataSource": "Open Baltimore",
+   "incidentsInProbe": 6531,
+   "windowDays": 211,
+   "publishes": true,
+   "categoryCount": 10,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-11",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 1,
+   "latestIncidentMonth": null,
+   "total": 85,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 21,
+    "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "fortworth",
+   "name": "Fort Worth",
+   "country": "US",
+   "dataSource": "City of Fort Worth Open Data",
+   "incidentsInProbe": 2439,
+   "windowDays": 210,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-08",
+   "total": 85,
+   "parts": {
+    "detail": 25,
+    "breadth": 25,
+    "history": 14
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "kansascity",
+   "name": "Kansas City",
+   "country": "US",
+   "dataSource": "Kansas City Open Data",
+   "incidentsInProbe": 3791,
+   "windowDays": 204,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-08",
+   "total": 85,
+   "parts": {
+    "detail": 25,
+    "breadth": 25,
+    "history": 14
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "mexicocity",
+   "name": "Mexico City",
+   "country": "MX",
+   "dataSource": "Hoyo de Crimen (api.hoyodecrimen.com) · CDMX FGJ",
+   "incidentsInProbe": 1405,
+   "windowDays": 346,
+   "publishes": true,
+   "categoryCount": 7,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-06",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-06",
+   "total": 85,
+   "parts": {
+    "detail": 25,
+    "breadth": 15,
+    "history": 24
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "neworleans",
+   "name": "New Orleans",
+   "country": "US",
+   "dataSource": "City of New Orleans / OPCD",
+   "incidentsInProbe": 7058,
+   "windowDays": 213,
+   "publishes": true,
+   "categoryCount": 11,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-08",
+   "total": 84,
+   "parts": {
+    "detail": 25,
+    "breadth": 23,
+    "history": 15
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "lasvegas",
+   "name": "Las Vegas",
+   "country": "US",
+   "dataSource": "LVMPD Open Data",
+   "incidentsInProbe": 14692,
+   "windowDays": 346,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": false,
+   "latestIncident": "2026-08-09",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 3,
+   "latestIncidentMonth": null,
+   "total": 84,
+   "parts": {
+    "freshness": 25,
+    "detail": 10,
+    "breadth": 25,
+    "history": 24
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "nyc",
+   "name": "New York",
+   "country": "US",
+   "dataSource": "NYC Open Data",
+   "incidentsInProbe": 18668,
+   "windowDays": 177,
+   "publishes": true,
+   "categoryCount": 12,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-06",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-06",
+   "total": 83,
+   "parts": {
+    "detail": 25,
+    "breadth": 25,
+    "history": 12
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "philly",
+   "name": "Philadelphia",
+   "country": "US",
+   "dataSource": "OpenDataPhilly",
+   "incidentsInProbe": 9901,
+   "windowDays": 211,
+   "publishes": true,
+   "categoryCount": 11,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-08",
+   "total": 83,
+   "parts": {
+    "detail": 25,
+    "breadth": 23,
+    "history": 14
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "denver",
+   "name": "Denver",
+   "country": "US",
+   "dataSource": "Open Data Denver",
+   "incidentsInProbe": 10160,
+   "windowDays": 210,
+   "publishes": true,
+   "categoryCount": 9,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-09",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 3,
+   "latestIncidentMonth": null,
+   "total": 83,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 19,
+    "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "dc",
+   "name": "Washington DC",
+   "country": "US",
+   "dataSource": "Open Data DC",
+   "incidentsInProbe": 3110,
+   "windowDays": 209,
+   "publishes": true,
+   "categoryCount": 6,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-10",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 2,
+   "latestIncidentMonth": null,
+   "total": 77,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 13,
+    "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "charlotte",
+   "name": "Charlotte",
+   "country": "US",
+   "dataSource": "City of Charlotte Open Data",
+   "incidentsInProbe": 4737,
+   "windowDays": 218,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": false,
+   "latestIncident": "2026-08-10",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 2,
+   "latestIncidentMonth": null,
+   "total": 75,
+   "parts": {
+    "freshness": 25,
+    "detail": 10,
+    "breadth": 25,
+    "history": 15
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "houston",
+   "name": "Houston",
+   "country": "US",
+   "dataSource": "City of Houston / HPD",
+   "incidentsInProbe": 703,
+   "windowDays": 30,
+   "publishes": true,
+   "categoryCount": 11,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-10",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 2,
+   "latestIncidentMonth": null,
+   "total": 75,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 23,
+    "history": 2
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "vancouver",
+   "name": "Vancouver",
+   "country": "CA",
+   "dataSource": "Vancouver Police Department",
+   "incidentsInProbe": 16841,
+   "windowDays": 349,
+   "publishes": true,
+   "categoryCount": 7,
+   "hasCoordinates": true,
+   "hasIncidentTime": false,
+   "latestIncident": "2026-08-10",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 2,
+   "latestIncidentMonth": null,
+   "total": 74,
+   "parts": {
+    "freshness": 25,
+    "detail": 10,
+    "breadth": 15,
+    "history": 24
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "hartford",
+   "name": "Hartford",
+   "country": "US",
+   "dataSource": "City of Hartford",
+   "incidentsInProbe": 11026,
+   "windowDays": 204,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": false,
+   "latestIncident": "2026-08-02",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 10,
+   "latestIncidentMonth": null,
+   "total": 73,
+   "parts": {
+    "freshness": 24,
+    "detail": 10,
+    "breadth": 25,
+    "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "minneapolis",
+   "name": "Minneapolis",
+   "country": "US",
+   "dataSource": "City of Minneapolis Open Data",
+   "incidentsInProbe": 3846,
+   "windowDays": 210,
+   "publishes": true,
+   "categoryCount": 10,
+   "hasCoordinates": true,
+   "hasIncidentTime": false,
+   "latestIncident": "2026-08-11",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 1,
+   "latestIncidentMonth": null,
+   "total": 70,
+   "parts": {
+    "freshness": 25,
+    "detail": 10,
+    "breadth": 21,
+    "history": 14
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "toronto",
+   "name": "Toronto",
+   "country": "CA",
+   "dataSource": "Toronto Police Service",
+   "incidentsInProbe": 5338,
+   "windowDays": 310,
+   "publishes": true,
+   "categoryCount": 5,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-06-30",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 43,
+   "latestIncidentMonth": null,
+   "total": 70,
+   "parts": {
+    "freshness": 14,
+    "detail": 25,
+    "breadth": 10,
+    "history": 21
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "longbeach",
+   "name": "Long Beach",
+   "country": "US",
+   "dataSource": "City of Long Beach",
+   "incidentsInProbe": 3399,
+   "windowDays": 174,
+   "publishes": true,
+   "categoryCount": 10,
+   "hasCoordinates": true,
+   "hasIncidentTime": false,
+   "latestIncident": "2026-08-12",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 0,
+   "latestIncidentMonth": null,
+   "total": 68,
+   "parts": {
+    "freshness": 25,
+    "detail": 10,
+    "breadth": 21,
+    "history": 12
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "sandiego",
+   "name": "San Diego",
+   "country": "US",
+   "dataSource": "City of San Diego",
+   "incidentsInProbe": 9050,
+   "windowDays": 210,
+   "publishes": true,
+   "categoryCount": 11,
+   "hasCoordinates": true,
+   "hasIncidentTime": false,
+   "latestIncident": "2026-08",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-08",
+   "total": 63,
+   "parts": {
+    "detail": 10,
+    "breadth": 23,
+    "history": 14
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "tucson",
+   "name": "Tucson",
+   "country": "US",
+   "dataSource": "City of Tucson",
+   "incidentsInProbe": 895,
+   "windowDays": 40,
+   "publishes": true,
+   "categoryCount": 14,
+   "hasCoordinates": true,
+   "hasIncidentTime": false,
+   "latestIncident": "2026-08-09",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 3,
+   "latestIncidentMonth": null,
+   "total": 63,
+   "parts": {
+    "freshness": 25,
+    "detail": 10,
+    "breadth": 25,
+    "history": 3
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "uk",
+   "name": "London",
+   "country": "GB",
+   "dataSource": "data.police.uk",
+   "incidentsInProbe": 12096,
+   "windowDays": 30,
+   "publishes": true,
+   "categoryCount": 14,
+   "hasCoordinates": true,
+   "hasIncidentTime": false,
+   "latestIncident": "2026-06",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-06",
+   "total": 49,
+   "parts": {
+    "detail": 10,
+    "breadth": 25,
+    "history": 2
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  }
+ ],
+ "notPublishing": [],
+ "unmeasurable": [],
+ "ukForces": {
+  "generatedFrom": "2026-06",
+  "method": "max crime count across 25 sampled neighbourhood centres; supplies if max >= 40, not-supplying if max <= 12, else unknown (left alone)",
+  "total": 44,
+  "notSupplying": [
+   "gloucestershire",
+   "greater-manchester"
+  ],
+  "detail": [
+   {
+    "force": "avon-and-somerset",
+    "name": "Avon and Somerset Constabulary",
+    "verdict": "supplies",
+    "maxInSample": 1628
+   },
+   {
+    "force": "bedfordshire",
+    "name": "Bedfordshire Police",
+    "verdict": "supplies",
+    "maxInSample": 883
+   },
+   {
+    "force": "cambridgeshire",
+    "name": "Cambridgeshire Constabulary",
+    "verdict": "supplies",
+    "maxInSample": 722
+   },
+   {
+    "force": "cheshire",
+    "name": "Cheshire Constabulary",
+    "verdict": "supplies",
+    "maxInSample": 519
+   },
+   {
+    "force": "city-of-london",
+    "name": "City of London Police",
+    "verdict": "supplies",
+    "maxInSample": 2820
+   },
+   {
+    "force": "cleveland",
+    "name": "Cleveland Police",
+    "verdict": "supplies",
+    "maxInSample": 745
+   },
+   {
+    "force": "cumbria",
+    "name": "Cumbria Constabulary",
+    "verdict": "supplies",
+    "maxInSample": 402
+   },
+   {
+    "force": "derbyshire",
+    "name": "Derbyshire Constabulary",
+    "verdict": "supplies",
+    "maxInSample": 423
+   },
+   {
+    "force": "devon-and-cornwall",
+    "name": "Devon & Cornwall Police",
+    "verdict": "supplies",
+    "maxInSample": 289
+   },
+   {
+    "force": "dorset",
+    "name": "Dorset Police",
+    "verdict": "supplies",
+    "maxInSample": 677
+   },
+   {
+    "force": "durham",
+    "name": "Durham Constabulary",
+    "verdict": "supplies",
+    "maxInSample": 303
+   },
+   {
+    "force": "dyfed-powys",
+    "name": "Dyfed-Powys Police",
+    "verdict": "supplies",
+    "maxInSample": 281
+   },
+   {
+    "force": "essex",
+    "name": "Essex Police",
+    "verdict": "supplies",
+    "maxInSample": 585
+   },
+   {
+    "force": "gloucestershire",
+    "name": "Gloucestershire Constabulary",
+    "verdict": "not-supplying",
+    "maxInSample": 1
+   },
+   {
+    "force": "greater-manchester",
+    "name": "Greater Manchester Police",
+    "verdict": "not-supplying",
+    "maxInSample": 6
+   },
+   {
+    "force": "gwent",
+    "name": "Gwent Police",
+    "verdict": "supplies",
+    "maxInSample": 528
+   },
+   {
+    "force": "hampshire",
+    "name": "Hampshire Constabulary",
+    "verdict": "supplies",
+    "maxInSample": 961
+   },
+   {
+    "force": "hertfordshire",
+    "name": "Hertfordshire Constabulary",
+    "verdict": "supplies",
+    "maxInSample": 670
+   },
+   {
+    "force": "humberside",
+    "name": "Humberside Police",
+    "verdict": "supplies",
+    "maxInSample": 639
+   },
+   {
+    "force": "kent",
+    "name": "Kent Police",
+    "verdict": "supplies",
+    "maxInSample": 460
+   },
+   {
+    "force": "lancashire",
+    "name": "Lancashire Constabulary",
+    "verdict": "supplies",
+    "maxInSample": 559
+   },
+   {
+    "force": "leicestershire",
+    "name": "Leicestershire Police",
+    "verdict": "supplies",
+    "maxInSample": 1630
+   },
+   {
+    "force": "lincolnshire",
+    "name": "Lincolnshire Police",
+    "verdict": "supplies",
+    "maxInSample": 286
+   },
+   {
+    "force": "merseyside",
+    "name": "Merseyside Police",
+    "verdict": "supplies",
+    "maxInSample": 1500
+   },
+   {
+    "force": "metropolitan",
+    "name": "Metropolitan Police Service",
+    "verdict": "supplies",
+    "maxInSample": 4413
+   },
+   {
+    "force": "norfolk",
+    "name": "Norfolk Constabulary",
+    "verdict": "supplies",
+    "maxInSample": 237
+   },
+   {
+    "force": "north-wales",
+    "name": "North Wales Police",
+    "verdict": "supplies",
+    "maxInSample": 295
+   },
+   {
+    "force": "north-yorkshire",
+    "name": "North Yorkshire Police",
+    "verdict": "supplies",
+    "maxInSample": 695
+   },
+   {
+    "force": "northamptonshire",
+    "name": "Northamptonshire Police",
+    "verdict": "supplies",
+    "maxInSample": 1111
+   },
+   {
+    "force": "northern-ireland",
+    "name": "Police Service of Northern Ireland",
+    "verdict": "supplies",
+    "maxInSample": 193
+   },
+   {
+    "force": "northumbria",
+    "name": "Northumbria Police",
+    "verdict": "supplies",
+    "maxInSample": 1222
+   },
+   {
+    "force": "nottinghamshire",
+    "name": "Nottinghamshire Police",
+    "verdict": "supplies",
+    "maxInSample": 1705
+   },
+   {
+    "force": "south-wales",
+    "name": "South Wales Police",
+    "verdict": "supplies",
+    "maxInSample": 361
+   },
+   {
+    "force": "south-yorkshire",
+    "name": "South Yorkshire Police",
+    "verdict": "supplies",
+    "maxInSample": 1160
+   },
+   {
+    "force": "staffordshire",
+    "name": "Staffordshire Police",
+    "verdict": "supplies",
+    "maxInSample": 608
+   },
+   {
+    "force": "suffolk",
+    "name": "Suffolk Constabulary",
+    "verdict": "supplies",
+    "maxInSample": 522
+   },
+   {
+    "force": "surrey",
+    "name": "Surrey Police",
+    "verdict": "supplies",
+    "maxInSample": 291
+   },
+   {
+    "force": "sussex",
+    "name": "Sussex Police",
+    "verdict": "supplies",
+    "maxInSample": 1532
+   },
+   {
+    "force": "thames-valley",
+    "name": "Thames Valley Police",
+    "verdict": "supplies",
+    "maxInSample": 630
+   },
+   {
+    "force": "warwickshire",
+    "name": "Warwickshire Police",
+    "verdict": "supplies",
+    "maxInSample": 435
+   },
+   {
+    "force": "west-mercia",
+    "name": "West Mercia Police",
+    "verdict": "supplies",
+    "maxInSample": 269
+   },
+   {
+    "force": "west-midlands",
+    "name": "West Midlands Police",
+    "verdict": "supplies",
+    "maxInSample": 1096
+   },
+   {
+    "force": "west-yorkshire",
+    "name": "West Yorkshire Police",
+    "verdict": "supplies",
+    "maxInSample": 1449
+   },
+   {
+    "force": "wiltshire",
+    "name": "Wiltshire Police",
+    "verdict": "supplies",
+    "maxInSample": 486
+   }
+  ]
+ }
+}
