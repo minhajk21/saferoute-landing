@@ -80,6 +80,20 @@ jobs:
       - name: Keep App Store facts on the site true
         run: node tools/check-app-facts.mjs
 
+      # The transparency dataset is MEASURED in the backend repo (the providers
+      # live there) and pushed here by its monthly-data-audit job, which runs on
+      # the 1st so the data is waiting by the time this runs on the 2nd.
+      # Guarded: a missing file skips the page rather than failing a 25-minute
+      # rebuild of 1,222 pages over one auxiliary page.
+      - name: Render the transparency page
+        run: |
+          if [ -f tools/data/transparency-index.json ]; then
+            node tools/render-transparency.mjs
+          else
+            echo "::warning::no transparency dataset — /transparency/ left as-is"
+          fi
+
+      # After the transparency page, because the sitemap includes it.
       - name: Render pages
         run: node tools/render-pages.mjs
 
