@@ -28,6 +28,17 @@ const APP_URL = `https://apps.apple.com/app/apple-store/id${APP_ID}?pt=${APP_PT}
 const CF_BEACON_TOKEN = process.env.CF_BEACON_TOKEN || 'a7d4a481ed8b4512a43225404078e7ab';
 
 const d = JSON.parse(readFileSync(join(ROOT, 'tools', 'data', 'transparency-index.json')));
+
+// REFUSE TO RENDER A SHORT DATASET. A city missing from `regions` does not get
+// a "we couldn't measure this" row — it silently vanishes from the table, which
+// for the top-ranked city (Dallas, in the incident that motivated this guard)
+// reads as an editorial judgement we never made. The backend's publish step has
+// the same gate; this one exists in case a bad file arrives by any other path.
+// Exit non-zero and let the caller keep the previous page live.
+if ((d.regions?.length ?? 0) < 28) {
+  console.error(`transparency: dataset has only ${d.regions?.length ?? 0} of 30 regions — refusing to render; keeping the existing page`);
+  process.exit(1);
+}
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const fmt = n => Number(n).toLocaleString('en-US');
 
@@ -195,6 +206,12 @@ ${table(full)}
 <h3 style="font-size:17px;margin:30px 0 4px">Measured on three of four</h3>
 <p style="font-size:14.5px;color:var(--ink-3);margin-bottom:6px">These ${partial.length} feeds report only the <em>month</em> of their newest record, not the date, so freshness could not be tested. They are scored on the other three and shown separately — <strong>ranking them against the group above would compare different measurements</strong>, which is the error this page exists to point out.</p>
 ${table(partial)}
+${(d.unmeasurable?.length ?? 0) ? `
+<!-- A city we could not measure must be SAID, not silently dropped — a missing
+     row reads as an editorial judgement (see the Dallas incident in the guard
+     above). Feeds do go down: Nashville's ArcGIS view rolled back to 2023 for
+     a period in Aug 2026. -->
+<p style="font-size:14.5px;color:var(--ink-3);margin-top:14px"><strong>Not measured this time:</strong> ${d.unmeasurable.map(u => esc(u.name)).join(', ')} — ${d.unmeasurable.length === 1 ? 'its feed' : 'their feeds'} could not be reached when this snapshot was taken. No score is shown rather than a wrong one.</p>` : ''}
 
 <h2>How it is measured</h2>
 <p>Each city's live feed is queried directly — a ${d.method.probe}. Nothing here is taken on trust or from documentation; every value comes from asking the feed what it actually returns today.</p>

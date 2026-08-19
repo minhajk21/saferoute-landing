@@ -88,7 +88,7 @@ jobs:
       - name: Render the transparency page
         run: |
           if [ -f tools/data/transparency-index.json ]; then
-            node tools/render-transparency.mjs
+            node tools/render-transparency.mjs || echo "::warning::transparency render refused (short or bad dataset) — /transparency/ left as-is"
           else
             echo "::warning::no transparency dataset — /transparency/ left as-is"
           fi

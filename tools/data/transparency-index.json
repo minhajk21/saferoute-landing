@@ -44,6 +44,36 @@
    ]
   },
   {
+   "id": "dallas",
+   "name": "Dallas",
+   "country": "US",
+   "dataSource": "Dallas Open Data",
+   "incidentsInProbe": 14313,
+   "windowDays": 347,
+   "publishes": true,
+   "categoryCount": 12,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-17",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 2,
+   "latestIncidentMonth": null,
+   "total": 99,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 25,
+    "history": 24
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
    "id": "sf",
    "name": "San Francisco",
    "country": "US",
@@ -108,16 +138,16 @@
    "name": "Nashville",
    "country": "US",
    "dataSource": "Nashville Open Data",
-   "incidentsInProbe": 9278,
-   "windowDays": 220,
+   "incidentsInProbe": 9322,
+   "windowDays": 221,
    "publishes": true,
    "categoryCount": 13,
    "hasCoordinates": true,
    "hasIncidentTime": true,
-   "latestIncident": "2026-08-18",
+   "latestIncident": "2026-08-19",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
-   "lagDays": 1,
+   "lagDays": 0,
    "latestIncidentMonth": null,
    "total": 90,
    "parts": {
@@ -185,6 +215,36 @@
     "detail": 25,
     "breadth": 25,
     "history": 15
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "chicago",
+   "name": "Chicago",
+   "country": "US",
+   "dataSource": "Chicago Data Portal",
+   "incidentsInProbe": 11314,
+   "windowDays": 210,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-10",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 9,
+   "latestIncidentMonth": null,
+   "total": 88,
+   "parts": {
+    "freshness": 24,
+    "detail": 25,
+    "breadth": 25,
+    "history": 14
    },
    "scoredOn": [
     "freshness",
@@ -486,6 +546,36 @@
    ]
   },
   {
+   "id": "dc",
+   "name": "Washington DC",
+   "country": "US",
+   "dataSource": "Open Data DC",
+   "incidentsInProbe": 3243,
+   "windowDays": 216,
+   "publishes": true,
+   "categoryCount": 6,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-18",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 1,
+   "latestIncidentMonth": null,
+   "total": 78,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 13,
+    "history": 15
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
    "id": "charlotte",
    "name": "Charlotte",
    "country": "US",
@@ -551,7 +641,7 @@
    "country": "US",
    "dataSource": "NYC Open Data",
    "incidentsInProbe": 18668,
-   "windowDays": 178,
+   "windowDays": 177,
    "publishes": true,
    "categoryCount": 12,
    "hasCoordinates": true,
@@ -812,23 +902,7 @@
    ]
   }
  ],
- "notPublishing": [
-  {
-   "id": "chicago",
-   "name": "Chicago",
-   "country": "US"
-  },
-  {
-   "id": "dc",
-   "name": "Washington DC",
-   "country": "US"
-  },
-  {
-   "id": "dallas",
-   "name": "Dallas",
-   "country": "US"
-  }
- ],
+ "notPublishing": [],
  "unmeasurable": [],
  "ukForces": {
   "generatedFrom": "2026-06",
