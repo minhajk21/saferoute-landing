@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-12",
+ "generatedAt": "2026-08-19",
  "method": {
   "probe": "2000m box at each city's central coordinate",
   "weights": {
@@ -14,27 +14,87 @@
  },
  "regions": [
   {
-   "id": "dallas",
-   "name": "Dallas",
+   "id": "la",
+   "name": "Los Angeles",
    "country": "US",
-   "dataSource": "Dallas Open Data",
-   "incidentsInProbe": 14410,
-   "windowDays": 348,
+   "dataSource": "LA City Open Data",
+   "incidentsInProbe": 37276,
+   "windowDays": 832,
    "publishes": true,
-   "categoryCount": 12,
+   "categoryCount": 13,
    "hasCoordinates": true,
    "hasIncidentTime": true,
-   "latestIncident": "2026-08-11",
+   "latestIncident": "2026-08-08",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
-   "lagDays": 1,
+   "lagDays": 11,
    "latestIncidentMonth": null,
    "total": 99,
+   "parts": {
+    "freshness": 24,
+    "detail": 25,
+    "breadth": 25,
+    "history": 25
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "sf",
+   "name": "San Francisco",
+   "country": "US",
+   "dataSource": "DataSF",
+   "incidentsInProbe": 17050,
+   "windowDays": 217,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-16",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 3,
+   "latestIncidentMonth": null,
+   "total": 90,
    "parts": {
     "freshness": 25,
     "detail": 25,
     "breadth": 25,
-    "history": 24
+    "history": 15
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "seattle",
+   "name": "Seattle",
+   "country": "US",
+   "dataSource": "Seattle Open Data",
+   "incidentsInProbe": 11630,
+   "windowDays": 218,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-17",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 2,
+   "latestIncidentMonth": null,
+   "total": 90,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 25,
+    "history": 15
    },
    "scoredOn": [
     "freshness",
@@ -48,13 +108,13 @@
    "name": "Nashville",
    "country": "US",
    "dataSource": "Nashville Open Data",
-   "incidentsInProbe": 8988,
-   "windowDays": 213,
+   "incidentsInProbe": 9278,
+   "windowDays": 220,
    "publishes": true,
    "categoryCount": 13,
    "hasCoordinates": true,
    "hasIncidentTime": true,
-   "latestIncident": "2026-08-11",
+   "latestIncident": "2026-08-18",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
    "lagDays": 1,
@@ -74,117 +134,27 @@
    ]
   },
   {
-   "id": "sf",
-   "name": "San Francisco",
-   "country": "US",
-   "dataSource": "DataSF",
-   "incidentsInProbe": 16603,
-   "windowDays": 211,
-   "publishes": true,
-   "categoryCount": 13,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-08-10",
-   "latestIncidentPrecision": "day",
-   "freshnessMeasured": true,
-   "lagDays": 2,
-   "latestIncidentMonth": null,
-   "total": 89,
-   "parts": {
-    "freshness": 25,
-    "detail": 25,
-    "breadth": 25,
-    "history": 14
-   },
-   "scoredOn": [
-    "freshness",
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
-   "id": "seattle",
-   "name": "Seattle",
-   "country": "US",
-   "dataSource": "Seattle Open Data",
-   "incidentsInProbe": 11268,
-   "windowDays": 211,
-   "publishes": true,
-   "categoryCount": 13,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-08-10",
-   "latestIncidentPrecision": "day",
-   "freshnessMeasured": true,
-   "lagDays": 2,
-   "latestIncidentMonth": null,
-   "total": 89,
-   "parts": {
-    "freshness": 25,
-    "detail": 25,
-    "breadth": 25,
-    "history": 14
-   },
-   "scoredOn": [
-    "freshness",
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
    "id": "cleveland",
    "name": "Cleveland",
    "country": "US",
    "dataSource": "City of Cleveland Open Data",
-   "incidentsInProbe": 3698,
-   "windowDays": 210,
+   "incidentsInProbe": 3900,
+   "windowDays": 218,
    "publishes": true,
    "categoryCount": 13,
    "hasCoordinates": true,
    "hasIncidentTime": true,
-   "latestIncident": "2026-08-11",
+   "latestIncident": "2026-08-18",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
    "lagDays": 1,
    "latestIncidentMonth": null,
-   "total": 89,
+   "total": 90,
    "parts": {
     "freshness": 25,
     "detail": 25,
     "breadth": 25,
-    "history": 14
-   },
-   "scoredOn": [
-    "freshness",
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
-   "id": "chicago",
-   "name": "Chicago",
-   "country": "US",
-   "dataSource": "Chicago Data Portal",
-   "incidentsInProbe": 10952,
-   "windowDays": 204,
-   "publishes": true,
-   "categoryCount": 13,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-08-03",
-   "latestIncidentPrecision": "day",
-   "freshnessMeasured": true,
-   "lagDays": 9,
-   "latestIncidentMonth": null,
-   "total": 88,
-   "parts": {
-    "freshness": 24,
-    "detail": 25,
-    "breadth": 25,
-    "history": 14
+    "history": 15
    },
    "scoredOn": [
     "freshness",
@@ -198,23 +168,23 @@
    "name": "Kansas City",
    "country": "US",
    "dataSource": "Kansas City Open Data",
-   "incidentsInProbe": 3791,
-   "windowDays": 204,
+   "incidentsInProbe": 4072,
+   "windowDays": 217,
    "publishes": true,
    "categoryCount": 13,
    "hasCoordinates": true,
    "hasIncidentTime": true,
-   "latestIncident": "2026-08-03",
+   "latestIncident": "2026-08-17",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
-   "lagDays": 9,
+   "lagDays": 2,
    "latestIncidentMonth": null,
-   "total": 88,
+   "total": 90,
    "parts": {
-    "freshness": 24,
+    "freshness": 25,
     "detail": 25,
     "breadth": 25,
-    "history": 14
+    "history": 15
    },
    "scoredOn": [
     "freshness",
@@ -224,17 +194,17 @@
    ]
   },
   {
-   "id": "neworleans",
-   "name": "New Orleans",
+   "id": "detroit",
+   "name": "Detroit",
    "country": "US",
-   "dataSource": "City of New Orleans / OPCD",
-   "incidentsInProbe": 6991,
-   "windowDays": 212,
+   "dataSource": "City of Detroit Open Data",
+   "incidentsInProbe": 4029,
+   "windowDays": 215,
    "publishes": true,
    "categoryCount": 11,
    "hasCoordinates": true,
    "hasIncidentTime": true,
-   "latestIncident": "2026-08-11",
+   "latestIncident": "2026-08-18",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
    "lagDays": 1,
@@ -254,57 +224,27 @@
    ]
   },
   {
-   "id": "detroit",
-   "name": "Detroit",
-   "country": "US",
-   "dataSource": "City of Detroit Open Data",
-   "incidentsInProbe": 3901,
-   "windowDays": 209,
-   "publishes": true,
-   "categoryCount": 11,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-08-11",
-   "latestIncidentPrecision": "day",
-   "freshnessMeasured": true,
-   "lagDays": 1,
-   "latestIncidentMonth": null,
-   "total": 87,
-   "parts": {
-    "freshness": 25,
-    "detail": 25,
-    "breadth": 23,
-    "history": 14
-   },
-   "scoredOn": [
-    "freshness",
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
    "id": "memphis",
    "name": "Memphis",
    "country": "US",
    "dataSource": "City of Memphis Open Data",
-   "incidentsInProbe": 2425,
-   "windowDays": 208,
+   "incidentsInProbe": 2513,
+   "windowDays": 215,
    "publishes": true,
    "categoryCount": 11,
    "hasCoordinates": true,
    "hasIncidentTime": true,
-   "latestIncident": "2026-08-10",
+   "latestIncident": "2026-08-17",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
    "lagDays": 2,
    "latestIncidentMonth": null,
-   "total": 87,
+   "total": 88,
    "parts": {
     "freshness": 25,
     "detail": 25,
     "breadth": 23,
-    "history": 14
+    "history": 15
    },
    "scoredOn": [
     "freshness",
@@ -314,27 +254,27 @@
    ]
   },
   {
-   "id": "la",
-   "name": "Los Angeles",
+   "id": "neworleans",
+   "name": "New Orleans",
    "country": "US",
-   "dataSource": "LA City Open Data",
-   "incidentsInProbe": 10001,
-   "windowDays": 207,
+   "dataSource": "City of New Orleans / OPCD",
+   "incidentsInProbe": 6982,
+   "windowDays": 219,
    "publishes": true,
-   "categoryCount": 13,
+   "categoryCount": 11,
    "hasCoordinates": true,
    "hasIncidentTime": true,
-   "latestIncident": "2026-07-25",
+   "latestIncident": "2026-08-18",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
-   "lagDays": 18,
+   "lagDays": 1,
    "latestIncidentMonth": null,
-   "total": 86,
+   "total": 88,
    "parts": {
-    "freshness": 22,
+    "freshness": 25,
     "detail": 25,
-    "breadth": 25,
-    "history": 14
+    "breadth": 23,
+    "history": 15
    },
    "scoredOn": [
     "freshness",
@@ -348,8 +288,8 @@
    "name": "Boston",
    "country": "US",
    "dataSource": "Analyze Boston",
-   "incidentsInProbe": 3660,
-   "windowDays": 208,
+   "incidentsInProbe": 3770,
+   "windowDays": 214,
    "publishes": true,
    "categoryCount": 13,
    "hasCoordinates": true,
@@ -359,11 +299,39 @@
    "freshnessMeasured": false,
    "lagDays": null,
    "latestIncidentMonth": "2026-08",
-   "total": 85,
+   "total": 87,
    "parts": {
     "detail": 25,
     "breadth": 25,
-    "history": 14
+    "history": 15
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "fortworth",
+   "name": "Fort Worth",
+   "country": "US",
+   "dataSource": "City of Fort Worth Open Data",
+   "incidentsInProbe": 2508,
+   "windowDays": 216,
+   "publishes": true,
+   "categoryCount": 13,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-08",
+   "total": 87,
+   "parts": {
+    "detail": 25,
+    "breadth": 25,
+    "history": 15
    },
    "scoredOn": [
     "detail",
@@ -376,54 +344,26 @@
    "name": "Baltimore",
    "country": "US",
    "dataSource": "Open Baltimore",
-   "incidentsInProbe": 6531,
-   "windowDays": 211,
+   "incidentsInProbe": 6782,
+   "windowDays": 217,
    "publishes": true,
    "categoryCount": 10,
    "hasCoordinates": true,
    "hasIncidentTime": true,
-   "latestIncident": "2026-08-11",
+   "latestIncident": "2026-08-18",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
    "lagDays": 1,
    "latestIncidentMonth": null,
-   "total": 85,
+   "total": 86,
    "parts": {
     "freshness": 25,
     "detail": 25,
     "breadth": 21,
-    "history": 14
+    "history": 15
    },
    "scoredOn": [
     "freshness",
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
-   "id": "fortworth",
-   "name": "Fort Worth",
-   "country": "US",
-   "dataSource": "City of Fort Worth Open Data",
-   "incidentsInProbe": 2439,
-   "windowDays": 210,
-   "publishes": true,
-   "categoryCount": 13,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-08",
-   "latestIncidentPrecision": "month",
-   "freshnessMeasured": false,
-   "lagDays": null,
-   "latestIncidentMonth": "2026-08",
-   "total": 85,
-   "parts": {
-    "detail": 25,
-    "breadth": 25,
-    "history": 14
-   },
-   "scoredOn": [
     "detail",
     "breadth",
     "history"
@@ -458,17 +398,75 @@
    ]
   },
   {
+   "id": "philly",
+   "name": "Philadelphia",
+   "country": "US",
+   "dataSource": "OpenDataPhilly",
+   "incidentsInProbe": 10285,
+   "windowDays": 217,
+   "publishes": true,
+   "categoryCount": 11,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08",
+   "latestIncidentPrecision": "month",
+   "freshnessMeasured": false,
+   "lagDays": null,
+   "latestIncidentMonth": "2026-08",
+   "total": 84,
+   "parts": {
+    "detail": 25,
+    "breadth": 23,
+    "history": 15
+   },
+   "scoredOn": [
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
+   "id": "denver",
+   "name": "Denver",
+   "country": "US",
+   "dataSource": "Open Data Denver",
+   "incidentsInProbe": 10564,
+   "windowDays": 218,
+   "publishes": true,
+   "categoryCount": 9,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-08-18",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 1,
+   "latestIncidentMonth": null,
+   "total": 84,
+   "parts": {
+    "freshness": 25,
+    "detail": 25,
+    "breadth": 19,
+    "history": 15
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
    "id": "lasvegas",
    "name": "Las Vegas",
    "country": "US",
    "dataSource": "LVMPD Open Data",
-   "incidentsInProbe": 14692,
+   "incidentsInProbe": 14619,
    "windowDays": 346,
    "publishes": true,
    "categoryCount": 13,
    "hasCoordinates": true,
    "hasIncidentTime": false,
-   "latestIncident": "2026-08-09",
+   "latestIncident": "2026-08-16",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
    "lagDays": 3,
@@ -488,135 +486,17 @@
    ]
   },
   {
-   "id": "philly",
-   "name": "Philadelphia",
-   "country": "US",
-   "dataSource": "OpenDataPhilly",
-   "incidentsInProbe": 9901,
-   "windowDays": 211,
-   "publishes": true,
-   "categoryCount": 11,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-08",
-   "latestIncidentPrecision": "month",
-   "freshnessMeasured": false,
-   "lagDays": null,
-   "latestIncidentMonth": "2026-08",
-   "total": 83,
-   "parts": {
-    "detail": 25,
-    "breadth": 23,
-    "history": 14
-   },
-   "scoredOn": [
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
-   "id": "denver",
-   "name": "Denver",
-   "country": "US",
-   "dataSource": "Open Data Denver",
-   "incidentsInProbe": 10192,
-   "windowDays": 211,
-   "publishes": true,
-   "categoryCount": 9,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-08-10",
-   "latestIncidentPrecision": "day",
-   "freshnessMeasured": true,
-   "lagDays": 2,
-   "latestIncidentMonth": null,
-   "total": 83,
-   "parts": {
-    "freshness": 25,
-    "detail": 25,
-    "breadth": 19,
-    "history": 14
-   },
-   "scoredOn": [
-    "freshness",
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
-   "id": "dc",
-   "name": "Washington DC",
-   "country": "US",
-   "dataSource": "Open Data DC",
-   "incidentsInProbe": 3110,
-   "windowDays": 209,
-   "publishes": true,
-   "categoryCount": 6,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-08-10",
-   "latestIncidentPrecision": "day",
-   "freshnessMeasured": true,
-   "lagDays": 2,
-   "latestIncidentMonth": null,
-   "total": 77,
-   "parts": {
-    "freshness": 25,
-    "detail": 25,
-    "breadth": 13,
-    "history": 14
-   },
-   "scoredOn": [
-    "freshness",
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
-   "id": "nyc",
-   "name": "New York",
-   "country": "US",
-   "dataSource": "NYC Open Data",
-   "incidentsInProbe": 18668,
-   "windowDays": 177,
-   "publishes": true,
-   "categoryCount": 12,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-06-30",
-   "latestIncidentPrecision": "day",
-   "freshnessMeasured": true,
-   "lagDays": 43,
-   "latestIncidentMonth": null,
-   "total": 76,
-   "parts": {
-    "freshness": 14,
-    "detail": 25,
-    "breadth": 25,
-    "history": 12
-   },
-   "scoredOn": [
-    "freshness",
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
    "id": "charlotte",
    "name": "Charlotte",
    "country": "US",
    "dataSource": "City of Charlotte Open Data",
-   "incidentsInProbe": 4737,
-   "windowDays": 218,
+   "incidentsInProbe": 4918,
+   "windowDays": 225,
    "publishes": true,
    "categoryCount": 13,
    "hasCoordinates": true,
    "hasIncidentTime": false,
-   "latestIncident": "2026-08-10",
+   "latestIncident": "2026-08-17",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
    "lagDays": 2,
@@ -640,13 +520,13 @@
    "name": "Houston",
    "country": "US",
    "dataSource": "City of Houston / HPD",
-   "incidentsInProbe": 703,
+   "incidentsInProbe": 651,
    "windowDays": 30,
    "publishes": true,
    "categoryCount": 11,
    "hasCoordinates": true,
    "hasIncidentTime": true,
-   "latestIncident": "2026-08-10",
+   "latestIncident": "2026-08-17",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
    "lagDays": 2,
@@ -666,17 +546,47 @@
    ]
   },
   {
+   "id": "nyc",
+   "name": "New York",
+   "country": "US",
+   "dataSource": "NYC Open Data",
+   "incidentsInProbe": 18668,
+   "windowDays": 178,
+   "publishes": true,
+   "categoryCount": 12,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-06-30",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 50,
+   "latestIncidentMonth": null,
+   "total": 74,
+   "parts": {
+    "freshness": 12,
+    "detail": 25,
+    "breadth": 25,
+    "history": 12
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
    "id": "vancouver",
    "name": "Vancouver",
    "country": "CA",
    "dataSource": "Vancouver Police Department",
-   "incidentsInProbe": 16841,
-   "windowDays": 349,
+   "incidentsInProbe": 16839,
+   "windowDays": 348,
    "publishes": true,
    "categoryCount": 7,
    "hasCoordinates": true,
    "hasIncidentTime": false,
-   "latestIncident": "2026-08-10",
+   "latestIncident": "2026-08-17",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
    "lagDays": 2,
@@ -700,13 +610,13 @@
    "name": "Hartford",
    "country": "US",
    "dataSource": "City of Hartford",
-   "incidentsInProbe": 11026,
-   "windowDays": 204,
+   "incidentsInProbe": 11373,
+   "windowDays": 211,
    "publishes": true,
    "categoryCount": 13,
    "hasCoordinates": true,
    "hasIncidentTime": false,
-   "latestIncident": "2026-08-02",
+   "latestIncident": "2026-08-09",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
    "lagDays": 10,
@@ -730,53 +640,23 @@
    "name": "Minneapolis",
    "country": "US",
    "dataSource": "City of Minneapolis Open Data",
-   "incidentsInProbe": 3846,
-   "windowDays": 210,
+   "incidentsInProbe": 3958,
+   "windowDays": 216,
    "publishes": true,
    "categoryCount": 10,
    "hasCoordinates": true,
    "hasIncidentTime": false,
-   "latestIncident": "2026-08-11",
+   "latestIncident": "2026-08-17",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
-   "lagDays": 1,
+   "lagDays": 2,
    "latestIncidentMonth": null,
-   "total": 70,
+   "total": 71,
    "parts": {
     "freshness": 25,
     "detail": 10,
     "breadth": 21,
-    "history": 14
-   },
-   "scoredOn": [
-    "freshness",
-    "detail",
-    "breadth",
-    "history"
-   ]
-  },
-  {
-   "id": "toronto",
-   "name": "Toronto",
-   "country": "CA",
-   "dataSource": "Toronto Police Service",
-   "incidentsInProbe": 5338,
-   "windowDays": 310,
-   "publishes": true,
-   "categoryCount": 5,
-   "hasCoordinates": true,
-   "hasIncidentTime": true,
-   "latestIncident": "2026-06-30",
-   "latestIncidentPrecision": "day",
-   "freshnessMeasured": true,
-   "lagDays": 43,
-   "latestIncidentMonth": null,
-   "total": 70,
-   "parts": {
-    "freshness": 14,
-    "detail": 25,
-    "breadth": 10,
-    "history": 21
+    "history": 15
    },
    "scoredOn": [
     "freshness",
@@ -790,13 +670,13 @@
    "name": "Long Beach",
    "country": "US",
    "dataSource": "City of Long Beach",
-   "incidentsInProbe": 3399,
-   "windowDays": 174,
+   "incidentsInProbe": 3402,
+   "windowDays": 173,
    "publishes": true,
    "categoryCount": 10,
    "hasCoordinates": true,
    "hasIncidentTime": false,
-   "latestIncident": "2026-08-12",
+   "latestIncident": "2026-08-19",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
    "lagDays": 0,
@@ -816,12 +696,42 @@
    ]
   },
   {
+   "id": "toronto",
+   "name": "Toronto",
+   "country": "CA",
+   "dataSource": "Toronto Police Service",
+   "incidentsInProbe": 5198,
+   "windowDays": 302,
+   "publishes": true,
+   "categoryCount": 5,
+   "hasCoordinates": true,
+   "hasIncidentTime": true,
+   "latestIncident": "2026-06-30",
+   "latestIncidentPrecision": "day",
+   "freshnessMeasured": true,
+   "lagDays": 50,
+   "latestIncidentMonth": null,
+   "total": 68,
+   "parts": {
+    "freshness": 12,
+    "detail": 25,
+    "breadth": 10,
+    "history": 21
+   },
+   "scoredOn": [
+    "freshness",
+    "detail",
+    "breadth",
+    "history"
+   ]
+  },
+  {
    "id": "sandiego",
    "name": "San Diego",
    "country": "US",
    "dataSource": "City of San Diego",
-   "incidentsInProbe": 9050,
-   "windowDays": 210,
+   "incidentsInProbe": 9407,
+   "windowDays": 217,
    "publishes": true,
    "categoryCount": 11,
    "hasCoordinates": true,
@@ -831,11 +741,11 @@
    "freshnessMeasured": false,
    "lagDays": null,
    "latestIncidentMonth": "2026-08",
-   "total": 63,
+   "total": 64,
    "parts": {
     "detail": 10,
     "breadth": 23,
-    "history": 14
+    "history": 15
    },
    "scoredOn": [
     "detail",
@@ -848,16 +758,16 @@
    "name": "Tucson",
    "country": "US",
    "dataSource": "City of Tucson",
-   "incidentsInProbe": 895,
-   "windowDays": 40,
+   "incidentsInProbe": 880,
+   "windowDays": 41,
    "publishes": true,
-   "categoryCount": 14,
+   "categoryCount": 15,
    "hasCoordinates": true,
    "hasIncidentTime": false,
-   "latestIncident": "2026-08-09",
+   "latestIncident": "2026-08-17",
    "latestIncidentPrecision": "day",
    "freshnessMeasured": true,
-   "lagDays": 3,
+   "lagDays": 2,
    "latestIncidentMonth": null,
    "total": 63,
    "parts": {
@@ -902,7 +812,23 @@
    ]
   }
  ],
- "notPublishing": [],
+ "notPublishing": [
+  {
+   "id": "chicago",
+   "name": "Chicago",
+   "country": "US"
+  },
+  {
+   "id": "dc",
+   "name": "Washington DC",
+   "country": "US"
+  },
+  {
+   "id": "dallas",
+   "name": "Dallas",
+   "country": "US"
+  }
+ ],
  "unmeasurable": [],
  "ukForces": {
   "generatedFrom": "2026-06",
@@ -1025,13 +951,13 @@
     "force": "humberside",
     "name": "Humberside Police",
     "verdict": "supplies",
-    "maxInSample": 639
+    "maxInSample": 879
    },
    {
     "force": "kent",
     "name": "Kent Police",
     "verdict": "supplies",
-    "maxInSample": 460
+    "maxInSample": 317
    },
    {
     "force": "lancashire",
@@ -1163,7 +1089,7 @@
     "force": "west-midlands",
     "name": "West Midlands Police",
     "verdict": "supplies",
-    "maxInSample": 1096
+    "maxInSample": 935
    },
    {
     "force": "west-yorkshire",
@@ -1175,7 +1101,7 @@
     "force": "wiltshire",
     "name": "Wiltshire Police",
     "verdict": "supplies",
-    "maxInSample": 486
+    "maxInSample": 409
    }
   ]
  }
