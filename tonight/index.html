@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tonight — the last 24 hours of police activity, live — SafeRoute</title>
+<meta name="description" content="See the last 24 hours of police-responded calls on a live map — filtered to real incidents, from official dispatch data. Live in New Orleans; San Francisco next. No alerts, no panic — just what tonight looks like.">
+<link rel="canonical" href="https://safe-route.app/tonight/">
+<meta name="apple-itunes-app" content="app-id=6768244297">
+<meta property="og:title" content="Tonight — the last 24 hours, live — SafeRoute">
+<meta property="og:description" content="The last 24 hours of police-responded calls on a live map, from official dispatch data. No alerts, no panic — just what tonight looks like.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://safe-route.app/tonight/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+  /* This page lives at night. Same type system as the rest of the site, but
+     the dark palette is the point — it is the web's version of the app's
+     Tonight card, not a themed variant of the cream pages. */
+  :root{
+    --night:#0E1116; --night-2:#161A21; --night-3:#1F242D;
+    --ink:#F5F1E8; --ink-2:#B8B2A8; --ink-3:#8C8580;
+    --teal:#3B7E76; --ember:#FF5A4D; --ember-soft:#D98C8C;
+    --line:#2A2F38;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --sans:'IBM Plex Sans',-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:var(--sans);color:var(--ink);background:var(--night);-webkit-font-smoothing:antialiased}
+  a{color:var(--ink)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,72px)}
+
+  header{border-bottom:1px solid var(--line);background:rgba(14,17,22,.92);backdrop-filter:blur(10px);position:sticky;top:0;z-index:1000}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+  .brand .shield{width:20px;height:24px;flex:none}
+  .brand b{font-family:var(--mono);font-size:16px;letter-spacing:.16em;font-weight:600}
+  .nav-right{display:flex;align-items:center;gap:16px}
+  .nav-link{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;color:var(--ink-2);white-space:nowrap}
+  .nav-link:hover{color:var(--ink);text-decoration:underline}
+  .nav-link.on{color:var(--ink);border-bottom:2px solid var(--ember)}
+  .nav-cta{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;background:var(--ink);color:var(--night);padding:9px 14px;border-radius:2px}
+  .nav-cta:hover{background:var(--ember-soft)}
+  @media(max-width:700px){.nav-link.hide-sm{display:none}}
+
+  .head{padding:clamp(30px,5vw,56px) 0 18px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  .eyebrow .live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ember);margin-right:7px;animation:heartbeat 2.4s ease-in-out infinite}
+  @keyframes heartbeat{0%,100%{opacity:1}50%{opacity:.35}}
+  h1{font-size:clamp(30px,4.8vw,48px);line-height:1.04;letter-spacing:-.02em;margin:12px 0 10px}
+  .lead{font-size:clamp(16px,2vw,18.5px);color:var(--ink-2);max-width:62ch;margin:0;line-height:1.6}
+
+  .citycard{border:1px solid var(--line);background:var(--night-2);margin:26px 0 14px;overflow:hidden;border-radius:6px}
+  .citybar{display:flex;align-items:baseline;justify-content:space-between;gap:14px;padding:16px 20px;flex-wrap:wrap}
+  .cityname{font-size:20px;font-weight:600;letter-spacing:-.01em}
+  .citycount{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+  .citycount b{color:var(--ember-soft);font-size:15px}
+  #map{width:100%;height:min(62vh,560px);background:var(--night-3)}
+  .cityfoot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+
+  h2{font-size:22px;margin:36px 0 10px}
+  p{color:var(--ink-2);line-height:1.65;margin:0 0 14px}
+  .coming{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
+  .coming span{font-family:var(--mono);font-size:11px;letter-spacing:.05em;border:1px solid var(--line);color:var(--ink-2);padding:7px 12px;border-radius:999px}
+  .coming span b{color:var(--ink)}
+
+  .cta-block{border:1px solid var(--line);background:var(--night-2);border-radius:6px;padding:24px;margin:34px 0}
+  .cta-block h2{margin:0 0 8px}
+  .btn{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;background:var(--ink);color:var(--night);padding:12px 18px;border-radius:2px}
+  .btn:hover{background:var(--ember-soft)}
+
+  footer{border-top:1px solid var(--line);margin-top:48px;padding:22px 0 34px}
+  footer p{font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.6}
+  footer a{color:var(--ink-2)}
+
+  .leaflet-container{background:var(--night-3);font:inherit}
+  .recent-dot{animation:rpulse 2.6s ease-in-out infinite}
+  @keyframes rpulse{0%,100%{stroke-opacity:.95}50%{stroke-opacity:.3}}
+  .leaflet-tooltip.tt{background:var(--night-2);border:1px solid var(--line);color:var(--ink);font-family:var(--sans);font-size:12.5px;border-radius:4px;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+  .leaflet-tooltip.tt::before{display:none}
+</style>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a7d4a481ed8b4512a43225404078e7ab"}'></script>
+</head>
+<body>
+
+<header><div class="wrap"><div class="nav">
+  <a class="brand" href="/">
+    <svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#3B7E76"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#0E1116" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <b>SAFEROUTE</b>
+  </a>
+  <div class="nav-right">
+    <a class="nav-link" href="/safety/">Safety index</a>
+    <a class="nav-link" href="/check/">Check an address</a>
+    <a class="nav-link on" href="/tonight/">Tonight</a>
+    <a class="nav-link hide-sm" href="/transparency/">Transparency</a>
+    <a class="nav-cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-tonight&mt=8">Get the app</a>
+  </div>
+</div></div></header>
+
+<main><div class="wrap">
+  <div class="head">
+    <p class="eyebrow"><span class="live"></span>LIVE DISPATCH DATA · LAST 24 HOURS</p>
+    <h1>What tonight actually looks like.</h1>
+    <p class="lead">For cities whose police publish dispatch data fast enough, SafeRoute maps the
+    last 24 hours of calls officers responded to — filtered to real incidents, from official
+    sources. No alerts. No user reports. No panic. Just the night, as it is.</p>
+  </div>
+
+  <div class="citycard">
+    <div class="citybar">
+      <span class="cityname">New Orleans</span>
+      <span class="citycount" id="count">Loading the last 24 hours…</span>
+    </div>
+    <div id="map" role="img" aria-label="Map of New Orleans showing calls police responded to in the last 24 hours"></div>
+    <div class="cityfoot">
+      <span id="srcline">OPCD CALLS FOR SERVICE VIA DATA.NOLA.GOV</span>
+      <span id="cadence"></span>
+    </div>
+  </div>
+
+  <h2>Where this is going next</h2>
+  <p>A city joins when its feed passes three tests, measured live — fresh enough to mean
+  "tonight", geolocated, and classifiable so dispatch noise (alarms, traffic stops, welfare
+  checks) can be filtered out rather than dressed up as crime.</p>
+  <div class="coming">
+    <span><b>San Francisco</b> — near real-time · in progress</span>
+    <span><b>Seattle</b> — past-week tier · queued</span>
+    <span>Dallas, Kansas City &amp; others — waiting on their feeds</span>
+  </div>
+
+  <h2>How it works — and what it deliberately isn't</h2>
+  <p>The dots are 911 calls police responded to, from each city's official dispatch feed, kept
+  only when the call type describes an actual offence — a burglary call survives, a noise
+  complaint doesn't. Locations are block-level as published by the source. The layer never touches
+  the <a href="/safety/">safety index</a>, which stays on report-grade data: dispatch tells you
+  about tonight, reports tell you about an area. Mixing them would corrupt both.</p>
+  <p>And it is not an alert system. No push notifications, no "danger near you", no user-submitted
+  sightings. Apps built on alarm have their place; this isn't one of them. SafeRoute's job is the
+  walk home — the same data, in a register you can actually use to make a decision.</p>
+
+  <div class="cta-block">
+    <h2>The same night, in your pocket</h2>
+    <p>The SafeRoute app shows this view for wherever you're standing — plus the safety index,
+    lit-street routing, and safe places open now. Free, no account.</p>
+    <a class="btn" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-tonight&mt=8">Get SafeRoute on the App Store</a>
+  </div>
+</div></main>
+
+<footer><div class="wrap">
+  <p><strong>Sources.</strong> Official municipal dispatch data, fetched live; currently OPCD Calls for Service via <a href="https://data.nola.gov">data.nola.gov</a>. Calls are filtered to offence-describing types; locations are anonymised to block level by the source. This page shows police workload, not verified crime — informational only.</p>
+  <p><a href="/safety/">Neighbourhood safety index</a> · <a href="/check/">Check any address</a> · <a href="/transparency/">Crime-data transparency index</a> · <a href="/">SafeRoute</a></p>
+</div></footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const API='https://saferoute-backend-w5yf.onrender.com';
+const CITY={lat:29.9540,lng:-90.0700,zoom:13};
+const map=L.map('map',{zoomControl:true,attributionControl:true,scrollWheelZoom:false}).setView([CITY.lat,CITY.lng],CITY.zoom);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+  subdomains:'abcd',maxZoom:19,detectRetina:true,
+  attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>',
+}).addTo(map);
+
+const catName=c=>({'violent-crime':'Violence','other-theft':'Theft','vehicle-crime':'Vehicle crime','robbery':'Robbery','burglary':'Burglary','sexual-offences':'Sexual offence','possession-of-weapons':'Weapons','criminal-damage-arson':'Damage / arson','drugs':'Drugs','shoplifting':'Shoplifting','public-order':'Public order','other-crime':'Other'}[c]||c);
+const ago=m=>m==null?'':m<90?`${m} min ago`:`${Math.round(m/60)} h ago`;
+
+fetch(`${API}/public/recent?lat=${CITY.lat}&lng=${CITY.lng}`)
+  .then(r=>r.ok?r.json():null)
+  .then(d=>{
+    const count=document.getElementById('count');
+    if(!d||!d.supported){ count.textContent='Unavailable right now.'; return; }
+    if(d.available===false){
+      // No-answer is not a quiet night — say we couldn't load, never imply calm.
+      count.textContent="Couldn't load the last 24 hours right now.";
+      return;
+    }
+    count.innerHTML=`<b>${d.count}</b> ${d.label} · last ${d.windowHours} hrs`;
+    document.getElementById('cadence').textContent=((d.cadence||'')+(d.freshestMinutesAgo!=null?` · FRESHEST ${ago(d.freshestMinutesAgo).toUpperCase()}`:'')).toUpperCase();
+    (d.incidents||[]).forEach(i=>{
+      L.circleMarker([i.lat,i.lng],{radius:5,color:'#FF5A4D',weight:1.5,fillColor:'#D98C8C',fillOpacity:.85,className:'recent-dot'})
+        .bindTooltip(`<b>${i.type||catName(i.cat)}</b><br>${catName(i.cat)} · ${ago(i.minutesAgo)}`,{direction:'top',offset:[0,-6],className:'tt'})
+        .addTo(map);
+    });
+  })
+  .catch(()=>{ document.getElementById('count').textContent="Couldn't load the last 24 hours right now."; });
+</script>
+</body>
+</html>

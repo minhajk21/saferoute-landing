@@ -323,6 +323,20 @@ const CITIES = {
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// City hubs show two facts sourced from the transparency dataset (D): the
+// feed's own transparency score, and which region id the hub maps to. Guarded:
+// a missing dataset just hides the chips, it never fails a 1,222-page build.
+const SLUG_TO_REGION = { 'new-york': 'nyc', london: 'uk', chicago: 'chicago', la: 'la',
+  sf: 'sf', seattle: 'seattle', toronto: 'toronto', dc: 'dc', boston: 'boston', philly: 'philly' };
+// Region ids with a live tonight layer — drives the hub strip. NOLA is live but
+// has no SEO hub; SF joins this list the day its layer ships.
+const TONIGHT_REGIONS = new Set(['neworleans']);
+let TRANSPARENCY = null;
+try {
+  const t = JSON.parse(readFileSync(join(ROOT, 'tools', 'data', 'transparency-index.json')));
+  TRANSPARENCY = Object.fromEntries(t.regions.map(r => [r.id, r]));
+} catch { /* chips simply don't render */ }
+
 const monthName = ym => {
   const [y, m] = String(ym).split('-').map(Number);
   return new Date(Date.UTC(y, m - 1, 1)).toLocaleString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -575,10 +589,19 @@ ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script
 ${analytics()}</head>
 <body>`;
 
+// Shared header: wordmark + the five-destination site nav; breadcrumbs move to
+// their own slim bar below so navigation and orientation stop competing for
+// the same row.
 const chrome = crumbs => `<header class="site"><div class="wrap">
 <a class="wordmark" href="/"><svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>SAFEROUTE</span></a>
-<nav class="crumbs">${crumbs}</nav>
-</div></header><main><div class="wrap">`;
+<nav class="site-nav" aria-label="Site">
+<a href="/safety/" class="on">Safety index</a>
+<a href="/check/">Check an address</a>
+<a href="/tonight/">Tonight</a>
+<a class="hide-sm" href="/transparency/">Transparency</a>
+<a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-safety-pages&mt=8">Get the app</a>
+</nav>
+</div></header><div class="crumbbar"><div class="wrap"><nav class="crumbs">${crumbs}</nav></div></div><main><div class="wrap">`;
 
 const footer = (cfg, a, citySlug, windowDays) => `</div></main><footer class="site"><div class="wrap">
 <p><strong>Sources.</strong> ${cfg.sources(!a ? ''
@@ -679,6 +702,7 @@ function renderCity(citySlug) {
     <div class="gaugebar"><i style="width:${a.safetyScore}%;background:${bandColor[a.band]}"></i></div>
   </div>
 </div>
+<p class="recency-chip">DATA THROUGH ${monthName(a.crimeDate).toUpperCase()}${windowPhrase(windowDays) ? ` · ${windowPhrase(windowDays).replace(/^the month$/, '1 month').replace(/^the /, '').toUpperCase()} OF DATA` : ''}</p>
 <p style="font-size:14px;color:var(--ink-3);margin-top:-6px">The 0–100 scale is calibrated to ${esc(cfg.name)} — a typical ${esc(cfg.name)} ${cfg.areaWord} sits near ${median}. It ranks ${esc(a.name)} against other ${cfg.areaWordPlural} here, and cannot be read against a score in another city.</p>
 
 ${p.mix ? `<p>${p.mix}</p>` : ''}
@@ -746,6 +770,21 @@ ${footer(cfg, a, citySlug, windowDays)}`;
 </div>
 
 <p class="notice">${cfg.hub.notice(median)}</p>
+${(() => {
+  // D: the city's data, described in chips — feed recency, window, and the
+  // transparency score for the city's own feed, linking to the index.
+  const region = TRANSPARENCY?.[SLUG_TO_REGION[citySlug]];
+  const newestYm = [...areas].map(a => a.crimeDate).filter(Boolean).sort().pop();
+  const chips = [];
+  if (newestYm) chips.push(`Feed current to ${monthName(newestYm)}`);
+  const span = windowPhrase(windowDays);
+  if (span) chips.push(`covers ${span.replace(/^the month$/, '1 month').replace(/^the /, '')}`);
+  if (region?.categoryCount) chips.push(`${region.categoryCount} offence categories`);
+  if (region?.total != null) chips.push(`<a href="/transparency/">data transparency ${region.total}/100</a>`);
+  if (TONIGHT_REGIONS.has(SLUG_TO_REGION[citySlug]))
+    chips.push(`<a href="/tonight/" class="tonight">⏺ last 24 hrs live</a>`);
+  return chips.length ? `<div class="citychips">${chips.map(c => `<span>${c}</span>`).join('')}</div>` : '';
+})()}
 
 ${tables}
 
@@ -842,6 +881,9 @@ ${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug, rendered[0].
     // belongs in the one sitemap. Its lastmod comes from the dataset's own
     // generation date rather than the crime feeds', because the page is about
     // when we last MEASURED the feeds, not when they last published.
+    ...(existsSync(join(ROOT, 'tonight', 'index.html'))
+      ? [{ loc: `${SITE}/tonight/`, pri: '0.8', mod: lastmodOf(siteDate) }]
+      : []),
     ...(existsSync(join(ROOT, 'transparency', 'index.html'))
       ? [{ loc: `${SITE}/transparency/`, pri: '0.8',
            mod: JSON.parse(readFileSync(join(ROOT, 'tools', 'data', 'transparency-index.json'))).generatedAt }]

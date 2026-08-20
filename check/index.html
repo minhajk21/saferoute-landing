@@ -127,6 +127,8 @@
       </a>
       <div class="nav-right">
         <a class="nav-link" href="/safety/">Safety index</a>
+      <a class="nav-link" href="/tonight/">Tonight</a>
+      <a class="nav-link" href="/transparency/">Transparency</a>
         <a class="nav-cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-check&mt=8">Get the app</a>
       </div>
     </nav>
@@ -447,6 +449,26 @@ async function addPubLink(lat,lng,reqId){
 // ── utils ──
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function fmt(n){ return Number(n||0).toLocaleString('en-US'); }
+// Homepage hero hands a query over as '#q=…' — run it through the normal
+// search path so the hero needs no second search implementation.
+(function(){
+  const m = location.hash.match(/^#q=(.+)/);
+  if(!m) return;
+  const text = decodeURIComponent(m[1]);
+  history.replaceState(null, '', location.pathname + location.search);
+  const input = document.getElementById('q');
+  if(input){ input.value = text; }
+  // Geocode via the same backend search the autocomplete uses, then take the
+  // top result — the hero promised an answer, not a dropdown to re-choose from.
+  fetch(`${API}/public/search?q=${encodeURIComponent(text)}`)
+    .then(r => r.ok ? r.json() : null)
+    .then(j => {
+      const top = j && (j.results || j)[0];
+      if(top && top.lat != null){ pick(top); }
+      else if(input){ input.dispatchEvent(new Event('input', {bubbles:true})); }
+    })
+    .catch(()=>{ if(input) input.dispatchEvent(new Event('input', {bubbles:true})); });
+})();
 function monthName(ym){ const [y,m]=String(ym).split('-').map(Number); return new Date(Date.UTC(y,(m||1)-1,1)).toLocaleString('en-US',{month:'long',year:'numeric',timeZone:'UTC'}); }
 // How long a period the incident count covers. Feeds differ enormously — a
 // rolling month in the UK, year-to-date in New York — so a bare count is not
