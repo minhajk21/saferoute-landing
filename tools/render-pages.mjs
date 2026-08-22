@@ -330,7 +330,7 @@ const SLUG_TO_REGION = { 'new-york': 'nyc', london: 'uk', chicago: 'chicago', la
   sf: 'sf', seattle: 'seattle', toronto: 'toronto', dc: 'dc', boston: 'boston', philly: 'philly' };
 // Region ids with a live tonight layer — drives the hub strip. NOLA is live but
 // has no SEO hub; SF joins this list the day its layer ships.
-const TONIGHT_REGIONS = new Set(['neworleans']);
+const TONIGHT_REGIONS = new Set(['neworleans', 'sf']);   // sf added 2026-08-22 (near real-time dispatch)
 let TRANSPARENCY = null;
 try {
   const t = JSON.parse(readFileSync(join(ROOT, 'tools', 'data', 'transparency-index.json')));

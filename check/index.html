@@ -226,9 +226,16 @@ async function fetchCameras(lat,lng,reqId){
     if(!d.cameras || !d.cameras.length) return;
     if(slot) slot.innerHTML=`<div class="meta" style="margin-top:6px"><span style="display:inline-block;width:9px;height:9px;border-radius:2px;border:1.5px solid #2E6B8A;background:#fff;margin-right:6px"></span><b>Street cameras:</b> ${fmt(d.count)} nearby — click a pin for the latest still <span style="color:var(--ink-3)">(${esc(d.attribution)})</span></div>`;
     const ico=L.divIcon({className:'cam-pin',html:'📷',iconSize:[18,18],iconAnchor:[9,9],popupAnchor:[0,-8]});
+    // London's cameras carry ~10s MP4 clips (video:true per camera) → a
+    // muted looping player. Elsewhere a still — and where the upstream
+    // refreshes at second scale (NYC), the popupopen handler below re-polls
+    // the still every few seconds, which reads as slow-motion live.
+    const media=c=> c.video
+      ? `<video class="campop-media" width="272" height="222" style="object-fit:cover;border-radius:8px;margin-top:6px;background:#111;display:block" autoplay muted loop playsinline poster="${API}/public/camera-image?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}" src="${API}/public/camera-video?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}"></video>`
+      : `<img class="campop-media" data-refresh="1" src="${API}/public/camera-image?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}" width="272" height="222" style="object-fit:cover;border-radius:8px;margin-top:6px;background:#e8e4da" alt="Latest still from ${esc(c.name)}">`;
     const pins=d.cameras.map(c=>
       L.marker([c.lat,c.lng],{icon:ico,title:c.name,keyboard:false})
-       .bindPopup(`<div class="campop"><b>${esc(c.name)}</b><br><img src="${API}/public/camera-image?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}" width="272" height="222" style="object-fit:cover;border-radius:8px;margin-top:6px;background:#e8e4da" alt="Latest still from ${esc(c.name)}"><div class="src" style="margin-top:4px">Latest still · ${esc(d.cadence||'refreshes about every 2 minutes')} · ${esc(d.attribution)}</div></div>`,{maxWidth:296}));
+       .bindPopup(`<div class="campop"><b>${esc(c.name)}</b><br>${media(c)}<div class="src" style="margin-top:4px">${c.video?'Live clip':'Latest still'} · ${esc(d.cadence||'refreshes about every 2 minutes')} · ${esc(d.attribution)}</div></div>`,{maxWidth:296}));
     camLayer=L.layerGroup(pins).addTo(map);
   }catch{ /* overlay only — never break the main lookup */ }
 }
@@ -253,10 +260,20 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 if(window.ResizeObserver){ new ResizeObserver(()=>map.invalidateSize()).observe(document.getElementById('map')); }
 setTimeout(()=>map.invalidateSize(), 200);
 let incLayer=null, ringLayer=null, ctrLayer=null, recentLayer=null, camLayer=null;
+// Re-poll fast-refreshing stills (NYC) while their popup is open.
+let camRefreshTmr=null;
+map && null; // (map defined below; handlers attached after init)
 
 // Auto-update on pan/zoom (like the app): when the user moves the map, re-fetch
 // the area under the new center and redraw. A flag suppresses our own animated
 // flyTo, and we ignore moves smaller than ~250 m so a pure zoom doesn't refetch.
+map.on('popupopen', e => {
+  const img = e.popup.getElement()?.querySelector('img.campop-media[data-refresh]');
+  if(!img) return;
+  const base = img.src;
+  camRefreshTmr = setInterval(()=>{ img.src = base + (base.includes('?')?'&':'?') + 't=' + Date.now(); }, 5000);
+});
+map.on('popupclose', () => { if(camRefreshTmr){ clearInterval(camRefreshTmr); camRefreshTmr=null; } });
 let suppressMove=false, panTmr=null, lastCenter=null, lastData=null;
 map.on('moveend', () => {
   if(suppressMove){ suppressMove=false; return; }
