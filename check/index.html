@@ -109,6 +109,8 @@
   .leaflet-popup-content-wrapper{border-radius:8px}
 
 .recent-dot{animation:rpulse 2.6s ease-in-out infinite}
+.cam-pin{background:#fff;border:1.5px solid #2E6B8A;border-radius:5px;display:grid;place-items:center;font-size:10px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.campop img{display:block}
 @keyframes rpulse{0%,100%{stroke-opacity:.9}50%{stroke-opacity:.25}}
 </style>
 <!-- Cloudflare Web Analytics — cookieless, no PII, no consent banner needed.
@@ -201,6 +203,35 @@ async function fetchRecent(lat,lng,reqId){
     recentLayer=L.layerGroup(dots).addTo(map);
   }catch{ /* overlay only — never break the main lookup */ }
 }
+
+// ── Street cameras: public traffic-cam stills, where a city publishes them ──
+// Served by /public/cameras (London/TfL at launch, chosen on measured ward
+// coverage — 58% of our Inner London wards are within 500m of a JamCam and
+// stills run ~2 minutes old). Camera pins; clicking one loads the PROXIED
+// still (/public/camera-image) into the popup — the image only downloads when
+// a popup opens. Attribution comes with the payload: TfL's licence requires
+// "Powered by TfL Open Data" wherever the imagery is shown.
+async function fetchCameras(lat,lng,reqId){
+  if(camLayer){ map.removeLayer(camLayer); camLayer=null; }
+  const slot=document.getElementById('cams'); if(slot) slot.innerHTML='';
+  try{
+    const r=await fetch(`${API}/public/cameras?lat=${lat}&lng=${lng}`);
+    if(!r.ok) return;                       // quietly absent — the layer is a bonus
+    const d=await r.json();
+    if(reqId!==lastReqId || !d.supported) return;
+    if(d.available===false){
+      if(slot) slot.innerHTML=`<p class="src" style="margin-top:6px">Street cameras: couldn't load right now.</p>`;
+      return;
+    }
+    if(!d.cameras || !d.cameras.length) return;
+    if(slot) slot.innerHTML=`<div class="meta" style="margin-top:6px"><span style="display:inline-block;width:9px;height:9px;border-radius:2px;border:1.5px solid #2E6B8A;background:#fff;margin-right:6px"></span><b>Street cameras:</b> ${fmt(d.count)} nearby — click a pin for the latest still <span style="color:var(--ink-3)">(${esc(d.attribution)})</span></div>`;
+    const ico=L.divIcon({className:'cam-pin',html:'📷',iconSize:[18,18],iconAnchor:[9,9],popupAnchor:[0,-8]});
+    const pins=d.cameras.map(c=>
+      L.marker([c.lat,c.lng],{icon:ico,title:c.name,keyboard:false})
+       .bindPopup(`<div class="campop"><b>${esc(c.name)}</b><br><img src="${API}/public/camera-image?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}" width="272" height="222" style="object-fit:cover;border-radius:8px;margin-top:6px;background:#e8e4da" alt="Latest still from ${esc(c.name)}"><div class="src" style="margin-top:4px">Latest still · ${esc(d.cadence||'refreshes about every 2 minutes')} · ${esc(d.attribution)}</div></div>`,{maxWidth:296}));
+    camLayer=L.layerGroup(pins).addTo(map);
+  }catch{ /* overlay only — never break the main lookup */ }
+}
 // Backend timeOfDay is [wkDay, wkEve, wkNight, wkndDay, wkndEve, wkndNight].
 // The old flat label row mislabelled bucket 0 and repeated "Wknd day"; it is
 // now two clearly-headed weekday/weekend groups of Day / Eve / Night.
@@ -221,7 +252,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 // invalidateSize once layout settles fixes a clipped/greyed map.
 if(window.ResizeObserver){ new ResizeObserver(()=>map.invalidateSize()).observe(document.getElementById('map')); }
 setTimeout(()=>map.invalidateSize(), 200);
-let incLayer=null, ringLayer=null, ctrLayer=null, recentLayer=null;
+let incLayer=null, ringLayer=null, ctrLayer=null, recentLayer=null, camLayer=null;
 
 // Auto-update on pan/zoom (like the app): when the user moves the map, re-fetch
 // the area under the new center and redraw. A flag suppresses our own animated
@@ -309,6 +340,7 @@ async function lookup(lat, lng, name, address){
     render(d, name, address);
     if(d.covered){ drawHex(d); addPubLink(lat, lng, reqId); }
     fetchRecent(lat, lng, reqId);
+    fetchCameras(lat, lng, reqId);
   }catch{
     if(reqId===lastReqId) panel.innerHTML=`<p class="note">Something went wrong looking that up. Please try again.</p>`;
   }
@@ -342,6 +374,7 @@ function render(d, name, address){
     <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported ${esc(d.reportedTo||'to police')} within 1&nbsp;km${span?` over ${span}${d.crimeDate?` to ${monthName(d.crimeDate)}`:''}`:''} — higher index = safer. ${d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
     <div id="pub"></div>
     <div id="recent"></div>
+    <div id="cams"></div>
     <div class="divider"></div>
     ${cats.length?`<div><p class="h3">What's reported here</p>${cats.map(c=>`<div class="cat"><span class="bar" style="width:${Math.round(c.count/maxCat*46)+8}px"></span><span class="lbl">${catName(c.category)}</span><span class="n">${fmt(c.count)}</span></div>`).join('')}</div>`:''}
     ${tod?`<div class="divider"></div><div><p class="h3">When it happens</p><div class="todwrap">${[['Weekday',tod.slice(0,3)],['Weekend',tod.slice(3,6)]].map(g=>`<div class="todgrp"><div class="tod">${g[1].map(v=>`<div class="b" style="height:${Math.max(3,Math.round(v/maxTod*50))}px"></div>`).join('')}</div><div class="tod-x">${TOD3.map(t=>`<span>${t}</span>`).join('')}</div><div class="todlbl">${g[0]}</div></div>`).join('')}</div><p class="tiny">Severity-weighted share of reported incidents by time of day.</p></div>`:''}
@@ -372,6 +405,7 @@ async function refetchAt(lat, lng){
     render(d, name, '');
     if(d.covered){ drawHex(d); addPubLink(lat, lng, reqId); }
     fetchRecent(lat, lng, reqId);
+    fetchCameras(lat, lng, reqId);
   }catch{}
 }
 
