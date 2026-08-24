@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0A0D12">
 <title>Tonight — the last 24 hours of police activity, live — SafeRoute</title>
 <meta name="description" content="See the last 24 hours of police-responded calls on a live map — filtered to real incidents, from official dispatch data. Live in New Orleans; San Francisco next. No alerts, no panic — just what tonight looks like.">
 <link rel="canonical" href="https://safe-route.app/tonight/">
@@ -20,12 +21,12 @@
      the dark palette is the point — it is the web's version of the app's
      Tonight card, not a themed variant of the cream pages. */
   :root{
-    --night:#0E1116; --night-2:#161A21; --night-3:#1F242D;
-    --ink:#F5F1E8; --ink-2:#B8B2A8; --ink-3:#8C8580;
-    --teal:#3B7E76; --ember:#FF5A4D; --ember-soft:#D98C8C;
-    --line:#2A2F38;
-    --mono:'IBM Plex Mono',ui-monospace,monospace;
-    --sans:'IBM Plex Sans',-apple-system,sans-serif;
+    --night:#0A0D12; --night-2:#141B24; --night-3:#1B2531;
+    --ink:#F3F7FA; --ink-2:#A8B6C4; --ink-3:#6E7E90;
+    --teal:#3FD9C0; --ember:#FF5A4D; --ember-soft:#FF8A7D;
+    --line:#212C39; --line-2:#2C3947;
+    --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Inter,system-ui,sans-serif;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
@@ -33,27 +34,27 @@
   a{color:var(--ink)}
   .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,72px)}
 
-  header{border-bottom:1px solid var(--line);background:rgba(14,17,22,.92);backdrop-filter:blur(10px);position:sticky;top:0;z-index:1000}
+  header{border-bottom:1px solid var(--line);background:rgba(10,13,18,.86);backdrop-filter:saturate(160%) blur(14px);position:sticky;top:0;z-index:1000}
   .nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
   .brand .shield{width:20px;height:24px;flex:none}
   .brand b{font-family:var(--mono);font-size:16px;letter-spacing:.16em;font-weight:600}
   .nav-right{display:flex;align-items:center;gap:16px}
   .nav-link{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;color:var(--ink-2);white-space:nowrap}
-  .nav-link:hover{color:var(--ink);text-decoration:underline}
+  .nav-link:hover{color:var(--teal);text-decoration:none}
   .nav-link.on{color:var(--ink);border-bottom:2px solid var(--ember)}
-  .nav-cta{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;background:var(--ink);color:var(--night);padding:9px 14px;border-radius:2px}
-  .nav-cta:hover{background:var(--ember-soft)}
+  .nav-cta{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;background:var(--teal);color:#04231E;padding:9px 14px;border-radius:8px}
+  .nav-cta:hover{background:#5CE8D2}
   @media(max-width:700px){.nav-link.hide-sm{display:none}}
 
   .head{padding:clamp(30px,5vw,56px) 0 18px}
-  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--ember)}
   .eyebrow .live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ember);margin-right:7px;animation:heartbeat 2.4s ease-in-out infinite}
   @keyframes heartbeat{0%,100%{opacity:1}50%{opacity:.35}}
   h1{font-size:clamp(30px,4.8vw,48px);line-height:1.04;letter-spacing:-.02em;margin:12px 0 10px}
   .lead{font-size:clamp(16px,2vw,18.5px);color:var(--ink-2);max-width:62ch;margin:0;line-height:1.6}
 
-  .citycard{border:1px solid var(--line);background:var(--night-2);margin:26px 0 14px;overflow:hidden;border-radius:6px}
+  .citycard{border:1px solid var(--line);background:var(--night-2);margin:26px 0 14px;overflow:hidden;border-radius:16px}
   .citybar{display:flex;align-items:baseline;justify-content:space-between;gap:14px;padding:16px 20px;flex-wrap:wrap}
   .cityname{font-size:20px;font-weight:600;letter-spacing:-.01em}
   .citycount{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
@@ -64,12 +65,12 @@
   h2{font-size:22px;margin:36px 0 10px}
   p{color:var(--ink-2);line-height:1.65;margin:0 0 14px}
   .coming{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
-  .coming span{font-family:var(--mono);font-size:11px;letter-spacing:.05em;border:1px solid var(--line);color:var(--ink-2);padding:7px 12px;border-radius:999px}
+  .coming span{font-family:var(--mono);font-size:11px;letter-spacing:.05em;border:1px solid var(--line-2);color:var(--ink-2);padding:7px 12px;border-radius:999px}
   .coming span b{color:var(--ink)}
 
-  .cta-block{border:1px solid var(--line);background:var(--night-2);border-radius:6px;padding:24px;margin:34px 0}
+  .cta-block{border:1px solid var(--line);background:var(--night-2);border-radius:16px;padding:24px;margin:34px 0}
   .cta-block h2{margin:0 0 8px}
-  .btn{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;background:var(--ink);color:var(--night);padding:12px 18px;border-radius:2px}
+  .btn{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;background:var(--teal);color:#04231E;padding:12px 18px;border-radius:10px}
   .btn:hover{background:var(--ember-soft)}
 
   footer{border-top:1px solid var(--line);margin-top:48px;padding:22px 0 34px}
@@ -81,6 +82,18 @@
   @keyframes rpulse{0%,100%{stroke-opacity:.95}50%{stroke-opacity:.3}}
   .leaflet-tooltip.tt{background:var(--night-2);border:1px solid var(--line);color:var(--ink);font-family:var(--sans);font-size:12.5px;border-radius:4px;box-shadow:0 6px 18px rgba(0,0,0,.5)}
   .leaflet-tooltip.tt::before{display:none}
+
+  /* Leaflet's default chrome is light — restyle it for the night map. */
+  .leaflet-container{background:var(--night-3);font-family:var(--sans)}
+  .leaflet-bar a{background:#141B24;color:var(--ink);border-bottom-color:var(--line-2)}
+  .leaflet-bar a:hover{background:#1B2531;color:var(--teal)}
+  .leaflet-control-attribution{background:rgba(10,13,18,.8)!important;color:var(--ink-3);font-size:10px}
+  .leaflet-control-attribution a{color:var(--ink-2)}
+  .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#141B24;color:var(--ink);box-shadow:0 18px 40px rgba(0,0,0,.6)}
+  .leaflet-popup-content-wrapper{border-radius:10px;border:1px solid var(--line-2)}
+  .leaflet-popup-content{font-family:var(--sans);font-size:13.5px}
+  .leaflet-container a.leaflet-popup-close-button{color:var(--ink-3)}
+  .leaflet-container a.leaflet-popup-close-button:hover{color:var(--ink)}
 </style>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a7d4a481ed8b4512a43225404078e7ab"}'></script>
 </head>
@@ -88,7 +101,7 @@
 
 <header><div class="wrap"><div class="nav">
   <a class="brand" href="/">
-    <svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#3B7E76"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#0E1116" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#12433D"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#3FD9C0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <b>SAFEROUTE</b>
   </a>
   <div class="nav-right">
@@ -180,7 +193,7 @@ fetch(`${API}/public/recent?lat=${CITY.lat}&lng=${CITY.lng}`)
     count.innerHTML=`<b>${d.count}</b> ${d.label} · last ${d.windowHours} hrs`;
     document.getElementById('cadence').textContent=((d.cadence||'')+(d.freshestMinutesAgo!=null?` · FRESHEST ${ago(d.freshestMinutesAgo).toUpperCase()}`:'')).toUpperCase();
     (d.incidents||[]).forEach(i=>{
-      L.circleMarker([i.lat,i.lng],{radius:5,color:'#FF5A4D',weight:1.5,fillColor:'#D98C8C',fillOpacity:.85,className:'recent-dot'})
+      L.circleMarker([i.lat,i.lng],{radius:5,color:'#FF5A4D',weight:1.5,fillColor:'#FF8A7D',fillOpacity:.9,className:'recent-dot'})
         .bindTooltip(`<b>${i.type||catName(i.cat)}</b><br>${catName(i.cat)} · ${ago(i.minutesAgo)}`,{direction:'top',offset:[0,-6],className:'tt'})
         .addTo(map);
     });

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0A0D12">
 <title>Check any address — SafeRoute neighborhood safety</title>
 <meta name="description" content="Type any address, neighborhood or landmark and get its SafeRoute safety index (0–100) from official police crime data — a live crime map for anywhere SafeRoute covers.">
 <link rel="canonical" href="https://safe-route.app/check/">
@@ -13,13 +14,13 @@
 <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
   :root{
-    --cream:#F4F0E6; --cream-deep:#EAE3D0; --paper:#FBF9F2;
-    --ink:#052926; --ink-2:#3C514C; --ink-3:#717F7A;
-    --teal:#3B7E76; --teal-deep:#14564C;
-    --green:#2E8B40; --amber:#B0703C; --elevated:#9C5220; --red:#BC3B2E;
-    --line:#D6CDB8;
-    --mono:'IBM Plex Mono',ui-monospace,monospace;
-    --sans:'IBM Plex Sans',-apple-system,sans-serif;
+    --cream:#0A0D12; --cream-deep:#1B2531; --paper:#141B24;
+    --ink:#F3F7FA; --ink-2:#A8B6C4; --ink-3:#6E7E90;
+    --teal:#3FD9C0; --teal-deep:#3FD9C0;
+    --green:#43C46A; --amber:#E8A33D; --elevated:#E8763D; --red:#FF5A4D;
+    --line:#212C39; --line-2:#2C3947;
+    --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Inter,system-ui,sans-serif;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
@@ -27,20 +28,20 @@
   a{color:var(--teal-deep)}
   .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,72px)}
 
-  header{border-bottom:1px solid var(--line);background:var(--cream)}
+  header{border-bottom:1px solid var(--line);background:rgba(10,13,18,.86);backdrop-filter:saturate(160%) blur(14px);position:sticky;top:0;z-index:1300}
   .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
   .brand .shield{width:20px;height:24px;flex:none}
   .brand b{font-family:var(--mono);font-size:16px;letter-spacing:.16em;font-weight:600}
   .nav-right{display:flex;align-items:center;gap:16px}
-  .nav-link{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--ink);padding:9px 2px}
-  .nav-link:hover{color:var(--teal-deep);text-decoration:underline}
-  .nav-cta{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;background:var(--ink);color:var(--cream);padding:9px 16px;border:1px solid var(--ink)}
-  .nav-cta:hover{background:transparent;color:var(--ink)}
+  .nav-link{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--ink-2);padding:9px 2px}
+  .nav-link:hover{color:var(--teal);text-decoration:none}
+  .nav-cta{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;background:var(--teal);color:#04231E;padding:9px 16px;border:1px solid var(--teal);border-radius:8px}
+  .nav-cta:hover{background:#5CE8D2;border-color:#5CE8D2;color:#04231E}
   @media(max-width:640px){.nav-link{display:none}}
 
   .head{padding:clamp(28px,5vw,52px) 0 20px}
-  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--teal)}
   .eyebrow .slash{color:var(--teal)}
   h1{font-size:clamp(28px,4.5vw,44px);line-height:1.05;letter-spacing:-.02em;margin:12px 0 10px}
   .lead{font-size:clamp(16px,2vw,18px);color:var(--ink-2);max-width:60ch;margin:0}
@@ -48,12 +49,12 @@
   /* search */
   .search{position:relative;max-width:640px;margin:22px 0 0;z-index:1200}
   .search-row{display:flex;gap:10px}
-  #q{flex:1;font-family:var(--sans);font-size:17px;color:var(--ink);background:var(--paper);border:1px solid var(--line);padding:15px 16px;outline:none;-webkit-appearance:none;border-radius:0;transition:border-color .15s}
-  #q:focus{border-color:var(--teal)}
+  #q{flex:1;font-family:var(--sans);font-size:17px;color:var(--ink);background:var(--paper);border:1px solid var(--line-2);padding:15px 16px;outline:none;-webkit-appearance:none;border-radius:10px;transition:border-color .15s,box-shadow .15s}
+  #q:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(63,217,192,.14)}
   #q::placeholder{color:var(--ink-3)}
-  #geo{flex:none;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--cream-deep);border:1px solid var(--line);padding:0 15px;cursor:pointer;white-space:nowrap}
+  #geo{flex:none;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--cream-deep);border:1px solid var(--line-2);border-radius:10px;padding:0 15px;cursor:pointer;white-space:nowrap}
   #geo:hover{border-color:var(--teal)}
-  #ac{list-style:none;margin:0;padding:0;position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:1200;background:var(--paper);border:1px solid var(--line);max-height:340px;overflow:auto;box-shadow:0 14px 32px rgba(5,41,38,.16)}
+  #ac{list-style:none;margin:0;padding:0;position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:1200;background:var(--paper);border:1px solid var(--line);max-height:340px;overflow:auto;box-shadow:0 18px 40px rgba(0,0,0,.6);border-radius:10px}
   #ac:empty{display:none}
   #ac li a{display:flex;flex-direction:column;gap:2px;padding:11px 16px;text-decoration:none;color:var(--ink);cursor:pointer}
   #ac li a:hover,#ac li a.on{background:var(--cream-deep)}
@@ -61,7 +62,7 @@
   #ac .ad{font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
 
   /* layout */
-  .layout{position:relative;z-index:1;display:grid;grid-template-columns:1fr 380px;gap:0;border:1px solid var(--line);margin:22px 0 60px;min-height:560px;background:var(--paper)}
+  .layout{position:relative;z-index:1;display:grid;grid-template-columns:1fr 380px;gap:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:22px 0 60px;min-height:560px;background:var(--paper)}
   @media(max-width:860px){.layout{grid-template-columns:1fr;min-height:0}}
   #map{width:100%;height:100%;min-height:560px;background:var(--cream-deep)}
   @media(max-width:860px){#map{min-height:340px}}
@@ -92,24 +93,31 @@
   .todlbl{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);text-align:center;margin-top:7px;border-top:1px solid var(--line);padding-top:6px}
   .tiny{font-size:11.5px;color:var(--ink-3);margin:9px 0 0}
   .hexpop{display:flex;justify-content:space-between;gap:16px;font-size:12.5px;margin-top:3px}
-  .hexpop span:last-child{color:#717F7A;font-family:var(--mono)}
+  .hexpop span:last-child{color:var(--ink-3);font-family:var(--mono)}
   .src{font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.5}
-  .cta{display:inline-block;margin-top:2px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;background:var(--ink);color:var(--cream);padding:11px 16px;text-align:center}
-  .cta:hover{background:var(--teal-deep)}
+  .cta{display:inline-block;margin-top:2px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;background:var(--teal);color:#04231E;padding:11px 16px;border-radius:10px;text-align:center}
+  .cta:hover{background:#5CE8D2}
   .spinner{width:22px;height:22px;border:2.5px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .note{font-size:13.5px;color:var(--ink-2);line-height:1.55;background:var(--cream-deep);padding:14px 16px;border-radius:3px}
+  .note{font-size:13.5px;color:var(--ink-2);line-height:1.55;background:var(--cream-deep);border:1px solid var(--line);padding:14px 16px;border-radius:10px}
   #pub:empty{display:none}
-  .publink{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.03em;color:var(--teal-deep);text-decoration:none;border:1px solid var(--line);padding:9px 14px;border-radius:9px;transition:border-color .15s,background .15s}
+  .publink{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.03em;color:var(--teal);text-decoration:none;border:1px solid var(--line-2);padding:9px 14px;border-radius:9px;transition:border-color .15s,background .15s}
   .publink:hover{border-color:var(--teal);background:var(--cream-deep)}
   .publink .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex:none}
   .leaflet-container{background:var(--cream-deep);font-family:var(--sans)}
   .leaflet-control-attribution{font-size:10px}
   .leaflet-popup-content{font-family:var(--sans);font-size:13.5px;color:var(--ink);margin:11px 14px}
-  .leaflet-popup-content-wrapper{border-radius:8px}
+  .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#141B24;color:var(--ink);box-shadow:0 18px 40px rgba(0,0,0,.6)}
+  .leaflet-popup-content-wrapper{border-radius:10px;border:1px solid var(--line-2)}
+  .leaflet-container a.leaflet-popup-close-button{color:var(--ink-3)}
+  .leaflet-container a.leaflet-popup-close-button:hover{color:var(--ink)}
+  .leaflet-control-attribution{background:rgba(10,13,18,.8)!important;color:var(--ink-3)}
+  .leaflet-control-attribution a{color:var(--ink-2)}
+  .leaflet-bar a{background:#141B24;color:var(--ink);border-bottom-color:var(--line-2)}
+  .leaflet-bar a:hover{background:#1B2531;color:var(--teal)}
 
 .recent-dot{animation:rpulse 2.6s ease-in-out infinite}
-.cam-pin{background:#fff;border:1.5px solid #2E6B8A;border-radius:5px;display:grid;place-items:center;font-size:10px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.cam-pin{background:#0F1720;border:1.5px solid #4AABB5;border-radius:5px;display:grid;place-items:center;font-size:10px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.25)}
 .campop img{display:block}
 @keyframes rpulse{0%,100%{stroke-opacity:.9}50%{stroke-opacity:.25}}
 </style>
@@ -198,7 +206,7 @@ async function fetchRecent(lat,lng,reqId){
     slot.innerHTML=`<div class="meta" style="margin-top:6px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#BC3B2E;margin-right:6px"></span><b>Last 24 hrs:</b> ${fmt(d.count)} ${esc(d.label)} nearby${d.cadence?` <span style="color:var(--ink-3)">(${esc(d.cadence)})</span>`:''}</div>`;
     if(!d.incidents || !d.incidents.length) return;
     const dots=d.incidents.map(i=>
-      L.circleMarker([i.lat,i.lng],{radius:5,color:'#BC3B2E',weight:1.5,fillColor:'#D98C8C',fillOpacity:.85,className:'recent-dot'})
+      L.circleMarker([i.lat,i.lng],{radius:5,color:'#FF5A4D',weight:1.5,fillColor:'#FF8A7D',fillOpacity:.9,className:'recent-dot'})
        .bindTooltip(`${catName(i.cat)} · ${fmtAgo(i.minutesAgo)}`,{direction:'top',offset:[0,-6]}));
     recentLayer=L.layerGroup(dots).addTo(map);
   }catch{ /* overlay only — never break the main lookup */ }
@@ -251,7 +259,7 @@ const TOD3 = ["Day","Eve","Night"];
 // map lives in a still-resolving CSS grid) interrupt Leaflet's tile fade-in and
 // leave tiles stuck at opacity 0. Disabling the fade paints them immediately.
 const map = L.map('map', { zoomControl:true, attributionControl:true, scrollWheelZoom:true, fadeAnimation:false }).setView([39,-98], 4);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   subdomains:'abcd', maxZoom:19, detectRetina:true,
   attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>',
 }).addTo(map);
@@ -438,8 +446,8 @@ function hexRound(q, r){ // cube-round a fractional axial coord to the nearest h
   if(dx>dy && dx>dz) rx=-ry-rz; else if(dy>dz) ry=-rx-rz; else rz=-rx-ry;
   return [rx, rz];
 }
-function heatColor(t){ // t 0..1 → coral → deep red
-  const s=[[0,[238,178,150]],[0.5,[201,79,68]],[1,[126,20,16]]];
+function heatColor(t){ // t 0..1 → dim maroon → hot ember (dark basemap)
+  const s=[[0,[74,44,48]],[0.5,[199,71,55]],[1,[255,138,90]]];
   let a=s[0], b=s[s.length-1];
   for(let i=0;i<s.length-1;i++){ if(t>=s[i][0] && t<=s[i+1][0]){ a=s[i]; b=s[i+1]; break; } }
   const f=(t-a[0])/((b[0]-a[0])||1), c=a[1].map((v,i)=>Math.round(v+(b[1][i]-v)*f));
@@ -465,7 +473,7 @@ function drawHex(d){
   for(const b of bins.values()){
     const cx=HEX_M*S3*(b.q+b.r/2), cy=HEX_M*1.5*b.r, corners=[];
     for(let i=0;i<6;i++){ const a=Math.PI/180*(60*i-30); corners.push(toLL(cx+HEX_M*Math.cos(a), cy+HEX_M*Math.sin(a))); }
-    const poly=L.polygon(corners, { color:'#ffffff', weight:0.6, opacity:0.5, fillColor:heatColor(b.w/maxW), fillOpacity:0.6 });
+    const poly=L.polygon(corners, { color:'#ffffff', weight:0.6, opacity:0.14, fillColor:heatColor(b.w/maxW), fillOpacity:0.62 });
     poly.on('mouseover', function(){ this.setStyle({weight:1.6, opacity:1, color:'#14564C'}); });
     poly.on('mouseout',  function(){ this.setStyle({weight:0.6, opacity:0.5, color:'#ffffff'}); });
     // Click a hex → what was reported in that block, by category.
@@ -476,7 +484,7 @@ function drawHex(d){
   }
   incLayer=L.layerGroup(hexes).addTo(map);
   ringLayer=L.circle([cLat,cLng],{radius:(d.radiusMetres||1000),color:'#14564C',weight:1.4,dashArray:'3 4',fill:false,opacity:0.55}).addTo(map);
-  ctrLayer=L.circleMarker([cLat,cLng],{radius:6,color:'#fff',weight:2,fillColor:'#14564C',fillOpacity:1}).addTo(map);
+  ctrLayer=L.circleMarker([cLat,cLng],{radius:6,color:'#04231E',weight:2,fillColor:'#3FD9C0',fillOpacity:1}).addTo(map);
 }
 
 // ── reverse link: the nearest published in-depth neighborhood page ──
