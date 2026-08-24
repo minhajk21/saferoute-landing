@@ -1,3 +1,13 @@
+/* SafeRoute — /safety/ and /transparency/ specifics.
+   Tokens, type scale, links, buttons and the wordmark all come from the
+   shared sheet; only rules unique to these pages live here.
+
+   The @import is a shim for the 1,233 pages already built with a link to
+   this file. render-pages.mjs and render-transparency.mjs now link
+   /assets/sr.css directly, so regenerated pages load both in parallel and
+   the shim costs nothing after the next monthly rebuild. */
+@import url("/assets/sr.css");
+
 /* SafeRoute — shared styles for /safety/ (1,200+ generated pages) and
    /transparency/.
    
@@ -14,23 +24,6 @@
    2. --teal-deep does double duty as link colour (must be bright on dark)
       and as the .cta block background (needs to stay deep behind white
       text), so .cta sets its own background rather than reusing the token. */
-:root{
-  /* Semantic names kept; values inverted. --cream is the page, --paper is a
-     raised surface, --cream-deep is a muted track. */
-  --cream:#0A0D12; --cream-deep:#1B2531; --paper:#141B24;
-  --ink:#F3F7FA; --ink-2:#A8B6C4; --ink-3:#6E7E90;
-  --teal:#3FD9C0; --teal-deep:#1E9E8C;
-  --green:#43C46A; --amber:#E8A33D; --coral:#E8763D; --red:#FF5A4D;
-  --line:#212C39; --line-2:#2C3947;
-  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;
-  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Inter,system-ui,sans-serif;
-  --maxw:880px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
-a{color:var(--teal-deep)}
-img{max-width:100%;height:auto;display:block}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(18px,4vw,40px)}
 header.site{border-bottom:1px solid var(--line);background:rgba(10,13,18,.82);backdrop-filter:saturate(160%) blur(14px);position:sticky;top:0;z-index:50}
 header.site .wrap{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-top:14px;padding-bottom:14px}
 /* Shared site nav — the same five destinations on every surface. Before this,
@@ -41,23 +34,16 @@ header.site .wrap{display:flex;align-items:center;justify-content:space-between;
 .site-nav a:hover{color:var(--teal);text-decoration:none}
 .site-nav a.on{color:var(--teal);border-bottom:2px solid var(--teal)}
 .site-nav a.cta{background:var(--teal);color:#04231E;font-weight:680;padding:7px 12px;border-radius:8px}
-.site-nav a.cta:hover{background:#5CE8D2;color:#04231E}
-@media(max-width:760px){.site-nav a.hide-sm{display:none}}
+.site-nav a.cta:hover{background:#5CE8D2;color:#04231E}@media(max-width:760px){.site-nav a.hide-sm{display:none}}
 .crumbbar{background:var(--paper);border-bottom:1px solid var(--line)}
 .crumbbar .wrap{padding-top:7px;padding-bottom:7px}
 .crumbbar .crumbs{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
 .crumbbar .crumbs a{color:var(--ink-3);text-decoration:none}
 .crumbbar .crumbs a:hover{color:var(--teal)}
-.wordmark{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-weight:600;font-size:16px;letter-spacing:.16em;color:var(--ink);text-decoration:none}
-.wordmark .shield{width:19px;height:22px;flex:none}
 .crumbs{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
 .crumbs a{color:var(--ink-3);text-decoration:none}
 .crumbs a:hover{color:var(--teal)}
 main{padding:34px 0 56px}
-.eyebrow{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
-h1{font-size:clamp(28px,5vw,40px);line-height:1.15;margin:8px 0 14px;letter-spacing:-.02em}
-h2{font-size:22px;margin:38px 0 12px;letter-spacing:-.015em}
-p.lead{font-size:18.5px;color:var(--ink-2)}
 .scorecard{display:flex;gap:26px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin:26px 0}
 /* Inline band colours were picked for cream; lift them for a dark surface
    without flattening the distinction between bands. */
@@ -154,4 +140,4 @@ figure.map svg [stroke="#052926"]{stroke:#F3F7FA}
 figure.map svg [fill="#14564C"]{fill:#3FD9C0}          /* centre marker  */
 figure.map svg [stroke="#14564C"]{stroke:#3FD9C0}
 figure.map svg [fill="#E89286"]{fill:#FF8A7D}          /* lower-severity */
-figure.map svg [fill="#8C1010"]{fill:#FF3B2A}          /* high-severity  */
+figure.map svg [fill="#8C1010"]{fill:#FF3B2A}/* high-severity  */

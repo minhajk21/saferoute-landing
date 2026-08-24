@@ -19,6 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sr.css">
 
 <script>
   /* Only opt into scroll-reveal when this browser can genuinely finish it:
@@ -32,31 +33,10 @@
   }
 </script>
 <style>
-  :root{
-    --bg:#0A0D12; --bg-2:#0E131A; --surface:#141B24; --surface-2:#1B2531;
-    --line:#212C39; --line-2:#2C3947;
-    --text:#F3F7FA; --text-2:#A8B6C4; --text-3:#6E7E90;
-    --teal:#3FD9C0; --teal-2:#1FA98F;
-    --ember:#FF5A4D; --cam:#4AABB5; --amber:#E8A33D; --green:#43C46A;
-    --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;
-    --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Inter,system-ui,sans-serif;
-    --maxw:1200px; --gutter:clamp(20px,5vw,64px);
-    --r:16px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--text);font-family:var(--sans);
-       font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  a{color:inherit;text-decoration:none}
-  img{max-width:100%;height:auto;display:block}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
+  :root{--maxw:1200px;--gutter:clamp(20px,5vw,64px)}
   .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
            color:var(--teal);display:flex;align-items:center;gap:9px;margin-bottom:18px}
   .eyebrow::before{content:'';width:22px;height:1px;background:var(--teal);opacity:.6}
-  h1,h2,h3{letter-spacing:-.025em;line-height:1.08;font-weight:680}
-  h1{font-size:clamp(38px,5vw,58px)}
-  h2{font-size:clamp(30px,4.1vw,46px);line-height:1.12}
-  h3{font-size:20px;line-height:1.3;letter-spacing:-.015em;font-weight:640}
   .lede{font-size:clamp(17px,1.55vw,19.5px);color:var(--text-2);max-width:60ch}
   .sec{padding:clamp(72px,9vw,124px) 0;border-top:1px solid var(--line)}
 
@@ -66,19 +46,8 @@
   .nav-in{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter);height:62px;
           display:flex;align-items:center;gap:12px}
   .brand{display:flex;align-items:center;gap:9px;margin-right:auto}
-  .brand svg{width:19px;height:23px;flex:none}
-  .brand b{font-size:15.5px;letter-spacing:.13em;font-weight:640}
   .nav a.lnk{font-size:14.5px;color:var(--text-2);padding:7px 11px;border-radius:8px;transition:.15s}
-  .nav a.lnk:hover{color:var(--text);background:var(--surface)}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;
-       border-radius:10px;transition:.16s;white-space:nowrap;cursor:pointer}
-  .btn-sm{font-size:14.5px;padding:8px 15px}
-  .btn-ghost{border:1px solid var(--line-2);color:var(--text)}
-  .btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
-  .btn-fill{background:var(--teal);color:#04231E;font-weight:680}
-  .btn-fill:hover{background:#5CE8D2;transform:translateY(-1px)}
-  @media(max-width:880px){.hide-md{display:none}}
-  @media(max-width:560px){.hide-sm{display:none}}
+  .nav a.lnk:hover{color:var(--text);background:var(--surface)}@media(max-width:880px){.hide-md{display:none}}@media(max-width:560px){.hide-sm{display:none}}
 
   /* ---------- hero ---------- */
   .hero{position:relative;padding:clamp(56px,7vw,92px) 0 clamp(64px,8vw,104px);overflow:hidden}
@@ -116,8 +85,7 @@
          box-shadow:0 44px 90px -26px rgba(0,0,0,.92),0 0 60px -20px rgba(63,217,192,.12)}
   .phone img{width:100%;height:auto;border-radius:29px}
   .phone-a{width:min(232px,36vw);transform:rotate(-3.5deg) translateY(8px);z-index:2}
-  .phone-b{width:min(214px,33vw);transform:rotate(4.5deg) translate(-14px,-12px);z-index:1}
-  @media(max-width:900px){
+  .phone-b{width:min(214px,33vw);transform:rotate(4.5deg) translate(-14px,-12px);z-index:1}@media(max-width:900px){
     .hero-grid{grid-template-columns:1fr}
     .phones{margin-top:14px}
     .phone-a{width:min(240px,46vw)} .phone-b{width:min(224px,43vw)}
@@ -132,8 +100,7 @@
   /* ---------- feature rows ---------- */
   .row{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,72px);align-items:center}
   .row + .row{margin-top:clamp(60px,7vw,96px)}
-  .row.flip .row-media{order:-1}
-  @media(max-width:860px){.row{grid-template-columns:1fr;gap:30px}.row.flip .row-media{order:0}}
+  .row.flip .row-media{order:-1}@media(max-width:860px){.row{grid-template-columns:1fr;gap:30px}.row.flip .row-media{order:0}}
   .row-media{display:flex;justify-content:center}
   .row-media .phone{width:min(290px,74vw)}
   .tagpill{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
@@ -149,8 +116,7 @@
 
   /* ---------- cards ---------- */
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:18px;margin-top:44px}
-  .cards-2{grid-template-columns:1fr 1fr}
-  @media(max-width:560px){.cards-2{grid-template-columns:1fr}}
+  .cards-2{grid-template-columns:1fr 1fr}@media(max-width:560px){.cards-2{grid-template-columns:1fr}}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px 24px;
         transition:.18s}
   .card:hover{border-color:var(--line-2);transform:translateY(-2px)}
@@ -190,12 +156,10 @@
   .final{text-align:center;background:
      radial-gradient(closest-side at 50% 0%,rgba(63,217,192,.14),transparent 75%),var(--bg-2)}
   .final .btnrow{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:28px}
-  .btn-lg{font-size:16px;padding:14px 26px}
 
   /* ---------- footer ---------- */
   footer{border-top:1px solid var(--line);padding:52px 0 34px;background:var(--bg-2)}
-  .fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:36px}
-  @media(max-width:720px){.fgrid{grid-template-columns:1fr 1fr}}
+  .fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:36px}@media(max-width:720px){.fgrid{grid-template-columns:1fr 1fr}}
   .fdesc{color:var(--text-3);font-size:14.5px;margin-top:14px;max-width:38ch}
   .fcol h4{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
            color:var(--text-3);margin-bottom:13px;font-weight:500}
@@ -207,9 +171,7 @@
 
   /* ---------- reveal ---------- */
   .js .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s cubic-bezier(.2,.7,.3,1),transform .6s cubic-bezier(.2,.7,.3,1);transition-delay:calc(var(--i,0)*70ms)}
-  .js .reveal.in{opacity:1;transform:none}
-  @media(prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none}}
-</style>
+  .js .reveal.in{opacity:1;transform:none}@media(prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none}}</style>
 </head>
 <body>
 
@@ -236,7 +198,7 @@
     <div class="hero-grid">
       <div>
         <div class="eyebrow reveal" style="--i:0">Version 1.3 — now with live data</div>
-        <h1 class="reveal" style="--i:1">See your street<br><span class="grad">before you walk it.</span></h1>
+        <h1 class="h1-hero reveal" style="--i:1">See your street<br><span class="grad">before you walk it.</span></h1>
         <p class="lede reveal" style="--i:2">
           SafeRoute scores any address from official police data, plans walking routes
           by real risk, and — in a growing list of cities — shows you the last 24 hours

@@ -11,22 +11,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sr.css">
 <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
-  :root{
-    --cream:#0A0D12; --cream-deep:#1B2531; --paper:#141B24;
-    --ink:#F3F7FA; --ink-2:#A8B6C4; --ink-3:#6E7E90;
-    --teal:#3FD9C0; --teal-deep:#3FD9C0;
-    --green:#43C46A; --amber:#E8A33D; --elevated:#E8763D; --red:#FF5A4D;
-    --line:#212C39; --line-2:#2C3947;
-    --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;
-    --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Inter,system-ui,sans-serif;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0}
-  body{font-family:var(--sans);color:var(--ink);background:var(--cream);-webkit-font-smoothing:antialiased}
-  a{color:var(--teal-deep)}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,72px)}
+  :root{--maxw:1180px;--gutter:clamp(20px,5vw,72px)}
 
   header{border-bottom:1px solid var(--line);background:rgba(10,13,18,.86);backdrop-filter:saturate(160%) blur(14px);position:sticky;top:0;z-index:1300}
   .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
@@ -37,13 +25,10 @@
   .nav-link{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--ink-2);padding:9px 2px}
   .nav-link:hover{color:var(--teal);text-decoration:none}
   .nav-cta{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;background:var(--teal);color:#04231E;padding:9px 16px;border:1px solid var(--teal);border-radius:8px}
-  .nav-cta:hover{background:#5CE8D2;border-color:#5CE8D2;color:#04231E}
-  @media(max-width:640px){.nav-link{display:none}}
+  .nav-cta:hover{background:#5CE8D2;border-color:#5CE8D2;color:#04231E}@media(max-width:640px){.nav-link{display:none}}
 
   .head{padding:clamp(28px,5vw,52px) 0 20px}
-  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--teal)}
   .eyebrow .slash{color:var(--teal)}
-  h1{font-size:clamp(28px,4.5vw,44px);line-height:1.05;letter-spacing:-.02em;margin:12px 0 10px}
   .lead{font-size:clamp(16px,2vw,18px);color:var(--ink-2);max-width:60ch;margin:0}
 
   /* search */
@@ -62,12 +47,9 @@
   #ac .ad{font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
 
   /* layout */
-  .layout{position:relative;z-index:1;display:grid;grid-template-columns:1fr 380px;gap:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:22px 0 60px;min-height:560px;background:var(--paper)}
-  @media(max-width:860px){.layout{grid-template-columns:1fr;min-height:0}}
-  #map{width:100%;height:100%;min-height:560px;background:var(--cream-deep)}
-  @media(max-width:860px){#map{min-height:340px}}
-  aside{border-left:1px solid var(--line);padding:26px 24px;display:flex;flex-direction:column;gap:18px}
-  @media(max-width:860px){aside{border-left:none;border-top:1px solid var(--line)}}
+  .layout{position:relative;z-index:1;display:grid;grid-template-columns:1fr 380px;gap:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:22px 0 60px;min-height:560px;background:var(--paper)}@media(max-width:860px){.layout{grid-template-columns:1fr;min-height:0}}
+  #map{width:100%;height:100%;min-height:560px;background:var(--cream-deep)}@media(max-width:860px){#map{min-height:340px}}
+  aside{border-left:1px solid var(--line);padding:26px 24px;display:flex;flex-direction:column;gap:18px}@media(max-width:860px){aside{border-left:none;border-top:1px solid var(--line)}}
 
   .empty{color:var(--ink-3);font-size:15px;line-height:1.5}
   .place{font-size:20px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
@@ -97,8 +79,7 @@
   .src{font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.5}
   .cta{display:inline-block;margin-top:2px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;background:var(--teal);color:#04231E;padding:11px 16px;border-radius:10px;text-align:center}
   .cta:hover{background:#5CE8D2}
-  .spinner{width:22px;height:22px;border:2.5px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
+  .spinner{width:22px;height:22px;border:2.5px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite}to{transform:rotate(360deg)}
   .note{font-size:13.5px;color:var(--ink-2);line-height:1.55;background:var(--cream-deep);border:1px solid var(--line);padding:14px 16px;border-radius:10px}
   #pub:empty{display:none}
   .publink{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.03em;color:var(--teal);text-decoration:none;border:1px solid var(--line-2);padding:9px 14px;border-radius:9px;transition:border-color .15s,background .15s}
@@ -118,9 +99,7 @@
 
 .recent-dot{animation:rpulse 2.6s ease-in-out infinite}
 .cam-pin{background:#0F1720;border:1.5px solid #4AABB5;border-radius:5px;display:grid;place-items:center;font-size:10px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.25)}
-.campop img{display:block}
-@keyframes rpulse{0%,100%{stroke-opacity:.9}50%{stroke-opacity:.25}}
-</style>
+.campop img{display:block}0%,100%{stroke-opacity:.9}50%{stroke-opacity:.25}</style>
 <!-- Cloudflare Web Analytics — cookieless, no PII, no consent banner needed.
      Token is PUBLIC by design (ships in page source), not a secret.
      Keep in sync with CF_BEACON_TOKEN in tools/render-pages.mjs, which does the

@@ -15,24 +15,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sr.css">
 <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
+  :root{--maxw:1180px;--gutter:clamp(20px,5vw,72px)}
   /* This page lives at night. Same type system as the rest of the site, but
      the dark palette is the point — it is the web's version of the app's
      Tonight card, not a themed variant of the cream pages. */
   :root{
-    --night:#0A0D12; --night-2:#141B24; --night-3:#1B2531;
-    --ink:#F3F7FA; --ink-2:#A8B6C4; --ink-3:#6E7E90;
-    --teal:#3FD9C0; --ember:#FF5A4D; --ember-soft:#FF8A7D;
-    --line:#212C39; --line-2:#2C3947;
-    --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;
-    --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Inter,system-ui,sans-serif;
+    /* Page-specific aliases only — every shared token comes from sr.css. */
+    --night:var(--bg); --night-2:var(--surface); --night-3:var(--surface-2);
+    --ember-soft:#FF8A7D;
   }
-  *{box-sizing:border-box}
-  html,body{margin:0}
-  body{font-family:var(--sans);color:var(--ink);background:var(--night);-webkit-font-smoothing:antialiased}
-  a{color:var(--ink)}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,72px)}
 
   header{border-bottom:1px solid var(--line);background:rgba(10,13,18,.86);backdrop-filter:saturate(160%) blur(14px);position:sticky;top:0;z-index:1000}
   .nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
@@ -44,14 +38,10 @@
   .nav-link:hover{color:var(--teal);text-decoration:none}
   .nav-link.on{color:var(--ink);border-bottom:2px solid var(--ember)}
   .nav-cta{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;background:var(--teal);color:#04231E;padding:9px 14px;border-radius:8px}
-  .nav-cta:hover{background:#5CE8D2}
-  @media(max-width:700px){.nav-link.hide-sm{display:none}}
+  .nav-cta:hover{background:#5CE8D2}@media(max-width:700px){.nav-link.hide-sm{display:none}}
 
   .head{padding:clamp(30px,5vw,56px) 0 18px}
-  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--ember)}
-  .eyebrow .live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ember);margin-right:7px;animation:heartbeat 2.4s ease-in-out infinite}
-  @keyframes heartbeat{0%,100%{opacity:1}50%{opacity:.35}}
-  h1{font-size:clamp(30px,4.8vw,48px);line-height:1.04;letter-spacing:-.02em;margin:12px 0 10px}
+  .eyebrow .live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ember);margin-right:7px;animation:heartbeat 2.4s ease-in-out infinite}0%,100%{opacity:1}50%{opacity:.35}
   .lead{font-size:clamp(16px,2vw,18.5px);color:var(--ink-2);max-width:62ch;margin:0;line-height:1.6}
 
   .citycard{border:1px solid var(--line);background:var(--night-2);margin:26px 0 14px;overflow:hidden;border-radius:16px}
@@ -59,10 +49,8 @@
   .cityname{font-size:20px;font-weight:600;letter-spacing:-.01em}
   .citycount{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
   .citycount b{color:var(--ember-soft);font-size:15px}
-  #map{width:100%;height:min(62vh,560px);background:var(--night-3)}
+  .citymap{width:100%;height:min(62vh,560px);background:var(--night-3)}
   .cityfoot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
-
-  h2{font-size:22px;margin:36px 0 10px}
   p{color:var(--ink-2);line-height:1.65;margin:0 0 14px}
   .coming{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
   .coming span{font-family:var(--mono);font-size:11px;letter-spacing:.05em;border:1px solid var(--line-2);color:var(--ink-2);padding:7px 12px;border-radius:999px}
@@ -78,8 +66,7 @@
   footer a{color:var(--ink-2)}
 
   .leaflet-container{background:var(--night-3);font:inherit}
-  .recent-dot{animation:rpulse 2.6s ease-in-out infinite}
-  @keyframes rpulse{0%,100%{stroke-opacity:.95}50%{stroke-opacity:.3}}
+  .recent-dot{animation:rpulse 2.6s ease-in-out infinite}0%,100%{stroke-opacity:.95}50%{stroke-opacity:.3}
   .leaflet-tooltip.tt{background:var(--night-2);border:1px solid var(--line);color:var(--ink);font-family:var(--sans);font-size:12.5px;border-radius:4px;box-shadow:0 6px 18px rgba(0,0,0,.5)}
   .leaflet-tooltip.tt::before{display:none}
 
@@ -93,8 +80,7 @@
   .leaflet-popup-content-wrapper{border-radius:10px;border:1px solid var(--line-2)}
   .leaflet-popup-content{font-family:var(--sans);font-size:13.5px}
   .leaflet-container a.leaflet-popup-close-button{color:var(--ink-3)}
-  .leaflet-container a.leaflet-popup-close-button:hover{color:var(--ink)}
-</style>
+  .leaflet-container a.leaflet-popup-close-button:hover{color:var(--ink)}</style>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a7d4a481ed8b4512a43225404078e7ab"}'></script>
 </head>
 <body>
@@ -122,24 +108,13 @@
     sources. No alerts. No user reports. No panic. Just the night, as it is.</p>
   </div>
 
-  <div class="citycard">
-    <div class="citybar">
-      <span class="cityname">New Orleans</span>
-      <span class="citycount" id="count">Loading the last 24 hours…</span>
-    </div>
-    <div id="map" role="img" aria-label="Map of New Orleans showing calls police responded to in the last 24 hours"></div>
-    <div class="cityfoot">
-      <span id="srcline">OPCD CALLS FOR SERVICE VIA DATA.NOLA.GOV</span>
-      <span id="cadence"></span>
-    </div>
-  </div>
+  <div id="cities"></div>
 
   <h2>Where this is going next</h2>
   <p>A city joins when its feed passes three tests, measured live — fresh enough to mean
   "tonight", geolocated, and classifiable so dispatch noise (alarms, traffic stops, welfare
   checks) can be filtered out rather than dressed up as crime.</p>
   <div class="coming">
-    <span><b>San Francisco</b> — near real-time · in progress</span>
     <span><b>Seattle</b> — past-week tier · queued</span>
     <span>Dallas, Kansas City &amp; others — waiting on their feeds</span>
   </div>
@@ -163,42 +138,93 @@
 </div></main>
 
 <footer><div class="wrap">
-  <p><strong>Sources.</strong> Official municipal dispatch data, fetched live; currently OPCD Calls for Service via <a href="https://data.nola.gov">data.nola.gov</a>. Calls are filtered to offence-describing types; locations are anonymised to block level by the source. This page shows police workload, not verified crime — informational only.</p>
+  <p><strong>Sources.</strong> Official municipal dispatch data, fetched live; currently SFPD dispatched calls via <a href="https://datasf.org/opendata/">DataSF</a> and OPCD Calls for Service via <a href="https://data.nola.gov">data.nola.gov</a>. Calls are filtered to offence-describing types; locations are anonymised to block level by the source. This page shows police workload, not verified crime — informational only.</p>
   <p><a href="/safety/">Neighbourhood safety index</a> · <a href="/check/">Check any address</a> · <a href="/transparency/">Crime-data transparency index</a> · <a href="/">SafeRoute</a></p>
 </div></footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 const API='https://saferoute-backend-w5yf.onrender.com';
-const CITY={lat:29.9540,lng:-90.0700,zoom:13};
-const map=L.map('map',{zoomControl:true,attributionControl:true,scrollWheelZoom:false}).setView([CITY.lat,CITY.lng],CITY.zoom);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-  subdomains:'abcd',maxZoom:19,detectRetina:true,
-  attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>',
-}).addTo(map);
+
+/* Every city the backend serves a live layer for. The page used to hardcode a
+   single New Orleans map, which meant San Francisco — the one city with
+   near real-time data — never appeared here after it shipped, and the page
+   showed whichever city happened to be emptiest. Cards render in this order
+   but are re-sorted freshest-first once each answers. */
+const CITIES=[
+  {id:'sf',   name:'San Francisco', lat:37.7880, lng:-122.4074, zoom:13},
+  {id:'nola', name:'New Orleans',   lat:29.9540, lng:-90.0700,  zoom:13},
+];
 
 const catName=c=>({'violent-crime':'Violence','other-theft':'Theft','vehicle-crime':'Vehicle crime','robbery':'Robbery','burglary':'Burglary','sexual-offences':'Sexual offence','possession-of-weapons':'Weapons','criminal-damage-arson':'Damage / arson','drugs':'Drugs','shoplifting':'Shoplifting','public-order':'Public order','other-crime':'Other'}[c]||c);
 const ago=m=>m==null?'':m<90?`${m} min ago`:`${Math.round(m/60)} h ago`;
+const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-fetch(`${API}/public/recent?lat=${CITY.lat}&lng=${CITY.lng}`)
-  .then(r=>r.ok?r.json():null)
-  .then(d=>{
-    const count=document.getElementById('count');
-    if(!d||!d.supported){ count.textContent='Unavailable right now.'; return; }
-    if(d.available===false){
-      // No-answer is not a quiet night — say we couldn't load, never imply calm.
-      count.textContent="Couldn't load the last 24 hours right now.";
-      return;
-    }
-    count.innerHTML=`<b>${d.count}</b> ${d.label} · last ${d.windowHours} hrs`;
-    document.getElementById('cadence').textContent=((d.cadence||'')+(d.freshestMinutesAgo!=null?` · FRESHEST ${ago(d.freshestMinutesAgo).toUpperCase()}`:'')).toUpperCase();
-    (d.incidents||[]).forEach(i=>{
-      L.circleMarker([i.lat,i.lng],{radius:5,color:'#FF5A4D',weight:1.5,fillColor:'#FF8A7D',fillOpacity:.9,className:'recent-dot'})
-        .bindTooltip(`<b>${i.type||catName(i.cat)}</b><br>${catName(i.cat)} · ${ago(i.minutesAgo)}`,{direction:'top',offset:[0,-6],className:'tt'})
-        .addTo(map);
-    });
-  })
-  .catch(()=>{ document.getElementById('count').textContent="Couldn't load the last 24 hours right now."; });
+const host=document.getElementById('cities');
+
+function card(c){
+  const el=document.createElement('div');
+  el.className='citycard';
+  el.innerHTML=`<div class="citybar">
+      <span class="cityname">${esc(c.name)}</span>
+      <span class="citycount" id="count-${c.id}">Loading the last 24 hours…</span>
+    </div>
+    <div id="map-${c.id}" class="citymap" role="img"
+         aria-label="Map of ${esc(c.name)} showing calls police responded to in the last 24 hours"></div>
+    <div class="cityfoot"><span id="src-${c.id}"></span><span id="cad-${c.id}"></span></div>`;
+  host.appendChild(el);
+  return el;
+}
+
+function load(c){
+  const el=card(c);
+  const map=L.map(`map-${c.id}`,{zoomControl:true,attributionControl:true,scrollWheelZoom:false})
+              .setView([c.lat,c.lng],c.zoom);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    subdomains:'abcd',maxZoom:19,detectRetina:true,
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>',
+  }).addTo(map);
+
+  const count=document.getElementById(`count-${c.id}`);
+  return fetch(`${API}/public/recent?lat=${c.lat}&lng=${c.lng}`)
+    .then(r=>r.ok?r.json():null)
+    .then(d=>{
+      if(!d||!d.supported){ count.textContent='Unavailable right now.'; return {el,fresh:1e9}; }
+      if(d.available===false){
+        /* No-answer is not a quiet night — say we couldn't load, never imply calm. */
+        count.textContent="Couldn't load the last 24 hours right now.";
+        return {el,fresh:1e9};
+      }
+      count.innerHTML=`<b>${d.count}</b> ${esc(d.label)} · last ${d.windowHours} hrs`;
+      document.getElementById(`src-${c.id}`).textContent=(d.dataSource||'').toUpperCase();
+      document.getElementById(`cad-${c.id}`).textContent=
+        ((d.cadence||'')+(d.freshestMinutesAgo!=null?` · FRESHEST ${ago(d.freshestMinutesAgo).toUpperCase()}`:'')).toUpperCase();
+      /* A nightly-batch feed can legitimately be near-empty late in the day.
+         Say why, so a quiet map never reads as a quiet city. */
+      if(d.count===0 || (d.freshestMinutesAgo!=null && d.freshestMinutesAgo>720)){
+        const note=document.createElement('div');
+        note.className='cityfoot';
+        note.style.borderTop='none';
+        note.style.paddingTop='0';
+        note.innerHTML=`<span>THIS FEED ${esc((d.cadence||'updates periodically').toUpperCase())} — LATE IN THE DAY THE LAST 24 HOURS CAN LOOK QUIET BECAUSE THE NEXT BATCH HASN'T LANDED, NOT BECAUSE THE CITY WAS.</span>`;
+        el.appendChild(note);
+      }
+      (d.incidents||[]).forEach(i=>{
+        L.circleMarker([i.lat,i.lng],{radius:5,color:'#FF5A4D',weight:1.5,fillColor:'#FF8A7D',fillOpacity:.9,className:'recent-dot'})
+          .bindTooltip(`<b>${esc(i.type||catName(i.cat))}</b><br>${esc(catName(i.cat))} · ${ago(i.minutesAgo)}`,
+                       {direction:'top',offset:[0,-6],className:'tt'})
+          .addTo(map);
+      });
+      setTimeout(()=>map.invalidateSize(),80);
+      return {el,fresh:d.freshestMinutesAgo==null?1e9:d.freshestMinutesAgo};
+    })
+    .catch(()=>{ count.textContent="Couldn't load the last 24 hours right now."; return {el,fresh:1e9}; });
+}
+
+/* Freshest city first, so the page leads with the liveliest map it has. */
+Promise.all(CITIES.map(load)).then(rs=>{
+  rs.filter(Boolean).sort((a,b)=>a.fresh-b.fresh).forEach(r=>host.appendChild(r.el));
+});
 </script>
 </body>
 </html>
