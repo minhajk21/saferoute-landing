@@ -292,6 +292,91 @@ const CITIES = {
       methodology: `Each incident reported to the Boston Police Department (via Analyze Boston) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the BPDA's official neighborhood set; the Harbor Islands are excluded because the uninhabited park has no reported crime and would read as falsely "safe". Because Boston is compact and densely built, neighborhood centers sit close together and their 1&nbsp;km circles overlap — adjacent areas will show similar figures. Time-of-day charts use BPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
     },
   },
+  'baltimore': {
+    name: 'Baltimore',
+    hubName: 'Baltimore',
+    rankPool: 'Baltimore community statistical areas',
+    // CSAs, not the 256 neighbourhood statistical areas: at 566 m median centre
+    // spacing the NSA set is finer than the 1 km index radius, so adjacent
+    // pages would describe overlapping circles. The 56 CSAs land at 1,469 m —
+    // wider than NYC or Toronto. See build-gazetteer-baltimore.mjs.
+    areaWord: 'area', areaWordPlural: 'areas',
+    centre: 'center', centreLabel: 'area center',
+    reportedTo: 'reported to the Baltimore Police',
+    dataName: 'Baltimore Police data',
+    medianLabel: 'citywide median',
+    forCity: 'for Baltimore',
+    acrossCity: 'across Baltimore',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Baltimore Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Baltimore Police Department Part 1 crime via <a href="https://data.baltimorecity.gov/">Open Baltimore</a>${dateLine}. Area boundaries: Community Statistical Areas (2020) from <a href="https://bniajfi.org/">BNIA-JFI</a>, the Jacob France Institute at the University of Baltimore \u2014 the geography the city's own indicator reporting uses. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Baltimore Neighborhood Safety Map & Rankings (${n} areas) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Baltimore neighborhood? Safety index (0\u2013100) for all ${n} Baltimore community statistical areas from Baltimore Police data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Baltimore neighborhood?',
+      lead: `SafeRoute scores every Baltimore community statistical area 0\u2013100 from incidents reported to the Baltimore Police Department \u2014 severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. Each area groups several neighborhoods, the way the city's own reporting does. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check an area \u2014 e.g. Canton, Fells Point, Hampden\u2026',
+      rankHeading: (n) => `All ${n} Baltimore areas, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each area's center \u2014 they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the Baltimore Police Department (via Open Baltimore) is weighted by severity \u2014 violence counts for more than shoplifting. For every area we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are BNIA-JFI's 56 Community Statistical Areas rather than Baltimore's 256 neighborhood statistical areas: the neighborhood set is finer than the 1&nbsp;km radius this index measures over, so neighboring pages would describe almost the same circle. CSAs group those neighborhoods on census-tract lines \u2014 the same geography the city uses for its own indicator reporting \u2014 so each page covers a distinct part of the city. Time-of-day charts use BPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
+    },
+  },
+  'denver': {
+    name: 'Denver',
+    hubName: 'Denver',
+    rankPool: 'Denver neighborhoods',
+    // Denver's 78 official statistical neighborhoods are large by US standards
+    // (median centre spacing 1.4 km, wider than NYC's), so 1 km circles stay
+    // meaningfully distinct and one ranked table is enough.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    reportedTo: 'reported to the Denver Police',
+    dataName: 'Denver Police data',
+    medianLabel: 'citywide median',
+    forCity: 'for Denver',
+    acrossCity: 'across Denver',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Denver Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Denver Police Department offense records via <a href="https://opendata-geospatialdenver.hub.arcgis.com/">Denver Open Data</a>${dateLine}. Neighborhood boundaries: City and County of Denver official statistical neighborhoods. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Denver Neighborhood Safety Map & Rankings (${n} neighborhoods) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Denver neighborhood? Safety index (0\u2013100) for ${n} Denver neighborhoods from Denver Police offense data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Denver neighborhood?',
+      lead: `SafeRoute scores every Denver neighborhood 0\u2013100 from offenses reported to the Denver Police Department \u2014 severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood \u2014 e.g. Five Points, Capitol Hill, Baker\u2026',
+      rankHeading: (n) => `All ${n} Denver neighborhoods, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center \u2014 they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each offense reported to the Denver Police Department (via Denver Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted offenses within 1 km of its center, and normalize against citywide crime rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City and County of Denver's official statistical neighborhoods. Denver's neighborhoods are relatively large, so 1&nbsp;km circles overlap less than in denser cities and adjacent areas separate more cleanly. Time-of-day charts use DPD offense timestamps, severity-weighted. Pages regenerate as new data is published.`,
+    },
+  },
+  'vancouver': {
+    name: 'Vancouver',
+    hubName: 'Vancouver',
+    rankPool: 'Vancouver local areas',
+    // Canadian spelling: neighbourhood/centre, but -ize endings (normalize).
+    // 22 official local areas, the widest centre spacing of any city here
+    // (1.9 km), so each page describes a genuinely distinct part of the city.
+    areaWord: 'neighbourhood', areaWordPlural: 'neighbourhoods',
+    centre: 'centre', centreLabel: 'neighbourhood centre',
+    reportedTo: 'reported to the Vancouver Police',
+    dataName: 'Vancouver Police data',
+    medianLabel: 'citywide median',
+    forCity: 'for Vancouver',
+    acrossCity: 'across Vancouver',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Vancouver Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} centre, and normalizes against citywide crime rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Vancouver Police Department public crime incidents via the <a href="https://geodash.vpd.ca/">VPD GeoDASH open data service</a>${dateLine}. Neighbourhood boundaries: City of Vancouver official local areas (22). Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Vancouver Neighbourhood Safety Map & Rankings (${n} local areas) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Vancouver neighbourhood? Safety index (0\u2013100) for all ${n} Vancouver local areas from VPD crime data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Vancouver neighbourhood?',
+      lead: `SafeRoute scores every Vancouver local area 0\u2013100 from incidents reported to the Vancouver Police Department \u2014 severity-weighted, within 1 km of each area's centre, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes, and Vancouver's live street cameras in the app's Live tab.`,
+      placeholder: 'Check a neighbourhood \u2014 e.g. Downtown, Mount Pleasant, Kitsilano\u2026',
+      rankHeading: (n) => `All ${n} Vancouver local areas, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each area's centre \u2014 they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the Vancouver Police Department (via the VPD GeoDASH open data service) is weighted by severity \u2014 violence counts for more than shoplifting. For every local area we sum weighted incidents within 1 km of its centre, and normalize against citywide crime rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of Vancouver's 22 official local areas \u2014 the coarsest set on this site, so each page covers a genuinely distinct part of the city rather than a block or two. VPD anonymises incident locations to the nearest block, so maps show the reported block, not an exact address. Time-of-day charts use VPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
+    },
+  },
   'philly': {
     name: 'Philadelphia',
     hubName: 'Philadelphia',
@@ -327,7 +412,8 @@ const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 // feed's own transparency score, and which region id the hub maps to. Guarded:
 // a missing dataset just hides the chips, it never fails a 1,222-page build.
 const SLUG_TO_REGION = { 'new-york': 'nyc', london: 'uk', chicago: 'chicago', la: 'la',
-  sf: 'sf', seattle: 'seattle', toronto: 'toronto', dc: 'dc', boston: 'boston', philly: 'philly' };
+  sf: 'sf', seattle: 'seattle', toronto: 'toronto', dc: 'dc', boston: 'boston', philly: 'philly',
+  denver: 'denver', vancouver: 'vancouver', baltimore: 'baltimore' };
 // Region ids with a live tonight layer — drives the hub strip. NOLA is live but
 // has no SEO hub; SF joins this list the day its layer ships.
 const TONIGHT_REGIONS = new Set(['neworleans', 'sf']);   // sf added 2026-08-22 (near real-time dispatch)
@@ -846,7 +932,7 @@ if (!rendered.length) throw new Error('no cities with data');
 <table class="rank"><tbody>
 ${rows}
 </tbody></table>
-<p style="font-size:15px;color:var(--ink-2)">More cities from SafeRoute's 30-city coverage (Vancouver, Denver, Mexico City…) are on the way.</p>
+<p style="font-size:15px;color:var(--ink-2)">More cities from SafeRoute's 30-city coverage are on the way.</p>
 ${cta('your city')}
 ${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug, rendered[0].windowDays)}`;
   mkdirSync(join(ROOT, 'safety'), { recursive: true });
