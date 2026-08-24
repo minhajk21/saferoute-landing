@@ -83,6 +83,9 @@ for (const f of j.features) {
   areas.push({
     name,
     slug: slugify(name),
+    // Single-tier city: one ranked table on the hub, so borough is the city
+    // itself (the convention Chicago and SF already use).
+    borough: 'Baltimore',
     lat: +lat.toFixed(6),
     lng: +lng.toFixed(6),
     // Which neighbourhoods this CSA covers — used in page copy so someone

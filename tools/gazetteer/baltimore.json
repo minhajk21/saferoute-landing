@@ -20,7 +20,8 @@
         "Uplands",
         "Yale Heights",
         "Lower Edmondson Village"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Beechfield/Ten Hills/West Hills",
@@ -34,7 +35,8 @@
         "Tremont",
         "West Hills",
         "Westgate"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Belair-Edison",
@@ -47,7 +49,8 @@
         "Four By Four",
         "Mayfield",
         "Herring Run Park"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Brooklyn/Curtis Bay/Hawkins Point",
@@ -60,7 +63,8 @@
         "Fairfield Area",
         "Hawkins Point",
         "Curtis Bay Industrial Area"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Canton",
@@ -70,7 +74,8 @@
       "covers": [
         "Canton",
         "Patterson Park"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Cedonia/Frankford",
@@ -82,7 +87,8 @@
         "Frankford",
         "Cedmont",
         "Parkside"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Cherry Hill",
@@ -92,7 +98,8 @@
       "covers": [
         "Cherry Hill",
         "Middle Branch/Reedbird Parks"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Chinquapin Park/Belvedere",
@@ -106,7 +113,8 @@
         "Mid-Govans",
         "Belvedere",
         "Evesham Park"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Claremont/Armistead",
@@ -117,7 +125,8 @@
         "Armistead Gardens",
         "Claremont-Freedom (now Orchard Ridge)",
         "Orchard Ridge"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Clifton-Berea",
@@ -130,7 +139,8 @@
         "Broadway East",
         "Darley Park",
         "South Clifton Park"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Cross-Country/Cheswolde",
@@ -140,7 +150,8 @@
       "covers": [
         "Cheswolde",
         "Cross Country"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Dickeyville/Franklintown",
@@ -152,7 +163,8 @@
         "Franklintown",
         "Purnell",
         "Wakefield"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Dorchester/Ashburton",
@@ -166,7 +178,8 @@
         "Dolfield",
         "Dorchester",
         "East Arlington"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Downtown/Seton Hill",
@@ -177,7 +190,8 @@
         "Downtown",
         "Seton Hill",
         "University of Maryland"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Edmondson Village",
@@ -189,7 +203,8 @@
         "Rognel Heights",
         "Gwynns Falls/Leakin Park",
         "Edgewood"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Fells Point",
@@ -200,7 +215,8 @@
         "Butcher's Hill",
         "Fells Point",
         "Upper Fells Point"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Forest Park/Walbrook",
@@ -215,7 +231,8 @@
         "Mount Holly",
         "West Forest Park",
         "Windsor Hills"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Glen-Fallstaff",
@@ -227,7 +244,8 @@
         "Glen",
         "Reisterstown Station",
         "Woodmere"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Greater Charles Village/Barclay",
@@ -242,7 +260,8 @@
         "Oakenshawe",
         "Johns Hopkins Homewood",
         "Old Goucher"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Greater Govans",
@@ -257,7 +276,8 @@
         "Winston-Govans",
         "Woodbourne-McCabe",
         "Wrenlane"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Greater Mondawmin",
@@ -271,7 +291,8 @@
         "Mondawmin",
         "Panway/Braddish Avenue",
         "Walbrook"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Greater Roland Park/Poplar Hill",
@@ -285,7 +306,8 @@
         "North Roland Park/Poplar Hill",
         "Roland Park",
         "Wyndhurst"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Greater Rosemont",
@@ -302,7 +324,8 @@
         "Rosemont",
         "Winchester",
         "Rosemont Homewoners/Tenants"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Greenmount East",
@@ -313,7 +336,8 @@
         "Greenmount Cemetery",
         "Johnston Square",
         "Oliver"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Hamilton",
@@ -324,7 +348,8 @@
         "Rosemont East",
         "Westfield",
         "Glenham-Belford"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Harbor East/Little Italy",
@@ -336,7 +361,8 @@
         "Jonestown",
         "Little Italy",
         "Perkins Homes"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Harford/Echodale",
@@ -351,7 +377,8 @@
         "Overlea",
         "Taylor Heights",
         "Woodring (now North Harford Road)"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Highlandtown",
@@ -361,7 +388,8 @@
       "covers": [
         "Brewers Hill",
         "Highlandtown"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Howard Park/West Arlington",
@@ -374,7 +402,8 @@
         "Howard Park",
         "West Arlington",
         "Seton Business Park"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Inner Harbor/Federal Hill",
@@ -392,7 +421,8 @@
         "Downtown West",
         "SBIC (now South Baltimore)",
         "South Baltimore"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Lauraville",
@@ -408,7 +438,8 @@
         "Morgan Park",
         "Waltherson",
         "Wilson Heights (now Moravia-Walther)"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Loch Raven",
@@ -422,7 +453,8 @@
         "Mt. Pleasant Park",
         "Ramblewood",
         "Woodbourne Heights"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Madison/East End",
@@ -433,7 +465,8 @@
         "Madison-Eastend",
         "McElderry Park",
         "Milton-Montford"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Medfield/Hampden/Woodberry/Remington",
@@ -448,7 +481,8 @@
         "Remington",
         "Woodberry",
         "Wyman Park"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Midtown",
@@ -461,7 +495,8 @@
         "Greenmount West",
         "Mid-Town Belvedere",
         "Mount Vernon"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Midway/Coldstream",
@@ -471,7 +506,8 @@
       "covers": [
         "Coldstream Homestead Montebello",
         "East Baltimore Midway"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Morrell Park/Violetville",
@@ -485,7 +521,8 @@
         "Saint Paul",
         "Violetville",
         "Wilhelm Park"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Mount Washington/Coldspring",
@@ -496,7 +533,8 @@
         "Coldspring",
         "Mt. Washington",
         "Sabina-Mattfeldt"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "North Baltimore/Guilford/Homeland",
@@ -518,7 +556,8 @@
         "Loyola/Notre Dame",
         "Radnor-Winston",
         "York-Homeland"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Northwood",
@@ -533,7 +572,8 @@
         "Original Northwood",
         "Perring Loch",
         "Stonewood-Pentwood-Winston"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Oldtown/Middle East",
@@ -548,7 +588,8 @@
         "Penn-Fallsway",
         "Pleasant View Gardens",
         "CARE"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Orangeville/East Highlandtown",
@@ -566,7 +607,8 @@
         "Bayview",
         "Orangeville Industrial Area",
         "Pulaski Industrial Area"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Patterson Park North & East",
@@ -577,7 +619,8 @@
         "Baltimore-Linwood (now Patterson Park Neighborhood)",
         "Patterson Place",
         "Ellwood Park/Monument"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Penn North/Reservoir Hill",
@@ -589,7 +632,8 @@
         "Parkview/Woodbrook",
         "Penn North",
         "Reservoir Hill"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Pimlico/Arlington/Hilltop",
@@ -603,7 +647,8 @@
         "Langston Hughes",
         "Levindale",
         "Pimlico Good Neighbors"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Poppleton/The Terraces/Hollins Market",
@@ -613,7 +658,8 @@
       "covers": [
         "Hollins Market",
         "Poppleton"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Sandtown-Winchester/Harlem Park",
@@ -625,7 +671,8 @@
         "Harlem Park",
         "Midtown-Edmondson",
         "Sandtown-Winchester"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "South Baltimore",
@@ -636,7 +683,8 @@
         "Locust Point",
         "Port Covington",
         "Locust Point Industrial Area"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Southeastern",
@@ -652,7 +700,8 @@
         "O'Donnell Heights",
         "Saint Helena",
         "Dundalk Marine Terminal"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Southern Park Heights",
@@ -665,7 +714,8 @@
         "Park Circle",
         "Parklane",
         "Towanda-Grantley"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Southwest Baltimore",
@@ -681,7 +731,8 @@
         "Shipley Hill",
         "Union Square",
         "New Southwest/Mt. Clare"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "The Waverlies",
@@ -692,14 +743,16 @@
         "Better Waverly",
         "Ednor Gardens-Lakeside",
         "Waverly"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Unassigned -- Jail",
       "slug": "unassigned-jail",
       "lat": 39.2995,
       "lng": -76.608972,
-      "covers": []
+      "covers": [],
+      "borough": "Baltimore"
     },
     {
       "name": "Upton/Druid Heights",
@@ -711,7 +764,8 @@
         "Heritage Crossing",
         "Madison Park",
         "Upton"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Washington Village/Pigtown",
@@ -723,7 +777,8 @@
         "Carroll Park",
         "Caroll-Camden Industrial Area",
         "Washington Village/Pigtown"
-      ]
+      ],
+      "borough": "Baltimore"
     },
     {
       "name": "Westport/Mount Winans/Lakeland",
@@ -734,7 +789,8 @@
         "Lakeland",
         "Mt. Winans",
         "Westport"
-      ]
+      ],
+      "borough": "Baltimore"
     }
   ]
 }

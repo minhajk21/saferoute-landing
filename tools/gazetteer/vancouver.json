@@ -1,142 +1,164 @@
 {
- "city": "Vancouver",
- "citySlug": "vancouver",
- "country": "CA",
- "source": "City of Vancouver Open Data — 22 official local areas",
- "purpose": "CALIBRATION ONLY — no /safety/ pages are generated from this set",
- "generatedAt": "2026-08-06",
- "areas": [
-  {
-   "name": "Arbutus Ridge",
-   "slug": "arbutus-ridge",
-   "lat": 49.246805,
-   "lng": -123.161669
-  },
-  {
-   "name": "Downtown",
-   "slug": "downtown",
-   "lat": 49.280747,
-   "lng": -123.116567
-  },
-  {
-   "name": "Dunbar-Southlands",
-   "slug": "dunbar-southlands",
-   "lat": 49.237962,
-   "lng": -123.189547
-  },
-  {
-   "name": "Fairview",
-   "slug": "fairview",
-   "lat": 49.26454,
-   "lng": -123.131049
-  },
-  {
-   "name": "Grandview-Woodland",
-   "slug": "grandview-woodland",
-   "lat": 49.27644,
-   "lng": -123.066728
-  },
-  {
-   "name": "Hastings-Sunrise",
-   "slug": "hastings-sunrise",
-   "lat": 49.277934,
-   "lng": -123.04027
-  },
-  {
-   "name": "Kensington-Cedar Cottage",
-   "slug": "kensington-cedar-cottage",
-   "lat": 49.246686,
-   "lng": -123.072885
-  },
-  {
-   "name": "Kerrisdale",
-   "slug": "kerrisdale",
-   "lat": 49.223655,
-   "lng": -123.159576
-  },
-  {
-   "name": "Killarney",
-   "slug": "killarney",
-   "lat": 49.217022,
-   "lng": -123.037647
-  },
-  {
-   "name": "Kitsilano",
-   "slug": "kitsilano",
-   "lat": 49.26754,
-   "lng": -123.163295
-  },
-  {
-   "name": "Marpole",
-   "slug": "marpole",
-   "lat": 49.210207,
-   "lng": -123.128382
-  },
-  {
-   "name": "Mount Pleasant",
-   "slug": "mount-pleasant",
-   "lat": 49.263065,
-   "lng": -123.098513
-  },
-  {
-   "name": "Oakridge",
-   "slug": "oakridge",
-   "lat": 49.226403,
-   "lng": -123.123025
-  },
-  {
-   "name": "Renfrew-Collingwood",
-   "slug": "renfrew-collingwood",
-   "lat": 49.247343,
-   "lng": -123.040166
-  },
-  {
-   "name": "Riley Park",
-   "slug": "riley-park",
-   "lat": 49.244766,
-   "lng": -123.103147
-  },
-  {
-   "name": "Shaughnessy",
-   "slug": "shaughnessy",
-   "lat": 49.245681,
-   "lng": -123.13976
-  },
-  {
-   "name": "South Cambie",
-   "slug": "south-cambie",
-   "lat": 49.245556,
-   "lng": -123.121801
-  },
-  {
-   "name": "Strathcona",
-   "slug": "strathcona",
-   "lat": 49.27822,
-   "lng": -123.088235
-  },
-  {
-   "name": "Sunset",
-   "slug": "sunset",
-   "lat": 49.218756,
-   "lng": -123.092038
-  },
-  {
-   "name": "Victoria-Fraserview",
-   "slug": "victoria-fraserview",
-   "lat": 49.220012,
-   "lng": -123.064135
-  },
-  {
-   "name": "West End",
-   "slug": "west-end",
-   "lat": 49.285011,
-   "lng": -123.135438
-  },
-  {
-   "name": "West Point Grey",
-   "slug": "west-point-grey",
-   "lat": 49.268401,
-   "lng": -123.203467
-  }
- ]
+  "city": "Vancouver",
+  "citySlug": "vancouver",
+  "country": "CA",
+  "source": "City of Vancouver Open Data — 22 official local areas",
+  "purpose": "CALIBRATION ONLY — no /safety/ pages are generated from this set",
+  "generatedAt": "2026-08-06",
+  "areas": [
+    {
+      "name": "Arbutus Ridge",
+      "slug": "arbutus-ridge",
+      "lat": 49.246805,
+      "lng": -123.161669,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Downtown",
+      "slug": "downtown",
+      "lat": 49.280747,
+      "lng": -123.116567,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Dunbar-Southlands",
+      "slug": "dunbar-southlands",
+      "lat": 49.237962,
+      "lng": -123.189547,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Fairview",
+      "slug": "fairview",
+      "lat": 49.26454,
+      "lng": -123.131049,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Grandview-Woodland",
+      "slug": "grandview-woodland",
+      "lat": 49.27644,
+      "lng": -123.066728,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Hastings-Sunrise",
+      "slug": "hastings-sunrise",
+      "lat": 49.277934,
+      "lng": -123.04027,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Kensington-Cedar Cottage",
+      "slug": "kensington-cedar-cottage",
+      "lat": 49.246686,
+      "lng": -123.072885,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Kerrisdale",
+      "slug": "kerrisdale",
+      "lat": 49.223655,
+      "lng": -123.159576,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Killarney",
+      "slug": "killarney",
+      "lat": 49.217022,
+      "lng": -123.037647,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Kitsilano",
+      "slug": "kitsilano",
+      "lat": 49.26754,
+      "lng": -123.163295,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Marpole",
+      "slug": "marpole",
+      "lat": 49.210207,
+      "lng": -123.128382,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Mount Pleasant",
+      "slug": "mount-pleasant",
+      "lat": 49.263065,
+      "lng": -123.098513,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Oakridge",
+      "slug": "oakridge",
+      "lat": 49.226403,
+      "lng": -123.123025,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Renfrew-Collingwood",
+      "slug": "renfrew-collingwood",
+      "lat": 49.247343,
+      "lng": -123.040166,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Riley Park",
+      "slug": "riley-park",
+      "lat": 49.244766,
+      "lng": -123.103147,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Shaughnessy",
+      "slug": "shaughnessy",
+      "lat": 49.245681,
+      "lng": -123.13976,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "South Cambie",
+      "slug": "south-cambie",
+      "lat": 49.245556,
+      "lng": -123.121801,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Strathcona",
+      "slug": "strathcona",
+      "lat": 49.27822,
+      "lng": -123.088235,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Sunset",
+      "slug": "sunset",
+      "lat": 49.218756,
+      "lng": -123.092038,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "Victoria-Fraserview",
+      "slug": "victoria-fraserview",
+      "lat": 49.220012,
+      "lng": -123.064135,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "West End",
+      "slug": "west-end",
+      "lat": 49.285011,
+      "lng": -123.135438,
+      "borough": "Vancouver"
+    },
+    {
+      "name": "West Point Grey",
+      "slug": "west-point-grey",
+      "lat": 49.268401,
+      "lng": -123.203467,
+      "borough": "Vancouver"
+    }
+  ]
 }
