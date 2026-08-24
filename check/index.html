@@ -6,6 +6,11 @@
 <meta name="theme-color" content="#0A0D12">
 <title>Check any address — SafeRoute neighborhood safety</title>
 <meta name="description" content="Type any address, neighborhood or landmark and get its SafeRoute safety index (0–100) from official police crime data — a live crime map for anywhere SafeRoute covers.">
+<meta property="og:image" content="https://safe-route.app/assets/og-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:title" content="Check any address — SafeRoute neighborhood safety">
+<meta property="og:description" content="Type any street, neighborhood or landmark and get its safety index on a live crime map — official police data, plus live 911 calls and street cameras where cities publish them.">
+<meta property="og:type" content="website">
 <link rel="canonical" href="https://safe-route.app/check/">
 <meta name="apple-itunes-app" content="app-id=6768244297">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +29,7 @@
   .nav-right{display:flex;align-items:center;gap:16px}
   .nav-link{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--ink-2);padding:9px 2px}
   .nav-link:hover{color:var(--teal);text-decoration:none}
+  .nav-link.on{color:var(--teal);border-bottom:2px solid var(--teal)}
   .nav-cta{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;background:var(--teal);color:#04231E;padding:9px 16px;border:1px solid var(--teal);border-radius:8px}
   .nav-cta:hover{background:#5CE8D2;border-color:#5CE8D2;color:#04231E}@media(max-width:640px){.nav-link{display:none}}
 
@@ -116,6 +122,7 @@
       </a>
       <div class="nav-right">
         <a class="nav-link" href="/safety/">Safety index</a>
+      <a class="nav-link on" href="/check/">Check an address</a>
       <a class="nav-link" href="/tonight/">Tonight</a>
       <a class="nav-link" href="/transparency/">Transparency</a>
         <a class="nav-cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-check&mt=8">Get the app</a>

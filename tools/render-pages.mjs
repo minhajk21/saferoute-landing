@@ -579,6 +579,8 @@ const head = (title, desc, canonical, jsonld) => `<!DOCTYPE html>
 <meta name="apple-itunes-app" content="app-id=${APP_ID}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
+<meta property="og:image" content="https://safe-route.app/assets/og-preview.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${canonical}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -883,6 +885,13 @@ ${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug, rendered[0].
     // belongs in the one sitemap. Its lastmod comes from the dataset's own
     // generation date rather than the crime feeds', because the page is about
     // when we last MEASURED the feeds, not when they last published.
+    // /check/ is hand-written rather than generated, which is exactly why it
+    // kept missing from the sitemap — the generator only ever listed what it
+    // produced itself. It is a real, indexable page and the homepage's primary
+    // call to action, so it belongs here like the other hand-written surfaces.
+    ...(existsSync(join(ROOT, 'check', 'index.html'))
+      ? [{ loc: `${SITE}/check/`, pri: '0.9', mod: lastmodOf(siteDate) }]
+      : []),
     ...(existsSync(join(ROOT, 'tonight', 'index.html'))
       ? [{ loc: `${SITE}/tonight/`, pri: '0.8', mod: lastmodOf(siteDate) }]
       : []),

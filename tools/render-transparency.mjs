@@ -130,6 +130,8 @@ const html = `<!DOCTYPE html>
 <meta name="apple-itunes-app" content="app-id=${APP_ID}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
+<meta property="og:image" content="https://safe-route.app/assets/og-preview.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${SITE}/transparency/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
