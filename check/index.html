@@ -379,7 +379,7 @@ function render(d, name, address){
   panel.innerHTML = `
     <div class="place">${esc(name)}${address?`<small>${esc(address)}</small>`:''}</div>
     <div class="scorebox">
-      <span class="score" style="color:${b.c}">${d.safetyScore}<span class="of">/100</span></span>
+      <span class="score" style="color:${b.c}">${d.safetyScore}<span class="of">\u002F100</span></span>
       <span class="band" style="background:${b.c}">${b.t}</span>
     </div>
     <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported ${esc(d.reportedTo||'to police')} within 1&nbsp;km${span?` over ${span}${d.crimeDate?` to ${monthName(d.crimeDate)}`:''}`:''} — higher index = safer. ${d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
@@ -488,7 +488,17 @@ async function addPubLink(lat,lng,reqId){
   for(const p of idx){ const dd=distKm(lat,lng,p.la,p.lo); if(dd<bd){ bd=dd; best=p; } }
   if(!best || bd>3 || reqId!==lastReqId) return; // >3km = not in a published neighborhood
   const el=document.getElementById('pub'); if(!el) return;
-  el.innerHTML = `<a class="publink" href="/safety/${best.c}/${best.s}/"><span class="dot"></span>Read the in-depth ${esc(best.n)} safety report →</a>`;
+  // Built via DOM rather than an innerHTML string. Googlebot scrapes
+  // URL-shaped text out of inline script source, so an interpolated href
+  // written as a template literal gets crawled before it is ever evaluated
+  // and lands in Search Console as a 404. Keep the path assembled at
+  // runtime, never spelled out in the markup.
+  const a = document.createElement('a');
+  a.className = 'publink';
+  a.href = '/safety/' + best.c + '/' + best.s + '/';
+  const dot = document.createElement('span'); dot.className = 'dot';
+  a.append(dot, 'Read the in-depth ' + best.n + ' safety report →');
+  el.replaceChildren(a);
 }
 
 // ── utils ──

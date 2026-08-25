@@ -602,7 +602,7 @@
         var li = document.createElement('li'), el = document.createElement('a');
         el.href = '/safety/' + a.c + '/' + a.s + '/';
         el.innerHTML = '<span>' + a.n + ' <span class="lk-where">' + a.cn + '</span></span>' +
-                       '<span class="lk-score" style="color:' + (BAND[a.b] || '#F3F7FA') + '">' + a.v + '/100</span>';
+                       '<span class="lk-score" style="color:' + (BAND[a.b] || '#F3F7FA') + '">' + a.v + '<span class="of">\u002F100</span></span>';
         li.appendChild(el); out.appendChild(li);
       });
     }
