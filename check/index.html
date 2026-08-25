@@ -85,7 +85,23 @@
   .src{font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.5}
   .cta{display:inline-block;margin-top:2px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;background:var(--teal);color:#04231E;padding:11px 16px;border-radius:10px;text-align:center}
   .cta:hover{background:#5CE8D2}
-  .spinner{width:22px;height:22px;border:2.5px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite}to{transform:rotate(360deg)}
+  .spinner{width:22px;height:22px;border:2.5px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  /* Pan status. The map refetches as you drag (see refetchAt) and until that
+     lands the panel still shows the PREVIOUS area's numbers — so say so, the
+     way the app's "Updating area…" caption does, rather than letting stale
+     figures read as current. Top-RIGHT because Leaflet owns the top-left. */
+  .mapstatus{position:absolute;top:14px;right:14px;z-index:1200;display:flex;align-items:center;gap:9px;
+    padding:8px 13px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);
+    color:var(--ink-2);font-size:13px;line-height:1;white-space:nowrap;pointer-events:none;
+    box-shadow:0 6px 20px rgba(0,0,0,.35);
+    opacity:0;transform:translateY(-4px);transition:opacity .18s ease,transform .18s ease}
+  .mapstatus.on{opacity:1;transform:none}
+  .mapstatus .spinner{width:13px;height:13px;border-width:2px}
+  @media(prefers-reduced-motion:reduce){
+    .mapstatus{transition:none}
+    .spinner{animation-duration:1.6s}
+  }
   .note{font-size:13.5px;color:var(--ink-2);line-height:1.55;background:var(--cream-deep);border:1px solid var(--line);padding:14px 16px;border-radius:10px}
   #pub:empty{display:none}
   .publink{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.03em;color:var(--teal);text-decoration:none;border:1px solid var(--line-2);padding:9px 14px;border-radius:9px;transition:border-color .15s,background .15s}
@@ -245,6 +261,22 @@ const TOD3 = ["Day","Eve","Night"];
 // map lives in a still-resolving CSS grid) interrupt Leaflet's tile fade-in and
 // leave tiles stuck at opacity 0. Disabling the fade paints them immediately.
 const map = L.map('map', { zoomControl:true, attributionControl:true, scrollWheelZoom:true, fadeAnimation:false }).setView([39,-98], 4);
+
+// Pan status pill — mirrors the app's "Updating area…" caption. Built with DOM
+// calls (not innerHTML) for the same reason as the publink: no URL-shaped
+// string literals for Googlebot to scrape out of this script.
+const mapStatus = document.createElement('div');
+mapStatus.className = 'mapstatus';
+mapStatus.setAttribute('role', 'status');
+mapStatus.setAttribute('aria-live', 'polite');
+mapStatus.setAttribute('aria-hidden', 'true');
+const mapStatusSpin = document.createElement('span'); mapStatusSpin.className = 'spinner';
+mapStatus.append(mapStatusSpin, 'Updating area\u2026');
+map.getContainer().appendChild(mapStatus);
+function showUpdating(on){
+  mapStatus.classList.toggle('on', on);
+  mapStatus.setAttribute('aria-hidden', on ? 'false' : 'true');
+}
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   subdomains:'abcd', maxZoom:19, detectRetina:true,
   attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>',
@@ -403,6 +435,7 @@ let lastName='This area';
 async function refetchAt(lat, lng){
   const reqId = ++lastReqId;
   lastCenter=[lat,lng];
+  showUpdating(true);
   try{
     const [r, rev] = await Promise.all([
       fetch(`${API}/public/area?lat=${lat}&lng=${lng}`),
@@ -418,6 +451,10 @@ async function refetchAt(lat, lng){
     fetchRecent(lat, lng, reqId);
     fetchCameras(lat, lng, reqId);
   }catch{}
+  // Every exit clears it — including the quiet 429/!ok returns — or the pill
+  // sticks forever. Guarded on reqId so a superseded pan does not switch off
+  // the indicator that a newer, still-running pan owns.
+  finally{ if(reqId===lastReqId) showUpdating(false); }
 }
 
 // ── hexagon heat map (matches the app) ──────────────────────────────
