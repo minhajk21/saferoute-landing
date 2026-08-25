@@ -349,6 +349,37 @@ const CITIES = {
       methodology: `Each offense reported to the Denver Police Department (via Denver Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted offenses within 1 km of its center, and normalize against citywide crime rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City and County of Denver's official statistical neighborhoods. Denver's neighborhoods are relatively large, so 1&nbsp;km circles overlap less than in denser cities and adjacent areas separate more cleanly. Time-of-day charts use DPD offense timestamps, severity-weighted. Pages regenerate as new data is published.`,
     },
   },
+  'longbeach': {
+    name: 'Long Beach',
+    hubName: 'Long Beach',
+    rankPool: 'Long Beach neighborhoods',
+    // 98 official neighborhoods. The city's boundary file carries 123, but 25
+    // of those are "Unassigned (...)" fragments — marinas, the entrance
+    // channel, regional parks, two power stations. They are not neighborhoods,
+    // nobody walks them, and pages for them would be thin content, so they are
+    // excluded. Doing so also widens median centre spacing 709 m → 780 m,
+    // clearing DC (700 m), the tightest city published here.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    reportedTo: 'reported to the Long Beach Police',
+    dataName: 'Long Beach Police data',
+    medianLabel: 'citywide median',
+    forCity: 'for Long Beach',
+    acrossCity: 'across Long Beach',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Long Beach Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Long Beach Police Department incident records via <a href="https://datalb.longbeach.gov/">City of Long Beach Open Data</a>${dateLine}. Neighborhood boundaries: City of Long Beach official neighborhoods. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Long Beach Neighborhood Safety Map & Rankings (${n} neighborhoods) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Long Beach neighborhood? Safety index (0\u2013100) for ${n} Long Beach neighborhoods from Long Beach Police incident data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Long Beach neighborhood?',
+      lead: `SafeRoute scores every Long Beach neighborhood 0\u2013100 from incidents reported to the Long Beach Police Department \u2014 severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood \u2014 e.g. Belmont Shore, Bixby Knolls, Alamitos Beach\u2026',
+      rankHeading: (n) => `All ${n} Long Beach neighborhoods, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center \u2014 they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the Long Beach Police Department (via City of Long Beach Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of Long Beach's official neighborhoods; 25 unnamed fragments in the city's boundary file \u2014 marinas, the entrance channel, regional parks and two power stations \u2014 are excluded, because they are not places anyone lives or walks. Long Beach neighborhoods are compact, so 1&nbsp;km circles around adjacent centers overlap more than in a sprawling city; read neighbouring pages together rather than as sharp borders. The dataset records the date an incident was reported rather than when it occurred, so time-of-day patterns are not shown. Pages regenerate as new data is published.`,
+    },
+  },
   'vancouver': {
     name: 'Vancouver',
     hubName: 'Vancouver',
@@ -413,7 +444,7 @@ const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 // a missing dataset just hides the chips, it never fails a 1,222-page build.
 const SLUG_TO_REGION = { 'new-york': 'nyc', london: 'uk', chicago: 'chicago', la: 'la',
   sf: 'sf', seattle: 'seattle', toronto: 'toronto', dc: 'dc', boston: 'boston', philly: 'philly',
-  denver: 'denver', vancouver: 'vancouver', baltimore: 'baltimore' };
+  denver: 'denver', vancouver: 'vancouver', baltimore: 'baltimore', longbeach: 'longbeach' };
 // Region ids with a live tonight layer — drives the hub strip. NOLA is live but
 // has no SEO hub; SF joins this list the day its layer ships.
 const TONIGHT_REGIONS = new Set(['neworleans', 'sf']);   // sf added 2026-08-22 (near real-time dispatch)
