@@ -1,0 +1,381 @@
+{
+  "city": "San Diego",
+  "citySlug": "sandiego",
+  "country": "US",
+  "source": "SANDAG / City of San Diego — Community Plan Areas",
+  "purpose": "Safety pages + calibration. Community plan areas, not census tracts: see the header of this script for why.",
+  "generatedAt": "2026-08-26",
+  "areas": [
+    {
+      "name": "Balboa Park",
+      "slug": "balboa-park",
+      "lat": 32.731126,
+      "lng": -117.145962,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Barrio Logan",
+      "slug": "barrio-logan",
+      "lat": 32.690703,
+      "lng": -117.131487,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Black Mountain Ranch",
+      "slug": "black-mountain-ranch",
+      "lat": 32.998323,
+      "lng": -117.140475,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Carmel Mountain Ranch",
+      "slug": "carmel-mountain-ranch",
+      "lat": 32.977427,
+      "lng": -117.077315,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Carmel Valley",
+      "slug": "carmel-valley",
+      "lat": 32.944327,
+      "lng": -117.220343,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Clairemont Mesa",
+      "slug": "clairemont-mesa",
+      "lat": 32.816376,
+      "lng": -117.194832,
+      "borough": "San Diego"
+    },
+    {
+      "name": "College Area",
+      "slug": "college-area",
+      "lat": 32.771394,
+      "lng": -117.073113,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Del Mar Mesa",
+      "slug": "del-mar-mesa",
+      "lat": 32.942019,
+      "lng": -117.179998,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Downtown",
+      "slug": "downtown",
+      "lat": 32.713911,
+      "lng": -117.160586,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Encanto Neighborhoods",
+      "slug": "encanto-neighborhoods",
+      "lat": 32.709735,
+      "lng": -117.07276,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Fairbanks Ranch Country Club",
+      "slug": "fairbanks-ranch-country-club",
+      "lat": 32.97903,
+      "lng": -117.213844,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Greater Golden Hill",
+      "slug": "greater-golden-hill",
+      "lat": 32.719877,
+      "lng": -117.131269,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Kearny Mesa",
+      "slug": "kearny-mesa",
+      "lat": 32.822744,
+      "lng": -117.139113,
+      "borough": "San Diego"
+    },
+    {
+      "name": "La Jolla",
+      "slug": "la-jolla",
+      "lat": 32.839324,
+      "lng": -117.254707,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Linda Vista",
+      "slug": "linda-vista",
+      "lat": 32.782258,
+      "lng": -117.177348,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Los Penasquitos Canyon",
+      "slug": "los-penasquitos-canyon",
+      "lat": 32.923708,
+      "lng": -117.183924,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Mid-City:city Heights",
+      "slug": "mid-city-city-heights",
+      "lat": 32.740164,
+      "lng": -117.101272,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Mid-City:eastern Area",
+      "slug": "mid-city-eastern-area",
+      "lat": 32.742664,
+      "lng": -117.069625,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Mid-City:kensington-Talmadge",
+      "slug": "mid-city-kensington-talmadge",
+      "lat": 32.764977,
+      "lng": -117.09882,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Mid-City:normal Heights",
+      "slug": "mid-city-normal-heights",
+      "lat": 32.764795,
+      "lng": -117.118573,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Midway-Pacific Highway",
+      "slug": "midway-pacific-highway",
+      "lat": 32.746299,
+      "lng": -117.201128,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Mira Mesa",
+      "slug": "mira-mesa",
+      "lat": 32.909228,
+      "lng": -117.158595,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Miramar Ranch North",
+      "slug": "miramar-ranch-north",
+      "lat": 32.930425,
+      "lng": -117.096069,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Mission Bay Park",
+      "slug": "mission-bay-park",
+      "lat": 32.775276,
+      "lng": -117.228496,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Mission Beach",
+      "slug": "mission-beach",
+      "lat": 32.773762,
+      "lng": -117.25214,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Mission Valley",
+      "slug": "mission-valley",
+      "lat": 32.77337,
+      "lng": -117.145727,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Navajo",
+      "slug": "navajo",
+      "lat": 32.802929,
+      "lng": -117.052033,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Ncfua Subarea Ii",
+      "slug": "ncfua-subarea-ii",
+      "lat": 32.973133,
+      "lng": -117.240363,
+      "borough": "San Diego"
+    },
+    {
+      "name": "North Park",
+      "slug": "north-park",
+      "lat": 32.746027,
+      "lng": -117.130428,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Ocean Beach",
+      "slug": "ocean-beach",
+      "lat": 32.746861,
+      "lng": -117.246218,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Old Town San Diego",
+      "slug": "old-town-san-diego",
+      "lat": 32.755214,
+      "lng": -117.195967,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Otay Mesa",
+      "slug": "otay-mesa",
+      "lat": 32.565141,
+      "lng": -116.991162,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Otay Mesa-Nestor",
+      "slug": "otay-mesa-nestor",
+      "lat": 32.580864,
+      "lng": -117.078112,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Pacific Beach",
+      "slug": "pacific-beach",
+      "lat": 32.803466,
+      "lng": -117.239086,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Pacific Highlands Ranch",
+      "slug": "pacific-highlands-ranch",
+      "lat": 32.962678,
+      "lng": -117.193437,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Peninsula",
+      "slug": "peninsula",
+      "lat": 32.720673,
+      "lng": -117.236191,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Rancho Bernardo",
+      "slug": "rancho-bernardo",
+      "lat": 33.025118,
+      "lng": -117.072953,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Rancho Encantada",
+      "slug": "rancho-encantada",
+      "lat": 32.929117,
+      "lng": -117.013435,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Rancho Penasquitos",
+      "slug": "rancho-penasquitos",
+      "lat": 32.965559,
+      "lng": -117.120178,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Sabre Springs",
+      "slug": "sabre-springs",
+      "lat": 32.948308,
+      "lng": -117.087703,
+      "borough": "San Diego"
+    },
+    {
+      "name": "San Ysidro",
+      "slug": "san-ysidro",
+      "lat": 32.555717,
+      "lng": -117.047708,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Scripps Miramar Ranch",
+      "slug": "scripps-miramar-ranch",
+      "lat": 32.909435,
+      "lng": -117.087345,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Serra Mesa",
+      "slug": "serra-mesa",
+      "lat": 32.794847,
+      "lng": -117.140756,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Skyline-Paradise Hills",
+      "slug": "skyline-paradise-hills",
+      "lat": 32.692135,
+      "lng": -117.044161,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Southeastern San Diego",
+      "slug": "southeastern-san-diego",
+      "lat": 32.702663,
+      "lng": -117.117479,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Tierrasanta",
+      "slug": "tierrasanta",
+      "lat": 32.828503,
+      "lng": -117.081519,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Tijuana River Valley",
+      "slug": "tijuana-river-valley",
+      "lat": 32.548088,
+      "lng": -117.088153,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Torrey Highlands",
+      "slug": "torrey-highlands",
+      "lat": 32.966912,
+      "lng": -117.155745,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Torrey Hills",
+      "slug": "torrey-hills",
+      "lat": 32.918879,
+      "lng": -117.225347,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Torrey Pines",
+      "slug": "torrey-pines",
+      "lat": 32.932633,
+      "lng": -117.242897,
+      "borough": "San Diego"
+    },
+    {
+      "name": "University",
+      "slug": "university",
+      "lat": 32.876163,
+      "lng": -117.220367,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Uptown",
+      "slug": "uptown",
+      "lat": 32.747444,
+      "lng": -117.166491,
+      "borough": "San Diego"
+    },
+    {
+      "name": "Via De La Valle",
+      "slug": "via-de-la-valle",
+      "lat": 32.983319,
+      "lng": -117.243273,
+      "borough": "San Diego"
+    }
+  ]
+}

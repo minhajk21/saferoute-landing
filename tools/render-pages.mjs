@@ -380,6 +380,41 @@ const CITIES = {
       methodology: `Each incident reported to the Long Beach Police Department (via City of Long Beach Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of Long Beach's official neighborhoods; 25 unnamed fragments in the city's boundary file \u2014 marinas, the entrance channel, regional parks and two power stations \u2014 are excluded, because they are not places anyone lives or walks. Long Beach neighborhoods are compact, so 1&nbsp;km circles around adjacent centers overlap more than in a sprawling city; read neighbouring pages together rather than as sharp borders. The dataset records the date an incident was reported rather than when it occurred, so time-of-day patterns are not shown. Pages regenerate as new data is published.`,
     },
   },
+  'sandiego': {
+    name: 'San Diego',
+    hubName: 'San Diego',
+    rankPool: 'San Diego communities',
+    // 53 of the city's 61 COMMUNITY PLAN AREAS. Eight are excluded: six are
+    // not neighbourhoods at all and mostly say so in their own name (five
+    // "RESERVE AREA-Not a community plan", plus "MILITARY FACILITIES"), and
+    // two more — East Elliott and San Pasqual — are undeveloped land and an
+    // agricultural valley where SDPD reports NO incidents at all. Those two
+    // scored a perfect 100 precisely because there is no data, which would
+    // have published "the safest place in San Diego" about empty backcountry.
+    // Community plan areas are also the coarsest boundary set here after
+    // Chicago and LA: 2,642 m median centre spacing, 1,103 m at the closest,
+    // so no two pages describe overlapping ground.
+    areaWord: 'community', areaWordPlural: 'communities',
+    centre: 'center', centreLabel: 'community center',
+    reportedTo: 'reported to the San Diego Police',
+    dataName: 'San Diego Police data',
+    medianLabel: 'citywide median',
+    forCity: 'for San Diego',
+    acrossCity: 'across San Diego',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the San Diego Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: San Diego Police Department incident records via <a href="https://data.sandiego.gov/">City of San Diego Open Data</a>${dateLine}. Community boundaries: SANDAG / City of San Diego Community Plan Areas. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `San Diego Community Safety Map & Rankings (${n} communities) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your San Diego community? Safety index (0\u2013100) for ${n} San Diego communities from San Diego Police incident data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your San Diego community?',
+      lead: `SafeRoute scores every San Diego community 0\u2013100 from incidents reported to the San Diego Police Department \u2014 severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a community \u2014 e.g. North Park, Pacific Beach, La Jolla\u2026',
+      rankHeading: (n) => `All ${n} San Diego communities, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each community's center \u2014 they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the San Diego Police Department (via City of San Diego Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every community we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are SANDAG's Community Plan Areas \u2014 the areas San Diegans actually name. Eight of the city's 61 are excluded: six are not neighbourhoods (five reserve areas that say so in their own name, plus military facilities), and two \u2014 East Elliott and San Pasqual \u2014 are undeveloped backcountry where no incidents are reported at all, which would otherwise publish a perfect score built on an absence of data rather than on safety. The dataset records the date an incident occurred but not the time, so time-of-day patterns are not shown. Pages regenerate as new data is published.`,
+    },
+  },
   'vancouver': {
     name: 'Vancouver',
     hubName: 'Vancouver',
@@ -444,7 +479,8 @@ const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 // a missing dataset just hides the chips, it never fails a 1,222-page build.
 const SLUG_TO_REGION = { 'new-york': 'nyc', london: 'uk', chicago: 'chicago', la: 'la',
   sf: 'sf', seattle: 'seattle', toronto: 'toronto', dc: 'dc', boston: 'boston', philly: 'philly',
-  denver: 'denver', vancouver: 'vancouver', baltimore: 'baltimore', longbeach: 'longbeach' };
+  denver: 'denver', vancouver: 'vancouver', baltimore: 'baltimore', longbeach: 'longbeach',
+  sandiego: 'sandiego' };
 // Region ids with a live tonight layer — drives the hub strip. NOLA is live but
 // has no SEO hub; SF joins this list the day its layer ships.
 const TONIGHT_REGIONS = new Set(['neworleans', 'sf']);   // sf added 2026-08-22 (near real-time dispatch)
@@ -536,10 +572,21 @@ function mapSVG(a, shape, bm, cfg) {
   const path = (rings2, close) => rings2.map(r => 'M' + r.map(p => p.join(',')).join('L') + (close ? 'Z' : '')).join('');
   let ground = `<rect width="${W}" height="${H}" fill="#FBF9F2"/>`;
   let streetLabels = '';
-  if (bm && (bm.land?.length || bm.water?.length)) {
+  // The gate must ask "is there ANY basemap geometry", not "is there ground
+  // geometry": it used to require land or water polygons, so a fully inland,
+  // dry area — no river, no shoreline, no docks — silently lost its entire
+  // street grid and rendered as dots on blank paper. That was live on 100
+  // pages across 13 cities (San Diego's mesas exposed it: 11 of 53) before
+  // being caught here. Dry areas get the land tone as their ground.
+  const hasBm = bm && ((bm.land?.length || 0) + (bm.water?.length || 0) +
+                       (bm.parks?.length || 0) + (bm.stMinor?.length || 0) +
+                       (bm.stMajor?.length || 0)) > 0;
+  if (hasBm) {
     ground = bm.land?.length
       ? `<rect width="${W}" height="${H}" fill="#D7E3E8"/><path d="${path(bm.land, true)}" fill="#F7F3E8" fill-rule="evenodd"/>`
-      : `<rect width="${W}" height="${H}" fill="#F7F3E8"/><path d="${path(bm.water, true)}" fill="#D7E3E8" fill-rule="evenodd"/>`;
+      : bm.water?.length
+      ? `<rect width="${W}" height="${H}" fill="#F7F3E8"/><path d="${path(bm.water, true)}" fill="#D7E3E8" fill-rule="evenodd"/>`
+      : `<rect width="${W}" height="${H}" fill="#F7F3E8"/>`;
     ground +=
       (bm.parks?.length ? `<path d="${path(bm.parks, true)}" fill="#E4EDDA" fill-rule="evenodd"/>` : '') +
       (bm.stMinor?.length ? `<path d="${path(bm.stMinor)}" fill="none" stroke="#DCD3BF" stroke-width="1"/>` : '') +
