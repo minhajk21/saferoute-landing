@@ -242,18 +242,29 @@ async function fetchCameras(lat,lng,reqId){
       return;
     }
     if(!d.cameras || !d.cameras.length) return;
-    if(slot) slot.innerHTML=`<div class="meta" style="margin-top:6px"><span style="display:inline-block;width:9px;height:9px;border-radius:2px;border:1.5px solid #2E6B8A;background:#fff;margin-right:6px"></span><b>Street cameras:</b> ${fmt(d.count)} nearby — click a pin for the latest still <span style="color:var(--ink-3)">(${esc(d.attribution)})</span></div>`;
+    if(slot) slot.innerHTML=`<div class="meta" style="margin-top:6px"><span style="display:inline-block;width:9px;height:9px;border-radius:2px;border:1.5px solid #2E6B8A;background:#fff;margin-right:6px"></span><b>Street cameras:</b> ${fmt(d.count)} nearby — click a pin for ${d.stream?'a live view':'the latest still'} <span style="color:var(--ink-3)">(${esc(d.attribution)})</span></div>`;
     const ico=L.divIcon({className:'cam-pin',html:'📷',iconSize:[18,18],iconAnchor:[9,9],popupAnchor:[0,-8]});
     // London's cameras carry ~10s MP4 clips (video:true per camera) → a
     // muted looping player. Elsewhere a still — and where the upstream
     // refreshes at second scale (NYC), the popupopen handler below re-polls
     // the still every few seconds, which reads as slow-motion live.
-    const media=c=> c.video
-      ? `<video class="campop-media" width="272" height="222" style="object-fit:cover;border-radius:8px;margin-top:6px;background:#111;display:block" autoplay muted loop playsinline poster="${API}/public/camera-image?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}" src="${API}/public/camera-video?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}"></video>`
-      : `<img class="campop-media" data-refresh="1" src="${API}/public/camera-image?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}" width="272" height="222" style="object-fit:cover;border-radius:8px;margin-top:6px;background:#e8e4da" alt="Latest still from ${esc(c.name)}">`;
+    const VSTYLE='object-fit:cover;border-radius:8px;margin-top:6px;background:#111;display:block';
+    const still=c=>`${API}/public/camera-image?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}`;
+    // Three media kinds, most-live first. A live HLS stream (Las Vegas, and
+    // NYC's arterials) is played from the AUTHORITY, not proxied — a live
+    // stream cannot be cached, so relaying it would spend bandwidth to buy
+    // nothing. The still is the poster, so the popup is never blank while the
+    // stream negotiates, and stays put if it never does.
+    const media=c=> c.streamUrl
+      ? `<video class="campop-media" data-stream="${esc(c.streamUrl)}" width="272" height="222" style="${VSTYLE}" autoplay muted playsinline poster="${still(c)}"></video>`
+      : c.video
+      ? `<video class="campop-media" width="272" height="222" style="${VSTYLE}" autoplay muted loop playsinline poster="${still(c)}" src="${API}/public/camera-video?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}"></video>`
+      : `<img class="campop-media" data-refresh="1" src="${still(c)}" width="272" height="222" style="object-fit:cover;border-radius:8px;margin-top:6px;background:#e8e4da" alt="Latest still from ${esc(c.name)}">`;
+    const kind=c=> c.streamUrl ? 'Live video' : (c.video ? 'Live clip' : 'Latest still');
+    const credit=c=> c.streamUrl ? (d.streamAttribution || d.attribution) : d.attribution;
     const pins=d.cameras.map(c=>
       L.marker([c.lat,c.lng],{icon:ico,title:c.name,keyboard:false})
-       .bindPopup(`<div class="campop"><b>${esc(c.name)}</b><br>${media(c)}<div class="src" style="margin-top:4px">${c.video?'Live clip':'Latest still'} · ${esc(d.cadence||'refreshes about every 2 minutes')} · ${esc(d.attribution)}</div></div>`,{maxWidth:296}));
+       .bindPopup(`<div class="campop"><b>${esc(c.name)}</b><br>${media(c)}<div class="src" style="margin-top:4px">${kind(c)}${c.streamUrl?'':' · '+esc(d.cadence||'refreshes about every 2 minutes')} · ${esc(credit(c))}</div></div>`,{maxWidth:296}));
     camLayer=L.layerGroup(pins).addTo(map);
   }catch{ /* overlay only — never break the main lookup */ }
 }
@@ -323,13 +334,50 @@ map && null; // (map defined below; handlers attached after init)
 // Auto-update on pan/zoom (like the app): when the user moves the map, re-fetch
 // the area under the new center and redraw. A flag suppresses our own animated
 // flyTo, and we ignore moves smaller than ~250 m so a pure zoom doesn't refetch.
+// Safari plays HLS natively; everything else needs hls.js, which is fetched
+// ONLY when a stream popup is actually opened — no cost to the 99% of visits
+// that never tap a camera. If it cannot load or the stream fails, the poster
+// still is already painted underneath, so the popup degrades to the still
+// rather than to a black rectangle.
+let hlsLib = null;
+function withHls(cb){
+  if(window.Hls) return cb(window.Hls);
+  if(hlsLib) return hlsLib.then(cb).catch(()=>{});
+  hlsLib = new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js';
+    s.onload=()=>res(window.Hls); s.onerror=rej;
+    document.head.appendChild(s);
+  });
+  hlsLib.then(cb).catch(()=>{});
+}
+let camHls=null;
 map.on('popupopen', e => {
+  const vid = e.popup.getElement()?.querySelector('video.campop-media[data-stream]');
+  if(vid){
+    const src = vid.getAttribute('data-stream');
+    if(vid.canPlayType('application/vnd.apple.mpegurl')){
+      vid.src = src; vid.play().catch(()=>{});            // Safari / iOS
+    } else {
+      withHls(Hls => {
+        if(!Hls.isSupported()) return;                     // poster still stands
+        camHls = new Hls({ liveDurationInfinity:true });
+        camHls.loadSource(src); camHls.attachMedia(vid);
+        camHls.on(Hls.Events.MANIFEST_PARSED, ()=>vid.play().catch(()=>{}));
+      });
+    }
+  }
   const img = e.popup.getElement()?.querySelector('img.campop-media[data-refresh]');
   if(!img) return;
   const base = img.src;
   camRefreshTmr = setInterval(()=>{ img.src = base + (base.includes('?')?'&':'?') + 't=' + Date.now(); }, 5000);
 });
-map.on('popupclose', () => { if(camRefreshTmr){ clearInterval(camRefreshTmr); camRefreshTmr=null; } });
+map.on('popupclose', () => {
+  if(camRefreshTmr){ clearInterval(camRefreshTmr); camRefreshTmr=null; }
+  // A live stream keeps pulling segments until told otherwise — closing the
+  // popup must actually stop it, not just hide it.
+  if(camHls){ camHls.destroy(); camHls=null; }
+});
 let suppressMove=false, panTmr=null, lastCenter=null, lastData=null;
 // Leaflet fires moveend for PROGRAMMATIC moves too, and treating those as user
 // pans was a real bug: clicking a camera pin near the edge makes Leaflet autoPan
