@@ -342,30 +342,37 @@ map && null; // (map defined below; handlers attached after init)
 let hlsLib = null;
 function withHls(cb){
   if(window.Hls) return cb(window.Hls);
-  if(hlsLib) return hlsLib.then(cb).catch(()=>{});
-  hlsLib = new Promise((res,rej)=>{
+  // Resolves with null rather than rejecting when the CDN is unreachable, so
+  // the caller still runs and can try the native path.
+  hlsLib = hlsLib || new Promise((res)=>{
     const s=document.createElement('script');
     s.src='https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js';
-    s.onload=()=>res(window.Hls); s.onerror=rej;
+    s.onload=()=>res(window.Hls||null); s.onerror=()=>res(null);
     document.head.appendChild(s);
   });
-  hlsLib.then(cb).catch(()=>{});
+  hlsLib.then(cb);
 }
 let camHls=null;
 map.on('popupopen', e => {
   const vid = e.popup.getElement()?.querySelector('video.campop-media[data-stream]');
   if(vid){
     const src = vid.getAttribute('data-stream');
-    if(vid.canPlayType('application/vnd.apple.mpegurl')){
-      vid.src = src; vid.play().catch(()=>{});            // Safari / iOS
-    } else {
-      withHls(Hls => {
-        if(!Hls.isSupported()) return;                     // poster still stands
+    // hls.js FIRST, native only as the fallback — the reverse of the obvious
+    // order, and deliberately so. canPlayType('application/vnd.apple.mpegurl')
+    // answers "maybe" in Chrome, which is not support: taking that branch set
+    // .src on a stream Chrome cannot demux, and the element sat paused at
+    // readyState 1 with no error to notice. Asking the library whether it can
+    // actually play is a real answer; asking the element is a guess.
+    withHls(Hls => {
+      if(Hls && Hls.isSupported()){
         camHls = new Hls({ liveDurationInfinity:true });
         camHls.loadSource(src); camHls.attachMedia(vid);
         camHls.on(Hls.Events.MANIFEST_PARSED, ()=>vid.play().catch(()=>{}));
-      });
-    }
+      } else if(vid.canPlayType('application/vnd.apple.mpegurl')){
+        vid.src = src; vid.play().catch(()=>{});           // Safari / iOS
+      }
+      // neither → the poster still is already painted, so nothing to do
+    });
   }
   const img = e.popup.getElement()?.querySelector('img.campop-media[data-refresh]');
   if(!img) return;
