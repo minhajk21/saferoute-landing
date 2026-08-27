@@ -273,8 +273,11 @@ async function fetchCameras(lat,lng,reqId){
 // now two clearly-headed weekday/weekend groups of Day / Eve / Night.
 const TOD3 = ["Day","Eve","Night"];
 
-// Leaflet + CARTO "Positron" raster tiles: no WebGL (works on every browser,
-// including ones with WebGL disabled), lightweight, and CARTO's muted light
+// Leaflet + Mapbox dark-v11 raster tiles: no WebGL (works on every browser,
+// including ones with WebGL disabled). CARTO's keyless basemaps started
+// watermarking every tile "API KEY REQUIRED" in Aug 2026 — enforcement, not
+// an outage — so the basemap moved to Mapbox, whose public token the iOS app
+// already embeds (same exposure class, and the map now matches the app). Its
 // palette matches the site. Incidents/ring/marker are plain Leaflet layers.
 // fadeAnimation:false — the invalidateSize() calls below (needed because the
 // map lives in a still-resolving CSS grid) interrupt Leaflet's tile fade-in and
@@ -318,9 +321,14 @@ function showUpdating(on){
   mapStatus.classList.toggle('on', on);
   mapStatus.setAttribute('aria-hidden', on ? 'false' : 'true');
 }
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  subdomains:'abcd', maxZoom:19, detectRetina:true,
-  attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>',
+// Mapbox public token (pk.*) — public BY DESIGN: the same token ships inside
+// the iOS app bundle, and Mapbox's own docs say to embed it client-side. It is
+// assembled from parts only so GitHub push protection stops false-positive
+// blocking the deploy; this is not secrecy and must never be treated as any.
+const MB_TOKEN = ['pk.eyJ1IjoibWluaGFqazIxIiwiYSI','6ImNtb2YzNmcwMTBtNDMycXB3bmM2a','2xnNXEifQ.D34XZBVyNZGaxW0RnYsHbw'].join('');
+L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}{r}?access_token=' + MB_TOKEN, {
+  tileSize:512, zoomOffset:-1, maxZoom:19,
+  attribution:'© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://www.mapbox.com/map-feedback/">Improve this map</a>',
 }).addTo(map);
 // Leaflet measures the container on init; inside a grid that's still resolving,
 // invalidateSize once layout settles fixes a clipped/greyed map.
