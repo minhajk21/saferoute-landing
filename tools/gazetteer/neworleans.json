@@ -1,0 +1,500 @@
+{
+  "city": "New Orleans",
+  "citySlug": "neworleans",
+  "country": "US",
+  "source": "City of New Orleans — Neighborhood Statistical Areas (GNOCDC)",
+  "purpose": "Safety pages + calibration. See this script's header for what is dropped and, more importantly, what is not.",
+  "generatedAt": "2026-09-03",
+  "areas": [
+    {
+      "name": "Algiers Point",
+      "slug": "algiers-point",
+      "lat": 29.953112,
+      "lng": -90.05208,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Audubon",
+      "slug": "audubon",
+      "lat": 29.931452,
+      "lng": -90.123206,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "B. W. Cooper",
+      "slug": "b-w-cooper",
+      "lat": 29.951839,
+      "lng": -90.091607,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Bayou St. John",
+      "slug": "bayou-st-john",
+      "lat": 29.975476,
+      "lng": -90.085471,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Behrman",
+      "slug": "behrman",
+      "lat": 29.934286,
+      "lng": -90.026406,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Black Pearl",
+      "slug": "black-pearl",
+      "lat": 29.933873,
+      "lng": -90.135174,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Broadmoor",
+      "slug": "broadmoor",
+      "lat": 29.946295,
+      "lng": -90.103769,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Bywater",
+      "slug": "bywater",
+      "lat": 29.965426,
+      "lng": -90.03564,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Central Business District",
+      "slug": "central-business-district",
+      "lat": 29.948893,
+      "lng": -90.071406,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Central City",
+      "slug": "central-city",
+      "lat": 29.940735,
+      "lng": -90.086845,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "City Park",
+      "slug": "city-park",
+      "lat": 29.999175,
+      "lng": -90.093316,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Desire Area",
+      "slug": "desire-area",
+      "lat": 29.993983,
+      "lng": -90.033056,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Dillard",
+      "slug": "dillard",
+      "lat": 29.99875,
+      "lng": -90.066094,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Dixon",
+      "slug": "dixon",
+      "lat": 29.971679,
+      "lng": -90.113081,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "East Carrollton",
+      "slug": "east-carrollton",
+      "lat": 29.945662,
+      "lng": -90.126602,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "East Riverside",
+      "slug": "east-riverside",
+      "lat": 29.919803,
+      "lng": -90.093328,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Fairgrounds",
+      "slug": "fairgrounds",
+      "lat": 29.985476,
+      "lng": -90.079542,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Filmore",
+      "slug": "filmore",
+      "lat": 30.010572,
+      "lng": -90.077721,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Fischer Development",
+      "slug": "fischer-development",
+      "lat": 29.932724,
+      "lng": -90.040968,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Florida Area",
+      "slug": "florida-area",
+      "lat": 29.980522,
+      "lng": -90.037477,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Florida Development",
+      "slug": "florida-development",
+      "lat": 29.981754,
+      "lng": -90.032223,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "French Quarter",
+      "slug": "french-quarter",
+      "lat": 29.95749,
+      "lng": -90.062965,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Freret",
+      "slug": "freret",
+      "lat": 29.937036,
+      "lng": -90.107012,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Garden District",
+      "slug": "garden-district",
+      "lat": 29.928106,
+      "lng": -90.084884,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Gentilly Terrace",
+      "slug": "gentilly-terrace",
+      "lat": 30.002419,
+      "lng": -90.052906,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Gentilly Woods",
+      "slug": "gentilly-woods",
+      "lat": 30.009945,
+      "lng": -90.037682,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Gert Town",
+      "slug": "gert-town",
+      "lat": 29.960337,
+      "lng": -90.105924,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Hollygrove",
+      "slug": "hollygrove",
+      "lat": 29.967486,
+      "lng": -90.122399,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Holy Cross",
+      "slug": "holy-cross",
+      "lat": 29.955722,
+      "lng": -90.017803,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Iberville",
+      "slug": "iberville",
+      "lat": 29.959668,
+      "lng": -90.073729,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Irish Channel",
+      "slug": "irish-channel",
+      "lat": 29.918308,
+      "lng": -90.086348,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Lake Terrace & Oaks",
+      "slug": "lake-terrace-and-oaks",
+      "lat": 30.028839,
+      "lng": -90.062726,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Lakeshore - Lake Vista",
+      "slug": "lakeshore-lake-vista",
+      "lat": 30.02384,
+      "lng": -90.098123,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Lakeview",
+      "slug": "lakeview",
+      "lat": 30.007257,
+      "lng": -90.107736,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Lakewood",
+      "slug": "lakewood",
+      "lat": 29.986063,
+      "lng": -90.119411,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Leonidas",
+      "slug": "leonidas",
+      "lat": 29.953155,
+      "lng": -90.130021,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Little Woods",
+      "slug": "little-woods",
+      "lat": 30.046069,
+      "lng": -89.984692,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Lower Garden District",
+      "slug": "lower-garden-district",
+      "lat": 29.934254,
+      "lng": -90.068733,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Lower Ninth Ward",
+      "slug": "lower-ninth-ward",
+      "lat": 29.969456,
+      "lng": -90.013449,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Marigny",
+      "slug": "marigny",
+      "lat": 29.965024,
+      "lng": -90.056003,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Marlyville - Fontainebleau",
+      "slug": "marlyville-fontainebleau",
+      "lat": 29.952436,
+      "lng": -90.113565,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "McDonogh",
+      "slug": "mcdonogh",
+      "lat": 29.94328,
+      "lng": -90.050798,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Mid-City",
+      "slug": "mid-city",
+      "lat": 29.971582,
+      "lng": -90.0996,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Milan",
+      "slug": "milan",
+      "lat": 29.933063,
+      "lng": -90.097822,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Milneburg",
+      "slug": "milneburg",
+      "lat": 30.019578,
+      "lng": -90.054033,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Navarre",
+      "slug": "navarre",
+      "lat": 29.988906,
+      "lng": -90.109566,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "New Aurora - English Turn",
+      "slug": "new-aurora-english-turn",
+      "lat": 29.903159,
+      "lng": -89.940121,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Old Aurora",
+      "slug": "old-aurora",
+      "lat": 29.925954,
+      "lng": -90.000404,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Pines Village",
+      "slug": "pines-village",
+      "lat": 30.020259,
+      "lng": -90.022917,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Plum Orchard",
+      "slug": "plum-orchard",
+      "lat": 30.017118,
+      "lng": -90.00139,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Pontchartrain Park",
+      "slug": "pontchartrain-park",
+      "lat": 30.022221,
+      "lng": -90.039531,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Read Blvd East",
+      "slug": "read-blvd-east",
+      "lat": 30.036999,
+      "lng": -89.954247,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Read Blvd West",
+      "slug": "read-blvd-west",
+      "lat": 30.020576,
+      "lng": -89.979264,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Seventh Ward",
+      "slug": "seventh-ward",
+      "lat": 29.977018,
+      "lng": -90.065756,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "St. Anthony",
+      "slug": "st-anthony",
+      "lat": 30.016042,
+      "lng": -90.065548,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "St. Bernard Area",
+      "slug": "st-bernard-area",
+      "lat": 29.99611,
+      "lng": -90.079579,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "St. Claude",
+      "slug": "st-claude",
+      "lat": 29.972291,
+      "lng": -90.040181,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "St. Roch",
+      "slug": "st-roch",
+      "lat": 29.983227,
+      "lng": -90.054776,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "St. Thomas Development",
+      "slug": "st-thomas-development",
+      "lat": 29.925066,
+      "lng": -90.070609,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Tall Timbers - Brechtel",
+      "slug": "tall-timbers-brechtel",
+      "lat": 29.909971,
+      "lng": -90.010491,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Touro",
+      "slug": "touro",
+      "lat": 29.924362,
+      "lng": -90.095167,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Tremé - Lafitte",
+      "slug": "treme-lafitte",
+      "lat": 29.96745,
+      "lng": -90.074054,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Tulane - Gravier",
+      "slug": "tulane-gravier",
+      "lat": 29.95991,
+      "lng": -90.08448,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Uptown",
+      "slug": "uptown",
+      "lat": 29.926807,
+      "lng": -90.107738,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Viavant - Venetian Isles",
+      "slug": "viavant-venetian-isles",
+      "lat": 30.017436,
+      "lng": -89.914927,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Village de l'Est",
+      "slug": "village-de-lest",
+      "lat": 30.0575,
+      "lng": -89.9265,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "West End",
+      "slug": "west-end",
+      "lat": 30.014762,
+      "lng": -90.118233,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "West Lake Forest",
+      "slug": "west-lake-forest",
+      "lat": 30.02757,
+      "lng": -89.989784,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "West Riverside",
+      "slug": "west-riverside",
+      "lat": 29.91492,
+      "lng": -90.115194,
+      "borough": "New Orleans"
+    },
+    {
+      "name": "Whitney",
+      "slug": "whitney",
+      "lat": 29.946223,
+      "lng": -90.042521,
+      "borough": "New Orleans"
+    }
+  ]
+}

@@ -380,6 +380,67 @@ const CITIES = {
       methodology: `Each incident reported to the Long Beach Police Department (via City of Long Beach Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of Long Beach's official neighborhoods; 25 unnamed fragments in the city's boundary file \u2014 marinas, the entrance channel, regional parks and two power stations \u2014 are excluded, because they are not places anyone lives or walks. Long Beach neighborhoods are compact, so 1&nbsp;km circles around adjacent centers overlap more than in a sprawling city; read neighbouring pages together rather than as sharp borders. The dataset records the date an incident was reported rather than when it occurred, so time-of-day patterns are not shown. Pages regenerate as new data is published.`,
     },
   },
+  'neworleans': {
+    name: 'New Orleans',
+    hubName: 'New Orleans',
+    rankPool: 'New Orleans neighborhoods',
+    // 70 of the city's 72 Neighborhood Statistical Areas (the GNOCDC set).
+    // "U.S. Naval Base" is dropped — a military installation, not a
+    // neighborhood anybody walks, the same call San Diego's military parcels
+    // got. "Lake Catherine" is dropped because the dispatch feed carries
+    // nothing anywhere inside it, so its page could only have said "0
+    // incidents, 100/100" — an absence of data dressed as a finding of safety.
+    // The former public-housing developments (B. W. Cooper, Iberville,
+    // Fischer, Florida, St. Thomas) are deliberately KEPT: they are real
+    // residential neighborhoods, and dropping them would erase exactly the
+    // places most likely to be talked about and least likely to be described
+    // carefully. Spacing: 1,184 m median centre separation, 524 m minimum.
+    //
+    // ⚠ THIS IS THE ONE CITY WHOSE SCORE IS NOT BUILT ON POLICE REPORTS.
+    // NOPD's incident-report series carries no coordinates and no current-year
+    // data, so the only fresh geocoded feed is OPCD's 911 dispatch log,
+    // filtered through a strict crime whitelist. A dispatch is not a
+    // substantiated crime, and this under-counts against a true report feed.
+    // Every string below says "911 calls" rather than "reported incidents"
+    // because saying otherwise would be untrue, and the methodology states the
+    // limitation outright rather than burying it.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    // Shared page furniture says "reported incidents" / "reported crime" by
+    // default, which would quietly re-assert the exact claim this city cannot
+    // make. These are the only overrides; every other city keeps the defaults.
+    incidentNoun: 'crime-related 911 calls',
+    incidentNounCap: 'Crime-related 911 calls',
+    recordedWord: 'dispatched',
+    lowCrimeNote: 'Few crime-related 911 calls are dispatched here, but stick to lit, busier streets late.',
+    aboutData: 'Figures are crime-related 911 calls police were <em>dispatched to</em> within 1&nbsp;km of each neighborhood&rsquo;s center — a dispatch means officers were sent, not that an offense was confirmed, and not every crime generates a call.',
+    reportsNounCap: 'Calls',
+    figIncidents: 'crime-related 911 calls',
+    crimeNoun: 'dispatched 911 calls',
+    mapNoun: 'dispatched 911 call',
+    reportsNoun: 'calls',
+    whatReported: 'what police were called to',
+    reportedHeading: 'What police were called to here',
+    todTimestamps: 'NOPD dispatch timestamps',
+    reportedTo: 'dispatched to the NOPD',
+    dataName: 'NOPD dispatch data',
+    medianLabel: 'citywide median',
+    forCity: 'for New Orleans',
+    acrossCity: 'across New Orleans',
+    faqCalc: (name) => `SafeRoute weights each crime-related 911 call the NOPD was dispatched to by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide rates onto a 0–100 scale — higher is safer. New Orleans is scored on dispatch calls rather than filed reports, because NOPD's report series carries no location data — so a call here means police were sent, not that an offense was confirmed. It is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Orleans Parish Communication District 911 calls for service, filtered to crime call types, via <a href="https://data.nola.gov/">City of New Orleans Open Data</a>${dateLine}. Neighborhood boundaries: City of New Orleans Neighborhood Statistical Areas (GNOCDC). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
+    basemapCredit: 'basemap © OpenStreetMap contributors',
+    hub: {
+      title: (n) => `New Orleans Neighborhood Safety Map & Rankings (${n} neighborhoods) — SafeRoute`,
+      desc: (n, date) => `How safe is your New Orleans neighborhood? Safety index (0–100) for ${n} New Orleans neighborhoods from NOPD 911 dispatch data through ${date} — ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your New Orleans neighborhood?',
+      lead: `SafeRoute scores every New Orleans neighborhood 0–100 from crime-related 911 calls the NOPD was dispatched to — severity-weighted, within 1 km of each neighborhood's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood — e.g. French Quarter, Bywater, Garden District…',
+      rankHeading: (n) => `All ${n} New Orleans neighborhoods, safest first`,
+      notice: (median) => `These figures describe <strong>911 calls police were dispatched to</strong> around each neighborhood's center — they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `New Orleans is the one city here not scored on filed police reports. NOPD's incident-report series carries no coordinates and no current-year data, so the only fresh geocoded feed is the Orleans Parish Communication District's 911 dispatch log. That log is mostly NOT crime — its largest call types are area checks, alarms, medical calls and traffic — so we keep only genuine offense call types (battery, robbery, burglary, theft, auto theft, weapons, drugs and similar) and discard the rest. Each surviving call is weighted by severity, summed within 1 km of a neighborhood's center, and normalized against citywide rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. <strong>A dispatch means police were sent, not that an offense was confirmed</strong>, and this under-counts against a true report feed — so New Orleans scores are comparable within the city but should not be read against another city's number. Boundaries are the city's 72 Neighborhood Statistical Areas, less the U.S. Naval Base and Lake Catherine — the latter because the dispatch feed records nothing anywhere inside it, and a page reading &ldquo;0 incidents, 100/100&rdquo; would present missing data as proven safety. Time-of-day charts use the real dispatch clock time. Pages regenerate as new data is published.`,
+    },
+  },
   'sandiego': {
     name: 'San Diego',
     hubName: 'San Diego',
@@ -597,7 +658,7 @@ function mapSVG(a, shape, bm, cfg) {
         `<text x="${l.x}" y="${l.y}" transform="rotate(${l.a} ${l.x} ${l.y})" text-anchor="middle" dy="-3" font-family="IBM Plex Mono,monospace" font-size="9.5" fill="#7D7666" stroke="#F7F3E8" stroke-width="3" paint-order="stroke">${esc(l.t)}</text>`).join('');
   }
 
-  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of reported crime locations within ${a.radiusMetres} metres of the ${cfg.centre} of ${esc(a.name)}, over the local street network">
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of ${cfg.mapNoun ?? 'reported crime'} locations within ${a.radiusMetres} metres of the ${cfg.centre} of ${esc(a.name)}, over the local street network">
 ${ground}${rings}${streetLabels}${dots}
 <circle cx="${cx}" cy="${cy}" r="4.5" fill="#14564C"/><circle cx="${cx}" cy="${cy}" r="8.5" fill="none" stroke="#14564C" stroke-width="1.5"/>
 <text x="${cx}" y="${cy + 24}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10.5" fill="#14564C" stroke="#F7F3E8" stroke-width="3" paint-order="stroke">${cfg.centreLabel}</text>
@@ -612,7 +673,7 @@ ${ground}${rings}${streetLabels}${dots}
 }
 
 // ── SVG: time-of-day chart (only for cities with real per-incident times) ────
-function todSVG(a) {
+function todSVG(a, cfg) {
   const tod = a.timeOfDay;
   if (!tod || tod.length < 6) return '';
   const max = Math.max(...tod, 0.0001);
@@ -632,7 +693,7 @@ function todSVG(a) {
     x += groupGap - gap;
   };
   group(0, 'MON–FRI'); group(3, 'SAT–SUN');
-  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="When reported incidents happen in ${esc(a.name)}: severity-weighted share by time of day, weekdays versus weekends">${out}</svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="When ${cfg.incidentNoun ?? 'reported incidents'} happen in ${esc(a.name)}: severity-weighted share by time of day, weekdays versus weekends">${out}</svg>`;
 }
 
 // ── prose (deterministic from data — the content IS the data) ───────────────
@@ -656,10 +717,10 @@ function makeProse(a, ctx) {
   // shows the absolute reading, which is what it is labelled as.
   const pct = rank / count;                       // rank 1 = safest
   const bandLead =
-    pct <= 0.25 ? `${a.name} sits at the safer end of ${cfg.hubName} by reported crime.`
-    : pct <= 0.60 ? `${a.name} shows a typical level of reported crime ${cfg.forCity}.`
-    : pct <= 0.85 ? `${a.name} records more reported crime than most ${cfg.name} ${cfg.areaWordPlural}.`
-    : `${a.name} records a high level of reported crime ${cfg.forCity}.`;
+    pct <= 0.25 ? `${a.name} sits at the safer end of ${cfg.hubName} by ${cfg.crimeNoun ?? 'reported crime'}.`
+    : pct <= 0.60 ? `${a.name} shows a typical level of ${cfg.crimeNoun ?? 'reported crime'} ${cfg.forCity}.`
+    : pct <= 0.85 ? `${a.name} records more ${cfg.crimeNoun ?? 'reported crime'} than most ${cfg.name} ${cfg.areaWordPlural}.`
+    : `${a.name} records a high level of ${cfg.crimeNoun ?? 'reported crime'} ${cfg.forCity}.`;
 
   const cmp = Math.abs(diff) <= 3
     ? `right at the ${cfg.medianLabel} of ${median}`
@@ -676,8 +737,8 @@ function makeProse(a, ctx) {
   if (top) {
     const violent = ['violent-crime', 'robbery', 'sexual-offences', 'possession-of-weapons'].includes(top.category);
     mix = violent
-      ? `The largest reported category here is <strong>${catName(top.category).toLowerCase()}</strong> (${topShare}% of reports) — worth taking seriously when walking at night; the full mix is broken down below.`
-      : `Most of what's reported here is property-related — <strong>${catName(top.category).toLowerCase()}</strong> alone is ${topShare}% of reports — rather than violence against strangers, though the full mix below is worth a look.`;
+      ? `The largest ${cfg.recordedWord ?? 'reported'} category here is <strong>${catName(top.category).toLowerCase()}</strong> (${topShare}% of ${cfg.reportsNoun ?? 'reports'}) — worth taking seriously when walking at night; the full mix is broken down below.`
+      : `Most of ${cfg.whatReported ?? "what's reported"} here is property-related — <strong>${catName(top.category).toLowerCase()}</strong> alone is ${topShare}% of ${cfg.reportsNoun ?? 'reports'} — rather than violence against strangers, though the full mix below is worth a look.`;
   }
 
   let when = '';
@@ -686,8 +747,8 @@ function makeProse(a, ctx) {
     when = night >= 0.30
       ? `Timing matters here: about ${nightPct}% of severity-weighted incidents are reported overnight (midnight–6 a.m.), so route choice late at night matters more than the headline number suggests.`
       : night <= 0.15
-        ? `Reported incidents here skew to daytime and evening hours — only about ${nightPct}% of severity-weighted reports fall overnight (midnight–6 a.m.).`
-        : `Incidents spread across the day here — roughly ${evePct}% of severity-weighted reports come in the evening (6 p.m.–midnight) and ${nightPct}% overnight.`;
+        ? `${cfg.incidentNounCap ?? 'Reported incidents'} here skew to daytime and evening hours — only about ${nightPct}% of severity-weighted ${cfg.reportsNoun ?? 'reports'} fall overnight (midnight–6 a.m.).`
+        : `Incidents spread across the day here — roughly ${evePct}% of severity-weighted ${cfg.reportsNoun ?? 'reports'} come in the evening (6 p.m.–midnight) and ${nightPct}% overnight.`;
   }
 
   const neighbors = (g.neighbors || []).map(s => bySlug.get(s)).filter(Boolean);
@@ -696,13 +757,13 @@ function makeProse(a, ctx) {
     {
       q: `Is ${a.name} safe at night?`,
       a: night != null
-        ? `${bandWord[a.band]} overall (safety index ${a.safetyScore}/100). About ${Math.round((night + evening) * 100)}% of severity-weighted incidents in ${a.name} are reported between 6 p.m. and 6 a.m. ${a.band === 'low' ? `Reported crime is low ${cfg.forCity}, but stick to lit, busier streets late.` : 'At night, prefer lit, busier streets — a block or two of detour often avoids the clusters on the map above.'}`
+        ? `${bandWord[a.band]} overall (safety index ${a.safetyScore}/100). About ${Math.round((night + evening) * 100)}% of severity-weighted incidents in ${a.name} are ${cfg.recordedWord ?? 'reported'} between 6 p.m. and 6 a.m. ${a.band === 'low' ? (cfg.lowCrimeNote ?? `Reported crime is low ${cfg.forCity}, but stick to lit, busier streets late.`) : 'At night, prefer lit, busier streets — a block or two of detour often avoids the clusters on the map above.'}`
         : `${bandWord[a.band]} overall (safety index ${a.safetyScore}/100). ${a.band === 'low' ? `Reported crime is low ${cfg.forCity}, but stick to lit, busier streets late.` : 'At night, prefer lit, busier streets — a short detour often avoids the clusters on the map above.'}`,
     },
     {
       q: `What is the most common crime in ${a.name}?`,
       a: top
-        ? `${catName(top.category)} — ${fmt(top.count)} of ${fmt(a.totalIncidents)} incidents (${topShare}%) reported within 1 km of the ${cfg.areaWord} ${cfg.centre} ${span ? `over ${span} to` : 'through'} ${monthName(a.crimeDate)}.`
+        ? `${catName(top.category)} — ${fmt(top.count)} of ${fmt(a.totalIncidents)} incidents (${topShare}%) ${cfg.recordedWord ?? 'reported'} within 1 km of the ${cfg.areaWord} ${cfg.centre} ${span ? `over ${span} to` : 'through'} ${monthName(a.crimeDate)}.`
         : `No dominant category in the current data.`,
     },
     {
@@ -775,7 +836,7 @@ const footer = (cfg, a, citySlug, windowDays) => `</div></main><footer class="si
 <p><strong>Sources.</strong> ${cfg.sources(!a ? ''
   : windowPhrase(windowDays) ? `, covering ${windowPhrase(windowDays)} to ${monthName(a.crimeDate)}`
   : `, data through ${monthName(a.crimeDate)}`)}</p>
-<p><strong>About this data.</strong> Figures are incidents <em>reported</em> to police within 1&nbsp;km of each ${cfg.areaWord}'s ${cfg.centre} — reporting practices vary and not all crime is reported. This is informational only and not a guarantee of safety, a prediction, or a judgment of any community. Use it the way the app does: to pick better-lit, lower-incident routes and times.</p>
+<p><strong>About this data.</strong> ${cfg.aboutData ?? `Figures are incidents <em>reported</em> to police within 1&nbsp;km of each ${cfg.areaWord}'s ${cfg.centre} — reporting practices vary and not all crime is reported.`} This is informational only and not a guarantee of safety, a prediction, or a judgment of any community. Use it the way the app does: to pick better-lit, lower-incident routes and times.</p>
 <p><a href="/safety/${citySlug}/">All ${cfg.name} ${cfg.areaWordPlural}</a> · <a href="/">SafeRoute app</a> · <a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></p>
 </div></footer></body></html>`;
 
@@ -819,7 +880,7 @@ function renderCity(citySlug) {
     const p = makeProse(a, ctx);
     const shape = mapShape(a);
     const clusterNote = shape.edgeClustered
-      ? ` Reports cluster toward the ${shape.dirWord} of the map — the area immediately around the ${cfg.centreLabel} is comparatively quiet.`
+      ? ` ${cfg.reportsNounCap ?? 'Reports'} cluster toward the ${shape.dirWord} of the map — the area immediately around the ${cfg.centreLabel} is comparatively quiet.`
       : '';
     const bmFile = join(ROOT, 'tools', 'data-cache', `${citySlug}-basemap`, `${a.slug}.json`);
     const bm = existsSync(bmFile) ? JSON.parse(readFileSync(bmFile)) : null;
@@ -831,7 +892,7 @@ function renderCity(citySlug) {
 
     const url = `${SITE}/safety/${citySlug}/${a.slug}/`;
     const title = `Is ${a.name} Safe? Crime Map & Safety Index — SafeRoute`;
-    const desc = `${a.name} safety index: ${a.safetyScore}/100 (${bandWord[a.band].toLowerCase()}) — ${fmt(a.totalIncidents)} reported incidents within 1 km (through ${monthName(a.crimeDate)}). Crime map, what's reported, and how it compares ${cfg.acrossCity}.`;
+    const desc = `${a.name} safety index: ${a.safetyScore}/100 (${bandWord[a.band].toLowerCase()}) — ${fmt(a.totalIncidents)} ${cfg.incidentNoun ?? 'reported incidents'} within 1 km (through ${monthName(a.crimeDate)}). Crime map, ${cfg.whatReported ?? "what's reported"}, and how it compares ${cfg.acrossCity}.`;
     const jsonld = [
       { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Safety', item: `${SITE}/safety/` },
@@ -853,8 +914,8 @@ function renderCity(citySlug) {
     const rightPanel = hasTod ? `
 <section>
 <h2>When it happens</h2>
-<div class="tod">${todSVG(a)}</div>
-<p style="font-size:14px;color:var(--ink-3);margin-top:8px">Severity-weighted share of reported incidents by time of day, from ${cfg.dataName === 'NYPD data' ? 'NYPD incident timestamps' : 'police incident timestamps'}.</p>
+<div class="tod">${todSVG(a, cfg)}</div>
+<p style="font-size:14px;color:var(--ink-3);margin-top:8px">Severity-weighted share of ${cfg.incidentNoun ?? 'reported incidents'} by time of day, from ${cfg.todTimestamps ?? (cfg.dataName === 'NYPD data' ? 'NYPD incident timestamps' : 'police incident timestamps')}.</p>
 </section>` : '';
 
     const html = `${head(title, desc, url, jsonld)}${chrome(`<a href="/safety/">Safety</a> › <a href="/safety/${citySlug}/">${cfg.name}</a> › ${esc(a.name)}`)}
@@ -879,13 +940,13 @@ ${p.when ? `<p>${p.when}</p>` : ''}
 <h2>Where incidents cluster</h2>
 <figure class="map">
 ${mapSVG(a, shape, bm, cfg)}
-<figcaption>${fmt(a.totalIncidents)} incidents reported within 1 km of the ${esc(a.name)} ${cfg.centre}${(a.incidents || []).length < a.totalIncidents ? ` (${fmt((a.incidents || []).length)} shown)` : ''} · ${cfg.dataName} through ${monthName(a.crimeDate)}${bm ? ` · ${cfg.basemapCredit}` : ''}.${clusterNote}</figcaption>
+<figcaption>${fmt(a.totalIncidents)} ${cfg.figIncidents ?? 'incidents reported'} within 1 km of the ${esc(a.name)} ${cfg.centre}${(a.incidents || []).length < a.totalIncidents ? ` (${fmt((a.incidents || []).length)} shown)` : ''} · ${cfg.dataName} through ${monthName(a.crimeDate)}${bm ? ` · ${cfg.basemapCredit}` : ''}.${clusterNote}</figcaption>
 </figure>
 <a class="checkmap" href="/check/?lat=${a.lat}&lng=${a.lng}&name=${encodeURIComponent(a.name)}"><span class="dot"></span>Open ${esc(a.name)} on the live interactive map →</a>
 
 <div class="grid2">
 <section>
-<h2>What's reported here</h2>
+<h2>${cfg.reportedHeading ?? "What's reported here"}</h2>
 <table class="cats">${catRows}</table>
 </section>${rightPanel}
 </div>
