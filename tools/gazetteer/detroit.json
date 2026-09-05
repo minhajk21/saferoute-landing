@@ -1,0 +1,1417 @@
+{
+  "city": "Detroit",
+  "citySlug": "detroit",
+  "country": "US",
+  "source": "City of Detroit — Current City of Detroit Neighborhoods (205), grouped by City Council district",
+  "purpose": "Safety pages + calibration. See this script's header for the land-use drop rule.",
+  "generatedAt": "2026-09-05",
+  "areas": [
+    {
+      "name": "Airport Sub",
+      "slug": "airport-sub",
+      "lat": 42.401103,
+      "lng": -83.020727,
+      "borough": "District 3"
+    },
+    {
+      "name": "Arden Park",
+      "slug": "arden-park",
+      "lat": 42.388642,
+      "lng": -83.080253,
+      "borough": "District 5"
+    },
+    {
+      "name": "Aviation Sub",
+      "slug": "aviation-sub",
+      "lat": 42.355108,
+      "lng": -83.166981,
+      "borough": "District 7"
+    },
+    {
+      "name": "Bagley",
+      "slug": "bagley",
+      "lat": 42.426119,
+      "lng": -83.151,
+      "borough": "District 2"
+    },
+    {
+      "name": "Barton-McFarland",
+      "slug": "barton-mcfarland",
+      "lat": 42.364474,
+      "lng": -83.161033,
+      "borough": "District 7"
+    },
+    {
+      "name": "Belmont",
+      "slug": "belmont",
+      "lat": 42.405283,
+      "lng": -83.193966,
+      "borough": "District 1"
+    },
+    {
+      "name": "Berg-Lahser",
+      "slug": "berg-lahser",
+      "lat": 42.436785,
+      "lng": -83.264952,
+      "borough": "District 1"
+    },
+    {
+      "name": "Bethune Community",
+      "slug": "bethune-community",
+      "lat": 42.401983,
+      "lng": -83.1747,
+      "borough": "District 2"
+    },
+    {
+      "name": "Blackstone Park",
+      "slug": "blackstone-park",
+      "lat": 42.441838,
+      "lng": -83.175996,
+      "borough": "District 2"
+    },
+    {
+      "name": "Boston Edison",
+      "slug": "boston-edison",
+      "lat": 42.381466,
+      "lng": -83.097098,
+      "borough": "District 5"
+    },
+    {
+      "name": "Boynton",
+      "slug": "boynton",
+      "lat": 42.271401,
+      "lng": -83.154469,
+      "borough": "District 6"
+    },
+    {
+      "name": "Brewster Homes",
+      "slug": "brewster-homes",
+      "lat": 42.348734,
+      "lng": -83.049145,
+      "borough": "District 5"
+    },
+    {
+      "name": "Brightmoor",
+      "slug": "brightmoor",
+      "lat": 42.394879,
+      "lng": -83.25364,
+      "borough": "District 1"
+    },
+    {
+      "name": "Brush Park",
+      "slug": "brush-park",
+      "lat": 42.344812,
+      "lng": -83.052704,
+      "borough": "District 5"
+    },
+    {
+      "name": "Buffalo Charles",
+      "slug": "buffalo-charles",
+      "lat": 42.41003,
+      "lng": -83.047764,
+      "borough": "District 3"
+    },
+    {
+      "name": "Butler",
+      "slug": "butler",
+      "lat": 42.443851,
+      "lng": -83.075671,
+      "borough": "District 3"
+    },
+    {
+      "name": "Cadillac Community",
+      "slug": "cadillac-community",
+      "lat": 42.389052,
+      "lng": -83.193991,
+      "borough": "District 1"
+    },
+    {
+      "name": "Cadillac Heights",
+      "slug": "cadillac-heights",
+      "lat": 42.422004,
+      "lng": -83.078312,
+      "borough": "District 3"
+    },
+    {
+      "name": "Campau/Banglatown",
+      "slug": "campau-banglatown",
+      "lat": 42.408676,
+      "lng": -83.068851,
+      "borough": "District 3"
+    },
+    {
+      "name": "Carbon Works",
+      "slug": "carbon-works",
+      "lat": 42.287628,
+      "lng": -83.129957,
+      "borough": "District 6"
+    },
+    {
+      "name": "Castle Rouge",
+      "slug": "castle-rouge",
+      "lat": 42.382238,
+      "lng": -83.268025,
+      "borough": "District 1"
+    },
+    {
+      "name": "Central Southwest",
+      "slug": "central-southwest",
+      "lat": 42.31955,
+      "lng": -83.103663,
+      "borough": "District 6"
+    },
+    {
+      "name": "Chadsey Condon",
+      "slug": "chadsey-condon",
+      "lat": 42.338872,
+      "lng": -83.107867,
+      "borough": "District 6"
+    },
+    {
+      "name": "Chalfonte",
+      "slug": "chalfonte",
+      "lat": 42.398957,
+      "lng": -83.149807,
+      "borough": "District 7"
+    },
+    {
+      "name": "Chandler Park",
+      "slug": "chandler-park",
+      "lat": 42.39623,
+      "lng": -82.973214,
+      "borough": "District 4"
+    },
+    {
+      "name": "Chandler Park-Chalmers",
+      "slug": "chandler-park-chalmers",
+      "lat": 42.400058,
+      "lng": -82.960047,
+      "borough": "District 4"
+    },
+    {
+      "name": "Claytown",
+      "slug": "claytown",
+      "lat": 42.332364,
+      "lng": -83.139122,
+      "borough": "District 6"
+    },
+    {
+      "name": "College Park",
+      "slug": "college-park",
+      "lat": 42.423004,
+      "lng": -83.209276,
+      "borough": "District 2"
+    },
+    {
+      "name": "Conant Gardens",
+      "slug": "conant-gardens",
+      "lat": 42.429775,
+      "lng": -83.067142,
+      "borough": "District 3"
+    },
+    {
+      "name": "Conner Creek",
+      "slug": "conner-creek",
+      "lat": 42.444871,
+      "lng": -83.00559,
+      "borough": "District 3"
+    },
+    {
+      "name": "Core City",
+      "slug": "core-city",
+      "lat": 42.343586,
+      "lng": -83.08779,
+      "borough": "District 6"
+    },
+    {
+      "name": "Corktown",
+      "slug": "corktown",
+      "lat": 42.329342,
+      "lng": -83.070223,
+      "borough": "District 6"
+    },
+    {
+      "name": "Cornerstone Village",
+      "slug": "cornerstone-village",
+      "lat": 42.41248,
+      "lng": -82.92321,
+      "borough": "District 4"
+    },
+    {
+      "name": "Crary/St Marys",
+      "slug": "crary-st-marys",
+      "lat": 42.408536,
+      "lng": -83.208752,
+      "borough": "District 1"
+    },
+    {
+      "name": "Cultural Center",
+      "slug": "cultural-center",
+      "lat": 42.36245,
+      "lng": -83.061482,
+      "borough": "District 5"
+    },
+    {
+      "name": "Davison",
+      "slug": "davison",
+      "lat": 42.420958,
+      "lng": -83.051707,
+      "borough": "District 3"
+    },
+    {
+      "name": "Davison-Schoolcraft",
+      "slug": "davison-schoolcraft",
+      "lat": 42.390892,
+      "lng": -83.151542,
+      "borough": "District 7"
+    },
+    {
+      "name": "Delray",
+      "slug": "delray",
+      "lat": 42.29925,
+      "lng": -83.106463,
+      "borough": "District 6"
+    },
+    {
+      "name": "Denby",
+      "slug": "denby",
+      "lat": 42.423178,
+      "lng": -82.955522,
+      "borough": "District 4"
+    },
+    {
+      "name": "Detroit Golf",
+      "slug": "detroit-golf",
+      "lat": 42.423185,
+      "lng": -83.126128,
+      "borough": "District 2"
+    },
+    {
+      "name": "Dexter-Fenkell",
+      "slug": "dexter-fenkell",
+      "lat": 42.399803,
+      "lng": -83.132685,
+      "borough": "District 2"
+    },
+    {
+      "name": "Dexter-Linwood",
+      "slug": "dexter-linwood",
+      "lat": 42.385134,
+      "lng": -83.114861,
+      "borough": "District 5"
+    },
+    {
+      "name": "Douglass",
+      "slug": "douglass",
+      "lat": 42.344918,
+      "lng": -83.046867,
+      "borough": "District 5"
+    },
+    {
+      "name": "Downtown",
+      "slug": "downtown",
+      "lat": 42.333099,
+      "lng": -83.048469,
+      "borough": "District 6"
+    },
+    {
+      "name": "East Canfield",
+      "slug": "east-canfield",
+      "lat": 42.380381,
+      "lng": -82.988109,
+      "borough": "District 4"
+    },
+    {
+      "name": "East English Village",
+      "slug": "east-english-village",
+      "lat": 42.40446,
+      "lng": -82.932818,
+      "borough": "District 4"
+    },
+    {
+      "name": "East Village",
+      "slug": "east-village",
+      "lat": 42.36777,
+      "lng": -82.985106,
+      "borough": "District 5"
+    },
+    {
+      "name": "Eastern Market",
+      "slug": "eastern-market",
+      "lat": 42.349299,
+      "lng": -83.03989,
+      "borough": "District 5"
+    },
+    {
+      "name": "Eden Gardens",
+      "slug": "eden-gardens",
+      "lat": 42.414698,
+      "lng": -82.983569,
+      "borough": "District 4"
+    },
+    {
+      "name": "Elijah McCoy",
+      "slug": "elijah-mccoy",
+      "lat": 42.360191,
+      "lng": -83.085309,
+      "borough": "District 5"
+    },
+    {
+      "name": "Eliza Howell",
+      "slug": "eliza-howell",
+      "lat": 42.389318,
+      "lng": -83.268067,
+      "borough": "District 1"
+    },
+    {
+      "name": "Elmwood Park",
+      "slug": "elmwood-park",
+      "lat": 42.345635,
+      "lng": -83.022644,
+      "borough": "District 5"
+    },
+    {
+      "name": "Evergreen Lahser 7/8",
+      "slug": "evergreen-lahser-7-8",
+      "lat": 42.436416,
+      "lng": -83.248844,
+      "borough": "District 1"
+    },
+    {
+      "name": "Evergreen-Outer Drive",
+      "slug": "evergreen-outer-drive",
+      "lat": 42.422594,
+      "lng": -83.22874,
+      "borough": "District 1"
+    },
+    {
+      "name": "Far West Detroit",
+      "slug": "far-west-detroit",
+      "lat": 42.347309,
+      "lng": -83.260162,
+      "borough": "District 7"
+    },
+    {
+      "name": "Farwell",
+      "slug": "farwell",
+      "lat": 42.440857,
+      "lng": -83.05305,
+      "borough": "District 3"
+    },
+    {
+      "name": "Fiskhorn",
+      "slug": "fiskhorn",
+      "lat": 42.354614,
+      "lng": -83.191941,
+      "borough": "District 7"
+    },
+    {
+      "name": "Fitzgerald/Marygrove",
+      "slug": "fitzgerald-marygrove",
+      "lat": 42.410429,
+      "lng": -83.153136,
+      "borough": "District 2"
+    },
+    {
+      "name": "Five Points",
+      "slug": "five-points",
+      "lat": 42.434542,
+      "lng": -83.282699,
+      "borough": "District 1"
+    },
+    {
+      "name": "Forest Park",
+      "slug": "forest-park",
+      "lat": 42.357848,
+      "lng": -83.046347,
+      "borough": "District 5"
+    },
+    {
+      "name": "Fox Creek",
+      "slug": "fox-creek",
+      "lat": 42.389741,
+      "lng": -82.960599,
+      "borough": "District 4"
+    },
+    {
+      "name": "Franklin",
+      "slug": "franklin",
+      "lat": 42.434905,
+      "lng": -82.982708,
+      "borough": "District 3"
+    },
+    {
+      "name": "Franklin Park",
+      "slug": "franklin-park",
+      "lat": 42.36475,
+      "lng": -83.2316,
+      "borough": "District 7"
+    },
+    {
+      "name": "Garden Homes",
+      "slug": "garden-homes",
+      "lat": 42.44227,
+      "lng": -83.151592,
+      "borough": "District 2"
+    },
+    {
+      "name": "Garden View",
+      "slug": "garden-view",
+      "lat": 42.354293,
+      "lng": -83.211546,
+      "borough": "District 7"
+    },
+    {
+      "name": "Gateway Community",
+      "slug": "gateway-community",
+      "lat": 42.389929,
+      "lng": -83.089432,
+      "borough": "District 5"
+    },
+    {
+      "name": "Gold Coast",
+      "slug": "gold-coast",
+      "lat": 42.351296,
+      "lng": -82.992198,
+      "borough": "District 5"
+    },
+    {
+      "name": "Grand River-I96",
+      "slug": "grand-river-i96",
+      "lat": 42.382891,
+      "lng": -83.169856,
+      "borough": "District 7"
+    },
+    {
+      "name": "Grand River-St Marys",
+      "slug": "grand-river-st-marys",
+      "lat": 42.398405,
+      "lng": -83.205407,
+      "borough": "District 1"
+    },
+    {
+      "name": "Grandmont",
+      "slug": "grandmont",
+      "lat": 42.392777,
+      "lng": -83.213414,
+      "borough": "District 1"
+    },
+    {
+      "name": "Grandmont #1",
+      "slug": "grandmont-1",
+      "lat": 42.3898,
+      "lng": -83.224469,
+      "borough": "District 1"
+    },
+    {
+      "name": "Grant",
+      "slug": "grant",
+      "lat": 42.427035,
+      "lng": -83.032594,
+      "borough": "District 3"
+    },
+    {
+      "name": "Gratiot Town/Kettering",
+      "slug": "gratiot-town-kettering",
+      "lat": 42.379126,
+      "lng": -83.021558,
+      "borough": "District 5"
+    },
+    {
+      "name": "Gratiot Woods",
+      "slug": "gratiot-woods",
+      "lat": 42.37928,
+      "lng": -83.00289,
+      "borough": "District 5"
+    },
+    {
+      "name": "Gratiot-Findlay",
+      "slug": "gratiot-findlay",
+      "lat": 42.415622,
+      "lng": -82.995072,
+      "borough": "District 4"
+    },
+    {
+      "name": "Gratiot-Grand",
+      "slug": "gratiot-grand",
+      "lat": 42.36988,
+      "lng": -83.014209,
+      "borough": "District 5"
+    },
+    {
+      "name": "Greektown",
+      "slug": "greektown",
+      "lat": 42.335232,
+      "lng": -83.04141,
+      "borough": "District 5"
+    },
+    {
+      "name": "Green Acres",
+      "slug": "green-acres",
+      "lat": 42.442048,
+      "lng": -83.131642,
+      "borough": "District 2"
+    },
+    {
+      "name": "Greenfield",
+      "slug": "greenfield",
+      "lat": 42.43727,
+      "lng": -83.20991,
+      "borough": "District 2"
+    },
+    {
+      "name": "Greenfield Park",
+      "slug": "greenfield-park",
+      "lat": 42.424368,
+      "lng": -83.097179,
+      "borough": "District 3"
+    },
+    {
+      "name": "Greenfield-Grand River",
+      "slug": "greenfield-grand-river",
+      "lat": 42.39089,
+      "lng": -83.203618,
+      "borough": "District 1"
+    },
+    {
+      "name": "Greenwich",
+      "slug": "greenwich",
+      "lat": 42.434775,
+      "lng": -83.175739,
+      "borough": "District 2"
+    },
+    {
+      "name": "Grixdale Farms",
+      "slug": "grixdale-farms",
+      "lat": 42.426319,
+      "lng": -83.106788,
+      "borough": "District 2"
+    },
+    {
+      "name": "Happy Homes",
+      "slug": "happy-homes",
+      "lat": 42.391526,
+      "lng": -83.173779,
+      "borough": "District 7"
+    },
+    {
+      "name": "Harmony Village",
+      "slug": "harmony-village",
+      "lat": 42.412756,
+      "lng": -83.176727,
+      "borough": "District 2"
+    },
+    {
+      "name": "Hawthorne Park",
+      "slug": "hawthorne-park",
+      "lat": 42.42888,
+      "lng": -83.089806,
+      "borough": "District 3"
+    },
+    {
+      "name": "Historic Atkinson",
+      "slug": "historic-atkinson",
+      "lat": 42.377228,
+      "lng": -83.100106,
+      "borough": "District 5"
+    },
+    {
+      "name": "Holcomb Community",
+      "slug": "holcomb-community",
+      "lat": 42.422173,
+      "lng": -83.248152,
+      "borough": "District 1"
+    },
+    {
+      "name": "Hubbard Farms",
+      "slug": "hubbard-farms",
+      "lat": 42.318251,
+      "lng": -83.090229,
+      "borough": "District 6"
+    },
+    {
+      "name": "Hubbard Richard",
+      "slug": "hubbard-richard",
+      "lat": 42.323332,
+      "lng": -83.073411,
+      "borough": "District 6"
+    },
+    {
+      "name": "Hubbell-Lyndon",
+      "slug": "hubbell-lyndon",
+      "lat": 42.395014,
+      "lng": -83.19172,
+      "borough": "District 1"
+    },
+    {
+      "name": "Hubbell-Puritan",
+      "slug": "hubbell-puritan",
+      "lat": 42.412636,
+      "lng": -83.192065,
+      "borough": "District 1"
+    },
+    {
+      "name": "Indian Village",
+      "slug": "indian-village",
+      "lat": 42.361208,
+      "lng": -82.996616,
+      "borough": "District 5"
+    },
+    {
+      "name": "Islandview",
+      "slug": "islandview",
+      "lat": 42.356142,
+      "lng": -83.00837,
+      "borough": "District 5"
+    },
+    {
+      "name": "Jamison",
+      "slug": "jamison",
+      "lat": 42.368711,
+      "lng": -83.111129,
+      "borough": "District 5"
+    },
+    {
+      "name": "Jefferson Chalmers",
+      "slug": "jefferson-chalmers",
+      "lat": 42.363956,
+      "lng": -82.944518,
+      "borough": "District 4"
+    },
+    {
+      "name": "Jeffries",
+      "slug": "jeffries",
+      "lat": 42.347335,
+      "lng": -83.072327,
+      "borough": "District 6"
+    },
+    {
+      "name": "Joseph Berry Sub",
+      "slug": "joseph-berry-sub",
+      "lat": 42.35572,
+      "lng": -82.98295,
+      "borough": "District 5"
+    },
+    {
+      "name": "Joy Community",
+      "slug": "joy-community",
+      "lat": 42.365189,
+      "lng": -83.20694,
+      "borough": "District 7"
+    },
+    {
+      "name": "Joy-Schaefer",
+      "slug": "joy-schaefer",
+      "lat": 42.35483,
+      "lng": -83.181625,
+      "borough": "District 7"
+    },
+    {
+      "name": "Krainz Woods",
+      "slug": "krainz-woods",
+      "lat": 42.429727,
+      "lng": -83.053053,
+      "borough": "District 3"
+    },
+    {
+      "name": "Lafayette Park",
+      "slug": "lafayette-park",
+      "lat": 42.339675,
+      "lng": -83.034794,
+      "borough": "District 5"
+    },
+    {
+      "name": "LaSalle College Park",
+      "slug": "lasalle-college-park",
+      "lat": 42.417941,
+      "lng": -83.002418,
+      "borough": "District 4"
+    },
+    {
+      "name": "LaSalle Gardens",
+      "slug": "lasalle-gardens",
+      "lat": 42.365527,
+      "lng": -83.097662,
+      "borough": "District 5"
+    },
+    {
+      "name": "Littlefield Community",
+      "slug": "littlefield-community",
+      "lat": 42.379862,
+      "lng": -83.153166,
+      "borough": "District 7"
+    },
+    {
+      "name": "Mapleridge",
+      "slug": "mapleridge",
+      "lat": 42.428087,
+      "lng": -82.970107,
+      "borough": "District 4"
+    },
+    {
+      "name": "Marina District",
+      "slug": "marina-district",
+      "lat": 42.360504,
+      "lng": -82.971001,
+      "borough": "District 5"
+    },
+    {
+      "name": "Martin Park",
+      "slug": "martin-park",
+      "lat": 42.413587,
+      "lng": -83.130072,
+      "borough": "District 2"
+    },
+    {
+      "name": "McDougall-Hunt",
+      "slug": "mcdougall-hunt",
+      "lat": 42.360077,
+      "lng": -83.0306,
+      "borough": "District 5"
+    },
+    {
+      "name": "McDowell",
+      "slug": "mcdowell",
+      "lat": 42.436062,
+      "lng": -83.166004,
+      "borough": "District 2"
+    },
+    {
+      "name": "McNichols Evergreen",
+      "slug": "mcnichols-evergreen",
+      "lat": 42.412726,
+      "lng": -83.242983,
+      "borough": "District 1"
+    },
+    {
+      "name": "Medbury Park",
+      "slug": "medbury-park",
+      "lat": 42.367181,
+      "lng": -83.064445,
+      "borough": "District 5"
+    },
+    {
+      "name": "Medical Center",
+      "slug": "medical-center",
+      "lat": 42.354493,
+      "lng": -83.055136,
+      "borough": "District 5"
+    },
+    {
+      "name": "Melvern Hill",
+      "slug": "melvern-hill",
+      "lat": 42.425771,
+      "lng": -83.263783,
+      "borough": "District 1"
+    },
+    {
+      "name": "Mexicantown",
+      "slug": "mexicantown",
+      "lat": 42.321053,
+      "lng": -83.085238,
+      "borough": "District 6"
+    },
+    {
+      "name": "Michigan-Martin",
+      "slug": "michigan-martin",
+      "lat": 42.327159,
+      "lng": -83.121146,
+      "borough": "District 6"
+    },
+    {
+      "name": "Midtown",
+      "slug": "midtown",
+      "lat": 42.346458,
+      "lng": -83.063054,
+      "borough": "District 6"
+    },
+    {
+      "name": "Midwest",
+      "slug": "midwest",
+      "lat": 42.35457,
+      "lng": -83.130052,
+      "borough": "District 6"
+    },
+    {
+      "name": "Miller Grove",
+      "slug": "miller-grove",
+      "lat": 42.410428,
+      "lng": -83.25011,
+      "borough": "District 1"
+    },
+    {
+      "name": "Milwaukee Junction",
+      "slug": "milwaukee-junction",
+      "lat": 42.371929,
+      "lng": -83.061177,
+      "borough": "District 5"
+    },
+    {
+      "name": "Minock Park",
+      "slug": "minock-park",
+      "lat": 42.404157,
+      "lng": -83.23531,
+      "borough": "District 1"
+    },
+    {
+      "name": "Mohican Regent",
+      "slug": "mohican-regent",
+      "lat": 42.446139,
+      "lng": -82.977889,
+      "borough": "District 3"
+    },
+    {
+      "name": "Morningside",
+      "slug": "morningside",
+      "lat": 42.399022,
+      "lng": -82.944274,
+      "borough": "District 4"
+    },
+    {
+      "name": "Moross-Morang",
+      "slug": "moross-morang",
+      "lat": 42.427596,
+      "lng": -82.94241,
+      "borough": "District 4"
+    },
+    {
+      "name": "Mount Olivet",
+      "slug": "mount-olivet",
+      "lat": 42.426879,
+      "lng": -83.016012,
+      "borough": "District 3"
+    },
+    {
+      "name": "Nardin Park",
+      "slug": "nardin-park",
+      "lat": 42.373412,
+      "lng": -83.129903,
+      "borough": "District 7"
+    },
+    {
+      "name": "New Center",
+      "slug": "new-center",
+      "lat": 42.368367,
+      "lng": -83.077428,
+      "borough": "District 5"
+    },
+    {
+      "name": "New Center Commons",
+      "slug": "new-center-commons",
+      "lat": 42.37201,
+      "lng": -83.079864,
+      "borough": "District 5"
+    },
+    {
+      "name": "Nolan",
+      "slug": "nolan",
+      "lat": 42.439838,
+      "lng": -83.092921,
+      "borough": "District 3"
+    },
+    {
+      "name": "North Campau",
+      "slug": "north-campau",
+      "lat": 42.414739,
+      "lng": -83.076086,
+      "borough": "District 3"
+    },
+    {
+      "name": "North Corktown",
+      "slug": "north-corktown",
+      "lat": 42.336747,
+      "lng": -83.076563,
+      "borough": "District 6"
+    },
+    {
+      "name": "North End",
+      "slug": "north-end",
+      "lat": 42.382996,
+      "lng": -83.07253,
+      "borough": "District 5"
+    },
+    {
+      "name": "North Rosedale Park",
+      "slug": "north-rosedale-park",
+      "lat": 42.409736,
+      "lng": -83.226978,
+      "borough": "District 1"
+    },
+    {
+      "name": "Northeast Central District",
+      "slug": "northeast-central-district",
+      "lat": 42.429064,
+      "lng": -83.078169,
+      "borough": "District 3"
+    },
+    {
+      "name": "Northwest Community",
+      "slug": "northwest-community",
+      "lat": 42.390201,
+      "lng": -83.163973,
+      "borough": "District 7"
+    },
+    {
+      "name": "Nortown",
+      "slug": "nortown",
+      "lat": 42.437496,
+      "lng": -83.024962,
+      "borough": "District 3"
+    },
+    {
+      "name": "NW Goldberg",
+      "slug": "nw-goldberg",
+      "lat": 42.356018,
+      "lng": -83.098641,
+      "borough": "District 5"
+    },
+    {
+      "name": "O'Hair Park",
+      "slug": "ohair-park",
+      "lat": 42.436891,
+      "lng": -83.229322,
+      "borough": "District 1"
+    },
+    {
+      "name": "Oak Grove District 1",
+      "slug": "oak-grove-district-1",
+      "lat": 42.418017,
+      "lng": -83.269442,
+      "borough": "District 1"
+    },
+    {
+      "name": "Oak Grove District 2",
+      "slug": "oak-grove-district-2",
+      "lat": 42.436922,
+      "lng": -83.151402,
+      "borough": "District 2"
+    },
+    {
+      "name": "Oakman Blvd Community",
+      "slug": "oakman-blvd-community",
+      "lat": 42.387881,
+      "lng": -83.134866,
+      "borough": "District 7"
+    },
+    {
+      "name": "Oakwood Heights",
+      "slug": "oakwood-heights",
+      "lat": 42.287299,
+      "lng": -83.153523,
+      "borough": "District 6"
+    },
+    {
+      "name": "Old Redford",
+      "slug": "old-redford",
+      "lat": 42.421238,
+      "lng": -83.260704,
+      "borough": "District 1"
+    },
+    {
+      "name": "Outer Drive-Hayes",
+      "slug": "outer-drive-hayes",
+      "lat": 42.411729,
+      "lng": -82.963121,
+      "borough": "District 4"
+    },
+    {
+      "name": "Palmer Park",
+      "slug": "palmer-park",
+      "lat": 42.424965,
+      "lng": -83.116479,
+      "borough": "District 2"
+    },
+    {
+      "name": "Palmer Woods",
+      "slug": "palmer-woods",
+      "lat": 42.434748,
+      "lng": -83.124499,
+      "borough": "District 2"
+    },
+    {
+      "name": "Paveway",
+      "slug": "paveway",
+      "lat": 42.376572,
+      "lng": -83.180621,
+      "borough": "District 7"
+    },
+    {
+      "name": "Pembroke",
+      "slug": "pembroke",
+      "lat": 42.443172,
+      "lng": -83.166276,
+      "borough": "District 2"
+    },
+    {
+      "name": "Penrose",
+      "slug": "penrose",
+      "lat": 42.43576,
+      "lng": -83.110809,
+      "borough": "District 2"
+    },
+    {
+      "name": "Pershing",
+      "slug": "pershing",
+      "lat": 42.436827,
+      "lng": -83.069877,
+      "borough": "District 3"
+    },
+    {
+      "name": "Petoskey-Otsego",
+      "slug": "petoskey-otsego",
+      "lat": 42.363371,
+      "lng": -83.119106,
+      "borough": "District 5"
+    },
+    {
+      "name": "Piety Hill",
+      "slug": "piety-hill",
+      "lat": 42.378872,
+      "lng": -83.084478,
+      "borough": "District 5"
+    },
+    {
+      "name": "Pilgrim Village",
+      "slug": "pilgrim-village",
+      "lat": 42.405948,
+      "lng": -83.126156,
+      "borough": "District 2"
+    },
+    {
+      "name": "Pingree Park",
+      "slug": "pingree-park",
+      "lat": 42.375821,
+      "lng": -83.006804,
+      "borough": "District 5"
+    },
+    {
+      "name": "Plymouth-Hubbell",
+      "slug": "plymouth-hubbell",
+      "lat": 42.372728,
+      "lng": -83.187892,
+      "borough": "District 7"
+    },
+    {
+      "name": "Plymouth-I96",
+      "slug": "plymouth-i96",
+      "lat": 42.375722,
+      "lng": -83.207267,
+      "borough": "District 7"
+    },
+    {
+      "name": "Poletown East",
+      "slug": "poletown-east",
+      "lat": 42.372879,
+      "lng": -83.043695,
+      "borough": "District 5"
+    },
+    {
+      "name": "Pride Area Community",
+      "slug": "pride-area-community",
+      "lat": 42.377853,
+      "lng": -83.173555,
+      "borough": "District 7"
+    },
+    {
+      "name": "Pulaski",
+      "slug": "pulaski",
+      "lat": 42.438095,
+      "lng": -82.999223,
+      "borough": "District 3"
+    },
+    {
+      "name": "Ravendale",
+      "slug": "ravendale",
+      "lat": 42.400725,
+      "lng": -82.98197,
+      "borough": "District 4"
+    },
+    {
+      "name": "Regent Park",
+      "slug": "regent-park",
+      "lat": 42.442812,
+      "lng": -82.959659,
+      "borough": "District 3"
+    },
+    {
+      "name": "Riverbend",
+      "slug": "riverbend",
+      "lat": 42.378663,
+      "lng": -82.953137,
+      "borough": "District 4"
+    },
+    {
+      "name": "Riverdale",
+      "slug": "riverdale",
+      "lat": 42.411041,
+      "lng": -83.267271,
+      "borough": "District 1"
+    },
+    {
+      "name": "Rivertown",
+      "slug": "rivertown",
+      "lat": 42.338002,
+      "lng": -83.017485,
+      "borough": "District 5"
+    },
+    {
+      "name": "Rosedale Park",
+      "slug": "rosedale-park",
+      "lat": 42.398468,
+      "lng": -83.226537,
+      "borough": "District 1"
+    },
+    {
+      "name": "Rouge Park",
+      "slug": "rouge-park",
+      "lat": 42.361508,
+      "lng": -83.253812,
+      "borough": "District 7"
+    },
+    {
+      "name": "Russell Woods",
+      "slug": "russell-woods",
+      "lat": 42.384245,
+      "lng": -83.133949,
+      "borough": "District 7"
+    },
+    {
+      "name": "San Bernardo",
+      "slug": "san-bernardo",
+      "lat": 42.435634,
+      "lng": -83.197766,
+      "borough": "District 2"
+    },
+    {
+      "name": "Schaefer 7/8 Lodge",
+      "slug": "schaefer-7-8-lodge",
+      "lat": 42.439297,
+      "lng": -83.188499,
+      "borough": "District 2"
+    },
+    {
+      "name": "Schoolcraft Southfield",
+      "slug": "schoolcraft-southfield",
+      "lat": 42.382948,
+      "lng": -83.210681,
+      "borough": "District 1"
+    },
+    {
+      "name": "Schulze",
+      "slug": "schulze",
+      "lat": 42.423972,
+      "lng": -83.170427,
+      "borough": "District 2"
+    },
+    {
+      "name": "Seven Mile Lodge",
+      "slug": "seven-mile-lodge",
+      "lat": 42.433422,
+      "lng": -83.192369,
+      "borough": "District 2"
+    },
+    {
+      "name": "Seven Mile-Rouge",
+      "slug": "seven-mile-rouge",
+      "lat": 42.431272,
+      "lng": -83.273213,
+      "borough": "District 1"
+    },
+    {
+      "name": "Sherwood",
+      "slug": "sherwood",
+      "lat": 42.442688,
+      "lng": -83.033209,
+      "borough": "District 3"
+    },
+    {
+      "name": "Sherwood Forest",
+      "slug": "sherwood-forest",
+      "lat": 42.435185,
+      "lng": -83.136869,
+      "borough": "District 2"
+    },
+    {
+      "name": "South of Six",
+      "slug": "south-of-six",
+      "lat": 42.410772,
+      "lng": -83.281913,
+      "borough": "District 1"
+    },
+    {
+      "name": "Southfield Plymouth",
+      "slug": "southfield-plymouth",
+      "lat": 42.37546,
+      "lng": -83.223039,
+      "borough": "District 7"
+    },
+    {
+      "name": "Springwells",
+      "slug": "springwells",
+      "lat": 42.310411,
+      "lng": -83.129798,
+      "borough": "District 6"
+    },
+    {
+      "name": "State Fair",
+      "slug": "state-fair",
+      "lat": 42.442941,
+      "lng": -83.116149,
+      "borough": "District 2"
+    },
+    {
+      "name": "Tech Town",
+      "slug": "tech-town",
+      "lat": 42.363914,
+      "lng": -83.074679,
+      "borough": "District 5"
+    },
+    {
+      "name": "The Eye",
+      "slug": "the-eye",
+      "lat": 42.420589,
+      "lng": -83.282587,
+      "borough": "District 1"
+    },
+    {
+      "name": "Tri-Point",
+      "slug": "tri-point",
+      "lat": 42.428995,
+      "lng": -83.182578,
+      "borough": "District 2"
+    },
+    {
+      "name": "University District",
+      "slug": "university-district",
+      "lat": 42.424443,
+      "lng": -83.136231,
+      "borough": "District 2"
+    },
+    {
+      "name": "Virginia Park",
+      "slug": "virginia-park",
+      "lat": 42.374629,
+      "lng": -83.081617,
+      "borough": "District 5"
+    },
+    {
+      "name": "Virginia Park Community",
+      "slug": "virginia-park-community",
+      "lat": 42.372018,
+      "lng": -83.094509,
+      "borough": "District 5"
+    },
+    {
+      "name": "Von Steuben",
+      "slug": "von-steuben",
+      "lat": 42.428175,
+      "lng": -82.999506,
+      "borough": "District 3"
+    },
+    {
+      "name": "Wade",
+      "slug": "wade",
+      "lat": 42.405537,
+      "lng": -82.985865,
+      "borough": "District 4"
+    },
+    {
+      "name": "Warren Ave Community",
+      "slug": "warren-ave-community",
+      "lat": 42.345678,
+      "lng": -83.205388,
+      "borough": "District 7"
+    },
+    {
+      "name": "Warrendale",
+      "slug": "warrendale",
+      "lat": 42.345185,
+      "lng": -83.228932,
+      "borough": "District 7"
+    },
+    {
+      "name": "Waterworks Park",
+      "slug": "waterworks-park",
+      "lat": 42.357958,
+      "lng": -82.978691,
+      "borough": "District 5"
+    },
+    {
+      "name": "Wayne State",
+      "slug": "wayne-state",
+      "lat": 42.356718,
+      "lng": -83.072887,
+      "borough": "District 6"
+    },
+    {
+      "name": "We Care Community",
+      "slug": "we-care-community",
+      "lat": 42.361976,
+      "lng": -83.186771,
+      "borough": "District 7"
+    },
+    {
+      "name": "Weatherby",
+      "slug": "weatherby",
+      "lat": 42.375279,
+      "lng": -83.237888,
+      "borough": "District 7"
+    },
+    {
+      "name": "West End",
+      "slug": "west-end",
+      "lat": 42.384391,
+      "lng": -82.992912,
+      "borough": "District 4"
+    },
+    {
+      "name": "West Outer Drive",
+      "slug": "west-outer-drive",
+      "lat": 42.371537,
+      "lng": -83.263645,
+      "borough": "District 7"
+    },
+    {
+      "name": "West Village",
+      "slug": "west-village",
+      "lat": 42.354798,
+      "lng": -82.99768,
+      "borough": "District 5"
+    },
+    {
+      "name": "Westwood Park",
+      "slug": "westwood-park",
+      "lat": 42.391523,
+      "lng": -83.233825,
+      "borough": "District 1"
+    },
+    {
+      "name": "Wildemere Park",
+      "slug": "wildemere-park",
+      "lat": 42.362194,
+      "lng": -83.106723,
+      "borough": "District 5"
+    },
+    {
+      "name": "Winship",
+      "slug": "winship",
+      "lat": 42.423129,
+      "lng": -83.190418,
+      "borough": "District 2"
+    },
+    {
+      "name": "Woodbridge",
+      "slug": "woodbridge",
+      "lat": 42.349323,
+      "lng": -83.082304,
+      "borough": "District 6"
+    },
+    {
+      "name": "Yorkshire Woods",
+      "slug": "yorkshire-woods",
+      "lat": 42.418886,
+      "lng": -82.944443,
+      "borough": "District 4"
+    }
+  ]
+}

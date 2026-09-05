@@ -210,6 +210,58 @@ const CITIES = {
       methodology: `Each incident reported to the Seattle Police Department (via Seattle Open Data) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the Seattle City GIS Neighborhood Map Atlas — 94 neighborhoods grouped into 20 districts (so Capitol Hill and West Seattle, which are districts, appear as section headings). Because Seattle's dense downtown far outweighs its residential neighborhoods, the index is calibrated to the citywide median so a typical neighborhood reads mid-scale. Time-of-day charts use SPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
     },
   },
+  'detroit': {
+    name: 'Detroit',
+    hubName: 'Detroit',
+    rankPool: 'Detroit neighborhoods',
+    // Multi-district city: the City of Detroit's own 205 official neighborhoods
+    // (the set behind theneighborhoods.org), grouped under the 7 City Council
+    // districts that ship in the same layer — the city's own second tier, not
+    // one we invented. 201 are scored; four are dropped as places nobody lives
+    // (Belle Isle and the three named industrial belts), because there a
+    // near-zero score describes empty land while reading as a finding of safety.
+    // The drop is a LAND-USE test, never a low-count one: dropping on counts
+    // would delete quiet residential neighborhoods, which is the same bias that
+    // keeps ShotSpotter and officer-initiated calls out of the app.
+    //
+    // Detroit's neighborhoods are small and adjacent — median centre spacing
+    // 868 m, and 22% of centres sit within 700 m of a neighbour — so 1 km
+    // circles overlap and adjacent areas read similarly. Disclosed in the
+    // methodology, the same as Boston.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    // Detroit is a shrinking city: Delray, Poletown East and Oakwood Heights
+    // were largely cleared for a refinery, a plant and a bridge, so they carry
+    // almost no incidents and float to the top of a per-area index. Their pages
+    // would otherwise read "low risk" about places nobody lives. They are NOT
+    // dropped — they are real named neighborhoods with residents, and erasing
+    // them is the worse error — so the thin ones that a ranking flatters say
+    // what a low count can actually mean.
+    // Named because each is a documented clearance, not because it scored low:
+    // Delray (Gordie Howe bridge approach and the refinery belt), Poletown East
+    // (razed for the GM assembly plant), Oakwood Heights (bought out by
+    // Marathon), Carbon Works (industrial). Their scores are real; what they
+    // measure is emptiness.
+    sparseAreas: new Set(['delray', 'poletown-east', 'oakwood-heights', 'carbon-works']),
+    sparseNote: 'Much of this area was cleared for industry or infrastructure, so the low count reflects how few people are left here as much as how safe the street is.',
+    reportedTo: 'reported to the DPD',
+    dataName: 'DPD data',
+    medianLabel: 'citywide median',
+    forCity: 'for Detroit',
+    acrossCity: 'across Detroit',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Detroit Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Detroit Police Department RMS crime incidents via <a href="https://data.detroitmi.gov/">City of Detroit Open Data</a>${dateLine}. Neighborhood boundaries: City of Detroit official neighborhoods (205), grouped by City Council district. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Detroit Neighborhood Safety Map & Rankings (${n} neighborhoods) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Detroit neighborhood? Safety index (0\u2013100) for ${n} Detroit neighborhoods from DPD reported-crime data through ${date} \u2014 ranked by council district, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Detroit neighborhood?',
+      lead: `SafeRoute scores every Detroit neighborhood 0\u2013100 from incidents reported to the Detroit Police Department \u2014 severity-weighted, within 1 km of each neighborhood's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood \u2014 e.g. Corktown, Indian Village, Brightmoor\u2026',
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center \u2014 they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the Detroit Police Department (RMS crime incidents, via City of Detroit Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the city's own 205 official neighborhoods, grouped by the 7 City Council districts published in the same layer. Four are not scored because nobody lives in them \u2014 Belle Isle, the state park island in the river, and the Conner Creek, Russell and West Side industrial belts \u2014 where near-zero reported crime would read as falsely "safe" rather than as empty land. Detroit's neighborhoods are small and closely spaced, so the 1&nbsp;km circles around adjacent centers overlap and neighbouring areas will show similar figures. Time-of-day charts use DPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
+    },
+  },
   'toronto': {
     name: 'Toronto',
     hubName: 'Toronto',
@@ -722,6 +774,18 @@ function makeProse(a, ctx) {
     : pct <= 0.85 ? `${a.name} records more ${cfg.crimeNoun ?? 'reported crime'} than most ${cfg.name} ${cfg.areaWordPlural}.`
     : `${a.name} records a high level of ${cfg.crimeNoun ?? 'reported crime'} ${cfg.forCity}.`;
 
+  // A "safest" ranking built on almost no incidents is the one reading this
+  // index can get badly wrong: the score counts incidents per AREA, not per
+  // person, so a cleared tract outscores a busy, well-policed street.
+  //
+  // This is a NAMED LIST, not a low-count threshold, and the difference matters.
+  // A bottom-decile rule was tried first and it swept in Palmer Woods and Green
+  // Acres — intact, affluent, genuinely safe neighborhoods — telling readers
+  // their quiet might mean nobody lives there. Incident count cannot separate
+  // "emptied out" from "safe and populated"; only knowing the place can. So the
+  // caveat attaches to specific documented cases and nothing else.
+  const sparse = cfg.sparseAreas?.has(a.slug) ? ` ${cfg.sparseNote}` : '';
+
   const cmp = Math.abs(diff) <= 3
     ? `right at the ${cfg.medianLabel} of ${median}`
     : `${Math.abs(diff)} points ${diff > 0 ? 'above' : 'below'} the ${cfg.medianLabel} of ${median}`;
@@ -731,7 +795,7 @@ function makeProse(a, ctx) {
   // actually judge, where the bare count plus an end date was not.
   const span = windowPhrase(windowDays);
   const period = span ? `over ${span} to ${monthName(a.crimeDate)}` : `(data through ${monthName(a.crimeDate)})`;
-  const lead = `${bandLead} Its SafeRoute safety index is <strong>${a.safetyScore} out of 100</strong> — ${cmp}, ranking ${ord(rank)} of ${count} ${cfg.rankPool} — based on ${fmt(a.totalIncidents)} incidents ${cfg.reportedTo} within 1 km of the ${cfg.areaWord} ${cfg.centre} ${period}.`;
+  const lead = `${bandLead} Its SafeRoute safety index is <strong>${a.safetyScore} out of 100</strong> — ${cmp}, ranking ${ord(rank)} of ${count} ${cfg.rankPool} — based on ${fmt(a.totalIncidents)} incidents ${cfg.reportedTo} within 1 km of the ${cfg.areaWord} ${cfg.centre} ${period}.${sparse}`;
 
   let mix = '';
   if (top) {
