@@ -1,0 +1,248 @@
+{
+  "city": "Cleveland",
+  "citySlug": "cleveland",
+  "country": "US",
+  "source": "City of Cleveland — 34 Statistical Planning Area neighborhoods",
+  "purpose": "Safety pages + calibration.",
+  "generatedAt": "2026-09-06",
+  "areas": [
+    {
+      "name": "Bellaire-Puritas",
+      "slug": "bellaire-puritas",
+      "lat": 41.430373,
+      "lng": -81.790845,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Broadway-Slavic Village",
+      "slug": "broadway-slavic-village",
+      "lat": 41.457963,
+      "lng": -81.643248,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Brooklyn Centre",
+      "slug": "brooklyn-centre",
+      "lat": 41.453279,
+      "lng": -81.701008,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Buckeye-Shaker Square",
+      "slug": "buckeye-shaker-square",
+      "lat": 41.481367,
+      "lng": -81.594492,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Buckeye-Woodhill",
+      "slug": "buckeye-woodhill",
+      "lat": 41.48494,
+      "lng": -81.613443,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Central",
+      "slug": "central",
+      "lat": 41.493873,
+      "lng": -81.655086,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Clark-Fulton",
+      "slug": "clark-fulton",
+      "lat": 41.468029,
+      "lng": -81.708091,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Collinwood-Nottingham",
+      "slug": "collinwood-nottingham",
+      "lat": 41.561341,
+      "lng": -81.567959,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Cudell",
+      "slug": "cudell",
+      "lat": 41.474635,
+      "lng": -81.75511,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Cuyahoga Valley",
+      "slug": "cuyahoga-valley",
+      "lat": 41.478873,
+      "lng": -81.683823,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Detroit Shoreway",
+      "slug": "detroit-shoreway",
+      "lat": 41.481626,
+      "lng": -81.732455,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Downtown",
+      "slug": "downtown",
+      "lat": 41.508282,
+      "lng": -81.685116,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Edgewater",
+      "slug": "edgewater",
+      "lat": 41.48449,
+      "lng": -81.759352,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Euclid-Green",
+      "slug": "euclid-green",
+      "lat": 41.551194,
+      "lng": -81.552549,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Fairfax",
+      "slug": "fairfax",
+      "lat": 41.496496,
+      "lng": -81.627469,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Glenville",
+      "slug": "glenville",
+      "lat": 41.534566,
+      "lng": -81.610022,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Goodrich-Kirtland Park",
+      "slug": "goodrich-kirtland-park",
+      "lat": 41.515171,
+      "lng": -81.661443,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Hopkins",
+      "slug": "hopkins",
+      "lat": 41.41047,
+      "lng": -81.849255,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Hough",
+      "slug": "hough",
+      "lat": 41.512386,
+      "lng": -81.634999,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Jefferson",
+      "slug": "jefferson",
+      "lat": 41.453745,
+      "lng": -81.783524,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Kamm's",
+      "slug": "kamms",
+      "lat": 41.449291,
+      "lng": -81.815761,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Kinsman",
+      "slug": "kinsman",
+      "lat": 41.474223,
+      "lng": -81.627392,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Lee-Harvard",
+      "slug": "lee-harvard",
+      "lat": 41.448806,
+      "lng": -81.560172,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Lee-Seville",
+      "slug": "lee-seville",
+      "lat": 41.434172,
+      "lng": -81.567933,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Mount Pleasant",
+      "slug": "mount-pleasant",
+      "lat": 41.464734,
+      "lng": -81.592432,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "North Shore Collinwood",
+      "slug": "north-shore-collinwood",
+      "lat": 41.579791,
+      "lng": -81.563058,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Ohio City",
+      "slug": "ohio-city",
+      "lat": 41.483218,
+      "lng": -81.710784,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Old Brooklyn",
+      "slug": "old-brooklyn",
+      "lat": 41.433908,
+      "lng": -81.70491,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "St. Clair-Superior",
+      "slug": "st-clair-superior",
+      "lat": 41.528182,
+      "lng": -81.639112,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Stockyards",
+      "slug": "stockyards",
+      "lat": 41.460437,
+      "lng": -81.727732,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Tremont",
+      "slug": "tremont",
+      "lat": 41.473996,
+      "lng": -81.69054,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "Union-Miles",
+      "slug": "union-miles",
+      "lat": 41.451211,
+      "lng": -81.604641,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "University",
+      "slug": "university",
+      "lat": 41.507185,
+      "lng": -81.606604,
+      "borough": "Cleveland"
+    },
+    {
+      "name": "West Boulevard",
+      "slug": "west-boulevard",
+      "lat": 41.460815,
+      "lng": -81.754006,
+      "borough": "Cleveland"
+    }
+  ]
+}

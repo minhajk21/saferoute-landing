@@ -299,6 +299,45 @@ const CITIES = {
       methodology: `Each incident reported to the Minneapolis Police Department (via Minneapolis Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the city's own 87 neighborhoods, grouped by its own 11 communities. Minneapolis wraps its neighborhoods around real lakes, so a centre that would otherwise land on open water is moved to the built-up part of the same neighborhood \u2014 never onto a neighbouring one. Time-of-day charts use MPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
     },
   },
+  'cleveland': {
+    name: 'Cleveland',
+    hubName: 'Cleveland',
+    rankPool: 'Cleveland neighborhoods',
+    // The city's own 34 Statistical Planning Areas, from the SAME ArcGIS org
+    // that publishes the CPD crime feed — boundaries and incidents share a
+    // publisher. Single ranked table: the layer's `DIST` is a planning-district
+    // id rather than a geography Clevelanders use, so grouping on it would
+    // invent one. Spacing is the roomiest of any city here (median 1,790 m),
+    // so the 1 km circles barely touch.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    // Cleveland's two top-ranked areas are an airport and an industrial river
+    // valley. NOTE the numeric audit did NOT catch them: the "<25% of the city
+    // median" screen sits at 193 incidents here, and Hopkins (219) and Cuyahoga
+    // Valley (317) clear it — an airport and a mill district generate enough
+    // theft to look populated while housing almost nobody. The screen is a net,
+    // not an oracle; the names still have to be read.
+    sparseAreas: new Set(['hopkins', 'cuyahoga-valley']),
+    sparseNote: 'Most of this area is airport or industrial land rather than housing, so the count reflects how few people live here rather than how safe the streets are.',
+    reportedTo: 'reported to the Cleveland Division of Police',
+    dataName: 'Cleveland Division of Police data',
+    medianLabel: 'citywide median',
+    forCity: 'for Cleveland',
+    acrossCity: 'across Cleveland',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Cleveland Division of Police by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Cleveland Division of Police crime incidents via the <a href="https://data.clevelandohio.gov/">City of Cleveland</a> open data${dateLine}. Neighborhood boundaries: City of Cleveland Statistical Planning Areas (34). Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Cleveland Neighborhood Safety Map & Rankings (${n} neighborhoods) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Cleveland neighborhood? Safety index (0\u2013100) for ${n} Cleveland neighborhoods from Cleveland Division of Police data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Cleveland neighborhood?',
+      lead: `SafeRoute scores every Cleveland neighborhood 0\u2013100 from incidents reported to the Cleveland Division of Police \u2014 severity-weighted, within 1 km of each neighborhood's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood \u2014 e.g. Tremont, Ohio City, Glenville\u2026',
+      rankHeading: (n) => `All ${n} Cleveland neighborhoods, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center \u2014 they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the Cleveland Division of Police is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the city's own 34 Statistical Planning Areas, published by the same office as the crime data. Cleveland's neighborhoods sit further apart than any other city here, so the 1&nbsp;km circles barely overlap and each figure describes its own area. Time-of-day charts use incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
+    },
+  },
   'toronto': {
     name: 'Toronto',
     hubName: 'Toronto',
