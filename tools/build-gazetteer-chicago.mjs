@@ -64,6 +64,30 @@ function centroidOf(geometry) {
   return best;
 }
 
+// A community area's geometric centre is not always where its people are.
+// South Deering spans the Lake Calumet industrial basin — landfills, slips and
+// the old steel-mill land — and its centroid landed out in that void, returning
+// 5 incidents and publishing a neighborhood of roughly 15,000 people as the
+// SAFEST place in Chicago (99/100). Its residential core, two kilometres away
+// around 106th & Torrence, returns 214. The override is asserted to be INSIDE
+// the polygon at build time, so this can move a centre to where people live but
+// can never move it onto a different community area.
+const CENTROID_OVERRIDE = new Map([
+  ['South Deering', { lat: 41.7100, lng: -87.5540 }],   // Trumbull Park / 106th & Torrence
+]);
+
+function pointInRing({ lat, lng }, ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i], [xj, yj] = ring[j];
+    if ((yi > lat) !== (yj > lat) && lng < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+const ringsOf = (g) => g?.type === 'Polygon' ? [g.coordinates[0]]
+  : g?.type === 'MultiPolygon' ? g.coordinates.map((p) => p[0]) : [];
+
 const distKm = (a, b) => {
   const dLat = (a.lat - b.lat) * 111.32;
   const dLng = (a.lng - b.lng) * 111.32 * Math.cos(a.lat * Math.PI / 180);
@@ -77,8 +101,16 @@ const geo = await res.json();
 const areas = geo.features
   .filter(f => f.geometry && f.properties && f.properties.community)
   .map(f => {
-    const c = centroidOf(f.geometry);
+    let c = centroidOf(f.geometry);
     const name = titleCase(f.properties.community);
+    const ov = CENTROID_OVERRIDE.get(name);
+    if (ov) {
+      if (!ringsOf(f.geometry).some((r) => pointInRing(ov, r))) {
+        throw new Error(`centroid override for "${name}" is outside its own polygon`);
+      }
+      c = ov;
+      console.log(`  centroid moved to built-up core: ${name}`);
+    }
     return {
       name,
       slug: slugify(name),

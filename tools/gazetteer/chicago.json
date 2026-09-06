@@ -3,7 +3,7 @@
  "citySlug": "chicago",
  "country": "US",
  "source": "Chicago Data Portal — Boundaries: Community Areas (igwz-8jzy), all 77",
- "generatedAt": "2026-09-02",
+ "generatedAt": "2026-09-06",
  "areas": [
   {
    "name": "Albany Park",
@@ -211,8 +211,8 @@
     "avalon-park",
     "burnside",
     "south-chicago",
-    "pullman",
-    "south-shore"
+    "south-deering",
+    "pullman"
    ]
   },
   {
@@ -463,9 +463,9 @@
    "lat": 41.660535,
    "lng": -87.546575,
    "neighbors": [
-    "south-deering",
     "riverdale",
     "east-side",
+    "south-deering",
     "pullman",
     "west-pullman"
    ]
@@ -870,8 +870,8 @@
    "neighbors": [
     "roseland",
     "burnside",
-    "south-deering",
     "calumet-heights",
+    "south-deering",
     "chatham"
    ]
   },
@@ -884,10 +884,10 @@
    "lng": -87.602849,
    "neighbors": [
     "west-pullman",
-    "south-deering",
     "hegewisch",
     "pullman",
-    "roseland"
+    "roseland",
+    "morgan-park"
    ]
   },
   {
@@ -931,8 +931,8 @@
     "calumet-heights",
     "south-shore",
     "avalon-park",
-    "burnside",
-    "east-side"
+    "south-deering",
+    "burnside"
    ]
   },
   {
@@ -940,14 +940,14 @@
    "slug": "south-deering",
    "borough": "Chicago",
    "areaNum": "51",
-   "lat": 41.690637,
-   "lng": -87.570057,
+   "lat": 41.71,
+   "lng": -87.554,
    "neighbors": [
-    "pullman",
     "east-side",
-    "hegewisch",
     "calumet-heights",
-    "riverdale"
+    "south-chicago",
+    "pullman",
+    "burnside"
    ]
   },
   {
