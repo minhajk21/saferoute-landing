@@ -270,6 +270,35 @@ const CITIES = {
       methodology: `Each incident reported to the Detroit Police Department (RMS crime incidents, via City of Detroit Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the city's own 205 official neighborhoods, grouped by the 7 City Council districts published in the same layer. Four are not scored because nobody lives in them \u2014 Belle Isle, the state park island in the river, and the Conner Creek, Russell and West Side industrial belts \u2014 where near-zero reported crime would read as falsely "safe" rather than as empty land. Detroit's neighborhoods are small and closely spaced, so the 1&nbsp;km circles around adjacent centers overlap and neighbouring areas will show similar figures. Time-of-day charts use DPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
     },
   },
+  'minneapolis': {
+    name: 'Minneapolis',
+    hubName: 'Minneapolis',
+    rankPool: 'Minneapolis neighborhoods',
+    // Multi-district city, and both tiers are the city's own: 87 official
+    // neighborhoods (Minneapolis_Neighborhoods) grouped under the official 11
+    // communities (Minneapolis_Communities). The layers ship separately with no
+    // shared key, so the community is assigned by point-in-polygon of each
+    // neighborhood's centroid.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    reportedTo: 'reported to the MPD',
+    dataName: 'MPD data',
+    medianLabel: 'citywide median',
+    forCity: 'for Minneapolis',
+    acrossCity: 'across Minneapolis',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Minneapolis Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Minneapolis Police Department incidents via <a href="https://opendata.minneapolismn.gov/">Minneapolis Open Data</a>${dateLine}. Neighborhood boundaries: City of Minneapolis official neighborhoods (87), grouped by the city's 11 communities. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Minneapolis Neighborhood Safety Map & Rankings (${n} neighborhoods) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Minneapolis neighborhood? Safety index (0\u2013100) for ${n} Minneapolis neighborhoods from MPD reported-crime data through ${date} \u2014 ranked by community, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Minneapolis neighborhood?',
+      lead: `SafeRoute scores every Minneapolis neighborhood 0\u2013100 from incidents reported to the Minneapolis Police Department \u2014 severity-weighted, within 1 km of each neighborhood's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood \u2014 e.g. Uptown, Linden Hills, Powderhorn Park\u2026',
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center \u2014 they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the Minneapolis Police Department (via Minneapolis Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the city's own 87 neighborhoods, grouped by its own 11 communities. Minneapolis wraps its neighborhoods around real lakes, so a centre that would otherwise land on open water is moved to the built-up part of the same neighborhood \u2014 never onto a neighbouring one. Time-of-day charts use MPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
+    },
+  },
   'toronto': {
     name: 'Toronto',
     hubName: 'Toronto',

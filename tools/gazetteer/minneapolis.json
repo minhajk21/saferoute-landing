@@ -1,0 +1,619 @@
+{
+  "city": "Minneapolis",
+  "citySlug": "minneapolis",
+  "country": "US",
+  "source": "City of Minneapolis — 87 official neighborhoods grouped by the city's 11 communities",
+  "purpose": "Safety pages + calibration.",
+  "generatedAt": "2026-09-06",
+  "areas": [
+    {
+      "name": "Armatage",
+      "slug": "armatage",
+      "lat": 44.898002,
+      "lng": -93.31124,
+      "borough": "Southwest"
+    },
+    {
+      "name": "Audubon Park",
+      "slug": "audubon-park",
+      "lat": 45.018258,
+      "lng": -93.238396,
+      "borough": "Northeast"
+    },
+    {
+      "name": "Bancroft",
+      "slug": "bancroft",
+      "lat": 44.930534,
+      "lng": -93.254917,
+      "borough": "Powderhorn"
+    },
+    {
+      "name": "Beltrami",
+      "slug": "beltrami",
+      "lat": 44.994992,
+      "lng": -93.242683,
+      "borough": "Northeast"
+    },
+    {
+      "name": "Bottineau",
+      "slug": "bottineau",
+      "lat": 45.009388,
+      "lng": -93.268488,
+      "borough": "Northeast"
+    },
+    {
+      "name": "Bryant",
+      "slug": "bryant",
+      "lat": 44.930523,
+      "lng": -93.268597,
+      "borough": "Powderhorn"
+    },
+    {
+      "name": "Bryn - Mawr",
+      "slug": "bryn-mawr",
+      "lat": 44.971465,
+      "lng": -93.31527,
+      "borough": "Calhoun Isle"
+    },
+    {
+      "name": "Camden Industrial",
+      "slug": "camden-industrial",
+      "lat": 45.033325,
+      "lng": -93.284208,
+      "borough": "Camden"
+    },
+    {
+      "name": "Cedar - Isles - Dean",
+      "slug": "cedar-isles-dean",
+      "lat": 44.953121,
+      "lng": -93.318422,
+      "borough": "Calhoun Isle"
+    },
+    {
+      "name": "Cedar Riverside",
+      "slug": "cedar-riverside",
+      "lat": 44.969154,
+      "lng": -93.241859,
+      "borough": "University"
+    },
+    {
+      "name": "Central",
+      "slug": "central",
+      "lat": 44.941243,
+      "lng": -93.268646,
+      "borough": "Powderhorn"
+    },
+    {
+      "name": "Cleveland",
+      "slug": "cleveland",
+      "lat": 45.018673,
+      "lng": -93.31336,
+      "borough": "Camden"
+    },
+    {
+      "name": "Columbia Park",
+      "slug": "columbia-park",
+      "lat": 45.028075,
+      "lng": -93.261069,
+      "borough": "Northeast"
+    },
+    {
+      "name": "Como",
+      "slug": "como",
+      "lat": 44.986227,
+      "lng": -93.220782,
+      "borough": "University"
+    },
+    {
+      "name": "Cooper",
+      "slug": "cooper",
+      "lat": 44.947517,
+      "lng": -93.210213,
+      "borough": "Longfellow"
+    },
+    {
+      "name": "Corcoran",
+      "slug": "corcoran",
+      "lat": 44.942557,
+      "lng": -93.240901,
+      "borough": "Powderhorn"
+    },
+    {
+      "name": "Diamond Lake",
+      "slug": "diamond-lake",
+      "lat": 44.897457,
+      "lng": -93.262698,
+      "borough": "Nokomis"
+    },
+    {
+      "name": "Downtown East",
+      "slug": "downtown-east",
+      "lat": 44.976063,
+      "lng": -93.254106,
+      "borough": "Central"
+    },
+    {
+      "name": "Downtown West",
+      "slug": "downtown-west",
+      "lat": 44.97784,
+      "lng": -93.270122,
+      "borough": "Central"
+    },
+    {
+      "name": "East Bde Maka Ska",
+      "slug": "east-bde-maka-ska",
+      "lat": 44.94304,
+      "lng": -93.304414,
+      "borough": "Calhoun Isle"
+    },
+    {
+      "name": "East Harriet",
+      "slug": "east-harriet",
+      "lat": 44.928944,
+      "lng": -93.298437,
+      "borough": "Southwest"
+    },
+    {
+      "name": "East Isles",
+      "slug": "east-isles",
+      "lat": 44.955181,
+      "lng": -93.300396,
+      "borough": "Calhoun Isle"
+    },
+    {
+      "name": "East Phillips",
+      "slug": "east-phillips",
+      "lat": 44.953448,
+      "lng": -93.247069,
+      "borough": "Phillips"
+    },
+    {
+      "name": "Elliot Park",
+      "slug": "elliot-park",
+      "lat": 44.969565,
+      "lng": -93.261829,
+      "borough": "Central"
+    },
+    {
+      "name": "Ericsson",
+      "slug": "ericsson",
+      "lat": 44.920843,
+      "lng": -93.233008,
+      "borough": "Nokomis"
+    },
+    {
+      "name": "Field",
+      "slug": "field",
+      "lat": 44.915431,
+      "lng": -93.268884,
+      "borough": "Nokomis"
+    },
+    {
+      "name": "Folwell",
+      "slug": "folwell",
+      "lat": 45.018611,
+      "lng": -93.300672,
+      "borough": "Camden"
+    },
+    {
+      "name": "Fulton",
+      "slug": "fulton",
+      "lat": 44.911567,
+      "lng": -93.318847,
+      "borough": "Southwest"
+    },
+    {
+      "name": "Hale",
+      "slug": "hale",
+      "lat": 44.908527,
+      "lng": -93.254451,
+      "borough": "Nokomis"
+    },
+    {
+      "name": "Harrison",
+      "slug": "harrison",
+      "lat": 44.980605,
+      "lng": -93.303751,
+      "borough": "Near North"
+    },
+    {
+      "name": "Hawthorne",
+      "slug": "hawthorne",
+      "lat": 45.006176,
+      "lng": -93.284224,
+      "borough": "Near North"
+    },
+    {
+      "name": "Hiawatha",
+      "slug": "hiawatha",
+      "lat": 44.921737,
+      "lng": -93.209973,
+      "borough": "Longfellow"
+    },
+    {
+      "name": "Holland",
+      "slug": "holland",
+      "lat": 45.011724,
+      "lng": -93.255712,
+      "borough": "Northeast"
+    },
+    {
+      "name": "Howe",
+      "slug": "howe",
+      "lat": 44.936247,
+      "lng": -93.215492,
+      "borough": "Longfellow"
+    },
+    {
+      "name": "Humboldt Industrial Area",
+      "slug": "humboldt-industrial-area",
+      "lat": 45.041723,
+      "lng": -93.307395,
+      "borough": "Camden"
+    },
+    {
+      "name": "Jordan",
+      "slug": "jordan",
+      "lat": 45.007346,
+      "lng": -93.303344,
+      "borough": "Near North"
+    },
+    {
+      "name": "Keewaydin",
+      "slug": "keewaydin",
+      "lat": 44.910869,
+      "lng": -93.234898,
+      "borough": "Nokomis"
+    },
+    {
+      "name": "Kenny",
+      "slug": "kenny",
+      "lat": 44.898549,
+      "lng": -93.296872,
+      "borough": "Southwest"
+    },
+    {
+      "name": "Kenwood",
+      "slug": "kenwood",
+      "lat": 44.961765,
+      "lng": -93.311228,
+      "borough": "Calhoun Isle"
+    },
+    {
+      "name": "King Field",
+      "slug": "king-field",
+      "lat": 44.928662,
+      "lng": -93.281481,
+      "borough": "Southwest"
+    },
+    {
+      "name": "Lind - Bohanon",
+      "slug": "lind-bohanon",
+      "lat": 45.044237,
+      "lng": -93.290843,
+      "borough": "Camden"
+    },
+    {
+      "name": "Linden Hills",
+      "slug": "linden-hills",
+      "lat": 44.927514,
+      "lng": -93.318728,
+      "borough": "Southwest"
+    },
+    {
+      "name": "Logan Park",
+      "slug": "logan-park",
+      "lat": 45.00317,
+      "lng": -93.25234,
+      "borough": "Northeast"
+    },
+    {
+      "name": "Longfellow",
+      "slug": "longfellow",
+      "lat": 44.948146,
+      "lng": -93.228513,
+      "borough": "Longfellow"
+    },
+    {
+      "name": "Loring Park",
+      "slug": "loring-park",
+      "lat": 44.96966,
+      "lng": -93.280798,
+      "borough": "Central"
+    },
+    {
+      "name": "Lowry Hill",
+      "slug": "lowry-hill",
+      "lat": 44.967672,
+      "lng": -93.295472,
+      "borough": "Calhoun Isle"
+    },
+    {
+      "name": "Lowry Hill East",
+      "slug": "lowry-hill-east",
+      "lat": 44.955009,
+      "lng": -93.292149,
+      "borough": "Calhoun Isle"
+    },
+    {
+      "name": "Lyndale",
+      "slug": "lyndale",
+      "lat": 44.943029,
+      "lng": -93.281444,
+      "borough": "Powderhorn"
+    },
+    {
+      "name": "Lynnhurst",
+      "slug": "lynnhurst",
+      "lat": 44.912312,
+      "lng": -93.298427,
+      "borough": "Southwest"
+    },
+    {
+      "name": "Marcy Holmes",
+      "slug": "marcy-holmes",
+      "lat": 44.985069,
+      "lng": -93.2452,
+      "borough": "University"
+    },
+    {
+      "name": "Marshall Terrace",
+      "slug": "marshall-terrace",
+      "lat": 45.021043,
+      "lng": -93.270247,
+      "borough": "Northeast"
+    },
+    {
+      "name": "McKinley",
+      "slug": "mckinley",
+      "lat": 45.018311,
+      "lng": -93.284659,
+      "borough": "Camden"
+    },
+    {
+      "name": "Mid - City Industrial",
+      "slug": "mid-city-industrial",
+      "lat": 44.997264,
+      "lng": -93.221472,
+      "borough": "University"
+    },
+    {
+      "name": "Midtown Phillips",
+      "slug": "midtown-phillips",
+      "lat": 44.953744,
+      "lng": -93.257536,
+      "borough": "Phillips"
+    },
+    {
+      "name": "Minnehaha",
+      "slug": "minnehaha",
+      "lat": 44.909775,
+      "lng": -93.213841,
+      "borough": "Nokomis"
+    },
+    {
+      "name": "Morris Park",
+      "slug": "morris-park",
+      "lat": 44.900084,
+      "lng": -93.215192,
+      "borough": "Nokomis"
+    },
+    {
+      "name": "Near - North",
+      "slug": "near-north",
+      "lat": 44.992681,
+      "lng": -93.292427,
+      "borough": "Near North"
+    },
+    {
+      "name": "Nicollet Island - East Bank",
+      "slug": "nicollet-island-east-bank",
+      "lat": 44.98769,
+      "lng": -93.259574,
+      "borough": "University"
+    },
+    {
+      "name": "North Loop",
+      "slug": "north-loop",
+      "lat": 44.985398,
+      "lng": -93.278943,
+      "borough": "Central"
+    },
+    {
+      "name": "Northeast Park",
+      "slug": "northeast-park",
+      "lat": 45.004174,
+      "lng": -93.229872,
+      "borough": "Northeast"
+    },
+    {
+      "name": "Northrop",
+      "slug": "northrop",
+      "lat": 44.920066,
+      "lng": -93.255367,
+      "borough": "Nokomis"
+    },
+    {
+      "name": "Page",
+      "slug": "page",
+      "lat": 44.907356,
+      "lng": -93.268534,
+      "borough": "Nokomis"
+    },
+    {
+      "name": "Phillips West",
+      "slug": "phillips-west",
+      "lat": 44.953862,
+      "lng": -93.267343,
+      "borough": "Phillips"
+    },
+    {
+      "name": "Powderhorn Park",
+      "slug": "powderhorn-park",
+      "lat": 44.941256,
+      "lng": -93.254981,
+      "borough": "Powderhorn"
+    },
+    {
+      "name": "Prospect Park - East River Road",
+      "slug": "prospect-park-east-river-road",
+      "lat": 44.968931,
+      "lng": -93.216697,
+      "borough": "University"
+    },
+    {
+      "name": "Regina",
+      "slug": "regina",
+      "lat": 44.923303,
+      "lng": -93.268616,
+      "borough": "Nokomis"
+    },
+    {
+      "name": "Seward",
+      "slug": "seward",
+      "lat": 44.959184,
+      "lng": -93.231127,
+      "borough": "Longfellow"
+    },
+    {
+      "name": "Sheridan",
+      "slug": "sheridan",
+      "lat": 45.002058,
+      "lng": -93.266153,
+      "borough": "Northeast"
+    },
+    {
+      "name": "Shingle Creek",
+      "slug": "shingle-creek",
+      "lat": 45.047579,
+      "lng": -93.309349,
+      "borough": "Camden"
+    },
+    {
+      "name": "South Uptown",
+      "slug": "south-uptown",
+      "lat": 44.943029,
+      "lng": -93.293251,
+      "borough": "Calhoun Isle"
+    },
+    {
+      "name": "St. Anthony East",
+      "slug": "st-anthony-east",
+      "lat": 44.995615,
+      "lng": -93.252772,
+      "borough": "Northeast"
+    },
+    {
+      "name": "St. Anthony West",
+      "slug": "st-anthony-west",
+      "lat": 44.994514,
+      "lng": -93.265103,
+      "borough": "Northeast"
+    },
+    {
+      "name": "Standish",
+      "slug": "standish",
+      "lat": 44.93136,
+      "lng": -93.237443,
+      "borough": "Powderhorn"
+    },
+    {
+      "name": "Steven's Square - Loring Heights",
+      "slug": "stevens-square-loring-heights",
+      "lat": 44.964317,
+      "lng": -93.277314,
+      "borough": "Central"
+    },
+    {
+      "name": "Sumner - Glenwood",
+      "slug": "sumner-glenwood",
+      "lat": 44.984035,
+      "lng": -93.291603,
+      "borough": "Near North"
+    },
+    {
+      "name": "Tangletown",
+      "slug": "tangletown",
+      "lat": 44.912047,
+      "lng": -93.281398,
+      "borough": "Southwest"
+    },
+    {
+      "name": "University of Minnesota",
+      "slug": "university-of-minnesota",
+      "lat": 44.975106,
+      "lng": -93.234522,
+      "borough": "University"
+    },
+    {
+      "name": "Ventura Village",
+      "slug": "ventura-village",
+      "lat": 44.96278,
+      "lng": -93.257902,
+      "borough": "Phillips"
+    },
+    {
+      "name": "Victory",
+      "slug": "victory",
+      "lat": 45.03324,
+      "lng": -93.313543,
+      "borough": "Camden"
+    },
+    {
+      "name": "Waite Park",
+      "slug": "waite-park",
+      "lat": 45.029014,
+      "lng": -93.236127,
+      "borough": "Northeast"
+    },
+    {
+      "name": "Webber - Camden",
+      "slug": "webber-camden",
+      "lat": 45.030104,
+      "lng": -93.297395,
+      "borough": "Camden"
+    },
+    {
+      "name": "Wenonah",
+      "slug": "wenonah",
+      "lat": 44.901171,
+      "lng": -93.235347,
+      "borough": "Nokomis"
+    },
+    {
+      "name": "West Maka Ska",
+      "slug": "west-maka-ska",
+      "lat": 44.943055,
+      "lng": -93.319708,
+      "borough": "Calhoun Isle"
+    },
+    {
+      "name": "Whittier",
+      "slug": "whittier",
+      "lat": 44.955986,
+      "lng": -93.279582,
+      "borough": "Powderhorn"
+    },
+    {
+      "name": "Willard - Hay",
+      "slug": "willard-hay",
+      "lat": 44.996352,
+      "lng": -93.311734,
+      "borough": "Near North"
+    },
+    {
+      "name": "Windom",
+      "slug": "windom",
+      "lat": 44.89698,
+      "lng": -93.283119,
+      "borough": "Southwest"
+    },
+    {
+      "name": "Windom Park",
+      "slug": "windom-park",
+      "lat": 45.009746,
+      "lng": -93.234943,
+      "borough": "Northeast"
+    }
+  ]
+}
