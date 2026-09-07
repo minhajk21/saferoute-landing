@@ -198,7 +198,7 @@ const CITIES = {
     // neighborhoods and tells readers nobody lives there. Not dropped either:
     // these are real places people visit, and a page that explains the number
     // beats a page that is silently missing.
-    sparseAreas: new Set(['harbor-island']),
+    sparseAreas: new Set(['harbor-island', 'industrial-district']),
     sparseNote: 'Almost all of this area is industrial port land rather than homes, so a low count reflects how few people are here rather than how safe the streets are.',
     reportedTo: 'reported to the SPD',
     dataName: 'SPD data',
@@ -503,8 +503,8 @@ const CITIES = {
     // neighborhoods and tells readers nobody lives there. Not dropped either:
     // these are real places people visit, and a page that explains the number
     // beats a page that is silently missing.
-    sparseAreas: new Set(['port-of-long-beach']),
-    sparseNote: 'Almost all of this area is working port and terminal land rather than homes, so a low count reflects how few people are here rather than how safe the streets are.',
+    sparseAreas: new Set(['port-of-long-beach', 'airport-area']),
+    sparseNote: 'Almost all of this area is working port, airport and terminal land rather than homes, so a low count reflects how few people are here rather than how safe the streets are.',
     reportedTo: 'reported to the Long Beach Police',
     dataName: 'Long Beach Police data',
     medianLabel: 'citywide median',
@@ -679,8 +679,8 @@ const CITIES = {
     // neighborhoods and tells readers nobody lives there. Not dropped either:
     // these are real places people visit, and a page that explains the number
     // beats a page that is silently missing.
-    sparseAreas: new Set(['navy-yard', 'byberry']),
-    sparseNote: 'Most of this area is industrial, institutional and commercial land rather than housing, so a low count reflects how few people live here rather than how safe the streets are.',
+    sparseAreas: new Set(['navy-yard', 'byberry', 'stadium-district']),
+    sparseNote: 'Most of this area is industrial, institutional, stadium and commercial land rather than housing, so a low count reflects how few people live here rather than how safe the streets are.',
     reportedTo: 'reported to the Philadelphia Police',
     dataName: 'Philadelphia Police data',
     medianLabel: 'citywide median',

@@ -3,7 +3,7 @@
  "citySlug": "toronto",
  "country": "CA",
  "source": "City of Toronto Open Data — 158 neighbourhoods, grouped by former municipality",
- "generatedAt": "2026-09-02",
+ "generatedAt": "2026-09-07",
  "areas": [
   {
    "name": "Broadview North",
@@ -1077,10 +1077,10 @@
    "lng": -79.377128,
    "neighbors": [
     "yonge-bay-corridor",
+    "st-lawrence-east-bayfront-the-islands",
     "moss-park",
     "church-wellesley",
-    "regent-park",
-    "bay-cloverhill"
+    "regent-park"
    ]
   },
   {
@@ -1176,9 +1176,9 @@
    "neighbors": [
     "wellington-place",
     "yonge-bay-corridor",
-    "st-lawrence-east-bayfront-the-islands",
     "kensington-chinatown",
-    "west-queen-west"
+    "west-queen-west",
+    "st-lawrence-east-bayfront-the-islands"
    ]
   },
   {
@@ -1302,9 +1302,9 @@
    "neighbors": [
     "regent-park",
     "downtown-yonge-east",
+    "st-lawrence-east-bayfront-the-islands",
     "cabbagetown-south-stjames-town",
-    "yonge-bay-corridor",
-    "north-stjames-town"
+    "yonge-bay-corridor"
    ]
   },
   {
@@ -1402,7 +1402,7 @@
     "cabbagetown-south-stjames-town",
     "downtown-yonge-east",
     "north-riverdale",
-    "north-stjames-town"
+    "st-lawrence-east-bayfront-the-islands"
    ]
   },
   {
@@ -1472,21 +1472,21 @@
     "moss-park",
     "greenwood-coxwell",
     "north-riverdale",
-    "blake-jones"
+    "st-lawrence-east-bayfront-the-islands"
    ]
   },
   {
    "name": "St Lawrence-East Bayfront-The Islands",
    "slug": "st-lawrence-east-bayfront-the-islands",
    "borough": "Old Toronto",
-   "lat": 43.632242,
-   "lng": -79.37435,
+   "lat": 43.649,
+   "lng": -79.372,
    "neighbors": [
-    "harbourfront-cityplace",
-    "wellington-place",
-    "yonge-bay-corridor",
     "downtown-yonge-east",
-    "moss-park"
+    "moss-park",
+    "yonge-bay-corridor",
+    "regent-park",
+    "harbourfront-cityplace"
    ]
   },
   {
@@ -1609,10 +1609,10 @@
    "lng": -79.383728,
    "neighbors": [
     "downtown-yonge-east",
+    "st-lawrence-east-bayfront-the-islands",
     "kensington-chinatown",
     "wellington-place",
-    "moss-park",
-    "bay-cloverhill"
+    "moss-park"
    ]
   },
   {

@@ -125,12 +125,45 @@ function districtFor(c) {
   return best.name;
 }
 
+// A neighbourhood that reaches across water gets its centre pulled offshore.
+// "St Lawrence-East Bayfront-The Islands" spans the dense downtown blocks AND
+// the Toronto Islands, so its geometric centre landed in the harbour: 11
+// incidents, scoring 94 and ranking 2nd SAFEST in Toronto. Probed at the St
+// Lawrence Market core it returns 1,159 incidents and scores 11 — high risk.
+// A busy downtown neighbourhood was published as one of the safest places in
+// the city, which is the most harmful direction this error can point.
+// The override is asserted INSIDE the polygon at build time, so a centre can be
+// moved to where people live but never onto a neighbouring area.
+const CENTROID_OVERRIDE = new Map([
+  ['St Lawrence-East Bayfront-The Islands', { lat: 43.6490, lng: -79.3720 }],  // St Lawrence Market
+]);
+
+function pointInRing({ lat, lng }, ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i], [xj, yj] = ring[j];
+    if ((yi > lat) !== (yj > lat) && lng < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+const ringsOf = (g) => g?.type === 'Polygon' ? [g.coordinates[0]]
+  : g?.type === 'MultiPolygon' ? g.coordinates.map((p) => p[0]) : [];
+
 const areas = nbhd.features
   .filter(f => f.geometry && f.properties?.AREA_NAME)
   .map(f => {
-    const c = centroidOf(f.geometry);
+    let c = centroidOf(f.geometry);
     // Names arrive as "South Eglinton-Davisville"; drop any trailing "(174)" code.
     const name = String(f.properties.AREA_NAME).replace(/\s*\(\d+\)\s*$/, '').trim();
+    const ov = CENTROID_OVERRIDE.get(name);
+    if (ov) {
+      if (!ringsOf(f.geometry).some((r) => pointInRing(ov, r))) {
+        throw new Error(`centroid override for "${name}" is outside its own polygon`);
+      }
+      c = ov;
+      console.log(`  centroid moved out of the harbour to the built-up core: ${name}`);
+    }
     return {
       name,
       slug: slugify(name),
