@@ -1163,8 +1163,8 @@
     "woodbine-corridor",
     "blake-jones",
     "danforth",
-    "danforth-east-york",
-    "the-beaches"
+    "south-riverdale",
+    "danforth-east-york"
    ]
   },
   {
@@ -1331,8 +1331,8 @@
     "playter-estates-danforth",
     "blake-jones",
     "cabbagetown-south-stjames-town",
-    "regent-park",
-    "broadview-north"
+    "south-riverdale",
+    "regent-park"
    ]
   },
   {
@@ -1465,14 +1465,14 @@
    "name": "South Riverdale",
    "slug": "south-riverdale",
    "borough": "Old Toronto",
-   "lat": 43.649203,
-   "lng": -79.335618,
+   "lat": 43.662,
+   "lng": -79.339,
    "neighbors": [
-    "regent-park",
-    "moss-park",
-    "greenwood-coxwell",
     "north-riverdale",
-    "st-lawrence-east-bayfront-the-islands"
+    "blake-jones",
+    "greenwood-coxwell",
+    "regent-park",
+    "cabbagetown-south-stjames-town"
    ]
   },
   {

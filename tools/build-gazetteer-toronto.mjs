@@ -134,8 +134,16 @@ function districtFor(c) {
 // the city, which is the most harmful direction this error can point.
 // The override is asserted INSIDE the polygon at build time, so a centre can be
 // moved to where people live but never onto a neighbouring area.
+//
+// South Riverdale is the SAME failure, found later by a neighbour-ratio audit
+// rather than by reading names — "South Riverdale" sounds residential because
+// most of it is. Its polygon runs south into the Port Lands, and the geometric
+// centre landed in that industrial void: 16 incidents, scoring 91 "low risk",
+// while Queen St E at Carlaw — the Leslieville core where people actually live
+// and walk — returns 231 and scores 39, "elevated".
 const CENTROID_OVERRIDE = new Map([
   ['St Lawrence-East Bayfront-The Islands', { lat: 43.6490, lng: -79.3720 }],  // St Lawrence Market
+  ['South Riverdale', { lat: 43.6620, lng: -79.3390 }],                        // Queen St E / Carlaw
 ]);
 
 function pointInRing({ lat, lng }, ring) {
