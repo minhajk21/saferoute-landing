@@ -164,6 +164,12 @@ const CITIES = {
     // tags every incident with, so the map and the score describe the same area.
     areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
     centre: 'center', centreLabel: 'neighborhood center',
+    // The Presidio scores 99 \u2014 the highest in San Francisco \u2014 on 6 incidents,
+    // with its surroundings 26x busier. It is a national park with a small
+    // residential population, not a quiet neighbourhood: the centroid is
+    // correctly placed, so this is a land-use caveat, not a centroid fix.
+    sparseAreas: new Set(['presidio']),
+    sparseNote: 'Most of this area is national parkland rather than housing, so a low count reflects how few people live here rather than how safe the streets are.',
     reportedTo: 'reported to the SFPD',
     dataName: 'SFPD data',
     medianLabel: 'citywide median',
@@ -615,8 +621,12 @@ const CITIES = {
     // neighborhoods and tells readers nobody lives there. Not dropped either:
     // these are real places people visit, and a page that explains the number
     // beats a page that is silently missing.
-    sparseAreas: new Set(['ncfua-subarea-ii']),
-    sparseNote: 'Much of this area is still undeveloped land rather than homes, so a low count reflects how few people are here rather than how safe the streets are.',
+    // NCFUA Subarea II is undeveloped; Mission Bay Park is parkland and the
+    // Tijuana River Valley is open river-valley and agricultural land. The note
+    // has to be true of all three, so it says "open land" rather than naming
+    // any one of them — the Cleveland lesson about a shared note over-claiming.
+    sparseAreas: new Set(['ncfua-subarea-ii', 'mission-bay-park', 'tijuana-river-valley']),
+    sparseNote: 'Most of this area is open land \u2014 park, river valley or undeveloped \u2014 rather than homes, so a low count reflects how few people are here rather than how safe the streets are.',
     reportedTo: 'reported to the San Diego Police',
     dataName: 'San Diego Police data',
     medianLabel: 'citywide median',
