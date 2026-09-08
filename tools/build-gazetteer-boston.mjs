@@ -42,9 +42,38 @@ const EXCLUDE = new Set(['harbor islands']);
 //   (Maverick / Central / Eagle Hill) reads 397 incidents → 52, and is stable
 //   across nearby points, so that is the honest centre for the page.
 // Verified against the live feed before hard-coding; revisit if BPDA redraws.
+//   South Boston Waterfront: the polygon runs from Fort Point east to Conley
+//   Terminal, so it spans the built-up Seaport AND the marine industrial port.
+//   The geometric centroid landed in the quiet industrial half (108 incidents →
+//   87/100) rather than where the district's residents and foot traffic are.
+//   This is a MILDER case than East Boston and than Toronto's harbour bugs —
+//   108 is low, not near-zero — so the centre moves to Fan Pier / Seaport Blvd
+//   (144 → 83), a 4-point adjustment, not a rescue.
+//   The point is chosen for BUILT FORM, deliberately not for incident count:
+//   Fort Point at the north-west edge reads 688 and the far side of the channel
+//   reads 1,462, and picking either would import downtown's crime into the
+//   Seaport's page. Choosing the busiest in-polygon point would bias every
+//   corrected centroid downward, which is its own falsification.
 const CENTROID_OVERRIDE = {
   'east boston': { lat: 42.3750, lng: -71.0390, why: 'geometric centroid lands on Logan Airport' },
+  'south boston waterfront': { lat: 42.3512, lng: -71.0448, why: 'geometric centroid lands in the marine industrial port, not the Seaport core' },
 };
+
+// An override moves a centre to where people live; it must never move it onto a
+// neighbouring area. Every other city's builder asserts this and Boston's did
+// not, so a typo here would have shifted a page onto the wrong neighbourhood
+// silently.
+function pointInRing({ lat, lng }, ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i], [xj, yj] = ring[j];
+    if ((yi > lat) !== (yj > lat) && lng < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+const ringsOf = (g) => g?.type === 'Polygon' ? [g.coordinates[0]]
+  : g?.type === 'MultiPolygon' ? g.coordinates.map((poly) => poly[0]) : [];
 
 const slugify = (s) => s
   .normalize('NFD').replace(/[̀-ͯ]/g, '')
@@ -92,6 +121,9 @@ const areas = geo.features
   .map(f => {
     const name = String(f.properties.name).trim();
     const ov = CENTROID_OVERRIDE[name.toLowerCase()];
+    if (ov && !ringsOf(f.geometry).some((r) => pointInRing(ov, r))) {
+      throw new Error(`centroid override for "${name}" is outside its own polygon — refusing to move a page onto a neighbouring area`);
+    }
     const c = ov || centroidOf(f.geometry);
     if (ov) snapped.push(`${name} (${ov.why})`);
     return {
