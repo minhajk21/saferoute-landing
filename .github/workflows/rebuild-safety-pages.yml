@@ -40,7 +40,23 @@ jobs:
           node tools/build-gazetteer-dc.mjs
           node tools/build-gazetteer-boston.mjs
           node tools/build-gazetteer-philly.mjs
+          node tools/build-gazetteer-baltimore.mjs
+          node tools/build-gazetteer-sandiego.mjs
+          node tools/build-gazetteer-neworleans.mjs
+          node tools/build-gazetteer-detroit.mjs
+          node tools/build-gazetteer-minneapolis.mjs
+          node tools/build-gazetteer-cleveland.mjs
+          # denver, longbeach and vancouver have NO builder script — their
+          # gazetteers are committed JSON only, so there is nothing to re-run.
+          # Their data and basemaps still refresh in the steps below.
 
+      # EVERY published city must appear in all three steps below. Nine cities
+      # (baltimore, denver, longbeach, sandiego, vancouver, neworleans, detroit,
+      # minneapolis, cleveland — 704 live pages) were missing here until
+      # 2026-09-09: they were added to the site but never to this workflow, so
+      # they re-rendered every month from whatever crime data happened to be
+      # committed and would never have refreshed again. Adding a city to
+      # render-pages.mjs is NOT enough; it has to be added here too.
       - name: Refresh safety data (paced against prod backend)
         env:
           SAFEROUTE_API_KEY: ${{ secrets.SAFEROUTE_API_KEY }}
@@ -56,6 +72,15 @@ jobs:
           node tools/generate-data.mjs --force --city dc
           node tools/generate-data.mjs --force --city boston
           node tools/generate-data.mjs --force --city philly
+          node tools/generate-data.mjs --force --city baltimore
+          node tools/generate-data.mjs --force --city denver
+          node tools/generate-data.mjs --force --city longbeach
+          node tools/generate-data.mjs --force --city sandiego
+          node tools/generate-data.mjs --force --city vancouver
+          node tools/generate-data.mjs --force --city neworleans
+          node tools/generate-data.mjs --force --city detroit
+          node tools/generate-data.mjs --force --city minneapolis
+          node tools/generate-data.mjs --force --city cleveland
 
       # Incremental — cached areas are skipped, so a normal run fetches nothing
       # and never touches Overpass. Only genuinely new areas cost a request.
@@ -71,6 +96,15 @@ jobs:
           node tools/fetch-basemap-osm.mjs --city dc
           node tools/fetch-basemap-osm.mjs --city boston
           node tools/fetch-basemap-osm.mjs --city philly
+          node tools/fetch-basemap-osm.mjs --city baltimore
+          node tools/fetch-basemap-osm.mjs --city denver
+          node tools/fetch-basemap-osm.mjs --city longbeach
+          node tools/fetch-basemap-osm.mjs --city sandiego
+          node tools/fetch-basemap-osm.mjs --city vancouver
+          node tools/fetch-basemap-osm.mjs --city neworleans
+          node tools/fetch-basemap-osm.mjs --city detroit
+          node tools/fetch-basemap-osm.mjs --city minneapolis
+          node tools/fetch-basemap-osm.mjs --city cleveland
 
       # The homepage states "Requires iOS X+" by hand, and it went stale the day
       # 1.2.3 dropped the floor from 26.4 to 16.4 — telling older iPhones they
