@@ -1,0 +1,1725 @@
+{
+  "city": "Kansas City",
+  "citySlug": "kansascity",
+  "country": "US",
+  "source": "City of Kansas City, Missouri — 246 neighborhood boundaries, grouped by the city's 18 Area Plans",
+  "purpose": "Safety pages + calibration. See this script's header for what is dropped and why nothing else is.",
+  "generatedAt": "2026-09-10",
+  "areas": [
+    {
+      "name": "18th and Vine and Downtown East",
+      "slug": "18th-and-vine-and-downtown-east",
+      "lat": 39.093474,
+      "lng": -94.55363,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Air Line Junction",
+      "slug": "air-line-junction",
+      "lat": 39.13128,
+      "lng": -94.4989,
+      "borough": "Riverfront Industrial"
+    },
+    {
+      "name": "Antioch Acres",
+      "slug": "antioch-acres",
+      "lat": 39.178257,
+      "lng": -94.548538,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Armour Fields",
+      "slug": "armour-fields",
+      "lat": 39.00511,
+      "lng": -94.59822,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Armour Hills",
+      "slug": "armour-hills",
+      "lat": 39.004836,
+      "lng": -94.588865,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Ashland Ridge",
+      "slug": "ashland-ridge",
+      "lat": 39.051899,
+      "lng": -94.463112,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Bannister Acres",
+      "slug": "bannister-acres",
+      "lat": 38.944794,
+      "lng": -94.500321,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Barry Harbour",
+      "slug": "barry-harbour",
+      "lat": 39.233479,
+      "lng": -94.606623,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Beacon Hills",
+      "slug": "beacon-hills",
+      "lat": 39.08052,
+      "lng": -94.568322,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Birmingham Bottoms",
+      "slug": "birmingham-bottoms",
+      "lat": 39.158901,
+      "lng": -94.44075,
+      "borough": "Riverfront Industrial"
+    },
+    {
+      "name": "Blenheim Square Research Hospital",
+      "slug": "blenheim-square-research-hospital",
+      "lat": 39.006607,
+      "lng": -94.561137,
+      "borough": "Swope"
+    },
+    {
+      "name": "Blue Hills",
+      "slug": "blue-hills",
+      "lat": 39.029352,
+      "lng": -94.561226,
+      "borough": "Swope"
+    },
+    {
+      "name": "Blue Hills Estates",
+      "slug": "blue-hills-estates",
+      "lat": 38.899378,
+      "lng": -94.600964,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Blue Ridge Farms",
+      "slug": "blue-ridge-farms",
+      "lat": 38.884492,
+      "lng": -94.571487,
+      "borough": "Martin City/Richards-Gebaur"
+    },
+    {
+      "name": "Blue Valley Industrial",
+      "slug": "blue-valley-industrial",
+      "lat": 39.084714,
+      "lng": -94.494791,
+      "borough": "Riverfront Industrial"
+    },
+    {
+      "name": "Blue Vue Hills",
+      "slug": "blue-vue-hills",
+      "lat": 39.021844,
+      "lng": -94.42217,
+      "borough": "Little Blue Valley"
+    },
+    {
+      "name": "Boone Hills",
+      "slug": "boone-hills",
+      "lat": 38.961143,
+      "lng": -94.586388,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Boulevard Village",
+      "slug": "boulevard-village",
+      "lat": 39.065562,
+      "lng": -94.524846,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Breen Hills",
+      "slug": "breen-hills",
+      "lat": 39.202316,
+      "lng": -94.620688,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Briarcliff and Claymont",
+      "slug": "briarcliff-and-claymont",
+      "lat": 39.169124,
+      "lng": -94.5842,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Briarcliff West",
+      "slug": "briarcliff-west",
+      "lat": 39.174992,
+      "lng": -94.597426,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Bridlespur",
+      "slug": "bridlespur",
+      "lat": 38.935532,
+      "lng": -94.59023,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Broadway Gillham",
+      "slug": "broadway-gillham",
+      "lat": 39.067526,
+      "lng": -94.584913,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Brookside Park",
+      "slug": "brookside-park",
+      "lat": 39.022755,
+      "lng": -94.585162,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Brown Estates",
+      "slug": "brown-estates",
+      "lat": 39.022908,
+      "lng": -94.513295,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Calico Farms",
+      "slug": "calico-farms",
+      "lat": 38.91706,
+      "lng": -94.556634,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "CBD Downtown",
+      "slug": "cbd-downtown",
+      "lat": 39.101462,
+      "lng": -94.580378,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Center City",
+      "slug": "center-city",
+      "lat": 39.066795,
+      "lng": -94.569226,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Central Blue Valley and Park Tower Gardens",
+      "slug": "central-blue-valley-and-park-tower-gardens",
+      "lat": 39.086491,
+      "lng": -94.509474,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "Central Hyde Park",
+      "slug": "central-hyde-park",
+      "lat": 39.059853,
+      "lng": -94.576909,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Chaumiere",
+      "slug": "chaumiere",
+      "lat": 39.168299,
+      "lng": -94.54062,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Chouteau Estates",
+      "slug": "chouteau-estates",
+      "lat": 39.157348,
+      "lng": -94.524906,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Citadel",
+      "slug": "citadel",
+      "lat": 39.016236,
+      "lng": -94.564533,
+      "borough": "Swope"
+    },
+    {
+      "name": "Clayton",
+      "slug": "clayton",
+      "lat": 39.216913,
+      "lng": -94.595145,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Coachlight Square",
+      "slug": "coachlight-square",
+      "lat": 39.022428,
+      "lng": -94.491589,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Coleman Highlands",
+      "slug": "coleman-highlands",
+      "lat": 39.068178,
+      "lng": -94.599645,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Colonial Square",
+      "slug": "colonial-square",
+      "lat": 39.168976,
+      "lng": -94.552718,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Columbus Park",
+      "slug": "columbus-park",
+      "lat": 39.110019,
+      "lng": -94.570619,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Columbus Park Industrial",
+      "slug": "columbus-park-industrial",
+      "lat": 39.116327,
+      "lng": -94.571497,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Cooley Highlands S",
+      "slug": "cooley-highlands-s",
+      "lat": 39.158882,
+      "lng": -94.540027,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Country Club",
+      "slug": "country-club",
+      "lat": 39.020786,
+      "lng": -94.595199,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Country Club District",
+      "slug": "country-club-district",
+      "lat": 39.017796,
+      "lng": -94.600207,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Country Club Estates and Big Shoal",
+      "slug": "country-club-estates-and-big-shoal",
+      "lat": 39.191571,
+      "lng": -94.539736,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Country Club Plaza",
+      "slug": "country-club-plaza",
+      "lat": 39.041745,
+      "lng": -94.591184,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Country Lane Estates",
+      "slug": "country-lane-estates",
+      "lat": 38.93279,
+      "lng": -94.601128,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Country Valley-Hawthorn Square",
+      "slug": "country-valley-hawthorn-square",
+      "lat": 39.028852,
+      "lng": -94.39545,
+      "borough": "Little Blue Valley"
+    },
+    {
+      "name": "Countryside",
+      "slug": "countryside",
+      "lat": 39.028774,
+      "lng": -94.588037,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Coves North",
+      "slug": "coves-north",
+      "lat": 39.25393,
+      "lng": -94.633699,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Crestview",
+      "slug": "crestview",
+      "lat": 39.172832,
+      "lng": -94.567831,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Crestwood",
+      "slug": "crestwood",
+      "lat": 39.028746,
+      "lng": -94.580687,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Crossgates",
+      "slug": "crossgates",
+      "lat": 38.911327,
+      "lng": -94.512131,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Crossroads",
+      "slug": "crossroads",
+      "lat": 39.092136,
+      "lng": -94.584252,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Crown Center",
+      "slug": "crown-center",
+      "lat": 39.081076,
+      "lng": -94.585297,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Cunningham Ridge",
+      "slug": "cunningham-ridge",
+      "lat": 39.058264,
+      "lng": -94.481946,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Davidson",
+      "slug": "davidson",
+      "lat": 39.187616,
+      "lng": -94.565737,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Dunbar",
+      "slug": "dunbar",
+      "lat": 39.060742,
+      "lng": -94.519494,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "East Blue Valley",
+      "slug": "east-blue-valley",
+      "lat": 39.092581,
+      "lng": -94.504063,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "East Community Team North",
+      "slug": "east-community-team-north",
+      "lat": 39.09008,
+      "lng": -94.531155,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "East Community Team South",
+      "slug": "east-community-team-south",
+      "lat": 39.078298,
+      "lng": -94.52954,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "East Meyer 6",
+      "slug": "east-meyer-6",
+      "lat": 38.991478,
+      "lng": -94.570788,
+      "borough": "Swope"
+    },
+    {
+      "name": "East Meyer 7",
+      "slug": "east-meyer-7",
+      "lat": 38.99086,
+      "lng": -94.561617,
+      "borough": "Swope"
+    },
+    {
+      "name": "East Swope Highlands",
+      "slug": "east-swope-highlands",
+      "lat": 39.004021,
+      "lng": -94.493061,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Eastern 49-63",
+      "slug": "eastern-49-63",
+      "lat": 39.026389,
+      "lng": -94.571084,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Eastwood Hills East",
+      "slug": "eastwood-hills-east",
+      "lat": 39.035177,
+      "lng": -94.490839,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Eastwood Hills West",
+      "slug": "eastwood-hills-west",
+      "lat": 39.039813,
+      "lng": -94.508678,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Fairlane",
+      "slug": "fairlane",
+      "lat": 38.943745,
+      "lng": -94.522034,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Fairway Hills",
+      "slug": "fairway-hills",
+      "lat": 39.020583,
+      "lng": -94.436749,
+      "borough": "Little Blue Valley"
+    },
+    {
+      "name": "Fairwood and Robandee",
+      "slug": "fairwood-and-robandee",
+      "lat": 38.957423,
+      "lng": -94.49444,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Forgotten Homes",
+      "slug": "forgotten-homes",
+      "lat": 39.099292,
+      "lng": -94.558334,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "Foxcroft and Glen Arbor",
+      "slug": "foxcroft-and-glen-arbor",
+      "lat": 38.923956,
+      "lng": -94.600624,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Foxtown East",
+      "slug": "foxtown-east",
+      "lat": 39.001083,
+      "lng": -94.537954,
+      "borough": "Swope"
+    },
+    {
+      "name": "Foxwoods-Carriage Hills",
+      "slug": "foxwoods-carriage-hills",
+      "lat": 39.195186,
+      "lng": -94.525745,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Gashland",
+      "slug": "gashland",
+      "lat": 39.259228,
+      "lng": -94.556211,
+      "borough": "Gashland/Nashua"
+    },
+    {
+      "name": "Glen Lake",
+      "slug": "glen-lake",
+      "lat": 39.017112,
+      "lng": -94.427939,
+      "borough": "Little Blue Valley"
+    },
+    {
+      "name": "Glenhaven",
+      "slug": "glenhaven",
+      "lat": 39.184281,
+      "lng": -94.526373,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Gracemor-Randolph Corners",
+      "slug": "gracemor-randolph-corners",
+      "lat": 39.188822,
+      "lng": -94.486305,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Greenway Fields",
+      "slug": "greenway-fields",
+      "lat": 39.013758,
+      "lng": -94.595869,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Hanover Place",
+      "slug": "hanover-place",
+      "lat": 39.060204,
+      "lng": -94.586181,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Harlem",
+      "slug": "harlem",
+      "lat": 39.119455,
+      "lng": -94.581464,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Hawthorne and Picture Hills",
+      "slug": "hawthorne-and-picture-hills",
+      "lat": 39.213576,
+      "lng": -94.651281,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Hickman Mills",
+      "slug": "hickman-mills",
+      "lat": 38.91724,
+      "lng": -94.524696,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Hickman Mills South",
+      "slug": "hickman-mills-south",
+      "lat": 38.934093,
+      "lng": -94.490347,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Hidden Valley",
+      "slug": "hidden-valley",
+      "lat": 38.960385,
+      "lng": -94.549024,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Highview Estates",
+      "slug": "highview-estates",
+      "lat": 38.951833,
+      "lng": -94.447678,
+      "borough": "Little Blue Valley"
+    },
+    {
+      "name": "Hill Haven",
+      "slug": "hill-haven",
+      "lat": 39.160478,
+      "lng": -94.506344,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Hillcrest",
+      "slug": "hillcrest",
+      "lat": 38.978215,
+      "lng": -94.525368,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Holiday Hills",
+      "slug": "holiday-hills",
+      "lat": 39.170387,
+      "lng": -94.518595,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Holmes Park",
+      "slug": "holmes-park",
+      "lat": 39.005099,
+      "lng": -94.57823,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Hospital Hill",
+      "slug": "hospital-hill",
+      "lat": 39.089067,
+      "lng": -94.574585,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Independence Plaza",
+      "slug": "independence-plaza",
+      "lat": 39.101286,
+      "lng": -94.550234,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "Ingleside",
+      "slug": "ingleside",
+      "lat": 39.071852,
+      "lng": -94.539255,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Ivanhoe Northeast",
+      "slug": "ivanhoe-northeast",
+      "lat": 39.059147,
+      "lng": -94.557486,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Ivanhoe Southeast",
+      "slug": "ivanhoe-southeast",
+      "lat": 39.048133,
+      "lng": -94.558066,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Ivanhoe Southwest",
+      "slug": "ivanhoe-southwest",
+      "lat": 39.04869,
+      "lng": -94.564972,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Jefferson Highlands",
+      "slug": "jefferson-highlands",
+      "lat": 39.240382,
+      "lng": -94.578665,
+      "borough": "Gashland/Nashua"
+    },
+    {
+      "name": "Key Coalition",
+      "slug": "key-coalition",
+      "lat": 39.070019,
+      "lng": -94.557473,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Kirkside",
+      "slug": "kirkside",
+      "lat": 38.91094,
+      "lng": -94.49314,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Knoches Park",
+      "slug": "knoches-park",
+      "lat": 39.055799,
+      "lng": -94.528086,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Lakeview Terrace",
+      "slug": "lakeview-terrace",
+      "lat": 39.19461,
+      "lng": -94.595622,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Lea Manor",
+      "slug": "lea-manor",
+      "lat": 38.950392,
+      "lng": -94.602503,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Leeds",
+      "slug": "leeds",
+      "lat": 39.061636,
+      "lng": -94.504127,
+      "borough": "Riverfront Industrial"
+    },
+    {
+      "name": "Legacy East",
+      "slug": "legacy-east",
+      "lat": 38.964686,
+      "lng": -94.565007,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Lewis Heights",
+      "slug": "lewis-heights",
+      "lat": 39.01604,
+      "lng": -94.489282,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Linden Hills and Indian Heights",
+      "slug": "linden-hills-and-indian-heights",
+      "lat": 38.947852,
+      "lng": -94.571089,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Linden Park",
+      "slug": "linden-park",
+      "lat": 39.220929,
+      "lng": -94.653022,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Line Creek and Northern Heights",
+      "slug": "line-creek-and-northern-heights",
+      "lat": 39.20484,
+      "lng": -94.60705,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Linwood Homeowners-Ivanhoe",
+      "slug": "linwood-homeowners-ivanhoe",
+      "lat": 39.062681,
+      "lng": -94.564506,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Little Blue",
+      "slug": "little-blue",
+      "lat": 38.990747,
+      "lng": -94.412784,
+      "borough": "Little Blue Valley"
+    },
+    {
+      "name": "Loma Vista",
+      "slug": "loma-vista",
+      "lat": 38.959951,
+      "lng": -94.513063,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Longfellow",
+      "slug": "longfellow",
+      "lat": 39.076056,
+      "lng": -94.574832,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Longview",
+      "slug": "longview",
+      "lat": 38.864136,
+      "lng": -94.460394,
+      "borough": "Longview"
+    },
+    {
+      "name": "Lykins",
+      "slug": "lykins",
+      "lat": 39.101196,
+      "lng": -94.533093,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "Manheim Park",
+      "slug": "manheim-park",
+      "lat": 39.048791,
+      "lng": -94.570221,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Maple Park",
+      "slug": "maple-park",
+      "lat": 39.188069,
+      "lng": -94.49942,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Maple Park West",
+      "slug": "maple-park-west",
+      "lat": 39.187125,
+      "lng": -94.511694,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Marlborough East",
+      "slug": "marlborough-east",
+      "lat": 38.981852,
+      "lng": -94.547004,
+      "borough": "Swope"
+    },
+    {
+      "name": "Marlborough Heights/Marlborough Pride",
+      "slug": "marlborough-heights-marlborough-pride",
+      "lat": 38.978519,
+      "lng": -94.567095,
+      "borough": "Swope"
+    },
+    {
+      "name": "Martin City",
+      "slug": "martin-city",
+      "lat": 38.879637,
+      "lng": -94.596821,
+      "borough": "Martin City/Richards-Gebaur"
+    },
+    {
+      "name": "Meadowbrook Heights",
+      "slug": "meadowbrook-heights",
+      "lat": 39.285063,
+      "lng": -94.580277,
+      "borough": "Gashland/Nashua"
+    },
+    {
+      "name": "Minneville",
+      "slug": "minneville",
+      "lat": 39.176348,
+      "lng": -94.4674,
+      "borough": "Riverfront Industrial"
+    },
+    {
+      "name": "Mission Lake",
+      "slug": "mission-lake",
+      "lat": 38.907047,
+      "lng": -94.577298,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Morningside",
+      "slug": "morningside",
+      "lat": 39.01479,
+      "lng": -94.587455,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Mount Cleveland",
+      "slug": "mount-cleveland",
+      "lat": 39.034629,
+      "lng": -94.535045,
+      "borough": "Swope"
+    },
+    {
+      "name": "Mount Hope",
+      "slug": "mount-hope",
+      "lat": 39.073601,
+      "lng": -94.564248,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Nashua",
+      "slug": "nashua",
+      "lat": 39.299386,
+      "lng": -94.567641,
+      "borough": "Gashland/Nashua"
+    },
+    {
+      "name": "Neighbors United For Action",
+      "slug": "neighbors-united-for-action",
+      "lat": 39.004819,
+      "lng": -94.569746,
+      "borough": "Swope"
+    },
+    {
+      "name": "New Mark",
+      "slug": "new-mark",
+      "lat": 39.276575,
+      "lng": -94.566312,
+      "borough": "Gashland/Nashua"
+    },
+    {
+      "name": "Noble and Gregory Ridge",
+      "slug": "noble-and-gregory-ridge",
+      "lat": 38.993587,
+      "lng": -94.541478,
+      "borough": "Swope"
+    },
+    {
+      "name": "North Blue Ridge",
+      "slug": "north-blue-ridge",
+      "lat": 39.107317,
+      "lng": -94.485098,
+      "borough": "Riverfront Industrial"
+    },
+    {
+      "name": "North Hyde Park",
+      "slug": "north-hyde-park",
+      "lat": 39.066874,
+      "lng": -94.575672,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "North Indian Mound",
+      "slug": "north-indian-mound",
+      "lat": 39.116112,
+      "lng": -94.519307,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "North Town Fork Creek",
+      "slug": "north-town-fork-creek",
+      "lat": 39.029616,
+      "lng": -94.548172,
+      "borough": "Swope"
+    },
+    {
+      "name": "Northeast Industrial District",
+      "slug": "northeast-industrial-district",
+      "lat": 39.127415,
+      "lng": -94.53958,
+      "borough": "Riverfront Industrial"
+    },
+    {
+      "name": "Oak Meyer Gardens",
+      "slug": "oak-meyer-gardens",
+      "lat": 39.008145,
+      "lng": -94.581777,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Oak Park Northwest",
+      "slug": "oak-park-northwest",
+      "lat": 39.061597,
+      "lng": -94.548657,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Oak Park Southeast",
+      "slug": "oak-park-southeast",
+      "lat": 39.048029,
+      "lng": -94.543354,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Oak Park Southwest",
+      "slug": "oak-park-southwest",
+      "lat": 39.047375,
+      "lng": -94.549993,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Oakwood",
+      "slug": "oakwood",
+      "lat": 38.946687,
+      "lng": -94.547344,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Old Westport",
+      "slug": "old-westport",
+      "lat": 39.05301,
+      "lng": -94.59134,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Oldham Farms",
+      "slug": "oldham-farms",
+      "lat": 38.972668,
+      "lng": -94.50884,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Outer Gashland-Nashua",
+      "slug": "outer-gashland-nashua",
+      "lat": 39.301305,
+      "lng": -94.586571,
+      "borough": "Gashland/Nashua"
+    },
+    {
+      "name": "Palestine East",
+      "slug": "palestine-east",
+      "lat": 39.061211,
+      "lng": -94.537148,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Palestine West and Oak Park Northeast",
+      "slug": "palestine-west-and-oak-park-northeast",
+      "lat": 39.061357,
+      "lng": -94.541752,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Park Central-Research Park",
+      "slug": "park-central-research-park",
+      "lat": 39.040066,
+      "lng": -94.577635,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Park Farms",
+      "slug": "park-farms",
+      "lat": 38.983795,
+      "lng": -94.494229,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Park Forest",
+      "slug": "park-forest",
+      "lat": 39.236292,
+      "lng": -94.672428,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Park Plaza",
+      "slug": "park-plaza",
+      "lat": 39.218374,
+      "lng": -94.63299,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Parkdale and Walden",
+      "slug": "parkdale-and-walden",
+      "lat": 39.198415,
+      "lng": -94.643058,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Parkview",
+      "slug": "parkview",
+      "lat": 39.102352,
+      "lng": -94.560927,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Paseo West",
+      "slug": "paseo-west",
+      "lat": 39.101549,
+      "lng": -94.568057,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Pendleton Heights",
+      "slug": "pendleton-heights",
+      "lat": 39.111421,
+      "lng": -94.556502,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "Platte Brook North",
+      "slug": "platte-brook-north",
+      "lat": 39.234302,
+      "lng": -94.624617,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Platte Ridge",
+      "slug": "platte-ridge",
+      "lat": 39.239473,
+      "lng": -94.663192,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Plaza Westport",
+      "slug": "plaza-westport",
+      "lat": 39.04659,
+      "lng": -94.592711,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Prairie Point-Wildberry",
+      "slug": "prairie-point-wildberry",
+      "lat": 39.254045,
+      "lng": -94.673061,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Quality Hill",
+      "slug": "quality-hill",
+      "lat": 39.101901,
+      "lng": -94.590974,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Ravenwood-Somerset",
+      "slug": "ravenwood-somerset",
+      "lat": 39.20624,
+      "lng": -94.513938,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Red Bridge North",
+      "slug": "red-bridge-north",
+      "lat": 38.932615,
+      "lng": -94.578557,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Red Bridge South",
+      "slug": "red-bridge-south",
+      "lat": 38.918411,
+      "lng": -94.588663,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Richards Gebaur",
+      "slug": "richards-gebaur",
+      "lat": 38.855177,
+      "lng": -94.566822,
+      "borough": "Martin City/Richards-Gebaur"
+    },
+    {
+      "name": "Ridgefield",
+      "slug": "ridgefield",
+      "lat": 39.24028,
+      "lng": -94.551032,
+      "borough": "Gashland/Nashua"
+    },
+    {
+      "name": "Riss Lake",
+      "slug": "riss-lake",
+      "lat": 39.042759,
+      "lng": -94.463012,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "River Forest",
+      "slug": "river-forest",
+      "lat": 39.159629,
+      "lng": -94.554149,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "River Market",
+      "slug": "river-market",
+      "lat": 39.110946,
+      "lng": -94.58268,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "River View",
+      "slug": "river-view",
+      "lat": 39.160097,
+      "lng": -94.568644,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Roanoke",
+      "slug": "roanoke",
+      "lat": 39.060792,
+      "lng": -94.597555,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Robandee South",
+      "slug": "robandee-south",
+      "lat": 38.945119,
+      "lng": -94.480201,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Rockhill",
+      "slug": "rockhill",
+      "lat": 39.044919,
+      "lng": -94.577667,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Rockhill Manor",
+      "slug": "rockhill-manor",
+      "lat": 38.979151,
+      "lng": -94.578584,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Rolling Meadows",
+      "slug": "rolling-meadows",
+      "lat": 38.979191,
+      "lng": -94.583237,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Romanelli West",
+      "slug": "romanelli-west",
+      "lat": 39.006513,
+      "lng": -94.60539,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Royal Oaks",
+      "slug": "royal-oaks",
+      "lat": 38.931408,
+      "lng": -94.535711,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Royal Oaks North",
+      "slug": "royal-oaks-north",
+      "lat": 39.2224,
+      "lng": -94.670674,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Ruskin Heights",
+      "slug": "ruskin-heights",
+      "lat": 38.922512,
+      "lng": -94.502473,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Ruskin Hills",
+      "slug": "ruskin-hills",
+      "lat": 38.922832,
+      "lng": -94.485962,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Santa Fe",
+      "slug": "santa-fe",
+      "lat": 39.072418,
+      "lng": -94.54811,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Santa Fe Hills",
+      "slug": "santa-fe-hills",
+      "lat": 38.970213,
+      "lng": -94.585975,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Scarritt Point",
+      "slug": "scarritt-point",
+      "lat": 39.113082,
+      "lng": -94.539435,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "Sechrest",
+      "slug": "sechrest",
+      "lat": 38.961987,
+      "lng": -94.53344,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Self Help Neighborhood Council",
+      "slug": "self-help-neighborhood-council",
+      "lat": 39.001392,
+      "lng": -94.5498,
+      "borough": "Swope"
+    },
+    {
+      "name": "Sheffield",
+      "slug": "sheffield",
+      "lat": 39.102984,
+      "lng": -94.507486,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "Sheraton Estates",
+      "slug": "sheraton-estates",
+      "lat": 39.03074,
+      "lng": -94.53296,
+      "borough": "Swope"
+    },
+    {
+      "name": "Sherrydale",
+      "slug": "sherrydale",
+      "lat": 39.255601,
+      "lng": -94.58245,
+      "borough": "Gashland/Nashua"
+    },
+    {
+      "name": "Sherwood Estates",
+      "slug": "sherwood-estates",
+      "lat": 39.183031,
+      "lng": -94.537719,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Shoal Creek",
+      "slug": "shoal-creek",
+      "lat": 39.272234,
+      "lng": -94.501251,
+      "borough": "Shoal Creek Valley"
+    },
+    {
+      "name": "South Blue Valley",
+      "slug": "south-blue-valley",
+      "lat": 39.076999,
+      "lng": -94.512999,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "South Hyde Park",
+      "slug": "south-hyde-park",
+      "lat": 39.051001,
+      "lng": -94.575488,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "South Indian Mound",
+      "slug": "south-indian-mound",
+      "lat": 39.109014,
+      "lng": -94.521478,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "South Plaza",
+      "slug": "south-plaza",
+      "lat": 39.03625,
+      "lng": -94.587196,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "South Town Fork Creek",
+      "slug": "south-town-fork-creek",
+      "lat": 39.015628,
+      "lng": -94.548933,
+      "borough": "Swope"
+    },
+    {
+      "name": "Southmoreland",
+      "slug": "southmoreland",
+      "lat": 39.048748,
+      "lng": -94.583623,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Squier Park",
+      "slug": "squier-park",
+      "lat": 39.059591,
+      "lng": -94.569612,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "St Catherines Gardens",
+      "slug": "st-catherines-gardens",
+      "lat": 38.931748,
+      "lng": -94.556169,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Stayton Meadows",
+      "slug": "stayton-meadows",
+      "lat": 39.032001,
+      "lng": -94.463227,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Sterling Acres",
+      "slug": "sterling-acres",
+      "lat": 39.041235,
+      "lng": -94.441905,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Sterling Gardens",
+      "slug": "sterling-gardens",
+      "lat": 39.033114,
+      "lng": -94.442731,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Stratford Estates",
+      "slug": "stratford-estates",
+      "lat": 38.929792,
+      "lng": -94.516673,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Stratford Gardens",
+      "slug": "stratford-gardens",
+      "lat": 39.016852,
+      "lng": -94.605051,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Strupwood",
+      "slug": "strupwood",
+      "lat": 38.999983,
+      "lng": -94.505866,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Sunset Hill",
+      "slug": "sunset-hill",
+      "lat": 39.033464,
+      "lng": -94.59771,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Sunset Hill West",
+      "slug": "sunset-hill-west",
+      "lat": 39.026047,
+      "lng": -94.605423,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Swope Park",
+      "slug": "swope-park",
+      "lat": 39.000236,
+      "lng": -94.520774,
+      "borough": "Swope"
+    },
+    {
+      "name": "Swope Park Campus",
+      "slug": "swope-park-campus",
+      "lat": 39.008592,
+      "lng": -94.549329,
+      "borough": "Swope"
+    },
+    {
+      "name": "Swope Park Ridge-Winchester",
+      "slug": "swope-park-ridge-winchester",
+      "lat": 39.008989,
+      "lng": -94.507858,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Swope Parkway-Elmwood",
+      "slug": "swope-parkway-elmwood",
+      "lat": 39.021639,
+      "lng": -94.532316,
+      "borough": "Swope"
+    },
+    {
+      "name": "Tanglewood and Regency North",
+      "slug": "tanglewood-and-regency-north",
+      "lat": 39.208324,
+      "lng": -94.58815,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Terrace Lake Gardens",
+      "slug": "terrace-lake-gardens",
+      "lat": 38.918317,
+      "lng": -94.540547,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "The Coves",
+      "slug": "the-coves",
+      "lat": 39.240291,
+      "lng": -94.644848,
+      "borough": "Line Creek"
+    },
+    {
+      "name": "Timber Valley",
+      "slug": "timber-valley",
+      "lat": 39.006084,
+      "lng": -94.43939,
+      "borough": "Little Blue Valley"
+    },
+    {
+      "name": "Tower Homes",
+      "slug": "tower-homes",
+      "lat": 38.991991,
+      "lng": -94.584988,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Truman Sports Complex",
+      "slug": "truman-sports-complex",
+      "lat": 39.048584,
+      "lng": -94.48493,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Union Hill",
+      "slug": "union-hill",
+      "lat": 39.074498,
+      "lng": -94.581901,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Unity Ridge",
+      "slug": "unity-ridge",
+      "lat": 38.950054,
+      "lng": -94.420841,
+      "borough": "Little Blue Valley"
+    },
+    {
+      "name": "Valentine",
+      "slug": "valentine",
+      "lat": 39.064059,
+      "lng": -94.592643,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Verona Hills",
+      "slug": "verona-hills",
+      "lat": 38.914634,
+      "lng": -94.601197,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Vineyard",
+      "slug": "vineyard",
+      "lat": 39.046392,
+      "lng": -94.530123,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Vineyard Estates",
+      "slug": "vineyard-estates",
+      "lat": 39.047812,
+      "lng": -94.517628,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Vineyard Northwest",
+      "slug": "vineyard-northwest",
+      "lat": 39.049039,
+      "lng": -94.53608,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Volker",
+      "slug": "volker",
+      "lat": 39.058049,
+      "lng": -94.603012,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "Waldo Homes",
+      "slug": "waldo-homes",
+      "lat": 38.979452,
+      "lng": -94.590188,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Ward Estates",
+      "slug": "ward-estates",
+      "lat": 39.026258,
+      "lng": -94.597834,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Ward Parkway",
+      "slug": "ward-parkway",
+      "lat": 38.992695,
+      "lng": -94.601101,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Ward Parkway Plaza",
+      "slug": "ward-parkway-plaza",
+      "lat": 38.980183,
+      "lng": -94.606119,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Washington Wheatley",
+      "slug": "washington-wheatley",
+      "lat": 39.083249,
+      "lng": -94.546229,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "Wendell Phillips",
+      "slug": "wendell-phillips",
+      "lat": 39.084119,
+      "lng": -94.558834,
+      "borough": "Heart of the City"
+    },
+    {
+      "name": "West Blue Valley",
+      "slug": "west-blue-valley",
+      "lat": 39.094038,
+      "lng": -94.516632,
+      "borough": "Truman Plaza"
+    },
+    {
+      "name": "West Bottoms",
+      "slug": "west-bottoms",
+      "lat": 39.119136,
+      "lng": -94.596782,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "West of Vine",
+      "slug": "west-of-vine",
+      "lat": 39.093018,
+      "lng": -94.567402,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "West Plaza",
+      "slug": "west-plaza",
+      "lat": 39.04475,
+      "lng": -94.601403,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "West Waldo",
+      "slug": "west-waldo",
+      "lat": 38.979833,
+      "lng": -94.599471,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Western 49-63",
+      "slug": "western-49-63",
+      "lat": 39.025421,
+      "lng": -94.578246,
+      "borough": "Country Club/Waldo"
+    },
+    {
+      "name": "Western Blue Township",
+      "slug": "western-blue-township",
+      "lat": 39.073475,
+      "lng": -94.480027,
+      "borough": "Blue Ridge"
+    },
+    {
+      "name": "Western Hills",
+      "slug": "western-hills",
+      "lat": 38.967875,
+      "lng": -94.601384,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Westside North",
+      "slug": "westside-north",
+      "lat": 39.091388,
+      "lng": -94.594586,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Westside South",
+      "slug": "westside-south",
+      "lat": 39.077854,
+      "lng": -94.596696,
+      "borough": "Greater Downtown"
+    },
+    {
+      "name": "Westwood",
+      "slug": "westwood",
+      "lat": 39.037727,
+      "lng": -94.604701,
+      "borough": "Midtown/Plaza"
+    },
+    {
+      "name": "White Oak",
+      "slug": "white-oak",
+      "lat": 38.958483,
+      "lng": -94.476172,
+      "borough": "Hickman Mills"
+    },
+    {
+      "name": "Willow Creek",
+      "slug": "willow-creek",
+      "lat": 38.948251,
+      "lng": -94.589332,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Winnetonka",
+      "slug": "winnetonka",
+      "lat": 39.174907,
+      "lng": -94.503087,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Winnwood",
+      "slug": "winnwood",
+      "lat": 39.172497,
+      "lng": -94.527341,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Winnwood Gardens",
+      "slug": "winnwood-gardens",
+      "lat": 39.175891,
+      "lng": -94.516752,
+      "borough": "Briarcliff/Winnwood"
+    },
+    {
+      "name": "Woodbridge",
+      "slug": "woodbridge",
+      "lat": 38.893574,
+      "lng": -94.590543,
+      "borough": "Red Bridge"
+    },
+    {
+      "name": "Woodson Estates",
+      "slug": "woodson-estates",
+      "lat": 39.011128,
+      "lng": -94.441303,
+      "borough": "Little Blue Valley"
+    },
+    {
+      "name": "Worlds of Fun",
+      "slug": "worlds-of-fun",
+      "lat": 39.169029,
+      "lng": -94.484595,
+      "borough": "Riverfront Industrial"
+    },
+    {
+      "name": "Wornall Homestead",
+      "slug": "wornall-homestead",
+      "lat": 39.019703,
+      "lng": -94.590764,
+      "borough": "Country Club/Waldo"
+    }
+  ]
+}

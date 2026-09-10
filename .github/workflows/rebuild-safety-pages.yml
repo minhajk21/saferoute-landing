@@ -19,6 +19,14 @@ permissions:
 jobs:
   rebuild:
     runs-on: ubuntu-latest
+    # Explicit, because the default is 6 hours. Refreshing all 19 cities walks
+    # 1,917 areas at GEN_DELAY_MS=1200, so generate-data alone is ~40 min (the
+    # ten-city job was ~25 min for 1,222) and the whole run lands near an hour.
+    # 180 leaves ample headroom for cold-start retries while still killing a
+    # genuinely wedged run early. A timeout costs nothing but a stale month:
+    # the commit/push is the last step, so a killed run publishes nothing and
+    # the next run redoes the work.
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -46,9 +54,25 @@ jobs:
           node tools/build-gazetteer-detroit.mjs
           node tools/build-gazetteer-minneapolis.mjs
           node tools/build-gazetteer-cleveland.mjs
-          # denver, longbeach and vancouver have NO builder script — their
-          # gazetteers are committed JSON only, so there is nothing to re-run.
-          # Their data and basemaps still refresh in the steps below.
+          # denver, longbeach and vancouver are DELIBERATELY not rebuilt here.
+          # They do have a builder — tools/build-gazetteer-calibration.mjs takes
+          # exactly these ids as args — but it emits calibration-grade sets, and
+          # re-running it would regress all three published ones:
+          #   * It never emits `borough`. render-pages.mjs groups the city hub by
+          #     that field and calls b.toLowerCase() on it, so a rebuilt gazetteer
+          #     crashes the render step. The field was hand-backfilled into these
+          #     three in 05a8cb25 for exactly that reason.
+          #   * longbeach would come back as all 123 boundary areas. The published
+          #     set is the curated 96: 73f0dbe6 dropped 25 "Unassigned" marina,
+          #     park and power-station fragments plus a bare "AOC7" code and a
+          #     duplicate, and the backend normaliser was refitted (241 → 326) for
+          #     the 96. Restoring the artifacts would re-add thin pages AND leave
+          #     the city scored by a normaliser fitted to a different area set.
+          # Worse, run with NO args it rebuilds every calibration city, which
+          # includes baltimore — replacing its published 56 CSAs with 256 NSAs.
+          # If one of these ever needs rebuilding, give it its own per-city
+          # builder (as baltimore has) and add that here; do not add the
+          # calibration script. Their data and basemaps still refresh below.
 
       # EVERY published city must appear in all three steps below. Nine cities
       # (baltimore, denver, longbeach, sandiego, vancouver, neworleans, detroit,
