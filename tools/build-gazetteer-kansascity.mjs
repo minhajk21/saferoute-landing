@@ -9,9 +9,16 @@
 // Boundaries: nbhboundaries_updated (field `nbhname`)
 // Districts:  Databook_AreaPlan_Boundaries (field `NAME`, 18 plans)
 //
-// ONE AREA IS DROPPED: "KCI & 2nd Creek" — 135 km² that is Kansas City
-// International Airport and its approaches. Nobody walks it as a neighborhood,
-// the same call San Diego's military parcels and Detroit's Belle Isle got.
+// TWO AREAS ARE DROPPED, for different reasons.
+//   "KCI & 2nd Creek" — 135 km² that is Kansas City International Airport and
+//   its approaches. Nobody walks it as a neighborhood: the same call San Diego's
+//   military parcels and Detroit's Belle Isle got.
+//   "Longview" — 30.6 km² wrapped around Longview Lake, and the feed carries
+//   NOTHING anywhere inside it. Probing four separate interior points returned
+//   0, 1, 0 and 0 incidents, three of them dataUnavailable. Its page could only
+//   have said "0 incidents, 100/100, low risk", which is the absence of a
+//   finding dressed as one — the same reason New Orleans's Lake Catherine was
+//   dropped. Dropping it also removes the one-member Longview Area Plan.
 // Everything else is KEPT, including the industrial districts and the river
 // bottoms. They are thin, but a caveat on the page is the honest remedy; a drop
 // erases a place, and the bar for that is "a page could say nothing true".
@@ -39,7 +46,7 @@ const SRC = `${ORG}/nbhboundaries_updated/FeatureServer/0/query`
 const PLANS = `${ORG}/Databook_AreaPlan_Boundaries/FeatureServer/0/query`
   + '?where=1%3D1&outFields=NAME&returnGeometry=true&outSR=4326&f=geojson';
 
-const NOT_A_NEIGHBOURHOOD = /^KCI (&|and) 2nd Creek$/i;
+const NOT_A_NEIGHBOURHOOD = /^(KCI (&|and) 2nd Creek|Longview)$/i;
 
 // The layer mixes connectors: one name uses "&" and thirteen spell out "And"
 // mid-name, which title-casing leaves as a capital. Lowercase the connector so

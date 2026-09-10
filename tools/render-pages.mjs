@@ -344,6 +344,48 @@ const CITIES = {
       methodology: `Each incident reported to the Cleveland Division of Police is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the city's own 34 Statistical Planning Areas, published by the same office as the crime data. Cleveland's neighborhoods sit further apart than any other city here, so the 1&nbsp;km circles barely overlap and each figure describes its own area. Time-of-day charts use incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
     },
   },
+  'kansascity': {
+    name: 'Kansas City',
+    hubName: 'Kansas City',
+    rankPool: 'Kansas City neighborhoods',
+    // The city's own 246 neighborhood boundaries, grouped by the city's own 18
+    // Area Plans — both from the same KCMO ArcGIS org, so the second tier is
+    // real planning geography rather than one invented here. Two areas are
+    // dropped in the gazetteer: KCI & 2nd Creek (135 km2 of airport) and
+    // Longview (30 km2 wrapped around Longview Lake, with 0-1 incidents at every
+    // interior point probed — the Lake Catherine case). 244 published across 16
+    // districts; spacing median 1,009 m.
+    //
+    // KC's normaliser was RECALIBRATED (597 -> 212 per-30d) when these pages
+    // first produced real per-neighborhood medians: the old grid sample put the
+    // median at 77.5 with 149 of 244 reading "low risk". It is now 55.0.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    // Flagged by the neighbour-ratio audit (West Bottoms 0.05, Northeast
+    // Industrial 0.11) and by name-screening the top of the ranking, which the
+    // ratio misses when an area's NEIGHBOURS are also empty — the river bottoms
+    // and the undeveloped Northland tracts all sat in the top ten "safest".
+    sparseAreas: new Set(['west-bottoms', 'northeast-industrial-district',
+                          'birmingham-bottoms', 'little-blue', 'shoal-creek']),
+    sparseNote: 'Much of this area is industrial, river-bottom or undeveloped land rather than housing, so a low count reflects how few people are here rather than how safe the streets are.',
+    reportedTo: 'reported to the KCPD',
+    dataName: 'Kansas City Police data',
+    medianLabel: 'citywide median',
+    forCity: 'for Kansas City',
+    acrossCity: 'across Kansas City',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Kansas City Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Kansas City Police Department crime incidents via <a href="https://data.kcmo.org/">Open Data KC</a>${dateLine}. Neighborhood boundaries: City of Kansas City, Missouri (246 neighborhoods), grouped by the city's 18 Area Plans. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Kansas City Neighborhood Safety Map & Rankings (${n} neighborhoods) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Kansas City neighborhood? Safety index (0\u2013100) for ${n} KC neighborhoods from Kansas City Police data through ${date} \u2014 ranked by Area Plan district, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Kansas City neighborhood?',
+      lead: `SafeRoute scores every Kansas City neighborhood 0\u2013100 from incidents reported to the KCPD \u2014 severity-weighted, within 1 km of each neighborhood's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood \u2014 e.g. River Market, Crossroads, Waldo\u2026',
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center \u2014 they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the Kansas City Police Department is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the city's own 246 neighborhoods, grouped by the 18 Area Plans the city itself plans against. Two are not scored: KCI &amp; 2nd Creek, which is the airport, and Longview, which wraps Longview Lake and carries almost no recorded incidents anywhere inside it \u2014 a page there could only have said &ldquo;0 incidents, 100/100&rdquo;, which is missing data dressed as proven safety. Kansas City covers a lot of ground, and several neighborhoods along the Missouri and Blue river bottoms are industrial or largely undeveloped; those pages say so rather than letting an empty count read as a quiet street. Time-of-day charts use KCPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
+    },
+  },
   'toronto': {
     name: 'Toronto',
     hubName: 'Toronto',
