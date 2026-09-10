@@ -19,13 +19,17 @@ permissions:
 jobs:
   rebuild:
     runs-on: ubuntu-latest
-    # Explicit, because the default is 6 hours. Refreshing all 19 cities walks
-    # 1,917 areas at GEN_DELAY_MS=1200, so generate-data alone is ~40 min (the
-    # ten-city job was ~25 min for 1,222) and the whole run lands near an hour.
-    # 180 leaves ample headroom for cold-start retries while still killing a
-    # genuinely wedged run early. A timeout costs nothing but a stale month:
-    # the commit/push is the last step, so a killed run publishes nothing and
-    # the next run redoes the work.
+    # Explicit, because the default is 6 hours. Sized from measured runs, not
+    # from GEN_DELAY_MS: run #4 (2026-09-02, the last ten-city run) spent
+    # 58m33s in the data step for 1,222 areas — 2.9 s/area, so the free-tier
+    # backend adds ~1.7s on top of the 1.2s pace. Every other step is noise
+    # (gazetteers 18s, basemaps 2s, render 7s, commit 27s). At 1,917 areas
+    # that projects to ~92 min of fetching and ~93 min overall.
+    # 180 is therefore about 2x the expected run, not the wide margin it looks
+    # like — a bad month of cold starts (5 attempts, 30s backoff, 45s timeouts)
+    # eats into it. Re-measure before trusting it against city #20.
+    # The cap is cheap: commit/push is the last step, so a killed run publishes
+    # nothing and the next run redoes the work.
     timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
