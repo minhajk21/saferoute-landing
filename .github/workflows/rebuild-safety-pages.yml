@@ -19,18 +19,18 @@ permissions:
 jobs:
   rebuild:
     runs-on: ubuntu-latest
-    # Explicit, because the default is 6 hours. Sized from measured runs, not
-    # from GEN_DELAY_MS: run #4 (2026-09-02, the last ten-city run) spent
-    # 58m33s in the data step for 1,222 areas — 2.9 s/area, so the free-tier
-    # backend adds ~1.7s on top of the 1.2s pace. Every other step is noise
-    # (gazetteers 18s, basemaps 2s, render 7s, commit 27s). At 1,917 areas
-    # that projects to ~92 min of fetching and ~93 min overall.
-    # 180 is therefore about 2x the expected run, not the wide margin it looks
-    # like — a bad month of cold starts (5 attempts, 30s backoff, 45s timeouts)
-    # eats into it. Re-measure before trusting it against city #20.
-    # The cap is cheap: commit/push is the last step, so a killed run publishes
-    # nothing and the next run redoes the work.
-    timeout-minutes: 180
+    # Explicit, because the default is 6 hours. Sized from measured runs:
+    #   run #4  2026-09-02  10 cities  1,222 areas   58m33s data step
+    #   run #6  2026-09-11  20 cities  1,917 areas  118m20s
+    #   run #7  2026-09-11  22 cities  2,050 areas  133m41s
+    # That is a steady ~3.5 s/area against the free-tier backend — nearly 3x
+    # the 1.2s GEN_DELAY_MS, because the backend's own fetch dominates. Sizing
+    # this from the pacing constant (as it was originally) under-read it by
+    # 2.4x. Rule of thumb: ~6 min per city added.
+    # 240 leaves roughly 1.6x over run #7 and room for Bristol and Cardiff.
+    # The cap is cheap: the push is the last step, so a killed run publishes
+    # nothing and the next run redoes the work. Re-measure past ~30 cities.
+    timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -131,20 +131,6 @@ jobs:
       - name: Keep App Store facts on the site true
         run: node tools/check-app-facts.mjs
 
-      # This job runs for ~2 hours, and main moves under it. During run #6
-      # two cities (Birmingham, Liverpool) landed mid-run and the bare `git
-      # push` at the end was rejected non-fast-forward, throwing away 118
-      # minutes of fetching. Rebasing here rather than at the end means the
-      # render below sees those cities' committed gazetteers and data-cache and
-      # includes them in the hub and sitemap, and it shrinks the window between
-      # rebase and push from two hours to seconds.
-      # --autostash because the refreshed data-cache is still uncommitted.
-      - name: Pick up anything that landed on main during the run
-        run: |
-          git config user.name "saferoute-bot"
-          git config user.email "minhaj@safe-route.app"
-          git pull --rebase --autostash origin main
-
       # The transparency dataset is MEASURED in the backend repo (the providers
       # live there) and pushed here by its monthly-data-audit job, which runs on
       # the 1st so the data is waiting by the time this runs on the 2nd.
@@ -169,14 +155,34 @@ jobs:
           git add -A
           git diff --cached --quiet && { echo "no changes"; exit 0; }
           git commit -m "safety pages: monthly data refresh"
-          # Retry rather than a bare push: the step above narrows the race but
-          # does not close it, and losing a two-hour run to a commit that landed
-          # in the last few seconds is the most expensive failure this job has.
+
+          # This job runs for ~2 hours and main moves under it: run #6 fetched
+          # all 20 cities and then lost the lot to a non-fast-forward push
+          # because two cities landed while it ran.
+          #
+          # The rebase happens HERE, after the commit, so the tree is clean.
+          # An earlier attempt rebased mid-run with --autostash and that is a
+          # trap: when re-applying the stash conflicts, git prints "Applying
+          # autostash resulted in conflicts", writes <<<<<<< markers into the
+          # data files, and STILL EXITS 0. Run #7 went green on that step and
+          # died in the renderer on a conflict marker inside a JSON file, after
+          # 2h13m of fetching. Never autostash generated output.
+          #
+          # After a rebase, re-render: the pages and sitemap this run produced
+          # do not know about a city that landed since, and ours would overwrite
+          # theirs. render-pages.mjs skips a city with no data, so a half-added
+          # city cannot break this.
           for i in 1 2 3; do
             if git push; then exit 0; fi
-            echo "push rejected (attempt $i) — rebasing onto main and retrying"
-            git pull --rebase origin main || { git rebase --abort || true; }
-            sleep 5
+            echo "push rejected (attempt $i) — rebasing onto main"
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo "::error::rebase conflicted with main — re-run the rebuild"
+              exit 1
+            fi
+            node tools/render-pages.mjs
+            git add -A
+            git diff --cached --quiet || git commit --amend --no-edit
           done
           echo "::error::could not push after 3 attempts — main is moving faster than this job can rebase"
           exit 1
