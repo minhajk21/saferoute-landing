@@ -58,6 +58,7 @@ jobs:
           node tools/build-gazetteer-detroit.mjs
           node tools/build-gazetteer-minneapolis.mjs
           node tools/build-gazetteer-cleveland.mjs
+          node tools/build-gazetteer-kansascity.mjs
           # denver, longbeach and vancouver are DELIBERATELY not rebuilt here.
           # They do have a builder — tools/build-gazetteer-calibration.mjs takes
           # exactly these ids as args — but it emits calibration-grade sets, and
@@ -109,6 +110,7 @@ jobs:
           node tools/generate-data.mjs --force --city detroit
           node tools/generate-data.mjs --force --city minneapolis
           node tools/generate-data.mjs --force --city cleveland
+          node tools/generate-data.mjs --force --city kansascity
 
       # Incremental — cached areas are skipped, so a normal run fetches nothing
       # and never touches Overpass. Only genuinely new areas cost a request.
@@ -133,6 +135,7 @@ jobs:
           node tools/fetch-basemap-osm.mjs --city detroit
           node tools/fetch-basemap-osm.mjs --city minneapolis
           node tools/fetch-basemap-osm.mjs --city cleveland
+          node tools/fetch-basemap-osm.mjs --city kansascity
 
       # The homepage states "Requires iOS X+" by hand, and it went stale the day
       # 1.2.3 dropped the floor from 26.4 to 16.4 — telling older iPhones they
