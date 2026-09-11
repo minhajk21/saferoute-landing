@@ -77,6 +77,36 @@ function ringArea(ring) {
   return Math.abs(a / 2);
 }
 
+// Centroids that land on open ground rather than the place the area is named
+// for, with the built-up point they move to. Asserted INSIDE the polygon at
+// build time, so an override can move a page to where people are but never onto
+// a neighbouring community.
+//
+// La Jolla was found by the 2026-09 all-cities audit. San Diego's Community
+// Plan Areas are coarse — 2,642 m median centre spacing, the loosest in the
+// project — and La Jolla's geometric centre landed on the Mount Soledad
+// hillside: 33 incidents, 79/100. The two places the name actually denotes
+// measure 174 (the Village) and 159 (the Shores), both scoring 44. "Is La Jolla
+// safe" is a high-volume query and the page was answering it about a hillside.
+//
+// Chosen for BUILT FORM: the Village is the walkable core the question is
+// really about, not the highest-count point.
+const CENTROID_OVERRIDE = new Map([
+  ['La Jolla', [-117.2740, 32.8470]],   // the Village — Girard Ave / Prospect St
+]);
+
+function pointInRing([x, y], ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i], [xj, yj] = ring[j];
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+const ringsOf = (g) => g?.type === 'Polygon' ? [g.coordinates[0]]
+  : g?.type === 'MultiPolygon' ? g.coordinates.map((p) => p[0]) : [];
+
 /// Largest-ring centroid, so a community that includes offshore or detached
 /// parcels is still centred on its mainland body.
 function centroidOf(geom) {
@@ -97,13 +127,21 @@ const gj = await res.json();
 
 const areas = [];
 let dropped = [];
+const moved = [];
 for (const f of gj.features || []) {
   const raw = String(f.properties?.CPNAME || '').trim();
   if (!raw) continue;
   if (NOT_A_NEIGHBOURHOOD.test(raw)) { dropped.push(raw); continue; }
-  const c = centroidOf(f.geometry || {});
+  let c = centroidOf(f.geometry || {});
   if (!c) continue;
   const name = titleCase(raw);
+  const ov = CENTROID_OVERRIDE.get(name);
+  if (ov) {
+    if (!ringsOf(f.geometry || {}).some((r) => pointInRing(ov, r))) {
+      throw new Error(`centroid override for "${name}" is outside its own polygon — refusing to move a page onto a neighbouring community`);
+    }
+    c = ov; moved.push(name);
+  }
   areas.push({
     name,
     slug: slugify(name),
@@ -129,3 +167,4 @@ writeFileSync(OUT, JSON.stringify({
 }, null, 2) + '\n');
 console.log(`san diego gazetteer: ${areas.length} community plan areas → ${OUT}`);
 if (dropped.length) console.log(`  dropped ${dropped.length} non-neighbourhood: ${dropped.join(', ')}`);
+if (moved.length) console.log(`  centroid moved to the built-up core: ${moved.join(', ')}`);

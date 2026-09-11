@@ -48,6 +48,13 @@ const SVC = 'https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/
 //   Sutton Walmley & Minworth  7 in the Minworth green belt → 22 at Walmley village
 //   Edgbaston              33 in the university/botanical belt → 429 at Calthorpe
 const CENTROID_OVERRIDE = {
+  bristol: {
+    // The ward is "Avonmouth AND Lawrence Weston" and the centroid landed in
+    // Avonmouth — the container port. 6 incidents, 99/100, top of the city.
+    // Moved to the Lawrence Weston housing estate the other half is named for:
+    // 94 incidents, and where the ward's residents actually are.
+    'Avonmouth and Lawrence Weston': { lat: 51.5030, lng: -2.6560 },
+  },
   birmingham: {
     'Sutton Vesey': { lat: 52.5560, lng: -1.8360 },              // Boldmere
     'Sutton Walmley & Minworth': { lat: 52.5460, lng: -1.7900 }, // Walmley village
@@ -148,6 +155,6 @@ writeFileSync(OUT, JSON.stringify({
 }, null, 2) + '\n');
 
 console.log(`${CFG.city} gazetteer: ${areas.length} wards → ${OUT}`);
-if (moved.length) console.log(`  centroid moved out of parkland: ${moved.join(', ')}`);
+if (moved.length) console.log(`  centroid moved to built-up land: ${moved.join(', ')}`);
 console.log(`  nearest-centroid spacing: median ${Math.round(median)} m, min ${Math.round(sorted[0])} m`);
 console.log(`  gate: DC (tightest published) is ~700 m median → ${median >= 700 ? 'PASS' : 'REVIEW'}`);

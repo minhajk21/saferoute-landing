@@ -3,7 +3,7 @@
  "citySlug": "toronto",
  "country": "CA",
  "source": "City of Toronto Open Data — 158 neighbourhoods, grouped by former municipality",
- "generatedAt": "2026-09-07",
+ "generatedAt": "2026-09-11",
  "areas": [
   {
    "name": "Broadview North",
@@ -1889,8 +1889,8 @@
    "lng": -79.215647,
    "neighbors": [
     "malvern-west",
-    "morningside",
     "morningside-heights",
+    "morningside",
     "highland-creek",
     "woburn-north"
    ]
@@ -1903,10 +1903,10 @@
    "lng": -79.230751,
    "neighbors": [
     "malvern-east",
+    "morningside-heights",
     "agincourt-north",
     "morningside",
-    "agincourt-south-malvern-west",
-    "morningside-heights"
+    "agincourt-south-malvern-west"
    ]
   },
   {
@@ -1941,14 +1941,14 @@
    "name": "Morningside Heights",
    "slug": "morningside-heights",
    "borough": "Scarborough",
-   "lat": 43.827899,
-   "lng": -79.197719,
+   "lat": 43.818,
+   "lng": -79.2065,
    "neighbors": [
     "malvern-east",
     "malvern-west",
     "highland-creek",
     "morningside",
-    "west-rouge"
+    "agincourt-north"
    ]
   },
   {

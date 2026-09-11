@@ -144,6 +144,23 @@ function districtFor(c) {
 const CENTROID_OVERRIDE = new Map([
   ['St Lawrence-East Bayfront-The Islands', { lat: 43.6490, lng: -79.3720 }],  // St Lawrence Market
   ['South Riverdale', { lat: 43.6620, lng: -79.3390 }],                        // Queen St E / Carlaw
+  //
+  // Morningside Heights is the THIRD Toronto centroid found in a void, and the
+  // one that hid longest, because neither name-screening nor local knowledge
+  // would catch it: "Morningside Heights" reads residential because it IS
+  // residential. It surfaced only from a neighbour-ratio sweep across all 22
+  // published cities — 6 incidents against a 4-neighbour median of 104, ranked
+  // #1 SAFEST of 158 — and was then confirmed by probing: the centroid sits in
+  // Rouge parkland on the northern city limit, while the subdivision the
+  // neighbourhood actually is returns 79. All 6 of its own cached incidents lie
+  // 700-900 m southwest of the published centre; none within 400 m.
+  //
+  // The point below is the built subdivision. It is deliberately NOT the
+  // higher-count probe 1.9 km southwest, which returned 108 but lies OUTSIDE
+  // this polygon entirely and drifts into Malvern — taking it would have
+  // imported a neighbour's crime, and the in-polygon assertion below would have
+  // rejected it anyway.
+  ['Morningside Heights', { lat: 43.8180, lng: -79.2065 }],                    // subdivision core
 ]);
 
 function pointInRing({ lat, lng }, ring) {
@@ -170,7 +187,7 @@ const areas = nbhd.features
         throw new Error(`centroid override for "${name}" is outside its own polygon`);
       }
       c = ov;
-      console.log(`  centroid moved out of the harbour to the built-up core: ${name}`);
+      console.log(`  centroid moved to the built-up core: ${name}`);
     }
     return {
       name,

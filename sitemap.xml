@@ -1473,7 +1473,6 @@
 <url><loc>https://safe-route.app/safety/liverpool/city-centre-south/</loc><lastmod>2026-07-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/liverpool/city-centre-north/</loc><lastmod>2026-07-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/</loc><lastmod>2026-06-01</lastmod><priority>0.9</priority></url>
-<url><loc>https://safe-route.app/safety/toronto/morningside-heights/</loc><lastmod>2026-05-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/bridle-path-sunnybrook-york-mills/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/edenbridge-humber-valley/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/west-rouge/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
@@ -1504,6 +1503,7 @@
 <url><loc>https://safe-route.app/safety/toronto/oconnor-parkview/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/pleasant-view/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/forest-hill-south/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
+<url><loc>https://safe-route.app/safety/toronto/morningside-heights/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/steeles/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/banbury-don-mills/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/bedford-park-nortown/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
@@ -2092,7 +2092,7 @@
 <url><loc>https://safe-route.app/safety/neworleans/central-business-district/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/neworleans/french-quarter/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/neworleans/iberville/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
-<url><loc>https://safe-route.app/safety/sandiego/</loc><lastmod>2026-08-01</lastmod><priority>0.9</priority></url>
+<url><loc>https://safe-route.app/safety/sandiego/</loc><lastmod>2026-09-01</lastmod><priority>0.9</priority></url>
 <url><loc>https://safe-route.app/safety/sandiego/black-mountain-ranch/</loc><lastmod>2026-07-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sandiego/del-mar-mesa/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sandiego/ncfua-subarea-ii/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
@@ -2102,7 +2102,6 @@
 <url><loc>https://safe-route.app/safety/sandiego/los-penasquitos-canyon/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sandiego/via-de-la-valle/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sandiego/torrey-highlands/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
-<url><loc>https://safe-route.app/safety/sandiego/la-jolla/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sandiego/torrey-pines/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sandiego/carmel-valley/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sandiego/sabre-springs/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
@@ -2123,6 +2122,7 @@
 <url><loc>https://safe-route.app/safety/sandiego/mid-city-kensington-talmadge/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sandiego/kearny-mesa/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sandiego/skyline-paradise-hills/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
+<url><loc>https://safe-route.app/safety/sandiego/la-jolla/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sandiego/carmel-mountain-ranch/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sandiego/balboa-park/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sandiego/college-area/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>

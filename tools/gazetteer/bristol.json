@@ -1,0 +1,248 @@
+{
+  "city": "Bristol",
+  "citySlug": "bristol",
+  "country": "GB",
+  "source": "ONS Wards (December 2025) Boundaries UK BSC — local authority \"Bristol, City of\", ONS population-weighted centroids",
+  "purpose": "Safety pages + calibration.",
+  "generatedAt": "2026-09-11",
+  "areas": [
+    {
+      "name": "Ashley",
+      "slug": "ashley",
+      "lat": 51.46883,
+      "lng": -2.580818,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Avonmouth and Lawrence Weston",
+      "slug": "avonmouth-and-lawrence-weston",
+      "lat": 51.503,
+      "lng": -2.656,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Bedminster",
+      "slug": "bedminster",
+      "lat": 51.43554,
+      "lng": -2.619887,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Bishopston and Ashley Down",
+      "slug": "bishopston-and-ashley-down",
+      "lat": 51.48129,
+      "lng": -2.588552,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Bishopsworth",
+      "slug": "bishopsworth",
+      "lat": 51.42284,
+      "lng": -2.620622,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Brislington East",
+      "slug": "brislington-east",
+      "lat": 51.43669,
+      "lng": -2.533942,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Brislington West",
+      "slug": "brislington-west",
+      "lat": 51.43384,
+      "lng": -2.554207,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Central",
+      "slug": "central",
+      "lat": 51.45345,
+      "lng": -2.595576,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Clifton",
+      "slug": "clifton",
+      "lat": 51.45783,
+      "lng": -2.618893,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Clifton Down",
+      "slug": "clifton-down",
+      "lat": 51.46443,
+      "lng": -2.612044,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Cotham",
+      "slug": "cotham",
+      "lat": 51.46618,
+      "lng": -2.59888,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Easton",
+      "slug": "easton",
+      "lat": 51.46074,
+      "lng": -2.558707,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Eastville",
+      "slug": "eastville",
+      "lat": 51.47438,
+      "lng": -2.544719,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Filwood",
+      "slug": "filwood",
+      "lat": 51.4242,
+      "lng": -2.589313,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Frome Vale",
+      "slug": "frome-vale",
+      "lat": 51.48705,
+      "lng": -2.533997,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Hartcliffe and Withywood",
+      "slug": "hartcliffe-and-withywood",
+      "lat": 51.40742,
+      "lng": -2.613567,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Henbury and Brentry",
+      "slug": "henbury-and-brentry",
+      "lat": 51.50866,
+      "lng": -2.625489,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Hengrove and Whitchurch Park",
+      "slug": "hengrove-and-whitchurch-park",
+      "lat": 51.41067,
+      "lng": -2.578541,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Hillfields",
+      "slug": "hillfields",
+      "lat": 51.47414,
+      "lng": -2.52551,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Horfield",
+      "slug": "horfield",
+      "lat": 51.49487,
+      "lng": -2.587703,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Hotwells and Harbourside",
+      "slug": "hotwells-and-harbourside",
+      "lat": 51.451,
+      "lng": -2.602797,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Knowle",
+      "slug": "knowle",
+      "lat": 51.43367,
+      "lng": -2.573697,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Lawrence Hill",
+      "slug": "lawrence-hill",
+      "lat": 51.45622,
+      "lng": -2.568583,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Lockleaze",
+      "slug": "lockleaze",
+      "lat": 51.48426,
+      "lng": -2.568989,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Redland",
+      "slug": "redland",
+      "lat": 51.47533,
+      "lng": -2.6026,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Southmead",
+      "slug": "southmead",
+      "lat": 51.50384,
+      "lng": -2.599619,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Southville",
+      "slug": "southville",
+      "lat": 51.44263,
+      "lng": -2.605681,
+      "borough": "Bristol"
+    },
+    {
+      "name": "St George Central",
+      "slug": "st-george-central",
+      "lat": 51.46164,
+      "lng": -2.525927,
+      "borough": "Bristol"
+    },
+    {
+      "name": "St George Troopers Hill",
+      "slug": "st-george-troopers-hill",
+      "lat": 51.45219,
+      "lng": -2.53274,
+      "borough": "Bristol"
+    },
+    {
+      "name": "St George West",
+      "slug": "st-george-west",
+      "lat": 51.45907,
+      "lng": -2.547142,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Stockwood",
+      "slug": "stockwood",
+      "lat": 51.41803,
+      "lng": -2.548536,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Stoke Bishop",
+      "slug": "stoke-bishop",
+      "lat": 51.47989,
+      "lng": -2.636358,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Westbury-on-Trym and Henleaze",
+      "slug": "westbury-on-trym-and-henleaze",
+      "lat": 51.48991,
+      "lng": -2.615064,
+      "borough": "Bristol"
+    },
+    {
+      "name": "Windmill Hill",
+      "slug": "windmill-hill",
+      "lat": 51.44043,
+      "lng": -2.582156,
+      "borough": "Bristol"
+    }
+  ]
+}

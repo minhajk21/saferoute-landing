@@ -4,7 +4,7 @@
   "country": "US",
   "source": "SANDAG / City of San Diego — Community Plan Areas",
   "purpose": "Safety pages + calibration. Community plan areas, not census tracts: see the header of this script for why.",
-  "generatedAt": "2026-08-26",
+  "generatedAt": "2026-09-11",
   "areas": [
     {
       "name": "Balboa Park",
@@ -70,6 +70,13 @@
       "borough": "San Diego"
     },
     {
+      "name": "East Elliott",
+      "slug": "east-elliott",
+      "lat": 32.862586,
+      "lng": -117.031313,
+      "borough": "San Diego"
+    },
+    {
       "name": "Encanto Neighborhoods",
       "slug": "encanto-neighborhoods",
       "lat": 32.709735,
@@ -100,8 +107,8 @@
     {
       "name": "La Jolla",
       "slug": "la-jolla",
-      "lat": 32.839324,
-      "lng": -117.254707,
+      "lat": 32.847,
+      "lng": -117.274,
       "borough": "San Diego"
     },
     {
@@ -284,6 +291,13 @@
       "slug": "sabre-springs",
       "lat": 32.948308,
       "lng": -117.087703,
+      "borough": "San Diego"
+    },
+    {
+      "name": "San Pasqual",
+      "slug": "san-pasqual",
+      "lat": 33.080173,
+      "lng": -117.010942,
       "borough": "San Diego"
     },
     {

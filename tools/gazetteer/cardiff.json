@@ -1,0 +1,206 @@
+{
+  "city": "Cardiff",
+  "citySlug": "cardiff",
+  "country": "GB",
+  "source": "ONS Wards (December 2025) Boundaries UK BSC — local authority \"Cardiff\", ONS population-weighted centroids",
+  "purpose": "Safety pages + calibration.",
+  "generatedAt": "2026-09-11",
+  "areas": [
+    {
+      "name": "Adamsdown",
+      "slug": "adamsdown",
+      "lat": 51.48619,
+      "lng": -3.157076,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Butetown",
+      "slug": "butetown",
+      "lat": 51.46234,
+      "lng": -3.158675,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Caerau",
+      "slug": "caerau",
+      "lat": 51.47436,
+      "lng": -3.2397,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Canton",
+      "slug": "canton",
+      "lat": 51.48034,
+      "lng": -3.214459,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Cathays",
+      "slug": "cathays",
+      "lat": 51.49026,
+      "lng": -3.18312,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Cyncoed",
+      "slug": "cyncoed",
+      "lat": 51.51991,
+      "lng": -3.167097,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Ely",
+      "slug": "ely",
+      "lat": 51.47634,
+      "lng": -3.25807,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Fairwater",
+      "slug": "fairwater",
+      "lat": 51.49355,
+      "lng": -3.244254,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Gabalfa",
+      "slug": "gabalfa",
+      "lat": 51.5003,
+      "lng": -3.195525,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Grangetown",
+      "slug": "grangetown",
+      "lat": 51.46154,
+      "lng": -3.185559,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Heath",
+      "slug": "heath",
+      "lat": 51.51257,
+      "lng": -3.193843,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Lisvane and Thornhill",
+      "slug": "lisvane-and-thornhill",
+      "lat": 51.54573,
+      "lng": -3.18058,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Llandaff",
+      "slug": "llandaff",
+      "lat": 51.49364,
+      "lng": -3.228007,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Llandaff North",
+      "slug": "llandaff-north",
+      "lat": 51.50415,
+      "lng": -3.21574,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Llanishen",
+      "slug": "llanishen",
+      "lat": 51.52679,
+      "lng": -3.190122,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Llanrumney",
+      "slug": "llanrumney",
+      "lat": 51.51958,
+      "lng": -3.128261,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Pentwyn",
+      "slug": "pentwyn",
+      "lat": 51.5189,
+      "lng": -3.147629,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Pentyrch and St Fagans",
+      "slug": "pentyrch-and-st-fagans",
+      "lat": 51.5216,
+      "lng": -3.296202,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Penylan",
+      "slug": "penylan",
+      "lat": 51.50053,
+      "lng": -3.154385,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Plasnewydd",
+      "slug": "plasnewydd",
+      "lat": 51.49191,
+      "lng": -3.165733,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Pontprennau and Old St Mellons",
+      "slug": "pontprennau-and-old-st-mellons",
+      "lat": 51.53809,
+      "lng": -3.128575,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Radyr",
+      "slug": "radyr",
+      "lat": 51.52018,
+      "lng": -3.258759,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Rhiwbina",
+      "slug": "rhiwbina",
+      "lat": 51.53494,
+      "lng": -3.21969,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Riverside",
+      "slug": "riverside",
+      "lat": 51.48706,
+      "lng": -3.198175,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Rumney",
+      "slug": "rumney",
+      "lat": 51.50339,
+      "lng": -3.122975,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Splott",
+      "slug": "splott",
+      "lat": 51.48354,
+      "lng": -3.142003,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Trowbridge",
+      "slug": "trowbridge",
+      "lat": 51.51511,
+      "lng": -3.095046,
+      "borough": "Cardiff"
+    },
+    {
+      "name": "Whitchurch and Tongwynlais",
+      "slug": "whitchurch-and-tongwynlais",
+      "lat": 51.51644,
+      "lng": -3.229918,
+      "borough": "Cardiff"
+    }
+  ]
+}

@@ -168,8 +168,19 @@ const CITIES = {
     // with its surroundings 26x busier. It is a national park with a small
     // residential population, not a quiet neighbourhood: the centroid is
     // correctly placed, so this is a land-use caveat, not a centroid fix.
-    sparseAreas: new Set(['presidio']),
-    sparseNote: 'Most of this area is national parkland rather than housing, so a low count reflects how few people live here rather than how safe the streets are.',
+    // Three of San Francisco's Analysis Neighborhoods are parks, not places
+    // people live, and all three ranked near the top: Presidio 99 (#1), Lincoln
+    // Park 84 (#4) and Golden Gate Park 75 (#10). In each case the centroid is
+    // CORRECTLY placed — the score is manufactured entirely by the residential
+    // fringe. Golden Gate Park has 3 of its 248 incidents within 400 m of the
+    // centre; Lincoln Park, which is a golf course, Lands End and the VA campus,
+    // has 5 of 145, with zero across its whole northern and western half
+    // (ocean and cliff). Nothing to move to; the page has to say what it is.
+    sparseAreas: new Set(['presidio', 'golden-gate-park', 'lincoln-park']),
+    // "national parkland" was true of the Presidio alone. Golden Gate Park is a
+    // city park and Lincoln Park is a municipal golf course, so a note shared
+    // across the set has to say "parkland" — the Cleveland lesson again.
+    sparseNote: 'Most of this area is parkland rather than housing, so a low count reflects how few people live here rather than how safe the streets are.',
     reportedTo: 'reported to the SFPD',
     dataName: 'SFPD data',
     medianLabel: 'citywide median',
@@ -256,8 +267,14 @@ const CITIES = {
     // (razed for the GM assembly plant), Oakwood Heights (bought out by
     // Marathon), Carbon Works (industrial). Their scores are real; what they
     // measure is emptiness.
-    sparseAreas: new Set(['delray', 'poletown-east', 'oakwood-heights', 'carbon-works']),
-    sparseNote: 'Much of this area was cleared for industry or infrastructure, so the low count reflects how few people are left here as much as how safe the street is.',
+    sparseAreas: new Set(['delray', 'poletown-east', 'oakwood-heights', 'carbon-works',
+                          'rouge-park', 'detroit-golf']),
+    // Widened for Rouge Park (1,181 acres of city park, ranked 9/201) and
+    // Detroit Golf (a private course, 79/100) — neither was "cleared", both are
+    // simply not housing. A large park at night is exactly the question this app
+    // exists to answer, and 0 of Rouge Park's incidents fall within 400 m of its
+    // centre, so the page was answering it wrong.
+    sparseNote: 'Much of this area is parkland, or was cleared for industry or infrastructure, so the low count reflects how few people are here as much as how safe the street is.',
     reportedTo: 'reported to the DPD',
     dataName: 'DPD data',
     medianLabel: 'citywide median',
@@ -365,8 +382,12 @@ const CITIES = {
     // Industrial 0.11) and by name-screening the top of the ranking, which the
     // ratio misses when an area's NEIGHBOURS are also empty — the river bottoms
     // and the undeveloped Northland tracts all sat in the top ten "safest".
+    // Swope Park added 2026-09 by the all-cities audit: 1,800 acres of park,
+    // zoo and golf reading 88/100 at rank 14/244, with all four ring probes
+    // confirming the whole circle is empty. The existing note fits verbatim.
     sparseAreas: new Set(['west-bottoms', 'northeast-industrial-district',
-                          'birmingham-bottoms', 'little-blue', 'shoal-creek']),
+                          'birmingham-bottoms', 'little-blue', 'shoal-creek',
+                          'swope-park']),
     sparseNote: 'Much of this area is industrial, river-bottom or undeveloped land rather than housing, so a low count reflects how few people are here rather than how safe the streets are.',
     reportedTo: 'reported to the KCPD',
     dataName: 'Kansas City Police data',
@@ -462,6 +483,64 @@ const CITIES = {
       rankHeading: (n) => `All ${n} Liverpool wards, safest first`,
       notice: (median) => `These figures describe <strong>reported</strong> crime around each ward's centre \u2014 they are informational, not a judgment of any community. Liverpool median index: <strong>${median}/100</strong>.`,
       methodology: `Each street-level incident published by Merseyside Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Liverpool's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the 64 Liverpool City Council wards from the ONS ward set. <strong>The scale is calibrated to Liverpool and cannot be read against another city's number</strong> \u2014 a Liverpool 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year, and a typical Liverpool ward carries fewer incidents than a typical inner-London one \u2014 so figures here move more from month to month, and small differences between neighbouring wards are not meaningful. Liverpool sits on the Mersey and several waterfront wards have a 1&nbsp;km circle that is partly river or dock water; where a ward is mostly parkland or dock rather than housing its page says so, because an empty circle reads as a quiet street when it is really no street at all. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
+    },
+  },
+  'bristol': {
+    name: 'Bristol',
+    hubName: 'Bristol',
+    rankPool: 'Bristol wards',
+    areaWord: 'ward', areaWordPlural: 'wards',
+    centre: 'centre', centreLabel: 'ward centre',
+    // Avonmouth and Lawrence Weston's centroid landed in the container port —
+    // 6 incidents, 99/100, top of the city. Moved to the Lawrence Weston
+    // housing estate the ward's other half is named for (94 incidents).
+    reportedTo: 'reported to Avon and Somerset Police',
+    dataName: 'Avon and Somerset Police data',
+    medianLabel: 'Bristol median',
+    forCity: 'for Bristol',
+    acrossCity: 'across Bristol',
+    faqCalc: (name) => `SafeRoute weights each police-recorded incident by severity (violence weighs more than shoplifting), sums the last published month within 1 km of the ${name} centre, and normalises against Bristol rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Avon and Somerset Police street-level crime via <a href="https://data.police.uk/">data.police.uk</a>${dateLine}, Open Government Licence v3.0. Ward boundaries: ONS Wards (December 2025) Boundaries UK, Office for National Statistics, OGL v3.0. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Bristol Ward Safety Map & Rankings (${n} wards) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Bristol ward? Safety index (0\u2013100) for all ${n} Bristol wards from Avon and Somerset Police data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Bristol ward?',
+      lead: `SafeRoute scores every Bristol ward 0\u2013100 from street-level incidents reported to Avon and Somerset Police \u2014 severity-weighted, within 1 km of each ward's centre, normalised against Bristol. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a ward \u2014 e.g. Clifton, Bedminster, Easton\u2026',
+      rankHeading: (n) => `All ${n} Bristol wards, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each ward's centre \u2014 they are informational, not a judgment of any community. Bristol median index: <strong>${median}/100</strong>.`,
+      methodology: `Each street-level incident published by Avon and Somerset Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Bristol's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the Bristol council wards from the ONS ward set. <strong>The scale is calibrated to Bristol and cannot be read against another city's number</strong> \u2014 a Bristol 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year. A typical Bristol ward carries fewer incidents than a typical inner-London one, so figures here move more from month to month and small differences between neighbouring wards are not meaningful. Bristol runs down to the Severn and one ward centre sat in the container port rather than the housing the ward is half named for; it has been moved to the built-up part of the same ward, because a circle drawn over a dock reads as safe when it is really empty. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
+    },
+  },
+  'cardiff': {
+    name: 'Cardiff',
+    hubName: 'Cardiff',
+    rankPool: 'Cardiff wards',
+    areaWord: 'ward', areaWordPlural: 'wards',
+    centre: 'centre', centreLabel: 'ward centre',
+    // Pentyrch and St Fagans is 28.8 km2 — a fifth of the whole council area —
+    // and overwhelmingly farmland and village rather than town. 8 incidents put
+    // it top of the city, which says nothing about walking anywhere in Cardiff.
+    sparseAreas: new Set(['pentyrch-and-st-fagans']),
+    sparseNote: 'Most of this ward is farmland and village rather than town, so a low count reflects how few people are here rather than how safe the streets are.',
+    reportedTo: 'reported to South Wales Police',
+    dataName: 'South Wales Police data',
+    medianLabel: 'Cardiff median',
+    forCity: 'for Cardiff',
+    acrossCity: 'across Cardiff',
+    faqCalc: (name) => `SafeRoute weights each police-recorded incident by severity (violence weighs more than shoplifting), sums the last published month within 1 km of the ${name} centre, and normalises against Cardiff rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: South Wales Police street-level crime via <a href="https://data.police.uk/">data.police.uk</a>${dateLine}, Open Government Licence v3.0. Ward boundaries: ONS Wards (December 2025) Boundaries UK, Office for National Statistics, OGL v3.0. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Cardiff Ward Safety Map & Rankings (${n} wards) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Cardiff ward? Safety index (0\u2013100) for all ${n} Cardiff wards from South Wales Police data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Cardiff ward?',
+      lead: `SafeRoute scores every Cardiff ward 0\u2013100 from street-level incidents reported to South Wales Police \u2014 severity-weighted, within 1 km of each ward's centre, normalised against Cardiff. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a ward \u2014 e.g. Roath, Canton, Grangetown\u2026',
+      rankHeading: (n) => `All ${n} Cardiff wards, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each ward's centre \u2014 they are informational, not a judgment of any community. Cardiff median index: <strong>${median}/100</strong>.`,
+      methodology: `Each street-level incident published by South Wales Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Cardiff's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the Cardiff council wards from the ONS ward set. <strong>The scale is calibrated to Cardiff and cannot be read against another city's number</strong> \u2014 a Cardiff 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year. <strong>Cardiff is the thinnest city published here</strong> \u2014 a typical ward sees about 126 incidents a month against inner London's 476 \u2014 so these figures move more from month to month than any other city's, and a small difference between two neighbouring wards is not meaningful. Where a ward is mostly farmland rather than town its page says so, because an empty circle reads as a quiet street when it is really no street at all. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
     },
   },
   'toronto': {
@@ -564,6 +643,13 @@ const CITIES = {
     // wider than NYC or Toronto. See build-gazetteer-baltimore.mjs.
     areaWord: 'area', areaWordPlural: 'areas',
     centre: 'center', centreLabel: 'area center',
+    // Baltimore had no sparseAreas key until the 2026-09 all-cities audit.
+    // "Southeastern" is a CSA that is largely marine terminal and industrial
+    // frontage, published at 91/100 and 3rd-safest of 56. Its incident cloud
+    // sits 644 m north-east of the centre, so this is NOT a void a centroid
+    // move fixes — the surroundings are genuinely mixed. The land is mostly port.
+    sparseAreas: new Set(['southeastern']),
+    sparseNote: 'Much of this area is marine terminal and industrial land rather than housing, so a low count reflects how few people are here rather than how safe the streets are.',
     reportedTo: 'reported to the Baltimore Police',
     dataName: 'Baltimore Police data',
     medianLabel: 'citywide median',
