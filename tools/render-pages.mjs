@@ -386,6 +386,44 @@ const CITIES = {
       methodology: `Each incident reported to the Kansas City Police Department is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the city's own 246 neighborhoods, grouped by the 18 Area Plans the city itself plans against. Two are not scored: KCI &amp; 2nd Creek, which is the airport, and Longview, which wraps Longview Lake and carries almost no recorded incidents anywhere inside it \u2014 a page there could only have said &ldquo;0 incidents, 100/100&rdquo;, which is missing data dressed as proven safety. Kansas City covers a lot of ground, and several neighborhoods along the Missouri and Blue river bottoms are industrial or largely undeveloped; those pages say so rather than letting an empty count read as a quiet street. Time-of-day charts use KCPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
     },
   },
+  'birmingham': {
+    name: 'Birmingham',
+    hubName: 'Birmingham',
+    rankPool: 'Birmingham wards',
+    // The city council's own 69 ONS wards — the same national ward layer London
+    // uses, filtered to Birmingham City Council (not the wider West Midlands).
+    // Single ranked table: Birmingham has no official sub-city grouping that
+    // people actually use, so inventing one would be the New Orleans call.
+    //
+    // THREE CENTROIDS WERE MOVED OUT OF PARKLAND. The ONS LAT/LONG attributes
+    // are GEOMETRIC centroids, not population-weighted as first assumed, so a
+    // ward containing a big park scores an empty circle: Sutton Vesey's landed
+    // in Sutton Park (3 incidents, 98/100), Walmley & Minworth's in the Minworth
+    // green belt, Edgbaston's in the university and botanical-gardens belt (33
+    // against 429 at the Calthorpe Estate). All three are now asserted inside
+    // their own ward. London was audited for the same defect and is clean — its
+    // wards are small and uniformly built up.
+    areaWord: 'ward', areaWordPlural: 'wards',
+    centre: 'centre', centreLabel: 'ward centre',
+    reportedTo: 'reported to West Midlands Police',
+    dataName: 'West Midlands Police data',
+    medianLabel: 'Birmingham median',
+    forCity: 'for Birmingham',
+    acrossCity: 'across Birmingham',
+    faqCalc: (name) => `SafeRoute weights each police-recorded incident by severity (violence weighs more than shoplifting), sums the last published month within 1 km of the ${name} centre, and normalises against Birmingham rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: West Midlands Police street-level crime via <a href="https://data.police.uk/">data.police.uk</a>${dateLine}, Open Government Licence v3.0. Ward boundaries: ONS Wards (December 2025) Boundaries UK, Office for National Statistics, OGL v3.0. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Birmingham Ward Safety Map & Rankings (${n} wards) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Birmingham ward? Safety index (0\u2013100) for all ${n} Birmingham wards from West Midlands Police data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Birmingham ward?',
+      lead: `SafeRoute scores every Birmingham ward 0\u2013100 from street-level incidents reported to West Midlands Police \u2014 severity-weighted, within 1 km of each ward's centre, normalised against Birmingham. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a ward \u2014 e.g. Ladywood, Handsworth, Moseley\u2026',
+      rankHeading: (n) => `All ${n} Birmingham wards, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each ward's centre \u2014 they are informational, not a judgment of any community. Birmingham median index: <strong>${median}/100</strong>.`,
+      methodology: `Each street-level incident published by West Midlands Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Birmingham's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the 69 Birmingham City Council wards from the ONS ward set. <strong>The scale is calibrated to Birmingham and cannot be read against another city's number</strong> \u2014 a Birmingham 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year, and a typical Birmingham ward carries fewer incidents than a typical inner-London one \u2014 which means figures here move more from month to month, and small differences between neighbouring wards are not meaningful. Three ward centres (Sutton Vesey, Sutton Walmley &amp; Minworth, Edgbaston) sit in large parks or green belt and have been moved to the built-up part of the same ward, because a circle drawn over parkland reads as safe when it is really empty. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
+    },
+  },
   'toronto': {
     name: 'Toronto',
     hubName: 'Toronto',

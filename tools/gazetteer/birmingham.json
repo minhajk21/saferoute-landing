@@ -1,0 +1,493 @@
+{
+  "city": "Birmingham",
+  "citySlug": "birmingham",
+  "country": "GB",
+  "source": "ONS Wards (December 2025) Boundaries UK BSC — local authority \"Birmingham\", ONS population-weighted centroids",
+  "purpose": "Safety pages + calibration.",
+  "generatedAt": "2026-09-11",
+  "areas": [
+    {
+      "name": "Acocks Green",
+      "slug": "acocks-green",
+      "lat": 52.44332,
+      "lng": -1.824114,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Allens Cross",
+      "slug": "allens-cross",
+      "lat": 52.41385,
+      "lng": -1.97991,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Alum Rock",
+      "slug": "alum-rock",
+      "lat": 52.4905,
+      "lng": -1.849862,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Aston",
+      "slug": "aston",
+      "lat": 52.50967,
+      "lng": -1.885748,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Balsall Heath West",
+      "slug": "balsall-heath-west",
+      "lat": 52.46021,
+      "lng": -1.893161,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Bartley Green",
+      "slug": "bartley-green",
+      "lat": 52.43266,
+      "lng": -1.994052,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Billesley",
+      "slug": "billesley",
+      "lat": 52.42159,
+      "lng": -1.875195,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Birchfield",
+      "slug": "birchfield",
+      "lat": 52.50939,
+      "lng": -1.913831,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Bordesley & Highgate",
+      "slug": "bordesley-and-highgate",
+      "lat": 52.47342,
+      "lng": -1.88618,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Bordesley Green",
+      "slug": "bordesley-green",
+      "lat": 52.47163,
+      "lng": -1.865766,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Bournbrook & Selly Park",
+      "slug": "bournbrook-and-selly-park",
+      "lat": 52.43858,
+      "lng": -1.923339,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Bournville & Cotteridge",
+      "slug": "bournville-and-cotteridge",
+      "lat": 52.42526,
+      "lng": -1.943435,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Brandwood & King's Heath",
+      "slug": "brandwood-and-kings-heath",
+      "lat": 52.42576,
+      "lng": -1.897272,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Bromford & Hodge Hill",
+      "slug": "bromford-and-hodge-hill",
+      "lat": 52.49921,
+      "lng": -1.807569,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Castle Vale",
+      "slug": "castle-vale",
+      "lat": 52.51855,
+      "lng": -1.786114,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Druids Heath & Monyhull",
+      "slug": "druids-heath-and-monyhull",
+      "lat": 52.40981,
+      "lng": -1.902189,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Edgbaston",
+      "slug": "edgbaston",
+      "lat": 52.469,
+      "lng": -1.91,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Erdington",
+      "slug": "erdington",
+      "lat": 52.52939,
+      "lng": -1.83083,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Frankley Great Park",
+      "slug": "frankley-great-park",
+      "lat": 52.40406,
+      "lng": -2.011898,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Garretts Green",
+      "slug": "garretts-green",
+      "lat": 52.47297,
+      "lng": -1.780669,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Glebe Farm & Tile Cross",
+      "slug": "glebe-farm-and-tile-cross",
+      "lat": 52.48238,
+      "lng": -1.776322,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Gravelly Hill",
+      "slug": "gravelly-hill",
+      "lat": 52.51267,
+      "lng": -1.848637,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Hall Green North",
+      "slug": "hall-green-north",
+      "lat": 52.43256,
+      "lng": -1.841542,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Hall Green South",
+      "slug": "hall-green-south",
+      "lat": 52.41783,
+      "lng": -1.845975,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Handsworth",
+      "slug": "handsworth",
+      "lat": 52.50796,
+      "lng": -1.929687,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Handsworth Wood",
+      "slug": "handsworth-wood",
+      "lat": 52.5216,
+      "lng": -1.93811,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Harborne",
+      "slug": "harborne",
+      "lat": 52.45965,
+      "lng": -1.960346,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Heartlands",
+      "slug": "heartlands",
+      "lat": 52.47856,
+      "lng": -1.833088,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Highter's Heath",
+      "slug": "highters-heath",
+      "lat": 52.40797,
+      "lng": -1.878335,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Holyhead",
+      "slug": "holyhead",
+      "lat": 52.50827,
+      "lng": -1.950961,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "King's Norton North",
+      "slug": "kings-norton-north",
+      "lat": 52.40572,
+      "lng": -1.941445,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "King's Norton South",
+      "slug": "kings-norton-south",
+      "lat": 52.39875,
+      "lng": -1.930387,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Kingstanding",
+      "slug": "kingstanding",
+      "lat": 52.54603,
+      "lng": -1.880064,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Ladywood",
+      "slug": "ladywood",
+      "lat": 52.47699,
+      "lng": -1.913762,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Longbridge & West Heath",
+      "slug": "longbridge-and-west-heath",
+      "lat": 52.39499,
+      "lng": -1.971027,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Lozells",
+      "slug": "lozells",
+      "lat": 52.50208,
+      "lng": -1.90866,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Moseley",
+      "slug": "moseley",
+      "lat": 52.4431,
+      "lng": -1.891554,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Nechells",
+      "slug": "nechells",
+      "lat": 52.49445,
+      "lng": -1.875463,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Newtown",
+      "slug": "newtown",
+      "lat": 52.49262,
+      "lng": -1.900432,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "North Edgbaston",
+      "slug": "north-edgbaston",
+      "lat": 52.48168,
+      "lng": -1.948296,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Northfield",
+      "slug": "northfield",
+      "lat": 52.40442,
+      "lng": -1.978209,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Oscott",
+      "slug": "oscott",
+      "lat": 52.5447,
+      "lng": -1.900284,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Perry Barr",
+      "slug": "perry-barr",
+      "lat": 52.52652,
+      "lng": -1.903701,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Perry Common",
+      "slug": "perry-common",
+      "lat": 52.53851,
+      "lng": -1.861079,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Pype Hayes",
+      "slug": "pype-hayes",
+      "lat": 52.5201,
+      "lng": -1.81318,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Quinton",
+      "slug": "quinton",
+      "lat": 52.46007,
+      "lng": -1.994843,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Rubery & Rednal",
+      "slug": "rubery-and-rednal",
+      "lat": 52.39105,
+      "lng": -2.005325,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Shard End",
+      "slug": "shard-end",
+      "lat": 52.49366,
+      "lng": -1.773893,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Sheldon",
+      "slug": "sheldon",
+      "lat": 52.46157,
+      "lng": -1.782669,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Small Heath",
+      "slug": "small-heath",
+      "lat": 52.4674,
+      "lng": -1.843228,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Soho & Jewellery Quarter",
+      "slug": "soho-and-jewellery-quarter",
+      "lat": 52.49283,
+      "lng": -1.928872,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "South Yardley",
+      "slug": "south-yardley",
+      "lat": 52.45786,
+      "lng": -1.811841,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Sparkbrook & Balsall Heath East",
+      "slug": "sparkbrook-and-balsall-heath-east",
+      "lat": 52.46022,
+      "lng": -1.867258,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Sparkhill",
+      "slug": "sparkhill",
+      "lat": 52.44783,
+      "lng": -1.86419,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Stirchley",
+      "slug": "stirchley",
+      "lat": 52.42675,
+      "lng": -1.916682,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Stockland Green",
+      "slug": "stockland-green",
+      "lat": 52.52176,
+      "lng": -1.861899,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Sutton Four Oaks",
+      "slug": "sutton-four-oaks",
+      "lat": 52.58652,
+      "lng": -1.85123,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Sutton Mere Green",
+      "slug": "sutton-mere-green",
+      "lat": 52.59726,
+      "lng": -1.831367,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Sutton Reddicap",
+      "slug": "sutton-reddicap",
+      "lat": 52.56417,
+      "lng": -1.794141,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Sutton Roughley",
+      "slug": "sutton-roughley",
+      "lat": 52.58287,
+      "lng": -1.797802,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Sutton Trinity",
+      "slug": "sutton-trinity",
+      "lat": 52.56197,
+      "lng": -1.831649,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Sutton Vesey",
+      "slug": "sutton-vesey",
+      "lat": 52.556,
+      "lng": -1.836,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Sutton Walmley & Minworth",
+      "slug": "sutton-walmley-and-minworth",
+      "lat": 52.546,
+      "lng": -1.79,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Sutton Wylde Green",
+      "slug": "sutton-wylde-green",
+      "lat": 52.54396,
+      "lng": -1.820068,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Tyseley & Hay Mills",
+      "slug": "tyseley-and-hay-mills",
+      "lat": 52.45263,
+      "lng": -1.834539,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Ward End",
+      "slug": "ward-end",
+      "lat": 52.49706,
+      "lng": -1.837437,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Weoley & Selly Oak",
+      "slug": "weoley-and-selly-oak",
+      "lat": 52.43473,
+      "lng": -1.957912,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Yardley East",
+      "slug": "yardley-east",
+      "lat": 52.47215,
+      "lng": -1.799915,
+      "borough": "Birmingham"
+    },
+    {
+      "name": "Yardley West & Stechford",
+      "slug": "yardley-west-and-stechford",
+      "lat": 52.47655,
+      "lng": -1.817018,
+      "borough": "Birmingham"
+    }
+  ]
+}
