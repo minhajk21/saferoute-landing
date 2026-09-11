@@ -37,32 +37,42 @@ jobs:
         with:
           node-version: 22
 
+      # ONE list, derived, used by all three steps below.
+      #
+      # These steps used to repeat the city list by hand and it drifted three
+      # times in two days: the nine cities up to cleveland (704 pages), then
+      # kansascity (244), then birmingham and liverpool (133). Every drift was
+      # silent — a missing city keeps re-rendering from whatever crime data was
+      # committed when it was built, while its pages still print a current
+      # "data through <date>" line. A comment saying "remember to add it here
+      # too" was already in this file when the last two drifted past it.
+      #
+      # safety/<city>/ is the source of truth because it IS the published
+      # corpus: a city has pages iff it has a directory, so the list cannot
+      # disagree with what the site serves. (Deriving it from render-pages.mjs
+      # CITIES would couple these steps to a file that is edited constantly.)
+      # Written to a file, not a step output: a step output would be pasted in
+      # by ${{ }} before bash sees it, and a multi-line value pasted into a
+      # `for c in ...` ends the statement at the first newline and then tries to
+      # RUN the second city as a command.
+      - name: Work out which cities are published
+        run: |
+          ls -d safety/*/ | xargs -n1 basename | grep -vxE 'assets|data' | sort > /tmp/cities.txt
+          echo "$(wc -l < /tmp/cities.txt | tr -d ' ') published cities:"
+          tr '\n' ' ' < /tmp/cities.txt; echo
+
       - name: Refresh gazetteers (boundaries rarely change; cheap)
         # build-gazetteer-la preserves committed density-snapped centroids, so
         # this does not undo snap-la-centroids. The snap step itself is not run
         # monthly — boundaries are stable and the snapped points are committed.
+        #
+        # Unknown city => the loop FAILS here, in the first minute, rather than
+        # letting a city silently go unrefreshed for months. If you are reading
+        # this because the job failed: give the new city a per-city builder, or
+        # add it to build-gazetteer-ukcity.mjs, or add it to SKIP with a reason.
         run: |
-          node tools/build-gazetteer-nyc.mjs
-          node tools/build-gazetteer-london.mjs
-          node tools/build-gazetteer-chicago.mjs
-          node tools/build-gazetteer-la.mjs
-          node tools/build-gazetteer-sf.mjs
-          node tools/build-gazetteer-seattle.mjs
-          node tools/build-gazetteer-toronto.mjs
-          node tools/build-gazetteer-dc.mjs
-          node tools/build-gazetteer-boston.mjs
-          node tools/build-gazetteer-philly.mjs
-          node tools/build-gazetteer-baltimore.mjs
-          node tools/build-gazetteer-sandiego.mjs
-          node tools/build-gazetteer-neworleans.mjs
-          node tools/build-gazetteer-detroit.mjs
-          node tools/build-gazetteer-minneapolis.mjs
-          node tools/build-gazetteer-cleveland.mjs
-          node tools/build-gazetteer-kansascity.mjs
-          # denver, longbeach and vancouver are DELIBERATELY not rebuilt here.
-          # They do have a builder — tools/build-gazetteer-calibration.mjs takes
-          # exactly these ids as args — but it emits calibration-grade sets, and
-          # re-running it would regress all three published ones:
+          # Committed gazetteers that must NOT be rebuilt. Their only builder is
+          # build-gazetteer-calibration.mjs, which emits calibration-grade sets:
           #   * It never emits `borough`. render-pages.mjs groups the city hub by
           #     that field and calls b.toLowerCase() on it, so a rebuilt gazetteer
           #     crashes the render step. The field was hand-backfilled into these
@@ -70,72 +80,48 @@ jobs:
           #   * longbeach would come back as all 123 boundary areas. The published
           #     set is the curated 96: 73f0dbe6 dropped 25 "Unassigned" marina,
           #     park and power-station fragments plus a bare "AOC7" code and a
-          #     duplicate, and the backend normaliser was refitted (241 → 326) for
+          #     duplicate, and the backend normaliser was refitted (241 -> 326) for
           #     the 96. Restoring the artifacts would re-add thin pages AND leave
           #     the city scored by a normaliser fitted to a different area set.
           # Worse, run with NO args it rebuilds every calibration city, which
           # includes baltimore — replacing its published 56 CSAs with 256 NSAs.
           # If one of these ever needs rebuilding, give it its own per-city
-          # builder (as baltimore has) and add that here; do not add the
-          # calibration script. Their data and basemaps still refresh below.
+          # builder (as baltimore has); do not reach for the calibration script.
+          SKIP="denver longbeach vancouver"
+          for c in $(cat /tmp/cities.txt); do
+            case " $SKIP " in *" $c "*) echo "skip $c (committed gazetteer)"; continue ;; esac
+            # The one city whose page slug and builder name differ: pages live
+            # at /safety/new-york/ but the builder is build-gazetteer-nyc.mjs.
+            case "$c" in new-york) b=nyc ;; *) b=$c ;; esac
+            if [ -f "tools/build-gazetteer-$b.mjs" ]; then
+              node "tools/build-gazetteer-$b.mjs"
+            elif grep -qE "^  $c: *\{" tools/build-gazetteer-ukcity.mjs; then
+              node tools/build-gazetteer-ukcity.mjs --city "$c"
+            else
+              echo "::error::$c is published but has no gazetteer builder and is not in SKIP"
+              exit 1
+            fi
+          done
 
-      # EVERY published city must appear in all three steps below. Nine cities
-      # (baltimore, denver, longbeach, sandiego, vancouver, neworleans, detroit,
-      # minneapolis, cleveland — 704 live pages) were missing here until
-      # 2026-09-09: they were added to the site but never to this workflow, so
-      # they re-rendered every month from whatever crime data happened to be
-      # committed and would never have refreshed again. Adding a city to
-      # render-pages.mjs is NOT enough; it has to be added here too.
       - name: Refresh safety data (paced against prod backend)
         env:
           SAFEROUTE_API_KEY: ${{ secrets.SAFEROUTE_API_KEY }}
           SAFEROUTE_BASE_URL: https://saferoute-backend-w5yf.onrender.com
         run: |
-          node tools/generate-data.mjs --force --city new-york
-          node tools/generate-data.mjs --force --city london
-          node tools/generate-data.mjs --force --city chicago
-          node tools/generate-data.mjs --force --city la
-          node tools/generate-data.mjs --force --city sf
-          node tools/generate-data.mjs --force --city seattle
-          node tools/generate-data.mjs --force --city toronto
-          node tools/generate-data.mjs --force --city dc
-          node tools/generate-data.mjs --force --city boston
-          node tools/generate-data.mjs --force --city philly
-          node tools/generate-data.mjs --force --city baltimore
-          node tools/generate-data.mjs --force --city denver
-          node tools/generate-data.mjs --force --city longbeach
-          node tools/generate-data.mjs --force --city sandiego
-          node tools/generate-data.mjs --force --city vancouver
-          node tools/generate-data.mjs --force --city neworleans
-          node tools/generate-data.mjs --force --city detroit
-          node tools/generate-data.mjs --force --city minneapolis
-          node tools/generate-data.mjs --force --city cleveland
-          node tools/generate-data.mjs --force --city kansascity
+          for c in $(cat /tmp/cities.txt); do
+            node tools/generate-data.mjs --force --city "$c"
+          done
 
       # Incremental — cached areas are skipped, so a normal run fetches nothing
       # and never touches Overpass. Only genuinely new areas cost a request.
+      # NYC has its own basemap source; every other city is OSM via the gazetteer.
       - name: Refresh basemaps
         run: |
           node tools/fetch-basemap.mjs
-          node tools/fetch-basemap-osm.mjs --city london
-          node tools/fetch-basemap-osm.mjs --city chicago
-          node tools/fetch-basemap-osm.mjs --city la
-          node tools/fetch-basemap-osm.mjs --city sf
-          node tools/fetch-basemap-osm.mjs --city seattle
-          node tools/fetch-basemap-osm.mjs --city toronto
-          node tools/fetch-basemap-osm.mjs --city dc
-          node tools/fetch-basemap-osm.mjs --city boston
-          node tools/fetch-basemap-osm.mjs --city philly
-          node tools/fetch-basemap-osm.mjs --city baltimore
-          node tools/fetch-basemap-osm.mjs --city denver
-          node tools/fetch-basemap-osm.mjs --city longbeach
-          node tools/fetch-basemap-osm.mjs --city sandiego
-          node tools/fetch-basemap-osm.mjs --city vancouver
-          node tools/fetch-basemap-osm.mjs --city neworleans
-          node tools/fetch-basemap-osm.mjs --city detroit
-          node tools/fetch-basemap-osm.mjs --city minneapolis
-          node tools/fetch-basemap-osm.mjs --city cleveland
-          node tools/fetch-basemap-osm.mjs --city kansascity
+          for c in $(cat /tmp/cities.txt); do
+            [ "$c" = "new-york" ] && continue
+            node tools/fetch-basemap-osm.mjs --city "$c"
+          done
 
       # The homepage states "Requires iOS X+" by hand, and it went stale the day
       # 1.2.3 dropped the floor from 26.4 to 16.4 — telling older iPhones they
@@ -144,6 +130,20 @@ jobs:
       # the run (an unreachable lookup is not a content error).
       - name: Keep App Store facts on the site true
         run: node tools/check-app-facts.mjs
+
+      # This job runs for ~2 hours, and main moves under it. During run #6
+      # two cities (Birmingham, Liverpool) landed mid-run and the bare `git
+      # push` at the end was rejected non-fast-forward, throwing away 118
+      # minutes of fetching. Rebasing here rather than at the end means the
+      # render below sees those cities' committed gazetteers and data-cache and
+      # includes them in the hub and sitemap, and it shrinks the window between
+      # rebase and push from two hours to seconds.
+      # --autostash because the refreshed data-cache is still uncommitted.
+      - name: Pick up anything that landed on main during the run
+        run: |
+          git config user.name "saferoute-bot"
+          git config user.email "minhaj@safe-route.app"
+          git pull --rebase --autostash origin main
 
       # The transparency dataset is MEASURED in the backend repo (the providers
       # live there) and pushed here by its monthly-data-audit job, which runs on
@@ -169,4 +169,14 @@ jobs:
           git add -A
           git diff --cached --quiet && { echo "no changes"; exit 0; }
           git commit -m "safety pages: monthly data refresh"
-          git push
+          # Retry rather than a bare push: the step above narrows the race but
+          # does not close it, and losing a two-hour run to a commit that landed
+          # in the last few seconds is the most expensive failure this job has.
+          for i in 1 2 3; do
+            if git push; then exit 0; fi
+            echo "push rejected (attempt $i) — rebasing onto main and retrying"
+            git pull --rebase origin main || { git rebase --abort || true; }
+            sleep 5
+          done
+          echo "::error::could not push after 3 attempts — main is moving faster than this job can rebase"
+          exit 1
