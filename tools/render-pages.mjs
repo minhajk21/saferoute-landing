@@ -424,6 +424,46 @@ const CITIES = {
       methodology: `Each street-level incident published by West Midlands Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Birmingham's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the 69 Birmingham City Council wards from the ONS ward set. <strong>The scale is calibrated to Birmingham and cannot be read against another city's number</strong> \u2014 a Birmingham 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year, and a typical Birmingham ward carries fewer incidents than a typical inner-London one \u2014 which means figures here move more from month to month, and small differences between neighbouring wards are not meaningful. Three ward centres (Sutton Vesey, Sutton Walmley &amp; Minworth, Edgbaston) sit in large parks or green belt and have been moved to the built-up part of the same ward, because a circle drawn over parkland reads as safe when it is really empty. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
     },
   },
+  'liverpool': {
+    name: 'Liverpool',
+    hubName: 'Liverpool',
+    rankPool: 'Liverpool wards',
+    // Liverpool City Council's 64 ONS wards. Single ranked table — Liverpool has
+    // no official sub-city grouping locals use, so inventing one would be the
+    // New Orleans call rather than the Detroit one.
+    //
+    // Merseyside got its own area normaliser (backend f5e47ff, 1520) because
+    // against the UK-wide constant Liverpool's median ward scored 81, with 39 of
+    // 64 reading "low" and none "high".
+    areaWord: 'ward', areaWordPlural: 'wards',
+    centre: 'centre', centreLabel: 'ward centre',
+    // Croxteth Country Park is a country park; Waterfront North is the north
+    // dock estate. Both are named for what they are and both carry almost no
+    // residents, so a quiet circle there is emptiness, not safety. Speke is
+    // deliberately NOT caveated — it contains the airport and a commerce park
+    // but is also a real residential estate of some 15,000 people, and telling
+    // them their neighbourhood is empty would be its own error.
+    sparseAreas: new Set(['croxteth-country-park', 'waterfront-north']),
+    sparseNote: 'Most of this ward is parkland or dock estate rather than housing, so a low count reflects how few people are here rather than how safe the streets are.',
+    reportedTo: 'reported to Merseyside Police',
+    dataName: 'Merseyside Police data',
+    medianLabel: 'Liverpool median',
+    forCity: 'for Liverpool',
+    acrossCity: 'across Liverpool',
+    faqCalc: (name) => `SafeRoute weights each police-recorded incident by severity (violence weighs more than shoplifting), sums the last published month within 1 km of the ${name} centre, and normalises against Liverpool rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Merseyside Police street-level crime via <a href="https://data.police.uk/">data.police.uk</a>${dateLine}, Open Government Licence v3.0. Ward boundaries: ONS Wards (December 2025) Boundaries UK, Office for National Statistics, OGL v3.0. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Liverpool Ward Safety Map & Rankings (${n} wards) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Liverpool ward? Safety index (0\u2013100) for all ${n} Liverpool wards from Merseyside Police data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Liverpool ward?',
+      lead: `SafeRoute scores every Liverpool ward 0\u2013100 from street-level incidents reported to Merseyside Police \u2014 severity-weighted, within 1 km of each ward's centre, normalised against Liverpool. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a ward \u2014 e.g. Anfield, Toxteth, Woolton\u2026',
+      rankHeading: (n) => `All ${n} Liverpool wards, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each ward's centre \u2014 they are informational, not a judgment of any community. Liverpool median index: <strong>${median}/100</strong>.`,
+      methodology: `Each street-level incident published by Merseyside Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Liverpool's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the 64 Liverpool City Council wards from the ONS ward set. <strong>The scale is calibrated to Liverpool and cannot be read against another city's number</strong> \u2014 a Liverpool 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year, and a typical Liverpool ward carries fewer incidents than a typical inner-London one \u2014 so figures here move more from month to month, and small differences between neighbouring wards are not meaningful. Liverpool sits on the Mersey and several waterfront wards have a 1&nbsp;km circle that is partly river or dock water; where a ward is mostly parkland or dock rather than housing its page says so, because an empty circle reads as a quiet street when it is really no street at all. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
+    },
+  },
   'toronto': {
     name: 'Toronto',
     hubName: 'Toronto',

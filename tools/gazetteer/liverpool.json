@@ -1,0 +1,458 @@
+{
+  "city": "Liverpool",
+  "citySlug": "liverpool",
+  "country": "GB",
+  "source": "ONS Wards (December 2025) Boundaries UK BSC — local authority \"Liverpool\", ONS population-weighted centroids",
+  "purpose": "Safety pages + calibration.",
+  "generatedAt": "2026-09-11",
+  "areas": [
+    {
+      "name": "Aigburth",
+      "slug": "aigburth",
+      "lat": 53.36718,
+      "lng": -2.929541,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Allerton",
+      "slug": "allerton",
+      "lat": 53.37557,
+      "lng": -2.900427,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Anfield",
+      "slug": "anfield",
+      "lat": 53.43372,
+      "lng": -2.954805,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Arundel",
+      "slug": "arundel",
+      "lat": 53.39356,
+      "lng": -2.942251,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Belle Vale",
+      "slug": "belle-vale",
+      "lat": 53.39033,
+      "lng": -2.849748,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Broadgreen",
+      "slug": "broadgreen",
+      "lat": 53.41331,
+      "lng": -2.902563,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Brownlow Hill",
+      "slug": "brownlow-hill",
+      "lat": 53.40749,
+      "lng": -2.970584,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Calderstones",
+      "slug": "calderstones",
+      "lat": 53.38375,
+      "lng": -2.896074,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Canning",
+      "slug": "canning",
+      "lat": 53.40152,
+      "lng": -2.964237,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Childwall",
+      "slug": "childwall",
+      "lat": 53.39766,
+      "lng": -2.887448,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Church",
+      "slug": "church",
+      "lat": 53.39321,
+      "lng": -2.909115,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "City Centre North",
+      "slug": "city-centre-north",
+      "lat": 53.40692,
+      "lng": -2.988713,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "City Centre South",
+      "slug": "city-centre-south",
+      "lat": 53.39959,
+      "lng": -2.979669,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Clubmoor East",
+      "slug": "clubmoor-east",
+      "lat": 53.43901,
+      "lng": -2.9318,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Clubmoor West",
+      "slug": "clubmoor-west",
+      "lat": 53.44236,
+      "lng": -2.944776,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "County",
+      "slug": "county",
+      "lat": 53.44306,
+      "lng": -2.964951,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Croxteth",
+      "slug": "croxteth",
+      "lat": 53.45407,
+      "lng": -2.90043,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Croxteth Country Park",
+      "slug": "croxteth-country-park",
+      "lat": 53.44806,
+      "lng": -2.88255,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Dingle",
+      "slug": "dingle",
+      "lat": 53.38387,
+      "lng": -2.968995,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Edge Hill",
+      "slug": "edge-hill",
+      "lat": 53.40302,
+      "lng": -2.947604,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Everton East",
+      "slug": "everton-east",
+      "lat": 53.42016,
+      "lng": -2.956337,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Everton North",
+      "slug": "everton-north",
+      "lat": 53.42582,
+      "lng": -2.963913,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Everton West",
+      "slug": "everton-west",
+      "lat": 53.41793,
+      "lng": -2.972281,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Fazakerley East",
+      "slug": "fazakerley-east",
+      "lat": 53.46488,
+      "lng": -2.911278,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Fazakerley North",
+      "slug": "fazakerley-north",
+      "lat": 53.46958,
+      "lng": -2.945681,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Fazakerley West",
+      "slug": "fazakerley-west",
+      "lat": 53.46004,
+      "lng": -2.937276,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Festival Gardens",
+      "slug": "festival-gardens",
+      "lat": 53.37601,
+      "lng": -2.961375,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Garston",
+      "slug": "garston",
+      "lat": 53.35039,
+      "lng": -2.888433,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Gateacre",
+      "slug": "gateacre",
+      "lat": 53.38927,
+      "lng": -2.871771,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Grassendale & Cressington",
+      "slug": "grassendale-and-cressington",
+      "lat": 53.36149,
+      "lng": -2.911715,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Greenbank Park",
+      "slug": "greenbank-park",
+      "lat": 53.38284,
+      "lng": -2.92904,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Kensington & Fairfield",
+      "slug": "kensington-and-fairfield",
+      "lat": 53.4156,
+      "lng": -2.942949,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Kirkdale East",
+      "slug": "kirkdale-east",
+      "lat": 53.43639,
+      "lng": -2.974208,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Kirkdale West",
+      "slug": "kirkdale-west",
+      "lat": 53.43481,
+      "lng": -2.984061,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Knotty Ash & Dovecot Park",
+      "slug": "knotty-ash-and-dovecot-park",
+      "lat": 53.41573,
+      "lng": -2.874328,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Mossley Hill",
+      "slug": "mossley-hill",
+      "lat": 53.37093,
+      "lng": -2.919177,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Much Woolton & Hunts Cross",
+      "slug": "much-woolton-and-hunts-cross",
+      "lat": 53.36721,
+      "lng": -2.867037,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Norris Green",
+      "slug": "norris-green",
+      "lat": 53.44439,
+      "lng": -2.920957,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Old Swan East",
+      "slug": "old-swan-east",
+      "lat": 53.4164,
+      "lng": -2.910843,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Old Swan West",
+      "slug": "old-swan-west",
+      "lat": 53.41181,
+      "lng": -2.921758,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Orrell Park",
+      "slug": "orrell-park",
+      "lat": 53.46379,
+      "lng": -2.966415,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Penny Lane",
+      "slug": "penny-lane",
+      "lat": 53.38415,
+      "lng": -2.915267,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Princes Park",
+      "slug": "princes-park",
+      "lat": 53.39363,
+      "lng": -2.955532,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Sandfield Park",
+      "slug": "sandfield-park",
+      "lat": 53.42445,
+      "lng": -2.907825,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Sefton Park",
+      "slug": "sefton-park",
+      "lat": 53.38127,
+      "lng": -2.943288,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Smithdown",
+      "slug": "smithdown",
+      "lat": 53.3979,
+      "lng": -2.932887,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Speke",
+      "slug": "speke",
+      "lat": 53.34034,
+      "lng": -2.849189,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Springwood",
+      "slug": "springwood",
+      "lat": 53.3649,
+      "lng": -2.885655,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "St Michaels",
+      "slug": "st-michaels",
+      "lat": 53.37598,
+      "lng": -2.9475,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Stoneycroft",
+      "slug": "stoneycroft",
+      "lat": 53.42248,
+      "lng": -2.924471,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Toxteth",
+      "slug": "toxteth",
+      "lat": 53.39122,
+      "lng": -2.96444,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Tuebrook Breckside Park",
+      "slug": "tuebrook-breckside-park",
+      "lat": 53.42688,
+      "lng": -2.944086,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Tuebrook Larkhill",
+      "slug": "tuebrook-larkhill",
+      "lat": 53.43038,
+      "lng": -2.929053,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Vauxhall",
+      "slug": "vauxhall",
+      "lat": 53.42088,
+      "lng": -2.982431,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Walton",
+      "slug": "walton",
+      "lat": 53.4557,
+      "lng": -2.955072,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Waterfront North",
+      "slug": "waterfront-north",
+      "lat": 53.4267,
+      "lng": -2.997494,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Waterfront South",
+      "slug": "waterfront-south",
+      "lat": 53.39863,
+      "lng": -2.990687,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Wavertree Garden Suburb",
+      "slug": "wavertree-garden-suburb",
+      "lat": 53.40216,
+      "lng": -2.905846,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Wavertree Village",
+      "slug": "wavertree-village",
+      "lat": 53.39774,
+      "lng": -2.923213,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "West Derby Deysbrook",
+      "slug": "west-derby-deysbrook",
+      "lat": 53.43188,
+      "lng": -2.891411,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "West Derby Leyfield",
+      "slug": "west-derby-leyfield",
+      "lat": 53.42444,
+      "lng": -2.890308,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "West Derby Muirhead",
+      "slug": "west-derby-muirhead",
+      "lat": 53.44088,
+      "lng": -2.903553,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Woolton Village",
+      "slug": "woolton-village",
+      "lat": 53.37926,
+      "lng": -2.877038,
+      "borough": "Liverpool"
+    },
+    {
+      "name": "Yew Tree",
+      "slug": "yew-tree",
+      "lat": 53.43173,
+      "lng": -2.877531,
+      "borough": "Liverpool"
+    }
+  ]
+}
