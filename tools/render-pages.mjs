@@ -176,7 +176,9 @@ const CITIES = {
     // centre; Lincoln Park, which is a golf course, Lands End and the VA campus,
     // has 5 of 145, with zero across its whole northern and western half
     // (ocean and cliff). Nothing to move to; the page has to say what it is.
-    sparseAreas: new Set(['presidio', 'golden-gate-park', 'lincoln-park']),
+    // McLaren Park added for consistency: SF's own builder already flags it
+    // PARK_LIKE alongside the other three, and it ranks 11/41 at 71/100.
+    sparseAreas: new Set(['presidio', 'golden-gate-park', 'lincoln-park', 'mclaren-park']),
     // "national parkland" was true of the Presidio alone. Golden Gate Park is a
     // city park and Lincoln Park is a municipal golf course, so a note shared
     // across the set has to say "parkland" — the Cleveland lesson again.
@@ -1118,6 +1120,20 @@ function makeProse(a, ctx) {
   // caveat attaches to specific documented cases and nothing else.
   const sparse = cfg.sparseAreas?.has(a.slug) ? ` ${cfg.sparseNote}` : '';
 
+  // A score built on a handful of reports is not wrong, but it is fragile, and
+  // the page states it in the same confident voice as a score built on two
+  // thousand. This says so — automatically, everywhere, with no per-city list to
+  // maintain, because it is a statement about the DATA and not about the place.
+  //
+  // It is deliberately separate from the sparseAreas caveat above. That one
+  // explains why land is empty (a park, a dock, an airport) and would be FALSE
+  // here: Long Beach's Island Village and San Diego's Black Mountain Ranch are
+  // ordinary residential communities that are simply very quiet. Telling their
+  // residents the area is "mostly industrial land" would be its own error.
+  const thin = !sparse && (a.totalIncidents ?? 0) > 0 && a.totalIncidents < 5
+    ? ` This score rests on just ${a.totalIncidents} recorded ${a.totalIncidents === 1 ? 'incident' : 'incidents'}, so it is far less settled than most and will move more as new data is published.`
+    : '';
+
   const cmp = Math.abs(diff) <= 3
     ? `right at the ${cfg.medianLabel} of ${median}`
     : `${Math.abs(diff)} points ${diff > 0 ? 'above' : 'below'} the ${cfg.medianLabel} of ${median}`;
@@ -1127,7 +1143,7 @@ function makeProse(a, ctx) {
   // actually judge, where the bare count plus an end date was not.
   const span = windowPhrase(windowDays);
   const period = span ? `over ${span} to ${monthName(a.crimeDate)}` : `(data through ${monthName(a.crimeDate)})`;
-  const lead = `${bandLead} Its SafeRoute safety index is <strong>${a.safetyScore} out of 100</strong> — ${cmp}, ranking ${ord(rank)} of ${count} ${cfg.rankPool} — based on ${fmt(a.totalIncidents)} incidents ${cfg.reportedTo} within 1 km of the ${cfg.areaWord} ${cfg.centre} ${period}.${sparse}`;
+  const lead = `${bandLead} Its SafeRoute safety index is <strong>${a.safetyScore} out of 100</strong> — ${cmp}, ranking ${ord(rank)} of ${count} ${cfg.rankPool} — based on ${fmt(a.totalIncidents)} incidents ${cfg.reportedTo} within 1 km of the ${cfg.areaWord} ${cfg.centre} ${period}.${sparse}${thin}`;
 
   let mix = '';
   if (top) {
@@ -1250,8 +1266,48 @@ function renderCity(citySlug) {
   if (!cfg || !existsSync(gazFile) || !existsSync(cacheDir)) return null;
 
   const gaz = JSON.parse(readFileSync(gazFile));
-  const areas = readdirSync(cacheDir).filter(f => f.endsWith('.json'))
+  const allAreas = readdirSync(cacheDir).filter(f => f.endsWith('.json'))
     .map(f => JSON.parse(readFileSync(join(cacheDir, f))));
+
+  // PUBLISH FLOOR — refuse to put a number on almost no data.
+  //
+  // A score is a claim, and these pages make it in a voice a reader will act on
+  // ("ranked 12th of 158", "elevated"). Below a certain amount of data there is
+  // nothing behind the claim. New Orleans's Viavant-Venetian Isles was published
+  // "elevated" from TWO incidents over a ONE-DAY window; Kansas City's Richards
+  // Gebaur from a single incident, also over one day. Those are not findings
+  // about those places, they are noise with a rank attached.
+  //
+  // The floor is deliberately about EVIDENCE, not about safety: an area is
+  // dropped when its window is too short or its count too small for any score
+  // to mean anything, whichever direction the number happens to point. It is the
+  // same call Lake Catherine and Longview got in their gazetteers, generalised
+  // so it catches the next one automatically instead of waiting for an audit.
+  // The floor is on the WINDOW, not on the count, and the distinction matters.
+  // A one-day window means there is no period to have measured anything over —
+  // no score computed from it can mean a thing in either direction. A low COUNT
+  // over a long window is different: it is a real measurement of a quiet or
+  // empty place, and the honest remedy there is the sparseAreas caveat, which
+  // says what the emptiness means. Dropping those would delete real pages —
+  // Port of Long Beach, Shoal Creek and Tijuana River Valley all carry caveats
+  // that explain themselves correctly.
+  const FLOOR_DAYS = 7;
+  const tooThin = allAreas.filter(a => a.windowDays != null && a.windowDays < FLOOR_DAYS);
+  const areas = allAreas.filter(a => !tooThin.includes(a));
+  if (tooThin.length) {
+    console.log(`  ${citySlug}: ${tooThin.length} area(s) below the ${FLOOR_DAYS}-day publish floor, not rendered — `
+      + tooThin.map(a => `${a.name} (${a.totalIncidents} incidents over ${a.windowDays}d)`).join('; '));
+  }
+  // A long window with almost nothing in it is legitimate, but only if the page
+  // SAYS so. Warn when such an area has no caveat — that is the Black Mountain
+  // Ranch case: 1 incident, 153 days, published at 99/100 with nothing to
+  // explain it.
+  const uncaveatedThin = areas.filter(a =>
+    (a.totalIncidents ?? 0) < 5 && !(cfg.sparseAreas?.has(a.slug)));
+  if (uncaveatedThin.length) {
+    console.log(`  ${citySlug}: WARNING — ${uncaveatedThin.length} area(s) under 5 incidents with NO caveat: `
+      + uncaveatedThin.map(a => `${a.name} (${a.totalIncidents}, score ${a.safetyScore})`).join('; '));
+  }
   if (!areas.length) return null;
   const noBasemap = [];
 

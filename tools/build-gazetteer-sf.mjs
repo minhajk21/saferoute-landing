@@ -43,6 +43,35 @@ const slugify = (s) => s
   .replace(/^-+|-+$/g, '')
   .toLowerCase();
 
+// Centroids that land on water or open ground rather than the housing the area
+// is named for, with the built-up point they move to. Asserted INSIDE the
+// polygon at build time.
+//
+// Lakeshore, found by the 2026-09 all-cities audit: its centroid sits in LAKE
+// MERCED. 101 incidents, 88/100, SF's 2nd-highest score, and NONE of its 101
+// cached incidents fall within 400 m of the centre. The polygon also contains
+// Parkmerced, Stonestown and SF State — a void plus a real neighbourhood, which
+// is the move case rather than the caveat case. The readers it misled are
+// students asking about Parkmerced at night.
+//
+// Parkmerced (398 incidents) is chosen over Stonestown (520) deliberately:
+// built form, not the highest count. Stonestown is a shopping centre.
+const CENTROID_OVERRIDE = new Map([
+  ['Lakeshore', { lat: 37.7210, lng: -122.4800 }],   // Parkmerced housing grid
+]);
+
+function pointInRing({ lat, lng }, ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i], [xj, yj] = ring[j];
+    if ((yi > lat) !== (yj > lat) && lng < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+const ringsOf = (g) => g?.type === 'Polygon' ? [g.coordinates[0]]
+  : g?.type === 'MultiPolygon' ? g.coordinates.map((p) => p[0]) : [];
+
 function centroidOf(geometry) {
   const polys = geometry.type === 'MultiPolygon' ? geometry.coordinates : [geometry.coordinates];
   let best = null, bestArea = -1;
@@ -70,11 +99,19 @@ const res = await fetch(SRC, { signal: AbortSignal.timeout(120_000) });
 if (!res.ok) throw new Error(`SF Analysis Neighborhoods fetch: HTTP ${res.status}`);
 const geo = await res.json();
 
+const moved = [];
 const areas = geo.features
   .filter(f => f.geometry && f.properties && f.properties.nhood)
   .map(f => {
-    const c = centroidOf(f.geometry);
+    let c = centroidOf(f.geometry);
     const name = String(f.properties.nhood).trim();
+    const ov = CENTROID_OVERRIDE.get(name);
+    if (ov) {
+      if (!ringsOf(f.geometry).some((r) => pointInRing(ov, r))) {
+        throw new Error(`centroid override for "${name}" is outside its own polygon — refusing to move a page onto a neighbouring area`);
+      }
+      c = ov; moved.push(name);
+    }
     const a = { name, slug: slugify(name), borough: 'San Francisco', lat: +c.lat.toFixed(6), lng: +c.lng.toFixed(6) };
     if (PARK_LIKE.has(name.toLowerCase())) a.parkLike = true;
     return a;
@@ -107,3 +144,4 @@ console.log(`gazetteer: ${areas.length} SF analysis neighborhoods → ${OUT}`);
 console.log('sample:', areas.slice(0, 6).map(a => a.name).join(' · '));
 console.log(`centroids outside the SFPD bbox: ${outside.length}${outside.length ? ' → ' + outside.map(a => a.name).join(', ') : ''}`);
 console.log(`park-like (low-signal) neighborhoods: ${areas.filter(a => a.parkLike).length} → ${areas.filter(a => a.parkLike).map(a => a.name).join(', ')}`);
+if (moved.length) console.log(`  centroid moved to the built-up core: ${moved.join(', ')}`);

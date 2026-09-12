@@ -3,7 +3,7 @@
  "citySlug": "sf",
  "country": "US",
  "source": "DataSF — Analysis Neighborhoods (41), via ArcGIS Online mirror",
- "generatedAt": "2026-09-02",
+ "generatedAt": "2026-09-12",
  "areas": [
   {
    "name": "Bayview Hunters Point",
@@ -192,14 +192,14 @@
    "name": "Lakeshore",
    "slug": "lakeshore",
    "borough": "San Francisco",
-   "lat": 37.720214,
-   "lng": -122.490365,
+   "lat": 37.721,
+   "lng": -122.48,
    "neighbors": [
     "oceanview-merced-ingleside",
-    "sunset-parkside",
     "west-of-twin-peaks",
     "outer-mission",
-    "inner-sunset"
+    "sunset-parkside",
+    "excelsior"
    ]
   },
   {
@@ -338,9 +338,9 @@
    "lng": -122.460927,
    "neighbors": [
     "outer-mission",
+    "lakeshore",
     "west-of-twin-peaks",
     "excelsior",
-    "lakeshore",
     "glen-park"
    ]
   },
@@ -494,8 +494,8 @@
    "neighbors": [
     "golden-gate-park",
     "inner-sunset",
-    "lakeshore",
     "west-of-twin-peaks",
+    "lakeshore",
     "outer-richmond"
    ]
   },
@@ -566,7 +566,7 @@
     "twin-peaks",
     "glen-park",
     "outer-mission",
-    "inner-sunset"
+    "lakeshore"
    ]
   },
   {
