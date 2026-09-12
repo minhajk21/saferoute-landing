@@ -4,7 +4,7 @@
   "country": "US",
   "source": "SANDAG / City of San Diego — Community Plan Areas",
   "purpose": "Safety pages + calibration. Community plan areas, not census tracts: see the header of this script for why.",
-  "generatedAt": "2026-09-11",
+  "generatedAt": "2026-09-12",
   "areas": [
     {
       "name": "Balboa Park",
@@ -126,28 +126,28 @@
       "borough": "San Diego"
     },
     {
-      "name": "Mid-City:city Heights",
+      "name": "Mid-City: City Heights",
       "slug": "mid-city-city-heights",
       "lat": 32.740164,
       "lng": -117.101272,
       "borough": "San Diego"
     },
     {
-      "name": "Mid-City:eastern Area",
+      "name": "Mid-City: Eastern Area",
       "slug": "mid-city-eastern-area",
       "lat": 32.742664,
       "lng": -117.069625,
       "borough": "San Diego"
     },
     {
-      "name": "Mid-City:kensington-Talmadge",
+      "name": "Mid-City: Kensington-Talmadge",
       "slug": "mid-city-kensington-talmadge",
       "lat": 32.764977,
       "lng": -117.09882,
       "borough": "San Diego"
     },
     {
-      "name": "Mid-City:normal Heights",
+      "name": "Mid-City: Normal Heights",
       "slug": "mid-city-normal-heights",
       "lat": 32.764795,
       "lng": -117.118573,

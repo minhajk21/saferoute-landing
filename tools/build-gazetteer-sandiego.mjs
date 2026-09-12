@@ -37,8 +37,14 @@ const SRC = 'https://geo.sandag.org/server/rest/directories/downloads/Community_
 // Names arrive SHOUTED ("NORTH PARK"); title-case them, but keep the short
 // forms people write as-is rather than inventing an expansion.
 const SMALL = new Set(['of', 'the', 'and', 'at', 'on', 'in']);
-const titleCase = (s) => s.toLowerCase().replace(/[^\s/-]+/g, (w, i) =>
-  (i > 0 && SMALL.has(w)) ? w : w.charAt(0).toUpperCase() + w.slice(1));
+// SANDAG names some communities "MID-CITY:CITY HEIGHTS". The word-splitter
+// treats ":" as part of the word, so the second half never got capitalised and
+// four pages published "Mid-City:city Heights" in the title, H1, meta
+// description and JSON-LD. Split on the colon too, and give it a space after —
+// "Mid-City: City Heights" is how the city writes it.
+const titleCase = (s) => s.toLowerCase().replace(/[^\s/:-]+/g, (w, i) =>
+  (i > 0 && SMALL.has(w)) ? w : w.charAt(0).toUpperCase() + w.slice(1))
+  .replace(/:\s*/g, ': ');
 
 const slugify = (s) => s.toLowerCase()
   .replace(/&/g, ' and ')

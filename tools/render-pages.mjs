@@ -1168,7 +1168,14 @@ function makeProse(a, ctx) {
   const faq = [
     {
       q: `Is ${a.name} safe at night?`,
-      a: night != null
+      // `night` is derived from the time-of-day mix, which several feeds do not
+      // actually carry — San Diego and Vancouver publish DATE ONLY. Those areas
+      // still produce a number, and it is 0, so 77 pages asserted "About 0% of
+      // severity-weighted incidents happen between 6 p.m. and 6 a.m." — a claim
+      // that is not merely wrong but reassuring in the exact way this project
+      // refuses to be, and it sat inside FAQPage acceptedAnswer, the field
+      // eligible for rich results. Gate it on the provider's own honesty flag.
+      a: (night != null && a.timeOfDayIsRealData !== false)
         ? `${bandWord[a.band]} overall (safety index ${a.safetyScore}/100). About ${Math.round((night + evening) * 100)}% of severity-weighted incidents in ${a.name} are ${cfg.recordedWord ?? 'reported'} between 6 p.m. and 6 a.m. ${a.band === 'low' ? (cfg.lowCrimeNote ?? `Reported crime is low ${cfg.forCity}, but stick to lit, busier streets late.`) : 'At night, prefer lit, busier streets — a block or two of detour often avoids the clusters on the map above.'}`
         : `${bandWord[a.band]} overall (safety index ${a.safetyScore}/100). ${a.band === 'low' ? `Reported crime is low ${cfg.forCity}, but stick to lit, busier streets late.` : 'At night, prefer lit, busier streets — a short detour often avoids the clusters on the map above.'}`,
     },
@@ -1405,8 +1412,8 @@ ${mapSVG(a, shape, bm, cfg)}
 
 ${cta(a.name)}
 
-<h2>Nearby areas</h2>
-<ul class="nearby">${nearbyRows}</ul>
+${nearbyRows ? `<h2>Nearby areas</h2>
+<ul class="nearby">${nearbyRows}</ul>` : ''}
 
 <h2>Common questions</h2>
 ${p.faq.map(f => `<details><summary>${esc(f.q)}</summary><p>${f.a}</p></details>`).join('\n')}
