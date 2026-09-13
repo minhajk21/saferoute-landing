@@ -54,6 +54,7 @@ const CITIES = {
     name: 'New York',
     hubName: 'New York City',
     rankPool: 'NYC neighborhoods',
+    districtHubs: true, districtWord: 'borough', districtWordPlural: 'boroughs',
     areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
     centre: 'center', centreLabel: 'neighborhood center',
     reportedTo: 'reported to the NYPD',
@@ -78,6 +79,7 @@ const CITIES = {
     name: 'London',
     hubName: 'Inner London',
     rankPool: 'Inner London areas',
+    districtHubs: true, districtWord: 'borough', districtWordPlural: 'boroughs',
     areaWord: 'neighbourhood', areaWordPlural: 'neighbourhoods',
     centre: 'centre', centreLabel: 'neighbourhood centre',
     reportedTo: 'reported to the police',
@@ -206,6 +208,7 @@ const CITIES = {
     name: 'Seattle',
     hubName: 'Seattle',
     rankPool: 'Seattle neighborhoods',
+    districtHubs: true, districtWord: 'district', districtWordPlural: 'districts',
     // Multi-district city (like NYC/London): 94 Neighborhood Map Atlas
     // neighborhoods grouped under 20 districts, so the hub ranks within each
     // district. No rankHeading → default borough-grouped tables.
@@ -299,6 +302,7 @@ const CITIES = {
     name: 'Minneapolis',
     hubName: 'Minneapolis',
     rankPool: 'Minneapolis neighborhoods',
+    districtHubs: true, districtWord: 'community', districtWordPlural: 'communities',
     // Multi-district city, and both tiers are the city's own: 87 official
     // neighborhoods (Minneapolis_Neighborhoods) grouped under the official 11
     // communities (Minneapolis_Communities). The layers ship separately with no
@@ -367,6 +371,7 @@ const CITIES = {
     name: 'Kansas City',
     hubName: 'Kansas City',
     rankPool: 'Kansas City neighborhoods',
+    districtHubs: true, districtWord: 'district', districtWordPlural: 'districts',
     // The city's own 246 neighborhood boundaries, grouped by the city's own 18
     // Area Plans — both from the same KCMO ArcGIS org, so the second tier is
     // real planning geography rather than one invented here. Two areas are
@@ -549,6 +554,7 @@ const CITIES = {
     name: 'Toronto',
     hubName: 'Toronto',
     rankPool: 'Toronto neighbourhoods',
+    districtHubs: true, districtWord: 'district', districtWordPlural: 'districts',
     // First Canadian SEO city. Boundaries are the City of Toronto's 158 official
     // neighbourhoods, grouped under the six former municipalities (Old Toronto,
     // North York, Scarborough, Etobicoke, East York, York) — a multi-district
@@ -974,6 +980,49 @@ const catName = c => CAT_NAMES[c] || c.replace(/-/g, ' ').replace(/^./, ch => ch
 const bandWord = { low: 'Low risk', moderate: 'Moderate', elevated: 'Elevated', high: 'High risk' };
 const bandColor = { low: '#2E8B40', moderate: '#B0703C', elevated: '#9C5220', high: '#BC3B2E' };
 
+// ── district hubs ───────────────────────────────────────────────────────────
+// A hub page earns roughly 142× what an area page earns. Over the first
+// quarter the 22 city hubs plus the homepage averaged 34.8 clicks each; the
+// 2,294 area pages averaged 0.24. Hubs answer the query people actually type
+// ("is Brooklyn safe", "safest neighborhoods in Lambeth") while an area page
+// answers a long-tail one that mostly nobody types. District pages sit between
+// the two tiers and are the cheapest remaining lever: no new data, no new
+// feed, purely a regrouping of what is already fetched.
+//
+// They also repair the site's weakest internal link structure. Only ten of the
+// 22 cities ever got a populated `neighbors` list, so on the other twelve an
+// area page is a dead end — one link up to a hub listing hundreds of rows and
+// nothing lateral. A district page gives every area in it a short, relevant
+// sibling list and a second parent, which is what the crawler follows.
+//
+// Built ONLY where the grouping tier carries real, searchable place names.
+// DC's "Ward 1–8", Detroit's "District 1–7" and Philadelphia's planning labels
+// ("Central", "Lower Far Northeast") are administrative: nobody searches them,
+// so a page named after one has no query to rank for. Those cities keep the
+// city hub and their area pages, and that is the right outcome, not a gap.
+const MIN_DISTRICT_AREAS = 3;
+
+// Same rule the gazetteer builders use, so a district slug is derived the same
+// way an area slug is and the two can never drift apart.
+const slugify = (s) => s
+  .normalize('NFD').replace(/[̀-ͯ]/g, '')
+  .replace(/['’.]/g, '')
+  .replace(/\s*\/\s*/g, '-')
+  .replace(/[^A-Za-z0-9]+/g, '-')
+  .replace(/^-+|-+$/g, '')
+  .toLowerCase();
+
+// "Lambeth, London" reads correctly; "Northeast, Minneapolis" does not, and
+// "Old Toronto, Toronto" is worse. Compass and generic labels take the city as
+// an adjective the way people actually say them, and a district whose name
+// already contains the city keeps it.
+const DISTRICT_ADJACENT = new Set(['Downtown', 'North', 'South', 'East', 'West',
+  'Central', 'Northeast', 'Northwest', 'Southeast', 'Southwest', 'North Central']);
+const districtDisplay = (name, cfg) =>
+  name.toLowerCase().includes(cfg.name.toLowerCase()) ? name
+    : DISTRICT_ADJACENT.has(name) ? `${name} ${cfg.name}`
+    : `${name}, ${cfg.name}`;
+
 // ── SVG: incident dot map over a build-time vector basemap ───────────────────
 function mapShape(a) {
   const cosLat = Math.cos(a.lat * Math.PI / 180);
@@ -1335,6 +1384,33 @@ function renderCity(citySlug) {
   const windowDays = windows.length ? windows[Math.floor(windows.length / 2)] : null;
   const ctx = { cfg, gazBySlug, bySlug, rankOf, median, count: areas.length, windowDays };
 
+  // Group into districts once, up front: the area pages need it for their
+  // breadcrumb, the city hub needs it to link its section headings, and the
+  // district pages themselves are rendered from it at the end. A district with
+  // fewer than MIN_DISTRICT_AREAS areas is skipped — the ranked table it exists
+  // to show would be two rows, and it would compete with its own children for
+  // the same query. Those areas keep their city-hub section; they just do not
+  // get a page of their own.
+  const districts = !cfg.districtHubs ? [] : (() => {
+    const by = new Map();
+    for (const a of ranked) {
+      if (!a.borough) continue;
+      if (!by.has(a.borough)) by.set(a.borough, []);
+      by.get(a.borough).push(a);
+    }
+    const skipped = [...by].filter(([, l]) => l.length < MIN_DISTRICT_AREAS).map(([n]) => n);
+    if (skipped.length) console.log(`  ${citySlug}: ${skipped.length} district(s) below ${MIN_DISTRICT_AREAS} areas, no hub — ${skipped.join(', ')}`);
+    return [...by]
+      .filter(([, l]) => l.length >= MIN_DISTRICT_AREAS)
+      .map(([name, list]) => {
+        const s = list.map(a => a.safetyScore).sort((x, y) => x - y);
+        return { name, slug: slugify(name), areas: list, median: s[Math.floor(s.length / 2)] };
+      });
+  })();
+  const districtOf = new Map();
+  for (const d of districts) for (const a of d.areas) districtOf.set(a.slug, d);
+  const districtHref = d => `/safety/${citySlug}/district/${d.slug}/`;
+
   for (const a of areas) {
     const p = makeProse(a, ctx);
     const shape = mapShape(a);
@@ -1352,11 +1428,16 @@ function renderCity(citySlug) {
     const url = `${SITE}/safety/${citySlug}/${a.slug}/`;
     const title = `Is ${a.name} Safe? Crime Map & Safety Index — SafeRoute`;
     const desc = `${a.name} safety index: ${a.safetyScore}/100 (${bandWord[a.band].toLowerCase()}) — ${fmt(a.totalIncidents)} ${cfg.incidentNoun ?? 'reported incidents'} within 1 km (through ${monthName(a.crimeDate)}). Crime map, ${cfg.whatReported ?? "what's reported"}, and how it compares ${cfg.acrossCity}.`;
+    // The district, where one has a page, is a real level of the hierarchy and
+    // belongs in both the visible crumb trail and the structured one — it is
+    // the second parent that makes an area page reachable laterally.
+    const dist = districtOf.get(a.slug);
     const jsonld = [
       { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Safety', item: `${SITE}/safety/` },
         { '@type': 'ListItem', position: 2, name: cfg.name, item: `${SITE}/safety/${citySlug}/` },
-        { '@type': 'ListItem', position: 3, name: a.name, item: url }] },
+        ...(dist ? [{ '@type': 'ListItem', position: 3, name: dist.name, item: `${SITE}${districtHref(dist)}` }] : []),
+        { '@type': 'ListItem', position: dist ? 4 : 3, name: a.name, item: url }] },
       { '@context': 'https://schema.org', '@type': 'FAQPage',
         mainEntity: p.faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
     ];
@@ -1377,7 +1458,7 @@ function renderCity(citySlug) {
 <p style="font-size:14px;color:var(--ink-3);margin-top:8px">Severity-weighted share of ${cfg.incidentNoun ?? 'reported incidents'} by time of day, from ${cfg.todTimestamps ?? (cfg.dataName === 'NYPD data' ? 'NYPD incident timestamps' : 'police incident timestamps')}.</p>
 </section>` : '';
 
-    const html = `${head(title, desc, url, jsonld)}${chrome(`<a href="/safety/">Safety</a> › <a href="/safety/${citySlug}/">${cfg.name}</a> › ${esc(a.name)}`)}
+    const html = `${head(title, desc, url, jsonld)}${chrome(`<a href="/safety/">Safety</a> › <a href="/safety/${citySlug}/">${cfg.name}</a>${dist ? ` › <a href="${districtHref(dist)}">${esc(dist.name)}</a>` : ''} › ${esc(a.name)}`)}
 <p class="eyebrow">Safety index · ${a.borough === cfg.name ? '' : esc(a.borough) + ', '}${cfg.name} · data through ${monthName(a.crimeDate)}</p>
 <h1>Is ${esc(a.name)} safe?</h1>
 <p class="lead">${p.lead}</p>
@@ -1437,9 +1518,15 @@ ${footer(cfg, a, citySlug, windowDays)}`;
       // Cities with no sub-city tier (Chicago: 77 community areas, one pool)
       // group into a single table — label it usefully instead of repeating the
       // city name under the h1.
-      const heading = boroughs.length === 1 && cfg.hub.rankHeading ? cfg.hub.rankHeading(areas.length) : esc(b);
+      const dh = districts.find(d => d.name === b);
+      const heading = boroughs.length === 1 && cfg.hub.rankHeading ? cfg.hub.rankHeading(areas.length)
+        : dh ? `<a href="${districtHref(dh)}">${esc(b)}</a>` : esc(b);
+      // Descriptive anchor text, not a bare "more" — the link is the crawler's
+      // only route down to the district page and the words in it are the query
+      // that page is trying to answer.
+      const dLink = dh ? `\n<p style="margin:-10px 0 26px;font-size:15px"><a href="${districtHref(dh)}">How safe is ${esc(districtDisplay(b, cfg))}? Median ${dh.median}/100 across ${dh.areas.length} ${cfg.areaWordPlural} →</a></p>` : '';
       return `<h2 id="${b.toLowerCase().replace(/\s+/g, '-')}">${heading}</h2>
-<table class="rank"><thead><tr><th>${cfg.areaWord.replace(/^./, c => c.toUpperCase())} (safest first)</th><th style="text-align:right">Index</th><th>Band</th><th style="text-align:right">Incidents</th></tr></thead><tbody>${rows}</tbody></table>`;
+<table class="rank"><thead><tr><th>${cfg.areaWord.replace(/^./, c => c.toUpperCase())} (safest first)</th><th style="text-align:right">Index</th><th>Band</th><th style="text-align:right">Incidents</th></tr></thead><tbody>${rows}</tbody></table>${dLink}`;
     }).join('\n');
 
     const idx = areas.map(a => ({ s: a.slug, n: a.name, b: a.borough, v: a.safetyScore, band: a.band }));
@@ -1510,7 +1597,104 @@ inp.addEventListener('input',()=>{
     writeFileSync(join(ROOT, 'safety', citySlug, 'index.html'), html);
   }
 
-  return { citySlug, cfg, count: areas.length, median, ranked, sample: areas[0], noBasemap, windowDays };
+  // ── district hubs ──
+  // Path segment is /district/ on every city even where the local word is
+  // "borough" or "community". Four cities have a name that is BOTH a district
+  // and an area inside it (Seattle's Ballard, Minneapolis's Longfellow), so a
+  // bare /safety/{city}/{slug}/ would collide and one page would silently
+  // overwrite the other. The visible copy uses the local word; only the URL is
+  // uniform, and a path segment is not something a reader searches for.
+  for (const d of districts) {
+    const display = districtDisplay(d.name, cfg);
+    const url = `${SITE}${districtHref(d)}`;
+    const date = monthName([...d.areas].map(a => a.crimeDate).filter(Boolean).sort().pop() || areas[0]?.crimeDate);
+    const list = d.areas;                    // inherited from `ranked`: safest first
+    const safest = list[0], worst = list[list.length - 1];
+    const bands = { low: 0, moderate: 0, elevated: 0, high: 0 };
+    for (const a of list) bands[a.band]++;
+    const incidents = list.reduce((s, a) => s + (a.totalIncidents || 0), 0);
+    const noun = cfg.incidentNoun ?? 'reported incidents';
+    const rate = n => n === 1 ? 'rates' : 'rate';
+
+    // Higher is safer, so say which way the comparison points rather than
+    // leaving a reader to work out what "above the median" means on an index
+    // they have never seen before. The 3-point dead band stops a one-point
+    // difference being narrated as a finding.
+    const cmp = d.median >= median + 3
+        ? `<strong>${d.median}/100</strong> — above the ${cfg.medianLabel} of ${median}, so a typical ${cfg.areaWord} here reads safer than a typical one ${cfg.acrossCity}`
+      : d.median <= median - 3
+        ? `<strong>${d.median}/100</strong> — below the ${cfg.medianLabel} of ${median}, so more is reported around a typical ${cfg.areaWord} here than ${cfg.acrossCity}`
+        : `<strong>${d.median}/100</strong> — close to the ${cfg.medianLabel} of ${median}`;
+
+    const rows = list.map((a, i) =>
+      `<tr><td><span class="rk">${i + 1}</span> <a href="/safety/${citySlug}/${a.slug}/">${esc(a.name)}</a></td><td class="n" style="color:${bandColor[a.band]}">${a.safetyScore}/100</td><td><span class="band ${a.band}">${bandWord[a.band]}</span></td><td class="n">${fmt(a.totalIncidents)}</td></tr>`).join('');
+
+    // Every district links to every other one. This is the lateral structure
+    // the site has never had: 12 cities have no `neighbors` data at all, so
+    // before this their area pages had exactly one outbound internal link.
+    const peers = [...districts].sort((x, y) => y.median - x.median).map(x =>
+      x.slug === d.slug
+        ? `<tr class="self"><td><strong>${esc(x.name)}</strong> (this page)</td><td class="n"><strong>${x.median}/100</strong></td><td class="n">${x.areas.length}</td></tr>`
+        : `<tr><td><a href="${districtHref(x)}">${esc(x.name)}</a></td><td class="n">${x.median}/100</td><td class="n">${x.areas.length}</td></tr>`).join('');
+
+    const faq = [
+      { q: `What is the safest ${cfg.areaWord} in ${display}?`,
+        a: `${safest.name} has the highest SafeRoute safety index in ${display}, at ${safest.safetyScore}/100 (${bandWord[safest.band].toLowerCase()}), from ${fmt(safest.totalIncidents)} ${noun} within 1 km of its ${cfg.centre}.${list.length > 2 ? ` ${list[1].name} (${list[1].safetyScore}/100) and ${list[2].name} (${list[2].safetyScore}/100) follow.` : ''}` },
+      { q: `Which ${cfg.areaWord} in ${display} has the most reported crime?`,
+        a: `${worst.name} has the lowest index in ${display}, at ${worst.safetyScore}/100, with ${fmt(worst.totalIncidents)} ${noun} within 1 km of its ${cfg.centre}. A low score means more is reported around that ${cfg.centre}, which busy commercial and transport areas produce simply by having more people in them — it is not a measure of how dangerous a resident's street is.` },
+      { q: `Is ${display} safe?`,
+        a: `Across its ${list.length} ${cfg.areaWordPlural} the median SafeRoute safety index is ${d.median}/100, against ${median} ${cfg.acrossCity}. ${bands.low} ${rate(bands.low)} low risk, ${bands.moderate} moderate, ${bands.elevated} elevated and ${bands.high} high risk. These describe reported crime only and vary widely within the ${cfg.districtWord ?? 'district'} — check the individual ${cfg.areaWord} rather than reading one number for the whole of it.` },
+      // faqCalc is written for a single area scored from a single centre, so it
+      // is asked about the AREA word here, never about the district: there is
+      // no measurement taken at a district's centre, and saying there is would
+      // be a straightforward factual error about our own method.
+      { q: `How is the SafeRoute safety index calculated?`,
+        a: `${cfg.faqCalc(cfg.areaWord)} The figure shown for ${display} is the median of its ${list.length} ${cfg.areaWordPlural} — the ${cfg.districtWord ?? 'district'} is not measured separately.` },
+    ];
+
+    const jsonld = [
+      { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Safety', item: `${SITE}/safety/` },
+        { '@type': 'ListItem', position: 2, name: cfg.name, item: `${SITE}/safety/${citySlug}/` },
+        { '@type': 'ListItem', position: 3, name: d.name, item: url }] },
+      { '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+    ];
+
+    const dTitle = `Is ${display} Safe? Safest ${cfg.areaWordPlural.replace(/^./, c => c.toUpperCase())} Ranked — SafeRoute`;
+    const dDesc = `Safety index (0–100) for all ${list.length} ${cfg.areaWordPlural} in ${display}, from ${cfg.dataName} through ${date}. Median ${d.median}/100 against ${median} ${cfg.acrossCity} — ranked safest first.`;
+
+    const dHtml = `${head(dTitle, dDesc, url, jsonld)}${chrome(`<a href="/safety/">Safety</a> › <a href="/safety/${citySlug}/">${cfg.name}</a> › ${esc(d.name)}`)}
+<p class="eyebrow">${(cfg.districtWord ?? 'district').replace(/^./, c => c.toUpperCase())} safety · ${cfg.hubName} · data through ${date}</p>
+<h1>How safe is ${esc(display)}?</h1>
+<p class="lead">${esc(display)} covers ${list.length} ${cfg.areaWordPlural} in SafeRoute's ${esc(cfg.hubName)} index. Its median safety index is ${cmp}. ${esc(safest.name)} scores highest at ${safest.safetyScore}/100; ${esc(worst.name)} lowest at ${worst.safetyScore}/100.</p>
+
+<div class="citychips"><span>${list.length} ${cfg.areaWordPlural}</span><span>median ${d.median}/100</span><span>${fmt(incidents)} ${noun}</span>${windowPhrase(windowDays) ? `<span>covers ${windowPhrase(windowDays).replace(/^the month$/, '1 month').replace(/^the /, '')}</span>` : ''}<span><a href="/safety/${citySlug}/">all of ${esc(cfg.name)}</a></span></div>
+
+<p class="notice">These figures describe <strong>reported</strong> crime around each ${cfg.areaWord}'s ${cfg.centre} — they are informational, not a judgment of any community. ${bands.low} of ${list.length} ${cfg.areaWordPlural} here ${rate(bands.low)} low risk, ${bands.moderate} moderate, ${bands.elevated} elevated and ${bands.high} high risk.</p>
+
+<h2>Every ${cfg.areaWord} in ${esc(d.name)}, safest first</h2>
+<table class="rank"><thead><tr><th>${cfg.areaWord.replace(/^./, c => c.toUpperCase())}</th><th style="text-align:right">Index</th><th>Band</th><th style="text-align:right">Incidents</th></tr></thead><tbody>${rows}</tbody></table>
+
+${cta(display)}
+
+<h2>How ${esc(d.name)} compares ${cfg.acrossCity}</h2>
+<table class="rank"><thead><tr><th>${(cfg.districtWordPlural ?? 'districts').replace(/^./, c => c.toUpperCase())} (safest first)</th><th style="text-align:right">Median index</th><th style="text-align:right">${cfg.areaWordPlural.replace(/^./, c => c.toUpperCase())}</th></tr></thead><tbody>${peers}</tbody></table>
+
+<h2>Common questions</h2>
+${faq.map(f => `<details><summary>${esc(f.q)}</summary><p>${f.a}</p></details>`).join('\n')}
+
+<h2>Methodology</h2>
+<p style="font-size:15.5px;color:var(--ink-2)">${cfg.hub.methodology}</p>
+<p style="font-size:15.5px;color:var(--ink-2)">The index compares ${cfg.areaWordPlural} <strong>within ${esc(cfg.hubName)}</strong>. It is not comparable between cities: each police force publishes a different set of offences over a different period — ${esc(cfg.name)}'s figures cannot be read against another city's on the same 0–100 scale.</p>
+${footer(cfg, list[0], citySlug, windowDays)}`;
+
+    const dDir = join(ROOT, 'safety', citySlug, 'district', d.slug);
+    mkdirSync(dDir, { recursive: true });
+    writeFileSync(join(dDir, 'index.html'), dHtml);
+  }
+
+  return { citySlug, cfg, count: areas.length, median, ranked, sample: areas[0], noBasemap, windowDays, districts };
 }
 
 // ── render all cities, then root + sitemap + robots ──────────────────────────
@@ -1585,6 +1769,11 @@ ${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug, rendered[0].
       : []),
     ...rendered.flatMap(r => [
       { loc: `${SITE}/safety/${r.citySlug}/`, pri: '0.9', mod: lastmodOf(cityDate(r)) },
+      // Districts sit between the city hub and the area pages in priority
+      // because that is where they sit in value: they answer a query with real
+      // volume ("is Brooklyn safe") that no area page can.
+      ...(r.districts || []).map(d => ({ loc: `${SITE}/safety/${r.citySlug}/district/${d.slug}/`, pri: '0.8',
+        mod: lastmodOf(newest(d.areas.map(a => a.crimeDate).filter(Boolean)) || cityDate(r)) })),
       ...r.ranked.map(a => ({ loc: `${SITE}/safety/${r.citySlug}/${a.slug}/`, pri: '0.7', mod: lastmodOf(a.crimeDate) })),
     ]),
   ];
