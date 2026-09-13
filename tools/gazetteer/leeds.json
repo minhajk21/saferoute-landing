@@ -1,0 +1,241 @@
+{
+  "city": "Leeds",
+  "citySlug": "leeds",
+  "country": "GB",
+  "source": "ONS Wards (December 2025) Boundaries UK BSC — local authority \"Leeds\", ONS population-weighted centroids",
+  "purpose": "Safety pages + calibration.",
+  "generatedAt": "2026-09-13",
+  "areas": [
+    {
+      "name": "Adel & Wharfedale",
+      "slug": "adel-and-wharfedale",
+      "lat": 53.88091,
+      "lng": -1.609435,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Alwoodley",
+      "slug": "alwoodley",
+      "lat": 53.853,
+      "lng": -1.542,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Ardsley & Robin Hood",
+      "slug": "ardsley-and-robin-hood",
+      "lat": 53.72509,
+      "lng": -1.544557,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Armley",
+      "slug": "armley",
+      "lat": 53.80183,
+      "lng": -1.600845,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Beeston & Holbeck",
+      "slug": "beeston-and-holbeck",
+      "lat": 53.77473,
+      "lng": -1.566978,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Bramley & Stanningley",
+      "slug": "bramley-and-stanningley",
+      "lat": 53.81702,
+      "lng": -1.635986,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Burmantofts & Richmond Hill",
+      "slug": "burmantofts-and-richmond-hill",
+      "lat": 53.79197,
+      "lng": -1.501694,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Calverley & Farsley",
+      "slug": "calverley-and-farsley",
+      "lat": 53.818,
+      "lng": -1.672,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Chapel Allerton",
+      "slug": "chapel-allerton",
+      "lat": 53.82197,
+      "lng": -1.540881,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Cross Gates & Whinmoor",
+      "slug": "cross-gates-and-whinmoor",
+      "lat": 53.813,
+      "lng": -1.439056,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Farnley & Wortley",
+      "slug": "farnley-and-wortley",
+      "lat": 53.78369,
+      "lng": -1.610458,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Garforth & Swillington",
+      "slug": "garforth-and-swillington",
+      "lat": 53.77047,
+      "lng": -1.413663,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Gipton & Harehills",
+      "slug": "gipton-and-harehills",
+      "lat": 53.81142,
+      "lng": -1.503833,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Guiseley & Rawdon",
+      "slug": "guiseley-and-rawdon",
+      "lat": 53.8755,
+      "lng": -1.708,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Harewood",
+      "slug": "harewood",
+      "lat": 53.911,
+      "lng": -1.421,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Headingley & Hyde Park",
+      "slug": "headingley-and-hyde-park",
+      "lat": 53.81534,
+      "lng": -1.567274,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Horsforth",
+      "slug": "horsforth",
+      "lat": 53.837,
+      "lng": -1.64,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Hunslet & Riverside",
+      "slug": "hunslet-and-riverside",
+      "lat": 53.77625,
+      "lng": -1.530818,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Killingbeck & Seacroft",
+      "slug": "killingbeck-and-seacroft",
+      "lat": 53.8193,
+      "lng": -1.473635,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Kippax & Methley",
+      "slug": "kippax-and-methley",
+      "lat": 53.767,
+      "lng": -1.37,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Kirkstall",
+      "slug": "kirkstall",
+      "lat": 53.8257,
+      "lng": -1.604356,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Little London & Woodhouse",
+      "slug": "little-london-and-woodhouse",
+      "lat": 53.80513,
+      "lng": -1.552757,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Middleton Park",
+      "slug": "middleton-park",
+      "lat": 53.75536,
+      "lng": -1.542258,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Moortown",
+      "slug": "moortown",
+      "lat": 53.83841,
+      "lng": -1.552418,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Morley North",
+      "slug": "morley-north",
+      "lat": 53.75804,
+      "lng": -1.624498,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Morley South",
+      "slug": "morley-south",
+      "lat": 53.7338,
+      "lng": -1.604977,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Otley & Yeadon",
+      "slug": "otley-and-yeadon",
+      "lat": 53.9048,
+      "lng": -1.693,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Pudsey",
+      "slug": "pudsey",
+      "lat": 53.79309,
+      "lng": -1.67475,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Rothwell",
+      "slug": "rothwell",
+      "lat": 53.7462,
+      "lng": -1.456503,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Roundhay",
+      "slug": "roundhay",
+      "lat": 53.83348,
+      "lng": -1.503726,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Temple Newsam",
+      "slug": "temple-newsam",
+      "lat": 53.78952,
+      "lng": -1.463336,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Weetwood",
+      "slug": "weetwood",
+      "lat": 53.83368,
+      "lng": -1.595453,
+      "borough": "Leeds"
+    },
+    {
+      "name": "Wetherby",
+      "slug": "wetherby",
+      "lat": 53.90071,
+      "lng": -1.352823,
+      "borough": "Leeds"
+    }
+  ]
+}

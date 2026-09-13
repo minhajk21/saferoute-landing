@@ -55,6 +55,48 @@ const CENTROID_OVERRIDE = {
     // 94 incidents, and where the ward's residents actually are.
     'Avonmouth and Lawrence Weston': { lat: 51.5030, lng: -2.6560 },
   },
+  leeds: {
+    // Leeds's LAD is 552 km2 and its outer wards are mostly countryside, so the
+    // ONS geometric centroid lands in a field far more often than in any other
+    // UK city built so far. Ring-probed at ~1500 m (these wards are large:
+    // median centroid spacing 2456 m vs DC's ~700 m); every move below is a
+    // point the probe showed the centroid was missing, asserted inside its own
+    // ward polygon, and chosen for BUILT FORM and the largest named settlement
+    // -- never for the highest count, which is how you accidentally publish a
+    // neighbouring ward's crime under this ward's name.
+    //
+    //   Kippax & Methley   0 incidents in farmland east of Kippax -> 55 in Kippax
+    //   Otley & Yeadon     3 on the Chevin, the wooded ridge BETWEEN the two
+    //                      towns -> 84 in Otley (the larger town, ~14k, and
+    //                      first-named; Yeadon read 116 but is half the size)
+    //   Alwoodley          4 in the golf courses and green belt -> 73 in the
+    //                      Alwoodley/Moor Allerton housing. The 104-incident
+    //                      point sits on the Moortown boundary and would import
+    //                      Moortown's crime, which is the Edgbaston lesson.
+    //   Guiseley & Rawdon 10 -> 62 in Guiseley centre (~21k, first-named). The
+    //                      125-incident point is Yeadon, which belongs to the
+    //                      OTHER ward entirely.
+    //   Harewood           0 at the centroid AND 0 at Harewood village itself.
+    //                      Moved to Collingham, the ward's largest village, for
+    //                      built form -- it is still only 8, and no point
+    //                      anywhere in this ward exceeds that. Rural North
+    //                      Leeds genuinely has almost no recorded crime, so it
+    //                      also carries the sparse caveat in render-pages.mjs.
+    'Kippax & Methley': { lat: 53.7670, lng: -1.3700 },   // Kippax village
+    'Otley & Yeadon': { lat: 53.9048, lng: -1.6930 },     // Otley town centre
+    'Alwoodley': { lat: 53.8530, lng: -1.5420 },          // Alwoodley / Moor Allerton
+    'Guiseley & Rawdon': { lat: 53.8755, lng: -1.7080 },  // Guiseley centre
+    'Harewood': { lat: 53.9110, lng: -1.4210 },           // Collingham
+    //   Horsforth          11 west of the town in the Horsforth Woodside green
+    //                      gap -> 85 on Town Street, the actual town centre of
+    //                      a 20k suburb. 11 was never plausible for Horsforth.
+    //   Calverley & Farsley 15 in the fields between the two villages -> 50 on
+    //                      Farsley Town Street. Deliberately NOT the 109-count
+    //                      point to the west: that is over the boundary in
+    //                      BRADFORD, a different local authority altogether.
+    'Horsforth': { lat: 53.8370, lng: -1.6400 },          // Horsforth Town Street
+    'Calverley & Farsley': { lat: 53.8180, lng: -1.6720 },// Farsley Town Street
+  },
   birmingham: {
     'Sutton Vesey': { lat: 52.5560, lng: -1.8360 },              // Boldmere
     'Sutton Walmley & Minworth': { lat: 52.5460, lng: -1.7900 }, // Walmley village
@@ -79,6 +121,7 @@ const CITIES = {
   liverpool:  { lad: 'Liverpool',  city: 'Liverpool' },
   bristol:    { lad: 'Bristol, City of', city: 'Bristol' },
   cardiff:    { lad: 'Cardiff',    city: 'Cardiff' },
+  leeds:      { lad: 'Leeds',      city: 'Leeds' },
 };
 
 const arg = process.argv.indexOf('--city');

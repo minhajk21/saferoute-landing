@@ -550,6 +550,53 @@ const CITIES = {
       methodology: `Each street-level incident published by South Wales Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Cardiff's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the Cardiff council wards from the ONS ward set. <strong>The scale is calibrated to Cardiff and cannot be read against another city's number</strong> \u2014 a Cardiff 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year. <strong>Cardiff is the thinnest city published here</strong> \u2014 a typical ward sees about 126 incidents a month against inner London's 476 \u2014 so these figures move more from month to month than any other city's, and a small difference between two neighbouring wards is not meaningful. Where a ward is mostly farmland rather than town its page says so, because an empty circle reads as a quiet street when it is really no street at all. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
     },
   },
+  'leeds': {
+    name: 'Leeds',
+    hubName: 'Leeds',
+    rankPool: 'Leeds wards',
+    // Leeds City Council's 33 ONS wards. Single ranked table, as Liverpool and
+    // Birmingham: Leeds has no sub-city tier locals use by name.
+    //
+    // West Yorkshire got its own area normaliser (backend 104f16c, 816) because
+    // against the UK-wide constant Leeds's median ward scored 89 - the furthest
+    // out of any city checked. That is geography, not a thin feed: the Leeds LAD
+    // is 552 km2 over 33 wards (16.7 km2 each, against Cardiff's 5), so a 1 km
+    // circle covers about a fifth of a Leeds ward and two thirds of a Cardiff
+    // one.
+    //
+    // SEVEN centroids were moved in build-gazetteer-ukcity.mjs, more than any
+    // other city: the outer wards are largely countryside and the ONS geometric
+    // centroid kept landing in a field. Two of them (Harewood, Kippax &
+    // Methley) returned ZERO incidents before the move.
+    areaWord: 'ward', areaWordPlural: 'wards',
+    centre: 'centre', centreLabel: 'ward centre',
+    // Harewood is rural North Leeds - Collingham, Bardsey, East Keswick,
+    // Scarcroft and farmland. It is the one ward where no point anywhere inside
+    // it reads above 8 incidents a month, so the low count is a fact about how
+    // few people are there, not about how safe a street is. Wetherby is
+    // deliberately NOT caveated: it is a market town of some 11,000 with 29
+    // incidents, which is a real measurement of a real place.
+    sparseAreas: new Set(['harewood']),
+    sparseNote: 'Most of this ward is farmland and village rather than town, so a low count reflects how few people are here rather than how safe the streets are.',
+    reportedTo: 'reported to West Yorkshire Police',
+    dataName: 'West Yorkshire Police data',
+    medianLabel: 'Leeds median',
+    forCity: 'for Leeds',
+    acrossCity: 'across Leeds',
+    faqCalc: (name) => `SafeRoute weights each police-recorded incident by severity (violence weighs more than shoplifting), sums the last published month within 1 km of the ${name} centre, and normalises against Leeds rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: West Yorkshire Police street-level crime via <a href="https://data.police.uk/">data.police.uk</a>${dateLine}, Open Government Licence v3.0. Ward boundaries: ONS Wards (December 2025) Boundaries UK, Office for National Statistics, OGL v3.0. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Leeds Ward Safety Map & Rankings (${n} wards) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Leeds ward? Safety index (0\u2013100) for all ${n} Leeds wards from West Yorkshire Police data through ${date} \u2014 ranked citywide, with crime maps.`,
+      h1: 'How safe is your Leeds ward?',
+      lead: `SafeRoute scores every Leeds ward 0\u2013100 from street-level incidents reported to West Yorkshire Police \u2014 severity-weighted, within 1 km of each ward's centre, normalised against Leeds. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a ward \u2014 e.g. Headingley, Chapel Allerton, Horsforth\u2026',
+      rankHeading: (n) => `All ${n} Leeds wards, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each ward's centre \u2014 they are informational, not a judgment of any community. Leeds median index: <strong>${median}/100</strong>.`,
+      methodology: `Each street-level incident published by West Yorkshire Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Leeds's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the 33 Leeds City Council wards from the ONS ward set. <strong>The scale is calibrated to Leeds and cannot be read against another city's number</strong> \u2014 a Leeds 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. Leeds wards are large by British standards \u2014 the council area is 552&nbsp;km\u00b2, so an outer ward can span a town, a village and several miles of farmland \u2014 and this index describes the kilometre around each ward's centre rather than the whole ward. Where the published centre sat in open country rather than in the built-up part of a ward, it has been moved onto the town or village the ward is named for. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year, and small differences between neighbouring wards are not meaningful. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
+    },
+  },
   'toronto': {
     name: 'Toronto',
     hubName: 'Toronto',
