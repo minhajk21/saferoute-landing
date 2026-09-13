@@ -96,6 +96,27 @@ const CENTROID_OVERRIDE = {
     //                      BRADFORD, a different local authority altogether.
     'Horsforth': { lat: 53.8370, lng: -1.6400 },          // Horsforth Town Street
     'Calverley & Farsley': { lat: 53.8180, lng: -1.6720 },// Farsley Town Street
+    // These last two were found by a SECOND method after the ring probe had
+    // cleared them, and the disagreement is the point. A four-point cardinal
+    // ring cannot see a displacement that runs diagonally: Garforth sits
+    // north-EAST of its ward's centroid and Adel south, so both rings sampled
+    // empty ground in every direction they looked and reported "quiet".
+    // Aggregating ONS 2021 LSOA population-weighted centroids per ward caught
+    // both immediately -- 2348 m and 1862 m from the published points.
+    //
+    //   Garforth & Swillington  18 -> 41 at the ward's population centre in
+    //                           Garforth, rather than the empty ground between
+    //                           Garforth and Swillington.
+    //   Adel & Wharfedale       10 -> 59 around Adel/Holt Park/Cookridge, not
+    //                           the Bramhope end.
+    //
+    // The method is NOT a replacement for the ring probe, because it has its
+    // own blind spot: a mean of LSOA centroids lands between the settlements of
+    // a POLYCENTRIC rural ward. It put Wetherby 2463 m away on 3 incidents
+    // against the published point's 29, and Harewood 5769 m out in farmland.
+    // Run both; where they disagree, probe and take the better point.
+    'Garforth & Swillington': { lat: 53.7852, lng: -1.3880 }, // Garforth
+    'Adel & Wharfedale': { lat: 53.8642, lng: -1.6083 },      // Adel / Holt Park
   },
   birmingham: {
     'Sutton Vesey': { lat: 52.5560, lng: -1.8360 },              // Boldmere
