@@ -11,6 +11,7 @@
 <url><loc>https://safe-route.app/safety/new-york/district/bronx/</loc><lastmod>2026-06-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/new-york/district/brooklyn/</loc><lastmod>2026-06-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/new-york/district/manhattan/</loc><lastmod>2026-06-01</lastmod><priority>0.8</priority></url>
+<url><loc>https://safe-route.app/safety/new-york/night/</loc><lastmod>2026-06-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/new-york/todt-hill-emerson-hill-lighthouse-hill-manor-heights/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/new-york/new-springville-willowbrook-bulls-head-travis/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/new-york/annadale-huguenot-princes-bay-woodrow/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
@@ -470,6 +471,7 @@
 <url><loc>https://safe-route.app/safety/london/st-jamess/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/london/west-end/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/chicago/</loc><lastmod>2026-08-01</lastmod><priority>0.9</priority></url>
+<url><loc>https://safe-route.app/safety/chicago/night/</loc><lastmod>2026-08-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/chicago/forest-glen/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/chicago/edison-park/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/chicago/mount-greenwood/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
@@ -548,6 +550,7 @@
 <url><loc>https://safe-route.app/safety/chicago/near-north-side/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/chicago/the-loop/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/la/</loc><lastmod>2026-08-01</lastmod><priority>0.9</priority></url>
+<url><loc>https://safe-route.app/safety/la/night/</loc><lastmod>2026-08-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/la/bel-air-beverly-crest/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/la/porter-ranch/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/la/granada-hills-north/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
@@ -648,6 +651,7 @@
 <url><loc>https://safe-route.app/safety/la/downtown-los-angeles/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/la/westlake-south/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sf/</loc><lastmod>2026-09-01</lastmod><priority>0.9</priority></url>
+<url><loc>https://safe-route.app/safety/sf/night/</loc><lastmod>2026-09-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/sf/presidio/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sf/treasure-island/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/sf/lincoln-park/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
@@ -708,6 +712,7 @@
 <url><loc>https://safe-route.app/safety/seattle/district/queen-anne/</loc><lastmod>2026-08-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/seattle/district/university-district/</loc><lastmod>2026-08-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/seattle/district/downtown/</loc><lastmod>2026-08-01</lastmod><priority>0.8</priority></url>
+<url><loc>https://safe-route.app/safety/seattle/night/</loc><lastmod>2026-08-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/seattle/harbor-island/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/seattle/matthews-beach/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/seattle/arbor-heights/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
@@ -803,6 +808,7 @@
 <url><loc>https://safe-route.app/safety/seattle/central-business-district/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/seattle/denny-triangle/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/detroit/</loc><lastmod>2026-09-01</lastmod><priority>0.9</priority></url>
+<url><loc>https://safe-route.app/safety/detroit/night/</loc><lastmod>2026-09-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/detroit/oakwood-heights/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/detroit/carbon-works/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/detroit/poletown-east/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
@@ -1104,6 +1110,7 @@
 <url><loc>https://safe-route.app/safety/minneapolis/downtown-west/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/minneapolis/stevens-square-loring-heights/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/cleveland/</loc><lastmod>2026-09-01</lastmod><priority>0.9</priority></url>
+<url><loc>https://safe-route.app/safety/cleveland/night/</loc><lastmod>2026-09-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/cleveland/hopkins/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/cleveland/cuyahoga-valley/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/cleveland/lee-seville/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
@@ -1153,6 +1160,7 @@
 <url><loc>https://safe-route.app/safety/kansascity/district/heart-of-the-city/</loc><lastmod>2026-09-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/kansascity/district/midtown-plaza/</loc><lastmod>2026-09-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/kansascity/district/truman-plaza/</loc><lastmod>2026-09-01</lastmod><priority>0.8</priority></url>
+<url><loc>https://safe-route.app/safety/kansascity/night/</loc><lastmod>2026-09-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/kansascity/blue-ridge-farms/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/kansascity/birmingham-bottoms/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/kansascity/little-blue/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
@@ -1630,6 +1638,7 @@
 <url><loc>https://safe-route.app/safety/leeds/gipton-and-harehills/</loc><lastmod>2026-07-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/leeds/little-london-and-woodhouse/</loc><lastmod>2026-07-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/dallas/</loc><lastmod>2026-09-01</lastmod><priority>0.9</priority></url>
+<url><loc>https://safe-route.app/safety/dallas/night/</loc><lastmod>2026-09-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/dallas/cedar-vista/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/dallas/mountain-creek-neighborhood/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/dallas/preston-hollow-west/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
@@ -1825,6 +1834,7 @@
 <url><loc>https://safe-route.app/safety/toronto/district/east-york/</loc><lastmod>2026-06-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/district/old-toronto/</loc><lastmod>2026-06-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/district/york/</loc><lastmod>2026-06-01</lastmod><priority>0.8</priority></url>
+<url><loc>https://safe-route.app/safety/toronto/night/</loc><lastmod>2026-06-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/bridle-path-sunnybrook-york-mills/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/edenbridge-humber-valley/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/west-rouge/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
@@ -1984,6 +1994,7 @@
 <url><loc>https://safe-route.app/safety/toronto/downtown-yonge-east/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/toronto/yonge-bay-corridor/</loc><lastmod>2026-06-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/dc/</loc><lastmod>2026-09-01</lastmod><priority>0.9</priority></url>
+<url><loc>https://safe-route.app/safety/dc/night/</loc><lastmod>2026-09-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/dc/hawthorne/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/dc/monumental-core/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/dc/north-portal-estates/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
@@ -2117,6 +2128,7 @@
 <url><loc>https://safe-route.app/safety/dc/logan-circle-shaw/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/dc/cardozo-shaw/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/boston/</loc><lastmod>2026-08-01</lastmod><priority>0.9</priority></url>
+<url><loc>https://safe-route.app/safety/boston/night/</loc><lastmod>2026-08-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/boston/west-roxbury/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/boston/roslindale/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/boston/south-boston-waterfront/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
@@ -2143,6 +2155,7 @@
 <url><loc>https://safe-route.app/safety/boston/downtown/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/boston/south-end/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/baltimore/</loc><lastmod>2026-08-01</lastmod><priority>0.9</priority></url>
+<url><loc>https://safe-route.app/safety/baltimore/night/</loc><lastmod>2026-08-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/baltimore/greater-roland-park-poplar-hill/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/baltimore/mount-washington-coldspring/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/baltimore/southeastern/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
@@ -2200,6 +2213,7 @@
 <url><loc>https://safe-route.app/safety/baltimore/patterson-park-north-and-east/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/baltimore/downtown-seton-hill/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/denver/</loc><lastmod>2026-08-01</lastmod><priority>0.9</priority></url>
+<url><loc>https://safe-route.app/safety/denver/night/</loc><lastmod>2026-08-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/denver/fort-logan/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/denver/marston/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/denver/indian-creek/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
@@ -2374,6 +2388,7 @@
 <url><loc>https://safe-route.app/safety/longbeach/downtown/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/longbeach/east-village/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/neworleans/</loc><lastmod>2026-09-01</lastmod><priority>0.9</priority></url>
+<url><loc>https://safe-route.app/safety/neworleans/night/</loc><lastmod>2026-09-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/neworleans/new-aurora-english-turn/</loc><lastmod>2026-05-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/neworleans/lakeshore-lake-vista/</loc><lastmod>2026-09-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/neworleans/village-de-lest/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
@@ -2521,6 +2536,7 @@
 <url><loc>https://safe-route.app/safety/vancouver/west-end/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/vancouver/downtown/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/philly/</loc><lastmod>2026-09-01</lastmod><priority>0.9</priority></url>
+<url><loc>https://safe-route.app/safety/philly/night/</loc><lastmod>2026-09-01</lastmod><priority>0.8</priority></url>
 <url><loc>https://safe-route.app/safety/philly/navy-yard/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/philly/byberry/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>
 <url><loc>https://safe-route.app/safety/philly/andorra/</loc><lastmod>2026-08-01</lastmod><priority>0.7</priority></url>

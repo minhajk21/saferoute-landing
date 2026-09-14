@@ -1567,6 +1567,13 @@ function renderCity(citySlug) {
   for (const d of districts) for (const a of d.areas) districtOf.set(a.slug, d);
   const districtHref = d => `/safety/${citySlug}/district/${d.slug}/`;
 
+  // Decided here rather than where the night page is written, because the city
+  // hub renders first and needs to know whether there is a page to link to.
+  const NIGHT = [1, 2, 4, 5];
+  const todAreas = areas.filter(a => a.timeOfDayIsRealData !== false
+    && Array.isArray(a.timeOfDay) && a.timeOfDay.length >= 6);
+  const nightPage = todAreas.length >= Math.max(8, areas.length * 0.8);
+
   for (const a of areas) {
     const p = makeProse(a, ctx);
     const shape = mapShape(a);
@@ -1702,6 +1709,7 @@ ${footer(cfg, a, citySlug, windowDays)}`;
 </div>
 
 <p class="notice">${cfg.hub.notice(median)}</p>
+${nightPage ? `<p style="margin:14px 0 4px;font-size:15.5px"><a href="/safety/${citySlug}/night/">Is ${esc(cfg.name)} safe at night? See which ${cfg.areaWordPlural} see the most reported crime after dark →</a></p>` : ''}
 ${(() => {
   // D: the city's data, described in chips — feed recency, window, and the
   // transparency score for the city's own feed, linking to the index.
@@ -1851,7 +1859,121 @@ ${footer(cfg, list[0], citySlug, windowDays)}`;
     writeFileSync(join(dDir, 'index.html'), dHtml);
   }
 
-  return { citySlug, cfg, count: areas.length, median, ranked, sample: areas[0], noBasemap, windowDays, districts };
+  // ── night hub ──
+  // SafeRoute is a night-safety walking app, and until now nothing on the site
+  // said so. The measured non-brand queries that convert are map- and
+  // ranking-shaped ("seattle safety map", "nyc neighborhoods ranked by
+  // safety"), and one city hub was competing for all of them at once. This is
+  // the second hub-shaped page per city, aimed at the query the product is
+  // actually for, and it costs no new data: the six time-of-day buckets are
+  // already cached on every area.
+  //
+  // Buckets are [Mon-Fri 6a-6p, 6p-12a, 12a-6a, Sat-Sun 6a-6p, 6p-12a, 12a-6a]
+  // and sum to 1, so night is 1, 2, 4, 5 — everything from 6pm to 6am, both
+  // weekday and weekend.
+  //
+  // Only rendered where the timestamps are REAL. data.police.uk publishes no
+  // incident times at all, so every UK city derives its chart from the category
+  // mix; a night page built on that would be inventing its central claim. Ten
+  // of the 26 published cities are excluded for this reason, and that is the
+  // right outcome rather than a gap.
+  if (nightPage) {
+    const shareOf = a => NIGHT.reduce((s, i) => s + (a.timeOfDay[i] || 0), 0);
+    const withNight = todAreas.map(a => ({
+      a, share: shareOf(a), nightInc: (a.totalIncidents || 0) * shareOf(a),
+    }));
+
+    // City-wide chart: each area's profile weighted by how much it contributes,
+    // so downtown does not count the same as a 40-incident suburb.
+    const totalInc = withNight.reduce((s, x) => s + (x.a.totalIncidents || 0), 0) || 1;
+    const cityTod = Array.from({ length: 6 }, (_, i) =>
+      withNight.reduce((s, x) => s + (x.a.timeOfDay[i] || 0) * (x.a.totalIncidents || 0), 0) / totalInc);
+    const cityShare = NIGHT.reduce((s, i) => s + cityTod[i], 0);
+    const lateShare = cityTod[2] + cityTod[5];          // midnight to 6am
+    const shares = withNight.map(x => x.share).sort((x, y) => x - y);
+    const medShare = shares[Math.floor(shares.length / 2)];
+
+    const byNightVolume = [...withNight].sort((x, y) => y.nightInc - x.nightInc);
+    const byConcentration = [...withNight].sort((x, y) => y.share - x.share);
+    const date = monthName(areas[0]?.crimeDate || '2026-01');
+    const url = `${SITE}/safety/${citySlug}/night/`;
+    const pct = v => `${Math.round(v * 100)}%`;
+
+    const volRows = byNightVolume.slice(0, 25).map((x, i) =>
+      `<tr><td><span class="rk">${i + 1}</span> <a href="/safety/${citySlug}/${x.a.slug}/">${esc(x.a.name)}</a></td><td class="n">${fmt(Math.round(x.nightInc))}</td><td class="n">${pct(x.share)}</td><td class="n" style="color:${bandColor[x.a.band]}">${x.a.safetyScore}/100</td></tr>`).join('');
+
+    const concRows = byConcentration.slice(0, 12).map(x =>
+      `<tr><td><a href="/safety/${citySlug}/${x.a.slug}/">${esc(x.a.name)}</a></td><td class="n">${pct(x.share)}</td><td class="n">${fmt(x.a.totalIncidents)}</td><td class="n" style="color:${bandColor[x.a.band]}">${x.a.safetyScore}/100</td></tr>`).join('');
+
+    const calmRows = [...byConcentration].reverse().slice(0, 8).map(x =>
+      `<tr><td><a href="/safety/${citySlug}/${x.a.slug}/">${esc(x.a.name)}</a></td><td class="n">${pct(x.share)}</td><td class="n">${fmt(x.a.totalIncidents)}</td></tr>`).join('');
+
+    const top = byNightVolume[0], conc = byConcentration[0];
+    const noun = cfg.incidentNoun ?? 'reported incidents';
+
+    const faq = [
+      { q: `Is ${cfg.name} safe to walk at night?`,
+        a: `${pct(cityShare)} of ${cfg.name}'s ${noun} happen between 6pm and 6am, and ${pct(lateShare)} fall in the small hours between midnight and 6am. That is a description of when incidents are reported, not a verdict on the city: the figure varies far more between ${cfg.areaWordPlural} than it does between cities, from ${pct(shares[0])} to ${pct(shares[shares.length - 1])} here. The useful question is which ${cfg.areaWord} and which route, not whether a whole city is safe.` },
+      { q: `Which ${cfg.areaWord} in ${cfg.name} has the most reported crime at night?`,
+        a: `${top.a.name}, with roughly ${fmt(Math.round(top.nightInc))} ${noun} between 6pm and 6am — ${pct(top.share)} of its total. Somewhere busy usually tops this list because more people are out, so read it alongside the daytime picture on its own page rather than on its own.` },
+      { q: `Which ${cfg.areaWord} changes most after dark?`,
+        a: `${conc.a.name} is the most night-concentrated in ${cfg.name}: ${pct(conc.share)} of what is reported there happens between 6pm and 6am, against a ${cfg.name} median of ${pct(medShare)}. A high share does not mean a high total — a quiet ${cfg.areaWord} whose few incidents mostly happen at night will rank high here — which is why the table shows the count beside it.` },
+      { q: `How does SafeRoute use this at night?`,
+        a: `The app scores each walking route against the same ${cfg.dataName}, and can weight it toward the time you are actually walking rather than a flat all-day average. It also shows how much of each route runs on lit streets, and lets you share a walk and check in on arrival.` },
+    ];
+
+    const title = `Is ${cfg.name} Safe at Night? Night-Time Crime Map — SafeRoute`;
+    const desc = `${pct(cityShare)} of ${cfg.name} ${noun} happen between 6pm and 6am. Which ${cfg.areaWordPlural} see the most night-time crime, and which change most after dark — from ${cfg.dataName} through ${date}.`;
+    const jsonld = [
+      { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Safety', item: `${SITE}/safety/` },
+        { '@type': 'ListItem', position: 2, name: cfg.name, item: `${SITE}/safety/${citySlug}/` },
+        { '@type': 'ListItem', position: 3, name: 'At night', item: url }] },
+      { '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+    ];
+
+    const html = `${head(title, desc, url, jsonld)}${chrome(`<a href="/safety/">Safety</a> › <a href="/safety/${citySlug}/">${cfg.name}</a> › At night`)}
+<p class="eyebrow">Night-time safety · ${cfg.hubName} · data through ${date}</p>
+<h1>Is ${esc(cfg.name)} safe at night?</h1>
+<p class="lead"><strong>${pct(cityShare)}</strong> of ${cfg.name}'s ${noun} happen between 6pm and 6am, and ${pct(lateShare)} of them fall between midnight and 6am. That share swings from ${pct(shares[0])} to ${pct(shares[shares.length - 1])} depending on which ${cfg.areaWord} you are in — which is the whole point: the question worth asking is not whether ${cfg.name} is safe after dark, but where and by which route.</p>
+
+<div class="citychips"><span>${pct(cityShare)} after 6pm</span><span>${pct(lateShare)} after midnight</span><span>${todAreas.length} ${cfg.areaWordPlural}</span>${windowPhrase(windowDays) ? `<span>covers ${windowPhrase(windowDays).replace(/^the month$/, '1 month').replace(/^the /, '')}</span>` : ''}<span><a href="/safety/${citySlug}/">all of ${esc(cfg.name)}</a></span></div>
+
+<figure class="map" style="text-align:center">
+${todSVG({ ...areas[0], timeOfDay: cityTod, name: cfg.name }, cfg)}
+<figcaption>When ${noun} happen ${cfg.acrossCity}, severity-weighted, weekday against weekend · ${cfg.dataName} through ${date}.</figcaption>
+</figure>
+
+<p class="notice">These figures describe <strong>when reported incidents happen</strong>, not how dangerous a street is. Somewhere with a night-time crowd reports more after dark because more people are there — that is a fact about footfall as much as about risk, and it is why the tables below show the count and the share side by side.</p>
+
+<h2>Most reported ${noun} after dark</h2>
+<table class="rank"><thead><tr><th>${cfg.areaWord.replace(/^./, c => c.toUpperCase())}</th><th style="text-align:right">6pm–6am</th><th style="text-align:right">Share</th><th style="text-align:right">Index</th></tr></thead><tbody>${volRows}</tbody></table>
+
+${cta(`${cfg.name} at night`)}
+
+<h2>Changes most after dark</h2>
+<p style="font-size:15.5px;color:var(--ink-2)">Ranked by the share of ${noun} that fall between 6pm and 6am, against a ${esc(cfg.name)} median of ${pct(medShare)}. A high share is not a high total — a quiet ${cfg.areaWord} whose few incidents mostly happen at night sits near the top — so the count is shown beside it.</p>
+<table class="rank"><thead><tr><th>${cfg.areaWord.replace(/^./, c => c.toUpperCase())}</th><th style="text-align:right">Night share</th><th style="text-align:right">Incidents</th><th style="text-align:right">Index</th></tr></thead><tbody>${concRows}</tbody></table>
+
+<h2>Least night-weighted</h2>
+<p style="font-size:15.5px;color:var(--ink-2)">Where what gets reported is most concentrated in daylight hours.</p>
+<table class="rank"><thead><tr><th>${cfg.areaWord.replace(/^./, c => c.toUpperCase())}</th><th style="text-align:right">Night share</th><th style="text-align:right">Incidents</th></tr></thead><tbody>${calmRows}</tbody></table>
+
+<h2>Common questions</h2>
+${faq.map(f => `<details><summary>${esc(f.q)}</summary><p>${f.a}</p></details>`).join('\n')}
+
+<h2>Methodology</h2>
+<p style="font-size:15.5px;color:var(--ink-2)">Every incident ${cfg.reportedTo} carries an occurrence time, which is bucketed into daytime (6am–6pm), evening (6pm–midnight) and the small hours (midnight–6am), split weekday against weekend, and weighted by severity so violence counts for more than shoplifting. A ${cfg.areaWord}'s night share is the weighted proportion falling between 6pm and 6am; its night count is that share applied to its total. The city-wide chart weights each ${cfg.areaWord} by its own volume, so a busy centre is not averaged against a quiet suburb as though they were the same size.</p>
+<p style="font-size:15.5px;color:var(--ink-2)">${cfg.hub.methodology}</p>
+${footer(cfg, areas[0], citySlug, windowDays)}`;
+
+    const dir = join(ROOT, 'safety', citySlug, 'night');
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'index.html'), html);
+  }
+
+  return { citySlug, cfg, count: areas.length, median, ranked, sample: areas[0], noBasemap, windowDays, districts, nightPage };
 }
 
 // ── render all cities, then root + sitemap + robots ──────────────────────────
@@ -1931,6 +2053,10 @@ ${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug, rendered[0].
       // volume ("is Brooklyn safe") that no area page can.
       ...(r.districts || []).map(d => ({ loc: `${SITE}/safety/${r.citySlug}/district/${d.slug}/`, pri: '0.8',
         mod: lastmodOf(newest(d.areas.map(a => a.crimeDate).filter(Boolean)) || cityDate(r)) })),
+      // Same priority as a district hub: it is the second hub-shaped page for
+      // the city, aimed at a distinct query, and it is the one that matches
+      // what the app is actually for.
+      ...(r.nightPage ? [{ loc: `${SITE}/safety/${r.citySlug}/night/`, pri: '0.8', mod: lastmodOf(cityDate(r)) }] : []),
       ...r.ranked.map(a => ({ loc: `${SITE}/safety/${r.citySlug}/${a.slug}/`, pri: '0.7', mod: lastmodOf(a.crimeDate) })),
     ]),
   ];
