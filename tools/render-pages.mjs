@@ -597,6 +597,44 @@ const CITIES = {
       methodology: `Each street-level incident published by West Yorkshire Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Leeds's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the 33 Leeds City Council wards from the ONS ward set. <strong>The scale is calibrated to Leeds and cannot be read against another city's number</strong> \u2014 a Leeds 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. Leeds wards are large by British standards \u2014 the council area is 552&nbsp;km\u00b2, so an outer ward can span a town, a village and several miles of farmland \u2014 and this index describes the kilometre around each ward's centre rather than the whole ward. Where the published centre sat in open country rather than in the built-up part of a ward, it has been moved onto the town or village the ward is named for. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year, and small differences between neighbouring wards are not meaningful. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
     },
   },
+  'dallas': {
+    name: 'Dallas',
+    hubName: 'Dallas',
+    rankPool: 'Dallas neighborhoods',
+    // 188 of the City of Dallas's registered Neighborhood Associations. Single
+    // ranked table: Dallas's own second tier is Council Districts 1-14, which
+    // is the DC/Detroit numbered-label problem, so grouping by it would invent
+    // a geography nobody names.
+    //
+    // The association registry is NOT a partition of the city -- it covers
+    // about 37% of Dallas land and some polygons overlap. That is acceptable
+    // here and would not be elsewhere: each page describes the kilometre around
+    // one named place and never claims to tile the city. See
+    // build-gazetteer-dallas.mjs for why every alternative set was worse.
+    //
+    // Normaliser recalibrated 673 -> 260 (backend) against these 188 real
+    // neighborhoods; the median scored 76 against the old grid-derived value.
+    areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
+    centre: 'center', centreLabel: 'neighborhood center',
+    reportedTo: 'reported to the Dallas Police Department',
+    dataName: 'Dallas PD data',
+    medianLabel: 'citywide median',
+    forCity: 'for Dallas',
+    acrossCity: 'across Dallas',
+    faqCalc: (name) => `SafeRoute weights each incident reported to the Dallas Police Department by severity (violence weighs more than shoplifting), sums the last twelve months within 1 km of the ${name} center, and normalizes against citywide rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
+    sources: (dateLine) => `Crime data: Dallas Police Department Police Incidents via <a href="https://www.dallasopendata.com/">Dallas Open Data</a>${dateLine}. Neighborhood boundaries: City of Dallas GIS registered Neighborhood Associations. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
+    hub: {
+      title: (n) => `Dallas Neighborhood Safety Map & Rankings (${n} neighborhoods) \u2014 SafeRoute`,
+      desc: (n, date) => `How safe is your Dallas neighborhood? Safety index (0\u2013100) for ${n} Dallas neighborhoods from Dallas PD reported-crime data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      h1: 'How safe is your Dallas neighborhood?',
+      lead: `SafeRoute scores Dallas neighborhoods 0\u2013100 from incidents reported to the Dallas Police Department \u2014 severity-weighted, within 1 km of each neighborhood's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
+      placeholder: 'Check a neighborhood \u2014 e.g. Deep Ellum, Bishop Arts, Lakewood\u2026',
+      rankHeading: (n) => `All ${n} Dallas neighborhoods, safest first`,
+      notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center \u2014 they are informational, not a judgment of any community. Dallas's entertainment districts sit low on this index because a night-time crowd reports more incidents, not because a resident's street is dangerous. Citywide median index: <strong>${median}/100</strong>.`,
+      methodology: `Each incident reported to the Dallas Police Department (via Dallas Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center over the last twelve months, and normalize against Dallas's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. <strong>The scale is calibrated to Dallas and cannot be read against another city's number.</strong> Boundaries are the City of Dallas GIS registry of neighborhood associations, cleaned to place names \u2014 "Deep Ellum Community Association" is published as Deep&nbsp;Ellum. That registry covers the parts of Dallas that organized, not every square mile, so this is a guide to the neighborhoods it names rather than a map of the whole city, and a few pages describe overlapping ground. Where a published center sat in parkland or a creek corridor rather than among houses, it has been moved to the deepest built-up point inside the same boundary. Time-of-day charts use Dallas PD occurrence times, severity-weighted. Pages regenerate as new data is published.`,
+    },
+  },
   'toronto': {
     name: 'Toronto',
     hubName: 'Toronto',
@@ -1065,6 +1103,77 @@ const slugify = (s) => s
 // already contains the city keeps it.
 const DISTRICT_ADJACENT = new Set(['Downtown', 'North', 'South', 'East', 'West',
   'Central', 'Northeast', 'Northwest', 'Southeast', 'Southwest', 'North Central']);
+// GENERIC AREA NAMES — the same keyword-cannibalisation fix, one tier down.
+// Eight published cities each had a page titled "Is Downtown Safe?" (Boston,
+// Cleveland, Dallas, DC, Detroit, Long Beach, San Diego, Vancouver), four had
+// "Is West End Safe?" and three "Is Uptown Safe?". Near-identical titles for
+// different places compete for one query and suppress each other, and a reader
+// seeing the result has no way to tell which city it is.
+//
+// Disambiguated in the TITLE, DESCRIPTION and H1 only. The slug, URL,
+// breadcrumb and every ranked table keep the bare name: those already sit in
+// city context, and changing a slug would break a live page for no gain.
+// "adj" names take the city as an adjective the way people say them -- Downtown
+// Dallas, Midtown Detroit -- while the rest read better with a comma, because
+// "North End Boston" is not how anyone writes it.
+const GENERIC_AREA = new Map([
+  ['downtown', 'adj'], ['uptown', 'adj'], ['midtown', 'adj'], ['downtown core', 'adj'],
+  ['north end', 'comma'], ['south end', 'comma'], ['west end', 'comma'], ['east end', 'comma'],
+  ['central business district', 'comma'], ['city centre', 'comma'], ['city center', 'comma'],
+]);
+
+// The generic list above is only the part you can enumerate. A cross-city scan
+// finds the rest, and there are far more of them: Woodbridge is in Detroit AND
+// Kansas City, Belmont is in four cities, Morningside in three, and Five
+// Points, Riverdale, Penrose, Greenwich, Douglass and Regent Park are all
+// shared. Eighty area pages carried a title identical to another city's, which
+// is the same cannibalisation as "Is Downtown Safe?" and just as invisible
+// without checking. Detected rather than listed, so it stays true as cities
+// are added -- the next city to include a "Belmont" disambiguates automatically
+// and so does the existing one.
+const AMBIGUOUS_AREA = (() => {
+  const seen = new Map();
+  for (const slug of Object.keys(CITIES)) {
+    const gz = join(ROOT, 'tools', 'gazetteer', `${slug}.json`);
+    if (!existsSync(gz)) continue;
+    for (const a of JSON.parse(readFileSync(gz)).areas || []) {
+      const k = String(a.name).trim().toLowerCase();
+      if (!seen.has(k)) seen.set(k, new Set());
+      seen.get(k).add(slug);
+    }
+  }
+  return new Set([...seen].filter(([, c]) => c.size > 1).map(([k]) => k));
+})();
+
+// Names can also collide INSIDE one city, where appending the city fixes
+// nothing: London has a Regent's Park ward in Camden and another in
+// Westminster, and their slugs already carry the borough for exactly that
+// reason. The district disambiguates where the city cannot.
+const SAME_CITY_DUP = (() => {
+  const out = new Set();
+  for (const slug of Object.keys(CITIES)) {
+    const gz = join(ROOT, 'tools', 'gazetteer', `${slug}.json`);
+    if (!existsSync(gz)) continue;
+    const seen = new Map();
+    for (const a of JSON.parse(readFileSync(gz)).areas || []) {
+      const k = String(a.name).trim().toLowerCase();
+      seen.set(k, (seen.get(k) || 0) + 1);
+    }
+    for (const [k, n] of seen) if (n > 1) out.add(`${slug}:${k}`);
+  }
+  return out;
+})();
+
+const areaDisplay = (name, cfg, citySlug, borough) => {
+  const k = String(name).trim().toLowerCase();
+  if (citySlug && SAME_CITY_DUP.has(`${citySlug}:${k}`) && borough && borough !== cfg.name) {
+    return `${name}, ${borough}`;
+  }
+  const g = GENERIC_AREA.get(k);
+  if (g) return g === 'adj' ? `${name} ${cfg.name}` : `${name}, ${cfg.name}`;
+  return AMBIGUOUS_AREA.has(k) ? `${name}, ${cfg.name}` : name;
+};
+
 const districtDisplay = (name, cfg) =>
   name.toLowerCase().includes(cfg.name.toLowerCase()) ? name
     : DISTRICT_ADJACENT.has(name) ? `${name} ${cfg.name}`
@@ -1473,8 +1582,9 @@ function renderCity(citySlug) {
                  (bm.stMinor?.length || 0) + (bm.stMajor?.length || 0))) noBasemap.push(a.slug);
 
     const url = `${SITE}/safety/${citySlug}/${a.slug}/`;
-    const title = `Is ${a.name} Safe? Crime Map & Safety Index — SafeRoute`;
-    const desc = `${a.name} safety index: ${a.safetyScore}/100 (${bandWord[a.band].toLowerCase()}) — ${fmt(a.totalIncidents)} ${cfg.incidentNoun ?? 'reported incidents'} within 1 km (through ${monthName(a.crimeDate)}). Crime map, ${cfg.whatReported ?? "what's reported"}, and how it compares ${cfg.acrossCity}.`;
+    const display = areaDisplay(a.name, cfg, citySlug, a.borough);
+    const title = `Is ${display} Safe? Crime Map & Safety Index — SafeRoute`;
+    const desc = `${display} safety index: ${a.safetyScore}/100 (${bandWord[a.band].toLowerCase()}) — ${fmt(a.totalIncidents)} ${cfg.incidentNoun ?? 'reported incidents'} within 1 km (through ${monthName(a.crimeDate)}). Crime map, ${cfg.whatReported ?? "what's reported"}, and how it compares ${cfg.acrossCity}.`;
     // The district, where one has a page, is a real level of the hierarchy and
     // belongs in both the visible crumb trail and the structured one — it is
     // the second parent that makes an area page reachable laterally.
@@ -1507,7 +1617,7 @@ function renderCity(citySlug) {
 
     const html = `${head(title, desc, url, jsonld)}${chrome(`<a href="/safety/">Safety</a> › <a href="/safety/${citySlug}/">${cfg.name}</a>${dist ? ` › <a href="${districtHref(dist)}">${esc(dist.name)}</a>` : ''} › ${esc(a.name)}`)}
 <p class="eyebrow">Safety index · ${a.borough === cfg.name ? '' : esc(a.borough) + ', '}${cfg.name} · data through ${monthName(a.crimeDate)}</p>
-<h1>Is ${esc(a.name)} safe?</h1>
+<h1>Is ${esc(display)} safe?</h1>
 <p class="lead">${p.lead}</p>
 
 <div class="scorecard">

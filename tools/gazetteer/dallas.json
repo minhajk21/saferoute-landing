@@ -1,0 +1,1326 @@
+{
+  "city": "Dallas",
+  "citySlug": "dallas",
+  "country": "US",
+  "source": "City of Dallas GIS — registered Neighborhood Associations",
+  "purpose": "SafeRoute programmatic neighborhood safety pages",
+  "generatedAt": "2026-09-14",
+  "areas": [
+    {
+      "name": "Adelaide",
+      "slug": "adelaide",
+      "lat": 32.690568,
+      "lng": -96.795928,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Arcadia Park",
+      "slug": "arcadia-park",
+      "lat": 32.751107,
+      "lng": -96.910566,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Arlington Park",
+      "slug": "arlington-park",
+      "lat": 32.815252,
+      "lng": -96.854993,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Bachman/NW Highway",
+      "slug": "bachman-nw-highway",
+      "lat": 32.865639,
+      "lng": -96.874407,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Beckley Estates",
+      "slug": "beckley-estates",
+      "lat": 32.665382,
+      "lng": -96.820214,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Belmont",
+      "slug": "belmont",
+      "lat": 32.814699,
+      "lng": -96.765897,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Belmont Addition Conservation District",
+      "slug": "belmont-addition-conservation-district",
+      "lat": 32.819687,
+      "lng": -96.765853,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Beverly Hills",
+      "slug": "beverly-hills",
+      "lat": 32.747295,
+      "lng": -96.869289,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Bexar Street Connection",
+      "slug": "bexar-street-connection",
+      "lat": 32.747367,
+      "lng": -96.752704,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Bickers Park",
+      "slug": "bickers-park",
+      "lat": 32.789357,
+      "lng": -96.851177,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Bishop Arts",
+      "slug": "bishop-arts",
+      "lat": 32.747938,
+      "lng": -96.831089,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Bluffview",
+      "slug": "bluffview",
+      "lat": 32.857578,
+      "lng": -96.828636,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Bonton",
+      "slug": "bonton",
+      "lat": 32.741088,
+      "lng": -96.752027,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Bottom",
+      "slug": "bottom",
+      "lat": 32.753492,
+      "lng": -96.805101,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Bradford Estates",
+      "slug": "bradford-estates",
+      "lat": 32.878254,
+      "lng": -96.870724,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Braeburn Glen",
+      "slug": "braeburn-glen",
+      "lat": 32.848898,
+      "lng": -96.653016,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Brettonwoods",
+      "slug": "brettonwoods",
+      "lat": 32.695389,
+      "lng": -96.865666,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Briarwood",
+      "slug": "briarwood",
+      "lat": 32.853142,
+      "lng": -96.6604,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Bruton Terrace",
+      "slug": "bruton-terrace",
+      "lat": 32.748771,
+      "lng": -96.67416,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Bryan Place",
+      "slug": "bryan-place",
+      "lat": 32.793489,
+      "lng": -96.787436,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Buckner Terrace",
+      "slug": "buckner-terrace",
+      "lat": 32.785909,
+      "lng": -96.702177,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Caillet",
+      "slug": "caillet",
+      "lat": 32.888113,
+      "lng": -96.873979,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Caruth Hills & Homeplace",
+      "slug": "caruth-hills-and-homeplace",
+      "lat": 32.85837,
+      "lng": -96.776762,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Casa Linda",
+      "slug": "casa-linda",
+      "lat": 32.824843,
+      "lng": -96.689095,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Casa Linda Estates",
+      "slug": "casa-linda-estates",
+      "lat": 32.828214,
+      "lng": -96.697639,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Casa Linda Forest",
+      "slug": "casa-linda-forest",
+      "lat": 32.817261,
+      "lng": -96.697141,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Casa View",
+      "slug": "casa-view",
+      "lat": 32.846609,
+      "lng": -96.674438,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Casa View Haven",
+      "slug": "casa-view-haven",
+      "lat": 32.832666,
+      "lng": -96.68215,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Casa View Heights",
+      "slug": "casa-view-heights",
+      "lat": 32.828286,
+      "lng": -96.662967,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Casa View Oaks",
+      "slug": "casa-view-oaks",
+      "lat": 32.827439,
+      "lng": -96.672209,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Cedar Creek Ranch",
+      "slug": "cedar-creek-ranch",
+      "lat": 32.655372,
+      "lng": -96.764907,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Cedar Crest",
+      "slug": "cedar-crest",
+      "lat": 32.728961,
+      "lng": -96.796703,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Cedar Crest Village Neighborhood & Civic Club",
+      "slug": "cedar-crest-village-neighborhood-and-civic-club",
+      "lat": 32.715678,
+      "lng": -96.799012,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Cedar Vista",
+      "slug": "cedar-vista",
+      "lat": 32.680387,
+      "lng": -96.931659,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Cedars",
+      "slug": "cedars",
+      "lat": 32.766693,
+      "lng": -96.790525,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Cherry Valley",
+      "slug": "cherry-valley",
+      "lat": 32.644958,
+      "lng": -96.777418,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Claremont Addition",
+      "slug": "claremont-addition",
+      "lat": 32.801146,
+      "lng": -96.708407,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Cochran Heights",
+      "slug": "cochran-heights",
+      "lat": 32.817585,
+      "lng": -96.785428,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Creekside",
+      "slug": "creekside",
+      "lat": 32.696324,
+      "lng": -96.835765,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Deep Ellum",
+      "slug": "deep-ellum",
+      "lat": 32.783883,
+      "lng": -96.779909,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Design District North",
+      "slug": "design-district-north",
+      "lat": 32.800674,
+      "lng": -96.837324,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Devonshire",
+      "slug": "devonshire",
+      "lat": 32.858854,
+      "lng": -96.816992,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Dolphin Heights",
+      "slug": "dolphin-heights",
+      "lat": 32.780892,
+      "lng": -96.740241,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Downtown",
+      "slug": "downtown",
+      "lat": 32.780257,
+      "lng": -96.798874,
+      "borough": "Dallas"
+    },
+    {
+      "name": "East Dallas For Affordable Housing",
+      "slug": "east-dallas-for-affordable-housing",
+      "lat": 32.789088,
+      "lng": -96.766912,
+      "borough": "Dallas"
+    },
+    {
+      "name": "East Kessler Park",
+      "slug": "east-kessler-park",
+      "lat": 32.763593,
+      "lng": -96.829178,
+      "borough": "Dallas"
+    },
+    {
+      "name": "East Lake June Neighborhood",
+      "slug": "east-lake-june-neighborhood",
+      "lat": 32.734149,
+      "lng": -96.656967,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Eastwood",
+      "slug": "eastwood",
+      "lat": 32.846843,
+      "lng": -96.700032,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Edgewood",
+      "slug": "edgewood",
+      "lat": 32.76702,
+      "lng": -96.772326,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Elm Thicket - Northpark",
+      "slug": "elm-thicket-northpark",
+      "lat": 32.844669,
+      "lng": -96.828865,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Elmwood",
+      "slug": "elmwood",
+      "lat": 32.725278,
+      "lng": -96.847431,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Five Mile Neighborhood",
+      "slug": "five-mile-neighborhood",
+      "lat": 32.671858,
+      "lng": -96.778368,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Forest Court",
+      "slug": "forest-court",
+      "lat": 32.902329,
+      "lng": -96.795774,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Forest Hills",
+      "slug": "forest-hills",
+      "lat": 32.814263,
+      "lng": -96.71542,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Fort Worth Ave Development Group",
+      "slug": "fort-worth-ave-development-group",
+      "lat": 32.770688,
+      "lng": -96.848988,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Gilbert-Emory",
+      "slug": "gilbert-emory",
+      "lat": 32.774998,
+      "lng": -96.836429,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Glen Meadow",
+      "slug": "glen-meadow",
+      "lat": 32.9159,
+      "lng": -96.846176,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Glencoe Park",
+      "slug": "glencoe-park",
+      "lat": 32.833612,
+      "lng": -96.775123,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Glendale Heights",
+      "slug": "glendale-heights",
+      "lat": 32.696078,
+      "lng": -96.809369,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Glenview",
+      "slug": "glenview",
+      "lat": 32.679721,
+      "lng": -96.814916,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Greenland Hills",
+      "slug": "greenland-hills",
+      "lat": 32.827118,
+      "lng": -96.776622,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Hampton Hills",
+      "slug": "hampton-hills",
+      "lat": 32.730735,
+      "lng": -96.855047,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Heart Of Oak Cliff",
+      "slug": "heart-of-oak-cliff",
+      "lat": 32.708864,
+      "lng": -96.767488,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Henderson",
+      "slug": "henderson",
+      "lat": 32.81181,
+      "lng": -96.778832,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Hidden Valley",
+      "slug": "hidden-valley",
+      "lat": 32.665397,
+      "lng": -96.800761,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Highland Hills Community Liaison/",
+      "slug": "highland-hills-community-liaison",
+      "lat": 32.663583,
+      "lng": -96.756704,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Highlands Of McKamy",
+      "slug": "highlands-of-mckamy",
+      "lat": 32.99285,
+      "lng": -96.78194,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Hillcrest Forest",
+      "slug": "hillcrest-forest",
+      "lat": 32.90485,
+      "lng": -96.78031,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Hillside",
+      "slug": "hillside",
+      "lat": 32.841368,
+      "lng": -96.747366,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Hillside Oaks",
+      "slug": "hillside-oaks",
+      "lat": 32.748666,
+      "lng": -96.665586,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Hillview Terrace",
+      "slug": "hillview-terrace",
+      "lat": 32.808735,
+      "lng": -96.679551,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Hockaday",
+      "slug": "hockaday",
+      "lat": 32.905413,
+      "lng": -96.832013,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Hollywood Santa Monica",
+      "slug": "hollywood-santa-monica",
+      "lat": 32.80276,
+      "lng": -96.7437,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Horizon Estates",
+      "slug": "horizon-estates",
+      "lat": 32.690341,
+      "lng": -96.786647,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Junius Heights Historic District",
+      "slug": "junius-heights-historic-district",
+      "lat": 32.805162,
+      "lng": -96.757785,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Kenningston Homeowners CW",
+      "slug": "kenningston-homeowners-cw",
+      "lat": 32.72323,
+      "lng": -96.643649,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Kessler",
+      "slug": "kessler",
+      "lat": 32.760025,
+      "lng": -96.840633,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Kessler Heights",
+      "slug": "kessler-heights",
+      "lat": 32.690769,
+      "lng": -96.770305,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Kessler Plaza/Ravinia Heights",
+      "slug": "kessler-plaza-ravinia-heights",
+      "lat": 32.744116,
+      "lng": -96.862612,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Kidd Springs",
+      "slug": "kidd-springs",
+      "lat": 32.754375,
+      "lng": -96.830248,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Kiest Park Community Group",
+      "slug": "kiest-park-community-group",
+      "lat": 32.713083,
+      "lng": -96.848553,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Kings Highway Conservation District",
+      "slug": "kings-highway-conservation-district",
+      "lat": 32.75258,
+      "lng": -96.842932,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Kleberg",
+      "slug": "kleberg",
+      "lat": 32.672624,
+      "lng": -96.607037,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Kleberg Neighborhood",
+      "slug": "kleberg-neighborhood",
+      "lat": 32.682774,
+      "lng": -96.621635,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Knox Armstrong",
+      "slug": "knox-armstrong",
+      "lat": 32.819438,
+      "lng": -96.791968,
+      "borough": "Dallas"
+    },
+    {
+      "name": "L Streets",
+      "slug": "l-streets",
+      "lat": 32.871208,
+      "lng": -96.704965,
+      "borough": "Dallas"
+    },
+    {
+      "name": "La Bajada Neighborhood",
+      "slug": "la-bajada-neighborhood",
+      "lat": 32.781401,
+      "lng": -96.832262,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Lake Highlands Estates",
+      "slug": "lake-highlands-estates",
+      "lat": 32.883407,
+      "lng": -96.709817,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Lake Park Estates , Inc.",
+      "slug": "lake-park-estates-inc",
+      "lat": 32.839647,
+      "lng": -96.702511,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Lake Ridge Estates",
+      "slug": "lake-ridge-estates",
+      "lat": 32.866963,
+      "lng": -96.71412,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Lakeland Hills",
+      "slug": "lakeland-hills",
+      "lat": 32.798703,
+      "lng": -96.69982,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Lakewood",
+      "slug": "lakewood",
+      "lat": 32.824203,
+      "lng": -96.742956,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Lakewood Heights",
+      "slug": "lakewood-heights",
+      "lat": 32.821433,
+      "lng": -96.75722,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Lakewood Trails",
+      "slug": "lakewood-trails",
+      "lat": 32.837229,
+      "lng": -96.739338,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Ledbetter",
+      "slug": "ledbetter",
+      "lat": 32.782061,
+      "lng": -96.900827,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Liberty Heights & CW",
+      "slug": "liberty-heights-and-cw",
+      "lat": 32.698989,
+      "lng": -96.800521,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Little Casa View",
+      "slug": "little-casa-view",
+      "lat": 32.839804,
+      "lng": -96.676092,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Little Forest Hills",
+      "slug": "little-forest-hills",
+      "lat": 32.821676,
+      "lng": -96.706827,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Lochwood",
+      "slug": "lochwood",
+      "lat": 32.855029,
+      "lng": -96.691601,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Los Altos",
+      "slug": "los-altos",
+      "lat": 32.783169,
+      "lng": -96.840483,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Love Field West",
+      "slug": "love-field-west",
+      "lat": 32.832858,
+      "lng": -96.853536,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Lower Greenville",
+      "slug": "lower-greenville",
+      "lat": 32.823878,
+      "lng": -96.765827,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Lowest Greenville West",
+      "slug": "lowest-greenville-west",
+      "lat": 32.813853,
+      "lng": -96.772421,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Maple Lawn",
+      "slug": "maple-lawn",
+      "lat": 32.822451,
+      "lng": -96.827877,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Meadows",
+      "slug": "meadows",
+      "lat": 32.883522,
+      "lng": -96.778959,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Merriman Park/University Manor",
+      "slug": "merriman-park-university-manor",
+      "lat": 32.858899,
+      "lng": -96.73959,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Mill City",
+      "slug": "mill-city",
+      "lat": 32.772739,
+      "lng": -96.746588,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Moss Farm",
+      "slug": "moss-farm",
+      "lat": 32.897313,
+      "lng": -96.745615,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Mount Auburn",
+      "slug": "mount-auburn",
+      "lat": 32.797171,
+      "lng": -96.750378,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Mountain Creek Neighborhood",
+      "slug": "mountain-creek-neighborhood",
+      "lat": 32.654499,
+      "lng": -96.959329,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Munger Place Historic District",
+      "slug": "munger-place-historic-district",
+      "lat": 32.798906,
+      "lng": -96.765236,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Neighborhood Planning Group",
+      "slug": "neighborhood-planning-group",
+      "lat": 32.660017,
+      "lng": -96.7934,
+      "borough": "Dallas"
+    },
+    {
+      "name": "North Oaklawn",
+      "slug": "north-oaklawn",
+      "lat": 32.818856,
+      "lng": -96.806779,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Northaven Park , Inc.",
+      "slug": "northaven-park-inc",
+      "lat": 32.902305,
+      "lng": -96.847218,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Northern Hills",
+      "slug": "northern-hills",
+      "lat": 32.940427,
+      "lng": -96.779302,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Northwest Dallas Improvement League, Inc.",
+      "slug": "northwest-dallas-improvement-league-inc",
+      "lat": 32.90386,
+      "lng": -96.872,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Northwood Estates",
+      "slug": "northwood-estates",
+      "lat": 32.902565,
+      "lng": -96.755616,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Oak Cliff Gardens CW/",
+      "slug": "oak-cliff-gardens-cw",
+      "lat": 32.702243,
+      "lng": -96.783634,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Oak Park Estates",
+      "slug": "oak-park-estates",
+      "lat": 32.698849,
+      "lng": -96.849939,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Old Lake Highlands",
+      "slug": "old-lake-highlands",
+      "lat": 32.85691,
+      "lng": -96.70934,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Owenwood",
+      "slug": "owenwood",
+      "lat": 32.787584,
+      "lng": -96.740096,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Park Central",
+      "slug": "park-central",
+      "lat": 32.93259,
+      "lng": -96.765274,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Park Forest Neighborhood Group",
+      "slug": "park-forest-neighborhood-group",
+      "lat": 32.90567,
+      "lng": -96.860427,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Parkdale Lawnview Of",
+      "slug": "parkdale-lawnview-of",
+      "lat": 32.772718,
+      "lng": -96.721029,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Pecan Heights Neighborhood",
+      "slug": "pecan-heights-neighborhood",
+      "lat": 32.78471,
+      "lng": -96.722969,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Peninsula",
+      "slug": "peninsula",
+      "lat": 32.841564,
+      "lng": -96.711837,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Phillis Wheatley",
+      "slug": "phillis-wheatley",
+      "lat": 32.767924,
+      "lng": -96.761989,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Pleasant Grove",
+      "slug": "pleasant-grove",
+      "lat": 32.750724,
+      "lng": -96.661837,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Pleasant Grove Unidos",
+      "slug": "pleasant-grove-unidos",
+      "lat": 32.723388,
+      "lng": -96.708822,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Polk Terrace",
+      "slug": "polk-terrace",
+      "lat": 32.650825,
+      "lng": -96.835671,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Polk-Vernon",
+      "slug": "polk-vernon",
+      "lat": 32.726695,
+      "lng": -96.838467,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Preston Citadel Club",
+      "slug": "preston-citadel-club",
+      "lat": 32.920777,
+      "lng": -96.795126,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Preston Hollow West",
+      "slug": "preston-hollow-west",
+      "lat": 32.872973,
+      "lng": -96.815961,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Preston Port Estates",
+      "slug": "preston-port-estates",
+      "lat": 32.978726,
+      "lng": -96.802628,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Preston Royal NW",
+      "slug": "preston-royal-nw",
+      "lat": 32.902951,
+      "lng": -96.808017,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Prestonwood On The Park",
+      "slug": "prestonwood-on-the-park",
+      "lat": 32.955076,
+      "lng": -96.782452,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Queen City",
+      "slug": "queen-city",
+      "lat": 32.7595,
+      "lng": -96.76683,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Rawlins-Hall Group",
+      "slug": "rawlins-hall-group",
+      "lat": 32.799522,
+      "lng": -96.81804,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Red Bird-Hampton",
+      "slug": "red-bird-hampton",
+      "lat": 32.665985,
+      "lng": -96.861506,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Residents United For Change & Opportunity",
+      "slug": "residents-united-for-change-and-opportunity",
+      "lat": 32.760931,
+      "lng": -96.75147,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Richardson And North Dallas Organization",
+      "slug": "richardson-and-north-dallas-organization",
+      "lat": 32.934946,
+      "lng": -96.761074,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Ridgewood Park",
+      "slug": "ridgewood-park",
+      "lat": 32.848252,
+      "lng": -96.748996,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Royal Northaven",
+      "slug": "royal-northaven",
+      "lat": 32.898756,
+      "lng": -96.828758,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Royalwood Estate",
+      "slug": "royalwood-estate",
+      "lat": 32.887664,
+      "lng": -96.829462,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Ruthmeade Place",
+      "slug": "ruthmeade-place",
+      "lat": 32.737955,
+      "lng": -96.830973,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Rylie",
+      "slug": "rylie",
+      "lat": 32.679633,
+      "lng": -96.651579,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Samuel Peak Creek",
+      "slug": "samuel-peak-creek",
+      "lat": 32.745425,
+      "lng": -96.668312,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Santa Fe &",
+      "slug": "santa-fe-and",
+      "lat": 32.792348,
+      "lng": -96.76236,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Singing Hills",
+      "slug": "singing-hills",
+      "lat": 32.676361,
+      "lng": -96.799888,
+      "borough": "Dallas"
+    },
+    {
+      "name": "South Central",
+      "slug": "south-central",
+      "lat": 32.71099,
+      "lng": -96.74764,
+      "borough": "Dallas"
+    },
+    {
+      "name": "South East Dallas Civic , Inc.",
+      "slug": "south-east-dallas-civic-inc",
+      "lat": 32.659361,
+      "lng": -96.768634,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Southern Hills",
+      "slug": "southern-hills",
+      "lat": 32.692729,
+      "lng": -96.83603,
+      "borough": "Dallas"
+    },
+    {
+      "name": "St. Andrews",
+      "slug": "st-andrews",
+      "lat": 32.838596,
+      "lng": -96.655625,
+      "borough": "Dallas"
+    },
+    {
+      "name": "St. Augustine Heights",
+      "slug": "st-augustine-heights",
+      "lat": 32.741128,
+      "lng": -96.654497,
+      "borough": "Dallas"
+    },
+    {
+      "name": "St. Philips",
+      "slug": "st-philips",
+      "lat": 32.757857,
+      "lng": -96.776078,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Stevens Park Estates",
+      "slug": "stevens-park-estates",
+      "lat": 32.760118,
+      "lng": -96.853713,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Stevens Park Village",
+      "slug": "stevens-park-village",
+      "lat": 32.762104,
+      "lng": -96.861034,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Sunset Hill Of",
+      "slug": "sunset-hill-of",
+      "lat": 32.740836,
+      "lng": -96.853047,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Swiss Ave Historic District",
+      "slug": "swiss-ave-historic-district",
+      "lat": 32.807531,
+      "lng": -96.764964,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Tenth Street Residential",
+      "slug": "tenth-street-residential",
+      "lat": 32.748227,
+      "lng": -96.807105,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Truett Area",
+      "slug": "truett-area",
+      "lat": 32.81633,
+      "lng": -96.675988,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Turtle Creek",
+      "slug": "turtle-creek",
+      "lat": 32.809415,
+      "lng": -96.802693,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Twin Oaks",
+      "slug": "twin-oaks",
+      "lat": 32.679333,
+      "lng": -96.847659,
+      "borough": "Dallas"
+    },
+    {
+      "name": "University Meadows",
+      "slug": "university-meadows",
+      "lat": 32.846766,
+      "lng": -96.757233,
+      "borough": "Dallas"
+    },
+    {
+      "name": "University Terrace",
+      "slug": "university-terrace",
+      "lat": 32.852128,
+      "lng": -96.738122,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Uptown",
+      "slug": "uptown",
+      "lat": 32.812919,
+      "lng": -96.794419,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Urbandale",
+      "slug": "urbandale",
+      "lat": 32.77044,
+      "lng": -96.700134,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Valley View",
+      "slug": "valley-view",
+      "lat": 32.932452,
+      "lng": -96.777718,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Vickery Place",
+      "slug": "vickery-place",
+      "lat": 32.820444,
+      "lng": -96.777334,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Vickery Together",
+      "slug": "vickery-together",
+      "lat": 32.879588,
+      "lng": -96.752134,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Victory Gardens & CW",
+      "slug": "victory-gardens-and-cw",
+      "lat": 32.782875,
+      "lng": -96.852307,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Walnut Ridge",
+      "slug": "walnut-ridge",
+      "lat": 32.883563,
+      "lng": -96.835686,
+      "borough": "Dallas"
+    },
+    {
+      "name": "WendelkinDriskell",
+      "slug": "wendelkindriskell",
+      "lat": 32.753251,
+      "lng": -96.767909,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Westmoreland Heights",
+      "slug": "westmoreland-heights",
+      "lat": 32.783412,
+      "lng": -96.878552,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Westmoreland Park",
+      "slug": "westmoreland-park",
+      "lat": 32.79033,
+      "lng": -96.877327,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Wheatland Meadows/Wisdom Terrace",
+      "slug": "wheatland-meadows-wisdom-terrace",
+      "lat": 32.654979,
+      "lng": -96.814277,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Whispering Hills",
+      "slug": "whispering-hills",
+      "lat": 32.924773,
+      "lng": -96.708874,
+      "borough": "Dallas"
+    },
+    {
+      "name": "White Rock",
+      "slug": "white-rock",
+      "lat": 32.839169,
+      "lng": -96.734296,
+      "borough": "Dallas"
+    },
+    {
+      "name": "White Rock Valley",
+      "slug": "white-rock-valley",
+      "lat": 32.869102,
+      "lng": -96.725146,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Wilshire Heights",
+      "slug": "wilshire-heights",
+      "lat": 32.832246,
+      "lng": -96.757271,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Winnetka Heights",
+      "slug": "winnetka-heights",
+      "lat": 32.745411,
+      "lng": -96.844134,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Woodbriar",
+      "slug": "woodbriar",
+      "lat": 32.954371,
+      "lng": -96.794706,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Woodlawn",
+      "slug": "woodlawn",
+      "lat": 32.754808,
+      "lng": -96.758714,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Woods - Sugarberry",
+      "slug": "woods-sugarberry",
+      "lat": 32.635696,
+      "lng": -96.948834,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Wynnewood Heights",
+      "slug": "wynnewood-heights",
+      "lat": 32.709479,
+      "lng": -96.835374,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Wynnewood Hills",
+      "slug": "wynnewood-hills",
+      "lat": 32.670736,
+      "lng": -96.844599,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Wynnewood North",
+      "slug": "wynnewood-north",
+      "lat": 32.730256,
+      "lng": -96.832448,
+      "borough": "Dallas"
+    },
+    {
+      "name": "Zoo Creek Park",
+      "slug": "zoo-creek-park",
+      "lat": 32.733477,
+      "lng": -96.806517,
+      "borough": "Dallas"
+    }
+  ]
+}
