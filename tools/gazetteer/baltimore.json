@@ -4,11 +4,12 @@
   "country": "US",
   "source": "BNIA-JFI / Jacob France Institute — Baltimore City Community Statistical Areas (CSAs), 2020 boundaries",
   "purpose": "Safety pages + calibration. CSAs, not the 256 NSAs: see the header of this script for why.",
-  "generatedAt": "2026-08-24",
+  "generatedAt": "2026-09-15",
   "areas": [
     {
       "name": "Allendale/Irvington/S. Hilton",
       "slug": "allendale-irvington-s-hilton",
+      "borough": "Baltimore",
       "lat": 39.284048,
       "lng": -76.678537,
       "covers": [
@@ -20,12 +21,12 @@
         "Uplands",
         "Yale Heights",
         "Lower Edmondson Village"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Beechfield/Ten Hills/West Hills",
       "slug": "beechfield-ten-hills-west-hills",
+      "borough": "Baltimore",
       "lat": 39.288136,
       "lng": -76.702264,
       "covers": [
@@ -35,12 +36,12 @@
         "Tremont",
         "West Hills",
         "Westgate"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Belair-Edison",
       "slug": "belair-edison",
+      "borough": "Baltimore",
       "lat": 39.321214,
       "lng": -76.574747,
       "covers": [
@@ -49,12 +50,12 @@
         "Four By Four",
         "Mayfield",
         "Herring Run Park"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Brooklyn/Curtis Bay/Hawkins Point",
       "slug": "brooklyn-curtis-bay-hawkins-point",
+      "borough": "Baltimore",
       "lat": 39.234018,
       "lng": -76.587283,
       "covers": [
@@ -63,23 +64,23 @@
         "Fairfield Area",
         "Hawkins Point",
         "Curtis Bay Industrial Area"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Canton",
       "slug": "canton",
+      "borough": "Baltimore",
       "lat": 39.284284,
       "lng": -76.578654,
       "covers": [
         "Canton",
         "Patterson Park"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Cedonia/Frankford",
       "slug": "cedonia-frankford",
+      "borough": "Baltimore",
       "lat": 39.332612,
       "lng": -76.544728,
       "covers": [
@@ -87,23 +88,23 @@
         "Frankford",
         "Cedmont",
         "Parkside"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Cherry Hill",
       "slug": "cherry-hill",
+      "borough": "Baltimore",
       "lat": 39.249653,
       "lng": -76.623246,
       "covers": [
         "Cherry Hill",
         "Middle Branch/Reedbird Parks"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Chinquapin Park/Belvedere",
       "slug": "chinquapin-park-belvedere",
+      "borough": "Baltimore",
       "lat": 39.362939,
       "lng": -76.603778,
       "covers": [
@@ -113,24 +114,24 @@
         "Mid-Govans",
         "Belvedere",
         "Evesham Park"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Claremont/Armistead",
       "slug": "claremont-armistead",
+      "borough": "Baltimore",
       "lat": 39.312681,
       "lng": -76.546306,
       "covers": [
         "Armistead Gardens",
         "Claremont-Freedom (now Orchard Ridge)",
         "Orchard Ridge"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Clifton-Berea",
       "slug": "clifton-berea",
+      "borough": "Baltimore",
       "lat": 39.309545,
       "lng": -76.583045,
       "covers": [
@@ -139,23 +140,23 @@
         "Broadway East",
         "Darley Park",
         "South Clifton Park"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Cross-Country/Cheswolde",
       "slug": "cross-country-cheswolde",
+      "borough": "Baltimore",
       "lat": 39.365732,
       "lng": -76.690203,
       "covers": [
         "Cheswolde",
         "Cross Country"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Dickeyville/Franklintown",
       "slug": "dickeyville-franklintown",
+      "borough": "Baltimore",
       "lat": 39.310356,
       "lng": -76.701535,
       "covers": [
@@ -163,12 +164,12 @@
         "Franklintown",
         "Purnell",
         "Wakefield"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Dorchester/Ashburton",
       "slug": "dorchester-ashburton",
+      "borough": "Baltimore",
       "lat": 39.33175,
       "lng": -76.677971,
       "covers": [
@@ -178,24 +179,24 @@
         "Dolfield",
         "Dorchester",
         "East Arlington"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Downtown/Seton Hill",
       "slug": "downtown-seton-hill",
+      "borough": "Baltimore",
       "lat": 39.29137,
       "lng": -76.618303,
       "covers": [
         "Downtown",
         "Seton Hill",
         "University of Maryland"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Edmondson Village",
       "slug": "edmondson-village",
+      "borough": "Baltimore",
       "lat": 39.299491,
       "lng": -76.683134,
       "covers": [
@@ -203,24 +204,24 @@
         "Rognel Heights",
         "Gwynns Falls/Leakin Park",
         "Edgewood"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Fells Point",
       "slug": "fells-point",
+      "borough": "Baltimore",
       "lat": 39.285327,
       "lng": -76.59159,
       "covers": [
         "Butcher's Hill",
         "Fells Point",
         "Upper Fells Point"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Forest Park/Walbrook",
       "slug": "forest-park-walbrook",
+      "borough": "Baltimore",
       "lat": 39.316683,
       "lng": -76.684525,
       "covers": [
@@ -231,12 +232,12 @@
         "Mount Holly",
         "West Forest Park",
         "Windsor Hills"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Glen-Fallstaff",
       "slug": "glen-fallstaff",
+      "borough": "Baltimore",
       "lat": 39.355928,
       "lng": -76.694768,
       "covers": [
@@ -244,12 +245,12 @@
         "Glen",
         "Reisterstown Station",
         "Woodmere"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Greater Charles Village/Barclay",
       "slug": "greater-charles-village-barclay",
+      "borough": "Baltimore",
       "lat": 39.323293,
       "lng": -76.616114,
       "covers": [
@@ -260,12 +261,12 @@
         "Oakenshawe",
         "Johns Hopkins Homewood",
         "Old Goucher"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Greater Govans",
       "slug": "greater-govans",
+      "borough": "Baltimore",
       "lat": 39.344454,
       "lng": -76.604296,
       "covers": [
@@ -276,12 +277,12 @@
         "Winston-Govans",
         "Woodbourne-McCabe",
         "Wrenlane"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Greater Mondawmin",
       "slug": "greater-mondawmin",
+      "borough": "Baltimore",
       "lat": 39.316831,
       "lng": -76.661378,
       "covers": [
@@ -291,12 +292,12 @@
         "Mondawmin",
         "Panway/Braddish Avenue",
         "Walbrook"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Greater Roland Park/Poplar Hill",
       "slug": "greater-roland-park-poplar-hill",
+      "borough": "Baltimore",
       "lat": 39.356317,
       "lng": -76.637998,
       "covers": [
@@ -306,12 +307,12 @@
         "North Roland Park/Poplar Hill",
         "Roland Park",
         "Wyndhurst"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Greater Rosemont",
       "slug": "greater-rosemont",
+      "borough": "Baltimore",
       "lat": 39.30289,
       "lng": -76.663052,
       "covers": [
@@ -324,36 +325,36 @@
         "Rosemont",
         "Winchester",
         "Rosemont Homewoners/Tenants"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Greenmount East",
       "slug": "greenmount-east",
+      "borough": "Baltimore",
       "lat": 39.307247,
       "lng": -76.600171,
       "covers": [
         "Greenmount Cemetery",
         "Johnston Square",
         "Oliver"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Hamilton",
       "slug": "hamilton",
+      "borough": "Baltimore",
       "lat": 39.351621,
       "lng": -76.547891,
       "covers": [
         "Rosemont East",
         "Westfield",
         "Glenham-Belford"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Harbor East/Little Italy",
       "slug": "harbor-east-little-italy",
+      "borough": "Baltimore",
       "lat": 39.288293,
       "lng": -76.599486,
       "covers": [
@@ -361,12 +362,12 @@
         "Jonestown",
         "Little Italy",
         "Perkins Homes"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Harford/Echodale",
       "slug": "harford-echodale",
+      "borough": "Baltimore",
       "lat": 39.364174,
       "lng": -76.553203,
       "covers": [
@@ -377,23 +378,23 @@
         "Overlea",
         "Taylor Heights",
         "Woodring (now North Harford Road)"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Highlandtown",
       "slug": "highlandtown",
+      "borough": "Baltimore",
       "lat": 39.285193,
       "lng": -76.566612,
       "covers": [
         "Brewers Hill",
         "Highlandtown"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Howard Park/West Arlington",
       "slug": "howard-park-west-arlington",
+      "borough": "Baltimore",
       "lat": 39.33556,
       "lng": -76.700687,
       "covers": [
@@ -402,12 +403,12 @@
         "Howard Park",
         "West Arlington",
         "Seton Business Park"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Inner Harbor/Federal Hill",
       "slug": "inner-harbor-federal-hill",
+      "borough": "Baltimore",
       "lat": 39.278968,
       "lng": -76.613349,
       "covers": [
@@ -421,12 +422,12 @@
         "Downtown West",
         "SBIC (now South Baltimore)",
         "South Baltimore"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Lauraville",
       "slug": "lauraville",
+      "borough": "Baltimore",
       "lat": 39.341029,
       "lng": -76.568233,
       "covers": [
@@ -438,12 +439,12 @@
         "Morgan Park",
         "Waltherson",
         "Wilson Heights (now Moravia-Walther)"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Loch Raven",
       "slug": "loch-raven",
+      "borough": "Baltimore",
       "lat": 39.363683,
       "lng": -76.585601,
       "covers": [
@@ -453,24 +454,24 @@
         "Mt. Pleasant Park",
         "Ramblewood",
         "Woodbourne Heights"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Madison/East End",
       "slug": "madison-east-end",
+      "borough": "Baltimore",
       "lat": 39.299654,
       "lng": -76.580444,
       "covers": [
         "Madison-Eastend",
         "McElderry Park",
         "Milton-Montford"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Medfield/Hampden/Woodberry/Remington",
       "slug": "medfield-hampden-woodberry-remington",
+      "borough": "Baltimore",
       "lat": 39.331543,
       "lng": -76.636733,
       "covers": [
@@ -481,12 +482,12 @@
         "Remington",
         "Woodberry",
         "Wyman Park"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Midtown",
       "slug": "midtown",
+      "borough": "Baltimore",
       "lat": 39.304784,
       "lng": -76.618169,
       "covers": [
@@ -495,23 +496,23 @@
         "Greenmount West",
         "Mid-Town Belvedere",
         "Mount Vernon"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Midway/Coldstream",
       "slug": "midway-coldstream",
+      "borough": "Baltimore",
       "lat": 39.319271,
       "lng": -76.598374,
       "covers": [
         "Coldstream Homestead Montebello",
         "East Baltimore Midway"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Morrell Park/Violetville",
       "slug": "morrell-park-violetville",
+      "borough": "Baltimore",
       "lat": 39.267663,
       "lng": -76.665687,
       "covers": [
@@ -521,24 +522,24 @@
         "Saint Paul",
         "Violetville",
         "Wilhelm Park"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Mount Washington/Coldspring",
       "slug": "mount-washington-coldspring",
+      "borough": "Baltimore",
       "lat": 39.360369,
       "lng": -76.658996,
       "covers": [
         "Coldspring",
         "Mt. Washington",
         "Sabina-Mattfeldt"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "North Baltimore/Guilford/Homeland",
       "slug": "north-baltimore-guilford-homeland",
+      "borough": "Baltimore",
       "lat": 39.353982,
       "lng": -76.619139,
       "covers": [
@@ -556,12 +557,12 @@
         "Loyola/Notre Dame",
         "Radnor-Winston",
         "York-Homeland"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Northwood",
       "slug": "northwood",
+      "borough": "Baltimore",
       "lat": 39.342243,
       "lng": -76.58847,
       "covers": [
@@ -572,12 +573,12 @@
         "Original Northwood",
         "Perring Loch",
         "Stonewood-Pentwood-Winston"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Oldtown/Middle East",
       "slug": "oldtown-middle-east",
+      "borough": "Baltimore",
       "lat": 39.297707,
       "lng": -76.597657,
       "covers": [
@@ -588,12 +589,12 @@
         "Penn-Fallsway",
         "Pleasant View Gardens",
         "CARE"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Orangeville/East Highlandtown",
       "slug": "orangeville-east-highlandtown",
+      "borough": "Baltimore",
       "lat": 39.294366,
       "lng": -76.549326,
       "covers": [
@@ -607,24 +608,24 @@
         "Bayview",
         "Orangeville Industrial Area",
         "Pulaski Industrial Area"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Patterson Park North & East",
       "slug": "patterson-park-north-and-east",
+      "borough": "Baltimore",
       "lat": 39.29257,
       "lng": -76.576338,
       "covers": [
         "Baltimore-Linwood (now Patterson Park Neighborhood)",
         "Patterson Place",
         "Ellwood Park/Monument"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Penn North/Reservoir Hill",
       "slug": "penn-north-reservoir-hill",
+      "borough": "Baltimore",
       "lat": 39.319969,
       "lng": -76.641986,
       "covers": [
@@ -632,12 +633,12 @@
         "Parkview/Woodbrook",
         "Penn North",
         "Reservoir Hill"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Pimlico/Arlington/Hilltop",
       "slug": "pimlico-arlington-hilltop",
+      "borough": "Baltimore",
       "lat": 39.34951,
       "lng": -76.673556,
       "covers": [
@@ -647,23 +648,23 @@
         "Langston Hughes",
         "Levindale",
         "Pimlico Good Neighbors"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Poppleton/The Terraces/Hollins Market",
       "slug": "poppleton-the-terraces-hollins-market",
+      "borough": "Baltimore",
       "lat": 39.29017,
       "lng": -76.632964,
       "covers": [
         "Hollins Market",
         "Poppleton"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Sandtown-Winchester/Harlem Park",
       "slug": "sandtown-winchester-harlem-park",
+      "borough": "Baltimore",
       "lat": 39.301178,
       "lng": -76.643323,
       "covers": [
@@ -671,24 +672,24 @@
         "Harlem Park",
         "Midtown-Edmondson",
         "Sandtown-Winchester"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "South Baltimore",
       "slug": "south-baltimore",
+      "borough": "Baltimore",
       "lat": 39.267032,
       "lng": -76.60114,
       "covers": [
         "Locust Point",
         "Port Covington",
         "Locust Point Industrial Area"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Southeastern",
       "slug": "southeastern",
+      "borough": "Baltimore",
       "lat": 39.266817,
       "lng": -76.547143,
       "covers": [
@@ -700,12 +701,12 @@
         "O'Donnell Heights",
         "Saint Helena",
         "Dundalk Marine Terminal"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Southern Park Heights",
       "slug": "southern-park-heights",
+      "borough": "Baltimore",
       "lat": 39.337433,
       "lng": -76.664015,
       "covers": [
@@ -714,12 +715,12 @@
         "Park Circle",
         "Parklane",
         "Towanda-Grantley"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Southwest Baltimore",
       "slug": "southwest-baltimore",
+      "borough": "Baltimore",
       "lat": 39.286702,
       "lng": -76.651069,
       "covers": [
@@ -731,32 +732,32 @@
         "Shipley Hill",
         "Union Square",
         "New Southwest/Mt. Clare"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "The Waverlies",
       "slug": "the-waverlies",
+      "borough": "Baltimore",
       "lat": 39.327142,
       "lng": -76.602678,
       "covers": [
         "Better Waverly",
         "Ednor Gardens-Lakeside",
         "Waverly"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Unassigned -- Jail",
       "slug": "unassigned-jail",
+      "borough": "Baltimore",
       "lat": 39.2995,
       "lng": -76.608972,
-      "covers": [],
-      "borough": "Baltimore"
+      "covers": []
     },
     {
       "name": "Upton/Druid Heights",
       "slug": "upton-druid-heights",
+      "borough": "Baltimore",
       "lat": 39.302707,
       "lng": -76.630875,
       "covers": [
@@ -764,12 +765,12 @@
         "Heritage Crossing",
         "Madison Park",
         "Upton"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Washington Village/Pigtown",
       "slug": "washington-village-pigtown",
+      "borough": "Baltimore",
       "lat": 39.276706,
       "lng": -76.635779,
       "covers": [
@@ -777,20 +778,19 @@
         "Carroll Park",
         "Caroll-Camden Industrial Area",
         "Washington Village/Pigtown"
-      ],
-      "borough": "Baltimore"
+      ]
     },
     {
       "name": "Westport/Mount Winans/Lakeland",
       "slug": "westport-mount-winans-lakeland",
+      "borough": "Baltimore",
       "lat": 39.256228,
       "lng": -76.639093,
       "covers": [
         "Lakeland",
         "Mt. Winans",
         "Westport"
-      ],
-      "borough": "Baltimore"
+      ]
     }
   ]
 }

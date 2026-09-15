@@ -4,7 +4,7 @@
   "country": "US",
   "source": "SANDAG / City of San Diego — Community Plan Areas",
   "purpose": "Safety pages + calibration. Community plan areas, not census tracts: see the header of this script for why.",
-  "generatedAt": "2026-09-12",
+  "generatedAt": "2026-09-15",
   "areas": [
     {
       "name": "Balboa Park",

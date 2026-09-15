@@ -4,7 +4,7 @@
   "country": "US",
   "source": "City of Kansas City, Missouri — 246 neighborhood boundaries, grouped by the city's 18 Area Plans",
   "purpose": "Safety pages + calibration. See this script's header for what is dropped and why nothing else is.",
-  "generatedAt": "2026-09-10",
+  "generatedAt": "2026-09-15",
   "areas": [
     {
       "name": "18th and Vine and Downtown East",
