@@ -1466,7 +1466,7 @@ const footer = (cfg, a, citySlug, windowDays) => `</div></main><footer class="si
 
 const cta = (name) => `<div class="cta">
 <h2>Walking in ${esc(name)} at night?</h2>
-<p>SafeRoute scores every walking route against the same live crime data on this page — and shows how much of each route runs on lit streets. Pick the safer way, share your walk, and check in when you arrive. Free, no account.</p>
+<p>SafeRoute scores every walking route against the same live crime data on this page — and shows how much of each route runs on lit streets. Compare the routes, share your walk, and check in when you arrive. Free, no account.</p>
 <a class="btn" href="${APP_URL}">Get SafeRoute on the App Store</a>
 </div>`;
 

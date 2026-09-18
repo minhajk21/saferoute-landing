@@ -181,7 +181,7 @@
   <div class="wrap" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3);display:flex;gap:20px;flex-wrap:wrap">
     <a href="/" style="color:var(--ink-3);text-decoration:none">← safe-route.app</a>
     <a href="/safety/" style="color:var(--ink-3);text-decoration:none">Neighborhood safety index</a>
-    <span>Crime data from official police / open-data sources. Informational only.</span>
+    <span>Crime data from official police / open-data sources. Informational only — each score is calibrated within its own city and cannot be read against another city's.</span>
   </div>
 </footer>
 
@@ -520,7 +520,7 @@ function render(d, name, address){
       <span class="score" style="color:${b.c}">${d.safetyScore}<span class="of">\u002F100</span></span>
       <span class="band" style="background:${b.c}">${b.t}</span>
     </div>
-    <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported ${esc(d.reportedTo||'to police')} within 1&nbsp;km${span?` over ${span}${d.crimeDate?` to ${monthName(d.crimeDate)}`:''}`:''} — higher index = safer. ${d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
+    <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported ${esc(d.reportedTo||'to police')} within 1&nbsp;km${span?` over ${span}${d.crimeDate?` to ${monthName(d.crimeDate)}`:''}`:d.crimeDate?` in the data through ${monthName(d.crimeDate)}`:''} — a higher index means fewer severity-weighted reported incidents. ${d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
     <div id="pub"></div>
     <div id="recent"></div>
     <div id="cams"></div>

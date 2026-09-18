@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SafeRoute — See your street before you walk it</title>
-<meta name="description" content="SafeRoute scores any address from official police data, plans walking routes by real risk, and shows the last 24 hours of 911 calls and live street cameras. UK, 26 US cities, Canada and Mexico City. No accounts, no ads.">
+<meta name="description" content="SafeRoute scores any address from official police data, plans walking routes by reported incidents, and shows the last 24 hours of 911 calls and live street cameras. UK, 26 US cities, Canada and Mexico City. No accounts, no ads.">
 <link rel="canonical" href="https://safe-route.app/">
 <meta name="apple-itunes-app" content="app-id=6768244297">
 <meta name="theme-color" content="#0A0D12">
@@ -201,7 +201,7 @@
         <h1 class="h1-hero reveal" style="--i:1">See your street<br><span class="grad">before you walk it.</span></h1>
         <p class="lede reveal" style="--i:2">
           SafeRoute scores any address from official police data, plans walking routes
-          by real risk, and — in a growing list of cities — shows you the last 24 hours
+          by reported incidents, and — in a growing list of cities — shows you the last 24 hours
           of 911 calls and live street cameras. No accounts. No ads.
         </p>
         <form class="check reveal" style="--i:3" action="/check/"
@@ -495,7 +495,7 @@
 <section class="sec final">
   <div class="wrap">
     <div class="reveal">
-      <h2>Walk smarter. Walk safer. Walk home.</h2>
+      <h2>Know the street. Choose the route. Walk home.</h2>
       <p class="lede" style="margin:18px auto 0;text-align:center">
         Free on the App Store. Nothing to sign up for.
       </p>
@@ -551,7 +551,7 @@
 "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
 "url":"https://safe-route.app/",
 "downloadUrl":"https://apps.apple.com/app/apple-store/id6768244297",
-"description":"Crime-aware walking navigation. Check how safe any address is from official police data, plan routes scored by real risk, and see live 911 calls and street cameras in supported cities."}
+"description":"Crime-aware walking navigation. See what has been reported near any address from official police data, plan routes scored by reported incidents, and see live 911 calls and street cameras in supported cities."}
 </script>
 
 <script>
@@ -597,7 +597,7 @@
         var xs = x.n.toLowerCase().indexOf(q) === 0, ys = y.n.toLowerCase().indexOf(q) === 0;
         return xs === ys ? y.v - x.v : (xs ? -1 : 1);
       });
-      note.textContent = hits.length ? hits.length + ' match' + (hits.length === 1 ? '' : 'es') : 'No match — try another spelling.';
+      note.textContent = hits.length ? hits.length + ' match' + (hits.length === 1 ? '' : 'es') + ' · scores are calibrated per city — compare areas, not cities' : 'No match — try another spelling.';
       hits.slice(0, 6).forEach(function(a){
         var li = document.createElement('li'), el = document.createElement('a');
         el.href = '/safety/' + a.c + '/' + a.s + '/';
