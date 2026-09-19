@@ -31,17 +31,7 @@
     --ember-soft:#FF8A7D;
   }
 
-  header{border-bottom:1px solid var(--line);background:rgba(10,13,18,.86);backdrop-filter:saturate(160%) blur(14px);position:sticky;top:0;z-index:1000}
-  .nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
-  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
-  .brand .shield{width:20px;height:24px;flex:none}
-  .brand b{font-family:var(--mono);font-size:16px;letter-spacing:.16em;font-weight:600}
-  .nav-right{display:flex;align-items:center;gap:16px}
-  .nav-link{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;color:var(--ink-2);white-space:nowrap}
-  .nav-link:hover{color:var(--teal);text-decoration:none}
-  .nav-link.on{color:var(--ink);border-bottom:2px solid var(--ember)}
-  .nav-cta{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;background:var(--teal);color:#04231E;padding:9px 14px;border-radius:8px}
-  .nav-cta:hover{background:#5CE8D2}@media(max-width:700px){.nav-link.hide-sm{display:none}}
+  /* Header styles live in /assets/sr.css — see the Site header block there. */
 
   .head{padding:clamp(30px,5vw,56px) 0 18px}
   .eyebrow .live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ember);margin-right:7px;animation:heartbeat 2.4s ease-in-out infinite}0%,100%{opacity:1}50%{opacity:.35}
@@ -124,19 +114,16 @@
 </head>
 <body>
 
-<header><div class="wrap"><div class="nav">
-  <a class="brand" href="/">
-    <svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#12433D"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#3FD9C0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <b>SAFEROUTE</b>
-  </a>
-  <div class="nav-right">
-    <a class="nav-link" href="/safety/">Safety index</a>
-    <a class="nav-link" href="/check/">Check an address</a>
-    <a class="nav-link on" href="/tonight/">Tonight</a>
-    <a class="nav-link hide-sm" href="/transparency/">Transparency</a>
-    <a class="nav-cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-tonight&mt=8">Get the app</a>
-  </div>
-</div></div></header>
+<header class="site"><div class="wrap">
+<a class="wordmark" href="/"><svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>SAFEROUTE</span></a>
+<nav class="site-nav" aria-label="Site">
+<a href="/safety/">Safety index</a>
+<a href="/check/">Check an address</a>
+<a class="on" href="/tonight/">Tonight</a>
+<a class="hide-sm" href="/transparency/">Transparency</a>
+<a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-tonight&mt=8">Get the app</a>
+</nav>
+</div></header>
 
 <main><div class="wrap">
   <div class="head">

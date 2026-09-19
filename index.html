@@ -40,14 +40,10 @@
   .lede{font-size:clamp(17px,1.55vw,19.5px);color:var(--text-2);max-width:60ch}
   .sec{padding:clamp(72px,9vw,124px) 0;border-top:1px solid var(--line)}
 
-  /* ---------- nav ---------- */
-  .nav{position:sticky;top:0;z-index:60;background:rgba(10,13,18,.82);
-       backdrop-filter:saturate(160%) blur(14px);border-bottom:1px solid var(--line)}
-  .nav-in{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter);height:62px;
-          display:flex;align-items:center;gap:12px}
-  .brand{display:flex;align-items:center;gap:9px;margin-right:auto}
-  .nav a.lnk{font-size:14.5px;color:var(--text-2);padding:7px 11px;border-radius:8px;transition:.15s}
-  .nav a.lnk:hover{color:var(--text);background:var(--surface)}@media(max-width:880px){.hide-md{display:none}}@media(max-width:560px){.hide-sm{display:none}}
+  /* Header styles live in /assets/sr.css — see the Site header block there.
+     Only the footer wordmark still needs anything of its own: it sits in the
+     footer grid and relies on this to stay left. */
+  footer .brand{margin-right:auto}
 
   /* ---------- hero ---------- */
   .hero{position:relative;padding:clamp(56px,7vw,92px) 0 clamp(64px,8vw,104px);overflow:hidden}
@@ -175,22 +171,16 @@
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-in">
-    <a class="brand" href="#top">
-      <svg viewBox="0 0 20 24" fill="none" aria-hidden="true">
-        <path d="M10 1 19 4.5V12c0 6-4 9.5-9 11C5 21.5 1 18 1 12V4.5L10 1Z"
-              fill="#12433D" stroke="#3FD9C0" stroke-width="1.2"/>
-      </svg>
-      <b>SAFEROUTE</b>
-    </a>
-    <a class="lnk hide-md" href="/safety/">Safety index</a>
-    <a class="lnk hide-sm" href="/check/">Check an address</a>
-    <a class="lnk hide-md" href="/tonight/">Tonight</a>
-    <a class="lnk hide-md" href="/transparency/">Transparency</a>
-    <a class="btn btn-sm btn-fill" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-home&mt=8">Get the app</a>
-  </div>
+<header class="site"><div class="wrap">
+<a class="wordmark" href="/"><svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>SAFEROUTE</span></a>
+<nav class="site-nav" aria-label="Site">
+<a href="/safety/">Safety index</a>
+<a href="/check/">Check an address</a>
+<a href="/tonight/">Tonight</a>
+<a class="hide-sm" href="/transparency/">Transparency</a>
+<a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-home&mt=8">Get the app</a>
 </nav>
+</div></header>
 
 <!-- ══════════ HERO ══════════ -->
 <section class="hero" id="top">

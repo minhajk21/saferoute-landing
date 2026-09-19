@@ -84,6 +84,52 @@ p.lead,.lede{font-size:clamp(17px,1.55vw,18.5px);color:var(--text-2);max-width:6
 }
 .wordmark .shield>*,.brand .shield>*,.brand svg>*{display:none}
 
+/* ── Site header ──────────────────────────────────────────────────────────
+   One header for every surface. This lived in FOUR places — safety.css plus an
+   inline copy each in /, /check/ and /tonight/ — and drifted exactly as the
+   note at the top of this file predicts: 11px vs 12px vs 14.5px links, .09em
+   vs .1em vs no tracking, a teal current-page border on one page and an ember
+   one on another, z-index 50 / 1000 / 1300, and four different breakpoints.
+   One copy also let a page's .cta CARD rule apply its margin to the header
+   button, which is what made the bar 139px tall on 2,685 pages.
+
+   The markup here is the one already baked into every generated /safety/ page,
+   so none of those need rebuilding; the three hand-written pages were moved
+   onto it:
+     <header class="site"><div class="wrap">
+       <a class="wordmark" href="/">…</a>
+       <nav class="site-nav" aria-label="Site">…<a class="cta">…</a></nav>
+     </div></header>
+   The bar uses the page's own --maxw, so it lines up with the content beneath
+   it on both the 880px reading pages and the 1180px map pages. */
+header.site{border-bottom:1px solid var(--line);background:rgba(10,13,18,.82);
+  backdrop-filter:saturate(160%) blur(14px);position:sticky;top:0;
+  /* Above Leaflet, whose panes and controls reach z-index 1000 — /check/ and
+     /tonight/ put a map directly under the bar. */
+  z-index:1300}
+header.site .wrap{display:flex;align-items:center;justify-content:space-between;
+  gap:18px;padding-top:14px;padding-bottom:14px}
+.site-nav{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.site-nav a{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--ink-2);text-decoration:none;white-space:nowrap;
+  transition:color .15s}
+.site-nav a:hover{color:var(--teal);text-decoration:none}
+.site-nav a.on{color:var(--teal);border-bottom:2px solid var(--teal)}
+/* margin and border are reset EXPLICITLY. Both safety.css and /check/ also
+   define a .cta — for an in-page card and an in-page button — and while this
+   selector out-specifies them on background and padding, it says nothing about
+   margin or border unless it says it here. That omission is the 38px that used
+   to inflate the bar. */
+.site-nav a.cta{background:var(--teal);color:#04231E;font-weight:680;
+  padding:7px 12px;border-radius:8px;margin:0;border:0}
+.site-nav a.cta:hover{background:#5CE8D2;color:#04231E}
+/* Shed links rather than wrap them. Below ~780px the wordmark, four links and
+   the button stop fitting one row; below 620px only Tonight survives, being
+   the one destination a page cannot offer inline (every area page carries its
+   own address search, and "Safety index" is where you already are). */
+@media(max-width:780px){.site-nav a.hide-sm{display:none}}
+@media(max-width:620px){.site-nav a[href="/safety/"],.site-nav a[href="/check/"]{display:none}}
+
 /* ── Buttons ──────────────────────────────────────────────────────────────*/
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;
      border-radius:10px;transition:.16s;white-space:nowrap;cursor:pointer;text-decoration:none}
