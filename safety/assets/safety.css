@@ -40,7 +40,18 @@ header.site .wrap{display:flex;align-items:center;justify-content:space-between;
    margin or border, so the header button silently inherited 38px of vertical
    margin and a 1px border — which is what made the header 139px tall on all
    2,685 pages using this sheet, against 64px on /, /check/ and /tonight/. */
-.site-nav a.cta:hover{background:#5CE8D2;color:#04231E}@media(max-width:760px){.site-nav a.hide-sm{display:none}}
+.site-nav a.cta:hover{background:#5CE8D2;color:#04231E}@media(max-width:780px){.site-nav a.hide-sm{display:none}}
+/* Below ~780px the wordmark, four links and the button stop fitting one row,
+   and .site-nav wraps — which is what made the sticky bar 131px tall on a
+   phone while the homepage stayed at 63px. Shed links in priority order
+   instead of letting it stack. Transparency goes first; then the two least
+   useful from INSIDE the safety section — "Safety index" (you are already in
+   it, and the crumbbar below links back) and "Check an address" (every area
+   page carries its own search). Tonight survives to the narrowest width: it
+   is the one destination an area page cannot offer inline.
+   Targeted by href, not by class, so all 2,685 published pages pick this up
+   from the shared sheet without a rebuild. */
+@media(max-width:620px){.site-nav a[href="/safety/"],.site-nav a[href="/check/"]{display:none}}
 .crumbbar{background:var(--paper);border-bottom:1px solid var(--line)}
 .crumbbar .wrap{padding-top:7px;padding-bottom:7px}
 .crumbbar .crumbs{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
