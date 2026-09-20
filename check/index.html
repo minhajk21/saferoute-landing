@@ -105,6 +105,16 @@
   .publink{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.03em;color:var(--teal);text-decoration:none;border:1px solid var(--line-2);padding:9px 14px;border-radius:9px;transition:border-color .15s,background .15s}
   .publink:hover{border-color:var(--teal);background:var(--cream-deep)}
   .publink .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex:none}
+  /* Nearby published areas. The index this reads was already being fetched and
+     already scanned in full — it just threw everything away except one link. */
+  .nearby{margin-top:10px}
+  .nearby .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+  .nbrs{display:flex;flex-wrap:wrap;gap:7px}
+  .nbr{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);text-decoration:none;
+       border:1px solid var(--line-2);padding:7px 11px;border-radius:9px;transition:border-color .15s,background .15s}
+  .nbr:hover{border-color:var(--teal);background:var(--cream-deep);text-decoration:none}
+  .nbr .sc{font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;padding:2px 6px;border-radius:3px;flex:none}
+  .nbr .km{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);flex:none}
   .leaflet-container{background:var(--cream-deep);font-family:var(--sans)}
   .leaflet-control-attribution{font-size:10px}
   .leaflet-popup-content{font-family:var(--sans);font-size:13.5px;color:var(--ink);margin:11px 14px}
@@ -505,6 +515,7 @@ function render(d, name, address){
     </div>
     <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported ${esc(d.reportedTo||'to police')} within 1&nbsp;km${span?` over ${span}${d.crimeDate?` to ${monthName(d.crimeDate)}`:''}`:d.crimeDate?` in the data through ${monthName(d.crimeDate)}`:''} — a higher index means fewer severity-weighted reported incidents. ${d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
     <div id="pub"></div>
+    <div id="nearby"></div>
     <div id="recent"></div>
     <div id="cams"></div>
     <div class="divider"></div>
@@ -611,9 +622,30 @@ function loadPub(){
 function distKm(a,b,c,e){ const R=6371, tr=x=>x*Math.PI/180, dl=tr(c-a), dg=tr(e-b); const s=Math.sin(dl/2)**2+Math.cos(tr(a))*Math.cos(tr(c))*Math.sin(dg/2)**2; return 2*R*Math.asin(Math.sqrt(s)); }
 async function addPubLink(lat,lng,reqId){
   const idx = await loadPub(); if(!idx.length || reqId!==lastReqId) return;
-  let best=null, bd=1e9;
-  for(const p of idx){ const dd=distKm(lat,lng,p.la,p.lo); if(dd<bd){ bd=dd; best=p; } }
-  if(!best || bd>3 || reqId!==lastReqId) return; // >3km = not in a published neighborhood
+  // One pass, keeping distance against every entry — the scan already ran over
+  // all 2,575 to find a single link, so the neighbours are free.
+  const scored = idx.map(p => ({ p, d: distKm(lat,lng,p.la,p.lo) })).sort((a,b) => a.d - b.d);
+  const nearest = scored[0];
+  if(!nearest || reqId!==lastReqId) return;
+  const best = nearest.p, bd = nearest.d;
+
+  // Neighbours are drawn from the SAME city only — "nearby" across a city
+  // boundary is not a thing a reader wants. 6 km because the sparser
+  // gazetteers (Vancouver has 22 areas, Boston 25) would otherwise return an
+  // empty list in genuinely covered places.
+  //
+  // The headline area is excluded ONLY when it is actually rendered as the
+  // headline link, i.e. within 3 km. Beyond that there is no headline, and
+  // excluding it anyway hid the single nearest published area: a probe 3.5 km
+  // from Bellaire-Puritas listed Old Brooklyn at 5.2 km and omitted the
+  // closer one.
+  const headlineShown = bd <= 3;
+  const nbrs = scored
+    .filter(x => x.p.c === best.c && x.d <= 6 && !(headlineShown && x.p.s === best.s))
+    .slice(0, 3);
+  renderNearby(best, bd, nbrs, reqId);
+
+  if(bd>3) return; // >3km = not in a published neighborhood, so no headline link
   const el=document.getElementById('pub'); if(!el) return;
   // Built via DOM rather than an innerHTML string. Googlebot scrapes
   // URL-shaped text out of inline script source, so an interpolated href
@@ -626,6 +658,55 @@ async function addPubLink(lat,lng,reqId){
   const dot = document.createElement('span'); dot.className = 'dot';
   a.append(dot, 'Read the in-depth ' + best.n + ' safety report →');
   el.replaceChildren(a);
+}
+
+// Render the "you are in X / nearby published areas" block.
+//
+// Everything here comes out of /safety/search-index.json, which this page was
+// already downloading and already scanning end to end — it kept one link out of
+// 2,575 entries and discarded the rest. Search Console says the hub tier earns
+// 44 clicks a page against 0.80 for the leaf pages, so the leaves do not need
+// more of them; they need to be reachable from somewhere people land.
+//
+// Deliberately NOT shown: a rank ("#148 of 197"). Vancouver has 22 areas and
+// Boston 25, so a rank out of 22 is noise; worse, the index rebuilds monthly
+// while the score above it is fetched live and 24h-cached, so a rank line and
+// a live score can visibly disagree on the same screen.
+function renderNearby(best, bd, nbrs, reqId){
+  if(reqId!==lastReqId) return;
+  const host = document.getElementById('nearby'); if(!host) return;
+  host.replaceChildren();
+  if(!nbrs.length) return;
+
+  const wrap = document.createElement('div'); wrap.className = 'nearby';
+  const lbl = document.createElement('div'); lbl.className = 'lbl';
+  // Two different sentences, because these are two different situations: a
+  // reader standing inside a published neighbourhood, and one who is not.
+  lbl.textContent = bd <= 3
+    ? 'Also in ' + best.cn + ' near you'
+    : 'Nearest published areas in ' + best.cn;
+  wrap.appendChild(lbl);
+
+  const row = document.createElement('div'); row.className = 'nbrs';
+  for(const { p, d } of nbrs){
+    // DOM calls, not innerHTML — same reason as the publink above: Googlebot
+    // scrapes URL-shaped text out of inline script source, so a path spelled
+    // out in a template literal gets crawled before it is ever evaluated.
+    const a = document.createElement('a');
+    a.className = 'nbr';
+    a.href = '/safety/' + p.c + '/' + p.s + '/';
+    const sc = document.createElement('span');
+    sc.className = 'sc';
+    sc.style.background = (BAND[p.b] || BAND.moderate).c;
+    sc.textContent = p.v;
+    const km = document.createElement('span');
+    km.className = 'km';
+    km.textContent = d < 1 ? Math.round(d*1000) + ' m' : d.toFixed(1) + ' km';
+    a.append(sc, document.createTextNode(p.n), km);
+    row.appendChild(a);
+  }
+  wrap.appendChild(row);
+  host.appendChild(wrap);
 }
 
 // ── utils ──
