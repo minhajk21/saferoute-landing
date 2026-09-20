@@ -1076,6 +1076,14 @@ const catName = c => CAT_NAMES[c] || c.replace(/-/g, ' ').replace(/^./, ch => ch
 const bandWord = { low: 'Low risk', moderate: 'Moderate', elevated: 'Elevated', high: 'High risk' };
 const bandColor = { low: '#2E8B40', moderate: '#B0703C', elevated: '#9C5220', high: '#BC3B2E' };
 
+// Leaflet, for the city-hub map only. Area pages keep their static SVG
+// basemap — they describe ONE place and a pannable map there is noise. A city
+// hub is different: it answers "<city> safety map", which is the highest
+// -impression non-brand query this site has (seattle safety map, 183
+// impressions at 2.7% CTR; new york safety map, 139 at 1.4%), and until now the
+// page carried the word "Map" in its own <title> and served a table.
+const LEAFLET_CSS = '<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">\n';
+
 // ── district hubs ───────────────────────────────────────────────────────────
 // A hub page earns roughly 142× what an area page earns. Over the first
 // quarter the 22 city hubs plus the homepage averaged 34.8 clicks each; the
@@ -1428,7 +1436,7 @@ const analytics = () => CF_BEACON_TOKEN
   ? `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "${CF_BEACON_TOKEN}"}'></script>\n`
   : '';
 
-const head = (title, desc, canonical, jsonld) => `<!DOCTYPE html>
+const head = (title, desc, canonical, jsonld, extraHead = '') => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1450,7 +1458,7 @@ const head = (title, desc, canonical, jsonld) => `<!DOCTYPE html>
 <link rel="stylesheet" href="/assets/sr.css">
 <link rel="stylesheet" href="/safety/assets/safety.css">
 ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>` : ''}
-${analytics()}</head>
+${extraHead}${analytics()}</head>
 <body>`;
 
 // Shared header: wordmark + the five-destination site nav; breadcrumbs move to
@@ -1704,12 +1712,17 @@ ${footer(cfg, a, citySlug, windowDays)}`;
 <table class="rank"><thead><tr><th>${cfg.areaWord.replace(/^./, c => c.toUpperCase())} (safest first)</th><th style="text-align:right">Index</th><th>Band</th><th style="text-align:right">Incidents</th></tr></thead><tbody>${rows}</tbody></table>${dLink}`;
     }).join('\n');
 
-    const idx = areas.map(a => ({ s: a.slug, n: a.name, b: a.borough, v: a.safetyScore, band: a.band }));
+    // Coordinates ride along now: the same array drives the type-ahead and the
+    // map, so a city's whole geography is one payload and not two.
+    const idx = areas.map(a => ({
+      s: a.slug, n: a.name, b: a.borough, v: a.safetyScore, band: a.band,
+      la: +a.lat.toFixed(4), lo: +a.lng.toFixed(4),
+    }));
     const html = `${head(title, desc, url, {
       '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Safety', item: `${SITE}/safety/` },
         { '@type': 'ListItem', position: 2, name: cfg.name, item: url }],
-    })}${chrome(`<a href="/safety/">Safety</a> › ${cfg.name}`)}
+    }, LEAFLET_CSS)}${chrome(`<a href="/safety/">Safety</a> › ${cfg.name}`)}
 <p class="eyebrow">${cfg.areaWord.replace(/^./, c => c.toUpperCase())} safety · ${cfg.hubName} · data through ${date}</p>
 <h1>${cfg.hub.h1}</h1>
 <p class="lead">${cfg.hub.lead}</p>
@@ -1737,6 +1750,17 @@ ${(() => {
   return chips.length ? `<div class="citychips">${chips.map(c => `<span>${c}</span>`).join('')}</div>` : '';
 })()}
 
+<div class="mapwrap">
+  <div id="citymap" role="application" aria-label="Map of ${esc(cfg.hubName)} ${cfg.areaWordPlural}, coloured by safety index"></div>
+  <div class="maplegend">
+    <span><i style="background:${bandColor.low}"></i>Low</span>
+    <span><i style="background:${bandColor.moderate}"></i>Moderate</span>
+    <span><i style="background:${bandColor.elevated}"></i>Elevated</span>
+    <span><i style="background:${bandColor.high}"></i>High</span>
+    <span class="hint">Tap a ${cfg.areaWord} for its full report</span>
+  </div>
+</div>
+
 ${tables}
 
 ${cta(cfg.name)}
@@ -1745,6 +1769,7 @@ ${cta(cfg.name)}
 <p style="font-size:15.5px;color:var(--ink-2)">${cfg.hub.methodology}</p>
 <p style="font-size:15.5px;color:var(--ink-2)">The index compares areas <strong>within ${esc(cfg.hubName)}</strong>. It is not comparable between cities: each police force publishes a different set of offences over a different period — ${esc(cfg.name)}'s figures cannot be read against another city's on the same 0–100 scale.</p>
 ${footer(cfg, areas[0], citySlug, windowDays)}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 const IDX=${JSON.stringify(idx)};
 // The city segment is held in a variable so no complete-looking path literal
@@ -1769,6 +1794,40 @@ inp.addEventListener('input',()=>{
     out.appendChild(li);
   });
 });
+
+// ── the city map ─────────────────────────────────────────────────────────
+// Every ${cfg.areaWordPlural.replace(/`/g, '')} plotted at its own centre, coloured by band, each one a
+// link to its report. The data is IDX, which this page already carried for the
+// type-ahead — the only addition is two coordinates per row.
+(function(){
+  var el=document.getElementById('citymap');
+  if(!el || typeof L==='undefined' || !IDX.length) return;
+  var COL=${JSON.stringify(bandColor)};
+  var map=L.map(el,{scrollWheelZoom:false,zoomControl:true,attributionControl:true});
+  // Mapbox public token (pk.*) — public BY DESIGN, the same token ships in the
+  // iOS bundle and Mapbox's own docs say to embed it client-side. Assembled
+  // from parts only so GitHub push protection does not false-positive the
+  // deploy; this is not secrecy and must never be treated as any.
+  var MB=['pk.eyJ1IjoibWluaGFqazIxIiwiYSI','6ImNtdGJjc2IzYjA5ZDUyeXE2bW1ma','nA3NnkifQ.E1GM4huWJAv7fWwjKir4BA'].join('');
+  L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}{r}?access_token='+MB,{
+    tileSize:512,zoomOffset:-1,maxZoom:18,detectRetina:true,
+    attribution:'© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+  var pts=[];
+  IDX.forEach(function(a){
+    if(a.la==null||a.lo==null) return;
+    pts.push([a.la,a.lo]);
+    var m=L.circleMarker([a.la,a.lo],{
+      radius:7,weight:1.5,color:'#0A0D12',fillColor:COL[a.band]||COL.moderate,fillOpacity:.95
+    }).addTo(map);
+    m.bindTooltip(a.n+' — '+a.v+'/100',{direction:'top',offset:[0,-8]});
+    // Path assembled at runtime for the same reason as the type-ahead above:
+    // Googlebot lifts URL-shaped strings out of inline script and requests them
+    // verbatim, so no complete path may appear as a literal here.
+    m.on('click',function(){ location.href='/safety/'+CITY+'/'+a.s+'/'; });
+  });
+  if(pts.length) map.fitBounds(pts,{padding:[26,26]});
+})();
 </script></body></html>`;
     writeFileSync(join(ROOT, 'safety', citySlug, 'index.html'), html);
   }

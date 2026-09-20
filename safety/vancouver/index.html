@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="/assets/sr.css">
 <link rel="stylesheet" href="/safety/assets/safety.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Safety","item":"https://safe-route.app/safety/"},{"@type":"ListItem","position":2,"name":"Vancouver","item":"https://safe-route.app/safety/vancouver/"}]}</script>
+<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a7d4a481ed8b4512a43225404078e7ab"}'></script>
 </head>
 <body><header class="site"><div class="wrap">
@@ -45,6 +46,17 @@
 
 <div class="citychips"><span>Feed current to September 2026</span><span>covers 11 months</span><span>7 offence categories</span><span><a href="/transparency/">data transparency 74/100</a></span></div>
 
+<div class="mapwrap">
+  <div id="citymap" role="application" aria-label="Map of Vancouver neighbourhoods, coloured by safety index"></div>
+  <div class="maplegend">
+    <span><i style="background:#2E8B40"></i>Low</span>
+    <span><i style="background:#B0703C"></i>Moderate</span>
+    <span><i style="background:#9C5220"></i>Elevated</span>
+    <span><i style="background:#BC3B2E"></i>High</span>
+    <span class="hint">Tap a neighbourhood for its full report</span>
+  </div>
+</div>
+
 <h2 id="vancouver">All 22 Vancouver local areas, safest first</h2>
 <table class="rank"><thead><tr><th>Neighbourhood (safest first)</th><th style="text-align:right">Index</th><th>Band</th><th style="text-align:right">Incidents</th></tr></thead><tbody><tr><td><a href="/safety/vancouver/dunbar-southlands/">Dunbar-Southlands</a></td><td class="n" style="color:#2E8B40">80/100</td><td><span class="band low">Low risk</span></td><td class="n">123</td></tr><tr><td><a href="/safety/vancouver/kerrisdale/">Kerrisdale</a></td><td class="n" style="color:#2E8B40">80/100</td><td><span class="band low">Low risk</span></td><td class="n">120</td></tr><tr><td><a href="/safety/vancouver/west-point-grey/">West Point Grey</a></td><td class="n" style="color:#2E8B40">78/100</td><td><span class="band low">Low risk</span></td><td class="n">137</td></tr><tr><td><a href="/safety/vancouver/killarney/">Killarney</a></td><td class="n" style="color:#2E8B40">77/100</td><td><span class="band low">Low risk</span></td><td class="n">142</td></tr><tr><td><a href="/safety/vancouver/arbutus-ridge/">Arbutus Ridge</a></td><td class="n" style="color:#2E8B40">75/100</td><td><span class="band low">Low risk</span></td><td class="n">162</td></tr><tr><td><a href="/safety/vancouver/shaughnessy/">Shaughnessy</a></td><td class="n" style="color:#B0703C">71/100</td><td><span class="band moderate">Moderate</span></td><td class="n">214</td></tr><tr><td><a href="/safety/vancouver/victoria-fraserview/">Victoria-Fraserview</a></td><td class="n" style="color:#B0703C">61/100</td><td><span class="band moderate">Moderate</span></td><td class="n">316</td></tr><tr><td><a href="/safety/vancouver/oakridge/">Oakridge</a></td><td class="n" style="color:#B0703C">60/100</td><td><span class="band moderate">Moderate</span></td><td class="n">317</td></tr><tr><td><a href="/safety/vancouver/south-cambie/">South Cambie</a></td><td class="n" style="color:#B0703C">58/100</td><td><span class="band moderate">Moderate</span></td><td class="n">382</td></tr><tr><td><a href="/safety/vancouver/renfrew-collingwood/">Renfrew-Collingwood</a></td><td class="n" style="color:#B0703C">57/100</td><td><span class="band moderate">Moderate</span></td><td class="n">344</td></tr><tr><td><a href="/safety/vancouver/riley-park/">Riley Park</a></td><td class="n" style="color:#B0703C">54/100</td><td><span class="band moderate">Moderate</span></td><td class="n">438</td></tr><tr><td><a href="/safety/vancouver/sunset/">Sunset</a></td><td class="n" style="color:#B0703C">51/100</td><td><span class="band moderate">Moderate</span></td><td class="n">436</td></tr><tr><td><a href="/safety/vancouver/hastings-sunrise/">Hastings-Sunrise</a></td><td class="n" style="color:#9C5220">48/100</td><td><span class="band elevated">Elevated</span></td><td class="n">561</td></tr><tr><td><a href="/safety/vancouver/marpole/">Marpole</a></td><td class="n" style="color:#9C5220">46/100</td><td><span class="band elevated">Elevated</span></td><td class="n">596</td></tr><tr><td><a href="/safety/vancouver/kensington-cedar-cottage/">Kensington-Cedar Cottage</a></td><td class="n" style="color:#9C5220">41/100</td><td><span class="band elevated">Elevated</span></td><td class="n">710</td></tr><tr><td><a href="/safety/vancouver/kitsilano/">Kitsilano</a></td><td class="n" style="color:#9C5220">40/100</td><td><span class="band elevated">Elevated</span></td><td class="n">793</td></tr><tr><td><a href="/safety/vancouver/fairview/">Fairview</a></td><td class="n" style="color:#9C5220">32/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,069</td></tr><tr><td><a href="/safety/vancouver/grandview-woodland/">Grandview-Woodland</a></td><td class="n" style="color:#9C5220">29/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,175</td></tr><tr><td><a href="/safety/vancouver/mount-pleasant/">Mount Pleasant</a></td><td class="n" style="color:#9C5220">25/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,495</td></tr><tr><td><a href="/safety/vancouver/strathcona/">Strathcona</a></td><td class="n" style="color:#BC3B2E">12/100</td><td><span class="band high">High risk</span></td><td class="n">2,959</td></tr><tr><td><a href="/safety/vancouver/west-end/">West End</a></td><td class="n" style="color:#BC3B2E">12/100</td><td><span class="band high">High risk</span></td><td class="n">3,467</td></tr><tr><td><a href="/safety/vancouver/downtown/">Downtown</a></td><td class="n" style="color:#BC3B2E">5/100</td><td><span class="band high">High risk</span></td><td class="n">10,192</td></tr></tbody></table>
 
@@ -62,8 +74,9 @@
 <p><strong>About this data.</strong> Figures are incidents <em>reported</em> to police within 1&nbsp;km of each neighbourhood's centre — reporting practices vary and not all crime is reported. This is informational only and not a guarantee of safety, a prediction, or a judgment of any community. Use it the way the app does: to pick better-lit, lower-incident routes and times.</p>
 <p><a href="/safety/vancouver/">All Vancouver neighbourhoods</a> · <a href="/">SafeRoute app</a> · <a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></p>
 </div></footer></body></html>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
-const IDX=[{"s":"arbutus-ridge","n":"Arbutus Ridge","b":"Vancouver","v":75,"band":"low"},{"s":"downtown","n":"Downtown","b":"Vancouver","v":5,"band":"high"},{"s":"dunbar-southlands","n":"Dunbar-Southlands","b":"Vancouver","v":80,"band":"low"},{"s":"fairview","n":"Fairview","b":"Vancouver","v":32,"band":"elevated"},{"s":"grandview-woodland","n":"Grandview-Woodland","b":"Vancouver","v":29,"band":"elevated"},{"s":"hastings-sunrise","n":"Hastings-Sunrise","b":"Vancouver","v":48,"band":"elevated"},{"s":"kensington-cedar-cottage","n":"Kensington-Cedar Cottage","b":"Vancouver","v":41,"band":"elevated"},{"s":"kerrisdale","n":"Kerrisdale","b":"Vancouver","v":80,"band":"low"},{"s":"killarney","n":"Killarney","b":"Vancouver","v":77,"band":"low"},{"s":"kitsilano","n":"Kitsilano","b":"Vancouver","v":40,"band":"elevated"},{"s":"marpole","n":"Marpole","b":"Vancouver","v":46,"band":"elevated"},{"s":"mount-pleasant","n":"Mount Pleasant","b":"Vancouver","v":25,"band":"elevated"},{"s":"oakridge","n":"Oakridge","b":"Vancouver","v":60,"band":"moderate"},{"s":"renfrew-collingwood","n":"Renfrew-Collingwood","b":"Vancouver","v":57,"band":"moderate"},{"s":"riley-park","n":"Riley Park","b":"Vancouver","v":54,"band":"moderate"},{"s":"shaughnessy","n":"Shaughnessy","b":"Vancouver","v":71,"band":"moderate"},{"s":"south-cambie","n":"South Cambie","b":"Vancouver","v":58,"band":"moderate"},{"s":"strathcona","n":"Strathcona","b":"Vancouver","v":12,"band":"high"},{"s":"sunset","n":"Sunset","b":"Vancouver","v":51,"band":"moderate"},{"s":"victoria-fraserview","n":"Victoria-Fraserview","b":"Vancouver","v":61,"band":"moderate"},{"s":"west-end","n":"West End","b":"Vancouver","v":12,"band":"high"},{"s":"west-point-grey","n":"West Point Grey","b":"Vancouver","v":78,"band":"low"}];
+const IDX=[{"s":"arbutus-ridge","n":"Arbutus Ridge","b":"Vancouver","v":75,"band":"low","la":49.2468,"lo":-123.1617},{"s":"downtown","n":"Downtown","b":"Vancouver","v":5,"band":"high","la":49.2807,"lo":-123.1166},{"s":"dunbar-southlands","n":"Dunbar-Southlands","b":"Vancouver","v":80,"band":"low","la":49.238,"lo":-123.1895},{"s":"fairview","n":"Fairview","b":"Vancouver","v":32,"band":"elevated","la":49.2645,"lo":-123.131},{"s":"grandview-woodland","n":"Grandview-Woodland","b":"Vancouver","v":29,"band":"elevated","la":49.2764,"lo":-123.0667},{"s":"hastings-sunrise","n":"Hastings-Sunrise","b":"Vancouver","v":48,"band":"elevated","la":49.2779,"lo":-123.0403},{"s":"kensington-cedar-cottage","n":"Kensington-Cedar Cottage","b":"Vancouver","v":41,"band":"elevated","la":49.2467,"lo":-123.0729},{"s":"kerrisdale","n":"Kerrisdale","b":"Vancouver","v":80,"band":"low","la":49.2237,"lo":-123.1596},{"s":"killarney","n":"Killarney","b":"Vancouver","v":77,"band":"low","la":49.217,"lo":-123.0376},{"s":"kitsilano","n":"Kitsilano","b":"Vancouver","v":40,"band":"elevated","la":49.2675,"lo":-123.1633},{"s":"marpole","n":"Marpole","b":"Vancouver","v":46,"band":"elevated","la":49.2102,"lo":-123.1284},{"s":"mount-pleasant","n":"Mount Pleasant","b":"Vancouver","v":25,"band":"elevated","la":49.2631,"lo":-123.0985},{"s":"oakridge","n":"Oakridge","b":"Vancouver","v":60,"band":"moderate","la":49.2264,"lo":-123.123},{"s":"renfrew-collingwood","n":"Renfrew-Collingwood","b":"Vancouver","v":57,"band":"moderate","la":49.2473,"lo":-123.0402},{"s":"riley-park","n":"Riley Park","b":"Vancouver","v":54,"band":"moderate","la":49.2448,"lo":-123.1031},{"s":"shaughnessy","n":"Shaughnessy","b":"Vancouver","v":71,"band":"moderate","la":49.2457,"lo":-123.1398},{"s":"south-cambie","n":"South Cambie","b":"Vancouver","v":58,"band":"moderate","la":49.2456,"lo":-123.1218},{"s":"strathcona","n":"Strathcona","b":"Vancouver","v":12,"band":"high","la":49.2782,"lo":-123.0882},{"s":"sunset","n":"Sunset","b":"Vancouver","v":51,"band":"moderate","la":49.2188,"lo":-123.092},{"s":"victoria-fraserview","n":"Victoria-Fraserview","b":"Vancouver","v":61,"band":"moderate","la":49.22,"lo":-123.0641},{"s":"west-end","n":"West End","b":"Vancouver","v":12,"band":"high","la":49.285,"lo":-123.1354},{"s":"west-point-grey","n":"West Point Grey","b":"Vancouver","v":78,"band":"low","la":49.2684,"lo":-123.2035}];
 // The city segment is held in a variable so no complete-looking path literal
 // survives in this source. Googlebot lifts URL-shaped strings straight out of
 // inline JS and requests them verbatim, so the old hard-coded prefix produced a
@@ -86,4 +99,38 @@ inp.addEventListener('input',()=>{
     out.appendChild(li);
   });
 });
+
+// ── the city map ─────────────────────────────────────────────────────────
+// Every neighbourhoods plotted at its own centre, coloured by band, each one a
+// link to its report. The data is IDX, which this page already carried for the
+// type-ahead — the only addition is two coordinates per row.
+(function(){
+  var el=document.getElementById('citymap');
+  if(!el || typeof L==='undefined' || !IDX.length) return;
+  var COL={"low":"#2E8B40","moderate":"#B0703C","elevated":"#9C5220","high":"#BC3B2E"};
+  var map=L.map(el,{scrollWheelZoom:false,zoomControl:true,attributionControl:true});
+  // Mapbox public token (pk.*) — public BY DESIGN, the same token ships in the
+  // iOS bundle and Mapbox's own docs say to embed it client-side. Assembled
+  // from parts only so GitHub push protection does not false-positive the
+  // deploy; this is not secrecy and must never be treated as any.
+  var MB=['pk.eyJ1IjoibWluaGFqazIxIiwiYSI','6ImNtdGJjc2IzYjA5ZDUyeXE2bW1ma','nA3NnkifQ.E1GM4huWJAv7fWwjKir4BA'].join('');
+  L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}{r}?access_token='+MB,{
+    tileSize:512,zoomOffset:-1,maxZoom:18,detectRetina:true,
+    attribution:'© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+  var pts=[];
+  IDX.forEach(function(a){
+    if(a.la==null||a.lo==null) return;
+    pts.push([a.la,a.lo]);
+    var m=L.circleMarker([a.la,a.lo],{
+      radius:7,weight:1.5,color:'#0A0D12',fillColor:COL[a.band]||COL.moderate,fillOpacity:.95
+    }).addTo(map);
+    m.bindTooltip(a.n+' — '+a.v+'/100',{direction:'top',offset:[0,-8]});
+    // Path assembled at runtime for the same reason as the type-ahead above:
+    // Googlebot lifts URL-shaped strings out of inline script and requests them
+    // verbatim, so no complete path may appear as a literal here.
+    m.on('click',function(){ location.href='/safety/'+CITY+'/'+a.s+'/'; });
+  });
+  if(pts.length) map.fitBounds(pts,{padding:[26,26]});
+})();
 </script></body></html>

@@ -138,3 +138,28 @@ figure.map svg [fill="#14564C"]{fill:#3FD9C0}          /* centre marker  */
 figure.map svg [stroke="#14564C"]{stroke:#3FD9C0}
 figure.map svg [fill="#E89286"]{fill:#FF8A7D}          /* lower-severity */
 figure.map svg [fill="#8C1010"]{fill:#FF3B2A}/* high-severity  */
+
+/* ── City-hub map ─────────────────────────────────────────────────────────
+   Only city hubs get a pannable map. Area pages keep their static SVG basemap:
+   they describe ONE place, and a map you can drag away from it is noise. A hub
+   answers "<city> safety map" — the highest-impression non-brand query this
+   site has — and shipped for months with the word Map in its own <title> and a
+   ranked table underneath it. */
+.mapwrap{margin:26px 0 30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+#citymap{width:100%;height:min(62vh,460px);background:var(--surface-2)}
+.maplegend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:11px 16px;border-top:1px solid var(--line);
+           font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.maplegend span{display:inline-flex;align-items:center;gap:6px}
+.maplegend i{width:9px;height:9px;border-radius:50%;flex:none}
+.maplegend .hint{margin-left:auto;text-transform:none;letter-spacing:0;font-size:11px}
+@media(max-width:640px){ .maplegend .hint{margin-left:0;flex-basis:100%} }
+/* Leaflet's chrome is built for light backgrounds. */
+.leaflet-container{background:var(--surface-2);font-family:var(--sans)}
+.leaflet-bar a{background:#141B24;color:var(--ink);border-bottom-color:var(--line-2)}
+.leaflet-bar a:hover{background:#1B2531;color:var(--teal)}
+.leaflet-control-attribution{background:rgba(10,13,18,.8)!important;color:var(--ink-3);font-size:10px}
+.leaflet-control-attribution a{color:var(--ink-2)}
+.leaflet-tooltip{background:var(--surface);border:1px solid var(--line-2);color:var(--ink);
+                 font-family:var(--sans);font-size:12.5px;border-radius:5px;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+.leaflet-tooltip::before{display:none}
+.leaflet-interactive{cursor:pointer}
