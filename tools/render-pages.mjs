@@ -980,6 +980,17 @@ const CITIES = {
     // Multi-district city (like NYC/DC/Toronto/Seattle): the city's 158 published
     // neighbourhoods — minus six with no residents — grouped under the 18 PCPC
     // Planning Districts, so the hub ranks within each district. No rankHeading.
+    //
+    // districtHubs was withheld when the first 66 hubs shipped, on the same
+    // reasoning that correctly excluded DC and Detroit: administrative labels
+    // nobody types into Google. That reasoning does not apply here and the
+    // grouping above says why. DC's tier is 'Ward 1'…'Ward 8' and Detroit's is
+    // 'District 1'…'District 7'; Philadelphia's is Center City, South, West,
+    // River Wards, University Southwest, Upper Far Northeast — PCPC planning
+    // districts that Philadelphians use as ordinary place names. Search Console
+    // is unambiguous about what that tier is worth: 18 city hubs earn 794 clicks
+    // against 759 from 953 area pages, 44 per page against 0.8.
+    districtHubs: true, districtWord: 'district', districtWordPlural: 'districts',
     areaWord: 'neighborhood', areaWordPlural: 'neighborhoods',
     centre: 'center', centreLabel: 'neighborhood center',
     // Land that is not housing tops a per-AREA index, because the score counts
