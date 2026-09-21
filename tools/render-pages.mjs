@@ -1076,6 +1076,45 @@ const catName = c => CAT_NAMES[c] || c.replace(/-/g, ' ').replace(/^./, ch => ch
 const bandWord = { low: 'Low risk', moderate: 'Moderate', elevated: 'Elevated', high: 'High risk' };
 const bandColor = { low: '#2E8B40', moderate: '#B0703C', elevated: '#9C5220', high: '#BC3B2E' };
 
+// ── TITLE EXPERIMENT, started 2026-09-20 ─────────────────────────────────
+//
+// WHAT IS BEING TESTED. "is <area> safe" is the single biggest thing this site
+// is shown for: 574 of the top 1,000 queries and 49% of all named impressions,
+// at average position 9.5 and a CTR of 0.7% — roughly a third of what that
+// position normally returns. The pages below rank on PAGE ONE (positions 5.8 to
+// 9.6) and still convert at 0.0-2.0%, so this is not a ranking problem. It is
+// what the result looks like once we are already on the page.
+//
+// THE HYPOTHESIS. The current title asks the question back: "Is Ballard Safe?
+// Crime Map & Safety Index". Someone who just typed "is ballard safe" learns
+// nothing from it and has no reason to prefer us over the Reddit thread above
+// us. The variant keeps the exact-match question — relevance — and then ANSWERS
+// it with the two things only we have: the index and the rank within the city.
+//
+// DESIGN. 40 highest-impression area pages, split by alternating impression
+// rank so the groups are matched rather than cherry-picked:
+//   TEST    20 pages · 5,099 impressions · CTR 0.73% · avg position 8.1
+//   CONTROL 20 pages · 4,933 impressions · CTR 0.99% · avg position 8.4
+// Only the TITLE changes. The description, body, schema and internal links are
+// untouched, so a CTR move is attributable to one variable.
+//
+// HOW TO READ IT. Google needs to recrawl and the sample is ~5,000 impressions
+// a quarter per arm, so give it 3-4 weeks. In Search Console, Pages, compare
+// each arm's CTR against its own baseline above — NOT test against control,
+// because the arms started 0.73% vs 0.99%. If test rises and control does not,
+// and average position has not moved, the title did it. If position moves too,
+// the result is confounded and the test needs rerunning.
+//
+// IF IT WINS, roll out to all 2,591 area pages. IF IT LOSES, revert and the
+// next suspect is the meta description, which is the other half of the snippet.
+const TITLE_TEST = new Set([
+  'chicago/jefferson-park', 'london/kilburn', 'chicago/pullman', 'boston/charlestown',
+  'london/streatham-common-vale', 'chicago/ohare', 'london/canary-wharf', 'sandiego/la-jolla',
+  'new-york/hells-kitchen', 'la/watts', 'la/west-adams', 'boston/dorchester',
+  'chicago/lincoln-square', 'london/fulham-town', 'boston/roslindale', 'boston/mattapan',
+  'la/pacoima', 'london/queens-park', 'la/north-hills-west', 'chicago/the-loop',
+]);
+
 // Leaflet, for the city-hub map only. Area pages keep their static SVG
 // basemap — they describe ONE place and a pannable map there is noise. A city
 // hub is different: it answers "<city> safety map", which is the highest
@@ -1609,7 +1648,24 @@ function renderCity(citySlug) {
 
     const url = `${SITE}/safety/${citySlug}/${a.slug}/`;
     const display = areaDisplay(a.name, cfg, citySlug, a.borough);
-    const title = `Is ${display} Safe? Crime Map & Safety Index — SafeRoute`;
+    // See TITLE_TEST above. The variant answers the question the searcher
+    // actually typed instead of restating it; rank 1 is the safest area, so
+    // "Nth safest" is literally what p.rank means (same value the score card
+    // prints below). No claim is added that the page does not already make.
+    const title = (() => {
+      const control = `Is ${display} Safe? Crime Map & Safety Index — SafeRoute`;
+      if (!TITLE_TEST.has(`${citySlug}/${a.slug}`)) return control;
+      // `display` already carries the city where a name is ambiguous across
+      // cities ("Jefferson Park, Chicago"), so naming it again in the suffix
+      // reads badly and costs characters Google will not show. Fall back to
+      // the count, which says the same thing without the repetition.
+      const dupCity = display.includes(cfg.name);
+      const long = `Is ${display} Safe? ${a.safetyScore}/100, ${ord(p.rank)} Safest in ${cfg.name}`;
+      const short = `Is ${display} Safe? ${a.safetyScore}/100, ${ord(p.rank)} Safest of ${p.count}`;
+      // ~60 characters is where Google truncates on desktop, and a truncated
+      // title loses the rank — the half of the variant being tested.
+      return (!dupCity && long.length <= 60) ? long : short;
+    })();
     const desc = `${display} safety index: ${a.safetyScore}/100 (${bandWord[a.band].toLowerCase()}) — ${fmt(a.totalIncidents)} ${cfg.incidentNoun ?? 'reported incidents'} within 1 km (through ${monthName(a.crimeDate)}). Crime map, ${cfg.whatReported ?? "what's reported"}, and how it compares ${cfg.acrossCity}.`;
     // The district, where one has a page, is a real level of the hierarchy and
     // belongs in both the visible crumb trail and the structured one — it is
