@@ -1088,8 +1088,12 @@ const bandColor = { low: '#2E8B40', moderate: '#B0703C', elevated: '#9C5220', hi
 // THE HYPOTHESIS. The current title asks the question back: "Is Ballard Safe?
 // Crime Map & Safety Index". Someone who just typed "is ballard safe" learns
 // nothing from it and has no reason to prefer us over the Reddit thread above
-// us. The variant keeps the exact-match question — relevance — and then ANSWERS
-// it with the two things only we have: the index and the rank within the city.
+// us. The variant keeps the exact-match question — relevance — and replaces the
+// generic label with this area's actual score, which is the answer.
+//
+// The rank was considered and rejected: "77th Safest in Chicago" indexes a bald
+// ordering of a real place without the caveat the page carries. The score alone
+// tests the same thing — answer versus mirror — with less exposure.
 //
 // DESIGN. 40 highest-impression area pages, split by alternating impression
 // rank so the groups are matched rather than cherry-picked:
@@ -1655,16 +1659,21 @@ function renderCity(citySlug) {
     const title = (() => {
       const control = `Is ${display} Safe? Crime Map & Safety Index — SafeRoute`;
       if (!TITLE_TEST.has(`${citySlug}/${a.slug}`)) return control;
-      // `display` already carries the city where a name is ambiguous across
-      // cities ("Jefferson Park, Chicago"), so naming it again in the suffix
-      // reads badly and costs characters Google will not show. Fall back to
-      // the count, which says the same thing without the repetition.
-      const dupCity = display.includes(cfg.name);
-      const long = `Is ${display} Safe? ${a.safetyScore}/100, ${ord(p.rank)} Safest in ${cfg.name}`;
-      const short = `Is ${display} Safe? ${a.safetyScore}/100, ${ord(p.rank)} Safest of ${p.count}`;
-      // ~60 characters is where Google truncates on desktop, and a truncated
-      // title loses the rank — the half of the variant being tested.
-      return (!dupCity && long.length <= 60) ? long : short;
+      // Minimal delta by design: the question and the brand suffix are held
+      // identical to the control, and ONLY the middle changes — from a generic
+      // label every competitor also carries to this area's actual number. One
+      // variable moves, so a CTR change has one candidate explanation.
+      //
+      // Deliberately NOT the within-city rank. "77th Safest in Chicago" puts a
+      // bald ordering of a real neighbourhood into Google's index stripped of
+      // the caveat the page itself carries — informational, not a judgment of
+      // any community. The rank is already on the page and in the hub tables,
+      // but a title is what gets indexed, shared and screenshotted, and the
+      // score alone tests the same hypothesis with less exposure.
+      const long = `Is ${display} Safe? Safety Index ${a.safetyScore}/100 — SafeRoute`;
+      // Past ~60 characters Google truncates, and the brand suffix is the part
+      // worth losing — the number is the whole point of the variant.
+      return long.length <= 60 ? long : `Is ${display} Safe? Safety Index ${a.safetyScore}/100`;
     })();
     const desc = `${display} safety index: ${a.safetyScore}/100 (${bandWord[a.band].toLowerCase()}) — ${fmt(a.totalIncidents)} ${cfg.incidentNoun ?? 'reported incidents'} within 1 km (through ${monthName(a.crimeDate)}). Crime map, ${cfg.whatReported ?? "what's reported"}, and how it compares ${cfg.acrossCity}.`;
     // The district, where one has a page, is a real level of the hierarchy and
