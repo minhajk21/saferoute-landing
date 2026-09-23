@@ -23,6 +23,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { tmpdir } from 'node:os';
+import { loadOfsted, REPORT_CARD_AREAS } from './fetch-ofsted.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = join(ROOT, 'schools', 'data');
@@ -195,6 +196,12 @@ function derivePhase(phase, lo, hi) {
   return 'All-through';
 }
 
+// Report-card area name -> a short stable key. Ofsted's headings are long and
+// contain spaces; the keys end up in a JSON payload and in browser code.
+const cardKey = a => 'rc' + a.replace(/[^a-zA-Z]+(.)/g, (_, c) => c.toUpperCase())
+                              .replace(/[^a-zA-Z]/g, '')
+                              .replace(/^./, c => c.toUpperCase());
+
 const run = async () => {
   const { header, rows } = parseCsv(await fetchGias());
   const col = Object.fromEntries(header.map((h, i) => [h, i]));
@@ -247,8 +254,59 @@ const run = async () => {
       // Without this the map cannot explain why a private pin has no Ofsted
       // grade, and an empty badge reads as "bad" rather than "not applicable".
       inspectorate: g(r, 'InspectorateName (name)'),
+      // Filled from the Ofsted join below. Declared here so every school has
+      // the key whether or not it has a rating — a school missing the field
+      // entirely would render differently from one with no grade, and half of
+      // them have no grade.
+      // NOTE for the UI: rcSafeguardingStandards is binary (Met / Not met),
+      // NOT the five-point scale the other report-card areas use. Rendering it
+      // on the same colour ramp would show "Met" as if it were a middling
+      // grade. It is a pass, and it is the only one of the seven like this.
+      ratingScheme: 'none',
+      oeifGrade: '',
+      oeifDate: '',
+      cardDate: '',
+      ...Object.fromEntries(REPORT_CARD_AREAS.map(a => [cardKey(a), ''])),
     });
   }
+
+  // ── Ofsted join ───────────────────────────────────────────────────────────
+  // Join on URN, which is the only stable key between GIAS and Ofsted. Note
+  // what is NOT done here: no overall grade is synthesised for a report-card
+  // school by averaging its areas. Ofsted deliberately abolished the single
+  // judgement; re-deriving one would be inventing data and would be the most
+  // misleading thing this map could do.
+  //
+  // THREE DIFFERENT THINGS, not one. Collapsing them all to "no rating" would
+  // tell a Cardiff parent their school is awaiting inspection when Ofsted has
+  // no remit in Wales at all:
+  //   'none'        in Ofsted's remit, inspected or not, but carries no grade
+  //                 right now — the modal English state school
+  //   'not-ofsted'  outside Ofsted's remit entirely: Wales (Estyn inspects),
+  //                 and independent schools inspected by ISI
+  const ofsted = await loadOfsted();
+  let matched = 0, graded = 0, outOfRemit = 0;
+  for (const s of out) {
+    const o = ofsted.get(s.urn);
+    if (!o) {
+      // Absent from the state-funded MI. That is Wales, independent schools,
+      // and a handful of other establishment types — not a failed join.
+      s.ratingScheme = 'not-ofsted';
+      outOfRemit++;
+      continue;
+    }
+    matched++;
+    s.ratingScheme = o.scheme;
+    s.oeifGrade = o.oeifGrade;
+    s.oeifDate = o.oeifDate;
+    s.cardDate = Object.keys(o.card).length ? o.cardDate : '';
+    for (const a of REPORT_CARD_AREAS) s[cardKey(a)] = o.card[a] || '';
+    if (o.scheme !== 'none') graded++;
+  }
+  console.log(`  Ofsted matched       ${matched.toLocaleString()} of ${out.length.toLocaleString()} schools`);
+  console.log(`    with any grade     ${graded.toLocaleString()}  (${(100 * graded / matched).toFixed(1)}% of matched)`);
+  console.log(`    NO grade           ${(matched - graded).toLocaleString()}  (${(100 * (matched - graded) / matched).toFixed(1)}%)  <- normal, not missing`);
+  console.log(`  outside Ofsted remit ${outOfRemit.toLocaleString()}  (Wales/Estyn, ISI-inspected independents)`);
 
   // Sort north to south. Purely a compression decision: it makes the lat column
   // near-monotonic and clusters la/ward/postcode regionally, so gzip's window
@@ -266,7 +324,9 @@ const run = async () => {
   // ── columnar encode ───────────────────────────────────────────────────────
   const FIELDS = Object.keys(out[0]);
   const ENUM_FIELDS = ['type', 'group', 'sector', 'phase', 'gender', 'religion',
-                       'admissions', 'trust', 'la', 'ward', 'inspectorate', 'censusDate'];
+                       'admissions', 'trust', 'la', 'ward', 'inspectorate', 'censusDate',
+                       'ratingScheme', 'oeifGrade', 'oeifDate', 'cardDate',
+                       ...REPORT_CARD_AREAS.map(cardKey)];
   const enums = {};
   for (const f of ENUM_FIELDS) {
     const vals = [...new Set(out.map(s => s[f]))].sort();
