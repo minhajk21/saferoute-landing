@@ -1,2 +1,15 @@
 .DS_Store
 *.backup
+
+# Raw bulk downloads. NOT a style preference — the monthly rebuild commits with
+# `git add -A`, so anything left in the tree gets published. GIAS alone is 62MB.
+# Every fetcher writes to /tmp instead; these are belt-and-braces.
+#
+# NOTE tools/data-cache/ is deliberately NOT ignored. It is a *committed* build
+# cache — render-pages.mjs reads the per-area basemap JSON out of it, and
+# fetch-basemap.mjs calls it "small, committed" in terms. Untracking it would
+# break the monthly page build.
+/tmp-data/
+data/raw/
+*.csv
+!tools/**/*.csv
