@@ -88,6 +88,26 @@
   .legend i{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
   .legend i.sq{border-radius:2px}
 
+  /* postcode */
+  .pcrow{display:flex;gap:8px;margin:10px 0 0;flex-wrap:wrap;align-items:center}
+  #pc{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);
+    background:var(--paper);border:1px solid var(--line-2);border-radius:999px;padding:9px 15px;outline:none;width:150px}
+  #pc:focus{border-color:var(--teal)}
+  #pcgo{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:600;
+    background:var(--teal);color:#04231E;border:0;border-radius:999px;padding:10px 16px;cursor:pointer}
+  #pcgo:hover{background:#5CE8D2}
+  #pcclear{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);
+    background:none;border:0;cursor:pointer;text-decoration:underline;padding:9px 4px}
+  #pcmsg{font-size:12.5px;color:var(--ink-3)}
+  #pcmsg.err{color:#E8916F}
+  .nearrow{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:7px 0;
+    border-bottom:1px solid var(--line);cursor:pointer}
+  .nearrow:hover .nn{color:var(--teal)}
+  .nearrow .nn{font-size:13.5px;color:var(--ink);line-height:1.3}
+  .nearrow .nn small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+  .nearrow .nd{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+  .ringwarn{font-size:12px;color:var(--ink-3);line-height:1.5;border-left:2px solid var(--line-2);padding-left:10px;margin:0}
+
   .leaflet-container{background:var(--cream-deep);font-family:var(--sans)}
   .leaflet-control-attribution{font-size:10px;background:rgba(10,13,18,.8)!important;color:var(--ink-3)}
   .leaflet-control-attribution a{color:var(--ink-2)}
@@ -126,6 +146,19 @@
       <label class="chk" id="l-board"><input type="checkbox" id="boarding"> Boarding</label>
       <label class="chk" id="l-nursery"><input type="checkbox" id="nursery"> Nursery</label>
       <button id="reset">Reset</button>
+    </div>
+
+    <div class="pcrow">
+      <input id="pc" type="text" autocomplete="postal-code" spellcheck="false" placeholder="SW1E 5HJ" aria-label="Your postcode" maxlength="9">
+      <button id="pcgo">Show distance</button>
+      <select id="radius" aria-label="Distance">
+        <option value="0.5">½ mile</option>
+        <option value="1" selected>1 mile</option>
+        <option value="2">2 miles</option>
+        <option value="3">3 miles</option>
+      </select>
+      <button id="pcclear" hidden>Clear</button>
+      <span id="pcmsg">Distance from a postcode — not a catchment area.</span>
     </div>
   </div>
 
@@ -169,6 +202,7 @@
 // needed only to DISPLAY one already drawn, and load behind first paint.
 let D = null, L_ = null, F = [], idx = {}, enums = {};
 const $ = id => document.getElementById(id);
+let EMPTY_PANEL = '';
 const note = $('mapnote');
 
 // fadeAnimation:false for the same reason as /check/ — the invalidateSize()
@@ -362,6 +396,137 @@ function showSchool(i) {
   $('panel').scrollTop = 0;
 }
 
+// ── distance from a postcode ────────────────────────────────────────────────
+//
+// THIS IS NOT A CATCHMENT AREA, AND THE DISTINCTION IS THE WHOLE FEATURE.
+//
+// England has no national catchment dataset and cannot have one: 69% of state
+// schools are their own admission authority, and none of the cities this site
+// covers publishes a boundary — London, Birmingham, Liverpool, Bristol and
+// Leeds all admit by straight-line distance from the school, REMEASURED EVERY
+// YEAR against that year's applicants. There is no shape to draw.
+//
+// So the ring is centred on the PERSON, never on a school. A ring around a
+// school asserts a boundary that does not exist and that a parent would
+// reasonably read as a guarantee. A ring around your own address answers the
+// question urban English admission actually turns on — which schools are
+// within X miles of me — and asserts nothing about who gets in.
+//
+// It is drawn dashed and unfilled for the same reason: a solid filled shape
+// reads as an official boundary, a dashed circle reads as a measuring tool.
+let ringLayer = null, origin = null;
+
+const MILE_M = 1609.344;
+function metresBetween(aLat, aLng, bLat, bLng) {
+  const R = 6371000, rad = x => x * Math.PI / 180;
+  const dLat = rad(bLat - aLat), dLng = rad(bLng - aLng);
+  const h = Math.sin(dLat/2)**2 + Math.cos(rad(aLat)) * Math.cos(rad(bLat)) * Math.sin(dLng/2)**2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+function clearOrigin() {
+  if (ringLayer) { map.removeLayer(ringLayer); ringLayer = null; }
+  origin = null;
+  $('pcclear').hidden = true;
+  $('pcmsg').className = '';
+  $('pcmsg').textContent = 'Distance from a postcode — not a catchment area.';
+  $('panel').innerHTML = EMPTY_PANEL;
+  render();
+}
+
+function drawRing() {
+  if (!origin) return;
+  if (ringLayer) map.removeLayer(ringLayer);
+  const miles = parseFloat($('radius').value);
+  ringLayer = L.layerGroup([
+    L.circle([origin.lat, origin.lng], {
+      radius: miles * MILE_M,
+      color: '#3FD9C0', weight: 1.5, dashArray: '5 5', fill: false, interactive: false,
+    }),
+    L.circleMarker([origin.lat, origin.lng], {
+      radius: 5, color: '#fff', weight: 2, fillColor: '#3FD9C0', fillOpacity: 1, interactive: false,
+    }),
+  ]).addTo(map);
+  showNearby();
+}
+
+// Admissions distances in England are quoted in miles, so miles is the unit —
+// but a school AT the searched postcode renders as "0.00 mi", which reads as
+// broken rather than as "this one is right here". Under a tenth of a mile,
+// switch to yards.
+function fmtDist(m) {
+  const mi = m / MILE_M;
+  return mi < 0.1 ? `${Math.round(m * 1.09361)} yd` : `${mi.toFixed(2)} mi`;
+}
+
+function showNearby() {
+  if (!origin) return;
+  const miles = parseFloat($('radius').value);
+  const limit = miles * MILE_M;
+  const near = [];
+  for (let i = 0; i < D.rows.length; i++) {
+    const r = D.rows[i];
+    if (!passes(r)) continue;
+    const m = metresBetween(origin.lat, origin.lng, r[idx.lat], r[idx.lng]);
+    if (m <= limit) near.push({ i, m });
+  }
+  near.sort((a, b) => a.m - b.m);
+
+  // Scotland and Northern Ireland are not in this dataset at all, so "0 schools"
+  // there means "not covered", not "none nearby". Saying the wrong one would be
+  // a confident wrong answer about somebody's neighbourhood.
+  if (!near.length && origin.country && origin.country !== 'England' && origin.country !== 'Wales') {
+    $('panel').innerHTML = `<p class="empty">This map covers <b>England and Wales</b> only.
+      ${esc(origin.pc)} is in <b>${esc(origin.country)}</b>, which has its own school system and inspectorate,
+      so there is nothing to show here — not "no schools nearby".</p>`;
+    return;
+  }
+
+  const head = `<div class="sname">${near.length.toLocaleString()} school${near.length === 1 ? '' : 's'} within ${miles} mile${miles === 1 ? '' : 's'}<small>${esc(origin.pc)} · straight-line distance</small></div>
+    <p class="ringwarn"><b>This is not a catchment area.</b> Most schools in these cities admit by straight-line distance from the school, remeasured each year against that year's applicants — so there is no fixed boundary. Around 69% of state schools set their own admissions rules too. Always check with the school and your council.</p>`;
+
+  if (!near.length) {
+    $('panel').innerHTML = head + `<p class="empty">No schools match your filters within ${miles} mile${miles === 1 ? '' : 's'}. Try a wider distance or fewer filters.</p>`;
+    return;
+  }
+  const rows = near.slice(0, 60).map(({ i, m }) => {
+    const r = D.rows[i];
+    const nm = L_ && L_.rows[i] ? L_.rows[i][0] : 'School';
+    const bits = [dec(r,'phase'), dec(r,'sector') === 'private' ? 'Private' : null, dec(r,'gender') !== 'Mixed' ? dec(r,'gender') : null].filter(Boolean);
+    return `<div class="nearrow" data-i="${i}"><span class="nn">${esc(nm)}<small>${esc(bits.join(' · '))}</small></span><span class="nd">${fmtDist(m)}</span></div>`;
+  }).join('');
+  $('panel').innerHTML = head + `<div>${rows}</div>` +
+    (near.length > 60 ? `<p class="tiny">Showing the nearest 60 of ${near.length.toLocaleString()}.</p>` : '');
+  $('panel').querySelectorAll('.nearrow').forEach(el =>
+    el.addEventListener('click', () => showSchool(+el.dataset.i)));
+  $('panel').scrollTop = 0;
+}
+
+async function lookupPostcode() {
+  const raw = $('pc').value.trim().toUpperCase().replace(/\s+/g, ' ');
+  const msg = $('pcmsg');
+  const fail = t => { msg.className = 'err'; msg.textContent = t; };
+  if (!raw) return fail('Enter a postcode.');
+
+  // Northern Ireland is rejected before any request rather than after a lookup
+  // that would succeed and then find nothing — NI schools are held by a separate
+  // authority and are not in GIAS at all.
+  if (/^BT/i.test(raw)) return fail('Northern Ireland is not covered — its schools are not in this dataset.');
+  if (!/^[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}$/.test(raw)) return fail('That does not look like a UK postcode.');
+
+  msg.className = ''; msg.textContent = 'Looking up…';
+  try {
+    const res = await fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(raw.replace(/\s/g, '')));
+    if (!res.ok) return fail(res.status === 404 ? 'Postcode not found.' : 'Lookup failed — try again.');
+    const r = (await res.json()).result;
+    origin = { lat: r.latitude, lng: r.longitude, pc: r.postcode, country: r.country };
+    msg.className = ''; msg.textContent = `${r.postcode} · ${r.admin_district || r.country}`;
+    $('pcclear').hidden = false;
+    map.setView([origin.lat, origin.lng], 14);
+    drawRing();
+  } catch { fail('Could not reach the postcode service.'); }
+}
+
 // ── wiring ──────────────────────────────────────────────────────────────────
 function fillSelect(el, field, skipBlank) {
   const vals = (enums[field] || []).filter(v => v && (!skipBlank || v !== ''));
@@ -372,13 +537,13 @@ function bind() {
   $('sector').addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     [...$('sector').children].forEach(x => x.classList.toggle('on', x === b));
-    state.sector = b.dataset.v; render();
+    state.sector = b.dataset.v; render(); showNearby();
   });
   for (const f of ['phase','gender','religion']) {
-    $(f).addEventListener('change', e => { state[f] = e.target.value; render(); });
+    $(f).addEventListener('change', e => { state[f] = e.target.value; render(); showNearby(); });
   }
   for (const [f, lab] of [['sixthForm','l-sixth'],['boarding','l-board'],['nursery','l-nursery']]) {
-    $(f).addEventListener('change', e => { state[f] = e.target.checked; $(lab).classList.toggle('on', e.target.checked); render(); });
+    $(f).addEventListener('change', e => { state[f] = e.target.checked; $(lab).classList.toggle('on', e.target.checked); render(); showNearby(); });
   }
   $('reset').addEventListener('click', () => {
     Object.assign(state, { sector:'', phase:'', gender:'', religion:'', sixthForm:false, boarding:false, nursery:false });
@@ -388,6 +553,10 @@ function bind() {
     render();
   });
   map.on('moveend zoomend', render);
+  $('pcgo').addEventListener('click', lookupPostcode);
+  $('pc').addEventListener('keydown', e => { if (e.key === 'Enter') lookupPostcode(); });
+  $('radius').addEventListener('change', drawRing);
+  $('pcclear').addEventListener('click', clearOrigin);
 }
 
 (async () => {
@@ -404,6 +573,7 @@ function bind() {
     fillSelect($('phase'), 'phase', true);
     fillSelect($('gender'), 'gender', true);
     fillSelect($('religion'), 'religion', true);
+    EMPTY_PANEL = $('panel').innerHTML;
     bind();
     render();
     // Labels second. Pins are already placed and filterable; only the panel
