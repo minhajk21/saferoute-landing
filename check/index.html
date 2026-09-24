@@ -89,6 +89,16 @@
   .mapbtn .mapbtn-dot{width:8px;height:8px;border-radius:2px;background:var(--line-2);transition:background .15s ease}
   .mapbtn.on{color:var(--ink)}
   .mapbtn.on .mapbtn-dot{background:#BC3B2E}
+  .mapbtn.second{top:56px}
+  .schnote{position:absolute;top:98px;right:14px;z-index:1200;max-width:190px;padding:7px 11px;border-radius:8px;
+    border:1px solid var(--line-2);background:var(--surface);color:var(--ink-3);font-family:var(--mono);
+    font-size:10px;letter-spacing:.04em;line-height:1.5;box-shadow:0 6px 20px rgba(0,0,0,.35);pointer-events:none}
+  .mapbtn.second.on .mapbtn-dot{background:#3FD9C0}
+  .schpop b{display:block;font-size:14px;margin-bottom:3px}
+  .schpop .m{font-family:var(--mono);font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em}
+  .schpop .r{margin-top:7px;font-size:12.5px;color:var(--ink-2);line-height:1.45}
+  .schpop a{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--teal);text-decoration:none}
   .mapstatus{position:absolute;top:58px;right:14px;z-index:1200;display:flex;align-items:center;gap:9px;
     padding:8px 13px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);
     color:var(--ink-2);font-size:13px;line-height:1;white-space:nowrap;pointer-events:none;
@@ -310,6 +320,114 @@ hexBtn.addEventListener('click', () => {
 // Leaflet swallows clicks that reach the map container, so keep them on the button.
 L.DomEvent.disableClickPropagation(hexBtn);
 map.getContainer().appendChild(hexBtn);
+
+// ── schools overlay ─────────────────────────────────────────────────────────
+// OFF by default, and the data is not fetched until someone asks for it. The
+// file is 728KB gzipped and about three quarters of this page's traffic is US,
+// where there is nothing to show — making every visitor pay for a layer most of
+// them cannot use would be the wrong default.
+//
+// Same rules as /schools/: colour is PHASE, shape is SECTOR, never quality.
+// Half of England's state schools carry no Ofsted grade at all and every
+// single-word grade predates the September 2024 withdrawal, so a
+// rating-coloured pin would invent a signal that no longer exists.
+let schOn = false, SCH = null, SCHL = null, schIdx = {}, schLayer = null, schLoading = false;
+const schCanvas = L.canvas({ padding: 0.3 });
+
+const schBtn = document.createElement('button');
+schBtn.type = 'button';
+schBtn.className = 'mapbtn second';
+schBtn.setAttribute('aria-pressed', 'false');
+const schDot = document.createElement('span'); schDot.className = 'mapbtn-dot';
+schBtn.append(schDot, 'Schools');
+schBtn.addEventListener('click', async () => {
+  schOn = !schOn;
+  schBtn.classList.toggle('on', schOn);
+  schBtn.setAttribute('aria-pressed', schOn ? 'true' : 'false');
+  if (!schOn) { if (schLayer) { map.removeLayer(schLayer); schLayer = null; } schNote.hidden = true; return; }
+  if (!SCH && !schLoading) {
+    schLoading = true;
+    schBtn.lastChild.textContent = 'Schools…';
+    try {
+      SCH = await (await fetch('/schools/data/schools.json', { cache: 'no-cache' })).json();
+      schIdx = Object.fromEntries(SCH.fields.map((f, i) => [f, i]));
+      const lab = await (await fetch('/schools/data/schools-labels.json', { cache: 'no-cache' })).json();
+      // Row-aligned by index — a mismatched pair would put every name on the
+      // wrong pin, so drop the names rather than risk that.
+      if (lab.count === SCH.count) SCHL = lab;
+    } catch { SCH = null; }
+    schLoading = false;
+    schBtn.lastChild.textContent = 'Schools';
+  }
+  drawSchools();
+});
+L.DomEvent.disableClickPropagation(schBtn);
+map.getContainer().appendChild(schBtn);
+
+// Silence would read as breakage. This page covers 30 regions across four
+// countries; the school data is England and Wales only, so a New Yorker who
+// turns the layer on and sees nothing needs to be told which it is.
+const schNote = document.createElement('div');
+schNote.className = 'schnote';
+schNote.hidden = true;
+map.getContainer().appendChild(schNote);
+
+const schDec = (row, f) => SCH.enums[f] ? SCH.enums[f][row[schIdx[f]]] : row[schIdx[f]];
+const schColour = p => ({ 'Primary':'#3FD9C0', 'Secondary':'#F2B13C', 'Sixth form':'#F2B13C' }[p] || '#C77DFF');
+const schEsc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function schRating(r) {
+  const scheme = schDec(r, 'ratingScheme');
+  if (scheme === 'not-ofsted') {
+    return schDec(r, 'country') === 'Wales'
+      ? 'In Wales — inspected by Estyn, not Ofsted.'
+      : 'Independent school — inspected separately from state schools.';
+  }
+  const g = schDec(r, 'oeifGrade');
+  if (g) return `<b style="display:inline">${schEsc(g)}</b> at its last graded inspection — a judgement under Ofsted's former framework, withdrawn September 2024.`;
+  if (scheme === 'reportcard' || scheme === 'both') return 'Inspected under Ofsted\'s report card framework — no single overall grade.';
+  return 'No current Ofsted grade — around half of England\'s state schools have none right now.';
+}
+
+function drawSchools() {
+  if (!schOn) return;
+  if (schLayer) { map.removeLayer(schLayer); schLayer = null; }
+  if (!SCH) return;
+  const b = map.getBounds().pad(0.1);
+  const g = L.layerGroup();
+  let n = 0;
+  for (let i = 0; i < SCH.rows.length && n < 1200; i++) {
+    const r = SCH.rows[i];
+    const lat = r[schIdx.lat], lng = r[schIdx.lng];
+    if (lat < b.getSouth() || lat > b.getNorth() || lng < b.getWest() || lng > b.getEast()) continue;
+    n++;
+    const priv = schDec(r, 'sector') === 'private';
+    const c = schColour(schDec(r, 'phase'));
+    const m = L.circleMarker([lat, lng], {
+      renderer: schCanvas, radius: 4, color: c, weight: priv ? 2 : 1,
+      fillColor: c, fillOpacity: priv ? 0 : .55, opacity: .95,
+    });
+    const nm = SCHL && SCHL.rows[i] ? SCHL.rows[i][0] : 'School';
+    const bits = [schDec(r,'phase'), priv ? 'Private' : null, schDec(r,'gender') !== 'Mixed' ? schDec(r,'gender') : null].filter(Boolean);
+    m.bindPopup(`<div class="schpop"><b>${schEsc(nm)}</b><span class="m">${schEsc(bits.join(' · '))}</span>
+      <div class="r">${schRating(r)}</div>
+      <a href="/schools/" target="_blank" rel="noopener">Open the schools map →</a></div>`);
+    g.addLayer(m);
+  }
+  schLayer = g.addTo(map);
+
+  if (n === 0) {
+    const c = map.getCenter();
+    const inGB = c.lat > 49.8 && c.lat < 61 && c.lng > -8.7 && c.lng < 2.1;
+    schNote.textContent = inGB
+      ? 'No schools in view — try zooming out.'
+      : 'School data covers England and Wales only.';
+    schNote.hidden = false;
+  } else {
+    schNote.hidden = true;
+  }
+}
+map.on('moveend zoomend', drawSchools);
 
 function showUpdating(on){
   mapStatus.classList.toggle('on', on);
