@@ -193,10 +193,8 @@ function derivePhase(phase, lo, hi) {
 }
 
 // Report-card area name -> a short stable key. Ofsted's headings are long and
-// contain spaces. NOTE: these per-area grades are joined onto every row but are
-// NOT in TILE_FIELDS, so no tile publishes them today — the /check/ popup shows
-// a one-line summary instead. Add the rc* keys to TILE_FIELDS if the popup ever
-// needs the seven areas; the join already has them.
+// contain spaces; the keys travel in every tile and are read by /check/'s
+// school pane, which lists all seven areas for a report-card school.
 const cardKey = a => 'rc' + a.replace(/[^a-zA-Z]+(.)/g, (_, c) => c.toUpperCase())
                               .replace(/[^a-zA-Z]/g, '')
                               .replace(/^./, c => c.toUpperCase());
@@ -359,7 +357,15 @@ const run = async () => {
   // out because nothing on that page reads them.
   const TILE_FIELDS = ['urn','name','postcode','lat','lng','type','sector','phase',
                        'gender','pupils','sixthForm','boarding','country',
-                       'ratingScheme','oeifGrade','oeifDate'];
+                       'ratingScheme','oeifGrade','oeifDate',
+                       // Detail-pane fields: clicking a school fills the right-hand
+                       // pane on /check/, so everything it shows travels in the tile.
+                       'ageLow','ageHigh','capacity','fsm','censusDate','nursery',
+                       'admissions','la','ward','trust','inspectorate','cardDate',
+                       ...REPORT_CARD_AREAS.map(cardKey)];
+  // Religious character is deliberately NOT here: the religion filter was removed
+  // at the owner's request, and it is not reintroduced through the back door as a
+  // detail row. Add 'religion' above if that decision is ever reversed.
   const cellKey = (lat, lng) => `${Math.floor(lat / CELL)}_${Math.floor(lng / CELL)}`;
   const tiles = new Map();
   for (const s of out) {

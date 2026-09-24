@@ -19,11 +19,25 @@
 <link rel="stylesheet" href="/assets/sr.css">
 <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
-  :root{--maxw:1180px;--gutter:clamp(20px,5vw,72px)}
+  /* The map page is a tool, so it uses the screen rather than stopping at the
+     1180px reading width: capped only on ultrawide monitors, where a map this
+     wide stops being useful. The header takes --maxw too, so it stays lined up
+     with the map beneath it. The intro text keeps its own 60ch measure. */
+  :root{--maxw:2400px;--gutter:clamp(16px,3vw,48px)}
 
   /* Header styles live in /assets/sr.css — see the Site header block there. */
 
   .head{padding:clamp(28px,5vw,52px) 0 20px}
+  /* Short screens (most laptops): the intro gives way to the map. Measured by
+     tools/audit-viewports.mjs — at 1280x720 the title, intro and search pushed
+     the map down until only ~42% of it was visible on arrival. */
+  @media(min-width:861px) and (max-height:860px){
+    .head{padding-top:18px;padding-bottom:12px}
+    .head h1{font-size:clamp(28px,3vw,36px);margin:4px 0 8px}
+    .head .lead{font-size:15.5px}
+    .search{margin-top:14px}
+    .layout{margin-top:14px}
+  }
   .eyebrow .slash{color:var(--teal)}
   .lead{font-size:clamp(16px,2vw,18px);color:var(--ink-2);max-width:60ch;margin:0}
 
@@ -43,9 +57,41 @@
   #ac .ad{font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
 
   /* layout */
-  .layout{position:relative;z-index:1;display:grid;grid-template-columns:1fr 380px;gap:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:22px 0 60px;min-height:560px;background:var(--paper)}@media(max-width:860px){.layout{grid-template-columns:1fr;min-height:0}}
-  #map{width:100%;height:100%;min-height:560px;background:var(--cream-deep)}@media(max-width:860px){#map{min-height:340px}}
-  aside{border-left:1px solid var(--line);padding:26px 24px;display:flex;flex-direction:column;gap:18px}@media(max-width:860px){aside{border-left:none;border-top:1px solid var(--line)}}
+  /* SIZED FROM THE SCREEN, NOT IN PIXELS. It was a fixed 560px map beside a
+     fixed 380px pane — measured by tools/audit-viewports.mjs at 39% of the
+     height and a quarter of the width of a 2560px monitor, and 33-43% of the
+     height of a phone.
+     Desktop: map + pane fill the viewport below the sticky header (~64px), so
+     once scrolled to, the tool is the whole screen at any size. dvh because on
+     phones and tablets the browser chrome grows and shrinks, which vh ignores;
+     the vh line is the fallback for browsers without dvh.
+     minmax(0,1fr) row so the pane scrolls inside the layout instead of
+     stretching it past the screen when a school's details are long. */
+  .layout{position:relative;z-index:1;display:grid;grid-template-columns:1fr clamp(340px,24vw,440px);grid-template-rows:minmax(0,1fr);gap:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:22px 0 60px;
+    height:clamp(480px,calc(100vh - 88px),1500px);height:clamp(480px,calc(100dvh - 88px),1500px);background:var(--paper)}
+  /* Phones and small tablets stack the pane under the map. The map deliberately
+     stops short of full height: on a touch screen one-finger drag pans a map,
+     so a full-height map traps the page and you cannot scroll to the pane. */
+  @media(max-width:860px){.layout{grid-template-columns:1fr;grid-template-rows:auto;height:auto}}
+  #map{width:100%;height:100%;min-height:0;background:var(--cream-deep)}
+  @media(max-width:860px){#map{height:clamp(300px,64vh,720px);height:clamp(300px,64dvh,720px)}}
+  aside{border-left:1px solid var(--line);padding:26px 24px;min-height:0;overflow-y:auto}@media(max-width:860px){aside{border-left:none;border-top:1px solid var(--line);overflow:visible}}
+  .view{display:flex;flex-direction:column;gap:18px}
+  .view.off{display:none}
+  .back{align-self:flex-start;font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+    color:var(--ink-3);background:none;border:0;padding:0;cursor:pointer}
+  .back:hover{color:var(--teal)}
+  .kv{display:flex;justify-content:space-between;gap:14px;font-size:13.5px;padding:6px 0;border-bottom:1px solid var(--line)}
+  .kv:last-child{border-bottom:0}
+  .kv span:first-child{color:var(--ink-2)}
+  .kv span:last-child{color:var(--ink);text-align:right}
+  .kv .mono{font-family:var(--mono);font-size:11.5px}
+  .caveat{display:block;margin-top:6px;font-size:12px;color:var(--ink-3)}
+  .ext{font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--teal);text-decoration:none}
+  .ext:hover{text-decoration:underline}
+  .leaflet-tooltip.schtip{background:#141B24;color:var(--ink);border:1px solid var(--line-2);border-radius:6px;
+    box-shadow:0 6px 18px rgba(0,0,0,.45);font-family:var(--sans);font-size:12.5px;padding:4px 8px}
+  .leaflet-tooltip-top.schtip:before{border-top-color:#141B24}
 
   .empty{color:var(--ink-3);font-size:15px;line-height:1.5}
   .place{font-size:20px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
@@ -115,11 +161,6 @@
     border:1px solid var(--line-2);background:var(--surface);color:var(--ink-3);font-family:var(--mono);
     font-size:10px;letter-spacing:.04em;line-height:1.5;box-shadow:0 6px 20px rgba(0,0,0,.35);pointer-events:none}
   .mapbtn.second.on .mapbtn-dot{background:#3FD9C0}
-  .schpop b{display:block;font-size:14px;margin-bottom:3px}
-  .schpop .m{font-family:var(--mono);font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em}
-  .schpop .r{margin-top:7px;font-size:12.5px;color:var(--ink-2);line-height:1.45}
-  .schpop a{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
-    text-transform:uppercase;color:var(--teal);text-decoration:none}
   .mapstatus{position:absolute;top:58px;right:14px;z-index:1200;display:flex;align-items:center;gap:9px;
     padding:8px 13px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);
     color:var(--ink-2);font-size:13px;line-height:1;white-space:nowrap;pointer-events:none;
@@ -214,8 +255,16 @@
 
   <div class="layout">
     <div id="map"></div>
-    <aside id="panel">
-      <p class="empty">Search an address above, or use your location, to see its safety index and a live crime map.<br><br>SafeRoute covers the UK, 26 US cities, Toronto, Vancouver and Mexico City.</p>
+    <!-- Two views sharing one pane. #panel is the address result, which fills
+         in stages (score first; #pub, #nearby, #recent and #cams arrive from
+         separate requests). A school click must not overwrite it, or those late
+         sections land nowhere and "back" has nothing to return to — so a school
+         gets its own view, and the two are swapped rather than rewritten. -->
+    <aside id="side">
+      <div id="panel" class="view">
+        <p class="empty">Search an address above, or use your location, to see its safety index and a live crime map.<br><br>SafeRoute covers the UK, 26 US cities, Toronto, Vancouver and Mexico City.</p>
+      </div>
+      <div id="schview" class="view off" aria-live="polite"></div>
     </aside>
   </div>
 </main>
@@ -376,7 +425,7 @@ map.getContainer().appendChild(hexBtn);
 let schOn = false, schIndex = null, schFields = {}, schLayer = null, schBusy = false;
 const schTiles = new Map();          // cell key -> rows, fetched once
 const schState = { sector:'', phase:'', gender:'', sixth:false, board:false };
-let schOrigin = null, schRing = null;
+let schOrigin = null, schRing = null, schSelected = null;
 const MILE_M = 1609.344;
 function schPasses(o) {
   if (schState.sector && o.sector !== schState.sector) return false;
@@ -400,6 +449,7 @@ schBtn.addEventListener('click', async () => {
   schBtn.setAttribute('aria-pressed', schOn ? 'true' : 'false');
   document.getElementById('schbar').classList.toggle('on', schOn);
   if (!schOn) {
+    showAreaView();
     if (schLayer) { map.removeLayer(schLayer); schLayer = null; }
     if (schRing) { map.removeLayer(schRing); schRing = null; }
     schNote.hidden = true;
@@ -421,18 +471,6 @@ map.getContainer().appendChild(schNote);
 const schEsc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const schColour = p => ({ 'Primary':'#3FD9C0', 'Secondary':'#F2B13C', 'Sixth form':'#F2B13C' }[p] || '#C77DFF');
 
-function schRating(g) {
-  const scheme = g.ratingScheme;
-  if (scheme === 'not-ofsted') {
-    return g.country === 'Wales'
-      ? 'In Wales — inspected by Estyn, not Ofsted.'
-      : 'Independent school — inspected separately from state schools.';
-  }
-  if (g.oeifGrade) return `<b style="display:inline">${schEsc(g.oeifGrade)}</b> at its last graded inspection — a judgement under Ofsted's former framework, withdrawn September 2024.`;
-  if (scheme === 'reportcard' || scheme === 'both') return "Inspected under Ofsted's report card framework — no single overall grade.";
-  return "No current Ofsted grade — around half of England's state schools have none right now.";
-}
-
 // Which 0.25° cells does the current view touch?
 function cellsInView(cell) {
   const b = map.getBounds().pad(0.1);
@@ -444,6 +482,106 @@ function cellsInView(cell) {
   if ((y1 - y0 + 1) * (x1 - x0 + 1) > 12) return null;
   for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) out.push(`${y}_${x}`);
   return out;
+}
+
+// ── school pane ─────────────────────────────────────────────────────────────
+const RC_LABELS = {
+  rcSafeguardingStandards:'Safeguarding', rcInclusion:'Inclusion',
+  rcCurriculumAndTeaching:'Curriculum and teaching', rcAchievement:'Achievement',
+  rcAttendanceAndBehaviour:'Attendance and behaviour',
+  rcPersonalDevelopmentAndWellbeing:'Personal development', rcLeadershipAndGovernance:'Leadership',
+};
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const ukDate = iso => { if (!iso) return ''; const [y, m, d] = iso.split('-'); return `${+d} ${MONTHS[+m - 1]} ${y}`; };
+
+// THE RATING BLOCK IS THE CAREFUL PART. Four states and three of them are not a
+// grade. Every single-word Ofsted grade on this map predates September 2024,
+// when that framework was withdrawn — all 9,775 of them — so the word never
+// appears without its date and that sentence, and never becomes a colour.
+function schRatingHtml(o) {
+  if (o.ratingScheme === 'not-ofsted') {
+    const why = o.country === 'Wales'
+      ? 'This school is in <b>Wales</b>, where <b>Estyn</b> inspects rather than Ofsted. Estyn outcomes are not in this dataset.'
+      : /independent/i.test(o.type)
+        ? (o.inspectorate === 'ISI'
+            ? 'Inspected by the <b>Independent Schools Inspectorate</b>, not Ofsted. ISI publishes reports school by school rather than as open data, so no grade is shown here.'
+            : 'A private school. Independent schools are inspected separately from state schools, and those outcomes are not published as open data.')
+        : 'No Ofsted inspection outcome is published for this establishment in the state-funded dataset.';
+    return `<p class="meta">${why}</p>`;
+  }
+  const out = [];
+  const areas = Object.keys(RC_LABELS).filter(k => o[k]);
+  if (areas.length) {
+    out.push(`<p class="meta"><b>Inspected under Ofsted's report card framework</b>${o.cardDate ? `, ${schEsc(ukDate(o.cardDate))}` : ''}. There is no single overall grade — that was deliberate.</p>`);
+    out.push('<div>' + areas.map(k => {
+      // Safeguarding is binary Met / Not met, not the five-point scale the other
+      // six use — said explicitly so "Met" never reads as a middling grade.
+      const v = schEsc(o[k]) + (k === 'rcSafeguardingStandards' ? ' <span style="color:var(--ink-3)">(pass/fail)</span>' : '');
+      return `<div class="kv"><span>${RC_LABELS[k]}</span><span class="mono">${v}</span></div>`;
+    }).join('') + '</div>');
+  }
+  if (o.oeifGrade) {
+    out.push(`<p class="meta"><b>${schEsc(o.oeifGrade)}</b> at its last graded inspection${o.oeifDate ? `, ${schEsc(ukDate(o.oeifDate))}` : ''}.
+      <span class="caveat">A single-word judgement under Ofsted's former framework, which was withdrawn in September 2024 and is no longer awarded.</span></p>`);
+  }
+  if (!out.length) {
+    out.push(`<p class="meta"><b>No current Ofsted grade.</b>
+      <span class="caveat">Ofsted stopped awarding single-word judgements in September 2024 and is re-inspecting under report cards. Around half of England's state schools have no grade right now — this is the normal state, not missing information.</span></p>`);
+  }
+  return out.join('');
+}
+
+function showSchoolPane(o) {
+  schSelected = o.urn;
+  const view = document.getElementById('schview');
+  const kv = [];
+  const row = (k, v) => { if (v !== '' && v != null && v !== false) kv.push(`<div class="kv"><span>${k}</span><span>${schEsc(v)}</span></div>`); };
+  row('Type', o.type);
+  row('Phase', o.phase);
+  if (o.ageLow && o.ageHigh) row('Ages', `${o.ageLow}–${o.ageHigh}`);
+  row('Gender', o.gender);
+  if (o.pupils) row('Pupils', o.pupils.toLocaleString('en-GB') + (o.capacity ? ` of ${o.capacity.toLocaleString('en-GB')} places` : ''));
+  if (o.fsm != null && o.fsm !== '') row('Free school meals', `${o.fsm}%`);
+  if (o.sixthForm) row('Sixth form', 'Yes');
+  if (o.boarding) row('Boarding', 'Yes');
+  if (o.nursery) row('Nursery', 'Yes');
+  row('Admissions', o.admissions);
+  row('Local authority', o.la);
+  row('Trust', o.trust);
+
+  // "Back" names the address it returns to — but only if one was actually
+  // checked. lastName defaults to 'This area' before any search, so the area
+  // view's own title is the honest test.
+  const areaTitle = panel.querySelector('.place');
+  const backLabel = areaTitle ? `← Back to ${schEsc(areaTitle.firstChild.textContent.trim())}` : '× Close';
+
+  view.innerHTML = `
+    <button class="back" id="schback">${backLabel}</button>
+    <div class="place">${schEsc(o.name)}<small>${schEsc([o.postcode, o.ward].filter(Boolean).join(' · '))}</small></div>
+    <div>${schRatingHtml(o)}</div>
+    <div class="divider"></div>
+    <div><p class="h3">Details</p>${kv.join('')}</div>
+    ${o.censusDate && o.pupils ? `<p class="src">Pupil numbers as at ${schEsc(ukDate(o.censusDate))}.</p>` : ''}
+    <a class="ext" href="https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/${o.urn}" target="_blank" rel="noopener">Full DfE record ↗</a>
+    <p class="src">URN ${o.urn} · DfE Get Information About Schools and Ofsted management information, Open Government Licence v3.0.</p>`;
+  document.getElementById('schback').addEventListener('click', showAreaView);
+
+  panel.classList.add('off');
+  view.classList.remove('off');
+  document.getElementById('side').scrollTop = 0;
+  // On a phone the pane sits BELOW the map, so a tap would otherwise change
+  // something off-screen with no visible response.
+  if (matchMedia('(max-width: 860px)').matches) {
+    document.getElementById('side').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  drawSchools();   // redraw so the selected pin is highlighted
+}
+
+function showAreaView() {
+  schSelected = null;
+  document.getElementById('schview').classList.add('off');
+  panel.classList.remove('off');
+  if (schOn) drawSchools();
 }
 
 async function drawSchools() {
@@ -476,7 +614,7 @@ async function drawSchools() {
 
     const b = map.getBounds().pad(0.1);
     const g = L.layerGroup();
-    let n = 0, inRing = 0;
+    let n = 0, inRing = 0, selectedMarker = null;
     for (const k of live) {
       for (const row of (schTiles.get(k) || [])) {
         const lat = row[schFields.lat], lng = row[schFields.lng];
@@ -492,12 +630,17 @@ async function drawSchools() {
           renderer: schCanvas, radius: 4, color: c, weight: priv ? 2 : 1,
           fillColor: c, fillOpacity: priv ? 0 : .55, opacity: .95,
         });
-        const bits = [o.phase, priv ? 'Private' : null, o.gender && o.gender !== 'Mixed' ? o.gender : null].filter(Boolean);
-        m.bindPopup(`<div class="schpop"><b>${schEsc(o.name)}</b><span class="m">${schEsc(bits.join(' · '))}${o.postcode ? ' · ' + schEsc(o.postcode) : ''}</span>
-          <div class="r">${schRating(o)}</div>
-          <a href="/schools/" target="_blank" rel="noopener">Open the schools map →</a></div>`);
-        g.addLayer(m);
+        // Details go in the right-hand pane, not a popup. The popup's only link
+        // was "Open the schools map", which after the merge just reloaded this
+        // same map — a circular link where the details should have been.
+        m.bindTooltip(schEsc(o.name), { className: 'schtip', direction: 'top', offset: [0, -5] });
+        m.on('click', () => showSchoolPane(o));
+        if (o.urn === schSelected) selectedMarker = m; else g.addLayer(m);
       }
+    }
+    if (selectedMarker) {
+      selectedMarker.setStyle({ radius: 7, weight: 3, color: '#FFFFFF', fillOpacity: .9 });
+      g.addLayer(selectedMarker);
     }
     schLayer = g.addTo(map);
 
@@ -585,6 +728,7 @@ function drawRingAt(lat, lng, label) {
   const circle = L.circle([lat, lng], { radius: miles * MILE_M, color: '#3FD9C0', weight: 1.5, dashArray: '5 5', fill: false, interactive: false });
   schRing = L.layerGroup([circle, L.circleMarker([lat, lng], { radius: 5, color: '#fff', weight: 2, fillColor: '#3FD9C0', fillOpacity: 1, interactive: false })]).addTo(map);
   map.fitBounds(circle.getBounds(), { padding: [20, 20] });   // moveend redraws and recounts
+  revealTool();
 }
 document.getElementById('sPcGo').addEventListener('click', schRingGo);
 document.getElementById('sPc').addEventListener('keydown', e => { if (e.key === 'Enter') schRingGo(); });
@@ -748,8 +892,25 @@ $('#geo').addEventListener('click', ()=>{
 });
 
 // ── lookup + render ──
+// After a deliberate search, scroll so the map + pane sit just under the sticky
+// header. The layout is sized to the viewport minus that header, so it then
+// fills the screen exactly — at any resolution — instead of arriving half below
+// the fold. Never moves the page if the tool is already in place, and never
+// animates for people who have asked for reduced motion.
+function revealTool() {
+  const lay = document.querySelector('.layout');
+  if (!lay) return;
+  const hdr = (document.querySelector('header.site')?.offsetHeight || 64) + 12;
+  const top = lay.getBoundingClientRect().top;
+  if (Math.abs(top - hdr) <= 16) return;
+  const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollTo({ top: window.scrollY + top - hdr, behavior: smooth ? 'smooth' : 'auto' });
+}
+
 async function lookup(lat, lng, name, address){
   const reqId = ++lastReqId;
+  showAreaView();   // a new search replaces any open school
+  revealTool();
   panel.innerHTML = `<div style="display:flex;align-items:center;gap:12px;color:var(--ink-3)"><div class="spinner"></div> Checking ${esc(name)}…</div>`;
   flyTo(lat,lng);
   try{

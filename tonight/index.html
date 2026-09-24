@@ -72,7 +72,11 @@
   .cityname{font-size:20px;font-weight:600;letter-spacing:-.01em}
   .citycount{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
   .citycount b{color:var(--ember-soft);font-size:15px}
-  .citymap{width:100%;height:min(62vh,560px);background:var(--night-3)}
+  /* Grows with the screen instead of stopping at 560px (a third of a 2560px
+     monitor). Embedded in a page with the city list above it, so it aims for
+     about two-thirds of the height, not all of it — and on a phone that also
+     leaves room to scroll past it, since one-finger drag pans the map. */
+  .citymap{width:100%;height:clamp(340px,68vh,1000px);height:clamp(340px,68dvh,1000px);background:var(--night-3)}
   .cityfoot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
   .lagnote{padding:0 20px 12px;font-family:var(--mono);font-size:10.5px;line-height:1.55;color:var(--ink-3)}
   p{color:var(--ink-2);line-height:1.65;margin:0 0 14px}
