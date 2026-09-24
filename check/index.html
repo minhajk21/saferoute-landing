@@ -322,16 +322,20 @@ L.DomEvent.disableClickPropagation(hexBtn);
 map.getContainer().appendChild(hexBtn);
 
 // ── schools overlay ─────────────────────────────────────────────────────────
-// OFF by default, and the data is not fetched until someone asks for it. The
-// file is 728KB gzipped and about three quarters of this page's traffic is US,
-// where there is nothing to show — making every visitor pay for a layer most of
-// them cannot use would be the wrong default.
+// OFF by default, and it fetches only the schools AROUND THE ADDRESS rather
+// than the country. The national file is 728KB gzipped; downloading it to look
+// at a square mile was the wrong shape, especially as roughly three quarters of
+// this page's traffic is US, where the answer is nothing at all.
+//
+// The data is tiled into 0.25° cells (389 of them, median 34 schools, worst
+// case 1,035 in central London). A zoom-14 viewport is about 0.02° tall, so it
+// sits inside one cell and a typical lookup pulls one to four at ~5-32KB each.
+// index.json lists the populated cells so we never request a 404 — most of the
+// bounding box of England and Wales is sea.
 //
 // Same rules as /schools/: colour is PHASE, shape is SECTOR, never quality.
-// Half of England's state schools carry no Ofsted grade at all and every
-// single-word grade predates the September 2024 withdrawal, so a
-// rating-coloured pin would invent a signal that no longer exists.
-let schOn = false, SCH = null, SCHL = null, schIdx = {}, schLayer = null, schLoading = false;
+let schOn = false, schIndex = null, schFields = {}, schLayer = null, schBusy = false;
+const schTiles = new Map();          // cell key -> rows, fetched once
 const schCanvas = L.canvas({ padding: 0.3 });
 
 const schBtn = document.createElement('button');
@@ -344,22 +348,12 @@ schBtn.addEventListener('click', async () => {
   schOn = !schOn;
   schBtn.classList.toggle('on', schOn);
   schBtn.setAttribute('aria-pressed', schOn ? 'true' : 'false');
-  if (!schOn) { if (schLayer) { map.removeLayer(schLayer); schLayer = null; } schNote.hidden = true; return; }
-  if (!SCH && !schLoading) {
-    schLoading = true;
-    schBtn.lastChild.textContent = 'Schools…';
-    try {
-      SCH = await (await fetch('/schools/data/schools.json', { cache: 'no-cache' })).json();
-      schIdx = Object.fromEntries(SCH.fields.map((f, i) => [f, i]));
-      const lab = await (await fetch('/schools/data/schools-labels.json', { cache: 'no-cache' })).json();
-      // Row-aligned by index — a mismatched pair would put every name on the
-      // wrong pin, so drop the names rather than risk that.
-      if (lab.count === SCH.count) SCHL = lab;
-    } catch { SCH = null; }
-    schLoading = false;
-    schBtn.lastChild.textContent = 'Schools';
+  if (!schOn) {
+    if (schLayer) { map.removeLayer(schLayer); schLayer = null; }
+    schNote.hidden = true;
+    return;
   }
-  drawSchools();
+  await drawSchools();
 });
 L.DomEvent.disableClickPropagation(schBtn);
 map.getContainer().appendChild(schBtn);
@@ -372,60 +366,91 @@ schNote.className = 'schnote';
 schNote.hidden = true;
 map.getContainer().appendChild(schNote);
 
-const schDec = (row, f) => SCH.enums[f] ? SCH.enums[f][row[schIdx[f]]] : row[schIdx[f]];
-const schColour = p => ({ 'Primary':'#3FD9C0', 'Secondary':'#F2B13C', 'Sixth form':'#F2B13C' }[p] || '#C77DFF');
 const schEsc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const schColour = p => ({ 'Primary':'#3FD9C0', 'Secondary':'#F2B13C', 'Sixth form':'#F2B13C' }[p] || '#C77DFF');
 
-function schRating(r) {
-  const scheme = schDec(r, 'ratingScheme');
+function schRating(g) {
+  const scheme = g.ratingScheme;
   if (scheme === 'not-ofsted') {
-    return schDec(r, 'country') === 'Wales'
+    return g.country === 'Wales'
       ? 'In Wales — inspected by Estyn, not Ofsted.'
       : 'Independent school — inspected separately from state schools.';
   }
-  const g = schDec(r, 'oeifGrade');
-  if (g) return `<b style="display:inline">${schEsc(g)}</b> at its last graded inspection — a judgement under Ofsted's former framework, withdrawn September 2024.`;
-  if (scheme === 'reportcard' || scheme === 'both') return 'Inspected under Ofsted\'s report card framework — no single overall grade.';
-  return 'No current Ofsted grade — around half of England\'s state schools have none right now.';
+  if (g.oeifGrade) return `<b style="display:inline">${schEsc(g.oeifGrade)}</b> at its last graded inspection — a judgement under Ofsted's former framework, withdrawn September 2024.`;
+  if (scheme === 'reportcard' || scheme === 'both') return "Inspected under Ofsted's report card framework — no single overall grade.";
+  return "No current Ofsted grade — around half of England's state schools have none right now.";
 }
 
-function drawSchools() {
-  if (!schOn) return;
-  if (schLayer) { map.removeLayer(schLayer); schLayer = null; }
-  if (!SCH) return;
+// Which 0.25° cells does the current view touch?
+function cellsInView(cell) {
   const b = map.getBounds().pad(0.1);
-  const g = L.layerGroup();
-  let n = 0;
-  for (let i = 0; i < SCH.rows.length && n < 1200; i++) {
-    const r = SCH.rows[i];
-    const lat = r[schIdx.lat], lng = r[schIdx.lng];
-    if (lat < b.getSouth() || lat > b.getNorth() || lng < b.getWest() || lng > b.getEast()) continue;
-    n++;
-    const priv = schDec(r, 'sector') === 'private';
-    const c = schColour(schDec(r, 'phase'));
-    const m = L.circleMarker([lat, lng], {
-      renderer: schCanvas, radius: 4, color: c, weight: priv ? 2 : 1,
-      fillColor: c, fillOpacity: priv ? 0 : .55, opacity: .95,
-    });
-    const nm = SCHL && SCHL.rows[i] ? SCHL.rows[i][0] : 'School';
-    const bits = [schDec(r,'phase'), priv ? 'Private' : null, schDec(r,'gender') !== 'Mixed' ? schDec(r,'gender') : null].filter(Boolean);
-    m.bindPopup(`<div class="schpop"><b>${schEsc(nm)}</b><span class="m">${schEsc(bits.join(' · '))}</span>
-      <div class="r">${schRating(r)}</div>
-      <a href="/schools/" target="_blank" rel="noopener">Open the schools map →</a></div>`);
-    g.addLayer(m);
-  }
-  schLayer = g.addTo(map);
+  const out = [];
+  const y0 = Math.floor(b.getSouth() / cell), y1 = Math.floor(b.getNorth() / cell);
+  const x0 = Math.floor(b.getWest() / cell),  x1 = Math.floor(b.getEast() / cell);
+  // A whole-country view would ask for every cell, which defeats the point, so
+  // cap it — at that zoom individual schools are not readable anyway.
+  if ((y1 - y0 + 1) * (x1 - x0 + 1) > 12) return null;
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) out.push(`${y}_${x}`);
+  return out;
+}
 
-  if (n === 0) {
-    const c = map.getCenter();
-    const inGB = c.lat > 49.8 && c.lat < 61 && c.lng > -8.7 && c.lng < 2.1;
-    schNote.textContent = inGB
-      ? 'No schools in view — try zooming out.'
-      : 'School data covers England and Wales only.';
-    schNote.hidden = false;
-  } else {
-    schNote.hidden = true;
-  }
+async function drawSchools() {
+  if (!schOn || schBusy) return;
+  schBusy = true;
+  try {
+    if (!schIndex) {
+      schIndex = await (await fetch('/schools/data/tiles/index.json', { cache: 'no-cache' })).json();
+      schFields = Object.fromEntries(schIndex.fields.map((f, i) => [f, i]));
+    }
+    const want = cellsInView(schIndex.cell);
+    if (schLayer) { map.removeLayer(schLayer); schLayer = null; }
+
+    if (want === null) {
+      schNote.textContent = 'Zoom in to see schools.';
+      schNote.hidden = false;
+      return;
+    }
+    const live = want.filter(k => schIndex.cells.includes(k));
+    await Promise.all(live.filter(k => !schTiles.has(k)).map(async k => {
+      try { schTiles.set(k, await (await fetch(`/schools/data/tiles/${k}.json`, { cache: 'no-cache' })).json()); }
+      catch { schTiles.set(k, []); }      // cache the failure so it is not retried on every pan
+    }));
+
+    const b = map.getBounds().pad(0.1);
+    const g = L.layerGroup();
+    let n = 0;
+    for (const k of live) {
+      for (const row of (schTiles.get(k) || [])) {
+        const lat = row[schFields.lat], lng = row[schFields.lng];
+        if (lat < b.getSouth() || lat > b.getNorth() || lng < b.getWest() || lng > b.getEast()) continue;
+        const o = {};
+        for (const f in schFields) o[f] = row[schFields[f]];
+        n++;
+        const priv = o.sector === 'private';
+        const c = schColour(o.phase);
+        const m = L.circleMarker([lat, lng], {
+          renderer: schCanvas, radius: 4, color: c, weight: priv ? 2 : 1,
+          fillColor: c, fillOpacity: priv ? 0 : .55, opacity: .95,
+        });
+        const bits = [o.phase, priv ? 'Private' : null, o.gender && o.gender !== 'Mixed' ? o.gender : null].filter(Boolean);
+        m.bindPopup(`<div class="schpop"><b>${schEsc(o.name)}</b><span class="m">${schEsc(bits.join(' · '))}${o.postcode ? ' · ' + schEsc(o.postcode) : ''}</span>
+          <div class="r">${schRating(o)}</div>
+          <a href="/schools/" target="_blank" rel="noopener">Open the schools map →</a></div>`);
+        g.addLayer(m);
+      }
+    }
+    schLayer = g.addTo(map);
+
+    if (n === 0) {
+      const c = map.getCenter();
+      const inGB = c.lat > 49.8 && c.lat < 61 && c.lng > -8.7 && c.lng < 2.1;
+      schNote.textContent = inGB ? 'No schools in view — try zooming out.'
+                                 : 'School data covers England and Wales only.';
+      schNote.hidden = false;
+    } else {
+      schNote.hidden = true;
+    }
+  } finally { schBusy = false; }
 }
 map.on('moveend zoomend', drawSchools);
 

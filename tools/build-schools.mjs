@@ -383,6 +383,56 @@ const run = async () => {
     rows: out.map(s => LABEL_FIELDS.map(f => s[f])),
   };
 
+  // ── geographic tiles ──────────────────────────────────────────────────────
+  // /check/ needs the schools around ONE address, not the country. Serving it
+  // the national file made every visitor download 728KB to look at a square
+  // mile — and three quarters of that page's traffic is US, where the answer is
+  // nothing at all.
+  //
+  // 0.25° cells, chosen from the measured distribution rather than picked:
+  // 389 files, median 34 schools, worst case 1,035 in central London. A
+  // zoom-14 viewport is about 0.02° tall, so it sits inside one cell and a
+  // typical lookup fetches one to four.
+  //
+  // Tiles carry DECODED strings (no enum dictionary — at ~34 schools per cell a
+  // dictionary costs more than it saves) but stay ROW-ARRAY shaped, with the
+  // field list held once in index.json. Plain objects were the obvious first
+  // cut and produced 20.6MB of raw tiles by repeating every key 26,000 times;
+  // this is the same data without that.
+  const CELL = 0.25;
+  // Everything a /check/ popup needs and nothing it does not — the filter-only
+  // fields (fsm, capacity, admissions, trust, ward, censusDate) stay out.
+  const TILE_FIELDS = ['urn','name','postcode','lat','lng','type','sector','phase',
+                       'gender','pupils','country','ratingScheme','oeifGrade','oeifDate'];
+  const cellKey = (lat, lng) => `${Math.floor(lat / CELL)}_${Math.floor(lng / CELL)}`;
+  const tiles = new Map();
+  for (const s of out) {
+    const k = cellKey(s.lat, s.lng);
+    if (!tiles.has(k)) tiles.set(k, []);
+    // Decode the enums back out — a tile is read directly, not joined.
+    tiles.get(k).push(TILE_FIELDS.map(f => ENUM_FIELDS.includes(f) ? enums[f][s[f]] : s[f]));
+    // `s` still carries name and postcode at this point — the map/labels split
+    // happens below, after tiling, so a tile is self-contained.
+  }
+
+  const TILE_DIR = join(OUT_DIR, 'tiles');
+  mkdirSync(TILE_DIR, { recursive: true });
+  let tileBytes = 0, biggest = 0;
+  for (const [k, list] of tiles) {
+    const j = JSON.stringify(list);
+    writeFileSync(join(TILE_DIR, `${k}.json`), j);
+    tileBytes += j.length;
+    biggest = Math.max(biggest, gzipSync(Buffer.from(j)).length);
+  }
+  // An index of populated cells, so the client never requests a 404. Most of
+  // the bounding box of England and Wales is sea.
+  writeFileSync(join(TILE_DIR, 'index.json'), JSON.stringify({
+    cell: CELL,
+    generated: new Date().toISOString().slice(0, 10),
+    fields: TILE_FIELDS,
+    cells: [...tiles.keys()].sort(),
+  }));
+
   mkdirSync(OUT_DIR, { recursive: true });
   const json = JSON.stringify(payload);
   const labelJson = JSON.stringify(labels);
@@ -400,6 +450,7 @@ const run = async () => {
   console.log(`  schools.json         ${(json.length / 1e6).toFixed(2)}MB raw  ${(gz / 1024).toFixed(0)}KB gzipped   (map + filters)`);
   console.log(`  schools-labels.json  ${(labelJson.length / 1e6).toFixed(2)}MB raw  ${(gzLabels / 1024).toFixed(0)}KB gzipped   (names, loaded after first paint)`);
   console.log(`  first paint costs    ${(gz / 1024).toFixed(0)}KB, not ${((gz + gzLabels) / 1024).toFixed(0)}KB`);
+  console.log(`  tiles                ${tiles.size} cells at ${CELL}°, ${(tileBytes / 1e6).toFixed(1)}MB raw total, largest ${(biggest / 1024).toFixed(0)}KB gzipped`);
 };
 
 run().catch(e => { console.error('build-schools failed:', e.message); process.exit(1); });
