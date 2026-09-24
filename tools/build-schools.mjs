@@ -400,10 +400,13 @@ const run = async () => {
   // cut and produced 20.6MB of raw tiles by repeating every key 26,000 times;
   // this is the same data without that.
   const CELL = 0.25;
-  // Everything a /check/ popup needs and nothing it does not — the filter-only
-  // fields (fsm, capacity, admissions, trust, ward, censusDate) stay out.
+  // Everything /check/ needs to draw, FILTER and pop up a school, and nothing
+  // else. sixthForm and boarding are here because /check/ now carries the
+  // schools filters; fsm, capacity, admissions, trust, ward and censusDate stay
+  // out because nothing on that page reads them.
   const TILE_FIELDS = ['urn','name','postcode','lat','lng','type','sector','phase',
-                       'gender','pupils','country','ratingScheme','oeifGrade','oeifDate'];
+                       'gender','pupils','sixthForm','boarding','country',
+                       'ratingScheme','oeifGrade','oeifDate'];
   const cellKey = (lat, lng) => `${Math.floor(lat / CELL)}_${Math.floor(lng / CELL)}`;
   const tiles = new Map();
   for (const s of out) {
@@ -430,6 +433,12 @@ const run = async () => {
     cell: CELL,
     generated: new Date().toISOString().slice(0, 10),
     fields: TILE_FIELDS,
+    // Filter dropdown values, so the page does not have to fetch every tile to
+    // discover what a "phase" can be.
+    options: {
+      phase: enums.phase.filter(Boolean),
+      gender: enums.gender.filter(v => v && v !== 'Not applicable'),
+    },
     cells: [...tiles.keys()].sort(),
   }));
 

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0A0D12">
 <title>Check any address — SafeRoute neighborhood safety</title>
-<meta name="description" content="Type any address, neighborhood or landmark and get its SafeRoute safety index (0–100) from official police crime data — a live crime map for anywhere SafeRoute covers.">
+<meta name="description" content="Type any address, neighborhood or landmark and get its SafeRoute safety index (0–100) from official police crime data — plus every nearby school in England and Wales, state and private, with Ofsted ratings.">
 <meta property="og:image" content="https://safe-route.app/assets/og-preview.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:title" content="Check any address — SafeRoute neighborhood safety">
@@ -90,6 +90,27 @@
   .mapbtn.on{color:var(--ink)}
   .mapbtn.on .mapbtn-dot{background:#BC3B2E}
   .mapbtn.second{top:56px}
+  /* Schools controls. Hidden until the layer is on — the page is an address
+     checker first, and a filter row for a layer you have not enabled is noise. */
+  .schbar{display:none;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0 0}
+  .schbar.on{display:flex}
+  .schbar .seg{display:inline-flex;border:1px solid var(--line-2);border-radius:999px;overflow:hidden;background:var(--paper)}
+  .schbar .seg button{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+    background:none;border:0;padding:8px 14px;cursor:pointer}
+  .schbar .seg button.on{background:var(--teal);color:#04231E;font-weight:600}
+  .schbar select,.schbar input{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--ink);background:var(--paper);border:1px solid var(--line-2);border-radius:999px;padding:8px 13px;outline:none}
+  .schbar input{width:120px}
+  .schbar select:focus,.schbar input:focus{border-color:var(--teal)}
+  .schbar .chk{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--ink-3);border:1px solid var(--line-2);border-radius:999px;padding:8px 12px;cursor:pointer}
+  .schbar .chk input{width:auto;accent-color:var(--teal);margin:0;padding:0;border:0}
+  .schbar .chk.on{color:var(--ink);border-color:var(--teal)}
+  .schbar button.go{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:600;
+    background:var(--teal);color:#04231E;border:0;border-radius:999px;padding:9px 14px;cursor:pointer}
+  .schbar .msg{font-size:12px;color:var(--ink-3)}
+  .schbar .msg.err{color:#E8916F}
+
   .schnote{position:absolute;top:98px;right:14px;z-index:1200;max-width:190px;padding:7px 11px;border-radius:8px;
     border:1px solid var(--line-2);background:var(--surface);color:var(--ink-3);font-family:var(--mono);
     font-size:10px;letter-spacing:.04em;line-height:1.5;box-shadow:0 6px 20px rgba(0,0,0,.35);pointer-events:none}
@@ -152,7 +173,6 @@
 <nav class="site-nav" aria-label="Site">
 <a href="/safety/">Safety index</a>
 <a class="on" href="/check/">Check an address</a>
-<a href="/schools/">Schools</a>
 <a href="/tonight/">Tonight</a>
 <a class="hide-sm" href="/transparency/">Transparency</a>
 <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-check&mt=8">Get the app</a>
@@ -163,13 +183,32 @@
   <div class="head">
     <span class="eyebrow"><span class="slash">//</span> Live crime lookup</span>
     <h1>How safe is any address?</h1>
-    <p class="lead">Type a street, neighborhood or landmark and get its SafeRoute safety index — scored 0–100 from official police crime data, the same engine behind the app's walking routes.</p>
+    <p class="lead">Type a street, neighborhood or landmark and get its SafeRoute safety index — scored 0–100 from official police crime data, the same engine behind the app's walking routes. In England and Wales, switch on <b>Schools</b> to see every school nearby, state and private.</p>
     <div class="search">
       <div class="search-row">
         <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="e.g. Ballard, Seattle · Wicker Park, Chicago · Camden, London" aria-label="Search an address or neighborhood">
         <button id="geo" title="Use my current location">◎ My location</button>
       </div>
       <ul id="ac"></ul>
+    </div>
+
+    <div class="schbar" id="schbar">
+      <div class="seg" id="sSector" role="group" aria-label="State or private">
+        <button data-v="" class="on">All</button>
+        <button data-v="state">State</button>
+        <button data-v="private">Private</button>
+      </div>
+      <select id="sPhase" aria-label="Phase"><option value="">Any phase</option></select>
+      <select id="sGender" aria-label="Gender"><option value="">Any gender</option></select>
+      <label class="chk" id="sSixthL"><input type="checkbox" id="sSixth"> Sixth form</label>
+      <label class="chk" id="sBoardL"><input type="checkbox" id="sBoard"> Boarding</label>
+      <input id="sPc" type="text" autocomplete="postal-code" spellcheck="false" placeholder="Postcode" maxlength="9" aria-label="Postcode">
+      <select id="sRadius" aria-label="Distance">
+        <option value="0.5">½ mi</option><option value="1" selected>1 mi</option>
+        <option value="2">2 mi</option><option value="3">3 mi</option>
+      </select>
+      <button class="go" id="sPcGo">Ring</button>
+      <span class="msg" id="sMsg">Distance ring — not a catchment area.</span>
     </div>
   </div>
 
@@ -336,6 +375,17 @@ map.getContainer().appendChild(hexBtn);
 // Same rules as /schools/: colour is PHASE, shape is SECTOR, never quality.
 let schOn = false, schIndex = null, schFields = {}, schLayer = null, schBusy = false;
 const schTiles = new Map();          // cell key -> rows, fetched once
+const schState = { sector:'', phase:'', gender:'', sixth:false, board:false };
+let schOrigin = null, schRing = null;
+const MILE_M = 1609.344;
+function schPasses(o) {
+  if (schState.sector && o.sector !== schState.sector) return false;
+  if (schState.phase  && o.phase  !== schState.phase)  return false;
+  if (schState.gender && o.gender !== schState.gender) return false;
+  if (schState.sixth  && !o.sixthForm) return false;
+  if (schState.board  && !o.boarding)  return false;
+  return true;
+}
 const schCanvas = L.canvas({ padding: 0.3 });
 
 const schBtn = document.createElement('button');
@@ -348,8 +398,10 @@ schBtn.addEventListener('click', async () => {
   schOn = !schOn;
   schBtn.classList.toggle('on', schOn);
   schBtn.setAttribute('aria-pressed', schOn ? 'true' : 'false');
+  document.getElementById('schbar').classList.toggle('on', schOn);
   if (!schOn) {
     if (schLayer) { map.removeLayer(schLayer); schLayer = null; }
+    if (schRing) { map.removeLayer(schRing); schRing = null; }
     schNote.hidden = true;
     return;
   }
@@ -401,6 +453,12 @@ async function drawSchools() {
     if (!schIndex) {
       schIndex = await (await fetch('/schools/data/tiles/index.json', { cache: 'no-cache' })).json();
       schFields = Object.fromEntries(schIndex.fields.map((f, i) => [f, i]));
+      for (const [id, key] of [['sPhase','phase'],['sGender','gender']]) {
+        const el = document.getElementById(id);
+        for (const v of (schIndex.options?.[key] || [])) {
+          const o = document.createElement('option'); o.value = v; o.textContent = v; el.appendChild(o);
+        }
+      }
     }
     const want = cellsInView(schIndex.cell);
     if (schLayer) { map.removeLayer(schLayer); schLayer = null; }
@@ -418,14 +476,16 @@ async function drawSchools() {
 
     const b = map.getBounds().pad(0.1);
     const g = L.layerGroup();
-    let n = 0;
+    let n = 0, inRing = 0;
     for (const k of live) {
       for (const row of (schTiles.get(k) || [])) {
         const lat = row[schFields.lat], lng = row[schFields.lng];
         if (lat < b.getSouth() || lat > b.getNorth() || lng < b.getWest() || lng > b.getEast()) continue;
         const o = {};
         for (const f in schFields) o[f] = row[schFields[f]];
+        if (!schPasses(o)) continue;
         n++;
+        if (schOrigin && map.distance([schOrigin.lat, schOrigin.lng], [lat, lng]) <= schOrigin.miles * MILE_M) inRing++;
         const priv = o.sector === 'private';
         const c = schColour(o.phase);
         const m = L.circleMarker([lat, lng], {
@@ -441,6 +501,12 @@ async function drawSchools() {
     }
     schLayer = g.addTo(map);
 
+    if (schOrigin) {
+      const m = document.getElementById('sMsg');
+      m.className = 'msg';
+      m.textContent = `${inRing} school${inRing === 1 ? '' : 's'} within ${schOrigin.miles} mi of ${schOrigin.label} — straight-line, not a catchment`;
+    }
+
     if (n === 0) {
       const c = map.getCenter();
       const inGB = c.lat > 49.8 && c.lat < 61 && c.lng > -8.7 && c.lng < 2.1;
@@ -453,6 +519,76 @@ async function drawSchools() {
   } finally { schBusy = false; }
 }
 map.on('moveend zoomend', drawSchools);
+
+// /schools/ used to be its own page and now redirects here with ?schools, so
+// that URL must land in schools mode — over England and Wales, where there is
+// something to see — rather than on an empty US-centred crime map.
+if (/[?&]schools\b/.test(location.search) || location.hash === '#schools') {
+  map.setView([52.8, -1.8], 7);
+  setTimeout(() => schBtn.click(), 0);
+}
+
+// ── schools controls ────────────────────────────────────────────────────────
+document.getElementById('sSector').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  [...document.getElementById('sSector').children].forEach(x => x.classList.toggle('on', x === b));
+  schState.sector = b.dataset.v; drawSchools();
+});
+document.getElementById('sPhase').addEventListener('change', e => { schState.phase = e.target.value; drawSchools(); });
+document.getElementById('sGender').addEventListener('change', e => { schState.gender = e.target.value; drawSchools(); });
+for (const [id, key, lab] of [['sSixth','sixth','sSixthL'],['sBoard','board','sBoardL']]) {
+  document.getElementById(id).addEventListener('change', e => {
+    schState[key] = e.target.checked;
+    document.getElementById(lab).classList.toggle('on', e.target.checked);
+    drawSchools();
+  });
+}
+
+// THE RING IS CENTRED ON THE PERSON, NEVER ON A SCHOOL. None of the cities this
+// site covers publishes a catchment boundary — they admit by straight-line
+// distance from the school, remeasured each year against that year's applicants.
+// A ring around a school would assert a boundary that does not exist; a ring
+// around your own address answers the question admission actually turns on.
+// Dashed and unfilled so it reads as a measuring tool, not an official line.
+//
+// Seamless by default: with no postcode typed, it rings the address you just
+// checked (the map is centred on it), so search -> Schools -> Ring needs no
+// retyping.
+async function schRingGo() {
+  const msg = document.getElementById('sMsg');
+  const fail = t => { msg.className = 'msg err'; msg.textContent = t; };
+  const raw = document.getElementById('sPc').value.trim().toUpperCase().replace(/\s+/g, ' ');
+  let lat, lng, label;
+  if (raw) {
+    if (/^BT/i.test(raw)) return fail('Northern Ireland is not covered.');
+    if (!/^[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}$/.test(raw)) return fail('That does not look like a UK postcode.');
+    try {
+      const res = await fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(raw.replace(/\s/g, '')));
+      if (!res.ok) return fail(res.status === 404 ? 'Postcode not found.' : 'Lookup failed.');
+      const r = (await res.json()).result;
+      if (r.country !== 'England' && r.country !== 'Wales') return fail(`${r.postcode} is in ${r.country} — school data covers England and Wales only.`);
+      lat = r.latitude; lng = r.longitude; label = r.postcode;
+    } catch { return fail('Could not reach the postcode service.'); }
+  } else {
+    const c = map.getCenter(); lat = c.lat; lng = c.lng; label = 'this spot';
+  }
+  drawRingAt(lat, lng, label);
+}
+
+// Separate from the lookup so a radius change redraws around the SAME point.
+// Re-reading the map centre instead would move the ring to wherever the user
+// had since panned — which silently changes what "near" means.
+function drawRingAt(lat, lng, label) {
+  const miles = parseFloat(document.getElementById('sRadius').value);
+  schOrigin = { lat, lng, miles, label };
+  if (schRing) map.removeLayer(schRing);
+  const circle = L.circle([lat, lng], { radius: miles * MILE_M, color: '#3FD9C0', weight: 1.5, dashArray: '5 5', fill: false, interactive: false });
+  schRing = L.layerGroup([circle, L.circleMarker([lat, lng], { radius: 5, color: '#fff', weight: 2, fillColor: '#3FD9C0', fillOpacity: 1, interactive: false })]).addTo(map);
+  map.fitBounds(circle.getBounds(), { padding: [20, 20] });   // moveend redraws and recounts
+}
+document.getElementById('sPcGo').addEventListener('click', schRingGo);
+document.getElementById('sPc').addEventListener('keydown', e => { if (e.key === 'Enter') schRingGo(); });
+document.getElementById('sRadius').addEventListener('change', () => { if (schOrigin) drawRingAt(schOrigin.lat, schOrigin.lng, schOrigin.label); });
 
 function showUpdating(on){
   mapStatus.classList.toggle('on', on);

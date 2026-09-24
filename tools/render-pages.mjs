@@ -1512,7 +1512,6 @@ const chrome = crumbs => `<header class="site"><div class="wrap">
 <nav class="site-nav" aria-label="Site">
 <a href="/safety/" class="on">Safety index</a>
 <a href="/check/">Check an address</a>
-<a href="/schools/">Schools</a>
 <a href="/tonight/">Tonight</a>
 <a class="hide-sm" href="/transparency/">Transparency</a>
 <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-safety-pages&mt=8">Get the app</a>
