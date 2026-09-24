@@ -128,7 +128,10 @@ header.site .wrap{display:flex;align-items:center;justify-content:space-between;
    the one destination a page cannot offer inline (every area page carries its
    own address search, and "Safety index" is where you already are). */
 @media(max-width:780px){.site-nav a.hide-sm{display:none}}
-@media(max-width:620px){.site-nav a[href="/safety/"],.site-nav a[href="/check/"]{display:none}}
+/* Phones keep ONE content link (Tonight) plus the CTA — a deliberate choice,
+   not an accident of width. Any new nav item joins this list, or adding it
+   quietly undoes that decision. */
+@media(max-width:620px){.site-nav a[href="/safety/"],.site-nav a[href="/check/"],.site-nav a[href="/schools/"]{display:none}}
 
 /* ── Buttons ──────────────────────────────────────────────────────────────*/
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;
