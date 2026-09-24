@@ -202,13 +202,24 @@ const cardKey = a => 'rc' + a.replace(/[^a-zA-Z]+(.)/g, (_, c) => c.toUpperCase(
                               .replace(/[^a-zA-Z]/g, '')
                               .replace(/^./, c => c.toUpperCase());
 
+// GIAS is a register of every educational ESTABLISHMENT, not of schools. It
+// includes universities, offshore schools and an explicit "Miscellaneous" bin.
+// Leaving them in put Falmouth University on a schools map — found by clicking
+// a pin, not by reading the data. Further education and post-16 institutions
+// stay, because 16-19 provision is a real choice a family makes.
+const NOT_A_SCHOOL = new Set([
+  'Higher education institutions',
+  'Miscellaneous',
+  'Offshore schools',          // outside England and Wales entirely
+]);
+
 const run = async () => {
   const { header, rows } = parseCsv(await fetchGias());
   const col = Object.fromEntries(header.map((h, i) => [h, i]));
   const g = (r, name) => (r[col[name]] ?? '').trim();
 
   const out = [];
-  let skippedClosed = 0, skippedNoGeo = 0;
+  let skippedClosed = 0, skippedNoGeo = 0, skippedNotSchool = 0;
 
   for (const r of rows) {
     if (r.length < header.length - 2) continue;
@@ -222,6 +233,7 @@ const run = async () => {
     if (lat < 49.8 || lat > 61 || lng < -8.7 || lng > 2.1) { skippedNoGeo++; continue; }
 
     const type = g(r, 'TypeOfEstablishment (name)');
+    if (NOT_A_SCHOOL.has(type)) { skippedNotSchool++; continue; }
     const religionRaw = g(r, 'ReligiousCharacter (name)');
 
     out.push({
@@ -233,6 +245,10 @@ const run = async () => {
       // The public/private toggle the map needs, decided once here rather than
       // by string-matching in the browser.
       sector: /independent/i.test(type) ? 'private' : 'state',
+      // Explicit, not inferred. The UI previously deduced "not independent and
+      // not in the Ofsted file, therefore Wales", which labelled an English
+      // university as Welsh. GIAS files every Welsh school under this one type.
+      country: type === 'Welsh establishment' ? 'Wales' : 'England',
       phase: derivePhase(g(r, 'PhaseOfEducation (name)'), g(r, 'StatutoryLowAge'), g(r, 'StatutoryHighAge')),
       ageLow: +g(r, 'StatutoryLowAge') || null,
       ageHigh: +g(r, 'StatutoryHighAge') || null,
@@ -325,7 +341,7 @@ const run = async () => {
   const FIELDS = Object.keys(out[0]);
   const ENUM_FIELDS = ['type', 'group', 'sector', 'phase', 'gender', 'religion',
                        'admissions', 'trust', 'la', 'ward', 'inspectorate', 'censusDate',
-                       'ratingScheme', 'oeifGrade', 'oeifDate', 'cardDate',
+                       'country', 'ratingScheme', 'oeifGrade', 'oeifDate', 'cardDate',
                        ...REPORT_CARD_AREAS.map(cardKey)];
   const enums = {};
   for (const f of ENUM_FIELDS) {
@@ -380,6 +396,7 @@ const run = async () => {
   console.log(`    private            ${out.filter(s => enums.sector[s.sector] === 'private').length.toLocaleString()}`);
   console.log(`  skipped, closed      ${skippedClosed.toLocaleString()}`);
   console.log(`  skipped, no coords   ${skippedNoGeo.toLocaleString()}`);
+  console.log(`  skipped, not a school ${skippedNotSchool.toLocaleString()}  (universities, offshore, misc)`);
   console.log(`  schools.json         ${(json.length / 1e6).toFixed(2)}MB raw  ${(gz / 1024).toFixed(0)}KB gzipped   (map + filters)`);
   console.log(`  schools-labels.json  ${(labelJson.length / 1e6).toFixed(2)}MB raw  ${(gzLabels / 1024).toFixed(0)}KB gzipped   (names, loaded after first paint)`);
   console.log(`  first paint costs    ${(gz / 1024).toFixed(0)}KB, not ${((gz + gzLabels) / 1024).toFixed(0)}KB`);

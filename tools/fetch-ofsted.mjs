@@ -64,15 +64,43 @@ export const REPORT_CARD_AREAS = [
   'Leadership and governance',
 ];
 
+const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+
+// Parse the date out of an Ofsted filename. Spellings vary between releases —
+// 31_Mar_2026, 30_June_2026, 31_August_2026 — so match a month PREFIX rather
+// than a fixed list of names.
+function dateFromName(url) {
+  const m = /_(\d{1,2})_([A-Za-z]+)_(\d{4})\.csv/.exec(decodeURIComponent(url));
+  if (!m) return 0;
+  const mi = MONTHS.indexOf(m[2].slice(0, 3).toLowerCase());
+  return mi < 0 ? 0 : Date.UTC(+m[3], mi, +m[1]);
+}
+
 async function resolveCsvUrl() {
   const res = await fetch(LANDING, { signal: AbortSignal.timeout(60_000) });
   if (!res.ok) throw new Error(`Ofsted landing page HTTP ${res.status}`);
   const html = await res.text();
-  // Match the state-funded CSV whatever its hash and however the month is spelt.
+
+  // TWO THINGS MATTER HERE, and getting either wrong is silent.
+  //
+  // 1. The page also lists HISTORICAL releases. Taking the first match in
+  //    document order fetched the November 2019 archive — seven-year-old
+  //    ratings, with no error anywhere. Always pick the NEWEST by date.
+  // 2. There are two file families: "latest_inspections_as_at_<date>" (the
+  //    current state of every school, which is what a map wants) and
+  //    "all_inspections_year_to_date" (an event log, one row per inspection,
+  //    which would duplicate schools). Require the former by name.
   const re = /https:\/\/assets\.publishing\.service\.gov\.uk\/media\/[a-f0-9]+\/Management_information_-_state-funded_schools[^"']*?\.csv/gi;
-  const hits = [...new Set(html.match(re) || [])];
-  if (!hits.length) throw new Error('no state-funded CSV link found on the Ofsted landing page — the page layout may have changed');
-  return hits[0];
+  const all = [...new Set(html.match(re) || [])];
+  const latest = all.filter(u => /latest_inspections/i.test(decodeURIComponent(u)));
+  if (!latest.length) {
+    throw new Error(`no "latest_inspections" state-funded CSV on the Ofsted page (saw ${all.length} state-funded links) — the naming may have changed; refusing to guess`);
+  }
+  const best = latest.map(u => ({ u, t: dateFromName(u) })).sort((a, b) => b.t - a.t)[0];
+  if (!best.t) throw new Error(`could not read a date from "${best.u.split('/').pop()}" — refusing to fetch a file of unknown vintage`);
+  const age = (Date.now() - best.t) / 864e5;
+  if (age > 120) throw new Error(`newest state-funded file is ${Math.round(age)} days old (${best.u.split('/').pop()}) — Ofsted publishes monthly, so something is wrong`);
+  return best.u;
 }
 
 async function fetchCsv() {
