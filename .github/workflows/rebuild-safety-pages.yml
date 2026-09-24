@@ -148,6 +148,15 @@ jobs:
       - name: Render pages
         run: node tools/render-pages.mjs
 
+      # The homepage quotes coverage numbers — areas, cities, per-city counts,
+      # schools. They were typed by hand and went badly stale: "1,376 areas
+      # across thirteen cities" survived until the site had 2,575 in 26. This
+      # copies them from search-index.json, which the step above just wrote, so
+      # it MUST run after Render pages. Never fails the run: a number it cannot
+      # compute is left as it was and reported.
+      - name: Keep homepage coverage numbers true
+        run: node tools/sync-site-facts.mjs
+
       - name: Commit + push if anything changed
         run: |
           git config user.name "saferoute-bot"
@@ -181,6 +190,10 @@ jobs:
               exit 1
             fi
             node tools/render-pages.mjs
+            # The re-render may have picked up a city that landed on main, which
+            # changes search-index.json — so the homepage counts must follow it or
+            # they would describe the pre-rebase site.
+            node tools/sync-site-facts.mjs
             git add -A
             git diff --cached --quiet || git commit --amend --no-edit
           done

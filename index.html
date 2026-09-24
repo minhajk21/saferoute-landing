@@ -120,6 +120,18 @@
             background:rgba(63,217,192,.11);color:var(--teal)}
   .card h3{margin-bottom:8px}
   .card p{color:var(--text-2);font-size:15.5px}
+  /* Cards that go somewhere. The .card hover lift already reads as clickable,
+     so a card that is NOT a link was the odd one out — these are. */
+  a.card-link{display:flex;flex-direction:column;text-decoration:none;color:inherit}
+  a.card-link:hover{border-color:var(--teal)}
+  a.card-link p{flex:1}
+  .card-go{margin-top:16px;font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;
+           text-transform:uppercase;color:var(--teal)}
+  /* Exactly four: 4 across, then 2x2, then stacked. auto-fit broke them 3+1 and
+     stranded the last card on its own row at common laptop widths. */
+  .cards-4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:1080px){.cards-4{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.cards-4{grid-template-columns:1fr}}
 
   /* ---------- coverage ---------- */
   .cov{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:40px}
@@ -175,7 +187,7 @@
 <a class="wordmark" href="/"><svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>SAFEROUTE</span></a>
 <nav class="site-nav" aria-label="Site">
 <a href="/safety/">Safety index</a>
-<a href="/check/">Check an address</a>
+<a href="/check/">Map</a>
 <a href="/tonight/">Tonight</a>
 <a class="hide-sm" href="/transparency/">Transparency</a>
 <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-home&mt=8">Get the app</a>
@@ -226,8 +238,9 @@
   <div class="wrap"><div class="strip-in">
     <span><b>4</b> countries</span>
     <span><b>26</b> US cities</span>
-    <span><b>1,376</b> neighborhood reports</span>
-    <span><b>Official</b> police data only</span>
+    <span><b data-fact="areas">2,575</b> neighborhood reports</span>
+    <span><b data-fact="schools">26,230</b> schools mapped</span>
+    <span><b>Official</b> data only</span>
     <span><b>No</b> accounts · <b>no</b> ads · <b>no</b> tracking</span>
   </div></div>
 </div>
@@ -442,40 +455,63 @@
 </section>
 
 <!-- ══════════ LOOKUP ══════════ -->
-<section class="sec" id="safety-index">
+<section class="sec" id="on-the-web">
   <div class="wrap">
     <div class="reveal" style="max-width:62ch">
       <div class="eyebrow">No app needed</div>
-      <h2>Check any address, right in your browser.</h2>
+      <h2>The map, the schools, the neighborhoods — all in your browser.</h2>
       <p class="lede" style="margin-top:18px">
-        Type any street, neighborhood or landmark and get its safety index on a
-        live crime map — the same official data the app routes on. Free, no sign-up.
+        Everything here is free on the web with no sign-up, built from the same
+        official data the app routes on.
       </p>
     </div>
-    <div class="lookup-box reveal">
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px">
-        <a class="btn btn-sm btn-fill" href="/check/">Open the live crime map →</a>
-        <a class="btn btn-sm btn-ghost" href="/tonight/">See tonight's calls →</a>
-      </div>
+    <div class="cards cards-4">
+      <a class="card card-link reveal" style="--i:0" href="/check/">
+        <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div>
+        <h3>Map</h3>
+        <p>Type any street, neighborhood or landmark and see its safety index on a live crime heatmap — anywhere in the UK, 26 US cities, Toronto, Vancouver and Mexico City.</p>
+        <span class="card-go">Open the map →</span>
+      </a>
+      <a class="card card-link reveal" style="--i:1" href="/check/?schools">
+        <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5 12 5l9 4.5-9 4.5-9-4.5Z"/><path d="M7 11.5V16c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-4.5"/></svg></div>
+        <h3>Schools</h3>
+        <p><span data-fact="schools">26,230</span> schools across England and Wales, state and private — phase, gender, size and inspection outcome. Enter a postcode to see what&rsquo;s within a mile.</p>
+        <span class="card-go">Find schools →</span>
+      </a>
+      <a class="card card-link reveal" style="--i:2" href="/safety/">
+        <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 12h7M9 16h7"/></svg></div>
+        <h3>Neighborhood reports</h3>
+        <p><span data-fact="areas">2,575</span> in-depth safety pages across <span data-fact="cities">26</span> cities — crime maps, what gets reported, and when it happens.</p>
+        <span class="card-go">Browse reports →</span>
+      </a>
+      <a class="card card-link reveal" style="--i:3" href="/tonight/">
+        <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></div>
+        <h3>Tonight</h3>
+        <p>Live police dispatch maps for the US cities that publish fast enough — what officers were sent to in the last 24 hours.</p>
+        <span class="card-go">See tonight →</span>
+      </a>
+    </div>
+
+    <div class="lookup-box reveal" style="margin-top:22px">
       <label for="hl-q" style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;
              text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:9px">
-        Or search our in-depth neighborhood reports</label>
+        Search the neighborhood reports</label>
       <input id="hl-q" type="search" autocomplete="off" spellcheck="false"
              aria-label="Search neighborhoods in the SafeRoute safety index"
              placeholder="Try Harlem, Brixton, Hyde Park…">
       <ul id="hl-out"></ul>
-      <p class="lookup-note" id="hl-note">1,376 areas across thirteen cities · New York · London · Chicago · LA · San Francisco · Seattle · Toronto · Washington DC · Boston · Philadelphia · Baltimore · Denver · Vancouver</p>
+      <p class="lookup-note" id="hl-note"><span data-fact="areas">2,575</span> areas across <span data-fact="cities">26</span> cities — try a neighborhood, ward or borough.</p>
       <div class="citylinks">
-        <a href="/safety/new-york/">New York <b>197</b></a>
-        <a href="/safety/london/">London <b>248</b></a>
-        <a href="/safety/chicago/">Chicago <b>77</b></a>
-        <a href="/safety/la/">Los Angeles <b>99</b></a>
-        <a href="/safety/sf/">San Francisco <b>41</b></a>
-        <a href="/safety/seattle/">Seattle <b>94</b></a>
-        <a href="/safety/denver/">Denver <b>76</b></a>
-        <a href="/safety/baltimore/">Baltimore <b>56</b></a>
-        <a href="/safety/vancouver/">Vancouver <b>22</b></a>
-        <a href="/safety/">All cities →</a>
+        <a href="/safety/london/">London <b data-fact="city:london">248</b></a>
+        <a href="/safety/new-york/">New York <b data-fact="city:new-york">197</b></a>
+        <a href="/safety/birmingham/">Birmingham <b data-fact="city:birmingham">69</b></a>
+        <a href="/safety/chicago/">Chicago <b data-fact="city:chicago">77</b></a>
+        <a href="/safety/la/">Los Angeles <b data-fact="city:la">99</b></a>
+        <a href="/safety/toronto/">Toronto <b data-fact="city:toronto">158</b></a>
+        <a href="/safety/liverpool/">Liverpool <b data-fact="city:liverpool">64</b></a>
+        <a href="/safety/seattle/">Seattle <b data-fact="city:seattle">94</b></a>
+        <a href="/safety/philly/">Philadelphia <b data-fact="city:philly">151</b></a>
+        <a href="/safety/">All <span data-fact="cities">26</span> cities →</a>
       </div>
     </div>
   </div>
@@ -515,7 +551,7 @@
       <div class="fcol">
         <h4>Product</h4>
         <a href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-home&mt=8">Download on the App Store</a>
-        <a href="/check/">Check an address</a>
+        <a href="/check/">Map</a>
         <a href="/tonight/">Tonight's calls</a>
         <a href="/safety/">Neighborhood safety index</a>
         <a href="/transparency/">Crime-data transparency index</a>

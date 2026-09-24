@@ -432,6 +432,9 @@ const run = async () => {
   writeFileSync(join(TILE_DIR, 'index.json'), JSON.stringify({
     cell: CELL,
     generated: new Date().toISOString().slice(0, 10),
+    // Read by tools/sync-site-facts.mjs for the homepage's school count, so the
+    // number on the homepage is this file's, never a typed copy.
+    count: out.length,
     fields: TILE_FIELDS,
     // Filter dropdown values, so the page does not have to fetch every tile to
     // discover what a "phase" can be.
