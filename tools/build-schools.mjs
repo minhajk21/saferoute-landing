@@ -214,6 +214,10 @@ const run = async () => {
   const { header, rows } = parseCsv(await fetchGias());
   const col = Object.fromEntries(header.map((h, i) => [h, i]));
   const g = (r, name) => (r[col[name]] ?? '').trim();
+  // GIAS writes CensusDate as DD-MM-YYYY; every other date on the map is ISO
+  // (Ofsted's come through fetch-ofsted's isoDate). Mixed formats rendered as
+  // "2026 January 15" — normalise here so the page has one format to read.
+  const dmyToIso = v => { const m = /^(\d{2})[-/](\d{2})[-/](\d{4})$/.exec(v); return m ? `${m[3]}-${m[2]}-${m[1]}` : ''; };
 
   const out = [];
   let skippedClosed = 0, skippedNoGeo = 0, skippedNotSchool = 0;
@@ -254,7 +258,7 @@ const run = async () => {
       pupils: +g(r, 'NumberOfPupils') || null,
       capacity: +g(r, 'SchoolCapacity') || null,
       fsm: parseFloat(g(r, 'PercentageFSM')) || null,
-      censusDate: g(r, 'CensusDate'),
+      censusDate: dmyToIso(g(r, 'CensusDate')),
       sixthForm: g(r, 'OfficialSixthForm (name)') === 'Has a sixth form',
       boarding: /boarding/i.test(g(r, 'BoardingEstablishment (name)')),
       nursery: /has nursery/i.test(g(r, 'NurseryProvision (name)')),

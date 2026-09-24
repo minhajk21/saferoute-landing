@@ -492,6 +492,17 @@ const RC_LABELS = {
   rcPersonalDevelopmentAndWellbeing:'Personal development', rcLeadershipAndGovernance:'Leadership',
 };
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+// GIAS publishes 97% of trust names in capitals ("HARRIS FEDERATION"). Shown
+// as-is they shout next to everything else in the pane, so display them in
+// title case. Names already in mixed case are the trust's own styling and are
+// left alone, as are vowel-less short tokens, which are initialisms (RC, CTK),
+// and one-word short names, which are usually acronyms themselves (BDAT).
+const TRUST_SMALL = new Set(['of','and','the','for','in','on','at','to','by','de']);
+const trustName = t => !t || t !== t.toUpperCase() || /^\S{1,5}$/.test(t) ? t : t.toLowerCase().split(' ').map((w, i) =>
+  w === 'st' ? 'St'
+  : /^[^aeiouy]{2,4}$/.test(w) ? w.toUpperCase()
+  : i && TRUST_SMALL.has(w) ? w
+  : w.replace(/(^|[-(])([a-z])/g, (_, p, c) => p + c.toUpperCase())).join(' ');
 const ukDate = iso => { if (!iso) return ''; const [y, m, d] = iso.split('-'); return `${+d} ${MONTHS[+m - 1]} ${y}`; };
 
 // THE RATING BLOCK IS THE CAREFUL PART. Four states and three of them are not a
@@ -547,7 +558,7 @@ function showSchoolPane(o) {
   if (o.nursery) row('Nursery', 'Yes');
   row('Admissions', o.admissions);
   row('Local authority', o.la);
-  row('Trust', o.trust);
+  row('Trust', trustName(o.trust));
 
   // "Back" names the address it returns to — but only if one was actually
   // checked. lastName defaults to 'This area' before any search, so the area
