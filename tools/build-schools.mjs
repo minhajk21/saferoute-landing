@@ -1,22 +1,19 @@
-// Build the data spine for /schools/ — every open, geocoded school in England
-// and Wales, as one small file the browser can hold entirely in memory.
+// Build the school data behind the Schools layer on /check/ — every open,
+// geocoded school in England and Wales, cut into 0.25° geographic tiles so the
+// map fetches only the schools around the address being looked at.
 //
-// WHY ONE NATIONAL FILE AND NOT PER-CITY SLICES. The whole country compresses
-// to well under a megabyte, which is smaller than a single photo on the
-// homepage. Slicing by city would buy nothing and would add a CITIES list —
-// exactly the kind of config that has drifted before in this repo — plus it
-// would break postcode search the moment someone types an outcode we have not
-// listed. One file, no config, no drift.
+// ONE OUTPUT SHAPE. This used to also write a national schools.json plus a
+// row-aligned schools-labels.json for a standalone /schools/ page. That page is
+// now a redirect into /check/, which reads tiles; the national files had no
+// reader but this repo's own verifier, so they are gone. If a whole-country
+// view is ever wanted again, build it from the tiles rather than resurrecting a
+// second format that has to be kept in step with the first.
 //
-// WHY COLUMNAR. Row objects repeat every key 26,000 times. Columns plus enum
-// dictionaries for the repeating strings (type, phase, gender, religion, LA)
-// cut the payload by roughly 4x for free.
-//
-// RAW DOWNLOAD GOES TO /tmp, NEVER INTO THE REPO. The monthly page rebuild
+// RAW DOWNLOADS GO TO /tmp, NEVER INTO THE REPO. The monthly page rebuild
 // commits with `git add -A`; a 62MB CSV left in the tree would be published.
 //
 // Usage:  node tools/build-schools.mjs
-// Output: schools/data/schools.json
+// Output: schools/data/tiles/{y}_{x}.json + schools/data/tiles/index.json
 
 import { writeFileSync, mkdirSync, existsSync, readFileSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -27,7 +24,6 @@ import { loadOfsted, REPORT_CARD_AREAS } from './fetch-ofsted.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = join(ROOT, 'schools', 'data');
-const OUT = join(OUT_DIR, 'schools.json');
 
 // GIAS publishes a fresh all-establishments extract every morning under a
 // date-stamped filename. There is no "latest" alias, so walk back a few days:
@@ -197,7 +193,10 @@ function derivePhase(phase, lo, hi) {
 }
 
 // Report-card area name -> a short stable key. Ofsted's headings are long and
-// contain spaces; the keys end up in a JSON payload and in browser code.
+// contain spaces. NOTE: these per-area grades are joined onto every row but are
+// NOT in TILE_FIELDS, so no tile publishes them today — the /check/ popup shows
+// a one-line summary instead. Add the rc* keys to TILE_FIELDS if the popup ever
+// needs the seven areas; the join already has them.
 const cardKey = a => 'rc' + a.replace(/[^a-zA-Z]+(.)/g, (_, c) => c.toUpperCase())
                               .replace(/[^a-zA-Z]/g, '')
                               .replace(/^./, c => c.toUpperCase());
@@ -324,9 +323,9 @@ const run = async () => {
   console.log(`    NO grade           ${(matched - graded).toLocaleString()}  (${(100 * (matched - graded) / matched).toFixed(1)}%)  <- normal, not missing`);
   console.log(`  outside Ofsted remit ${outOfRemit.toLocaleString()}  (Wales/Estyn, ISI-inspected independents)`);
 
-  // Sort north to south. Purely a compression decision: it makes the lat column
-  // near-monotonic and clusters la/ward/postcode regionally, so gzip's window
-  // sees repetition instead of noise. Worth ~20% of the payload for one line.
+  // Sort north to south so every tile lists its schools in a fixed order. Output
+  // is then deterministic — the same inputs produce byte-identical tiles — which
+  // keeps the monthly diff to real changes rather than reshuffled rows.
   out.sort((a, b) => a.lat - b.lat || a.lng - b.lng);
 
   // DELIBERATELY NOT CARRIED, so nobody re-adds them by accident:
@@ -336,52 +335,6 @@ const run = async () => {
   //                    area pages. Add it back with that feature, not before.
   //   DateOfLastInspectionVisit — filled for 310 of 27,173 open schools (1%).
   //                    A date that is absent 99% of the time is not a field.
-
-  // ── columnar encode ───────────────────────────────────────────────────────
-  const FIELDS = Object.keys(out[0]);
-  const ENUM_FIELDS = ['type', 'group', 'sector', 'phase', 'gender', 'religion',
-                       'admissions', 'trust', 'la', 'ward', 'inspectorate', 'censusDate',
-                       'country', 'ratingScheme', 'oeifGrade', 'oeifDate', 'cardDate',
-                       ...REPORT_CARD_AREAS.map(cardKey)];
-  const enums = {};
-  for (const f of ENUM_FIELDS) {
-    const vals = [...new Set(out.map(s => s[f]))].sort();
-    enums[f] = vals;
-    const idx = new Map(vals.map((v, i) => [v, i]));
-    for (const s of out) s[f] = idx.get(s[f]);
-  }
-
-  // ── two files, not one ────────────────────────────────────────────────────
-  // Measured on the real data: name (189KB gz) and postcode (92KB gz) are 28%
-  // of the payload, and NEITHER is needed to place a pin or evaluate a filter —
-  // only to render one that has already been drawn. Splitting them lets the map
-  // paint and filter off a much smaller file and pull the labels in behind it.
-  // The two files are row-aligned by index, so the join is `labels[i]`, not a
-  // lookup.
-  const LABEL_FIELDS = ['name', 'postcode'];
-  const MAP_FIELDS = FIELDS.filter(f => !LABEL_FIELDS.includes(f));
-
-  const meta = {
-    generated: new Date().toISOString().slice(0, 10),
-    source: 'Department for Education, Get Information About Schools (GIAS)',
-    licence: 'Open Government Licence v3.0',
-    count: out.length,
-  };
-
-  const payload = {
-    ...meta,
-    fields: MAP_FIELDS,
-    enumFields: ENUM_FIELDS,
-    enums: Object.fromEntries(Object.entries(enums).filter(([k]) => MAP_FIELDS.includes(k))),
-    rows: out.map(s => MAP_FIELDS.map(f => s[f])),
-  };
-
-  const labels = {
-    ...meta,
-    note: 'Row-aligned with schools.json by index.',
-    fields: LABEL_FIELDS,
-    rows: out.map(s => LABEL_FIELDS.map(f => s[f])),
-  };
 
   // ── geographic tiles ──────────────────────────────────────────────────────
   // /check/ needs the schools around ONE address, not the country. Serving it
@@ -412,14 +365,11 @@ const run = async () => {
   for (const s of out) {
     const k = cellKey(s.lat, s.lng);
     if (!tiles.has(k)) tiles.set(k, []);
-    // Decode the enums back out — a tile is read directly, not joined.
-    tiles.get(k).push(TILE_FIELDS.map(f => ENUM_FIELDS.includes(f) ? enums[f][s[f]] : s[f]));
-    // `s` still carries name and postcode at this point — the map/labels split
-    // happens below, after tiling, so a tile is self-contained.
+    tiles.get(k).push(TILE_FIELDS.map(f => s[f]));
   }
 
   const TILE_DIR = join(OUT_DIR, 'tiles');
-  mkdirSync(TILE_DIR, { recursive: true });
+  mkdirSync(TILE_DIR, { recursive: true });   // recursive: also creates OUT_DIR
   let tileBytes = 0, biggest = 0;
   for (const [k, list] of tiles) {
     const j = JSON.stringify(list);
@@ -439,29 +389,18 @@ const run = async () => {
     // Filter dropdown values, so the page does not have to fetch every tile to
     // discover what a "phase" can be.
     options: {
-      phase: enums.phase.filter(Boolean),
-      gender: enums.gender.filter(v => v && v !== 'Not applicable'),
+      phase: [...new Set(out.map(x => x.phase))].filter(Boolean).sort(),
+      gender: [...new Set(out.map(x => x.gender))].filter(v => v && v !== 'Not applicable').sort(),
     },
     cells: [...tiles.keys()].sort(),
   }));
 
-  mkdirSync(OUT_DIR, { recursive: true });
-  const json = JSON.stringify(payload);
-  const labelJson = JSON.stringify(labels);
-  writeFileSync(OUT, json);
-  writeFileSync(join(OUT_DIR, 'schools-labels.json'), labelJson);
-
-  const gz = gzipSync(Buffer.from(json)).length;
-  const gzLabels = gzipSync(Buffer.from(labelJson)).length;
   console.log(`  schools written      ${out.length.toLocaleString()}`);
-  console.log(`    state              ${out.filter(s => enums.sector[s.sector] === 'state').length.toLocaleString()}`);
-  console.log(`    private            ${out.filter(s => enums.sector[s.sector] === 'private').length.toLocaleString()}`);
+  console.log(`    state              ${out.filter(s => s.sector === 'state').length.toLocaleString()}`);
+  console.log(`    private            ${out.filter(s => s.sector === 'private').length.toLocaleString()}`);
   console.log(`  skipped, closed      ${skippedClosed.toLocaleString()}`);
   console.log(`  skipped, no coords   ${skippedNoGeo.toLocaleString()}`);
   console.log(`  skipped, not a school ${skippedNotSchool.toLocaleString()}  (universities, offshore, misc)`);
-  console.log(`  schools.json         ${(json.length / 1e6).toFixed(2)}MB raw  ${(gz / 1024).toFixed(0)}KB gzipped   (map + filters)`);
-  console.log(`  schools-labels.json  ${(labelJson.length / 1e6).toFixed(2)}MB raw  ${(gzLabels / 1024).toFixed(0)}KB gzipped   (names, loaded after first paint)`);
-  console.log(`  first paint costs    ${(gz / 1024).toFixed(0)}KB, not ${((gz + gzLabels) / 1024).toFixed(0)}KB`);
   console.log(`  tiles                ${tiles.size} cells at ${CELL}°, ${(tileBytes / 1e6).toFixed(1)}MB raw total, largest ${(biggest / 1024).toFixed(0)}KB gzipped`);
 };
 
