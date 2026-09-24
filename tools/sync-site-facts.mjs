@@ -28,7 +28,7 @@
 // thing this exists to prevent.
 //
 // Usage:
-//   node tools/sync-site-facts.mjs           fix in place
+//   node tools/sync-site-facts.mjs           fix in place (homepage + /check/)
 //   node tools/sync-site-facts.mjs --check    report only, exit 1 on any drift
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -37,7 +37,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const CHECK_ONLY = process.argv.includes('--check');
-const PAGES = ['index.html'];
+const PAGES = ['index.html', 'check/index.html'];
 
 const fmt = n => n.toLocaleString('en-GB');
 
