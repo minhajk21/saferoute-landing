@@ -1023,6 +1023,26 @@ const CITIES = {
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// Area names like "Medfield/Hampden/Woodberry/Remington" (Baltimore, DC, SF)
+// are one unbreakable word to a browser, which will not wrap after "/", so on
+// a phone they pushed 24 pages sideways by up to 264px. This adds a <wbr> after
+// every letter-slash-letter in VISIBLE text only: the <body>'s text nodes,
+// never a tag or attribute (URLs), a <script> (JSON-LD) or the <head> (title,
+// meta), where a literal <wbr> would be wrong. Applied as each page is written.
+// Registry names that run two names together with no separator at all get an
+// explicit break point too. Only "WendelkinDriskell" (City of Dallas registry
+// spelling, 17 letters, and the page's URL is built from it, so it is not
+// renamed): it alone pushed the Dallas hub's table 13px past a 320px screen.
+// Every other capital mid-word in the gazetteers is a real name (MacArthur,
+// McKinley, CityPlace) and must not break.
+const WBR_WORDS = [['WendelkinDriskell', 'Wendelkin<wbr>Driskell']];
+const wbrSlashes = html => {
+  const i = html.indexOf('<body');
+  if (i < 0) return html;
+  return html.slice(0, i) + html.slice(i).replace(/(<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<[^>]*>)|([^<]+)/g,
+    (m, tag, text) => tag ?? WBR_WORDS.reduce((t, [w, b]) => t.split(w).join(b),
+      text.replace(/([A-Za-z])\/(?=[A-Za-z])/g, '$1/<wbr>')));
+};
 // City hubs show two facts sourced from the transparency dataset (D): the
 // feed's own transparency score, and which region id the hub maps to. Guarded:
 // a missing dataset just hides the chips, it never fails a 1,222-page build.
@@ -1529,7 +1549,7 @@ const footer = (cfg, a, citySlug, windowDays) => `</div></main><footer class="si
 const cta = (name) => `<div class="cta">
 <h2>Walking in ${esc(name)} at night?</h2>
 <p>SafeRoute scores every walking route against the same live crime data on this page — and shows how much of each route runs on lit streets. Compare the routes, share your walk, and check in when you arrive. Free, no account.</p>
-<a class="btn" href="${APP_URL}">Get SafeRoute on the App Store</a>
+<a class="btn" href="${APP_URL}">Get SafeRoute on the App&nbsp;Store</a>
 </div>`;
 
 // ── render one city (pages + hub); returns summary for root/sitemap ─────────
@@ -1750,7 +1770,7 @@ ${footer(cfg, a, citySlug, windowDays)}`;
 
     const dir = join(ROOT, 'safety', citySlug, a.slug);
     mkdirSync(dir, { recursive: true });
-    writeFileSync(join(dir, 'index.html'), html);
+    writeFileSync(join(dir, 'index.html'), wbrSlashes(html));
   }
 
   // ── city hub ──
@@ -1894,7 +1914,7 @@ inp.addEventListener('input',()=>{
   if(pts.length) map.fitBounds(pts,{padding:[26,26]});
 })();
 </script></body></html>`;
-    writeFileSync(join(ROOT, 'safety', citySlug, 'index.html'), html);
+    writeFileSync(join(ROOT, 'safety', citySlug, 'index.html'), wbrSlashes(html));
   }
 
   // ── district hubs ──
@@ -1991,7 +2011,7 @@ ${footer(cfg, list[0], citySlug, windowDays)}`;
 
     const dDir = join(ROOT, 'safety', citySlug, 'district', d.slug);
     mkdirSync(dDir, { recursive: true });
-    writeFileSync(join(dDir, 'index.html'), dHtml);
+    writeFileSync(join(dDir, 'index.html'), wbrSlashes(dHtml));
   }
 
   // ── night hub ──
@@ -2105,7 +2125,7 @@ ${footer(cfg, areas[0], citySlug, windowDays)}`;
 
     const dir = join(ROOT, 'safety', citySlug, 'night');
     mkdirSync(dir, { recursive: true });
-    writeFileSync(join(dir, 'index.html'), html);
+    writeFileSync(join(dir, 'index.html'), wbrSlashes(html));
   }
 
   return { citySlug, cfg, count: areas.length, median, ranked, sample: areas[0], noBasemap, windowDays, districts, nightPage };
@@ -2132,7 +2152,7 @@ ${rows}
 ${cta('your city')}
 ${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug, rendered[0].windowDays)}`;
   mkdirSync(join(ROOT, 'safety'), { recursive: true });
-  writeFileSync(join(ROOT, 'safety', 'index.html'), html);
+  writeFileSync(join(ROOT, 'safety', 'index.html'), wbrSlashes(html));
 }
 
 {

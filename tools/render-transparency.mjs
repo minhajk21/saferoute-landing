@@ -178,9 +178,9 @@ ${CF_BEACON_TOKEN ? `<script type="module" src="https://static.cloudflareinsight
 <a class="wordmark" href="/"><svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>SAFEROUTE</span></a>
 <nav class="site-nav" aria-label="Site">
 <a href="/safety/">Safety index</a>
-<a href="/check/">Check an address</a>
+<a href="/check/">Map</a>
 <a href="/tonight/">Tonight</a>
-<a class="hide-sm" href="/transparency/" class="on">Transparency</a>
+<a class="hide-sm on" href="/transparency/">Transparency</a>
 <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-transparency&mt=8">Get the app</a>
 </nav>
 </div></header><main><div class="wrap">
@@ -238,13 +238,13 @@ ${(d.unmeasurable?.length ?? 0) ? `
 <div class="cta">
 <h2>Walking somewhere tonight?</h2>
 <p>SafeRoute scores every walking route against this same live crime data, and shows how much of each route runs on lit streets. Free, no account.</p>
-<a class="btn" href="${APP_URL}">Get SafeRoute on the App Store</a>
+<a class="btn" href="${APP_URL}">Get SafeRoute on the App&nbsp;Store</a>
 </div>
 
 </div></main><footer class="site"><div class="wrap">
 <p><strong>Sources.</strong> Each city's official police or municipal open-data service, queried live on ${esc(d.generatedAt)}; UK forces via <a href="https://data.police.uk/">data.police.uk</a>. Full method and the raw measurements are in the SafeRoute backend repository.</p>
 <p><strong>About this data.</strong> This page measures data publishing, not public safety. A low score means a force publishes little about crime — not that a place is dangerous, and not that its police are ineffective. Feeds change; this is a snapshot and is re-measured periodically.</p>
-<p><a href="/safety/">Neighbourhood safety index</a> · <a href="/check/">Check any address</a> · <a href="/">SafeRoute app</a> · <a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></p>
+<p><a href="/safety/">Neighbourhood safety index</a> · <a href="/check/">Map</a> · <a href="/">SafeRoute app</a> · <a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></p>
 </div></footer></body></html>`;
 
 mkdirSync(join(ROOT, 'transparency'), { recursive: true });

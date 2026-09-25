@@ -103,6 +103,22 @@ table.rank a:hover{color:var(--teal);text-decoration:underline}
 table.rank .rk{font-family:var(--mono);font-size:12px;color:var(--ink-3);display:inline-block;min-width:26px}
 table.rank tr.self td{background:var(--cream-deep)}
 table.rank tr.self td:first-child{box-shadow:inset 3px 0 0 var(--teal)}
+/* Phones: the four-column table's narrowest layout was 346px, wider than a
+   320-360px screen (it pushed /safety/london/ sideways by 9-49px). Tighter
+   type, padding and band pill bring it inside 284px without dropping a
+   column; the index number already carries the band's colour. Names are
+   never split mid-word (slash-joined names break at the slash, via the <wbr>
+   render-pages.mjs adds), and a pill never wraps ("High / risk"). The column
+   after the right-aligned index keeps a wider gap so "INDEX" and "BAND" do
+   not read as one header. */
+@media(max-width:480px){
+  table.rank{font-size:14px}
+  table.rank th{font-size:10px;letter-spacing:.03em;padding-right:6px}
+  table.rank td{padding-right:6px}
+  table.rank th:nth-child(2),table.rank td:nth-child(2){padding-right:11px}
+  table.rank th:last-child,table.rank td:last-child{padding-right:0}
+  table.rank .band{font-size:10px;letter-spacing:.03em;padding:3px 7px;margin-bottom:0;white-space:nowrap}
+}
 .notice{background:var(--cream-deep);border:1px solid var(--line);border-radius:10px;padding:12px 16px;font-size:14px;color:var(--ink-2);margin:18px 0}
 
 /* City-facts chips on hubs (D) + the recency chip on area pages (E). */

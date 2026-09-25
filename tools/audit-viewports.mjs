@@ -15,9 +15,8 @@
 //
 // WHAT IT CHECKS
 //   overflow   the page scrolls sideways (FAIL — content is cut off; measured
-//              against the device width, see AUDIT). A few pages outside
-//              /check/ have known overflow at 320-360px, reported as KNOWN
-//              until fixed (see KNOWN_OVERFLOW)
+//              against the device width, see AUDIT). Any exception must be
+//              listed in KNOWN_OVERFLOW, which is empty and should stay so
 //   offender   the widest element causing it, when it does
 //   map fill   on map pages, how much of the viewport the map uses once
 //              scrolled to it, against a target that fits what that map is for
@@ -63,16 +62,15 @@
 //     - the map height band is a FAIL here, not a WARN; after a search the map
 //       is not under the header and >= 55% of it is on screen, and on 360x740
 //       and 390x844 the search box is fully visible under the header too
-//       (elsewhere only a WARN: on 320x568 with the toolbar open and on a
-//       landscape phone the map wins by design).
+//       (on a landscape phone only a WARN: there the map wins by design).
 //   /check/?schools
 //     - the schools layer draws within 3s (pins, not the "Zoom in" note that
 //       the old z7 England view showed), centred on central London at zoom
 //       >= 12 — or, on a map too small to show central London at 12, the
 //       closest zoom that fits it. Its toolbar is shown, and on desktop it sits
 //       inside the map's stage, not the column; WARN if the pane keeps < 55%
-//       of the height under the header. On phones the Ring button is fully on
-//       screen.
+//       of the height under the header. On phones the toolbar stays inside
+//       the screen: its filter row scrolls sideways within itself.
 //   default view by time zone, once per run at 1440x900: Europe/London opens on
 //     Great Britain, America/New_York on the lower 48, America/Mexico_City on
 //     Mexico City, Asia/Tokyo wide enough to hold both London and New York —
@@ -149,7 +147,13 @@ const VIEWPORTS = [
 // so builds the map; the bare page has no map until someone picks a city.
 // /check/?schools is where the homepage's Schools card and the old /schools/
 // URL land, and it is the /check/ state with the most on screen at once.
-const ALL_PAGES = ['/', '/check/', '/check/?schools', '/tonight/#seattle', '/safety/', '/safety/london/', '/safety/london/peckham/', '/transparency/'];
+// /safety/baltimore/medfield-hampden-woodberry-remington/ stands for the area
+// pages whose names are slash-joined: a browser will not wrap after "/", and
+// before render-pages.mjs added a <wbr> after each one, 24 such pages pushed a
+// phone sideways by up to 264px while Peckham, the other area page here, was
+// fine.
+const ALL_PAGES = ['/', '/check/', '/check/?schools', '/tonight/#seattle', '/safety/', '/safety/london/', '/safety/london/peckham/',
+  '/safety/baltimore/medfield-hampden-woodberry-remington/', '/transparency/'];
 // A filter names one page; a listed page also brings its ?query variants.
 const PAGES = !FILTER ? ALL_PAGES
   : ALL_PAGES.includes(FILTER) ? ALL_PAGES.filter(p => p === FILTER || p.startsWith(FILTER + '?'))
@@ -203,7 +207,10 @@ const MAPS = {
   // load the live layers" — if that lands after the audit built the container,
   // it deletes it. That race made this report 'map not found' on roughly one
   // run in two; waiting until the page has settled removes it.
-  '/tonight/#seattle': { sel: '.citymap', desktopMin: 0.60, prepare: `(async () => {
+  // strict: its phone band (55-80%) FAILs rather than WARNs. On a landscape
+  // phone its 340px floor once made the map 87% of the screen, a touch scroll
+  // trap that sat in this report as a WARN nobody acted on.
+  '/tonight/#seattle': { sel: '.citymap', desktopMin: 0.60, strict: true, prepare: `(async () => {
       for (let i = 0; i < 40; i++) {
         if (document.querySelector('.citymap')) return 'live';
         if (/Couldn.t load the live layers/.test(document.body.innerText)) break;
@@ -220,25 +227,18 @@ const STACKED_BELOW = 861;
 const MOBILE_BAND = [0.55, 0.80];
 // Where acceptance A7 requires the search box, not just the map, to be on
 // screen after a search.
-const Q_AFTER_SEARCH = new Set(['360x740', '390x844']);
+const Q_AFTER_SEARCH = new Set(['320x568', '360x740', '390x844']);
 
-// Real sideways overflow on pages OUTSIDE /check/, exposed when overflow began
-// to be measured against the device width (the innerWidth measure read 0 under
-// mobile emulation). Each is printed on every run as KNOWN, not 'ok', and does
-// not fail it only because its fix lies outside /check/: sr.css's .btn is
-// white-space:nowrap, so "Get SafeRoute on the App Store" is 296px wide, and
-// the /safety/{city}/ ranking table has no scrolling wrapper. An entry covers
-// its page, width and offender up to the recorded overflow; a different
+// Sideways overflow that is known and tolerated: { page, w, tag, px }. An entry
+// covers its page, width and offender up to the recorded overflow; a different
 // offender or more overflow FAILs, and an entry that no longer reproduces
-// WARNs, so this list can only shrink.
-const KNOWN_OVERFLOW = [
-  { page: '/tonight/#seattle',        w: 320, tag: 'a.btn',      px: 6 },
-  { page: '/safety/',                 w: 320, tag: 'a.btn',      px: 21 },
-  { page: '/safety/london/',          w: 320, tag: 'table.rank', px: 49 },
-  { page: '/safety/london/',          w: 360, tag: 'table.rank', px: 9 },
-  { page: '/safety/london/peckham/',  w: 320, tag: 'a.btn',      px: 21 },
-  { page: '/transparency/',           w: 320, tag: 'a.btn',      px: 21 },
-];
+// WARNs, so the list can only shrink. EMPTY since 2026-09-25: measuring
+// overflow against the device width (innerWidth reads 0 under mobile
+// emulation) exposed six cases on pages outside /check/ — sr.css's nowrap
+// .btn ("Get SafeRoute on the App Store", 296px) and the /safety/ ranking
+// table (346px at its narrowest) — and both were fixed in CSS. Add to it only
+// with a reason and a plan to remove it.
+const KNOWN_OVERFLOW = [];
 // Under 540px tall the shell lets the page scroll rather than crush the column.
 const SHELL_MIN_H = 540;
 
@@ -430,14 +430,30 @@ const AC_PROBE = () => {
 // page's 16px padding: z13 on a laptop, but z11 on a 320px-wide phone or a
 // landscape phone's 248px-tall map, where z12 cannot show it.
 const SCHOOLS = (london) => {
-  // The device width, not innerWidth: a Ring button pushed off a phone's edge
+  // The device width, not innerWidth: a toolbar pushed past a phone's edge
   // widens the page, and mobile emulation then zooms out until it "fits".
   const vw = document.documentElement.clientWidth, vh = innerHeight;
   const hdr = document.querySelector('header.site');
   const hdrBottom = hdr ? Math.max(0, hdr.getBoundingClientRect().bottom) : 0;
   const sb = document.getElementById('schbar');
   const note = document.querySelector('.schnote');
-  const go = document.getElementById('sPcGo')?.getBoundingClientRect();
+  const bar = sb?.getBoundingClientRect();
+  // The filter row, not just the bar: the bar is always the stage's full
+  // width, so its box alone cannot show filters clipped past the edge. On a
+  // phone the row must scroll sideways, and its LAST control must come fully
+  // into view (and be the thing under the pointer) once it has.
+  const row = sb?.querySelector('.sb-filters');
+  let reach = null;
+  if (row && sb.offsetParent) {
+    const last = row.lastElementChild, keep = row.scrollLeft;
+    const ox = getComputedStyle(row).overflowX;
+    row.scrollLeft = row.scrollWidth;
+    const r = last?.getBoundingClientRect(), rr = row.getBoundingClientRect();
+    const hit = r ? document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2) : null;
+    reach = { overflows: row.scrollWidth > row.clientWidth + 1, ox, last: last?.id || last?.textContent.trim().slice(0, 20),
+      ok: !!(r && r.width && r.left >= Math.max(0, rr.left) - 1 && r.right <= Math.min(vw, rr.right) + 1 && hit && last.contains(hit)) };
+    row.scrollLeft = keep;
+  }
   const side = document.getElementById('side')?.getBoundingClientRect();
   let zoom = null, fitZoom = null, centre = null;
   try {
@@ -451,7 +467,8 @@ const SCHOOLS = (london) => {
     zoom, fitZoom, centre,
     noteVisible: !!(note && !note.hidden && getComputedStyle(note).display !== 'none' && note.getBoundingClientRect().height > 0),
     noteText: note?.textContent.trim() || '',
-    go: go ? { left: Math.round(go.left), right: Math.round(go.right), w: Math.round(go.width), h: Math.round(go.height) } : null,
+    bar: bar ? { left: Math.round(bar.left), right: Math.round(bar.right), w: Math.round(bar.width), h: Math.round(bar.height) } : null,
+    reach,
     sideVisH: side ? Math.round(Math.max(0, Math.min(vh, side.bottom) - Math.max(hdrBottom, side.top))) : null,
     room: Math.round(vh - hdrBottom),
     vw,
@@ -658,8 +675,14 @@ async function main() {
           if (desktop) {
             if (!x.schbarInStage) flag('FAIL', '#schbar is not inside .stage (the toolbar belongs on the map, not in the column)');
             if (x.sideVisH != null && x.sideVisH < 0.55 * x.room) flag('WARN', `pane keeps ${px(x.sideVisH)} of ${px(x.room)} under the header (want >= 55%)`);
-          } else if (!x.go || !x.go.w || x.go.left < 0 || x.go.right > x.vw) {
-            flag('FAIL', `#sPcGo (Ring) not fully on screen (${x.go ? `x ${x.go.left}–${x.go.right} of ${x.vw}` : 'missing'})`);
+          } else if (!x.bar || !x.bar.w || x.bar.left < 0 || x.bar.right > x.vw) {
+            flag('FAIL', `#schbar not inside the screen (${x.bar ? `x ${x.bar.left}–${x.bar.right} of ${x.vw}` : 'missing'})`);
+          } else if (!x.reach || !x.reach.ok || (x.reach.overflows && !/^(auto|scroll)$/.test(x.reach.ox))) {
+            flag('FAIL', `last school filter (${x.reach?.last ?? '?'}) cannot be scrolled fully into view (row overflow-x ${x.reach?.ox ?? '?'})`);
+          } else if (x.bar.h > 60) {
+            // One row of filters that scrolls sideways; a taller bar means they
+            // have started wrapping and are pushing the map down the phone.
+            flag('WARN', `#schbar is ${x.bar.h}px tall on a phone (want one row, <= 60px)`);
           }
         }
 

@@ -76,7 +76,11 @@
      monitor). Embedded in a page with the city list above it, so it aims for
      about two-thirds of the height, not all of it — and on a phone that also
      leaves room to scroll past it, since one-finger drag pans the map. */
-  .citymap{width:100%;height:clamp(340px,68vh,1000px);height:clamp(340px,68dvh,1000px);background:var(--night-3)}
+  /* 68% of the screen, but never more than 72% of it: the 340px floor used to
+     win on a phone held sideways (390px tall), making the map 87% of the
+     screen, and one-finger drag pans a map, so the page under it could not
+     be scrolled to. The floor now gives way on short screens. */
+  .citymap{width:100%;height:clamp(min(340px,72vh),68vh,1000px);height:clamp(min(340px,72dvh),68dvh,1000px);background:var(--night-3)}
   .cityfoot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
   .lagnote{padding:0 20px 12px;font-family:var(--mono);font-size:10.5px;line-height:1.55;color:var(--ink-3)}
   p{color:var(--ink-2);line-height:1.65;margin:0 0 14px}
@@ -175,7 +179,7 @@
     <h2>The same night, in your pocket</h2>
     <p>The SafeRoute app shows this view for wherever you're standing — plus the safety index,
     lit-street routing, and safe places open now. Free, no account.</p>
-    <a class="btn" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-tonight&mt=8">Get SafeRoute on the App Store</a>
+    <a class="btn" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-tonight&mt=8">Get SafeRoute on the App&nbsp;Store</a>
   </div>
 </div></main>
 
