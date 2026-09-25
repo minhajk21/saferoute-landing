@@ -356,9 +356,9 @@ const run = async () => {
   // this is the same data without that.
   const CELL = 0.25;
   // Everything /check/ needs to draw, FILTER and pop up a school, and nothing
-  // else. sixthForm and boarding are here because /check/ now carries the
-  // schools filters; fsm, capacity, admissions, trust, ward and censusDate stay
-  // out because nothing on that page reads them.
+  // else. boarding is here because it is a /check/ filter; sixthForm and the
+  // fields after ageLow are rows in the school detail pane. (The sixth-form
+  // filter was dropped as redundant; the pane still shows the fact.)
   const TILE_FIELDS = ['urn','name','postcode','lat','lng','type','sector','phase',
                        'gender','pupils','sixthForm','boarding','country',
                        'ratingScheme','oeifGrade','oeifDate',

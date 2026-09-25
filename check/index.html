@@ -313,7 +313,7 @@
   .schbar.on{display:flex}
   .schbar .sb-lbl{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
     color:var(--teal);margin-right:2px;white-space:nowrap}
-  .schbar .sb-filters,.schbar .sb-ring{display:inline-flex;flex-wrap:wrap;gap:7px 8px;align-items:center}
+  .schbar .sb-filters{display:inline-flex;flex-wrap:wrap;gap:7px 8px;align-items:center}
   .schbar .seg{display:inline-flex;border:1px solid var(--line-2);border-radius:999px;overflow:hidden;background:var(--bg)}
   .schbar .seg button{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);
     background:none;border:0;padding:7px 12px;cursor:pointer}
@@ -323,28 +323,21 @@
      the dark buttons, dark on the teal selected one. */
   .schbar .seg button:focus-visible{outline:2px solid var(--teal);outline-offset:-4px}
   .schbar .seg button.on:focus-visible{outline-color:#04231E}
-  .schbar select,.schbar input{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  .schbar select{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
     color:var(--ink);background:var(--bg);border:1px solid var(--line-2);border-radius:999px;padding:7px 11px;outline:none}
   /* Without a cap a select is as wide as its longest option ("Middle deemed
      secondary"). */
   .schbar select{max-width:160px}
-  .schbar input{width:108px}
-  .schbar select:focus,.schbar input:focus{border-color:var(--teal)}
-  .schbar input::placeholder{color:var(--ink-3)}
+  .schbar select:focus{border-color:var(--teal)}
   .schbar .chk{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
     text-transform:uppercase;color:var(--ink-2);border:1px solid var(--line-2);border-radius:999px;padding:7px 11px;cursor:pointer;background:var(--bg)}
   .schbar .chk input{width:auto;accent-color:var(--teal);margin:0;padding:0;border:0}
   .schbar .chk.on{color:var(--ink);border-color:var(--teal)}
-  .schbar button.go{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:600;
-    background:var(--teal);color:#04231E;border:0;border-radius:999px;padding:8px 14px;cursor:pointer}
-  .schbar .msg{font-size:12px;line-height:1.4;color:var(--ink-2)}
-  .schbar .msg.err{color:#E8916F}
   /* Phones: the filters (all optional, defaulting to "all") scroll sideways
-     in one row, so the toolbar is three short rows rather than five and the
-     map is not pushed off the screen. The fade says there is more; it drops
-     once you reach the end (.end, set by syncSbFade). The ring row and its
-     caveat always stay in full view. Sideways scrolling is phones only —
-     with a mouse and hidden scrollbars nobody would find it. */
+     in one row, so the toolbar is a single short row and the map is not
+     pushed off the screen. The fade says there is more; it drops once you
+     reach the end (.end, set by syncSbFade). Sideways scrolling is phones
+     only — with a mouse and hidden scrollbars nobody would find it. */
   @media(max-width:860px){
     .schbar{padding:9px 10px}
     .schbar .sb-filters{flex:0 0 calc(100% + 20px);max-width:calc(100% + 20px);min-width:0;margin:-5px -10px;padding:5px 10px;
@@ -460,8 +453,10 @@
 
   <div class="stage">
     <!-- Schools toolbar: the top strip of the map stage, shown only with the
-         layer on. Filters first (who and what), then the ring (where) and its
-         caveat, which must stay in full view at every width. -->
+         layer on. There is no distance ring: there is no national catchment
+         dataset for England or Wales, most schools set their own admissions
+         and the distances that decide a place shift every year, so any circle
+         drawn here would read as a catchment without being one. -->
     <div class="schbar" id="schbar" role="group" aria-label="School filters">
       <div class="sb-filters">
         <span class="sb-lbl">Schools</span>
@@ -472,18 +467,8 @@
         </div>
         <select id="sPhase" aria-label="Phase"><option value="">Any phase</option></select>
         <select id="sGender" aria-label="Gender"><option value="">Any gender</option></select>
-        <label class="chk" id="sSixthL"><input type="checkbox" id="sSixth"> Sixth form</label>
         <label class="chk" id="sBoardL"><input type="checkbox" id="sBoard"> Boarding</label>
       </div>
-      <div class="sb-ring">
-        <input id="sPc" type="text" autocomplete="postal-code" spellcheck="false" placeholder="Postcode" maxlength="9" aria-label="Postcode">
-        <select id="sRadius" aria-label="Distance">
-          <option value="0.5">½ mi</option><option value="1" selected>1 mi</option>
-          <option value="2">2 mi</option><option value="3">3 mi</option>
-        </select>
-        <button class="go" id="sPcGo">Ring</button>
-      </div>
-      <span class="msg" id="sMsg">Distance ring — not a catchment area.</span>
     </div>
     <div id="map"></div>
     <!-- Schools key, on the map it explains. Shown only with the layer on. -->
@@ -548,7 +533,7 @@
              (about 42% of all rows); phase and size are blank for most Welsh
              rows. -->
         <p class="meta">Switch on <b>Schools</b> to see every state and private school nearby in England, and state schools in Wales — <span data-fact="schools">26,230</span> of them, with phase and size where published and, where Ofsted has one, the latest inspection outcome.</p>
-        <p class="meta sch-hint"><span class="sch-start">Starting in central London. </span>Search an address, or type a postcode in the bar above the map and press Ring to see schools within a set distance. Pin colour is the phase, never a rating; hollow pins are private.</p>
+        <p class="meta sch-hint"><span class="sch-start">Starting in central London. </span>Search an address to see the schools around it, and click a pin for its details. Pin colour is the phase, never a rating; hollow pins are private.</p>
         <button type="button" class="btn-sch" id="schOpen"><i></i><span>Show schools</span></button>
       </section>
       <section>
@@ -804,17 +789,12 @@ map.getContainer().appendChild(hexBtn);
 // run once the current one finishes, never dropped.
 let schOn = false, schIndex = null, schFields = {}, schLayer = null, schBusy = false, schPending = false;
 const schTiles = new Map();          // cell key -> rows, fetched once
-const schState = { sector:'', phase:'', gender:'', sixth:false, board:false };
-// schMsgErr: #sMsg is showing a Ring error. A redraw must not replace it with
-// the previous ring's count — on a wrapping toolbar the shorter error text
-// resizes the map, and that resize's moveend redraws within ~20ms.
-let schOrigin = null, schRing = null, schSelected = null, schMsgErr = false;
-const MILE_M = 1609.344;
+const schState = { sector:'', phase:'', gender:'', board:false };
+let schSelected = null;
 function schPasses(o) {
   if (schState.sector && o.sector !== schState.sector) return false;
   if (schState.phase  && o.phase  !== schState.phase)  return false;
   if (schState.gender && o.gender !== schState.gender) return false;
-  if (schState.sixth  && !o.sixthForm) return false;
   if (schState.board  && !o.boarding)  return false;
   return true;
 }
@@ -844,13 +824,6 @@ schBtn.addEventListener('click', async () => {
     // An open school closes back to the report where the reader left it.
     if (document.getElementById('schview').classList.contains('off')) showAreaView(); else closeSchool();
     if (schLayer) { map.removeLayer(schLayer); schLayer = null; }
-    // The ring goes, and so does its centre: kept, it went on being counted
-    // ("34 schools within 1 mi…" with no ring drawn) and a later radius change
-    // silently redrew it.
-    if (schRing) { map.removeLayer(schRing); schRing = null; }
-    schOrigin = null; schMsgErr = false;
-    const m = document.getElementById('sMsg');
-    m.className = 'msg'; m.textContent = 'Distance ring — not a catchment area.';
     document.body.classList.remove('sch-london');
     schNote.hidden = true;
     return;
@@ -1059,7 +1032,7 @@ async function drawSchools() {
 
     const b = map.getBounds().pad(0.1);
     const g = L.layerGroup();
-    let n = 0, inRing = 0, selectedMarker = null;
+    let n = 0, selectedMarker = null;
     for (const k of live) {
       for (const row of (schTiles.get(k) || [])) {
         const lat = row[schFields.lat], lng = row[schFields.lng];
@@ -1068,7 +1041,6 @@ async function drawSchools() {
         for (const f in schFields) o[f] = row[schFields[f]];
         if (!schPasses(o)) continue;
         n++;
-        if (schOrigin && map.distance([schOrigin.lat, schOrigin.lng], [lat, lng]) <= schOrigin.miles * MILE_M) inRing++;
         const priv = o.sector === 'private';
         const c = schColour(o.phase);
         const m = L.circleMarker([lat, lng], {
@@ -1088,12 +1060,6 @@ async function drawSchools() {
       g.addLayer(selectedMarker);
     }
     schLayer = g.addTo(map);
-
-    if (schOrigin && !schMsgErr) {
-      const m = document.getElementById('sMsg');
-      m.className = 'msg';
-      m.textContent = `${inRing} school${inRing === 1 ? '' : 's'} within ${schOrigin.miles} mi of ${schOrigin.label} — straight-line, not a catchment`;
-    }
 
     if (n === 0) {
       const c = map.getCenter();
@@ -1141,13 +1107,11 @@ document.getElementById('sSector').addEventListener('click', e => {
 });
 document.getElementById('sPhase').addEventListener('change', e => { schState.phase = e.target.value; drawSchools(); });
 document.getElementById('sGender').addEventListener('change', e => { schState.gender = e.target.value; drawSchools(); });
-for (const [id, key, lab] of [['sSixth','sixth','sSixthL'],['sBoard','board','sBoardL']]) {
-  document.getElementById(id).addEventListener('change', e => {
-    schState[key] = e.target.checked;
-    document.getElementById(lab).classList.toggle('on', e.target.checked);
-    drawSchools();
-  });
-}
+document.getElementById('sBoard').addEventListener('change', e => {
+  schState.board = e.target.checked;
+  document.getElementById('sBoardL').classList.toggle('on', e.target.checked);
+  drawSchools();
+});
 // Phones scroll the filter row sideways under a fade that says "more this
 // way". Drop the fade once the row is scrolled to its end (or fits), so the
 // last filter is never left half-faded.
@@ -1158,60 +1122,6 @@ function syncSbFade() {
 }
 sbFilters?.addEventListener('scroll', syncSbFade, { passive: true });
 addEventListener('resize', syncSbFade);
-
-// THE RING IS CENTRED ON THE PERSON, NEVER ON A SCHOOL. None of the cities this
-// site covers publishes a catchment boundary — they admit by straight-line
-// distance from the school, remeasured each year against that year's applicants.
-// A ring around a school would assert a boundary that does not exist; a ring
-// around your own address answers the question admission actually turns on.
-// Dashed and unfilled so it reads as a measuring tool, not an official line.
-//
-// Seamless by default: with no postcode typed, it rings the address you just
-// checked (the map is centred on it), so search -> Schools -> Ring needs no
-// retyping.
-async function schRingGo() {
-  const msg = document.getElementById('sMsg');
-  const fail = t => { schMsgErr = true; msg.className = 'msg err'; msg.textContent = t; };
-  const raw = document.getElementById('sPc').value.trim().toUpperCase().replace(/\s+/g, ' ');
-  let lat, lng, label;
-  if (raw) {
-    if (/^BT/i.test(raw)) return fail('Northern Ireland is not covered.');
-    if (!/^[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}$/.test(raw)) return fail('That does not look like a UK postcode.');
-    try {
-      const res = await fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(raw.replace(/\s/g, '')));
-      if (!res.ok) return fail(res.status === 404 ? 'Postcode not found.' : 'Lookup failed.');
-      const r = (await res.json()).result;
-      if (r.country !== 'England' && r.country !== 'Wales') return fail(`${r.postcode} is in ${r.country} — school data covers England and Wales only.`);
-      lat = r.latitude; lng = r.longitude; label = r.postcode;
-    } catch { return fail('Could not reach the postcode service.'); }
-  } else {
-    const c = map.getCenter(); lat = c.lat; lng = c.lng; label = 'this spot';
-  }
-  drawRingAt(lat, lng, label);
-}
-
-// Separate from the lookup so a radius change redraws around the SAME point.
-// Re-reading the map centre instead would move the ring to wherever the user
-// had since panned — which silently changes what "near" means.
-function drawRingAt(lat, lng, label) {
-  // A ring that draws clears an earlier Ring error. The redraw below writes
-  // the count, unless the view is too wide to draw pins; then the caveat.
-  if (schMsgErr) {
-    schMsgErr = false;
-    const m = document.getElementById('sMsg');
-    m.className = 'msg'; m.textContent = 'Distance ring — not a catchment area.';
-  }
-  const miles = parseFloat(document.getElementById('sRadius').value);
-  schOrigin = { lat, lng, miles, label };
-  if (schRing) map.removeLayer(schRing);
-  const circle = L.circle([lat, lng], { radius: miles * MILE_M, color: '#3FD9C0', weight: 1.5, dashArray: '5 5', fill: false, interactive: false });
-  schRing = L.layerGroup([circle, L.circleMarker([lat, lng], { radius: 5, color: '#fff', weight: 2, fillColor: '#3FD9C0', fillOpacity: 1, interactive: false })]).addTo(map);
-  map.fitBounds(circle.getBounds(), { padding: [20, 20] });   // moveend redraws and recounts
-  revealTool();
-}
-document.getElementById('sPcGo').addEventListener('click', schRingGo);
-document.getElementById('sPc').addEventListener('keydown', e => { if (e.key === 'Enter') schRingGo(); });
-document.getElementById('sRadius').addEventListener('change', () => { if (schOrigin) drawRingAt(schOrigin.lat, schOrigin.lng, schOrigin.label); });
 
 function showUpdating(on){
   mapStatus.classList.toggle('on', on);
@@ -1444,18 +1354,17 @@ $('#useLoc')?.addEventListener('click', ()=>$('#geo').click());
 // revealTool: bring the answer into view after a deliberate search.
 // Desktop (app shell): the map and pane already fill the screen under the
 // header from the first paint, so the PAGE never needs scrolling, and the
-// pane is left exactly where the reader has it — a Ring click while reading
-// halfway down a report must not jump them to its top. (A NEW report starts
+// pane is left exactly where the reader has it: nothing but a new search
+// may jump a reader halfway down a report back to its top. (A NEW report starts
 // at the top; lookup() does that itself.)
 // Stacked (phones, small tablets): the map sits under the heading, so scroll.
 // Preferably so the search box sits just under the sticky header with the map
 // right below it — you can search again without scrolling back up, and the
 // score starts peeking in under the map. That is still the choice when it
-// would trim no more than a tenth off the map's bottom (a 360px phone with the
-// schools toolbar open: 96% of the map, and the search stays in reach). If it
-// would cost more (short landscape phones, the smallest phones with the
-// toolbar open), the map wins: the stage's top — the toolbar, if open, then
-// the map — goes under the header, as before.
+// would trim no more than a tenth off the map's bottom (a 320px phone with the
+// one-row schools toolbar open still keeps 96% of the map). If it would cost
+// more (short landscape phones), the map wins: the stage's top — the toolbar,
+// if open, then the map — goes under the header, as before.
 // Never moves anything that is already in place, and never animates for people
 // who have asked for reduced motion.
 function revealTool() {
