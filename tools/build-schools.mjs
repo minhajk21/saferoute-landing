@@ -208,6 +208,10 @@ const NOT_A_SCHOOL = new Set([
   'Higher education institutions',
   'Miscellaneous',
   'Offshore schools',          // outside England and Wales entirely
+  // Ministry of Defence schools abroad (Tehran, Sakhalin, Huiyang...). GIAS
+  // registers them to one Canary Wharf postcode, so they were four pins in
+  // east London for schools thousands of miles away.
+  "Service children's education",
 ]);
 
 const run = async () => {

@@ -465,7 +465,7 @@
           <button data-v="state">State</button>
           <button data-v="private">Private</button>
         </div>
-        <select id="sPhase" aria-label="Phase"><option value="">Any phase</option></select>
+        <select id="sPhase" aria-label="Phase"><option value="">Any phase</option><option>Nursery</option><option>Primary</option><option>Secondary</option></select>
         <select id="sGender" aria-label="Gender"><option value="">Any gender</option></select>
         <label class="chk" id="sBoardL"><input type="checkbox" id="sBoard"> Boarding</label>
       </div>
@@ -473,9 +473,10 @@
     <div id="map"></div>
     <!-- Schools key, on the map it explains. Shown only with the layer on. -->
     <div class="schkey" id="schkey">
+      <span><i style="--c:#C77DFF"></i>Nursery</span>
       <span><i style="--c:#3FD9C0"></i>Primary</span>
       <span><i style="--c:#F2B13C"></i>Secondary</span>
-      <span><i style="--c:#C77DFF"></i>Other</span>
+      <span><i style="--c:#8A96A3"></i>Not published</span>
       <span><i class="hollow" style="--c:var(--ink-2)"></i>Private</span>
     </div>
   </div>
@@ -532,7 +533,7 @@
              outcome exists only for English state schools Ofsted has graded
              (about 42% of all rows); phase and size are blank for most Welsh
              rows. -->
-        <p class="meta">Switch on <b>Schools</b> to see every state and private school nearby in England, and state schools in Wales — <span data-fact="schools">26,230</span> of them, with phase and size where published and, where Ofsted has one, the latest inspection outcome.</p>
+        <p class="meta">Switch on <b>Schools</b> to see every state and private school nearby in England, and state schools in Wales — <span data-fact="schools">26,217</span> of them, with phase and size where published and, where Ofsted has one, the latest inspection outcome.</p>
         <p class="meta sch-hint"><span class="sch-start">Starting in central London. </span>Search an address to see the schools around it, and click a pin for its details. Pin colour is the phase, never a rating; hollow pins are private.</p>
         <button type="button" class="btn-sch" id="schOpen"><i></i><span>Show schools</span></button>
       </section>
@@ -793,7 +794,7 @@ const schState = { sector:'', phase:'', gender:'', board:false };
 let schSelected = null;
 function schPasses(o) {
   if (schState.sector && o.sector !== schState.sector) return false;
-  if (schState.phase  && o.phase  !== schState.phase)  return false;
+  if (schState.phase  && schStage(o) !== schState.phase) return false;
   if (schState.gender && o.gender !== schState.gender) return false;
   if (schState.board  && !o.boarding)  return false;
   return true;
@@ -843,7 +844,37 @@ schNote.hidden = true;
 map.getContainer().appendChild(schNote);
 
 const schEsc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const schColour = p => ({ 'Primary':'#3FD9C0', 'Secondary':'#F2B13C', 'Sixth form':'#F2B13C' }[p] || '#C77DFF');
+// THREE STAGES, NOT EIGHT PHASES. GIAS has eight phase values, and the filter
+// listed them all ("Middle deemed secondary", "16 plus"...). A parent searches
+// by stage, so the filter and the pin colours use three, grouped the way
+// Ofsted's own "Ofsted phase" groups them: all 161 all-through, 89 middle
+// deemed secondary and the 16-plus state schools it inspects are Secondary,
+// and middle deemed primary is Primary (checked against its management
+// information, Sept 2026). "Sixth form" is this site's label for
+// independents that start at 16, so Secondary too. The pane still shows the
+// official phase.
+const SCH_STAGE = { 'Nursery':'Nursery', 'Primary':'Primary', 'Middle deemed primary':'Primary',
+  'Secondary':'Secondary', 'Middle deemed secondary':'Secondary', 'All-through':'Secondary',
+  '16 plus':'Secondary', 'Sixth form':'Secondary' };
+// ~1,390 Welsh schools come with no phase at all. Where the name says the
+// stage outright it is used — "Primary", "Infants", "C.P." (community
+// primary), "Ysgol Gynradd" (primary school), "High", "Comprehensive", "Ysgol
+// Uwchradd"/"Gyfun" (secondary/comprehensive), "Nursery"/"Meithrin" — in that
+// order, so "Primary and Nursery School" is a primary. The ~550 named only
+// "Ysgol …" ("… School") are NOT guessed: Wales has secondaries named that
+// way (Ysgol Dyffryn Nantlle, Ysgol Brynhyfryd), so they stay out of all three
+// and show only under "Any phase", as "Not published".
+const SCH_SEC = /\b(high|comprehensive|secondary|uwchradd|gyfun|college|grammar)\b/i;
+const SCH_PRI = /\b(primary|infants?|junior|prep|gynradd|babanod|iau|cp)\b|\bc\.\s?p\b/i;
+const SCH_NUR = /\b(nursery|meithrin)\b/i;
+function schStage(o) {
+  if (o.stage !== undefined) return o.stage;
+  let s = SCH_STAGE[o.phase] || null;
+  if (!s && o.type === 'Special post 16 institution') s = 'Secondary';
+  if (!s && o.name) s = SCH_SEC.test(o.name) ? 'Secondary' : SCH_PRI.test(o.name) ? 'Primary' : SCH_NUR.test(o.name) ? 'Nursery' : null;
+  return (o.stage = s);
+}
+const schColour = st => ({ 'Nursery':'#C77DFF', 'Primary':'#3FD9C0', 'Secondary':'#F2B13C' }[st] || '#8A96A3');
 
 // Which 0.25° cells does the current view touch?
 function cellsInView(cell) {
@@ -1001,7 +1032,8 @@ async function drawSchools() {
     if (!schIndex) {
       schIndex = await (await fetch('/schools/data/tiles/index.json', { cache: 'no-cache' })).json();
       schFields = Object.fromEntries(schIndex.fields.map((f, i) => [f, i]));
-      for (const [id, key] of [['sPhase','phase'],['sGender','gender']]) {
+      // Phase is the three fixed stages in the markup (see SCH_STAGE).
+      for (const [id, key] of [['sGender','gender']]) {
         const el = document.getElementById(id);
         for (const v of (schIndex.options?.[key] || [])) {
           const o = document.createElement('option'); o.value = v; o.textContent = v; el.appendChild(o);
@@ -1042,7 +1074,7 @@ async function drawSchools() {
         if (!schPasses(o)) continue;
         n++;
         const priv = o.sector === 'private';
-        const c = schColour(o.phase);
+        const c = schColour(schStage(o));
         const m = L.circleMarker([lat, lng], {
           renderer: schCanvas, radius: 4, color: c, weight: priv ? 2 : 1,
           fillColor: c, fillOpacity: priv ? 0 : .55, opacity: .95,
