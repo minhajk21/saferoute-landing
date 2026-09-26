@@ -3,51 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>San Francisco Neighborhood Safety Map &amp; Rankings (41 neighborhoods) — SafeRoute</title>
-<meta name="description" content="How safe is your SF neighborhood? Safety index (0–100) for all 41 San Francisco neighborhoods from SFPD reported-crime data through September 2026 — ranked citywide, with crime maps and night-time patterns.">
+<title>San Francisco Neighborhood Safety Map &amp; Rankings (41 neighborhoods)</title>
+<meta name="description" content="How safe is your SF neighborhood? Safety index (0–100) for all 41 San Francisco neighborhoods from SFPD reported-crime data through September 2026.">
 <link rel="canonical" href="https://safe-route.app/safety/sf/">
 <meta name="apple-itunes-app" content="app-id=6768244297">
-<meta property="og:title" content="San Francisco Neighborhood Safety Map &amp; Rankings (41 neighborhoods) — SafeRoute">
-<meta property="og:description" content="How safe is your SF neighborhood? Safety index (0–100) for all 41 San Francisco neighborhoods from SFPD reported-crime data through September 2026 — ranked citywide, with crime maps and night-time patterns.">
+<meta property="og:title" content="San Francisco Neighborhood Safety Map &amp; Rankings (41 neighborhoods)">
+<meta property="og:description" content="How safe is your SF neighborhood? Safety index (0–100) for all 41 San Francisco neighborhoods from SFPD reported-crime data through September 2026.">
 <meta property="og:image" content="https://safe-route.app/assets/og-preview.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://safe-route.app/safety/sf/">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#0A0D12">
 <link rel="stylesheet" href="/assets/sr.css">
 <link rel="stylesheet" href="/safety/assets/safety.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Safety","item":"https://safe-route.app/safety/"},{"@type":"ListItem","position":2,"name":"San Francisco","item":"https://safe-route.app/safety/sf/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Safety index","item":"https://safe-route.app/safety/"},{"@type":"ListItem","position":2,"name":"San Francisco","item":"https://safe-route.app/safety/sf/"}]}</script>
 <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a7d4a481ed8b4512a43225404078e7ab"}'></script>
 </head>
-<body><header class="site"><div class="wrap">
-<a class="wordmark" href="/"><svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>SAFEROUTE</span></a>
+<body><a class="skip" href="#main">Skip to content</a>
+<header class="site"><div class="wrap">
+<a class="wordmark" href="/"><span class="shield" aria-hidden="true"></span><span>SAFEROUTE</span></a>
 <nav class="site-nav" aria-label="Site">
-<a href="/safety/" class="on">Safety index</a>
+<a class="on" aria-current="page" href="/safety/">Safety<span class="nav-long"> index</span></a>
 <a href="/check/">Map</a>
 <a href="/tonight/">Tonight</a>
 <a class="hide-sm" href="/transparency/">Transparency</a>
 <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-safety-pages&mt=8">Get the app</a>
 </nav>
-</div></header><div class="crumbbar"><div class="wrap"><nav class="crumbs"><a href="/safety/">Safety</a> › San Francisco</nav></div></div><main><div class="wrap">
+</div></header><div class="crumbbar"><div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a href="/safety/">Safety index</a> › San Francisco</nav></div></div><main id="main"><div class="wrap">
 <p class="eyebrow">Neighborhood safety · San Francisco · data through September 2026</p>
 <h1>How safe is your San Francisco neighborhood?</h1>
 <p class="lead">SafeRoute scores all 41 San Francisco neighborhoods 0–100 from incidents reported to the SFPD — severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.</p>
 
 <div class="checker">
 <input id="ckr" type="search" placeholder="Check a neighborhood — e.g. the Mission, Sunset, North Beach…" aria-label="Search San Francisco neighborhoods">
+<p id="ckr-note" class="ckr-note" role="status"></p>
 <ul id="ckr-out"></ul>
 </div>
 
 <p class="notice">These figures describe <strong>reported</strong> crime around each neighborhood's center — they are informational, not a judgment of any community. Citywide median index: <strong>50/100</strong>.</p>
 <p style="margin:14px 0 4px;font-size:15.5px"><a href="/safety/sf/night/">Is San Francisco safe at night? See which neighborhoods see the most reported crime after dark →</a></p>
-<div class="citychips"><span>Feed current to September 2026</span><span>covers 8 months</span><span>13 offence categories</span><span><a href="/transparency/">data transparency 90/100</a></span><span><a href="/tonight/" class="tonight">⏺ last 24 hrs live</a></span></div>
+<div class="citychips"><span>Feed current to September 2026</span><span>covers 8 months</span><span>13 offence categories</span><span><a href="/transparency/">data transparency 92/100</a></span><span><a href="/tonight/#san-francisco" class="tonight">⏺ recent 911 calls, live</a></span></div>
 
 <div class="mapwrap">
-  <div id="citymap" role="application" aria-label="Map of San Francisco neighborhoods, coloured by safety index"></div>
+  <div id="citymap" role="region" aria-label="Map of San Francisco neighborhoods, coloured by safety index"></div>
   <div class="maplegend">
     <span><i style="background:#2E8B40"></i>Low</span>
     <span><i style="background:#B0703C"></i>Moderate</span>
@@ -58,11 +63,11 @@
 </div>
 
 <h2 id="san-francisco">All 41 SF neighborhoods, safest first</h2>
-<table class="rank"><thead><tr><th>Neighborhood (safest first)</th><th style="text-align:right">Index</th><th>Band</th><th style="text-align:right">Incidents</th></tr></thead><tbody><tr><td><a href="/safety/sf/presidio/">Presidio</a></td><td class="n" style="color:#2E8B40">99/100</td><td><span class="band low">Low risk</span></td><td class="n">6</td></tr><tr><td><a href="/safety/sf/treasure-island/">Treasure Island</a></td><td class="n" style="color:#2E8B40">88/100</td><td><span class="band low">Low risk</span></td><td class="n">89</td></tr><tr><td><a href="/safety/sf/lincoln-park/">Lincoln Park</a></td><td class="n" style="color:#2E8B40">84/100</td><td><span class="band low">Low risk</span></td><td class="n">160</td></tr><tr><td><a href="/safety/sf/west-of-twin-peaks/">West of Twin Peaks</a></td><td class="n" style="color:#2E8B40">80/100</td><td><span class="band low">Low risk</span></td><td class="n">197</td></tr><tr><td><a href="/safety/sf/sunset-parkside/">Sunset/<wbr>Parkside</a></td><td class="n" style="color:#2E8B40">79/100</td><td><span class="band low">Low risk</span></td><td class="n">200</td></tr><tr><td><a href="/safety/sf/twin-peaks/">Twin Peaks</a></td><td class="n" style="color:#2E8B40">79/100</td><td><span class="band low">Low risk</span></td><td class="n">196</td></tr><tr><td><a href="/safety/sf/seacliff/">Seacliff</a></td><td class="n" style="color:#2E8B40">76/100</td><td><span class="band low">Low risk</span></td><td class="n">222</td></tr><tr><td><a href="/safety/sf/glen-park/">Glen Park</a></td><td class="n" style="color:#2E8B40">75/100</td><td><span class="band low">Low risk</span></td><td class="n">255</td></tr><tr><td><a href="/safety/sf/golden-gate-park/">Golden Gate Park</a></td><td class="n" style="color:#2E8B40">75/100</td><td><span class="band low">Low risk</span></td><td class="n">257</td></tr><tr><td><a href="/safety/sf/inner-sunset/">Inner Sunset</a></td><td class="n" style="color:#B0703C">73/100</td><td><span class="band moderate">Moderate</span></td><td class="n">264</td></tr><tr><td><a href="/safety/sf/mclaren-park/">McLaren Park</a></td><td class="n" style="color:#B0703C">71/100</td><td><span class="band moderate">Moderate</span></td><td class="n">270</td></tr><tr><td><a href="/safety/sf/outer-richmond/">Outer Richmond</a></td><td class="n" style="color:#B0703C">68/100</td><td><span class="band moderate">Moderate</span></td><td class="n">344</td></tr><tr><td><a href="/safety/sf/lakeshore/">Lakeshore</a></td><td class="n" style="color:#B0703C">67/100</td><td><span class="band moderate">Moderate</span></td><td class="n">404</td></tr><tr><td><a href="/safety/sf/oceanview-merced-ingleside/">Oceanview/<wbr>Merced/<wbr>Ingleside</a></td><td class="n" style="color:#B0703C">64/100</td><td><span class="band moderate">Moderate</span></td><td class="n">434</td></tr><tr><td><a href="/safety/sf/visitacion-valley/">Visitacion Valley</a></td><td class="n" style="color:#B0703C">64/100</td><td><span class="band moderate">Moderate</span></td><td class="n">356</td></tr><tr><td><a href="/safety/sf/presidio-heights/">Presidio Heights</a></td><td class="n" style="color:#B0703C">59/100</td><td><span class="band moderate">Moderate</span></td><td class="n">561</td></tr><tr><td><a href="/safety/sf/inner-richmond/">Inner Richmond</a></td><td class="n" style="color:#B0703C">58/100</td><td><span class="band moderate">Moderate</span></td><td class="n">537</td></tr><tr><td><a href="/safety/sf/noe-valley/">Noe Valley</a></td><td class="n" style="color:#B0703C">58/100</td><td><span class="band moderate">Moderate</span></td><td class="n">598</td></tr><tr><td><a href="/safety/sf/portola/">Portola</a></td><td class="n" style="color:#B0703C">58/100</td><td><span class="band moderate">Moderate</span></td><td class="n">580</td></tr><tr><td><a href="/safety/sf/excelsior/">Excelsior</a></td><td class="n" style="color:#B0703C">55/100</td><td><span class="band moderate">Moderate</span></td><td class="n">575</td></tr><tr><td><a href="/safety/sf/bernal-heights/">Bernal Heights</a></td><td class="n" style="color:#B0703C">50/100</td><td><span class="band moderate">Moderate</span></td><td class="n">698</td></tr><tr><td><a href="/safety/sf/outer-mission/">Outer Mission</a></td><td class="n" style="color:#B0703C">50/100</td><td><span class="band moderate">Moderate</span></td><td class="n">717</td></tr><tr><td><a href="/safety/sf/potrero-hill/">Potrero Hill</a></td><td class="n" style="color:#B0703C">50/100</td><td><span class="band moderate">Moderate</span></td><td class="n">765</td></tr><tr><td><a href="/safety/sf/lone-mountain-usf/">Lone Mountain/<wbr>USF</a></td><td class="n" style="color:#9C5220">47/100</td><td><span class="band elevated">Elevated</span></td><td class="n">820</td></tr><tr><td><a href="/safety/sf/haight-ashbury/">Haight Ashbury</a></td><td class="n" style="color:#9C5220">46/100</td><td><span class="band elevated">Elevated</span></td><td class="n">860</td></tr><tr><td><a href="/safety/sf/marina/">Marina</a></td><td class="n" style="color:#9C5220">46/100</td><td><span class="band elevated">Elevated</span></td><td class="n">887</td></tr><tr><td><a href="/safety/sf/north-beach/">North Beach</a></td><td class="n" style="color:#9C5220">44/100</td><td><span class="band elevated">Elevated</span></td><td class="n">883</td></tr><tr><td><a href="/safety/sf/bayview-hunters-point/">Bayview Hunters Point</a></td><td class="n" style="color:#9C5220">40/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,031</td></tr><tr><td><a href="/safety/sf/mission-bay/">Mission Bay</a></td><td class="n" style="color:#9C5220">39/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,127</td></tr><tr><td><a href="/safety/sf/russian-hill/">Russian Hill</a></td><td class="n" style="color:#9C5220">38/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,166</td></tr><tr><td><a href="/safety/sf/castro-upper-market/">Castro/<wbr>Upper Market</a></td><td class="n" style="color:#9C5220">37/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,246</td></tr><tr><td><a href="/safety/sf/pacific-heights/">Pacific Heights</a></td><td class="n" style="color:#9C5220">35/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,470</td></tr><tr><td><a href="/safety/sf/japantown/">Japantown</a></td><td class="n" style="color:#9C5220">32/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,591</td></tr><tr><td><a href="/safety/sf/chinatown/">Chinatown</a></td><td class="n" style="color:#9C5220">26/100</td><td><span class="band elevated">Elevated</span></td><td class="n">2,011</td></tr><tr><td><a href="/safety/sf/western-addition/">Western Addition</a></td><td class="n" style="color:#9C5220">26/100</td><td><span class="band elevated">Elevated</span></td><td class="n">2,118</td></tr><tr><td><a href="/safety/sf/financial-district-south-beach/">Financial District/<wbr>South Beach</a></td><td class="n" style="color:#BC3B2E">24/100</td><td><span class="band high">High risk</span></td><td class="n">2,441</td></tr><tr><td><a href="/safety/sf/hayes-valley/">Hayes Valley</a></td><td class="n" style="color:#BC3B2E">22/100</td><td><span class="band high">High risk</span></td><td class="n">2,489</td></tr><tr><td><a href="/safety/sf/mission/">Mission</a></td><td class="n" style="color:#BC3B2E">14/100</td><td><span class="band high">High risk</span></td><td class="n">4,324</td></tr><tr><td><a href="/safety/sf/nob-hill/">Nob Hill</a></td><td class="n" style="color:#BC3B2E">12/100</td><td><span class="band high">High risk</span></td><td class="n">5,593</td></tr><tr><td><a href="/safety/sf/south-of-market/">South of Market</a></td><td class="n" style="color:#BC3B2E">10/100</td><td><span class="band high">High risk</span></td><td class="n">6,209</td></tr><tr><td><a href="/safety/sf/tenderloin/">Tenderloin</a></td><td class="n" style="color:#BC3B2E">7/100</td><td><span class="band high">High risk</span></td><td class="n">9,320</td></tr></tbody></table>
+<table class="rank"><thead><tr><th>Neighborhood (safest first)</th><th style="text-align:right">Index</th><th>Band</th><th style="text-align:right">Incidents</th></tr></thead><tbody><tr><td><a href="/safety/sf/presidio/">Presidio</a></td><td class="n" style="color:var(--band-low)">99/100</td><td><span class="band low">Low risk</span></td><td class="n">6</td></tr><tr><td><a href="/safety/sf/treasure-island/">Treasure Island</a></td><td class="n" style="color:var(--band-low)">88/100</td><td><span class="band low">Low risk</span></td><td class="n">89</td></tr><tr><td><a href="/safety/sf/lincoln-park/">Lincoln Park</a></td><td class="n" style="color:var(--band-low)">84/100</td><td><span class="band low">Low risk</span></td><td class="n">160</td></tr><tr><td><a href="/safety/sf/west-of-twin-peaks/">West of Twin Peaks</a></td><td class="n" style="color:var(--band-low)">80/100</td><td><span class="band low">Low risk</span></td><td class="n">197</td></tr><tr><td><a href="/safety/sf/sunset-parkside/">Sunset/<wbr>Parkside</a></td><td class="n" style="color:var(--band-low)">79/100</td><td><span class="band low">Low risk</span></td><td class="n">200</td></tr><tr><td><a href="/safety/sf/twin-peaks/">Twin Peaks</a></td><td class="n" style="color:var(--band-low)">79/100</td><td><span class="band low">Low risk</span></td><td class="n">196</td></tr><tr><td><a href="/safety/sf/seacliff/">Seacliff</a></td><td class="n" style="color:var(--band-low)">76/100</td><td><span class="band low">Low risk</span></td><td class="n">222</td></tr><tr><td><a href="/safety/sf/glen-park/">Glen Park</a></td><td class="n" style="color:var(--band-low)">75/100</td><td><span class="band low">Low risk</span></td><td class="n">255</td></tr><tr><td><a href="/safety/sf/golden-gate-park/">Golden Gate Park</a></td><td class="n" style="color:var(--band-low)">75/100</td><td><span class="band low">Low risk</span></td><td class="n">257</td></tr><tr><td><a href="/safety/sf/inner-sunset/">Inner Sunset</a></td><td class="n" style="color:var(--band-moderate)">73/100</td><td><span class="band moderate">Moderate</span></td><td class="n">264</td></tr><tr><td><a href="/safety/sf/mclaren-park/">McLaren Park</a></td><td class="n" style="color:var(--band-moderate)">71/100</td><td><span class="band moderate">Moderate</span></td><td class="n">270</td></tr><tr><td><a href="/safety/sf/outer-richmond/">Outer Richmond</a></td><td class="n" style="color:var(--band-moderate)">68/100</td><td><span class="band moderate">Moderate</span></td><td class="n">344</td></tr><tr><td><a href="/safety/sf/lakeshore/">Lakeshore</a></td><td class="n" style="color:var(--band-moderate)">67/100</td><td><span class="band moderate">Moderate</span></td><td class="n">404</td></tr><tr><td><a href="/safety/sf/oceanview-merced-ingleside/">Oceanview/<wbr>Merced/<wbr>Ingleside</a></td><td class="n" style="color:var(--band-moderate)">64/100</td><td><span class="band moderate">Moderate</span></td><td class="n">434</td></tr><tr><td><a href="/safety/sf/visitacion-valley/">Visitacion Valley</a></td><td class="n" style="color:var(--band-moderate)">64/100</td><td><span class="band moderate">Moderate</span></td><td class="n">356</td></tr><tr><td><a href="/safety/sf/presidio-heights/">Presidio Heights</a></td><td class="n" style="color:var(--band-moderate)">59/100</td><td><span class="band moderate">Moderate</span></td><td class="n">561</td></tr><tr><td><a href="/safety/sf/inner-richmond/">Inner Richmond</a></td><td class="n" style="color:var(--band-moderate)">58/100</td><td><span class="band moderate">Moderate</span></td><td class="n">537</td></tr><tr><td><a href="/safety/sf/noe-valley/">Noe Valley</a></td><td class="n" style="color:var(--band-moderate)">58/100</td><td><span class="band moderate">Moderate</span></td><td class="n">598</td></tr><tr><td><a href="/safety/sf/portola/">Portola</a></td><td class="n" style="color:var(--band-moderate)">58/100</td><td><span class="band moderate">Moderate</span></td><td class="n">580</td></tr><tr><td><a href="/safety/sf/excelsior/">Excelsior</a></td><td class="n" style="color:var(--band-moderate)">55/100</td><td><span class="band moderate">Moderate</span></td><td class="n">575</td></tr><tr><td><a href="/safety/sf/bernal-heights/">Bernal Heights</a></td><td class="n" style="color:var(--band-moderate)">50/100</td><td><span class="band moderate">Moderate</span></td><td class="n">698</td></tr><tr><td><a href="/safety/sf/outer-mission/">Outer Mission</a></td><td class="n" style="color:var(--band-moderate)">50/100</td><td><span class="band moderate">Moderate</span></td><td class="n">717</td></tr><tr><td><a href="/safety/sf/potrero-hill/">Potrero Hill</a></td><td class="n" style="color:var(--band-moderate)">50/100</td><td><span class="band moderate">Moderate</span></td><td class="n">765</td></tr><tr><td><a href="/safety/sf/lone-mountain-usf/">Lone Mountain/<wbr>USF</a></td><td class="n" style="color:var(--band-elevated)">47/100</td><td><span class="band elevated">Elevated</span></td><td class="n">820</td></tr><tr><td><a href="/safety/sf/haight-ashbury/">Haight Ashbury</a></td><td class="n" style="color:var(--band-elevated)">46/100</td><td><span class="band elevated">Elevated</span></td><td class="n">860</td></tr><tr><td><a href="/safety/sf/marina/">Marina</a></td><td class="n" style="color:var(--band-elevated)">46/100</td><td><span class="band elevated">Elevated</span></td><td class="n">887</td></tr><tr><td><a href="/safety/sf/north-beach/">North Beach</a></td><td class="n" style="color:var(--band-elevated)">44/100</td><td><span class="band elevated">Elevated</span></td><td class="n">883</td></tr><tr><td><a href="/safety/sf/bayview-hunters-point/">Bayview Hunters Point</a></td><td class="n" style="color:var(--band-elevated)">40/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,031</td></tr><tr><td><a href="/safety/sf/mission-bay/">Mission Bay</a></td><td class="n" style="color:var(--band-elevated)">39/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,127</td></tr><tr><td><a href="/safety/sf/russian-hill/">Russian Hill</a></td><td class="n" style="color:var(--band-elevated)">38/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,166</td></tr><tr><td><a href="/safety/sf/castro-upper-market/">Castro/<wbr>Upper Market</a></td><td class="n" style="color:var(--band-elevated)">37/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,246</td></tr><tr><td><a href="/safety/sf/pacific-heights/">Pacific Heights</a></td><td class="n" style="color:var(--band-elevated)">35/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,470</td></tr><tr><td><a href="/safety/sf/japantown/">Japantown</a></td><td class="n" style="color:var(--band-elevated)">32/100</td><td><span class="band elevated">Elevated</span></td><td class="n">1,591</td></tr><tr><td><a href="/safety/sf/chinatown/">Chinatown</a></td><td class="n" style="color:var(--band-elevated)">26/100</td><td><span class="band elevated">Elevated</span></td><td class="n">2,011</td></tr><tr><td><a href="/safety/sf/western-addition/">Western Addition</a></td><td class="n" style="color:var(--band-elevated)">26/100</td><td><span class="band elevated">Elevated</span></td><td class="n">2,118</td></tr><tr><td><a href="/safety/sf/financial-district-south-beach/">Financial District/<wbr>South Beach</a></td><td class="n" style="color:var(--band-high)">24/100</td><td><span class="band high">High risk</span></td><td class="n">2,441</td></tr><tr><td><a href="/safety/sf/hayes-valley/">Hayes Valley</a></td><td class="n" style="color:var(--band-high)">22/100</td><td><span class="band high">High risk</span></td><td class="n">2,489</td></tr><tr><td><a href="/safety/sf/mission/">Mission</a></td><td class="n" style="color:var(--band-high)">14/100</td><td><span class="band high">High risk</span></td><td class="n">4,324</td></tr><tr><td><a href="/safety/sf/nob-hill/">Nob Hill</a></td><td class="n" style="color:var(--band-high)">12/100</td><td><span class="band high">High risk</span></td><td class="n">5,593</td></tr><tr><td><a href="/safety/sf/south-of-market/">South of Market</a></td><td class="n" style="color:var(--band-high)">10/100</td><td><span class="band high">High risk</span></td><td class="n">6,209</td></tr><tr><td><a href="/safety/sf/tenderloin/">Tenderloin</a></td><td class="n" style="color:var(--band-high)">7/100</td><td><span class="band high">High risk</span></td><td class="n">9,320</td></tr></tbody></table>
 
 <div class="cta">
 <h2>Walking in San Francisco at night?</h2>
-<p>SafeRoute scores every walking route against the same live crime data on this page — and shows how much of each route runs on lit streets. Compare the routes, share your walk, and check in when you arrive. Free, no account.</p>
+<p>SafeRoute scores every walking route against the same official crime data on this page — and shows how much of each route runs on lit streets. Compare the routes, share your walk, and check in when you arrive. Free, no account.</p>
 <a class="btn" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-safety-pages&mt=8">Get SafeRoute on the App&nbsp;Store</a>
 </div>
 
@@ -70,9 +75,17 @@
 <p style="font-size:15.5px;color:var(--ink-2)">Each incident reported to the SFPD (via DataSF) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are DataSF's 41 Analysis Neighborhoods, the same unit SFPD tags each report with. Because San Francisco's dense downtown far outweighs its residential west side, the index is calibrated to the citywide median so a typical neighborhood reads mid-scale. Time-of-day charts use SFPD incident timestamps, severity-weighted. Pages regenerate as new data is published.</p>
 <p style="font-size:15.5px;color:var(--ink-2)">The index compares areas <strong>within San Francisco</strong>. It is not comparable between cities: each police force publishes a different set of offences over a different period — San Francisco's figures cannot be read against another city's on the same 0–100 scale.</p>
 </div></main><footer class="site"><div class="wrap">
-<p><strong>Sources.</strong> Crime data: SFPD incident reports via <a href="https://data.sfgov.org/">DataSF</a>, covering the 8 months to September 2026. Neighborhood boundaries: DataSF Analysis Neighborhoods (all 41). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.</p>
+<p><strong>Sources.</strong> Crime data: SFPD incident reports via <a href="https://data.sf.gov/">DataSF</a>, covering the 8 months to September 2026. Neighborhood boundaries: DataSF Analysis Neighborhoods (all 41). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.</p>
 <p><strong>About this data.</strong> Figures are incidents <em>reported</em> to police within 1&nbsp;km of each neighborhood's center — reporting practices vary and not all crime is reported. This is informational only and not a guarantee of safety, a prediction, or a judgment of any community. Use it the way the app does: to pick better-lit, lower-incident routes and times.</p>
-<p><a href="/safety/sf/">All San Francisco neighborhoods</a> · <a href="/">SafeRoute app</a> · <a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></p>
+<nav class="footlinks" aria-label="Footer"><ul>
+<li><a href="/safety/sf/">All San Francisco neighborhoods</a></li>
+<li><a href="/safety/">Safety index</a></li>
+<li><a href="/check/">Map</a></li>
+<li><a href="/tonight/">Tonight</a></li>
+<li><a href="/transparency/">Transparency</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-support/">Support</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></li>
+</ul></nav>
 </div></footer></body></html>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
@@ -85,11 +98,18 @@ const IDX=[{"s":"bayview-hunters-point","n":"Bayview Hunters Point","b":"San Fra
 // either — this comment used to interpolate the city slug and so recreated the
 // exact string it was describing.
 const CITY="sf";
-const inp=document.getElementById('ckr'),out=document.getElementById('ckr-out');
+const inp=document.getElementById('ckr'),out=document.getElementById('ckr-out'),note=document.getElementById('ckr-note');
 inp.addEventListener('input',()=>{
-  const q=inp.value.trim().toLowerCase();out.innerHTML='';
+  const q=inp.value.trim().toLowerCase();out.innerHTML='';note.textContent='';
   if(q.length<2)return;
-  IDX.filter(a=>a.n.toLowerCase().includes(q)).slice(0,8).forEach(a=>{
+  const hits=IDX.filter(a=>a.n.toLowerCase().includes(q));
+  // A search that matched nothing used to leave the box silent, which reads as
+  // broken, and a screen reader heard nothing either way. #ckr-note is a
+  // status region, so the count or the miss is announced as well as shown.
+  note.textContent=hits.length
+    ? hits.length+' '+(hits.length===1?"neighborhood":"neighborhoods")+' found'+(hits.length>8?', showing the first 8':'')
+    : 'No match — try another spelling.';
+  hits.slice(0,8).forEach(a=>{
     const li=document.createElement('li');
     // Built as its own value so the only complete path literal left in this
     // source is '/safety/', which is a real 200 page. Anything longer here gets
@@ -116,20 +136,41 @@ inp.addEventListener('input',()=>{
   var MB=['pk.eyJ1IjoibWluaGFqazIxIiwiYSI','6ImNtdGJjc2IzYjA5ZDUyeXE2bW1ma','nA3NnkifQ.E1GM4huWJAv7fWwjKir4BA'].join('');
   L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}{r}?access_token='+MB,{
     tileSize:512,zoomOffset:-1,maxZoom:18,detectRetina:true,
-    attribution:'© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    // Final addresses, not the redirects Mapbox's docs print (about/maps/ and
+    // map-feedback/ both 301), so a retired redirect cannot break the credit.
+    attribution:'© <a href="https://www.mapbox.com/about/maps">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://apps.mapbox.com/feedback/">Improve this map</a>'
   }).addTo(map);
+  // Mapbox's terms require its wordmark on any map drawn from its tiles. The
+  // image, size and placement live in sr.css (.mapbox-logo); this only adds it.
+  L.Control.MapboxLogo = L.Control.extend({
+    options: { position: 'bottomleft' },
+    onAdd: function () {
+      var a = L.DomUtil.create('a', 'mapbox-logo');
+      a.href = 'https://www.mapbox.com/'; a.target = '_blank'; a.rel = 'noopener';
+      a.setAttribute('aria-label', 'Mapbox');
+      L.DomEvent.disableClickPropagation(a);
+      return a;
+    }
+  });
+  new L.Control.MapboxLogo().addTo(map);
   var pts=[];
   IDX.forEach(function(a){
     if(a.la==null||a.lo==null) return;
     pts.push([a.la,a.lo]);
     var m=L.circleMarker([a.la,a.lo],{
       radius:7,weight:1.5,color:'#0A0D12',fillColor:COL[a.band]||COL.moderate,fillOpacity:.95
-    }).addTo(map);
+    });
     m.bindTooltip(a.n+' — '+a.v+'/100',{direction:'top',offset:[0,-8]});
+    // Leaflet 1.9 gives a tooltip'd path focus listeners, and Chrome then
+    // makes it a tab stop: one unnamed stop per area, hundreds of them between
+    // the search box and the tables. The dots are a pointer shortcut; the same
+    // areas are links in the tables below, for keyboards and screen readers.
+    m.on('add',function(){ var p=m.getElement(); if(p){ p.setAttribute('tabindex','-1'); p.setAttribute('aria-hidden','true'); } });
     // Path assembled at runtime for the same reason as the type-ahead above:
     // Googlebot lifts URL-shaped strings out of inline script and requests them
     // verbatim, so no complete path may appear as a literal here.
     m.on('click',function(){ location.href='/safety/'+CITY+'/'+a.s+'/'; });
+    m.addTo(map);
   });
   if(pts.length) map.fitBounds(pts,{padding:[26,26]});
 })();

@@ -218,8 +218,9 @@ async function fetchAreas(cfg, id) {
 //                               truth for "this is live right now". The monthly
 //                               workflow decides the same way (ls -d safety/*/);
 //                               keying on the index.html is what keeps
-//                               safety/assets and safety/data out without a
-//                               denylist that would need maintaining.
+//                               safety/assets (or any other non-city folder)
+//                               out without a denylist that would need
+//                               maintaining.
 //   CITIES in render-pages.mjs  the renderer's own intent, which also covers a
 //                               city configured but not yet rendered into the
 //                               tree. Parsed as TEXT deliberately: that module

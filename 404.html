@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page not found — SafeRoute</title>
+<!-- GitHub Pages serves this file, with a 404 status, for ANY missing path at
+     any depth — /safety/london/no-such-area/ as much as /nope. So every URL
+     here is absolute, and there is no canonical: this page has no address of
+     its own and must never be indexed. -->
+<meta name="robots" content="noindex">
+<meta name="description" content="This SafeRoute page moved or doesn't exist. Search the neighborhood safety index, or go to the Map, Tonight or the transparency index.">
+<meta name="theme-color" content="#0A0D12">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sr.css">
+<style>
+  /* Page-specific only — header, footer, buttons and tokens come from sr.css. */
+  main{padding:clamp(34px,6vw,64px) 0 56px}
+  .missing{font-family:var(--mono);font-size:12.5px;color:var(--ink-3);overflow-wrap:anywhere;margin-top:10px}
+  .missing code{font:inherit;color:var(--ink-2)}
+  /* The one guess worth making: a withdrawn or mistyped area page still names
+     its city, and that city's page lists every area it has now. */
+  .hint{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:10px;
+        padding:14px 18px;margin:22px 0 0;font-size:15.5px;color:var(--ink-2)}
+  .hint[hidden]{display:none}
+  .find{margin:30px 0 8px}
+  .find label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:9px}
+  .find input{width:100%;font:inherit;font-size:17px;padding:13px 16px;border:1px solid var(--line-2);border-radius:12px;background:var(--surface);color:var(--ink)}
+  .find input::placeholder{color:var(--ink-3)}
+  .find input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(63,217,192,.14)}
+  #nf-out{list-style:none;margin:10px 0 0}
+  #nf-out li+li{margin-top:6px}
+  #nf-out a{display:flex;justify-content:space-between;gap:12px;padding:11px 14px;border:1px solid var(--line);border-radius:10px;
+            background:var(--surface);color:var(--ink);text-decoration:none;transition:border-color .15s}
+  #nf-out a:hover,#nf-out a:focus-visible{border-color:var(--teal);outline:none}
+  #nf-out .where{color:var(--ink-3);font-size:14px}
+  #nf-out .s{font-family:var(--mono);white-space:nowrap}
+  #nf-note{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);margin-top:10px}
+  .dests{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:14px 0 0}
+  .dests a{display:block;height:100%;padding:15px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);
+           color:var(--ink);text-decoration:none;transition:border-color .15s}
+  .dests a:hover,.dests a:focus-visible{border-color:var(--teal);outline:none}
+  .dests b{display:block;font-weight:640;font-size:16.5px}
+  .dests span{display:block;font-size:14px;color:var(--ink-2);margin-top:3px;line-height:1.45}
+  .home{margin-top:18px;font-size:15.5px;color:var(--ink-2)}
+</style>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a7d4a481ed8b4512a43225404078e7ab"}'></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site"><div class="wrap">
+<a class="wordmark" href="/"><span class="shield" aria-hidden="true"></span><span>SAFEROUTE</span></a>
+<nav class="site-nav" aria-label="Site">
+<a href="/safety/">Safety<span class="nav-long"> index</span></a>
+<a href="/check/">Map</a>
+<a href="/tonight/">Tonight</a>
+<a class="hide-sm" href="/transparency/">Transparency</a>
+<a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-home&mt=8">Get the app</a>
+</nav>
+</div></header>
+
+<main id="main"><div class="wrap">
+<p class="eyebrow">404 · Page not found</p>
+<h1>This page moved or doesn't exist</h1>
+<p class="lead">Neighborhood pages follow each city's official area names, and those change from time to time, so an old link can end up here. Everything is still one search or one click away.</p>
+<p class="missing" id="nf-path" hidden>No page at <code></code></p>
+<p class="hint" id="nf-hint" hidden></p>
+
+<div class="find">
+  <label for="nf-q">Search the neighborhood reports</label>
+  <input id="nf-q" type="search" autocomplete="off" spellcheck="false" placeholder="Try Harlem, Brixton, Hyde Park…">
+  <ul id="nf-out"></ul>
+  <p id="nf-note" aria-live="polite">Every neighborhood, ward and borough the index covers.</p>
+</div>
+
+<h2>Or go to</h2>
+<ul class="dests">
+  <li><a href="/safety/"><b>Safety index</b><span>A 0–100 score and crime map for every neighborhood we cover.</span></a></li>
+  <li><a href="/check/"><b>Map</b><span>Check any address against official police data.</span></a></li>
+  <li><a href="/tonight/"><b>Tonight</b><span>Recent police dispatch calls, city by city.</span></a></li>
+  <li><a href="/transparency/"><b>Transparency</b><span>Which cities let you see their crime data.</span></a></li>
+</ul>
+<p class="home">Or start again from the <a href="/">SafeRoute homepage</a>.</p>
+</div></main>
+
+<footer class="site"><div class="wrap">
+<p>SafeRoute maps crime from official police and open-data sources. Informational only — not a guarantee of safety.</p>
+<nav class="footlinks" aria-label="Footer"><ul>
+<li><a href="/safety/">Safety index</a></li>
+<li><a href="/check/">Map</a></li>
+<li><a href="/tonight/">Tonight</a></li>
+<li><a href="/transparency/">Transparency</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-support/">Support</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></li>
+</ul></nav>
+</div></footer>
+
+<script>
+/* The missing path, a city hint when the path names a city we cover, and the
+   same neighborhood search as the homepage. Everything taken from the URL is
+   written with textContent, never as HTML: the path is whatever was typed. */
+(function(){
+  var path = location.pathname;
+  var pathEl = document.getElementById('nf-path');
+  if (path && path !== '/404.html') { pathEl.querySelector('code').textContent = path; pathEl.hidden = false; }
+
+  var inp = document.getElementById('nf-q'), out = document.getElementById('nf-out'), note = document.getElementById('nf-note');
+  var noteDefault = note.textContent, IDX = null, loading = null;
+  var BAND = { low:'var(--band-low)', moderate:'var(--band-moderate)', elevated:'var(--band-elevated)', high:'var(--band-high)' };
+  function load(){
+    if (!loading) loading = fetch('/safety/search-index.json')
+      .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function(j){ IDX = j; })
+      .catch(function(){ note.textContent = 'Search is unavailable right now — the Safety index lists every city.'; });
+    return loading;
+  }
+  function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); }
+  function find(q){
+    q = norm(q); if (q.length < 2 || !IDX) return [];
+    var hits = IDX.filter(function(a){ return norm(a.n).indexOf(q) > -1; });
+    hits.sort(function(x, y){ var xs = norm(x.n).indexOf(q) === 0, ys = norm(y.n).indexOf(q) === 0; return xs === ys ? y.v - x.v : (xs ? -1 : 1); });
+    return hits;
+  }
+  function render(){
+    var q = inp.value.trim();
+    out.textContent = '';
+    if (norm(q).length < 2) { note.textContent = noteDefault; return; }
+    if (!IDX) { note.textContent = 'Loading…'; return; }
+    var hits = find(q);
+    note.textContent = hits.length ? hits.length + ' match' + (hits.length === 1 ? '' : 'es') + (hits.length > 8 ? ' — showing the first 8' : '') : 'No match — try another spelling, or pick a city on the Safety index.';
+    hits.slice(0, 8).forEach(function(a){
+      var li = document.createElement('li'), el = document.createElement('a'), left = document.createElement('span'),
+          where = document.createElement('span'), s = document.createElement('span');
+      el.href = '/safety/' + a.c + '/' + a.s + '/';
+      left.textContent = a.n + ' '; where.className = 'where'; where.textContent = a.cn; left.appendChild(where);
+      s.className = 's'; s.textContent = a.v + '/100'; s.style.color = BAND[a.b] || 'var(--ink)';
+      el.appendChild(left); el.appendChild(s); li.appendChild(el); out.appendChild(li);
+    });
+  }
+  inp.addEventListener('focus', load, { once: true });
+  inp.addEventListener('input', function(){ load().then(render); render(); });
+
+  // /safety/<city>/… names a city: point at its page, which lists every
+  // current area, and pre-fill the search with as much of the old slug as
+  // still matches an area IN THAT CITY (peckham-old finds Peckham; a bare
+  // "richards" would find Dallas, which is no help).
+  var m = path.match(/^\/safety\/([a-z0-9-]+)\/(?:district\/)?([a-z0-9-]+)?/);
+  if (m) load().then(function(){
+    if (!IDX) return;
+    var city = IDX.find(function(a){ return a.c === m[1]; });
+    if (city) {
+      var hint = document.getElementById('nf-hint'), a = document.createElement('a');
+      a.href = '/safety/' + city.c + '/'; a.textContent = 'every ' + city.cn + ' area on its city page';
+      hint.textContent = 'This link was for a place in ' + city.cn + '. Area names follow the city\u2019s own boundaries and are updated as those change; you\u2019ll find ';
+      hint.appendChild(a); hint.appendChild(document.createTextNode('.'));
+      hint.hidden = false;
+    }
+    if (m[2] && m[2] !== 'night') {
+      var words = m[2].split('-');
+      for (var n = words.length; n > 0; n--) {
+        var q = words.slice(0, n).join(' ');
+        if (q.length < 4) break;
+        if (find(q).some(function(a){ return a.c === m[1]; })) { inp.value = q; render(); break; }
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>

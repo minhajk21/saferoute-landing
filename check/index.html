@@ -5,17 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0A0D12">
 <title>Check any address — SafeRoute neighborhood safety</title>
-<meta name="description" content="Type any address, neighborhood or landmark and get its SafeRoute safety index (0–100) from official police crime data — plus every nearby school in England and Wales, state and private, with Ofsted ratings.">
+<!-- Worded to the school data, which is England state and private plus Wales
+     state only, and whose inspection outcomes exist only where Ofsted has
+     graded an English state school (the same claim as #secSchools below). -->
+<meta name="description" content="Type any address for its SafeRoute safety index (0–100) from police crime data, plus nearby schools in England and Wales with the latest Ofsted outcome, if any.">
 <meta property="og:image" content="https://safe-route.app/assets/og-preview.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:title" content="Check any address — SafeRoute neighborhood safety">
 <meta property="og:description" content="Type any street, neighborhood or landmark and get its safety index on a live crime map — official police data, plus live 911 calls and street cameras where cities publish them.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://safe-route.app/check/">
 <link rel="canonical" href="https://safe-route.app/check/">
 <meta name="apple-itunes-app" content="app-id=6768244297">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/sr.css">
 <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
@@ -76,10 +83,18 @@
   #geo[aria-busy="true"] svg{animation:spin 1.1s linear infinite}
   #ac{list-style:none;margin:0;padding:0;position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:1200;background:var(--paper);border:1px solid var(--line);max-height:min(340px,60vh);overflow:auto;box-shadow:0 18px 40px rgba(0,0,0,.6);border-radius:10px}
   #ac:empty{display:none}
-  #ac li a{display:flex;flex-direction:column;gap:2px;padding:11px 16px;text-decoration:none;color:var(--ink);cursor:pointer}
-  #ac li a:hover,#ac li a.on{background:var(--cream-deep)}
+  /* Options are the list items themselves (role=option), not links inside
+     them: focus stays in the search box and aria-activedescendant points
+     here, so .on is the arrow-key row. */
+  #ac li{display:flex;flex-direction:column;gap:2px;padding:11px 16px;color:var(--ink);cursor:pointer}
+  #ac li[role="option"]:hover,#ac li.on{background:var(--cream-deep)}
   #ac .nm{font-size:15.5px;font-weight:500}
   #ac .ad{font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
+  /* Not a choice: "no places found", "search unavailable", or the line over a
+     list the page would not guess from. #acstatus says the same to a screen
+     reader, so this copy is aria-hidden. */
+  #ac li.acnote{cursor:default;font-size:13.5px;line-height:1.45;color:var(--ink-2)}
+  #ac li.acnote + li{border-top:1px solid var(--line)}
 
   /* layout */
   /* The stage is its own stacking context, so Leaflet's panes and controls
@@ -101,7 +116,7 @@
      scrolls), or into the map stage as an overlay; anything added to the
      page outside those is clipped off the bottom of the screen and
      unreachable. footer.colophon stays the last thing in aside#side: it
-     carries the / and /safety/ links and the calibration disclaimer that
+     carries the calibration disclaimer and the site's footer link row that
      every other page puts in its page footer. */
   @media(min-width:861px){
     body{display:flex;flex-direction:column;height:100vh;height:100dvh;min-height:540px}
@@ -142,8 +157,8 @@
     .stage{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
     #map{flex:none;height:64vh;height:64svh;min-height:240px;max-height:760px}
     /* A school tap scrolls the pane into view; keep its "Back" out from under
-       the sticky header, which wraps to two lines on the narrowest phones.
-       --hdr is the header's measured height (setHdr). */
+       the sticky header. --hdr is the header's measured height (setHdr), not
+       an assumed one: the header once wrapped to two lines on some phones. */
     aside{scroll-margin-top:calc(var(--hdr,61px) + 8px)}
     /* The same clearance for keyboard focus: Shift+Tab scrolls the control it
        lands on to the top edge, which is under the sticky header. Set on the
@@ -169,17 +184,23 @@
     box-shadow:0 6px 18px rgba(0,0,0,.45);font-family:var(--sans);font-size:12.5px;padding:4px 8px}
   .leaflet-tooltip-top.schtip:before{border-top-color:#141B24}
 
-  .place{font-size:20px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
+  /* The place (or school) is the pane's h2 and its sections are h3s, so a
+     screen reader's heading list still has a shape once a report replaces
+     the intro's h2s. */
+  .place{margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
   .place small{display:block;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);font-weight:400;letter-spacing:.03em;margin-top:3px}
+  /* The score and its pill as the area page draws them (Plex Mono, the band
+     colour from sr.css's --band-*, the shared .band pill), so one place reads
+     the same on both. They were white on the cream-era fills here, 4.0:1. */
   .scorebox{display:flex;align-items:baseline;gap:10px}
-  .score{font-size:56px;font-weight:700;letter-spacing:-.03em;line-height:1}
+  .score{font-family:var(--mono);font-size:56px;font-weight:600;line-height:1;white-space:nowrap}
   .score .of{font-size:22px;color:var(--ink-3);font-weight:500}
-  .band{align-self:center;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;color:#fff;border-radius:2px}
+  .scorebox .band{align-self:center;margin:0}
   .meta{font-size:14px;color:var(--ink-2);line-height:1.5}
   .meta b{color:var(--ink)}
   .divider{height:1px;background:var(--line)}
   .h3{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px}
-  h2.h3{font-weight:500;line-height:1.4}
+  :is(h2,h3).h3{font-weight:500;line-height:1.4}
   .cat{display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:14px}
   .cat .bar{height:8px;background:var(--teal);opacity:.5;border-radius:2px;flex:none}
   .cat .lbl{flex:1;color:var(--ink-2)}
@@ -196,7 +217,9 @@
   .hexpop span:last-child{color:var(--ink-3);font-family:var(--mono)}
   .src{font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.5}
   .cta{display:inline-block;margin-top:2px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;background:var(--teal);color:#04231E;padding:11px 16px;border-radius:10px;text-align:center}
-  .cta:hover{background:#5CE8D2}
+  /* The colour is restated: sr.css's a:hover (0,1,1) out-ranks .cta's own
+     (0,1,0) and turned the label teal on teal, 1.17:1. */
+  .cta:hover{background:#5CE8D2;color:#04231E}
   .spinner{width:22px;height:22px;border:2.5px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -228,6 +251,9 @@
   .linkbtn{display:inline-block;margin-top:10px;font-family:var(--sans);font-size:13px;color:var(--ink-2);background:none;border:0;padding:0;
     cursor:pointer;text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:3px}
   .linkbtn:hover{color:var(--teal);text-decoration-color:var(--teal)}
+  /* "Try again" under a couldn't-load note: left-aligned, not stretched
+     across the pane's column, and padded to a 24px target. */
+  .view > .linkbtn{align-self:flex-start;margin-top:-10px;padding:4px 0}
   section>.ext{display:inline-block;margin-top:10px;line-height:1.5}
   /* Heat legend: a real ramp in heatColor()'s own three stops, rather than
      three hexagon glyphs that read as "three categories". */
@@ -278,15 +304,18 @@
   .cov-more[open] summary::before{content:"\2212";content:"\2212" / ""}
   .cov-more summary:hover{color:var(--teal);border-color:var(--teal)}
   .cov-more[open] summary{margin-bottom:6px}
+  /* The footer link row (nav.footlinks) is sr.css's; it takes this 11px mono. */
   .colophon{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;line-height:1.6;color:var(--ink-3)}
-  .colophon nav{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
-  .colophon a{color:var(--ink-3);text-decoration:none}
-  .colophon a:hover{color:var(--teal)}
 
   /* One visible focus ring for everything this page adds. */
   .chip:focus-visible,.btn-sch:focus-visible,.cov button:focus-visible,#geo:focus-visible,.back:focus-visible,
-  .mapbtn:focus-visible,.schbar :focus-visible,.colophon a:focus-visible,
+  .mapbtn:focus-visible,.schbar :focus-visible,
   .about:focus-visible,.cov-more summary:focus-visible,.linkbtn:focus-visible,.ext:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+  /* The map is a tab stop (Leaflet's arrow-key panning). The ring is drawn
+     over the tiles, inset, because an outline outside the box was clipped
+     and one on the container itself sits under the tile panes. */
+  #map:focus-visible{outline:none}
+  #map:focus-visible::after{content:"";position:absolute;inset:0;z-index:1000;pointer-events:none;box-shadow:inset 0 0 0 2px var(--teal)}
 
   /* Pan status. The map refetches as you drag (see refetchAt) and until that
      lands the panel still shows the PREVIOUS area's numbers — so say so, the
@@ -340,17 +369,20 @@
      only — with a mouse and hidden scrollbars nobody would find it. */
   @media(max-width:860px){
     .schbar{padding:9px 10px}
+    /* scroll-padding: a control Tab brings into view (see the focusin
+       handler) stops short of the 12% fade rather than under it. */
     .schbar .sb-filters{flex:0 0 calc(100% + 20px);max-width:calc(100% + 20px);min-width:0;margin:-5px -10px;padding:5px 10px;
-      flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;
+      flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;scroll-padding-inline:10px 12%;
       -webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent)}
     .schbar .sb-filters.end{-webkit-mask-image:none;mask-image:none}
     .schbar .sb-filters::-webkit-scrollbar{display:none}
     .schbar .sb-filters>*{flex:none}
   }
   /* Colour is PHASE and fill is SECTOR — never quality — and nothing on the
-     map said so until now. 22px up: clear of Leaflet's 14px attribution
-     strip, which it overlapped wherever the map is narrow. */
-  .schkey{position:absolute;left:12px;bottom:22px;z-index:1100;display:none;flex-wrap:wrap;gap:4px 13px;max-width:calc(100% - 24px);
+     map said so until now. 34px up: above the Mapbox wordmark that owns the
+     bottom-left corner (21px tall, 6px up), which also clears Leaflet's
+     attribution strip on the right, one or two lines tall. */
+  .schkey{position:absolute;left:12px;bottom:34px;z-index:1100;display:none;flex-wrap:wrap;gap:4px 13px;max-width:calc(100% - 24px);
     padding:7px 11px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);box-shadow:0 6px 20px rgba(0,0,0,.35);
     font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--ink-2);pointer-events:none}
   .sch-on .schkey{display:flex}
@@ -390,22 +422,15 @@
   .nbr{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);text-decoration:none;
        border:1px solid var(--line-2);padding:7px 11px;border-radius:9px;transition:border-color .15s,background .15s}
   .nbr:hover{border-color:var(--teal);background:var(--cream-deep);text-decoration:none}
-  .nbr .sc{font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;padding:2px 6px;border-radius:3px;flex:none}
+  /* The shared .band pill (sr.css), sized down to a chip's score. */
+  .nbr .sc{font-size:11px;letter-spacing:.02em;padding:2px 7px;margin:0;flex:none}
   .nbr .km{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);flex:none}
   /* Here, not in the reduce block above: that came earlier in the sheet at the
      same specificity, so these two rules' transitions won over it. */
   @media(prefers-reduced-motion:reduce){ .publink,.nbr{transition:none} }
-  .leaflet-container{background:var(--cream-deep);font-family:var(--sans)}
-  .leaflet-control-attribution{font-size:10px}
+  /* Leaflet's dark chrome (zoom bar, attribution, tooltips, popups) is
+     sr.css's; only this page's popup type is here. */
   .leaflet-popup-content{font-family:var(--sans);font-size:13.5px;color:var(--ink);margin:11px 14px}
-  .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#141B24;color:var(--ink);box-shadow:0 18px 40px rgba(0,0,0,.6)}
-  .leaflet-popup-content-wrapper{border-radius:10px;border:1px solid var(--line-2)}
-  .leaflet-container a.leaflet-popup-close-button{color:var(--ink-3)}
-  .leaflet-container a.leaflet-popup-close-button:hover{color:var(--ink)}
-  .leaflet-control-attribution{background:rgba(10,13,18,.8)!important;color:var(--ink-3)}
-  .leaflet-control-attribution a{color:var(--ink-2)}
-  .leaflet-bar a{background:#141B24;color:var(--ink);border-bottom-color:var(--line-2)}
-  .leaflet-bar a:hover{background:#1B2531;color:var(--teal)}
 
 /* Only for people who have not asked for less motion. (The reduce rule above
    came earlier in the sheet with the same specificity, so this rule used to
@@ -421,11 +446,12 @@
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a7d4a481ed8b4512a43225404078e7ab"}'></script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="site"><div class="wrap">
-<a class="wordmark" href="/"><svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>SAFEROUTE</span></a>
+<a class="wordmark" href="/"><span class="shield" aria-hidden="true"></span><span>SAFEROUTE</span></a>
 <nav class="site-nav" aria-label="Site">
-<a href="/safety/">Safety index</a>
-<a class="on" href="/check/">Map</a>
+<a href="/safety/">Safety<span class="nav-long"> index</span></a>
+<a class="on" aria-current="page" href="/check/">Map</a>
 <a href="/tonight/">Tonight</a>
 <a class="hide-sm" href="/transparency/">Transparency</a>
 <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-check&mt=8">Get the app</a>
@@ -435,7 +461,7 @@
 <!-- DOM order is head, map, pane — the order the stacked phone layout shows
      them in, so keyboard focus follows what you see there. On desktop the
      grid puts head and pane in one column with the map beside them. -->
-<main class="shell">
+<main class="shell" id="main">
   <div class="head">
     <div class="h1row">
       <h1>How safe is any address?</h1>
@@ -444,10 +470,15 @@
     <p class="lead" id="lead">Type a street, neighborhood or landmark to get its SafeRoute safety index — scored 0–100 from official police crime data.</p>
     <div class="search" role="search">
       <div class="search-row">
-        <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Search any address or place" aria-label="Search an address or neighborhood">
+        <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Search any address or place" aria-label="Search an address or neighborhood"
+               role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="ac">
         <button id="geo" type="button" title="Use my current location" aria-label="Use my current location"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.3" fill="currentColor" stroke="none"/><path d="M12 1.8v3M12 19.2v3M1.8 12h3M19.2 12h3"/></svg></button>
       </div>
-      <ul id="ac"></ul>
+      <!-- tabindex -1: a scrolling list whose items are not focusable is
+           otherwise a nameless Tab stop in Chrome. The arrow keys reach the
+           options from the search box. -->
+      <ul id="ac" role="listbox" aria-label="Matching places" tabindex="-1"></ul>
+      <p id="acstatus" class="sr-only" role="status"></p>
     </div>
   </div>
 
@@ -461,16 +492,16 @@
       <div class="sb-filters">
         <span class="sb-lbl">Schools</span>
         <div class="seg" id="sSector" role="group" aria-label="State or private">
-          <button data-v="" class="on">All</button>
-          <button data-v="state">State</button>
-          <button data-v="private">Private</button>
+          <button type="button" data-v="" class="on" aria-pressed="true">All</button>
+          <button type="button" data-v="state" aria-pressed="false">State</button>
+          <button type="button" data-v="private" aria-pressed="false">Private</button>
         </div>
         <select id="sPhase" aria-label="Phase"><option value="">Any phase</option><option>Nursery</option><option>Primary</option><option>Secondary</option></select>
         <select id="sGender" aria-label="Gender"><option value="">Any gender</option></select>
         <label class="chk" id="sBoardL"><input type="checkbox" id="sBoard"> Boarding</label>
       </div>
     </div>
-    <div id="map"></div>
+    <div id="map" role="region" aria-label="Crime map"></div>
     <!-- Schools key, on the map it explains. Shown only with the layer on. -->
     <div class="schkey" id="schkey">
       <span><i style="--c:#C77DFF"></i>Nursery</span>
@@ -507,10 +538,10 @@
       <section>
         <h2 class="h3">Reading the score</h2>
         <ul class="scale">
-          <li style="--c:#BC3B2E"><b>0–24</b>High risk</li>
-          <li style="--c:#9C5220"><b>25–49</b>Elevated</li>
-          <li style="--c:#B0703C"><b>50–74</b>Moderate</li>
-          <li style="--c:#2E8B40"><b>75–100</b>Low risk</li>
+          <li style="--c:var(--band-high)"><b>0–24</b>High risk</li>
+          <li style="--c:var(--band-elevated)"><b>25–49</b>Elevated</li>
+          <li style="--c:var(--band-moderate)"><b>50–74</b>Moderate</li>
+          <li style="--c:var(--band-low)"><b>75–100</b>Low risk</li>
         </ul>
         <p class="meta">Each place is scored for the 1&nbsp;km around it, by the same engine behind the app's walking routes. A higher index means fewer severity-weighted reported incidents. Scores are calibrated within each city, so compare places in the same city, not across cities.</p>
         <!-- Not "the same score": routes are ranked on crime exposure along the
@@ -524,7 +555,10 @@
         <p class="meta hexnote">Each hexagon is a ~180&nbsp;m block, severity-weighted; click one for its breakdown.</p>
         <ul class="key">
           <li><svg viewBox="0 0 30 18" aria-hidden="true"><circle cx="15" cy="9" r="7.5" fill="none" stroke="#1E9E8C" stroke-width="1.4" stroke-dasharray="3 3"/><circle cx="15" cy="9" r="2.6" fill="#3FD9C0" stroke="#04231E" stroke-width="1"/></svg>The address, and the 1&nbsp;km its score covers</li>
-          <li><span class="cam" aria-hidden="true">📷 <span style="color:#FF5A4D">●</span></span>Street cameras and last-24-hour 911 calls, where a city publishes them</li>
+          <!-- "Recent", not a fixed window: each city's feed has its own (a
+               day in San Francisco, a week in Seattle), and the report names
+               it (windowLabel). -->
+          <li><span class="cam" aria-hidden="true">📷 <span style="color:#FF5A4D">●</span></span>Street cameras and recent 911 calls, where a city publishes them</li>
         </ul>
       </section>
       <section id="secSchools">
@@ -603,28 +637,44 @@
     <div id="schview" class="view off" aria-live="polite"></div>
 
     <footer class="colophon">
-      <nav aria-label="More from SafeRoute">
-        <a href="/">← safe-route.app</a>
-        <a href="/safety/">Neighborhood safety index</a>
-      </nav>
       <p>Crime data from official police / open-data sources. Informational only — each score is calibrated within its own city and cannot be read against another city's.</p>
+      <nav class="footlinks" aria-label="Footer"><ul>
+<li><a href="/safety/">Safety index</a></li>
+<li><a href="/check/">Map</a></li>
+<li><a href="/tonight/">Tonight</a></li>
+<li><a href="/transparency/">Transparency</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-support/">Support</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></li>
+</ul></nav>
     </footer>
   </aside>
 </main>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 const API = 'https://saferoute-backend-w5yf.onrender.com';
-const BAND = { low:{c:'#2E8B40',t:'Low risk'}, moderate:{c:'#B0703C',t:'Moderate'}, elevated:{c:'#9C5220',t:'Elevated'}, high:{c:'#BC3B2E',t:'High risk'} };
+// Labels only: each band's colour is sr.css's --band-* and its .band pill.
+const BAND = { low:'Low risk', moderate:'Moderate', elevated:'Elevated', high:'High risk' };
+const bandOf = b => BAND[b] ? b : 'moderate';
 const CAT = { 'violent-crime':'Violent crime','sexual-offences':'Sexual offences','robbery':'Robbery','possession-of-weapons':'Weapons','burglary':'Burglary','criminal-damage-arson':'Damage & arson','public-order':'Public order','theft-from-the-person':'Theft from a person','drugs':'Drugs','anti-social-behaviour':'Anti-social behaviour','vehicle-crime':'Vehicle crime','other-theft':'Other theft','other-crime':'Other','shoplifting':'Shoplifting','bicycle-theft':'Bicycle theft' };
 const catName = c => CAT[c] || c.replace(/-/g,' ').replace(/^./,x=>x.toUpperCase());
 
-// ── "Tonight" layer: last-24h dispatch calls, where a city's feed earns it ──
-// Served by /public/recent (New Orleans only at launch — the other candidate
-// feeds failed freshness/coordinate vetting). Overlay + one panel line; it
-// NEVER touches the score. Labels come from the backend so the honest wording
-// ("911 calls police responded to", "updated nightly") lives in one place.
-const fmtAgo = m => m==null ? '' : m<90 ? `${m} min ago` : `${Math.round(m/60)} h ago`;
+// ── Recent 911 calls, where a city's dispatch feed earns it ──
+// Served by /public/recent: seven US cities, each with its OWN window — a day
+// in San Francisco, two in Detroit, three in Las Vegas, seven in Seattle, whose
+// feed runs days behind. The line and the tooltips say that window, as
+// /tonight/ does, and say "across {city}": the feed is city-wide (the same
+// count at any two points), not a count of calls near the address. Overlay +
+// one panel line; it NEVER touches the score. Labels come from the backend so
+// the honest wording ("calls police responded to", "updated nightly") lives
+// in one place.
+// Days carry one decimal, as on /tonight/: Seattle's newest call can sit 6.7
+// days into its week, and "7 days ago" would read as a window with nothing in it.
+const ago = m => m==null ? '' : m<90 ? `${m} min ago` : m<2880 ? `${Math.round(m/60)} h ago` : `${(m/1440).toFixed(1).replace(/\.0$/,'')} days ago`;
+// Hours up to two days, because "2 days" beside a city counted in hours reads
+// as a different kind of measurement when it is the same one.
+const windowLabel = h => h==null ? '' : h<=48 ? `last ${h} hrs` : h%24===0 ? `last ${h/24} days` : `last ${h} hrs`;
+const cap1 = s => s ? s[0].toUpperCase() + s.slice(1) : s;
 async function fetchRecent(lat,lng,reqId){
   if(recentLayer){ map.removeLayer(recentLayer); recentLayer=null; }
   const slot=document.getElementById('recent'); if(slot) slot.innerHTML='';
@@ -637,14 +687,42 @@ async function fetchRecent(lat,lng,reqId){
     if(d.available===false){
       // No-answer is not a quiet night: say we couldn't load, never show
       // an empty map that implies nothing happened.
-      slot.innerHTML=`<p class="src" style="margin-top:6px">Last 24 hrs: couldn't load right now.</p>`;
+      slot.innerHTML=`<p class="src" style="margin-top:6px">Recent calls: couldn't load right now.</p>`;
       return;
     }
-    slot.innerHTML=`<div class="meta" style="margin-top:6px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#BC3B2E;margin-right:6px"></span><b>Last 24 hrs:</b> ${fmt(d.count)} ${esc(d.label)} nearby${d.cadence?` <span style="color:var(--ink-3)">(${esc(d.cadence)})</span>`:''}</div>`;
-    if(!d.incidents || !d.incidents.length) return;
-    const dots=d.incidents.map(i=>
-      L.circleMarker([i.lat,i.lng],{radius:5,color:'#FF5A4D',weight:1.5,fillColor:'#FF8A7D',fillOpacity:.9,className:'recent-dot'})
-       .bindTooltip(`${catName(i.cat)} · ${fmtAgo(i.minutesAgo)}`,{direction:'top',offset:[0,-6]}));
+    const inc = d.incidents || [];
+    const ages = inc.map(i=>i.minutesAgo).filter(Number.isFinite);
+    const newest = d.freshestMinutesAgo ?? (ages.length ? Math.min(...ages) : null);
+    const oldest = ages.length ? Math.max(...ages) : null;
+    const where = d.city ? ` across ${esc(d.city)}` : '';
+    // The same reading as /tonight/, so a city says the same thing on both
+    // tabs. `count` is every call in the window, `shown` the dots (at most
+    // 800), `capped` that the map holds fewer than `count`, and `countIsFloor`
+    // that the city's feed stopped at its row limit, so `count` is a lower
+    // bound. Only a floor earns a "+"; a capped exact count says how many of
+    // it are drawn. An older backend sent the dots as `count` with no flags,
+    // so there 800 dots, or dots stopping well short of the window, mean the
+    // window held more: a floor, with the span the dots actually cover.
+    const told = typeof d.capped === 'boolean';
+    const shown = Number.isFinite(d.shown) ? d.shown : inc.length;
+    const capped = told ? d.capped
+      : oldest!=null && (d.count >= 800 || (d.windowHours && oldest < d.windowHours*60*0.9));
+    const floor = told ? d.countIsFloor === true : capped;
+    const win = `<b>${cap1(windowLabel(d.windowHours))}:</b> ${fmt(d.count)}${floor ? '+' : ''} ${esc(d.label)}${where}`;
+    const head = !capped ? win
+      : !floor ? `${win}, the latest ${fmt(shown)} on the map`
+      : `${win}${shown < d.count ? `, the latest ${fmt(shown)} on the map` : ''}${newest!=null && oldest!=null ? `, ${ago(newest).replace(/ ago$/,'')} to ${ago(oldest)}` : ''}`;
+    slot.innerHTML=`<div class="meta" style="margin-top:6px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ember);margin-right:6px"></span>${head}${d.cadence?` <span style="color:var(--ink-3)">(${esc(d.cadence)})</span>`:''}</div>`;
+    if(!inc.length) return;
+    const dots=inc.map(i=>{
+      const dot=L.circleMarker([i.lat,i.lng],{radius:5,color:'#FF5A4D',weight:1.5,fillColor:'#FF8A7D',fillOpacity:.9,className:'recent-dot'})
+        .bindTooltip(`${catName(i.cat)} · ${ago(i.minutesAgo)}`,{direction:'top',offset:[0,-6]});
+      // A tooltip makes the dot a nameless Tab stop in Chrome (see the
+      // coverage dots below): up to 800 of them between the map and its zoom
+      // control. The line above is their text equivalent.
+      dot.on('add',()=>{ const el=dot.getElement(); if(el){ el.setAttribute('tabindex','-1'); el.setAttribute('aria-hidden','true'); } });
+      return dot;
+    });
     recentLayer=L.layerGroup(dots).addTo(map);
   }catch{ /* overlay only — never break the main lookup */ }
 }
@@ -670,11 +748,21 @@ async function fetchCameras(lat,lng,reqId){
     }
     if(!d.cameras || !d.cameras.length) return;
     if(slot) slot.innerHTML=`<div class="meta" style="margin-top:6px"><span style="display:inline-block;width:9px;height:9px;border-radius:2px;border:1.5px solid #2E6B8A;background:#fff;margin-right:6px"></span><b>Street cameras:</b> ${fmt(d.count)} nearby — click a pin for ${d.stream?'a live view':'the latest still'} <span style="color:var(--ink-3)">(${esc(d.attribution)})</span></div>`;
-    const ico=L.divIcon({className:'cam-pin',html:'📷',iconSize:[18,18],iconAnchor:[9,9],popupAnchor:[0,-8]});
+    // The glyph is decoration: each pin is named by its title (the camera).
+    const ico=L.divIcon({className:'cam-pin',html:'<span aria-hidden="true">📷</span>',iconSize:[18,18],iconAnchor:[9,9],popupAnchor:[0,-8]});
     // London's cameras carry ~10s MP4 clips (video:true per camera) → a
-    // muted looping player. Elsewhere a still — and where the upstream
-    // refreshes at second scale (NYC), the popupopen handler below re-polls
-    // the still every few seconds, which reads as slow-motion live.
+    // muted looping player. Elsewhere a still, re-polled while its popup is
+    // open ONLY where the network refreshes in under two minutes ("about
+    // every minute": New York, Las Vegas), and at that pace. It used to be
+    // every 5s for every still, written for a second-scale NYC feed that never
+    // shipped: the proxy serves the same frame for about a minute, and the
+    // polls spent the visitor's 30-a-minute limit, so a popup left open for
+    // 2.5 minutes made their next lookup fail. Toronto and Vancouver ("every
+    // few minutes") are never re-polled. A numeric refreshSeconds from the
+    // backend, if it sends one, wins over the wording.
+    const stillRefreshMs = Number.isFinite(d.refreshSeconds)
+      ? (d.refreshSeconds < 120 ? Math.max(30, d.refreshSeconds) * 1000 : 0)
+      : /\bevery minute\b/i.test(d.cadence || '') ? 60000 : 0;
     const MH=Math.max(120, Math.min(222, map.getSize().y - 120));
     const VSTYLE='object-fit:cover;border-radius:8px;margin-top:6px;background:#111;display:block';
     const still=c=>`${API}/public/camera-image?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}`;
@@ -687,7 +775,7 @@ async function fetchCameras(lat,lng,reqId){
       ? `<video class="campop-media" data-stream="${esc(c.streamUrl)}" width="272" height="${MH}" style="${VSTYLE}" autoplay muted playsinline poster="${still(c)}"></video>`
       : c.video
       ? `<video class="campop-media" width="272" height="${MH}" style="${VSTYLE}" autoplay muted loop playsinline poster="${still(c)}" src="${API}/public/camera-video?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}"></video>`
-      : `<img class="campop-media" data-refresh="1" src="${still(c)}" width="272" height="${MH}" style="object-fit:cover;border-radius:8px;margin-top:6px;background:#e8e4da" alt="Latest still from ${esc(c.name)}">`;
+      : `<img class="campop-media"${stillRefreshMs ? ` data-refresh="${stillRefreshMs}"` : ''} src="${still(c)}" width="272" height="${MH}" style="object-fit:cover;border-radius:8px;margin-top:6px;background:#e8e4da" alt="Latest still from ${esc(c.name)}">`;
     const kind=c=> c.streamUrl ? 'Live video' : (c.video ? 'Live clip' : 'Latest still');
     const credit=c=> c.streamUrl ? (d.streamAttribution || d.attribution) : d.attribution;
     const pins=d.cameras.map(c=>
@@ -738,6 +826,7 @@ const REGION = /^Europe\//.test(TZ) ? 'gb'
   : /^America\/(Mexico_City|Monterrey|Merida|Cancun|Matamoros|Chihuahua|Ciudad_Juarez|Ojinaga|Mazatlan|Bahia_Banderas|Hermosillo|Tijuana)$/.test(TZ) ? 'mx'
   : /^(America|US|Canada)\//.test(TZ) ? 'us' : 'both';
 map.fitBounds(VIEWS[IS_SCHOOLS ? 'schools' : REGION], { padding: [16, 16] });
+const START_ZOOM = map.getZoom();
 
 // Pan status pill — mirrors the app's "Updating area…" caption. Built with DOM
 // calls (not innerHTML) for the same reason as the publink: no URL-shaped
@@ -799,7 +888,15 @@ function schPasses(o) {
   if (schState.board  && !o.boarding)  return false;
   return true;
 }
-const schCanvas = L.canvas({ padding: 0.3 });
+// School pins are SVG in their own pane ABOVE the heatmap (Leaflet's overlay
+// pane is z-index 400). On the shared overlay pane they were on a canvas,
+// which Leaflet stacks under the hexes' SVG, so a pin inside a shaded block
+// could not be clicked or hovered — the block's popup opened instead (4-7 of
+// the 13 schools within 1 km of Peckham). A canvas in a higher pane is no
+// fix: it is one element the size of the map and would take every hex click.
+// SVG catches the pointer only where a pin is drawn.
+map.createPane('schools').style.zIndex = 450;
+const schRenderer = L.svg({ pane: 'schools', padding: 0.3 });
 
 const schBtn = document.createElement('button');
 schBtn.type = 'button';
@@ -973,11 +1070,11 @@ function showSchoolPane(o) {
   row('Trust', trustName(o.trust));
 
   view.innerHTML = `
-    <button class="back" id="schback"></button>
-    <div class="place">${schEsc(o.name)}<small>${schEsc([o.postcode, o.ward].filter(Boolean).join(' · '))}</small></div>
+    <button type="button" class="back" id="schback"></button>
+    <h2 class="place">${schEsc(o.name)}<small>${schEsc([o.postcode, o.ward].filter(Boolean).join(' · '))}</small></h2>
     <div>${schRatingHtml(o)}</div>
     <div class="divider"></div>
-    <div><p class="h3">Details</p>${kv.join('')}</div>
+    <div><h3 class="h3">Details</h3>${kv.join('')}</div>
     ${o.censusDate && o.pupils ? `<p class="src">Pupil numbers as at ${schEsc(ukDate(o.censusDate))}.</p>` : ''}
     <a class="ext" href="https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/${o.urn}" target="_blank" rel="noopener">Full DfE record ↗</a>
     <p class="src">URN ${o.urn} · DfE Get Information About Schools and Ofsted management information, Open Government Licence v3.0.</p>`;
@@ -1076,7 +1173,7 @@ async function drawSchools() {
         const priv = o.sector === 'private';
         const c = schColour(schStage(o));
         const m = L.circleMarker([lat, lng], {
-          renderer: schCanvas, radius: 4, color: c, weight: priv ? 2 : 1,
+          renderer: schRenderer, radius: 4, color: c, weight: priv ? 2 : 1,
           fillColor: c, fillOpacity: priv ? 0 : .55, opacity: .95,
         });
         // Details go in the right-hand pane, not a popup. The popup's only link
@@ -1084,6 +1181,10 @@ async function drawSchools() {
         // same map — a circular link where the details should have been.
         m.bindTooltip(schEsc(o.name), { className: 'schtip', direction: 'top', offset: [0, -5] });
         m.on('click', () => showSchoolPane(o));
+        // As an SVG path with a tooltip, each pin would be a nameless Tab stop
+        // (see the coverage dots below) — up to ~740 in central London. They
+        // are a pointer shortcut; the pane is where a school is read.
+        m.on('add', () => { const el = m.getElement(); if (el) { el.setAttribute('tabindex', '-1'); el.setAttribute('aria-hidden', 'true'); } });
         if (o.urn === schSelected) selectedMarker = m; else g.addLayer(m);
       }
     }
@@ -1132,9 +1233,13 @@ function openSchools() {
 }
 
 // ── schools controls ────────────────────────────────────────────────────────
+// aria-pressed, like the map's own Heatmap and Schools pills: .on alone told a
+// screen reader nothing about which of All / State / Private is chosen.
 document.getElementById('sSector').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
-  [...document.getElementById('sSector').children].forEach(x => x.classList.toggle('on', x === b));
+  [...document.getElementById('sSector').children].forEach(x => {
+    x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+  });
   schState.sector = b.dataset.v; drawSchools();
 });
 document.getElementById('sPhase').addEventListener('change', e => { schState.phase = e.target.value; drawSchools(); });
@@ -1154,6 +1259,12 @@ function syncSbFade() {
 }
 sbFilters?.addEventListener('scroll', syncSbFade, { passive: true });
 addEventListener('resize', syncSbFade);
+// Tab moves focus along that row without scrolling it: at 390px the Gender
+// select took focus with 8px of itself on screen. Bring the whole control
+// (the segmented group, the labelled checkbox) into view.
+sbFilters?.addEventListener('focusin', e => {
+  (e.target.closest('.sb-filters > *') || e.target).scrollIntoView({ inline: 'nearest', block: 'nearest' });
+});
 
 function showUpdating(on){
   mapStatus.classList.toggle('on', on);
@@ -1166,14 +1277,30 @@ function showUpdating(on){
 const MB_TOKEN = ['pk.eyJ1IjoibWluaGFqazIxIiwiYSI','6ImNtdGJjc2IzYjA5ZDUyeXE2bW1ma','nA3NnkifQ.E1GM4huWJAv7fWwjKir4BA'].join('');
 L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}{r}?access_token=' + MB_TOKEN, {
   tileSize:512, zoomOffset:-1, maxZoom:19,
-  attribution:'© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://www.mapbox.com/map-feedback/">Improve this map</a>',
+  // Final addresses, as on /tonight/ and the hub maps: the about/maps/ and
+  // map-feedback/ forms Mapbox's docs print both 301.
+  attribution:'© <a href="https://www.mapbox.com/about/maps">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://apps.mapbox.com/feedback/">Improve this map</a>',
 }).addTo(map);
+// Mapbox's terms require its wordmark on any map drawn from its tiles. The
+// image, size and placement live in sr.css (.mapbox-logo); this only adds it.
+L.Control.MapboxLogo = L.Control.extend({
+  options: { position: 'bottomleft' },
+  onAdd: function () {
+    var a = L.DomUtil.create('a', 'mapbox-logo');
+    a.href = 'https://www.mapbox.com/'; a.target = '_blank'; a.rel = 'noopener';
+    a.setAttribute('aria-label', 'Mapbox');
+    L.DomEvent.disableClickPropagation(a);
+    return a;
+  }
+});
+new L.Control.MapboxLogo().addTo(map);
 // Leaflet measures the container on init; inside a grid that's still resolving,
 // invalidateSize once layout settles fixes a clipped/greyed map.
 if(window.ResizeObserver){ new ResizeObserver(()=>map.invalidateSize()).observe(document.getElementById('map')); }
 setTimeout(()=>map.invalidateSize(), 200);
 let incLayer=null, ringLayer=null, ctrLayer=null, recentLayer=null, camLayer=null;
-// Re-poll fast-refreshing stills (NYC) while their popup is open.
+// Re-poll a still whose network refreshes about every minute while its popup
+// is open (see stillRefreshMs).
 let camRefreshTmr=null;
 
 // Auto-update on pan/zoom (like the app): when the user moves the map, re-fetch
@@ -1220,9 +1347,10 @@ map.on('popupopen', e => {
     });
   }
   const img = e.popup.getElement()?.querySelector('img.campop-media[data-refresh]');
-  if(!img) return;
+  const every = img ? +img.dataset.refresh : 0;
+  if(!(every > 0)) return;
   const base = img.src;
-  camRefreshTmr = setInterval(()=>{ img.src = base + (base.includes('?')?'&':'?') + 't=' + Date.now(); }, 5000);
+  camRefreshTmr = setInterval(()=>{ img.src = base + (base.includes('?')?'&':'?') + 't=' + Date.now(); }, every);
 });
 map.on('popupclose', () => {
   if(camRefreshTmr){ clearInterval(camRefreshTmr); camRefreshTmr=null; }
@@ -1282,9 +1410,10 @@ about.addEventListener('click', ()=>{
 });
 
 // ── measured header height ──
-// sr.css's header is one line (61px) on most screens but wraps to two on the
-// narrowest phones. --hdr is its real height, used to keep a scrolled-to
-// pane's "Back" clear of it (aside's scroll-margin-top).
+// sr.css's header is one 61px row at every width now, but it once wrapped to
+// two on the narrowest phones, so --hdr is measured rather than assumed. It
+// keeps a scrolled-to pane's "Back" clear of the header (aside's
+// scroll-margin-top).
 function setHdr(){
   document.documentElement.style.setProperty('--hdr', (document.querySelector('header.site')?.offsetHeight||61)+'px');
 }
@@ -1293,53 +1422,167 @@ addEventListener('resize', setHdr);
 if(window.ResizeObserver && document.querySelector('header.site')) new ResizeObserver(setHdr).observe(document.querySelector('header.site'));
 
 // ── autocomplete ──
+// A combobox in the ARIA sense: #q owns the #ac listbox (aria-controls,
+// aria-expanded), the arrow keys move aria-activedescendant through its
+// options while focus stays in the box, and #acstatus says how many places
+// matched, or that none did. The options were bare links with no href: no
+// screen reader could reach them, and nothing said a list had appeared.
+//
+// The list always belongs to the text in the box. Any edit empties it at
+// once, and every search carries a sequence number so a slow reply for "Bri"
+// can never repaint the list over "Brixton". Without that, Enter after six
+// Backspaces, or after Escape, opened a place the box no longer said.
+const acStatus = $('#acstatus');
+let acSeq = 0;
+const NO_SEARCH = 'Search is unavailable right now — try again in a moment.';
+const noMatch = t => `No places found for “${t}” — try a street, postcode or neighborhood.`;
+function clearAc(){
+  ac.innerHTML=''; acItems=[]; acIdx=-1;
+  q.setAttribute('aria-expanded','false'); q.removeAttribute('aria-activedescendant');
+}
+// A line in the list that is not a choice (no match, search down, "pick
+// one"). aria-hidden: #acstatus says it to a screen reader.
+function acLine(text){
+  const li=document.createElement('li'); li.className='acnote'; li.setAttribute('aria-hidden','true'); li.textContent=text;
+  return li;
+}
+// No match and a failed search used to leave the box silent, hero handoffs
+// included; the homepage's own box says "No match".
+function acNote(text){ clearAc(); ac.appendChild(acLine(text)); fitAc(); acStatus.textContent=text; }
 q.addEventListener('input', ()=>{
-  clearTimeout(tmr); const val=q.value.trim();
-  if(val.length<2){ ac.innerHTML=''; return; }
-  tmr=setTimeout(()=>geocode(val), 220);
+  clearTimeout(tmr); acSeq++; clearAc();
+  const val=q.value.trim();
+  if(val.length<2){ acStatus.textContent=''; return; }
+  tmr=setTimeout(()=>suggest(val), 220);
 });
 q.addEventListener('keydown', e=>{
-  if(!acItems.length) return;
-  if(e.key==='ArrowDown'){e.preventDefault(); acIdx=Math.min(acIdx+1,acItems.length-1); paintAc();}
-  else if(e.key==='ArrowUp'){e.preventDefault(); acIdx=Math.max(acIdx-1,0); paintAc();}
-  else if(e.key==='Enter'){e.preventDefault(); pick(acItems[acIdx>=0?acIdx:0]);}
-  else if(e.key==='Escape'){ ac.innerHTML=''; }
+  const n=acItems.length;
+  if(e.key==='ArrowDown'){ if(!n) return; e.preventDefault(); setActive(Math.min(acIdx+1,n-1)); }
+  else if(e.key==='ArrowUp'){ if(!n) return; e.preventDefault(); setActive(Math.max(acIdx-1,-1)); }
+  else if(e.key==='Enter'){
+    e.preventDefault();
+    // With a list: the arrow-key row, or the first (which #acstatus names).
+    // Without one — typed faster than the list came, or after Escape — search
+    // what the box says now and show the list; never open a place unseen.
+    if(n){ pick(acItems[acIdx>=0?acIdx:0]); return; }
+    const val=q.value.trim();
+    if(val.length>=2){ clearTimeout(tmr); suggest(val); }
+  }
+  else if(e.key==='Escape'){
+    // First Escape closes the list and keeps the text; with the list already
+    // closed, the search box's own Escape clears it.
+    if(ac.childElementCount){ e.preventDefault(); clearAc(); acStatus.textContent=''; }
+  }
 });
-document.addEventListener('click', e=>{ if(!$('.search').contains(e.target)) ac.innerHTML=''; });
+// A click on an option must not take focus out of the box first (that blur
+// would close the list before the click landed).
+ac.addEventListener('mousedown', e=>e.preventDefault());
+// Focus moving on (Tab, a click elsewhere) closes the list. Checked after the
+// move, so a window losing focus, which leaves #q the active element, doesn't.
+q.addEventListener('blur', ()=>setTimeout(()=>{ if(document.activeElement!==q) clearAc(); }, 0));
+document.addEventListener('click', e=>{ if(!$('.search').contains(e.target)) clearAc(); });
 
-async function geocode(val){
-  try{
-    const r = await fetch(`${API}/public/search?q=${encodeURIComponent(val)}`);
-    if(!r.ok) throw 0;
-    const j = await r.json();
-    acItems = j.results||[]; acIdx=-1; paintAc();
-  }catch{ ac.innerHTML=''; }
+// Ranked around what the map shows, which the backend passes to Mapbox as
+// proximity: the visitor's time-zone view before a search (so the country
+// they are probably in), the area they are looking at after one. Not while
+// the map still shows the wide both-sides-of-the-Atlantic start view, whose
+// centre is open sea.
+function nearParam(){
+  if(REGION==='both' && !IS_SCHOOLS && !lastCenter && map.getZoom() <= START_ZOOM) return '';
+  const c=map.getCenter();
+  return `&lat=${c.lat.toFixed(3)}&lng=${c.lng.toFixed(3)}`;
 }
-function paintAc(){
-  ac.innerHTML='';
+// One search, newest wins. Resolves to { items } ([] for no match),
+// { failed } or { stale } when a later search has overtaken it.
+async function searchPlaces(val){
+  const seq=++acSeq;
+  let items=null;
+  try{
+    const r=await fetch(`${API}/public/search?q=${encodeURIComponent(val)}${nearParam()}`);
+    if(r.ok) items=((await r.json()).results||[]).filter(x=>x && Number.isFinite(x.lat) && Number.isFinite(x.lng));
+  }catch{}
+  if(seq!==acSeq) return { stale:true };
+  return items ? { items } : { failed:true };
+}
+async function suggest(val){
+  const res=await searchPlaces(val);
+  if(res.stale) return;
+  if(res.failed) return acNote(NO_SEARCH);
+  if(!res.items.length) return acNote(noMatch(val));
+  acItems=res.items; paintAc();
+}
+function paintAc(prompt){
+  ac.innerHTML=''; acIdx=-1; q.removeAttribute('aria-activedescendant');
+  if(prompt) ac.appendChild(acLine(prompt));
   acItems.forEach((r,i)=>{
-    const li=document.createElement('li'), a=document.createElement('a');
-    a.className = i===acIdx?'on':'';
-    a.innerHTML = `<span class="nm">${esc(r.name)}</span>${r.address?`<span class="ad">${esc(r.address)}</span>`:''}`;
-    a.onclick = ()=>pick(r);
-    li.appendChild(a); ac.appendChild(li);
+    const li=document.createElement('li');
+    li.id='ac-opt-'+i; li.setAttribute('role','option'); li.setAttribute('aria-selected','false');
+    li.innerHTML = `<span class="nm">${esc(r.name)}</span>${r.address?`<span class="ad">${esc(r.address)}</span>`:''}`;
+    li.addEventListener('click', ()=>pick(r));
+    ac.appendChild(li);
   });
-  // Keep the whole list on screen: it drops below the search box, and on a
-  // short laptop or a scrolled phone a fixed 340px ran off the bottom.
+  q.setAttribute('aria-expanded', acItems.length ? 'true' : 'false');
+  fitAc();
+  const n=acItems.length, first=acItems[0];
+  acStatus.textContent = `${prompt ? prompt + ' ' : ''}${n} result${n===1?'':'s'}. The first is ${first.name}${first.address?', '+first.address:''}. Up and down arrows choose; Enter opens.`;
+}
+// Keep the whole list on screen: it drops below the search box, and on a
+// short laptop or a scrolled phone a fixed 340px ran off the bottom.
+function fitAc(){
   const room = innerHeight - q.getBoundingClientRect().bottom - 16;
   ac.style.maxHeight = Math.max(150, Math.min(340, room)) + 'px';
-  // The rebuild resets the list to its top, so bring the arrow-key row into
-  // view — scrolling the list only, never the page.
-  const on = ac.querySelector('a.on')?.parentElement;
-  if (on) ac.scrollTop = Math.max(0, on.offsetTop + on.offsetHeight - ac.clientHeight);
 }
+function setActive(i){
+  acIdx=i;
+  ac.querySelectorAll('[role="option"]').forEach((li,k)=>{ li.classList.toggle('on', k===i); li.setAttribute('aria-selected', k===i ? 'true' : 'false'); });
+  const li = i>=0 ? document.getElementById('ac-opt-'+i) : null;
+  if(!li){ q.removeAttribute('aria-activedescendant'); return; }
+  q.setAttribute('aria-activedescendant', li.id);
+  // Bring the arrow-key row into view — scrolling the list only, never the page.
+  if(li.offsetTop < ac.scrollTop) ac.scrollTop = li.offsetTop;
+  else if(li.offsetTop + li.offsetHeight > ac.scrollTop + ac.clientHeight) ac.scrollTop = li.offsetTop + li.offsetHeight - ac.clientHeight;
+}
+
+// ── a query handed over in the URL (#q= from the homepage hero, ?q=) ──
+// The hero promised an answer, not a list — but not a guess either. It used
+// to take the geocoder's first hit, and "Times Square" from a New York
+// visitor opened Newcastle upon Tyne, ranked above five US ones. So the
+// first hit is taken only when no other result shares its name somewhere
+// else, or when it is the only place of that name in the visitor's own
+// country (by time zone, see REGION): a London visitor still lands on a UK
+// Times Square, as a typed search would. Otherwise the list is shown, with a
+// line that says why.
+const COUNTRY = { 'United Kingdom':'gb', 'United States':'us', 'Canada':'ca', 'Mexico':'mx' };
+const HOME = { gb:['gb'], us:['us','ca'], mx:['mx'] }[REGION] || [];
+const countryOf = r => COUNTRY[String(r.address||'').split(',').pop().trim()] || null;
+const placeKey = s => String(s||'').toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+function unambiguous(items){
+  const top=items[0], k=placeKey(top.name);
+  const twins=items.filter(r=>r!==top && placeKey(r.name)===k && distKm(r.lat,r.lng,top.lat,top.lng)>2);
+  if(!twins.length) return top;
+  const home=[top,...twins].filter(r=>HOME.includes(countryOf(r)));
+  return home.length===1 && home[0]===top ? top : null;
+}
+async function bootSearch(text){
+  q.value=text;
+  if(text.length<2) return;
+  const res=await searchPlaces(text);
+  if(res.stale) return;
+  if(res.failed) return acNote(NO_SEARCH);
+  if(!res.items.length) return acNote(noMatch(text));
+  const top=unambiguous(res.items);
+  if(top) return pick(top, {boot:true});
+  acItems=res.items; paintAc(`Several places match “${text}” — pick the one you meant.`);
+}
+
 const STACKED = '(max-width: 860px)';
 // On a touch screen, drop the keyboard once a place is chosen — it otherwise
 // covers the very map and score the pick was for. Only there: blurring for a
 // keyboard user on a narrow desktop window dropped their focus to <body>.
 function pick(r, opts){
   if(!r) return;
-  ac.innerHTML=''; q.value=r.name;
+  clearTimeout(tmr); acSeq++; clearAc(); acStatus.textContent='';
+  q.value=r.name;
   if(matchMedia('(hover: none) and (pointer: coarse)').matches) q.blur();
   lookup(r.lat, r.lng, r.name, r.address, opts);
 }
@@ -1463,12 +1706,15 @@ async function lookup(lat, lng, name, address, opts = {}){
   document.getElementById('side').scrollTop = 0;   // a new report starts at its top (a no-op on phones)
   revealTool();
   panel.innerHTML = checkingHtml(name);
-  flyTo(lat,lng);
+  // flyTo sets suppressMove for the move it starts. If it throws before one
+  // starts (a hand-edited ?lat=abc gave it NaN), nothing would ever clear the
+  // flag and the next real pan would be swallowed — so finally clears it.
+  let moved = false;
   try{
+    flyTo(lat,lng); moved = true;
     const r = await fetch(`${API}/public/area?lat=${lat}&lng=${lng}`);
     if(r.status===429){ panel.innerHTML=`<p class="note">You're checking a lot of places quickly — give it a few seconds and try again.</p>`; syncBack(); return; }
-    if(!r.ok) throw 0;
-    const d = await r.json();
+    const d = await readArea(r);
     if(reqId!==lastReqId) return; // a newer search superseded this
     lastCenter=[lat,lng]; lastName=name; // so a later pan compares/labels correctly
     render(d, name, address);
@@ -1479,20 +1725,58 @@ async function lookup(lat, lng, name, address, opts = {}){
     // anchoring then held the view at the end as the report grew, with the
     // map scrolled off the top. Moves nothing that is already in place.
     revealTool();
-    if(d.covered){ drawHex(d); addPubLink(lat, lng, reqId); }
+    if(hasScore(d)){ drawHex(d); addPubLink(lat, lng, reqId); } else clearArea();
     fetchRecent(lat, lng, reqId);
     fetchCameras(lat, lng, reqId);
   }catch{
     if(reqId===lastReqId){ panel.innerHTML=`<p class="note">Something went wrong looking that up. Please try again.</p>`; syncBack(); }
+  }finally{
+    if(!moved) suppressMove=false;
   }
+}
+
+// /public/area has three answers. 200 covered:true is a score; 200
+// covered:false means SafeRoute holds no crime data for the place. A 503 with
+// available:false means it covers the place but could not load it just now —
+// data.police.uk throttling a tile, say — which used to arrive as
+// covered:false and tell a Camden Town visitor there was no data there.
+// Anything else is an error.
+async function readArea(r){
+  if(r.ok) return r.json();
+  if(r.status===503){ const j = await r.json().catch(()=>null); if(j && j.available===false) return j; }
+  throw 0;
+}
+const hasScore = d => d.covered && d.available!==false;
+// A place with no score keeps no heatmap: the last place's hexes, ring and
+// marker would otherwise sit beside a pane saying there is no data.
+function clearArea(){
+  for(const l of [incLayer, ringLayer, ctrLayer]) if(l) map.removeLayer(l);
+  incLayer = ringLayer = ctrLayer = null;
 }
 
 // Each app link has its own ct — header web-check, pre-search web-check-empty,
 // report web-check-result, uncovered web-check-uncovered — so App Store
 // Connect can tell the placements apart.
 function render(d, name, address){
+  const title = `<h2 class="place">${esc(name)}${address?`<small>${esc(address)}</small>`:''}</h2>`;
+  if(d.available===false){
+    // A fact about the moment, not the place, so never the coverage copy
+    // below. 'truncated' (the source had more rows than one pull may take,
+    // refused because a partial count reads safer than it is) gets the same
+    // answer on a retry, so only 'upstream' is offered one.
+    const retry = d.retryable !== false;
+    panel.innerHTML = `${title}
+      <p class="note">${retry
+        ? `Couldn't load crime data for this spot right now — try again in a moment.`
+        : `Couldn't load all the crime reported around this spot: there is more than SafeRoute can fetch at once, and a partial count would read safer than it is, so there is no score here.`}</p>
+      ${retry ? `<button type="button" class="linkbtn" id="retryArea">Try again</button>` : ''}`;
+    const at = Number.isFinite(d.lat) && Number.isFinite(d.lng) ? [d.lat, d.lng] : lastCenter;
+    if(at) $('#retryArea')?.addEventListener('click', ()=>lookup(at[0], at[1], name, address));
+    syncBack();
+    return;
+  }
   if(!d.covered){
-    panel.innerHTML = `<div class="place">${esc(name)}${address?`<small>${esc(address)}</small>`:''}</div>
+    panel.innerHTML = `${title}
       <!-- "most of the UK", not "the UK": a few forces (Greater Manchester and
            Gloucestershire today) publish no street-level crime to data.police.uk,
            so a real UK address can legitimately land here. Saying "the UK" told
@@ -1504,17 +1788,17 @@ function render(d, name, address){
     syncBack();
     return;
   }
-  const b = BAND[d.band]||BAND.moderate;
+  const b = bandOf(d.band);
   const cats = (d.breakdown||[]).slice().sort((a,c)=>c.count-a.count).slice(0,5);
   const maxCat = Math.max(1,...cats.map(c=>c.count));
   const tod = d.timeOfDayIsRealData && (d.timeOfDay||[]).some(x=>x>0) ? d.timeOfDay : null;
   const span = windowPhrase(d.windowDays);
   const maxTod = tod?Math.max(...tod):1;
   panel.innerHTML = `
-    <div class="place">${esc(name)}${address?`<small>${esc(address)}</small>`:''}</div>
+    ${title}
     <div class="scorebox">
-      <span class="score" style="color:${b.c}">${d.safetyScore}<span class="of">\u002F100</span></span>
-      <span class="band" style="background:${b.c}">${b.t}</span>
+      <span class="score" style="color:var(--band-${b})">${d.safetyScore}<span class="of">\u002F100</span></span>
+      <span class="band ${b}">${BAND[b]}</span>
     </div>
     <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported ${esc(d.reportedTo||'to police')} within 1&nbsp;km${span?` over ${span}${d.crimeDate?` to ${monthName(d.crimeDate)}`:''}`:d.crimeDate?` in the data through ${monthName(d.crimeDate)}`:''} — a higher index means fewer severity-weighted reported incidents. ${d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
     <div id="pub"></div>
@@ -1522,8 +1806,8 @@ function render(d, name, address){
     <div id="recent"></div>
     <div id="cams"></div>
     <div class="divider"></div>
-    ${cats.length?`<div><p class="h3">What's reported here</p>${cats.map(c=>`<div class="cat"><span class="bar" style="width:${Math.round(c.count/maxCat*46)+8}px"></span><span class="lbl">${catName(c.category)}</span><span class="n">${fmt(c.count)}</span></div>`).join('')}</div>`:''}
-    ${tod?`<div class="divider"></div><div><p class="h3">When it happens</p><div class="todwrap">${[['Weekday',tod.slice(0,3)],['Weekend',tod.slice(3,6)]].map(g=>`<div class="todgrp"><div class="tod">${g[1].map(v=>`<div class="b" style="height:${Math.max(3,Math.round(v/maxTod*50))}px"></div>`).join('')}</div><div class="tod-x">${TOD3.map(t=>`<span>${t}</span>`).join('')}</div><div class="todlbl">${g[0]}</div></div>`).join('')}</div><p class="tiny">Severity-weighted share of reported incidents by time of day.</p></div>`:''}
+    ${cats.length?`<div><h3 class="h3">What's reported here</h3>${cats.map(c=>`<div class="cat"><span class="bar" style="width:${Math.round(c.count/maxCat*46)+8}px"></span><span class="lbl">${catName(c.category)}</span><span class="n">${fmt(c.count)}</span></div>`).join('')}</div>`:''}
+    ${tod?`<div class="divider"></div><div><h3 class="h3">When it happens</h3><div class="todwrap">${[['Weekday',tod.slice(0,3)],['Weekend',tod.slice(3,6)]].map(g=>`<div class="todgrp"><div class="tod">${g[1].map(v=>`<div class="b" style="height:${Math.max(3,Math.round(v/maxTod*50))}px"></div>`).join('')}</div><div class="tod-x">${TOD3.map(t=>`<span>${t}</span>`).join('')}</div><div class="todlbl">${g[0]}</div></div>`).join('')}</div><p class="tiny">Severity-weighted share of reported incidents by time of day.</p></div>`:''}
     <div class="divider"></div>
     <p class="src">${esc(d.dataSource||'Police open data')}${d.crimeDate?` · through ${monthName(d.crimeDate)}`:''}. Locations are anonymised by the source. Informational only.</p>
     <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-check-result&mt=8">Route here safely with the app</a>`;
@@ -1561,13 +1845,16 @@ async function refetchAt(lat, lng){
       fetch(`${API}/public/area?lat=${lat}&lng=${lng}`),
       fetch(`${API}/public/reverse?lat=${lat}&lng=${lng}`).then(x=>x.ok?x.json():null).catch(()=>null)
     ]);
-    if(r.status===429 || !r.ok) return;      // stay quiet on pan throttling
-    const d = await r.json();
-    if(reqId!==lastReqId) return;
+    if(r.status===429) return;               // stay quiet on pan throttling
+    // A pan that fails quietly would leave the last area's numbers up as if
+    // they were this one's, so "couldn't load just now" is said (readArea);
+    // any other error is still quiet.
+    const d = await readArea(r).catch(()=>null);
+    if(!d || reqId!==lastReqId) return;
     const name = (rev && rev.name) ? rev.name : 'This area';
     lastName = name;
     render(d, name, '');
-    if(d.covered){ drawHex(d); addPubLink(lat, lng, reqId); }
+    if(hasScore(d)){ drawHex(d); addPubLink(lat, lng, reqId); } else clearArea();
     fetchRecent(lat, lng, reqId);
     fetchCameras(lat, lng, reqId);
   }catch{}
@@ -1716,8 +2003,7 @@ function renderNearby(best, bd, nbrs, reqId){
     a.className = 'nbr';
     a.href = '/safety/' + p.c + '/' + p.s + '/';
     const sc = document.createElement('span');
-    sc.className = 'sc';
-    sc.style.background = (BAND[p.b] || BAND.moderate).c;
+    sc.className = 'sc band ' + bandOf(p.b);
     sc.textContent = p.v;
     const km = document.createElement('span');
     km.className = 'km';
@@ -1732,26 +2018,6 @@ function renderNearby(best, bd, nbrs, reqId){
 // ── utils ──
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function fmt(n){ return Number(n||0).toLocaleString('en-US'); }
-// Homepage hero hands a query over as '#q=…' — run it through the normal
-// search path so the hero needs no second search implementation.
-(function(){
-  const m = location.hash.match(/^#q=(.+)/);
-  if(!m) return;
-  const text = decodeURIComponent(m[1]);
-  history.replaceState(null, '', location.pathname + location.search);
-  const input = document.getElementById('q');
-  if(input){ input.value = text; }
-  // Geocode via the same backend search the autocomplete uses, then take the
-  // top result — the hero promised an answer, not a dropdown to re-choose from.
-  fetch(`${API}/public/search?q=${encodeURIComponent(text)}`)
-    .then(r => r.ok ? r.json() : null)
-    .then(j => {
-      const top = j && (j.results || j)[0];
-      if(top && top.lat != null){ pick(top, {boot:true}); }
-      else if(input){ input.dispatchEvent(new Event('input', {bubbles:true})); }
-    })
-    .catch(()=>{ if(input) input.dispatchEvent(new Event('input', {bubbles:true})); });
-})();
 function monthName(ym){ const [y,m]=String(ym).split('-').map(Number); return new Date(Date.UTC(y,(m||1)-1,1)).toLocaleString('en-US',{month:'long',year:'numeric',timeZone:'UTC'}); }
 // How long a period the incident count covers. Feeds differ enormously — a
 // rolling month in the UK, year-to-date in New York — so a bare count is not
@@ -1830,11 +2096,24 @@ function syncCoverage(){
 map.on('zoomend', syncCoverage);
 syncCoverage();
 
-// Deep link: /check/?q=... or ?lat=&lng= — boot lookups, so the lead stays.
+// Deep links — ?lat=&lng= (the /safety/ pages' "check the address" links),
+// the homepage hero's #q=, and ?q= — run as boot lookups, so the lead stays.
+// Last in the script, after the chips and coverage cities are wired: a boot
+// that threw used to leave those dead. A query goes through bootSearch, which
+// shows the list rather than guess. Hand-edited URLs fall through to the
+// normal empty pane: a lat that is not a number used to leave "Checking…"
+// up for good, and a stray % in the hash threw before anything ran.
+const dec = s => { try { return decodeURIComponent(s); } catch { return s; } };
 (function(){
   const p=new URLSearchParams(location.search);
-  if(p.get('lat')&&p.get('lng')){ lookup(parseFloat(p.get('lat')),parseFloat(p.get('lng')),p.get('name')||'Location','',{boot:true}); }
-  else if(p.get('q')){ q.value=p.get('q'); geocode(p.get('q')).then(()=>{ if(acItems[0]) pick(acItems[0],{boot:true}); }); }
+  const lat=parseFloat(p.get('lat')), lng=parseFloat(p.get('lng'));
+  const hq=location.hash.match(/^#q=(.+)/);
+  if(hq) history.replaceState(null, '', location.pathname + location.search);
+  if(Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat)<=90 && Math.abs(lng)<=180){
+    lookup(lat, lng, p.get('name')||'Location', '', {boot:true});
+  }
+  else if(hq) bootSearch(dec(hq[1]).trim());
+  else if(p.get('q')) bootSearch(p.get('q').trim());
 })();
 </script>
 </body>

@@ -21,6 +21,7 @@
 // Run: node tools/render-pages.mjs
 
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -39,10 +40,20 @@ const APP_ID = '6768244297';
 // (Analytics → Acquisition → Campaigns); it is not a secret — it appears in
 // every public campaign URL. `mt=8` is the media type (apps).
 //
-// DELIBERATELY COARSE: three campaigns for the whole site, not one per city.
-// Apple hides a campaign until at least FIVE individual Apple Accounts install
-// from it, and the app takes ~72 installs a MONTH in total — so per-city tokens
-// would guarantee every one stayed below the threshold and reported nothing.
+// ONE TOKEN PER SURFACE, never per city: web-home (/ and /404.html),
+// web-safety-pages (every page this file writes), web-transparency, web-tonight
+// and web-check (the /check/ header). Apple hides a campaign until at least
+// FIVE individual Apple Accounts install from it, and the app takes ~72
+// installs a MONTH in total — so per-city tokens would guarantee every one
+// stayed below the threshold and reported nothing.
+//
+// The one deliberate exception is /check/, which adds three in-pane
+// placements (web-check-empty, web-check-result, web-check-uncovered) to learn
+// which state converts, accepting that each may sit under the floor. That is
+// eight tokens in all; `grep -rhoE 'ct=web-[a-z-]*'` over the built pages
+// should list exactly these. Add a ninth only with the same trade-off in mind.
+// (The sister support site, a separate repo, uses its own web-support, so
+// the same grep across both sites lists nine.)
 const APP_PT = '128877797';
 const appStoreURL = (campaign) =>
   `https://apps.apple.com/app/apple-store/id${APP_ID}?pt=${APP_PT}&ct=${campaign}&mt=8`;
@@ -63,7 +74,11 @@ const CITIES = {
     forCity: 'for New York City',
     acrossCity: 'across NYC',
     faqCalc: (name) => `SafeRoute weights each incident reported to the NYPD by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
-    sources: (dateLine) => `Crime data: NYPD complaint data via <a href="https://opendata.cityofnewyork.us/">NYC Open Data</a>${dateLine}. Neighborhood boundaries: NYC 2020 Neighborhood Tabulation Areas. Basemap (streets, parks, shoreline): NYC Open Data. Analysis © SafeRoute.`,
+    // Source links point at each portal's FINAL address. The old hosts
+    // (opendata.cityofnewyork.us, data.sfgov.org, data.torontopolice.on.ca,
+    // datalb.longbeach.gov, data.nola.gov) still redirect today, but a retired
+    // redirect would break the credit on every page of a city at once.
+    sources: (dateLine) => `Crime data: NYPD complaint data via <a href="https://www.nyc.gov/opendata">NYC Open Data</a>${dateLine}. Neighborhood boundaries: NYC 2020 Neighborhood Tabulation Areas. Basemap (streets, parks, shoreline): NYC Open Data. Analysis © SafeRoute.`,
     basemapCredit: 'basemap: NYC Open Data',
     hub: {
       title: (n) => `New York Neighborhood Safety Map & Rankings (${n} areas) — SafeRoute`,
@@ -191,7 +206,7 @@ const CITIES = {
     forCity: 'for San Francisco',
     acrossCity: 'across SF',
     faqCalc: (name) => `SafeRoute weights each incident reported to the SFPD by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
-    sources: (dateLine) => `Crime data: SFPD incident reports via <a href="https://data.sfgov.org/">DataSF</a>${dateLine}. Neighborhood boundaries: DataSF Analysis Neighborhoods (all 41). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
+    sources: (dateLine) => `Crime data: SFPD incident reports via <a href="https://data.sf.gov/">DataSF</a>${dateLine}. Neighborhood boundaries: DataSF Analysis Neighborhoods (all 41). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
     basemapCredit: 'basemap © OpenStreetMap contributors',
     hub: {
       title: (n) => `San Francisco Neighborhood Safety Map & Rankings (${n} neighborhoods) — SafeRoute`,
@@ -653,7 +668,7 @@ const CITIES = {
     forCity: 'for Toronto',
     acrossCity: 'across Toronto',
     faqCalc: (name) => `SafeRoute weights each incident reported to the Toronto Police Service by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} centre, and normalizes against citywide crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
-    sources: (dateLine) => `Crime data: Toronto Police Service Major Crime Indicators via the <a href="https://data.torontopolice.on.ca/">TPS Public Safety Data Portal</a>${dateLine}. Neighbourhood and former-municipality boundaries: <a href="https://open.toronto.ca/">City of Toronto Open Data</a> (158 neighbourhoods). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
+    sources: (dateLine) => `Crime data: Toronto Police Service Major Crime Indicators via the <a href="https://data.tps.ca/">TPS Public Safety Data Portal</a>${dateLine}. Neighbourhood and former-municipality boundaries: <a href="https://open.toronto.ca/">City of Toronto Open Data</a> (158 neighbourhoods). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
     basemapCredit: 'basemap © OpenStreetMap contributors',
     hub: {
       title: (n) => `Toronto Neighbourhood Safety Map & Rankings (${n} neighbourhoods) — SafeRoute`,
@@ -816,7 +831,7 @@ const CITIES = {
     forCity: 'for Long Beach',
     acrossCity: 'across Long Beach',
     faqCalc: (name) => `SafeRoute weights each incident reported to the Long Beach Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
-    sources: (dateLine) => `Crime data: Long Beach Police Department incident records via <a href="https://datalb.longbeach.gov/">City of Long Beach Open Data</a>${dateLine}. Neighborhood boundaries: City of Long Beach official neighborhoods. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    sources: (dateLine) => `Crime data: Long Beach Police Department incident records via the City of Long Beach <a href="https://maps.longbeach.gov/datasets/db3defed7a894a6088b98ec16b4b5dfa_0">Police Crime Mapping dataset</a>${dateLine}. Neighborhood boundaries: City of Long Beach official neighborhoods. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
     basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
     hub: {
       title: (n) => `Long Beach Neighborhood Safety Map & Rankings (${n} neighborhoods) \u2014 SafeRoute`,
@@ -885,7 +900,7 @@ const CITIES = {
     forCity: 'for New Orleans',
     acrossCity: 'across New Orleans',
     faqCalc: (name) => `SafeRoute weights each crime-related 911 call the NOPD was dispatched to by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide rates onto a 0–100 scale — higher is safer. New Orleans is scored on dispatch calls rather than filed reports, because NOPD's report series carries no location data — so a call here means police were sent, not that an offense was confirmed. It is not a guarantee of safety.`,
-    sources: (dateLine) => `Crime data: Orleans Parish Communication District 911 calls for service, filtered to crime call types, via <a href="https://data.nola.gov/">City of New Orleans Open Data</a>${dateLine}. Neighborhood boundaries: City of New Orleans Neighborhood Statistical Areas (GNOCDC). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
+    sources: (dateLine) => `Crime data: Orleans Parish Communication District 911 calls for service, filtered to crime call types, via <a href="https://datadriven.nola.gov/home/">City of New Orleans Open Data</a>${dateLine}. Neighborhood boundaries: City of New Orleans Neighborhood Statistical Areas (GNOCDC). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
     basemapCredit: 'basemap © OpenStreetMap contributors',
     hub: {
       title: (n) => `New Orleans Neighborhood Safety Map & Rankings (${n} neighborhoods) — SafeRoute`,
@@ -1023,6 +1038,12 @@ const CITIES = {
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// A template that puts "the" before an area name, or the centre word after
+// it, doubles whatever the name already carries: "How is the The Loop safety
+// index calculated?" went into FAQPage data, and "within 1 km of the Medical
+// Center center" into ten captions.
+const theName = n => /^the\s/i.test(n) ? n : `the ${n}`;
+const nameCentre = (n, cfg) => /\b(center|centre)$/i.test(n) ? theName(n) : `${theName(n)} ${cfg.centre}`;
 // Area names like "Medfield/Hampden/Woodberry/Remington" (Baltimore, DC, SF)
 // are one unbreakable word to a browser, which will not wrap after "/", so on
 // a phone they pushed 24 pages sideways by up to 264px. This adds a <wbr> after
@@ -1043,16 +1064,49 @@ const wbrSlashes = html => {
     (m, tag, text) => tag ?? WBR_WORDS.reduce((t, [w, b]) => t.split(w).join(b),
       text.replace(/([A-Za-z])\/(?=[A-Za-z])/g, '$1/<wbr>')));
 };
+
+// SITEMAP lastmod, recorded as each page is written. It moves only when the
+// page's HTML actually changes, and then to the date its data was fetched,
+// never the build date, which would tell crawlers all 2,700 pages changed
+// every month. The old rule stamped the first of the data MONTH, one to three
+// months before the real change: London pages fetched on 2026-09-15 read
+// 2026-07-01. An unchanged page keeps its previous lastmod, so a rebuild with
+// no new data leaves sitemap.xml byte-identical.
+const PREV_MOD = (() => {
+  try {
+    return new Map([...readFileSync(join(ROOT, 'sitemap.xml'), 'utf8')
+      .matchAll(/<loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod>/g)].map(m => [m[1], m[2]]));
+  } catch { return new Map(); }
+})();
+const LASTMOD = new Map();
+const newestOf = dates => dates.filter(Boolean).sort().pop();
+function writePage(dir, url, html, dataDate) {
+  mkdirSync(dir, { recursive: true });
+  const file = join(dir, 'index.html');
+  const out = wbrSlashes(html);
+  const prev = existsSync(file) ? readFileSync(file, 'utf8') : null;
+  LASTMOD.set(url, prev === out && PREV_MOD.has(url) ? PREV_MOD.get(url) : dataDate);
+  if (prev !== out) writeFileSync(file, out);
+}
 // City hubs show two facts sourced from the transparency dataset (D): the
 // feed's own transparency score, and which region id the hub maps to. Guarded:
-// a missing dataset just hides the chips, it never fails a 1,222-page build.
-const SLUG_TO_REGION = { 'new-york': 'nyc', london: 'uk', chicago: 'chicago', la: 'la',
-  sf: 'sf', seattle: 'seattle', toronto: 'toronto', dc: 'dc', boston: 'boston', philly: 'philly',
-  denver: 'denver', vancouver: 'vancouver', baltimore: 'baltimore', longbeach: 'longbeach',
-  sandiego: 'sandiego' };
-// Region ids with a live tonight layer — drives the hub strip. NOLA is live but
-// has no SEO hub; SF joins this list the day its layer ships.
-const TONIGHT_REGIONS = new Set(['neworleans', 'sf']);   // sf added 2026-08-22 (near real-time dispatch)
+// a missing dataset just hides the chips, it never fails a 2,700-page build.
+// Every UK city shares the one data.police.uk feed, so all six map to 'uk'.
+// A hub missing here silently loses its chips (eleven did, for months), so the
+// render warns about any city with no row in the dataset.
+const SLUG_TO_REGION = { 'new-york': 'nyc', london: 'uk', birmingham: 'uk', liverpool: 'uk',
+  bristol: 'uk', cardiff: 'uk', leeds: 'uk', chicago: 'chicago', la: 'la', sf: 'sf',
+  seattle: 'seattle', detroit: 'detroit', minneapolis: 'minneapolis', cleveland: 'cleveland',
+  kansascity: 'kansascity', dallas: 'dallas', toronto: 'toronto', dc: 'dc', boston: 'boston',
+  philly: 'philly', denver: 'denver', vancouver: 'vancouver', baltimore: 'baltimore',
+  longbeach: 'longbeach', neworleans: 'neworleans', sandiego: 'sandiego' };
+// Hub slug -> its /tonight/ deep link, for every hub city /tonight/ carries
+// (Las Vegas is on /tonight/ but has no hub). Keyed by hub slug so the chip
+// opens that city: bare /tonight/ opens whichever feed is freshest. The two
+// lists use different slugs (sf vs san-francisco), hence a map, not a set.
+// Check /tonight/'s CITIES when a dispatch city is added there.
+const TONIGHT_SLUG = { sf: 'san-francisco', seattle: 'seattle', detroit: 'detroit',
+  cleveland: 'cleveland', minneapolis: 'minneapolis', neworleans: 'new-orleans' };
 let TRANSPARENCY = null;
 try {
   const t = JSON.parse(readFileSync(join(ROOT, 'tools', 'data', 'transparency-index.json')));
@@ -1094,7 +1148,33 @@ const CAT_NAMES = {
 };
 const catName = c => CAT_NAMES[c] || c.replace(/-/g, ' ').replace(/^./, ch => ch.toUpperCase());
 const bandWord = { low: 'Low risk', moderate: 'Moderate', elevated: 'Elevated', high: 'High risk' };
+// Fills for map dots and swatches only. As TEXT these cream-era values fall to
+// 3.4:1 on the dark surfaces (1,896 index numbers failed), so any band-coloured
+// text uses the sr.css --band-* tokens instead: the pill colours, 5:1 or better
+// on every surface up to --surface-2, so a number matches the pill beside it.
 const bandColor = { low: '#2E8B40', moderate: '#B0703C', elevated: '#9C5220', high: '#BC3B2E' };
+const bandText = band => `var(--band-${band})`;
+
+// Search results cut a title near 65 characters and a description near 160.
+// The figures already lead both, so a long one loses only its closing
+// boilerplate: the brand suffix, or the clause after the last " — " (else the
+// last sentence), and only while that still leaves the figures in front. A
+// sentence ends at ". " before a capital, so "Washington, D.C. neighborhoods"
+// is not cut in the middle.
+const fitTitle = t => t.length > 65 && t.endsWith(' — SafeRoute') ? t.slice(0, -' — SafeRoute'.length) : t;
+const fitDesc = d => {
+  if (d.length <= 160) return d;
+  const cut = Math.max(d.lastIndexOf(' — '), ...[...d.matchAll(/\. (?=[A-Z])/g)].map(m => m.index));
+  if (cut < 60) return d;
+  const out = d.slice(0, cut).replace(/[.,;:]$/, '') + '.';
+  return out.length <= 160 ? out : fitDesc(out);
+};
+// AREA pages keep their current titles and descriptions until the title test
+// below is read (~2026-10-18). Each arm is judged against its own pre-test
+// CTR, so a change to the rest of the snippet mid-test would confound it; the
+// control arm is not recorded in code, so no area page can safely be trimmed.
+// Flip to true once the test is read.
+const TRIM_AREA_SNIPPETS = false;
 
 // ── TITLE EXPERIMENT, started 2026-09-20 ─────────────────────────────────
 //
@@ -1328,20 +1408,22 @@ function mapSVG(a, shape, bm, cfg) {
     streetLabels = (bm.labels || [])
       .filter(l => l.x >= 24 && l.x <= W - 24 && l.y >= 20 && l.y <= H - 20)
       .map(l =>
-        `<text x="${l.x}" y="${l.y}" transform="rotate(${l.a} ${l.x} ${l.y})" text-anchor="middle" dy="-3" font-family="IBM Plex Mono,monospace" font-size="9.5" fill="#7D7666" stroke="#F7F3E8" stroke-width="3" paint-order="stroke">${esc(l.t)}</text>`).join('');
+        `<text class="mlabel" x="${l.x}" y="${l.y}" transform="rotate(${l.a} ${l.x} ${l.y})" text-anchor="middle" dy="-3" font-family="IBM Plex Mono,monospace" font-size="9.5" fill="#7D7666" stroke="#F7F3E8" stroke-width="3" paint-order="stroke">${esc(l.t)}</text>`).join('');
   }
 
+  // The map is drawn at 640 units and shown at about half that on a phone,
+  // where its text fell to 5px. The dot legend is in the figcaption, which
+  // stays readable at any width; the labels left in here (.mlabel, and the
+  // scale bar, .mscale) are hidden on narrow screens by safety.css, where the
+  // caption's "rings every 250 m" still gives the scale.
   return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of ${cfg.mapNoun ?? 'reported crime'} locations within ${a.radiusMetres} metres of the ${cfg.centre} of ${esc(a.name)}, over the local street network">
 ${ground}${rings}${streetLabels}${dots}
 <circle cx="${cx}" cy="${cy}" r="4.5" fill="#14564C"/><circle cx="${cx}" cy="${cy}" r="8.5" fill="none" stroke="#14564C" stroke-width="1.5"/>
-<text x="${cx}" y="${cy + 24}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10.5" fill="#14564C" stroke="#F7F3E8" stroke-width="3" paint-order="stroke">${cfg.centreLabel}</text>
-<rect x="12" y="8" width="278" height="24" rx="7" fill="#FBF9F2" fill-opacity="0.88"/>
-<circle cx="26" cy="20" r="3" fill="#E89286" fill-opacity="0.85"/><circle cx="40" cy="20" r="3.6" fill="#8C1010" fill-opacity="0.85"/>
-<text x="52" y="24" font-family="IBM Plex Mono,monospace" font-size="11" fill="#3C514C">1 dot = 1 report · darker = more severe</text>
-<rect x="12" y="${H - 36}" width="118" height="28" rx="7" fill="#FBF9F2" fill-opacity="0.88"/>
+<text class="mlabel" x="${cx}" y="${cy + 24}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10.5" fill="#14564C" stroke="#F7F3E8" stroke-width="3" paint-order="stroke">${cfg.centreLabel}</text>
+<g class="mscale"><rect x="12" y="${H - 36}" width="118" height="28" rx="7" fill="#FBF9F2" fill-opacity="0.88"/>
 <line x1="20" y1="${H - 16}" x2="${20 + sb}" y2="${H - 16}" stroke="#052926" stroke-width="2"/>
-<text x="${20 + sb / 2}" y="${H - 22}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#3C514C">500 m</text>
-<text x="${W - 20}" y="${H - 20}" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="11" fill="#717F7A" stroke="#F7F3E8" stroke-width="3" paint-order="stroke">N ↑</text>
+<text x="${20 + sb / 2}" y="${H - 22}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#3C514C">500 m</text></g>
+<text class="mlabel" x="${W - 20}" y="${H - 20}" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="11" fill="#717F7A" stroke="#F7F3E8" stroke-width="3" paint-order="stroke">N ↑</text>
 </svg>`;
 }
 
@@ -1371,8 +1453,7 @@ function todSVG(a, cfg) {
 
 // ── prose (deterministic from data — the content IS the data) ───────────────
 function makeProse(a, ctx) {
-  const { cfg, gazBySlug, bySlug, rankOf, median, count, windowDays } = ctx;
-  const g = gazBySlug.get(a.slug) || {};
+  const { cfg, bySlug, rankOf, median, count, windowDays, cityYm, lateral } = ctx;
   const rank = rankOf.get(a.slug);
   const diff = a.safetyScore - median;
   const top = (a.breakdown || [])[0];
@@ -1429,7 +1510,7 @@ function makeProse(a, ctx) {
   // incidents ... over the 7 months to August 2026" is a claim a reader can
   // actually judge, where the bare count plus an end date was not.
   const span = windowPhrase(windowDays);
-  const period = span ? `over ${span} to ${monthName(a.crimeDate)}` : `(data through ${monthName(a.crimeDate)})`;
+  const period = span ? `over ${span} to ${monthName(cityYm)}` : `(data through ${monthName(cityYm)})`;
   const lead = `${bandLead} Its SafeRoute safety index is <strong>${a.safetyScore} out of 100</strong> — ${cmp}, ranking ${ord(rank)} of ${count} ${cfg.rankPool} — based on ${fmt(a.totalIncidents)} incidents ${cfg.reportedTo} within 1 km of the ${cfg.areaWord} ${cfg.centre} ${period}.${sparse}${thin}`;
 
   let mix = '';
@@ -1450,7 +1531,7 @@ function makeProse(a, ctx) {
         : `Incidents spread across the day here — roughly ${evePct}% of severity-weighted ${cfg.reportsNoun ?? 'reports'} come in the evening (6 p.m.–midnight) and ${nightPct}% overnight.`;
   }
 
-  const neighbors = (g.neighbors || []).map(s => bySlug.get(s)).filter(Boolean);
+  const neighbors = (lateral.get(a.slug) || []).map(s => bySlug.get(s)).filter(Boolean);
 
   const faq = [
     {
@@ -1469,11 +1550,11 @@ function makeProse(a, ctx) {
     {
       q: `What is the most common crime in ${a.name}?`,
       a: top
-        ? `${catName(top.category)} — ${fmt(top.count)} of ${fmt(a.totalIncidents)} incidents (${topShare}%) ${cfg.recordedWord ?? 'reported'} within 1 km of the ${cfg.areaWord} ${cfg.centre} ${span ? `over ${span} to` : 'through'} ${monthName(a.crimeDate)}.`
+        ? `${catName(top.category)} — ${fmt(top.count)} of ${fmt(a.totalIncidents)} incidents (${topShare}%) ${cfg.recordedWord ?? 'reported'} within 1 km of the ${cfg.areaWord} ${cfg.centre} ${span ? `over ${span} to` : 'through'} ${monthName(cityYm)}.`
         : `No dominant category in the current data.`,
     },
     {
-      q: `How is the ${a.name} safety index calculated?`,
+      q: `How is ${theName(a.name)} safety index calculated?`,
       // The scale is calibrated per city (a typical area reads mid-scale), so a
       // score only means something against other areas in the same city. The hub
       // says this under Methodology, but almost nobody arrives via the hub —
@@ -1514,6 +1595,9 @@ const head = (title, desc, canonical, jsonld, extraHead = '') => `<!DOCTYPE html
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${canonical}">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -1524,31 +1608,59 @@ ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script
 ${extraHead}${analytics()}</head>
 <body>`;
 
-// Shared header: wordmark + the five-destination site nav; breadcrumbs move to
-// their own slim bar below so navigation and orientation stop competing for
-// the same row.
-const chrome = crumbs => `<header class="site"><div class="wrap">
-<a class="wordmark" href="/"><svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>SAFEROUTE</span></a>
+// Shared header, the same markup as every other page on the site (sr.css
+// documents it): the Safety tab is marked current in words as well as colour,
+// and " index" drops visually on phones while staying in its accessible name.
+// Breadcrumbs sit in their own slim bar below, so navigation and orientation
+// stop competing for one row. The /safety/ root passes no crumbs: a trail one
+// item long, naming the tab it is on, is noise (and /transparency/ has none).
+const chrome = crumbs => `<a class="skip" href="#main">Skip to content</a>
+<header class="site"><div class="wrap">
+<a class="wordmark" href="/"><span class="shield" aria-hidden="true"></span><span>SAFEROUTE</span></a>
 <nav class="site-nav" aria-label="Site">
-<a href="/safety/" class="on">Safety index</a>
+<a class="on" aria-current="page" href="/safety/">Safety<span class="nav-long"> index</span></a>
 <a href="/check/">Map</a>
 <a href="/tonight/">Tonight</a>
 <a class="hide-sm" href="/transparency/">Transparency</a>
-<a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-safety-pages&mt=8">Get the app</a>
+<a class="cta" href="${APP_URL}">Get the app</a>
 </nav>
-</div></header><div class="crumbbar"><div class="wrap"><nav class="crumbs">${crumbs}</nav></div></div><main><div class="wrap">`;
+</div></header>${crumbs ? `<div class="crumbbar"><div class="wrap"><nav class="crumbs" aria-label="Breadcrumb">${crumbs}</nav></div></div>` : ''}<main id="main"><div class="wrap">`;
 
-const footer = (cfg, a, citySlug, windowDays) => `</div></main><footer class="site"><div class="wrap">
-<p><strong>Sources.</strong> ${cfg.sources(!a ? ''
-  : windowPhrase(windowDays) ? `, covering ${windowPhrase(windowDays)} to ${monthName(a.crimeDate)}`
-  : `, data through ${monthName(a.crimeDate)}`)}</p>
+// The closing link row, the same six destinations in the same order on every
+// page of the site; city pages put their own hub first. It is also how phones
+// reach Transparency, which the header drops below 780px.
+const footRow = (cityLink = '') => `<nav class="footlinks" aria-label="Footer"><ul>
+${cityLink ? `<li>${cityLink}</li>\n` : ''}<li><a href="/safety/">Safety index</a></li>
+<li><a href="/check/">Map</a></li>
+<li><a href="/tonight/">Tonight</a></li>
+<li><a href="/transparency/">Transparency</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-support/">Support</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></li>
+</ul></nav>`;
+
+// `ym` is the CITY's data month (see cityYm), so the credit agrees with every
+// "data through" line above it rather than with whichever area came first.
+const footer = (cfg, ym, citySlug, windowDays) => `</div></main><footer class="site"><div class="wrap">
+<p><strong>Sources.</strong> ${cfg.sources(!ym ? ''
+  : windowPhrase(windowDays) ? `, covering ${windowPhrase(windowDays)} to ${monthName(ym)}`
+  : `, data through ${monthName(ym)}`)}</p>
 <p><strong>About this data.</strong> ${cfg.aboutData ?? `Figures are incidents <em>reported</em> to police within 1&nbsp;km of each ${cfg.areaWord}'s ${cfg.centre} — reporting practices vary and not all crime is reported.`} This is informational only and not a guarantee of safety, a prediction, or a judgment of any community. Use it the way the app does: to pick better-lit, lower-incident routes and times.</p>
-<p><a href="/safety/${citySlug}/">All ${cfg.name} ${cfg.areaWordPlural}</a> · <a href="/">SafeRoute app</a> · <a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></p>
+${footRow(`<a href="/safety/${citySlug}/">All ${cfg.name} ${cfg.areaWordPlural}</a>`)}
+</div></footer></body></html>`;
+
+// The /safety/ root covers every city, so it credits none of them in
+// particular: it used to borrow the first city's footer and told readers the
+// whole index came from the NYPD. It shows no figures, so it names where each
+// city's figures are credited instead.
+const rootFooter = () => `</div></main><footer class="site"><div class="wrap">
+<p><strong>Sources.</strong> Crime data comes from each city's police open-data service and, in the UK, from <a href="https://data.police.uk/">data.police.uk</a> (Open Government Licence v3.0). Each city page names its source and the period it covers, and the <a href="/transparency/">Transparency index</a> measures how well each one publishes.</p>
+<p><strong>About this data.</strong> Figures are incidents <em>reported</em> to police — reporting practices vary and not all crime is reported. This is informational only and not a guarantee of safety, a prediction, or a judgment of any community.</p>
+${footRow()}
 </div></footer></body></html>`;
 
 const cta = (name) => `<div class="cta">
 <h2>Walking in ${esc(name)} at night?</h2>
-<p>SafeRoute scores every walking route against the same live crime data on this page — and shows how much of each route runs on lit streets. Compare the routes, share your walk, and check in when you arrive. Free, no account.</p>
+<p>SafeRoute scores every walking route against the same official crime data on this page — and shows how much of each route runs on lit streets. Compare the routes, share your walk, and check in when you arrive. Free, no account.</p>
 <a class="btn" href="${APP_URL}">Get SafeRoute on the App&nbsp;Store</a>
 </div>`;
 
@@ -1620,7 +1732,39 @@ function renderCity(citySlug) {
   // inventing a window.
   const windows = areas.map(a => a.windowDays).filter(w => w > 0).sort((x, y) => x - y);
   const windowDays = windows.length ? windows[Math.floor(windows.length / 2)] : null;
-  const ctx = { cfg, gazBySlug, bySlug, rankOf, median, count: areas.length, windowDays };
+  // The window's END is the city's too. An area's own crimeDate is the month
+  // of its newest incident, which lags wherever it has been quiet lately, and
+  // 47 pages dated their whole window by it: "8 months to May 2026" on a page
+  // whose feed ran to September, disagreeing with the hub's "Feed current to".
+  // Every "through <month>" phrase uses this; a lagging area says so in its
+  // map caption instead.
+  const cityYm = areas.map(a => a.crimeDate).filter(Boolean).sort().pop() || '2026-01';
+
+  // LATERAL LINKS. Only ten gazetteers carry a `neighbors` list, so in the
+  // other sixteen cities an area page linked to no other area at all: 1,353
+  // pages reachable only from their hub, a dead end for readers and crawlers
+  // alike. Where the gazetteer has none, the five nearest published areas by
+  // centre distance stand in (the same "Nearby areas" block, and true to its
+  // heading). A nearest-five list can leave an outlier that is nobody's
+  // nearest, so each of those is added to its own nearest neighbour's list:
+  // every area page is then linked from at least one other.
+  const lateral = (() => {
+    const dist = (p, q) => Math.hypot((q.lng - p.lng) * Math.cos((p.lat + q.lat) * Math.PI / 360), q.lat - p.lat);
+    const nearest = a => areas.filter(b => b !== a)
+      .sort((b, c) => dist(a, b) - dist(a, c) || (b.slug < c.slug ? -1 : 1));
+    const out = new Map();
+    for (const a of areas) {
+      const listed = (gazBySlug.get(a.slug)?.neighbors || []).filter(s => s !== a.slug && bySlug.has(s));
+      out.set(a.slug, listed.length ? listed : nearest(a).slice(0, 5).map(b => b.slug));
+    }
+    const linked = new Set([...out.values()].flat());
+    for (const a of areas) {
+      const b = linked.has(a.slug) ? null : nearest(a)[0];
+      if (b) out.get(b.slug).push(a.slug);
+    }
+    return out;
+  })();
+  const ctx = { cfg, bySlug, rankOf, median, count: areas.length, windowDays, cityYm, lateral };
 
   // Group into districts once, up front: the area pages need it for their
   // breadcrumb, the city hub needs it to link its section headings, and the
@@ -1655,6 +1799,10 @@ function renderCity(citySlug) {
   const todAreas = areas.filter(a => a.timeOfDayIsRealData !== false
     && Array.isArray(a.timeOfDay) && a.timeOfDay.length >= 6);
   const nightPage = todAreas.length >= Math.max(8, areas.length * 0.8);
+  // The night page's only inbound link used to be its hub. Area and district
+  // pages carry it too, below the time-of-day chart it expands on. It brings
+  // its own line breaks, so a city with no night page gets no stray blank line.
+  const nightLink = nightPage ? `\n<p style="margin:14px 0 0;font-size:15.5px"><a href="/safety/${citySlug}/night/">Is ${esc(cfg.name)} safe at night? See which ${cfg.areaWordPlural} see the most reported crime after dark →</a></p>\n` : '';
 
   for (const a of areas) {
     const p = makeProse(a, ctx);
@@ -1678,7 +1826,7 @@ function renderCity(citySlug) {
     // prints below). No claim is added that the page does not already make.
     const title = (() => {
       const control = `Is ${display} Safe? Crime Map & Safety Index — SafeRoute`;
-      if (!TITLE_TEST.has(`${citySlug}/${a.slug}`)) return control;
+      if (!TITLE_TEST.has(`${citySlug}/${a.slug}`)) return TRIM_AREA_SNIPPETS ? fitTitle(control) : control;
       // Minimal delta by design: the question and the brand suffix are held
       // identical to the control, and ONLY the middle changes — from a generic
       // label every competitor also carries to this area's actual number. One
@@ -1695,14 +1843,15 @@ function renderCity(citySlug) {
       // worth losing — the number is the whole point of the variant.
       return long.length <= 60 ? long : `Is ${display} Safe? Safety Index ${a.safetyScore}/100`;
     })();
-    const desc = `${display} safety index: ${a.safetyScore}/100 (${bandWord[a.band].toLowerCase()}) — ${fmt(a.totalIncidents)} ${cfg.incidentNoun ?? 'reported incidents'} within 1 km (through ${monthName(a.crimeDate)}). Crime map, ${cfg.whatReported ?? "what's reported"}, and how it compares ${cfg.acrossCity}.`;
+    const descFull = `${display} safety index: ${a.safetyScore}/100 (${bandWord[a.band].toLowerCase()}) — ${fmt(a.totalIncidents)} ${cfg.incidentNoun ?? 'reported incidents'} within 1 km (through ${monthName(cityYm)}). Crime map, ${cfg.whatReported ?? "what's reported"}, and how it compares ${cfg.acrossCity}.`;
+    const desc = TRIM_AREA_SNIPPETS ? fitDesc(descFull) : descFull;
     // The district, where one has a page, is a real level of the hierarchy and
     // belongs in both the visible crumb trail and the structured one — it is
     // the second parent that makes an area page reachable laterally.
     const dist = districtOf.get(a.slug);
     const jsonld = [
       { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Safety', item: `${SITE}/safety/` },
+        { '@type': 'ListItem', position: 1, name: 'Safety index', item: `${SITE}/safety/` },
         { '@type': 'ListItem', position: 2, name: cfg.name, item: `${SITE}/safety/${citySlug}/` },
         ...(dist ? [{ '@type': 'ListItem', position: 3, name: dist.name, item: `${SITE}${districtHref(dist)}` }] : []),
         { '@type': 'ListItem', position: dist ? 4 : 3, name: a.name, item: url }] },
@@ -1726,20 +1875,20 @@ function renderCity(citySlug) {
 <p style="font-size:14px;color:var(--ink-3);margin-top:8px">Severity-weighted share of ${cfg.incidentNoun ?? 'reported incidents'} by time of day, from ${cfg.todTimestamps ?? (cfg.dataName === 'NYPD data' ? 'NYPD incident timestamps' : 'police incident timestamps')}.</p>
 </section>` : '';
 
-    const html = `${head(title, desc, url, jsonld)}${chrome(`<a href="/safety/">Safety</a> › <a href="/safety/${citySlug}/">${cfg.name}</a>${dist ? ` › <a href="${districtHref(dist)}">${esc(dist.name)}</a>` : ''} › ${esc(a.name)}`)}
-<p class="eyebrow">Safety index · ${a.borough === cfg.name ? '' : esc(a.borough) + ', '}${cfg.name} · data through ${monthName(a.crimeDate)}</p>
+    const html = `${head(title, desc, url, jsonld)}${chrome(`<a href="/safety/">Safety index</a> › <a href="/safety/${citySlug}/">${cfg.name}</a>${dist ? ` › <a href="${districtHref(dist)}">${esc(dist.name)}</a>` : ''} › ${esc(a.name)}`)}
+<p class="eyebrow">Safety index · ${a.borough === cfg.name ? '' : esc(a.borough) + ', '}${cfg.name} · data through ${monthName(cityYm)}</p>
 <h1>Is ${esc(display)} safe?</h1>
 <p class="lead">${p.lead}</p>
 
 <div class="scorecard">
-  <div class="scorenum" style="color:${bandColor[a.band]}">${a.safetyScore}<small>/100</small></div>
+  <div class="scorenum" style="color:${bandText(a.band)}">${a.safetyScore}<small>/100</small></div>
   <div style="flex:1">
     <span class="band ${a.band}">${bandWord[a.band]}</span>
     <div class="scoremeta">SafeRoute safety index for the area within 1 km of the ${cfg.centre} of ${esc(a.name)} — higher is safer. ${ord(p.rank)} of ${p.count} ${cfg.rankPool}.</div>
     <div class="gaugebar"><i style="width:${a.safetyScore}%;background:${bandColor[a.band]}"></i></div>
   </div>
 </div>
-<p class="recency-chip">DATA THROUGH ${monthName(a.crimeDate).toUpperCase()}${windowPhrase(windowDays) ? ` · ${windowPhrase(windowDays).replace(/^the month$/, '1 month').replace(/^the /, '').toUpperCase()} OF DATA` : ''}</p>
+<p class="recency-chip">DATA THROUGH ${monthName(cityYm).toUpperCase()}${windowPhrase(windowDays) ? ` · ${windowPhrase(windowDays).replace(/^the month$/, '1 month').replace(/^the /, '').toUpperCase()} OF DATA` : ''}</p>
 <p style="font-size:14px;color:var(--ink-3);margin-top:-6px">The 0–100 scale is calibrated to ${esc(cfg.name)} — a typical ${esc(cfg.name)} ${cfg.areaWord} sits near ${median}. It ranks ${esc(a.name)} against other ${cfg.areaWordPlural} here, and cannot be read against a score in another city.</p>
 
 ${p.mix ? `<p>${p.mix}</p>` : ''}
@@ -1748,7 +1897,7 @@ ${p.when ? `<p>${p.when}</p>` : ''}
 <h2>Where incidents cluster</h2>
 <figure class="map">
 ${mapSVG(a, shape, bm, cfg)}
-<figcaption>${fmt(a.totalIncidents)} ${cfg.figIncidents ?? 'incidents reported'} within 1 km of the ${esc(a.name)} ${cfg.centre}${(a.incidents || []).length < a.totalIncidents ? ` (${fmt((a.incidents || []).length)} shown)` : ''} · ${cfg.dataName} through ${monthName(a.crimeDate)}${bm ? ` · ${cfg.basemapCredit}` : ''}.${clusterNote}</figcaption>
+<figcaption><span class="dotkey"><i class="lo"></i><i class="hi"></i>1 dot = 1 report · darker = more severe · rings every 250 m from the ${cfg.centreLabel}</span>${fmt(a.totalIncidents)} ${cfg.figIncidents ?? 'incidents reported'} within 1 km of ${nameCentre(esc(a.name), cfg)}${(a.incidents || []).length < a.totalIncidents ? ` (${fmt((a.incidents || []).length)} shown)` : ''} · ${cfg.dataName} through ${monthName(cityYm)}${a.crimeDate && a.crimeDate < cityYm ? `, latest report in this area ${monthName(a.crimeDate)}` : ''}${bm ? ` · ${cfg.basemapCredit}` : ''}.${clusterNote}</figcaption>
 </figure>
 <a class="checkmap" href="/check/?lat=${a.lat}&lng=${a.lng}&name=${encodeURIComponent(a.name)}"><span class="dot"></span>Open ${esc(a.name)} on the live interactive map →</a>
 
@@ -1758,7 +1907,7 @@ ${mapSVG(a, shape, bm, cfg)}
 <table class="cats">${catRows}</table>
 </section>${rightPanel}
 </div>
-
+${nightLink}
 ${cta(a.name)}
 
 ${nearbyRows ? `<h2>Nearby areas</h2>
@@ -1766,23 +1915,21 @@ ${nearbyRows ? `<h2>Nearby areas</h2>
 
 <h2>Common questions</h2>
 ${p.faq.map(f => `<details><summary>${esc(f.q)}</summary><p>${f.a}</p></details>`).join('\n')}
-${footer(cfg, a, citySlug, windowDays)}`;
+${footer(cfg, cityYm, citySlug, windowDays)}`;
 
-    const dir = join(ROOT, 'safety', citySlug, a.slug);
-    mkdirSync(dir, { recursive: true });
-    writeFileSync(join(dir, 'index.html'), wbrSlashes(html));
+    writePage(join(ROOT, 'safety', citySlug, a.slug), url, html, a.fetchedAt || `${cityYm}-01`);
   }
 
   // ── city hub ──
   {
     const url = `${SITE}/safety/${citySlug}/`;
-    const date = monthName(areas[0]?.crimeDate || '2026-01');
-    const title = cfg.hub.title(areas.length);
-    const desc = cfg.hub.desc(areas.length, date);
+    const date = monthName(cityYm);
+    const title = fitTitle(cfg.hub.title(areas.length));
+    const desc = fitDesc(cfg.hub.desc(areas.length, date));
     const boroughs = [...new Set(areas.map(a => a.borough))].sort();
     const tables = boroughs.map(b => {
       const rows = ranked.filter(a => a.borough === b).map(a =>
-        `<tr><td><a href="/safety/${citySlug}/${a.slug}/">${esc(a.name)}</a></td><td class="n" style="color:${bandColor[a.band]}">${a.safetyScore}/100</td><td><span class="band ${a.band}">${bandWord[a.band]}</span></td><td class="n">${fmt(a.totalIncidents)}</td></tr>`).join('');
+        `<tr><td><a href="/safety/${citySlug}/${a.slug}/">${esc(a.name)}</a></td><td class="n" style="color:${bandText(a.band)}">${a.safetyScore}/100</td><td><span class="band ${a.band}">${bandWord[a.band]}</span></td><td class="n">${fmt(a.totalIncidents)}</td></tr>`).join('');
       // Cities with no sub-city tier (Chicago: 77 community areas, one pool)
       // group into a single table — label it usefully instead of repeating the
       // city name under the h1.
@@ -1805,15 +1952,16 @@ ${footer(cfg, a, citySlug, windowDays)}`;
     }));
     const html = `${head(title, desc, url, {
       '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Safety', item: `${SITE}/safety/` },
+        { '@type': 'ListItem', position: 1, name: 'Safety index', item: `${SITE}/safety/` },
         { '@type': 'ListItem', position: 2, name: cfg.name, item: url }],
-    }, LEAFLET_CSS)}${chrome(`<a href="/safety/">Safety</a> › ${cfg.name}`)}
+    }, LEAFLET_CSS)}${chrome(`<a href="/safety/">Safety index</a> › ${cfg.name}`)}
 <p class="eyebrow">${cfg.areaWord.replace(/^./, c => c.toUpperCase())} safety · ${cfg.hubName} · data through ${date}</p>
 <h1>${cfg.hub.h1}</h1>
 <p class="lead">${cfg.hub.lead}</p>
 
 <div class="checker">
 <input id="ckr" type="search" placeholder="${cfg.hub.placeholder}" aria-label="Search ${cfg.name} ${cfg.areaWordPlural}">
+<p id="ckr-note" class="ckr-note" role="status"></p>
 <ul id="ckr-out"></ul>
 </div>
 
@@ -1823,20 +1971,20 @@ ${(() => {
   // D: the city's data, described in chips — feed recency, window, and the
   // transparency score for the city's own feed, linking to the index.
   const region = TRANSPARENCY?.[SLUG_TO_REGION[citySlug]];
-  const newestYm = [...areas].map(a => a.crimeDate).filter(Boolean).sort().pop();
-  const chips = [];
-  if (newestYm) chips.push(`Feed current to ${monthName(newestYm)}`);
+  if (TRANSPARENCY && !region) console.warn(`  ${citySlug}: no transparency row (SLUG_TO_REGION) — hub chips missing`);
+  const chips = [`Feed current to ${monthName(cityYm)}`];
   const span = windowPhrase(windowDays);
   if (span) chips.push(`covers ${span.replace(/^the month$/, '1 month').replace(/^the /, '')}`);
   if (region?.categoryCount) chips.push(`${region.categoryCount} offence categories`);
   if (region?.total != null) chips.push(`<a href="/transparency/">data transparency ${region.total}/100</a>`);
-  if (TONIGHT_REGIONS.has(SLUG_TO_REGION[citySlug]))
-    chips.push(`<a href="/tonight/" class="tonight">⏺ last 24 hrs live</a>`);
+  // No "24 hrs": /tonight/'s windows run from 48 hours to a week by city.
+  if (TONIGHT_SLUG[citySlug])
+    chips.push(`<a href="/tonight/#${TONIGHT_SLUG[citySlug]}" class="tonight">⏺ recent 911 calls, live</a>`);
   return chips.length ? `<div class="citychips">${chips.map(c => `<span>${c}</span>`).join('')}</div>` : '';
 })()}
 
 <div class="mapwrap">
-  <div id="citymap" role="application" aria-label="Map of ${esc(cfg.hubName)} ${cfg.areaWordPlural}, coloured by safety index"></div>
+  <div id="citymap" role="region" aria-label="Map of ${esc(cfg.hubName)} ${cfg.areaWordPlural}, coloured by safety index"></div>
   <div class="maplegend">
     <span><i style="background:${bandColor.low}"></i>Low</span>
     <span><i style="background:${bandColor.moderate}"></i>Moderate</span>
@@ -1853,7 +2001,7 @@ ${cta(cfg.name)}
 <h2>Methodology</h2>
 <p style="font-size:15.5px;color:var(--ink-2)">${cfg.hub.methodology}</p>
 <p style="font-size:15.5px;color:var(--ink-2)">The index compares areas <strong>within ${esc(cfg.hubName)}</strong>. It is not comparable between cities: each police force publishes a different set of offences over a different period — ${esc(cfg.name)}'s figures cannot be read against another city's on the same 0–100 scale.</p>
-${footer(cfg, areas[0], citySlug, windowDays)}
+${footer(cfg, cityYm, citySlug, windowDays)}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 const IDX=${JSON.stringify(idx)};
@@ -1865,11 +2013,18 @@ const IDX=${JSON.stringify(idx)};
 // either — this comment used to interpolate the city slug and so recreated the
 // exact string it was describing.
 const CITY=${JSON.stringify(citySlug)};
-const inp=document.getElementById('ckr'),out=document.getElementById('ckr-out');
+const inp=document.getElementById('ckr'),out=document.getElementById('ckr-out'),note=document.getElementById('ckr-note');
 inp.addEventListener('input',()=>{
-  const q=inp.value.trim().toLowerCase();out.innerHTML='';
+  const q=inp.value.trim().toLowerCase();out.innerHTML='';note.textContent='';
   if(q.length<2)return;
-  IDX.filter(a=>a.n.toLowerCase().includes(q)).slice(0,8).forEach(a=>{
+  const hits=IDX.filter(a=>a.n.toLowerCase().includes(q));
+  // A search that matched nothing used to leave the box silent, which reads as
+  // broken, and a screen reader heard nothing either way. #ckr-note is a
+  // status region, so the count or the miss is announced as well as shown.
+  note.textContent=hits.length
+    ? hits.length+' '+(hits.length===1?${JSON.stringify(cfg.areaWord)}:${JSON.stringify(cfg.areaWordPlural)})+' found'+(hits.length>8?', showing the first 8':'')
+    : 'No match — try another spelling.';
+  hits.slice(0,8).forEach(a=>{
     const li=document.createElement('li');
     // Built as its own value so the only complete path literal left in this
     // source is '/safety/', which is a real 200 page. Anything longer here gets
@@ -1896,25 +2051,46 @@ inp.addEventListener('input',()=>{
   var MB=['pk.eyJ1IjoibWluaGFqazIxIiwiYSI','6ImNtdGJjc2IzYjA5ZDUyeXE2bW1ma','nA3NnkifQ.E1GM4huWJAv7fWwjKir4BA'].join('');
   L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}{r}?access_token='+MB,{
     tileSize:512,zoomOffset:-1,maxZoom:18,detectRetina:true,
-    attribution:'© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    // Final addresses, not the redirects Mapbox's docs print (about/maps/ and
+    // map-feedback/ both 301), so a retired redirect cannot break the credit.
+    attribution:'© <a href="https://www.mapbox.com/about/maps">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://apps.mapbox.com/feedback/">Improve this map</a>'
   }).addTo(map);
+  // Mapbox's terms require its wordmark on any map drawn from its tiles. The
+  // image, size and placement live in sr.css (.mapbox-logo); this only adds it.
+  L.Control.MapboxLogo = L.Control.extend({
+    options: { position: 'bottomleft' },
+    onAdd: function () {
+      var a = L.DomUtil.create('a', 'mapbox-logo');
+      a.href = 'https://www.mapbox.com/'; a.target = '_blank'; a.rel = 'noopener';
+      a.setAttribute('aria-label', 'Mapbox');
+      L.DomEvent.disableClickPropagation(a);
+      return a;
+    }
+  });
+  new L.Control.MapboxLogo().addTo(map);
   var pts=[];
   IDX.forEach(function(a){
     if(a.la==null||a.lo==null) return;
     pts.push([a.la,a.lo]);
     var m=L.circleMarker([a.la,a.lo],{
       radius:7,weight:1.5,color:'#0A0D12',fillColor:COL[a.band]||COL.moderate,fillOpacity:.95
-    }).addTo(map);
+    });
     m.bindTooltip(a.n+' — '+a.v+'/100',{direction:'top',offset:[0,-8]});
+    // Leaflet 1.9 gives a tooltip'd path focus listeners, and Chrome then
+    // makes it a tab stop: one unnamed stop per area, hundreds of them between
+    // the search box and the tables. The dots are a pointer shortcut; the same
+    // areas are links in the tables below, for keyboards and screen readers.
+    m.on('add',function(){ var p=m.getElement(); if(p){ p.setAttribute('tabindex','-1'); p.setAttribute('aria-hidden','true'); } });
     // Path assembled at runtime for the same reason as the type-ahead above:
     // Googlebot lifts URL-shaped strings out of inline script and requests them
     // verbatim, so no complete path may appear as a literal here.
     m.on('click',function(){ location.href='/safety/'+CITY+'/'+a.s+'/'; });
+    m.addTo(map);
   });
   if(pts.length) map.fitBounds(pts,{padding:[26,26]});
 })();
 </script></body></html>`;
-    writeFileSync(join(ROOT, 'safety', citySlug, 'index.html'), wbrSlashes(html));
+    writePage(join(ROOT, 'safety', citySlug), url, html, newestOf(areas.map(a => a.fetchedAt)) || `${cityYm}-01`);
   }
 
   // ── district hubs ──
@@ -1927,7 +2103,7 @@ inp.addEventListener('input',()=>{
   for (const d of districts) {
     const display = districtDisplay(d.name, cfg);
     const url = `${SITE}${districtHref(d)}`;
-    const date = monthName([...d.areas].map(a => a.crimeDate).filter(Boolean).sort().pop() || areas[0]?.crimeDate);
+    const date = monthName(cityYm);
     const list = d.areas;                    // inherited from `ranked`: safest first
     const safest = list[0], worst = list[list.length - 1];
     const bands = { low: 0, moderate: 0, elevated: 0, high: 0 };
@@ -1947,7 +2123,7 @@ inp.addEventListener('input',()=>{
         : `<strong>${d.median}/100</strong> — close to the ${cfg.medianLabel} of ${median}`;
 
     const rows = list.map((a, i) =>
-      `<tr><td><span class="rk">${i + 1}</span> <a href="/safety/${citySlug}/${a.slug}/">${esc(a.name)}</a></td><td class="n" style="color:${bandColor[a.band]}">${a.safetyScore}/100</td><td><span class="band ${a.band}">${bandWord[a.band]}</span></td><td class="n">${fmt(a.totalIncidents)}</td></tr>`).join('');
+      `<tr><td><span class="rk">${i + 1}</span> <a href="/safety/${citySlug}/${a.slug}/">${esc(a.name)}</a></td><td class="n" style="color:${bandText(a.band)}">${a.safetyScore}/100</td><td><span class="band ${a.band}">${bandWord[a.band]}</span></td><td class="n">${fmt(a.totalIncidents)}</td></tr>`).join('');
 
     // Every district links to every other one. This is the lateral structure
     // the site has never had: 12 cities have no `neighbors` data at all, so
@@ -1974,17 +2150,17 @@ inp.addEventListener('input',()=>{
 
     const jsonld = [
       { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Safety', item: `${SITE}/safety/` },
+        { '@type': 'ListItem', position: 1, name: 'Safety index', item: `${SITE}/safety/` },
         { '@type': 'ListItem', position: 2, name: cfg.name, item: `${SITE}/safety/${citySlug}/` },
         { '@type': 'ListItem', position: 3, name: d.name, item: url }] },
       { '@context': 'https://schema.org', '@type': 'FAQPage',
         mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
     ];
 
-    const dTitle = `Is ${display} Safe? Safest ${cfg.areaWordPlural.replace(/^./, c => c.toUpperCase())} Ranked — SafeRoute`;
-    const dDesc = `Safety index (0–100) for all ${list.length} ${cfg.areaWordPlural} in ${display}, from ${cfg.dataName} through ${date}. Median ${d.median}/100 against ${median} ${cfg.acrossCity} — ranked safest first.`;
+    const dTitle = fitTitle(`Is ${display} Safe? Safest ${cfg.areaWordPlural.replace(/^./, c => c.toUpperCase())} Ranked — SafeRoute`);
+    const dDesc = fitDesc(`Safety index (0–100) for all ${list.length} ${cfg.areaWordPlural} in ${display}, from ${cfg.dataName} through ${date}. Median ${d.median}/100 against ${median} ${cfg.acrossCity} — ranked safest first.`);
 
-    const dHtml = `${head(dTitle, dDesc, url, jsonld)}${chrome(`<a href="/safety/">Safety</a> › <a href="/safety/${citySlug}/">${cfg.name}</a> › ${esc(d.name)}`)}
+    const dHtml = `${head(dTitle, dDesc, url, jsonld)}${chrome(`<a href="/safety/">Safety index</a> › <a href="/safety/${citySlug}/">${cfg.name}</a> › ${esc(d.name)}`)}
 <p class="eyebrow">${(cfg.districtWord ?? 'district').replace(/^./, c => c.toUpperCase())} safety · ${cfg.hubName} · data through ${date}</p>
 <h1>How safe is ${esc(display)}?</h1>
 <p class="lead">${esc(display)} covers ${list.length} ${cfg.areaWordPlural} in SafeRoute's ${esc(cfg.hubName)} index. Its median safety index is ${cmp}. ${esc(safest.name)} scores highest at ${safest.safetyScore}/100; ${esc(worst.name)} lowest at ${worst.safetyScore}/100.</p>
@@ -2000,18 +2176,17 @@ ${cta(display)}
 
 <h2>How ${esc(d.name)} compares ${cfg.acrossCity}</h2>
 <table class="rank"><thead><tr><th>${(cfg.districtWordPlural ?? 'districts').replace(/^./, c => c.toUpperCase())} (safest first)</th><th style="text-align:right">Median index</th><th style="text-align:right">${cfg.areaWordPlural.replace(/^./, c => c.toUpperCase())}</th></tr></thead><tbody>${peers}</tbody></table>
-
+${nightLink}
 <h2>Common questions</h2>
 ${faq.map(f => `<details><summary>${esc(f.q)}</summary><p>${f.a}</p></details>`).join('\n')}
 
 <h2>Methodology</h2>
 <p style="font-size:15.5px;color:var(--ink-2)">${cfg.hub.methodology}</p>
 <p style="font-size:15.5px;color:var(--ink-2)">The index compares ${cfg.areaWordPlural} <strong>within ${esc(cfg.hubName)}</strong>. It is not comparable between cities: each police force publishes a different set of offences over a different period — ${esc(cfg.name)}'s figures cannot be read against another city's on the same 0–100 scale.</p>
-${footer(cfg, list[0], citySlug, windowDays)}`;
+${footer(cfg, cityYm, citySlug, windowDays)}`;
 
-    const dDir = join(ROOT, 'safety', citySlug, 'district', d.slug);
-    mkdirSync(dDir, { recursive: true });
-    writeFileSync(join(dDir, 'index.html'), wbrSlashes(dHtml));
+    writePage(join(ROOT, 'safety', citySlug, 'district', d.slug), url, dHtml,
+      newestOf(list.map(a => a.fetchedAt)) || `${cityYm}-01`);
   }
 
   // ── night hub ──
@@ -2050,15 +2225,15 @@ ${footer(cfg, list[0], citySlug, windowDays)}`;
 
     const byNightVolume = [...withNight].sort((x, y) => y.nightInc - x.nightInc);
     const byConcentration = [...withNight].sort((x, y) => y.share - x.share);
-    const date = monthName(areas[0]?.crimeDate || '2026-01');
+    const date = monthName(cityYm);
     const url = `${SITE}/safety/${citySlug}/night/`;
     const pct = v => `${Math.round(v * 100)}%`;
 
     const volRows = byNightVolume.slice(0, 25).map((x, i) =>
-      `<tr><td><span class="rk">${i + 1}</span> <a href="/safety/${citySlug}/${x.a.slug}/">${esc(x.a.name)}</a></td><td class="n">${fmt(Math.round(x.nightInc))}</td><td class="n">${pct(x.share)}</td><td class="n" style="color:${bandColor[x.a.band]}">${x.a.safetyScore}/100</td></tr>`).join('');
+      `<tr><td><span class="rk">${i + 1}</span> <a href="/safety/${citySlug}/${x.a.slug}/">${esc(x.a.name)}</a></td><td class="n">${fmt(Math.round(x.nightInc))}</td><td class="n">${pct(x.share)}</td><td class="n" style="color:${bandText(x.a.band)}">${x.a.safetyScore}/100</td></tr>`).join('');
 
     const concRows = byConcentration.slice(0, 12).map(x =>
-      `<tr><td><a href="/safety/${citySlug}/${x.a.slug}/">${esc(x.a.name)}</a></td><td class="n">${pct(x.share)}</td><td class="n">${fmt(x.a.totalIncidents)}</td><td class="n" style="color:${bandColor[x.a.band]}">${x.a.safetyScore}/100</td></tr>`).join('');
+      `<tr><td><a href="/safety/${citySlug}/${x.a.slug}/">${esc(x.a.name)}</a></td><td class="n">${pct(x.share)}</td><td class="n">${fmt(x.a.totalIncidents)}</td><td class="n" style="color:${bandText(x.a.band)}">${x.a.safetyScore}/100</td></tr>`).join('');
 
     const calmRows = [...byConcentration].reverse().slice(0, 8).map(x =>
       `<tr><td><a href="/safety/${citySlug}/${x.a.slug}/">${esc(x.a.name)}</a></td><td class="n">${pct(x.share)}</td><td class="n">${fmt(x.a.totalIncidents)}</td></tr>`).join('');
@@ -2077,32 +2252,33 @@ ${footer(cfg, list[0], citySlug, windowDays)}`;
         a: `The app scores each walking route against the same ${cfg.dataName}, and can weight it toward the time you are actually walking rather than a flat all-day average. It also shows how much of each route runs on lit streets, and lets you share a walk and check in on arrival.` },
     ];
 
-    const title = `Is ${cfg.name} Safe at Night? Night-Time Crime Map — SafeRoute`;
-    const desc = `${pct(cityShare)} of ${cfg.name} ${noun} happen between 6pm and 6am. Which ${cfg.areaWordPlural} see the most night-time crime, and which change most after dark — from ${cfg.dataName} through ${date}.`;
+    const title = fitTitle(`Is ${cfg.name} Safe at Night? Night-Time Crime Map — SafeRoute`);
+    // Source and date sit with the figure, so a trim drops the prose, not them.
+    const desc = fitDesc(`${pct(cityShare)} of ${cfg.name} ${noun} happen between 6pm and 6am (${cfg.dataName} through ${date}). See which ${cfg.areaWordPlural} are busiest after dark.`);
     const jsonld = [
       { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Safety', item: `${SITE}/safety/` },
+        { '@type': 'ListItem', position: 1, name: 'Safety index', item: `${SITE}/safety/` },
         { '@type': 'ListItem', position: 2, name: cfg.name, item: `${SITE}/safety/${citySlug}/` },
         { '@type': 'ListItem', position: 3, name: 'At night', item: url }] },
       { '@context': 'https://schema.org', '@type': 'FAQPage',
         mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
     ];
 
-    const html = `${head(title, desc, url, jsonld)}${chrome(`<a href="/safety/">Safety</a> › <a href="/safety/${citySlug}/">${cfg.name}</a> › At night`)}
+    const html = `${head(title, desc, url, jsonld)}${chrome(`<a href="/safety/">Safety index</a> › <a href="/safety/${citySlug}/">${cfg.name}</a> › At night`)}
 <p class="eyebrow">Night-time safety · ${cfg.hubName} · data through ${date}</p>
 <h1>Is ${esc(cfg.name)} safe at night?</h1>
 <p class="lead"><strong>${pct(cityShare)}</strong> of ${cfg.name}'s ${noun} happen between 6pm and 6am, and ${pct(lateShare)} of them fall between midnight and 6am. That share swings from ${pct(shares[0])} to ${pct(shares[shares.length - 1])} depending on which ${cfg.areaWord} you are in — which is the whole point: the question worth asking is not whether ${cfg.name} is safe after dark, but where and by which route.</p>
 
 <div class="citychips"><span>${pct(cityShare)} after 6pm</span><span>${pct(lateShare)} after midnight</span><span>${todAreas.length} ${cfg.areaWordPlural}</span>${windowPhrase(windowDays) ? `<span>covers ${windowPhrase(windowDays).replace(/^the month$/, '1 month').replace(/^the /, '')}</span>` : ''}<span><a href="/safety/${citySlug}/">all of ${esc(cfg.name)}</a></span></div>
 
-<figure class="map" style="text-align:center">
+<figure class="map todwide">
 ${todSVG({ ...areas[0], timeOfDay: cityTod, name: cfg.name }, cfg)}
 <figcaption>When ${noun} happen ${cfg.acrossCity}, severity-weighted, weekday against weekend · ${cfg.dataName} through ${date}.</figcaption>
 </figure>
 
 <p class="notice">These figures describe <strong>when reported incidents happen</strong>, not how dangerous a street is. Somewhere with a night-time crowd reports more after dark because more people are there — that is a fact about footfall as much as about risk, and it is why the tables below show the count and the share side by side.</p>
 
-<h2>Most reported ${noun} after dark</h2>
+<h2>Most ${noun} after dark</h2>
 <table class="rank"><thead><tr><th>${cfg.areaWord.replace(/^./, c => c.toUpperCase())}</th><th style="text-align:right">6pm–6am</th><th style="text-align:right">Share</th><th style="text-align:right">Index</th></tr></thead><tbody>${volRows}</tbody></table>
 
 ${cta(`${cfg.name} at night`)}
@@ -2121,14 +2297,13 @@ ${faq.map(f => `<details><summary>${esc(f.q)}</summary><p>${f.a}</p></details>`)
 <h2>Methodology</h2>
 <p style="font-size:15.5px;color:var(--ink-2)">Every incident ${cfg.reportedTo} carries an occurrence time, which is bucketed into daytime (6am–6pm), evening (6pm–midnight) and the small hours (midnight–6am), split weekday against weekend, and weighted by severity so violence counts for more than shoplifting. A ${cfg.areaWord}'s night share is the weighted proportion falling between 6pm and 6am; its night count is that share applied to its total. The city-wide chart weights each ${cfg.areaWord} by its own volume, so a busy centre is not averaged against a quiet suburb as though they were the same size.</p>
 <p style="font-size:15.5px;color:var(--ink-2)">${cfg.hub.methodology}</p>
-${footer(cfg, areas[0], citySlug, windowDays)}`;
+${footer(cfg, cityYm, citySlug, windowDays)}`;
 
-    const dir = join(ROOT, 'safety', citySlug, 'night');
-    mkdirSync(dir, { recursive: true });
-    writeFileSync(join(dir, 'index.html'), wbrSlashes(html));
+    writePage(join(ROOT, 'safety', citySlug, 'night'), url, html,
+      newestOf(areas.map(a => a.fetchedAt)) || `${cityYm}-01`);
   }
 
-  return { citySlug, cfg, count: areas.length, median, ranked, sample: areas[0], noBasemap, windowDays, districts, nightPage };
+  return { citySlug, cfg, count: areas.length, median, ranked, noBasemap, windowDays, districts, nightPage };
 }
 
 // ── render all cities, then root + sitemap + robots ──────────────────────────
@@ -2140,7 +2315,12 @@ if (!rendered.length) throw new Error('no cities with data');
   const url = `${SITE}/safety/`;
   const rows = rendered.map(r =>
     `<tr><td><a href="/safety/${r.citySlug}/">${esc(r.cfg.hubName)}</a></td><td class="n">${r.count} ${r.cfg.areaWordPlural}</td></tr>`).join('\n');
-  const html = `${head('Neighborhood Safety Maps & Crime Data — SafeRoute', 'Data-driven neighborhood safety: crime maps, 0–100 safety indexes, and night-time patterns from official police data. Powered by the SafeRoute crime-aware walking app.', url, null)}${chrome('Safety')}
+  const areaTotal = rendered.reduce((n, r) => n + r.count, 0);
+  // The app covers more than these pages do. Its US city count comes from the
+  // transparency dataset, which measures every feed the backend serves, so it
+  // cannot drift the way a typed "30-city coverage" did.
+  const usCities = TRANSPARENCY ? Object.values(TRANSPARENCY).filter(r => r.country === 'US').length : 0;
+  const html = `${head('Neighborhood Safety Maps & Crime Data — SafeRoute', fitDesc(`${fmt(areaTotal)} neighborhoods in ${rendered.length} cities: 0–100 safety indexes, crime maps and night-time patterns from official police data. By the SafeRoute walking app.`), url, null)}${chrome(null)}
 <p class="eyebrow">SafeRoute safety index</p>
 <h1>Neighborhood safety, from official police data</h1>
 <p class="lead">The data behind SafeRoute's crime-aware walking routes, published as browsable neighborhood pages: a 0–100 safety index, a crime map, what's reported, and when it happens.</p>
@@ -2148,11 +2328,11 @@ if (!rendered.length) throw new Error('no cities with data');
 <table class="rank"><tbody>
 ${rows}
 </tbody></table>
-<p style="font-size:15px;color:var(--ink-2)">More cities from SafeRoute's 30-city coverage are on the way.</p>
+<p style="font-size:15px;color:var(--ink-2)">The app itself covers most of the UK, ${usCities ? `${usCities} US cities` : 'US cities'}, Toronto, Vancouver and Mexico City, and any address there can be checked on the <a href="/check/">Map</a>. More city pages are on the way.</p>
 ${cta('your city')}
-${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug, rendered[0].windowDays)}`;
-  mkdirSync(join(ROOT, 'safety'), { recursive: true });
-  writeFileSync(join(ROOT, 'safety', 'index.html'), wbrSlashes(html));
+${rootFooter()}`;
+  writePage(join(ROOT, 'safety'), url, html, newestOf(rendered.flatMap(r => r.ranked.map(a => a.fetchedAt)))
+    || `${newestOf(rendered.flatMap(r => r.ranked.map(a => a.crimeDate)))}-01`);
 }
 
 {
@@ -2169,52 +2349,52 @@ ${footer(rendered[0].cfg, rendered[0].sample, rendered[0].citySlug, rendered[0].
 }
 
 {
-  // lastmod tracks the DATA, not the build. Stamping every URL with today's
-  // date on each monthly rebuild tells crawlers all 1000+ pages changed when
-  // most did not, and Google learns to discount the signal. A page's content is
-  // a function of its crime data, so lastmod = first of the month the data runs
-  // through; it only moves when the page genuinely changes. Hubs/root take the
-  // newest date among their areas.
-  const lastmodOf = ym => `${ym || '2026-01'}-01`;
-  const newest = dates => dates.slice().sort().pop();
-  const cityDate = r => newest(r.ranked.map(a => a.crimeDate).filter(Boolean)) || '2026-01';
-  const siteDate = newest(rendered.map(cityDate));
+  // lastmod tracks the DATA, not the build: see writePage, which stamps a
+  // generated page with its data's fetch date when, and only when, the page
+  // changed. The hand-written pages take their last commit instead (the
+  // workflow checks out full history for this; a shallow clone would give
+  // every one of them the run date).
+  const gitDate = rel => {
+    try {
+      return execFileSync('git', ['log', '-1', '--format=%cs', '--', rel],
+        { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim() || null;
+    } catch { return null; }
+  };
+  const siteDate = LASTMOD.get(`${SITE}/safety/`);
+  const hand = (loc, file, pri) => existsSync(join(ROOT, file))
+    ? [{ loc: `${SITE}${loc}`, pri, mod: gitDate(file) || siteDate }] : [];
   urlCount = 0;
   const urls = [
-    { loc: `${SITE}/`, pri: '1.0', mod: lastmodOf(siteDate) },
-    { loc: `${SITE}/safety/`, pri: '0.8', mod: lastmodOf(siteDate) },
+    ...hand('/', 'index.html', '1.0'),
+    { loc: `${SITE}/safety/`, pri: '0.8', mod: LASTMOD.get(`${SITE}/safety/`) },
+    // /check/ and /tonight/ are hand-written rather than generated, which is
+    // exactly why /check/ kept missing from the sitemap: the generator only
+    // ever listed what it produced itself. They are real, indexable pages
+    // and the homepage's primary calls to action.
+    ...hand('/check/', 'check/index.html', '0.9'),
+    ...hand('/tonight/', 'tonight/index.html', '0.8'),
     // /transparency/ is generated by its own tool (render-transparency.mjs) but
-    // belongs in the one sitemap. Its lastmod comes from the dataset's own
-    // generation date rather than the crime feeds', because the page is about
-    // when we last MEASURED the feeds, not when they last published.
-    // /check/ is hand-written rather than generated, which is exactly why it
-    // kept missing from the sitemap — the generator only ever listed what it
-    // produced itself. It is a real, indexable page and the homepage's primary
-    // call to action, so it belongs here like the other hand-written surfaces.
-    ...(existsSync(join(ROOT, 'check', 'index.html'))
-      ? [{ loc: `${SITE}/check/`, pri: '0.9', mod: lastmodOf(siteDate) }]
-      : []),
-    ...(existsSync(join(ROOT, 'tonight', 'index.html'))
-      ? [{ loc: `${SITE}/tonight/`, pri: '0.8', mod: lastmodOf(siteDate) }]
-      : []),
+    // belongs in the one sitemap. Its lastmod is the dataset's own generation
+    // date, because the page is about when we last MEASURED the feeds.
     ...(existsSync(join(ROOT, 'transparency', 'index.html'))
       ? [{ loc: `${SITE}/transparency/`, pri: '0.8',
            mod: JSON.parse(readFileSync(join(ROOT, 'tools', 'data', 'transparency-index.json'))).generatedAt }]
       : []),
     ...rendered.flatMap(r => [
-      { loc: `${SITE}/safety/${r.citySlug}/`, pri: '0.9', mod: lastmodOf(cityDate(r)) },
+      { loc: `${SITE}/safety/${r.citySlug}/`, pri: '0.9' },
       // Districts sit between the city hub and the area pages in priority
       // because that is where they sit in value: they answer a query with real
       // volume ("is Brooklyn safe") that no area page can.
-      ...(r.districts || []).map(d => ({ loc: `${SITE}/safety/${r.citySlug}/district/${d.slug}/`, pri: '0.8',
-        mod: lastmodOf(newest(d.areas.map(a => a.crimeDate).filter(Boolean)) || cityDate(r)) })),
+      ...(r.districts || []).map(d => ({ loc: `${SITE}/safety/${r.citySlug}/district/${d.slug}/`, pri: '0.8' })),
       // Same priority as a district hub: it is the second hub-shaped page for
       // the city, aimed at a distinct query, and it is the one that matches
       // what the app is actually for.
-      ...(r.nightPage ? [{ loc: `${SITE}/safety/${r.citySlug}/night/`, pri: '0.8', mod: lastmodOf(cityDate(r)) }] : []),
-      ...r.ranked.map(a => ({ loc: `${SITE}/safety/${r.citySlug}/${a.slug}/`, pri: '0.7', mod: lastmodOf(a.crimeDate) })),
-    ]),
+      ...(r.nightPage ? [{ loc: `${SITE}/safety/${r.citySlug}/night/`, pri: '0.8' }] : []),
+      ...r.ranked.map(a => ({ loc: `${SITE}/safety/${r.citySlug}/${a.slug}/`, pri: '0.7' })),
+    ].map(u => ({ ...u, mod: LASTMOD.get(u.loc) }))),
   ];
+  const undated = urls.filter(u => !u.mod);
+  if (undated.length) throw new Error(`sitemap: no lastmod for ${undated.slice(0, 3).map(u => u.loc).join(', ')}`);
   urlCount = urls.length;
   writeFileSync(join(ROOT, 'sitemap.xml'),
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +

@@ -4,15 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Neighborhood Safety Maps &amp; Crime Data — SafeRoute</title>
-<meta name="description" content="Data-driven neighborhood safety: crime maps, 0–100 safety indexes, and night-time patterns from official police data. Powered by the SafeRoute crime-aware walking app.">
+<meta name="description" content="2,575 neighborhoods in 26 cities: 0–100 safety indexes, crime maps and night-time patterns from official police data. By the SafeRoute walking app.">
 <link rel="canonical" href="https://safe-route.app/safety/">
 <meta name="apple-itunes-app" content="app-id=6768244297">
 <meta property="og:title" content="Neighborhood Safety Maps &amp; Crime Data — SafeRoute">
-<meta property="og:description" content="Data-driven neighborhood safety: crime maps, 0–100 safety indexes, and night-time patterns from official police data. Powered by the SafeRoute crime-aware walking app.">
+<meta property="og:description" content="2,575 neighborhoods in 26 cities: 0–100 safety indexes, crime maps and night-time patterns from official police data. By the SafeRoute walking app.">
 <meta property="og:image" content="https://safe-route.app/assets/og-preview.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://safe-route.app/safety/">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -22,16 +25,17 @@
 
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a7d4a481ed8b4512a43225404078e7ab"}'></script>
 </head>
-<body><header class="site"><div class="wrap">
-<a class="wordmark" href="/"><svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>SAFEROUTE</span></a>
+<body><a class="skip" href="#main">Skip to content</a>
+<header class="site"><div class="wrap">
+<a class="wordmark" href="/"><span class="shield" aria-hidden="true"></span><span>SAFEROUTE</span></a>
 <nav class="site-nav" aria-label="Site">
-<a href="/safety/" class="on">Safety index</a>
+<a class="on" aria-current="page" href="/safety/">Safety<span class="nav-long"> index</span></a>
 <a href="/check/">Map</a>
 <a href="/tonight/">Tonight</a>
 <a class="hide-sm" href="/transparency/">Transparency</a>
 <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-safety-pages&mt=8">Get the app</a>
 </nav>
-</div></header><div class="crumbbar"><div class="wrap"><nav class="crumbs">Safety</nav></div></div><main><div class="wrap">
+</div></header><main id="main"><div class="wrap">
 <p class="eyebrow">SafeRoute safety index</p>
 <h1>Neighborhood safety, from official police data</h1>
 <p class="lead">The data behind SafeRoute's crime-aware walking routes, published as browsable neighborhood pages: a 0–100 safety index, a crime map, what's reported, and when it happens.</p>
@@ -64,14 +68,21 @@
 <tr><td><a href="/safety/vancouver/">Vancouver</a></td><td class="n">22 neighbourhoods</td></tr>
 <tr><td><a href="/safety/philly/">Philadelphia</a></td><td class="n">151 neighborhoods</td></tr>
 </tbody></table>
-<p style="font-size:15px;color:var(--ink-2)">More cities from SafeRoute's 30-city coverage are on the way.</p>
+<p style="font-size:15px;color:var(--ink-2)">The app itself covers most of the UK, 26 US cities, Toronto, Vancouver and Mexico City, and any address there can be checked on the <a href="/check/">Map</a>. More city pages are on the way.</p>
 <div class="cta">
 <h2>Walking in your city at night?</h2>
-<p>SafeRoute scores every walking route against the same live crime data on this page — and shows how much of each route runs on lit streets. Compare the routes, share your walk, and check in when you arrive. Free, no account.</p>
+<p>SafeRoute scores every walking route against the same official crime data on this page — and shows how much of each route runs on lit streets. Compare the routes, share your walk, and check in when you arrive. Free, no account.</p>
 <a class="btn" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-safety-pages&mt=8">Get SafeRoute on the App&nbsp;Store</a>
 </div>
 </div></main><footer class="site"><div class="wrap">
-<p><strong>Sources.</strong> Crime data: NYPD complaint data via <a href="https://opendata.cityofnewyork.us/">NYC Open Data</a>, covering the 6 months to June 2026. Neighborhood boundaries: NYC 2020 Neighborhood Tabulation Areas. Basemap (streets, parks, shoreline): NYC Open Data. Analysis © SafeRoute.</p>
-<p><strong>About this data.</strong> Figures are incidents <em>reported</em> to police within 1&nbsp;km of each neighborhood's center — reporting practices vary and not all crime is reported. This is informational only and not a guarantee of safety, a prediction, or a judgment of any community. Use it the way the app does: to pick better-lit, lower-incident routes and times.</p>
-<p><a href="/safety/new-york/">All New York neighborhoods</a> · <a href="/">SafeRoute app</a> · <a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></p>
+<p><strong>Sources.</strong> Crime data comes from each city's police open-data service and, in the UK, from <a href="https://data.police.uk/">data.police.uk</a> (Open Government Licence v3.0). Each city page names its source and the period it covers, and the <a href="/transparency/">Transparency index</a> measures how well each one publishes.</p>
+<p><strong>About this data.</strong> Figures are incidents <em>reported</em> to police — reporting practices vary and not all crime is reported. This is informational only and not a guarantee of safety, a prediction, or a judgment of any community.</p>
+<nav class="footlinks" aria-label="Footer"><ul>
+<li><a href="/safety/">Safety index</a></li>
+<li><a href="/check/">Map</a></li>
+<li><a href="/tonight/">Tonight</a></li>
+<li><a href="/transparency/">Transparency</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-support/">Support</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></li>
+</ul></nav>
 </div></footer></body></html>

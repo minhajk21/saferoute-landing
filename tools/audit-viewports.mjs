@@ -27,6 +27,19 @@
 //              layout: its map was 93% of the height once scrolled to, but a
 //              third of the screen on arrival.
 //   pane       on /check/, that the side pane stays inside <main>
+//   header     on every page type at every size (FAIL unless noted):
+//     - ONE row: the wordmark and every visible nav item share a centre line.
+//       It used to wrap to two rows at 372-375px on / and /tonight/ only
+//       (their gutter was 2px wider), so an iPhone SE saw a 95px bar there
+//       and a 61px one on the next tab.
+//     - the SAME height on every page type at the same size — the check that
+//       would have caught that drift, which no single page shows.
+//     - Map and Safety index are visible and at least 24x24px, phones
+//       included: phones once lost both, and the Map was then unreachable
+//       from 127 pages.
+//     - the current tab carries aria-current="page" — and only it (the
+//       homepage and the 404 page mark none) — so the one thing colour and an
+//       underline say to a sighted reader is said to a screen reader too.
 //
 // THE /check/ APP-SHELL CONTRACT (/check/ and /check/?schools, FAIL unless noted)
 // /check/ is an app shell, not a page with a map in it. Each rule below was a
@@ -56,9 +69,9 @@
 //       item's centre must hit the list. The map's stacking context once came
 //       within one z-index of covering it.
 //   stacked (< 861 wide)
-//     - #side's scroll-margin-top clears the header, which wraps to two lines
-//       on 320-360px phones: a school tap scrolls the pane into view, and a
-//       hard-coded 64px margin put its "Back" button under a 95px header.
+//     - #side's scroll-margin-top clears the header, whatever its height: a
+//       school tap scrolls the pane into view, and a hard-coded 64px margin
+//       once put its "Back" button under a 95px (two-row) header.
 //     - the map height band is a FAIL here, not a WARN; after a search the map
 //       is not under the header and >= 55% of it is on screen, and on 360x740
 //       and 390x844 the search box is fully visible under the header too
@@ -125,6 +138,9 @@ let OVERLAY = null, FILTER = null;
 const VIEWPORTS = [
   { name: 'phone-xs',   w: 320,  h: 568  },
   { name: 'phone-s',    w: 360,  h: 740  },
+  // iPhone SE and the 12/13 mini: the width where the header used to wrap on
+  // two tabs and not the others.
+  { name: 'phone-se',   w: 375,  h: 667  },
   { name: 'phone',      w: 390,  h: 844  },
   { name: 'tablet',     w: 768,  h: 1024 },
   // A phone on its side: still the stacked layout (under 861), and the
@@ -151,9 +167,14 @@ const VIEWPORTS = [
 // pages whose names are slash-joined: a browser will not wrap after "/", and
 // before render-pages.mjs added a <wbr> after each one, 24 such pages pushed a
 // phone sideways by up to 264px while Peckham, the other area page here, was
-// fine.
+// fine. /404.html is what Pages serves for every missing path, so it is a
+// page type of its own with the same header and footer.
 const ALL_PAGES = ['/', '/check/', '/check/?schools', '/tonight/#seattle', '/safety/', '/safety/london/', '/safety/london/peckham/',
-  '/safety/baltimore/medfield-hampden-woodberry-remington/', '/transparency/'];
+  '/safety/baltimore/medfield-hampden-woodberry-remington/', '/transparency/', '/404.html'];
+// The tab each page type is ON, by its nav link's href (null: none — the
+// homepage and the 404 page are not one of the tabs).
+const CURRENT_TAB = p => p.startsWith('/check/') ? '/check/' : p.startsWith('/tonight/') ? '/tonight/'
+  : p.startsWith('/safety/') ? '/safety/' : p.startsWith('/transparency/') ? '/transparency/' : null;
 // A filter names one page; a listed page also brings its ?query variants.
 const PAGES = !FILTER ? ALL_PAGES
   : ALL_PAGES.includes(FILTER) ? ALL_PAGES.filter(p => p === FILTER || p.startsWith(FILTER + '?'))
@@ -197,16 +218,15 @@ const MAPS = {
       }
       return drawn() ? 'ok' : 'timeout';
     })()` },
-  // Tonight only builds its map once LIVE data arrives, and the backend answers
-  // only safe-route.app — so offline it never builds. The container's size does
-  // not depend on the data, so the audit builds it directly (the page's own
-  // ensureMap) and says so in the report rather than implying it saw live data.
-  //
-  // It must WAIT for the page to finish trying first. Offline, the page's own
-  // city fetches fail, and its error handler rewrites the map slot with "Couldn't
-  // load the live layers" — if that lands after the audit built the container,
-  // it deletes it. That race made this report 'map not found' on roughly one
-  // run in two; waiting until the page has settled removes it.
+  // Tonight's Leaflet map is built only once LIVE data arrives, and the backend
+  // answers only safe-route.app — so offline it never builds. What the audit
+  // measures is the container, whose size does not depend on the data: the
+  // card is static HTML, so .citymap is there from the first paint, and when
+  // every city fetch fails the page keeps it at full size, marked .nomap ("No
+  // live data to map"). So the prepare returns at once; its 'live' means the
+  // container was found, not that live data was seen. The wait and the
+  // ensureMap fallback date from when the error handler rewrote the slot and
+  // could delete a container the audit had just built; they stay as a guard.
   // strict: its phone band (55-80%) FAILs rather than WARNs. On a landscape
   // phone its 340px floor once made the map 87% of the screen, a touch scroll
   // trap that sat in this report as a WARN nobody acted on.
@@ -508,6 +528,27 @@ const AFTER_SEARCH = `(async () => {
 const GEO_SPY = `(() => { window.__geoAsked = 0; const g = navigator.geolocation; if (!g) return;
   for (const k of ['getCurrentPosition', 'watchPosition']) { const f = g[k].bind(g); g[k] = (...a) => { window.__geoAsked++; return f(...a); }; } })()`;
 
+// Runs inside the page: the site header as a reader sees it. A nav link's
+// label may be shortened on phones ("Safety" for "Safety index", the rest
+// kept for screen readers), so links are found by href, not by their text.
+const HEADER = () => {
+  const hdr = document.querySelector('header.site');
+  if (!hdr) return { missing: true };
+  const vw = document.documentElement.clientWidth;
+  const shown = el => { const cs = getComputedStyle(el), r = el.getBoundingClientRect();
+    return cs.display !== 'none' && cs.visibility !== 'hidden' && r.width > 1 && r.height > 1 && r.left >= -1 && r.right <= vw + 1; };
+  const items = [...hdr.querySelectorAll('.wordmark, .site-nav a')].filter(shown);
+  const mids = items.map(el => { const r = el.getBoundingClientRect(); return r.top + r.height / 2; });
+  const link = href => { const a = hdr.querySelector(`.site-nav a[href="${href}"]`); if (!a) return null;
+    const r = a.getBoundingClientRect(); return { shown: shown(a), w: +r.width.toFixed(1), h: +r.height.toFixed(1) }; };
+  return {
+    h: +hdr.getBoundingClientRect().height.toFixed(1),
+    spread: mids.length ? +(Math.max(...mids) - Math.min(...mids)).toFixed(1) : 0,
+    map: link('/check/'), safety: link('/safety/'),
+    current: [...hdr.querySelectorAll('[aria-current="page"]')].map(a => a.getAttribute('href')),
+  };
+};
+
 // ── helpers for the checks ────────────────────────────────────────────────
 const pctOf = x => Math.round(x * 100);
 // Area shortfalls print one decimal: 49.7% rounds to "50%", which would read
@@ -576,17 +617,21 @@ async function main() {
   let fails = 0, warns = 0;
   const knowns = new Set();
   const rows = [];
+  const headerHeights = [];
   for (const vp of VIEWPORTS) {
     await c.send('Emulation.setDeviceMetricsOverride', {
       width: vp.w, height: vp.h, deviceScaleFactor: 1, mobile: vp.mobile ?? vp.w < 768,
     });
     const desktop = vp.w >= STACKED_BELOW;
+    const heights = [];   // [page, header height] at this size, compared below
     for (const page of PAGES) {
       const isCheck = page.startsWith('/check/');
       await load(base + page);
-      // Web fonts swap in after load and change the column's line breaks; on
-      // the shell every pixel of the column is measured, so wait for them.
-      if (isCheck) await ev(`Promise.race([document.fonts.ready.then(() => 1), new Promise(r => setTimeout(r, 3000))])`, true);
+      // Web fonts swap in after load and change line breaks: the column's on
+      // the shell, and the header's everywhere (its tabs are Plex Mono, and
+      // whether they fit one row is measured to the pixel). Wait for them.
+      await ev(`Promise.race([document.fonts.ready.then(() => 1), new Promise(r => setTimeout(r, 3000))])`, true);
+      const hd = (await ev(`(${HEADER.toString()})()`)) || { missing: true };
       // An unlisted /check/ URL is still the app shell: it takes the contract
       // of the variant it is (schools mode or not), never none.
       const mapCfg = MAPS[page] || (isCheck ? MAPS[/[?&]schools\b|#schools$/.test(page) ? '/check/?schools' : '/check/'] : null);
@@ -600,6 +645,23 @@ async function main() {
       const issues = [];
       const flag = (level, msg) => { issues.push(`${level} ${msg}`); if (level === 'FAIL') fails++; else warns++; };
       const sev = mapCfg?.strict ? 'FAIL' : 'WARN';
+      // ── header ──
+      if (hd.missing) flag('FAIL', 'no header.site');
+      else {
+        heights.push([page, hd.h]);
+        if (hd.spread > 1.5) flag('FAIL', `header wraps to more than one row (${hd.h}px tall; items ${hd.spread}px apart)`);
+        for (const [name, l] of [['Map', hd.map], ['Safety index', hd.safety]]) {
+          if (!l) flag('FAIL', `header has no ${name} link`);
+          else if (!l.shown) flag('FAIL', `header hides ${name} at this width`);
+          else if (l.w < 24 || l.h < 24) flag('FAIL', `header ${name} target ${l.w}x${l.h}px (want >= 24x24)`);
+        }
+        // Markup, not layout: checked at the first size only, so a missing
+        // attribute is one FAIL per page rather than one per size.
+        const want = CURRENT_TAB(page);
+        if (vp === VIEWPORTS[0] && (want ? hd.current.join() !== want : hd.current.length)) {
+          flag('FAIL', `aria-current="page" on ${hd.current.length ? hd.current.join(', ') : 'no tab'} (want ${want || 'none'})`);
+        }
+      }
       if (a.overflow) {
         const tag = a.offender?.tag || '';
         const known = KNOWN_OVERFLOW.find(k => k.page === page && k.w === vp.w && (tag === k.tag || tag.startsWith(k.tag + '.')) && a.overflow <= k.px + 2);
@@ -708,6 +770,18 @@ async function main() {
         : '';
       rows.push({ vp: `${vp.name} ${vp.w}x${vp.h}`, page, map: mapCol, issues });
     }
+    // One header, one height: every page type at this size must agree. No
+    // single page can show this drift, which is how a 95px bar on two tabs
+    // and a 61px bar on the rest went unnoticed.
+    const hs = heights.map(([, h]) => h);
+    if (hs.length > 1 && Math.max(...hs) - Math.min(...hs) > 0.5) {
+      fails++;
+      const byH = {};
+      for (const [p, h] of heights) (byH[h] ||= []).push(p);
+      rows.push({ vp: `${vp.name} ${vp.w}x${vp.h}`, page: '(all pages)', map: '',
+        issues: [`FAIL header height differs by page type: ${Object.entries(byH).map(([h, ps]) => `${h}px ${ps.join(' ')}`).join(' | ')}`] });
+    }
+    headerHeights.push(`${vp.w}x${vp.h} ${[...new Set(hs)].join('/')}px`);
   }
 
   // ── default view by time zone ──
@@ -757,6 +831,7 @@ async function main() {
     console.log(`  ${pad(r.vp, 20)} ${pad(r.page, 19)} ${pad(r.map, 64)} ${r.issues.join('; ') || 'ok'}`);
   }
   for (const k of stale) console.log(`  WARN known overflow on ${k.page} at ${k.w}px (${k.tag}, ${k.px}px) no longer reproduces — remove it from KNOWN_OVERFLOW`);
+  console.log(`\n  header height by size: ${headerHeights.join(' · ')}`);
   console.log(`\n  ${rows.length} page/size combinations · ${fails} FAIL · ${warns} WARN · ${knowns.size} KNOWN`);
   process.exit(fails ? 1 : 0);
 }

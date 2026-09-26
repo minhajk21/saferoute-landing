@@ -36,10 +36,16 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const APP_ID = '6768244297';
 const CHECK_ONLY = process.argv.includes('--check');
 
-// Every file that states a requirement, and the pattern that finds it. Add a
-// row here rather than a second script when a new page repeats the claim.
+// Every file that states a requirement, the pattern that finds it, and how to
+// write it back. Add a row here rather than a second script when a new page
+// repeats the claim. The homepage's JSON-LD states the floor as well, where
+// search engines read it; it has its own row because it is written as JSON,
+// and a fix that pasted the visible sentence in there would break the block.
 const TARGETS = [
-  { file: 'index.html', re: /Requires iOS (\d+(?:\.\d+)*)\+/g, label: 'Requires iOS <v>+' },
+  { file: 'index.html', re: /Requires iOS (\d+(?:\.\d+)*)\+/g, label: 'Requires iOS <v>+',
+    fix: v => `Requires iOS ${v}+` },
+  { file: 'index.html', re: /"operatingSystem":"iOS (\d+(?:\.\d+)*)\+"/g, label: '"operatingSystem":"iOS <v>+"',
+    fix: v => `"operatingSystem":"iOS ${v}+"` },
 ];
 
 async function appFacts() {
@@ -88,7 +94,7 @@ for (const t of TARGETS) {
     console.error(`[app-facts] ${t.file}: states ${[...new Set(wrong)].join(', ')} but the App Store requires ${facts.minOs}`);
     continue;
   }
-  const after = before.replace(t.re, `Requires iOS ${facts.minOs}+`);
+  const after = before.replace(t.re, t.fix(facts.minOs));
   writeFileSync(path, after);
   console.log(`[app-facts] ${t.file}: corrected ${wrong.length}× ${[...new Set(wrong)].join(', ')} → ${facts.minOs}`);
 }

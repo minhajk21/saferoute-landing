@@ -57,6 +57,11 @@ const grade = t => t >= 85 ? ['strong', 'var(--green)'] : t >= 70 ? ['fair', 'va
 // A row's bar is drawn from the points ACTUALLY EARNED, scaled by what was
 // measurable — so a city missing a component shows a narrower bar and a note,
 // never a silently inflated one.
+//
+// The segments are empty <i>s whose values lived only in hover titles, so a
+// keyboard, touch or screen-reader user could not read the breakdown at all,
+// and two of the four differ by colour alone. The bar is one image, named with
+// all four parts in order.
 function bar(r) {
   const measurable = r.scoredOn.length * 25;
   const segs = COMP.filter(([k]) => r.parts[k] != null).map(([k, , colour]) => {
@@ -64,7 +69,9 @@ function bar(r) {
     return `<i style="width:${pct.toFixed(1)}%;background:${colour}" title="${k}: ${r.parts[k]} of 25"></i>`;
   }).join('');
   const unmeasured = 100 - r.scoredOn.length * 25;
-  return `<div class="cbar">${segs}${unmeasured > 0
+  const label = COMP.map(([k, name]) => r.parts[k] != null ? `${name} ${r.parts[k]} of 25` : `${name} not measurable`)
+    .join(', ').replace(/(?<=, )[A-Z]/g, c => c.toLowerCase());
+  return `<div class="cbar" role="img" aria-label="${esc(label)}">${segs}${unmeasured > 0
     ? `<i class="nm" style="width:${unmeasured}%" title="not measurable — excluded from the score"></i>` : ''}</div>`;
 }
 
@@ -75,6 +82,9 @@ function row(r, i) {
   if (r.categoryCount != null && r.categoryCount < 8) notes.push(`only ${r.categoryCount} offence categories`);
   if (r.windowDays != null && r.windowDays < 60) notes.push(`${r.windowDays}-day window`);
   if (!r.hasIncidentTime) notes.push('no incident time');
+  // A feed that refuses the standard box at its row cap is probed over a
+  // smaller one; say so on its row, since its counts come from less ground.
+  if (r.probeMetres) notes.push(`${r.probeMetres}m probe box: 2000m exceeds its row cap`);
   return `<tr>
 <td class="rank">${i}</td>
 <td class="city"><span class="flag">${FLAG[r.country] || ''}</span> ${esc(r.name)}<span class="src">${esc(r.dataSource || '')}</span></td>
@@ -105,9 +115,15 @@ const scored = d.regions.map(r => r.total).sort((a, b) => a - b);
 const median = scored[Math.floor(scored.length / 2)];
 const best = full[0], worst = d.regions[d.regions.length - 1];
 
-const title = 'Which cities publish their crime data? — SafeRoute Transparency Index';
-const desc = `We measured how well ${d.regions.length} cities publish crime data — freshness, detail, breadth and history. `
+// Kept under the ~65 and ~160 characters a search result shows, so neither is
+// cut mid-phrase; the four measures are the page's first section anyway.
+const title = 'Which cities publish their crime data? — Transparency Index';
+const desc = `We measured how well ${d.regions.length} cities publish crime data. `
   + `Scores run ${worst.total} to ${best.total}. Two British police forces publish essentially nothing.`;
+
+// The method note ends with a pointer for readers of the raw JSON ("that
+// city's row carries probeMetres"); on the page, the row's own note says it.
+const probe = d.method.probe.replace(/;\s*that city's row carries probeMetres\s*$/, '');
 
 const jsonld = {
   '@context': 'https://schema.org', '@type': 'Dataset',
@@ -116,7 +132,7 @@ const jsonld = {
   url: `${SITE}/transparency/`,
   creator: { '@type': 'Organization', name: 'SafeRoute' },
   dateModified: d.generatedAt,
-  measurementTechnique: d.method.probe,
+  measurementTechnique: probe,
 };
 
 const html = `<!DOCTYPE html>
@@ -134,6 +150,9 @@ const html = `<!DOCTYPE html>
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${SITE}/transparency/">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -141,11 +160,8 @@ const html = `<!DOCTYPE html>
 <link rel="stylesheet" href="/assets/sr.css">
 <link rel="stylesheet" href="/safety/assets/safety.css">
 <style>
-/* Page-specific only — everything else comes from the shared sheet. */
-/* The shared sheet resets all margins and only restores them for headings and
-   .lead, which is fine on /safety/ pages where body paragraphs sit alone
-   between headings. This page runs several in a row, so they need separating. */
-main p + p{margin-top:15px}
+/* Page-specific only — everything else comes from the shared sheet, which
+   now also separates consecutive paragraphs in the reading column. */
 main ul li + li{margin-top:5px}
 .headline{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:12px;padding:20px 24px;margin:26px 0}
 .headline h2{margin:0 0 8px;font-size:19px}
@@ -174,16 +190,17 @@ td.bars{width:44%;padding-left:14px}
 ${CF_BEACON_TOKEN ? `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "${CF_BEACON_TOKEN}"}'></script>` : ''}
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="site"><div class="wrap">
-<a class="wordmark" href="/"><svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>SAFEROUTE</span></a>
+<a class="wordmark" href="/"><span class="shield" aria-hidden="true"></span><span>SAFEROUTE</span></a>
 <nav class="site-nav" aria-label="Site">
-<a href="/safety/">Safety index</a>
+<a href="/safety/">Safety<span class="nav-long"> index</span></a>
 <a href="/check/">Map</a>
 <a href="/tonight/">Tonight</a>
-<a class="hide-sm on" href="/transparency/">Transparency</a>
-<a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-transparency&mt=8">Get the app</a>
+<a class="hide-sm on" aria-current="page" href="/transparency/">Transparency</a>
+<a class="cta" href="${APP_URL}">Get the app</a>
 </nav>
-</div></header><main><div class="wrap">
+</div></header><main id="main"><div class="wrap">
 
 <p class="eyebrow">Crime-data transparency · ${d.regions.length} cities · 4 countries · ${esc(d.generatedAt)}</p>
 <h1>Which cities let you see their crime?</h1>
@@ -224,7 +241,7 @@ ${(d.unmeasurable?.length ?? 0) ? `
 <p style="font-size:14.5px;color:var(--ink-3);margin-top:14px"><strong>Not measured this time:</strong> ${d.unmeasurable.map(u => esc(u.name)).join(', ')} — ${d.unmeasurable.length === 1 ? 'its feed' : 'their feeds'} could not be reached when this snapshot was taken. No score is shown rather than a wrong one.</p>` : ''}
 
 <h2>How it is measured</h2>
-<p>Each city's live feed is queried directly — a ${d.method.probe}. Nothing here is taken on trust or from documentation; every value comes from asking the feed what it actually returns today.</p>
+<p>Each city's live feed is queried directly — a ${probe}. Nothing here is taken on trust or from documentation; every value comes from asking the feed what it actually returns today.</p>
 <ul style="font-size:15.5px;color:var(--ink-2);padding-left:20px;margin:10px 0">
 <li><strong>Freshness</strong> — how many days since the newest incident.</li>
 <li><strong>Detail</strong> — whether a record carries a clock time as well as a date, and a usable coordinate.</li>
@@ -242,9 +259,19 @@ ${(d.unmeasurable?.length ?? 0) ? `
 </div>
 
 </div></main><footer class="site"><div class="wrap">
-<p><strong>Sources.</strong> Each city's official police or municipal open-data service, queried live on ${esc(d.generatedAt)}; UK forces via <a href="https://data.police.uk/">data.police.uk</a>. Full method and the raw measurements are in the SafeRoute backend repository.</p>
+<p><strong>Sources.</strong> Each city's official police or municipal open-data service, queried live on ${esc(d.generatedAt)}; UK forces via <a href="https://data.police.uk/">data.police.uk</a>. The method is described above under How it is measured; the raw measurements are published as <a href="/tools/data/transparency-index.json">transparency-index.json</a>.</p>
 <p><strong>About this data.</strong> This page measures data publishing, not public safety. A low score means a force publishes little about crime — not that a place is dangerous, and not that its police are ineffective. Feeds change; this is a snapshot and is re-measured periodically.</p>
-<p><a href="/safety/">Neighbourhood safety index</a> · <a href="/check/">Map</a> · <a href="/">SafeRoute app</a> · <a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></p>
+<!-- The header's Transparency tab is hidden at 780px and below (it cannot fit
+     the one-row bar), which left phones with no current tab at all, seen or
+     announced. This row is where phones reach it, so it carries the mark. -->
+<nav class="footlinks" aria-label="Footer"><ul>
+<li><a href="/safety/">Safety index</a></li>
+<li><a href="/check/">Map</a></li>
+<li><a href="/tonight/">Tonight</a></li>
+<li><a aria-current="page" href="/transparency/">Transparency</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-support/">Support</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></li>
+</ul></nav>
 </div></footer></body></html>`;
 
 mkdirSync(join(ROOT, 'transparency'), { recursive: true });

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<!-- The header wordmark's compass (assets/sr.css), on the site's dark tile so
+     it holds up in light and dark browser tabs alike. The ring is drawn a
+     little heavier than in the header: at 16px its 1.7 stroke fades out. -->
+<rect width="32" height="32" rx="7" fill="#0A0D12"/>
+<g transform="translate(4 4)">
+<circle cx="12" cy="12" r="10.2" fill="none" stroke="#3FD9C0" stroke-width="2.1"/>
+<path d="M12 3.9 16 13.1 12 12.2Z" fill="#3FD9C0"/>
+<path d="M12 3.9 8 13.1 12 12.2Z" fill="#2AB9A2"/>
+<path d="M12 20.1 8.6 11.6 12 12.4Z" fill="#3FD9C0" fill-opacity=".42"/>
+<path d="M12 20.1 15.4 11.6 12 12.4Z" fill="#3FD9C0" fill-opacity=".28"/>
+<circle cx="12" cy="12" r="1.6" fill="#0A0D12"/>
+</g>
+</svg>

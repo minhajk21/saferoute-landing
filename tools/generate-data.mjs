@@ -10,9 +10,13 @@
 // Per neighborhood it stores a trimmed snapshot (score, band, counts, category
 // breakdown, time-of-day profile, and a capped sample of incident points for
 // the page's SVG map) in tools/data-cache/<city>/<slug>.json — the build cache,
-// committed so monthly rebuilds are incremental — and finally writes the small
-// published index (safety/data/<city>/index.json) that powers the client-side
-// area checker.
+// committed so monthly rebuilds are incremental. That cache is its only output.
+//
+// It used to publish a per-city index as well, safety/data/<city>/index.json,
+// for a client-side checker that has since moved to /safety/search-index.json
+// (written by render-pages.mjs). Nothing read the old files, and they ignored
+// the renderer's publish floor, so they kept publishing scores for areas the
+// site had withdrawn as too thin to score.
 //
 // Env:  SAFEROUTE_API_KEY (required) · SAFEROUTE_BASE_URL (default local :3111)
 // Run:  node tools/generate-data.mjs [--force] [--city new-york]
@@ -42,9 +46,7 @@ const DELAY_MS = Number(process.env.GEN_DELAY_MS || 1200);
 
 const gaz = JSON.parse(readFileSync(join(ROOT, 'tools', 'gazetteer', `${CITY}.json`)));
 const cacheDir = join(ROOT, 'tools', 'data-cache', CITY);
-const outDir = join(ROOT, 'safety', 'data', CITY);
 mkdirSync(cacheDir, { recursive: true });
-mkdirSync(outDir, { recursive: true });
 
 // Deterministic stride sample — stable across rebuilds with unchanged data.
 function samplePoints(incidents) {
@@ -130,24 +132,13 @@ async function worker() {
 console.log(`generate-data: ${CITY} — ${gaz.areas.length} areas → ${BASE}`);
 await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 
-// Published index — powers the client-side checker + hub table.
-const index = gaz.areas.flatMap(a => {
-  const f = join(cacheDir, `${a.slug}.json`);
-  if (!existsSync(f)) return [];
-  const j = JSON.parse(readFileSync(f));
-  return [{ slug: a.slug, name: a.name, borough: a.borough,
-            score: j.safetyScore, band: j.band, total: j.totalIncidents, date: j.crimeDate }];
-});
-writeFileSync(join(outDir, 'index.json'), JSON.stringify({
-  city: gaz.city, citySlug: gaz.citySlug, generatedAt: new Date().toISOString().slice(0, 10), areas: index,
-}));
-
-console.log(`done: ${done} fetched, ${skipped} cached, ${failed.length} failed · index: ${index.length} areas`);
+const cached = gaz.areas.filter(a => existsSync(join(cacheDir, `${a.slug}.json`))).length;
+console.log(`done: ${done} fetched, ${skipped} cached, ${failed.length} failed · ${cached} of ${gaz.areas.length} areas have data`);
 if (failed.length) {
   console.log('failed:', JSON.stringify(failed));
   // Tolerate a few stragglers. An area that fails KEEPS its previous cached
   // file, so the render still has data for it — just a little staler — and the
-  // index above already counts it. Failing the whole run over that trades a
+  // count above includes it. Failing the whole run over that trades a
   // couple of slightly-stale areas for ZERO refreshed areas across every city,
   // which is what happened on 2026-08-02: two London 503s out of 1,222 fetches
   // aborted the pipeline before it rendered or pushed anything, and the site

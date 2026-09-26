@@ -32,7 +32,14 @@ jobs:
     # nothing and the next run redoes the work. Re-measure past ~30 cities.
     timeout-minutes: 240
     steps:
+      # Full history, because render-pages.mjs dates the hand-written pages in
+      # sitemap.xml by their last commit, and the default one-commit clone
+      # gives every one of them the date of this run. blob:none keeps that
+      # cheap: commits and trees only, file contents fetched as needed.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -123,11 +130,12 @@ jobs:
             node tools/fetch-basemap-osm.mjs --city "$c"
           done
 
-      # The homepage states "Requires iOS X+" by hand, and it went stale the day
-      # 1.2.3 dropped the floor from 26.4 to 16.4 — telling older iPhones they
-      # could not install an app they could. This copies the App Store's own
-      # answer; the commit step below picks up any correction. It never fails
-      # the run (an unreachable lookup is not a content error).
+      # The homepage states "Requires iOS X+" by hand (and again in its JSON-LD),
+      # and it went stale the day 1.2.3 dropped the floor from 26.4 to 16.4 —
+      # telling older iPhones they could not install an app they could. This
+      # copies the App Store's own answer; the commit step below picks up any
+      # correction. It never fails the run (an unreachable lookup is not a
+      # content error).
       - name: Keep App Store facts on the site true
         run: node tools/check-app-facts.mjs
 

@@ -4,18 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SafeRoute — See your street before you walk it</title>
-<meta name="description" content="SafeRoute scores any address from official police data, plans walking routes by reported incidents, and shows the last 24 hours of 911 calls and live street cameras. UK, 26 US cities, Canada and Mexico City. No accounts, no ads.">
+<meta name="description" content="Official police data for the UK, 26 US cities, Canada and Mexico City: score any address, plan walks by reported incidents, see 911 calls and street cameras.">
 <link rel="canonical" href="https://safe-route.app/">
 <meta name="apple-itunes-app" content="app-id=6768244297">
 <meta name="theme-color" content="#0A0D12">
 
 <meta property="og:url" content="https://safe-route.app/">
 <meta property="og:title" content="SafeRoute — See your street before you walk it">
-<meta property="og:description" content="Check any address against official police data, plan a route scored street by street, and see the last 24 hours of 911 calls and live street cameras. UK · US · Canada · Mexico.">
+<meta property="og:description" content="Check any address against official police data, plan a route scored street by street, and see recent 911 calls and live street cameras. UK · US · Canada · Mexico.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://safe-route.app/assets/og-preview.png">
 <meta name="twitter:card" content="summary_large_image">
 
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -33,7 +36,9 @@
   }
 </script>
 <style>
-  :root{--maxw:1200px;--gutter:clamp(20px,5vw,64px)}
+  /* The same wide pair as /tonight/, so the header (which follows the page's
+     --maxw) puts the wordmark in the same place on both. */
+  :root{--maxw:1180px;--gutter:clamp(18px,5vw,72px)}
   .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
            color:var(--teal);display:flex;align-items:center;gap:9px;margin-bottom:18px}
   .eyebrow::before{content:'';width:22px;height:1px;background:var(--teal);opacity:.6}
@@ -87,9 +92,11 @@
     .phone-a{width:min(240px,46vw)} .phone-b{width:min(224px,43vw)}
   }
 
-  /* trust strip */
+  /* trust strip. The wide gap is for between items only: as one value it also
+     opened a 44px gap between the two rows it wraps to on a laptop. Rows keep
+     the 16px they always had on a phone. */
   .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-2)}
-  .strip-in{display:flex;flex-wrap:wrap;gap:clamp(16px,3.4vw,44px);padding:16px 0;
+  .strip-in{display:flex;flex-wrap:wrap;gap:16px clamp(16px,3.4vw,44px);padding:16px 0;
             font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3)}
   .strip-in b{color:var(--text-2);font-weight:500}
 
@@ -169,8 +176,10 @@
   footer{border-top:1px solid var(--line);padding:52px 0 34px;background:var(--bg-2)}
   .fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:36px}@media(max-width:720px){.fgrid{grid-template-columns:1fr 1fr}}
   .fdesc{color:var(--text-3);font-size:14.5px;margin-top:14px;max-width:38ch}
-  .fcol h4{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
-           color:var(--text-3);margin-bottom:13px;font-weight:500}
+  /* h2, not h4: the page's last heading is an h2, and an outline that jumps
+     two levels loses screen-reader users. Styled exactly as the h4 was. */
+  .fcol h2{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+           color:var(--text-3);margin:0 0 13px;font-weight:500;line-height:inherit}
   .fcol a,.fcol span{display:block;font-size:14.5px;color:var(--text-2);margin-bottom:9px}
   .fcol a:hover{color:var(--teal)}
   .fbot{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);display:flex;
@@ -182,11 +191,11 @@
   .js .reveal.in{opacity:1;transform:none}@media(prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none}}</style>
 </head>
 <body>
-
+<a class="skip" href="#main">Skip to content</a>
 <header class="site"><div class="wrap">
-<a class="wordmark" href="/"><svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>SAFEROUTE</span></a>
+<a class="wordmark" href="/"><span class="shield" aria-hidden="true"></span><span>SAFEROUTE</span></a>
 <nav class="site-nav" aria-label="Site">
-<a href="/safety/">Safety index</a>
+<a href="/safety/">Safety<span class="nav-long"> index</span></a>
 <a href="/check/">Map</a>
 <a href="/tonight/">Tonight</a>
 <a class="hide-sm" href="/transparency/">Transparency</a>
@@ -194,6 +203,7 @@
 </nav>
 </div></header>
 
+<main id="main">
 <!-- ══════════ HERO ══════════ -->
 <section class="hero" id="top">
   <div class="wrap">
@@ -203,8 +213,8 @@
         <h1 class="h1-hero reveal" style="--i:1">See your street<br><span class="grad">before you walk it.</span></h1>
         <p class="lede reveal" style="--i:2">
           SafeRoute scores any address from official police data, plans walking routes
-          by reported incidents, and — in a growing list of cities — shows you the last 24 hours
-          of 911 calls and live street cameras. No accounts. No ads.
+          by reported incidents, and — in a growing list of cities — shows you recent
+          911 calls and live street cameras. No accounts. No ads.
         </p>
         <form class="check reveal" style="--i:3" action="/check/"
               onsubmit="location.href='/check/#q='+encodeURIComponent(this.q.value.trim());return false">
@@ -261,13 +271,16 @@
 
       <div class="row reveal">
         <div>
-          <span class="tagpill"><i class="dot dot-ember"></i>Last 24 hours</span>
+          <span class="tagpill"><i class="dot dot-ember"></i>Recent 911 calls</span>
           <h3 style="font-size:clamp(24px,2.6vw,30px)">Every call police responded to, still glowing.</h3>
           <p>
             A dark, tilted 3D map of your city where each 911 dispatch call burns
             as an ember — brighter the fresher it is. Tap one to see what was
-            reported and when. Live today in New Orleans and San Francisco, where
-            calls land on the map minutes after they happen.
+            reported and when. Live today in seven US cities: San Francisco's calls
+            land on the map within minutes; Detroit and Cleveland update through
+            the day; Las Vegas, Minneapolis and New Orleans publish overnight or
+            each morning; and Seattle runs a few days behind, so it shows the
+            past week.
           </p>
           <p class="note">
             Dispatch calls are not confirmed crimes, and the app says so on every
@@ -285,14 +298,16 @@
           <span class="tagpill"><i class="dot dot-cam"></i>Live cameras</span>
           <h3 style="font-size:clamp(24px,2.6vw,30px)">Look down the street before you turn onto it.</h3>
           <p>
-            In London, tap any of 900+ Transport for London traffic cameras and
-            watch a short clip refreshed roughly every two minutes — Piccadilly
-            Circus, Oxford Street, Charing Cross Road. Toronto's city cameras are
-            in too, with more cities being measured.
+            In London, tap any of hundreds of Transport for London traffic cameras
+            and watch a short clip refreshed roughly every two minutes — Piccadilly
+            Circus, Oxford Street, Charing Cross Road. New York, Las Vegas, Toronto
+            and Vancouver cameras are in too, with more cities being measured.
           </p>
           <p class="note">
-            Public traffic cameras only, proxied through us so the camera network
-            never sees your device. Powered by TfL Open Data.
+            Public traffic cameras only. Stills and London's clips come through us,
+            so the camera network never sees your device; live video in New York
+            and Las Vegas plays straight from the transport authority. Powered by
+            TfL Open Data.
           </p>
         </div>
         <div class="row-media">
@@ -373,7 +388,7 @@
       <div class="card reveal" style="--i:0">
         <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
         <h3>Every number says its window</h3>
-        <p>"3,664 incidents over 7 months to Aug 2026" — because London publishes one month and most US cities publish year-to-date. A bare count would mislead.</p>
+        <p>Every count on every page says the span it covers, because London publishes one month at a time and most US cities publish year-to-date. A bare count would mislead.</p>
       </div>
       <div class="card reveal" style="--i:1">
         <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 3 20h18L12 3Z"/><path d="M12 10v4M12 17h.01"/></svg></div>
@@ -402,7 +417,9 @@
         <p class="lede" style="margin-top:18px">
           There is no account to make, nothing to sell, and no advertising. The
           alerts run entirely on your iPhone — your location never reaches our
-          servers at all. Camera images are fetched by us, never by your device.
+          servers at all. Camera stills are fetched by us, never by your device;
+          live video in New York and Las Vegas plays straight from the transport
+          authority.
         </p>
         <div class="cards cards-2" style="margin-top:30px">
           <div class="card"><h3>No sign-up</h3><p>Open it and it works. Nothing to create, nothing to remember.</p></div>
@@ -432,8 +449,8 @@
     <div class="cov">
       <div class="cov-item reveal" style="--i:0">
         <div class="n">United Kingdom</div>
-        <h3>Every territorial force</h3>
-        <p>England, Wales &amp; Northern Ireland via data.police.uk — plus live TfL street cameras across London.</p>
+        <h3>Most of the UK</h3>
+        <p>England, Wales &amp; Northern Ireland via data.police.uk — every force that publishes street-level crime, which is all but Greater Manchester and Gloucestershire. Scotland doesn't publish. Plus live TfL street cameras across London.</p>
       </div>
       <div class="cov-item reveal" style="--i:1">
         <div class="n">United States · 26 cities</div>
@@ -443,7 +460,7 @@
       <div class="cov-item reveal" style="--i:2">
         <div class="n">Canada</div>
         <h3>Toronto &amp; Vancouver</h3>
-        <p>Toronto Police Service and Vancouver Police open data — with Toronto's city traffic cameras live in the app.</p>
+        <p>Toronto Police Service and Vancouver Police open data — with Toronto and Vancouver city traffic cameras live in the app.</p>
       </div>
       <div class="cov-item reveal" style="--i:3">
         <div class="n">Mexico</div>
@@ -469,7 +486,7 @@
       <a class="card card-link reveal" style="--i:0" href="/check/">
         <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div>
         <h3>Map</h3>
-        <p>Type any street, neighborhood or landmark and see its safety index on a live crime heatmap — anywhere in the UK, 26 US cities, Toronto, Vancouver and Mexico City.</p>
+        <p>Type any street, neighborhood or landmark and see its safety index on a live crime heatmap — most of the UK (England, Wales, Northern Ireland), 26 US cities, Toronto, Vancouver and Mexico City.</p>
         <span class="card-go">Open the map →</span>
       </a>
       <a class="card card-link reveal" style="--i:1" href="/check/?schools">
@@ -487,7 +504,7 @@
       <a class="card card-link reveal" style="--i:3" href="/tonight/">
         <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></div>
         <h3>Tonight</h3>
-        <p>Live police dispatch maps for the US cities that publish fast enough — what officers were sent to in the last 24 hours.</p>
+        <p>Live police dispatch maps for the US cities that publish fast enough — what officers were sent to over the last day to the last week, depending on the city.</p>
         <span class="card-go">See tonight →</span>
       </a>
     </div>
@@ -500,7 +517,7 @@
              aria-label="Search neighborhoods in the SafeRoute safety index"
              placeholder="Try Harlem, Brixton, Hyde Park…">
       <ul id="hl-out"></ul>
-      <p class="lookup-note" id="hl-note"><span data-fact="areas">2,575</span> areas across <span data-fact="cities">26</span> cities — try a neighborhood, ward or borough.</p>
+      <p class="lookup-note" id="hl-note" role="status"><span data-fact="areas">2,575</span> areas across <span data-fact="cities">26</span> cities — try a neighborhood, ward or borough.</p>
       <div class="citylinks">
         <a href="/safety/london/">London <b data-fact="city:london">248</b></a>
         <a href="/safety/new-york/">New York <b data-fact="city:new-york">197</b></a>
@@ -533,6 +550,7 @@
     </div>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="wrap">
@@ -549,7 +567,7 @@
           US cities, Canada and Mexico City. Built for the walk home.</p>
       </div>
       <div class="fcol">
-        <h4>Product</h4>
+        <h2>Product</h2>
         <a href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-home&mt=8">Download on the App Store</a>
         <a href="/check/">Map</a>
         <a href="/tonight/">Tonight's calls</a>
@@ -557,7 +575,7 @@
         <a href="/transparency/">Crime-data transparency index</a>
       </div>
       <div class="fcol">
-        <h4>More</h4>
+        <h2>More</h2>
         <a href="https://minhajk21.github.io/saferoute-support/">Support</a>
         <a href="https://minhajk21.github.io/saferoute-privacy/">Privacy policy</a>
         <a href="mailto:minhaj@safe-route.app">minhaj@safe-route.app</a>
@@ -566,7 +584,7 @@
     </div>
     <div class="fbot">
       <span>© 2026 SafeRoute</span>
-      <span>Crime data: data.police.uk + US/Canada city open data + CDMX FGJ (Hoyo de Crimen) · Camera imagery: TfL Open Data, City of Toronto · Not affiliated with any police force</span>
+      <span>Crime data: data.police.uk + US/Canada city open data + CDMX FGJ (Hoyo de Crimen) · Camera imagery: TfL Open Data, 511NY/NYSDOT, Nevada DOT, City of Toronto (OGL–Toronto), City of Vancouver (OGL–Vancouver) · Not affiliated with any police force</span>
     </div>
   </div>
 </footer>

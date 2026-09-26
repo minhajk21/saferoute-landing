@@ -5,36 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0A0D12">
 <title>Tonight — live police dispatch maps for seven US cities — SafeRoute</title>
-<meta name="description" content="Pick a city and see the calls police actually responded to, mapped from official dispatch data — San Francisco, Detroit, Las Vegas, Seattle, Cleveland, Minneapolis and New Orleans. Filtered to real incidents. No alerts, no panic — just what tonight looks like.">
+<meta name="description" content="See the calls police responded to in San Francisco, Detroit, Cleveland, New Orleans, Minneapolis, Las Vegas and Seattle, mapped from official dispatch data.">
 <link rel="canonical" href="https://safe-route.app/tonight/">
 <meta name="apple-itunes-app" content="app-id=6768244297">
-<meta property="og:title" content="Tonight — live police dispatch maps, city by city — SafeRoute">
+<meta property="og:title" content="Tonight — live police dispatch maps for seven US cities — SafeRoute">
 <meta property="og:description" content="Seven cities whose police publish dispatch data fast enough to map. Pick one and see the calls officers responded to, from official sources. No alerts, no panic.">
 <meta property="og:image" content="https://safe-route.app/assets/og-preview.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://safe-route.app/tonight/">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://saferoute-backend-w5yf.onrender.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/sr.css">
 <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
-  :root{--maxw:1180px;--gutter:clamp(20px,5vw,72px)}
-  /* This page lives at night. Same type system as the rest of the site, but
-     the dark palette is the point — it is the web's version of the app's
-     Tonight card, not a themed variant of the cream pages. */
+  /* The same wide pair as the homepage, so the header (which follows the
+     page's --maxw) puts the wordmark in the same place on both. */
+  :root{--maxw:1180px;--gutter:clamp(18px,5vw,72px)}
   :root{
     /* Page-specific aliases only — every shared token comes from sr.css. */
     --night:var(--bg); --night-2:var(--surface); --night-3:var(--surface-2);
     --ember-soft:#FF8A7D;
   }
 
-  /* Header styles live in /assets/sr.css — see the Site header block there. */
+  /* Header, footer, the app-download card and the dark Leaflet chrome all
+     live in /assets/sr.css. */
 
-  .head{padding:clamp(30px,5vw,56px) 0 18px}
-  .eyebrow .live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ember);margin-right:7px;animation:heartbeat 2.4s ease-in-out infinite}0%,100%{opacity:1}50%{opacity:.35}
+  /* 34px from the header to the eyebrow, as on every reading page. Body
+     paragraphs take the site's ink; only the lead is set in the quieter grey. */
+  .head{padding:34px 0 18px}
+  .eyebrow .live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ember);margin-right:7px;animation:heartbeat 2.4s ease-in-out infinite}
+  @keyframes heartbeat{0%,100%{opacity:1}50%{opacity:.35}}
   .lead{font-size:clamp(16px,2vw,18.5px);color:var(--ink-2);max-width:62ch;margin:0;line-height:1.6}
 
   /* ---- City picker -------------------------------------------------------
@@ -42,7 +48,14 @@
      and render them all on load; at two cities that was merely wasteful, at
      seven it would be a second of jank and seven tile bills for six maps
      nobody scrolled to. The list loads seven counts in parallel — cheap, it is
-     the same call the app makes — and the map is built once, on first pick. */
+     the same call the app makes — and the map is built once, on first pick.
+
+     The seven buttons are written in the HTML with every line already in
+     place, and script only fills in the numbers. The list used to arrive
+     empty and grow as each city answered, pushing everything under it down
+     the screen (a layout shift of 0.10-0.14 at laptop sizes). The badge is a
+     fixed width for the same reason: "···" becoming "THIS WEEK" must not
+     squeeze the city name onto a second line. */
   .picker{margin:26px 0 10px}
   .picker h2{font-size:13px;font-family:var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin:0 0 12px}
   .citylist{display:grid;grid-template-columns:repeat(auto-fill,minmax(212px,1fr));gap:10px;list-style:none;padding:0;margin:0}
@@ -56,17 +69,30 @@
   .citybtn[disabled]:hover{border-color:var(--line);background:var(--night-2)}
   .cb-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
   .cb-name{font-size:16px;font-weight:600;letter-spacing:-.01em}
+  /* Wide enough for the longest heading, THIS WEEK: 9 characters at .7em. */
   .badge{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.1em;
-         border:1px solid var(--line-2);color:var(--ink-3);padding:3px 7px;border-radius:999px;white-space:nowrap}
+         border:1px solid var(--line-2);color:var(--ink-3);padding:3px 7px;border-radius:999px;white-space:nowrap;
+         flex:none;min-width:calc(6.3em + 16px);text-align:center}
   .badge.now{border-color:var(--ember);color:var(--ember-soft)}
   /* Both are spans inside the button, so they must be told to be blocks —
      left inline they reflow onto one run the moment the name wraps, which is
      every card at phone width. */
-  .cb-stat{display:block;font-family:var(--mono);font-size:12px;color:var(--ink-2)}
-  .cb-stat b{color:var(--ember-soft);font-size:14.5px;font-weight:600}
-  .cb-sub{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--ink-3);margin-top:4px;text-transform:uppercase}
+  .cb-stat{display:block;font-family:var(--mono);font-size:11.5px;line-height:22px;color:var(--ink-2)}
+  .cb-stat b{color:var(--ember-soft);font-size:14.5px;font-weight:600;line-height:1}
+  .cb-sub{display:block;font-family:var(--mono);font-size:10px;line-height:16px;letter-spacing:.04em;color:var(--ink-3);margin-top:4px;text-transform:uppercase}
+  /* Whether a line wraps must not depend on the data. From a 218px text
+     column up, the longest a line can be ("1059 calls police responded to" or
+     "800+ …", four characters of count; "LAST 7 DAYS · NEWEST 3.3 DAYS AGO")
+     fits on one; below that, each keeps two lines from the first paint, so a
+     count landing never adds one. Counts carry no thousands comma for that
+     reason: "1,059" is 9px wider and would wrap at 1440. */
+  .citylist li{container-type:inline-size}
+  @container (max-width:249.9px){.cb-stat{min-height:44px}.cb-sub{min-height:32px}}
 
-  /* ---- The one map ---- */
+  /* ---- The one map ----
+     The card is in the HTML too, at its full height, so building the map on
+     the first pick fills a box that is already there rather than inserting
+     one (that insertion alone was a 0.08 shift). */
   .citycard{border:1px solid var(--line);background:var(--night-2);margin:18px 0 14px;overflow:hidden;border-radius:16px}
   .citybar{display:flex;align-items:baseline;justify-content:space-between;gap:14px;padding:16px 20px;flex-wrap:wrap}
   .cityname{font-size:20px;font-weight:600;letter-spacing:-.01em}
@@ -81,38 +107,21 @@
      screen, and one-finger drag pans a map, so the page under it could not
      be scrolled to. The floor now gives way on short screens. */
   .citymap{width:100%;height:clamp(min(340px,72vh),68vh,1000px);height:clamp(min(340px,72dvh),68dvh,1000px);background:var(--night-3)}
+  .citymap.nomap{display:grid;place-items:center}
+  .citymap.nomap::after{content:'No live data to map';font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
   .cityfoot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
   .lagnote{padding:0 20px 12px;font-family:var(--mono);font-size:10.5px;line-height:1.55;color:var(--ink-3)}
-  p{color:var(--ink-2);line-height:1.65;margin:0 0 14px}
+  /* On a phone the name and the count never share a line, so the bar is two
+     lines from the first paint rather than becoming two when the count lands. */
+  @media(max-width:560px){.citybar{flex-direction:column;align-items:flex-start;gap:2px}}
   .coming{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
   .coming span{font-family:var(--mono);font-size:11px;letter-spacing:.05em;border:1px solid var(--line-2);color:var(--ink-2);padding:7px 12px;border-radius:999px}
   .coming span b{color:var(--ink)}
 
-  .cta-block{border:1px solid var(--line);background:var(--night-2);border-radius:16px;padding:24px;margin:34px 0}
-  .cta-block h2{margin:0 0 8px}
-  .btn{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;background:var(--teal);color:#04231E;padding:12px 18px;border-radius:10px}
-  .btn:hover{background:var(--ember-soft)}
-
-  footer{border-top:1px solid var(--line);margin-top:48px;padding:22px 0 34px}
-  footer p{font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.6}
-  footer a{color:var(--ink-2)}
-
-  .leaflet-container{background:var(--night-3);font:inherit}
-  .recent-dot{animation:rpulse 2.6s ease-in-out infinite}0%,100%{stroke-opacity:.95}50%{stroke-opacity:.3}
+  .recent-dot{animation:rpulse 2.6s ease-in-out infinite}
+  @keyframes rpulse{0%,100%{stroke-opacity:.95}50%{stroke-opacity:.3}}
   .leaflet-tooltip.tt{background:var(--night-2);border:1px solid var(--line);color:var(--ink);font-family:var(--sans);font-size:12.5px;border-radius:4px;box-shadow:0 6px 18px rgba(0,0,0,.5)}
   .leaflet-tooltip.tt::before{display:none}
-
-  /* Leaflet's default chrome is light — restyle it for the night map. */
-  .leaflet-container{background:var(--night-3);font-family:var(--sans)}
-  .leaflet-bar a{background:#141B24;color:var(--ink);border-bottom-color:var(--line-2)}
-  .leaflet-bar a:hover{background:#1B2531;color:var(--teal)}
-  .leaflet-control-attribution{background:rgba(10,13,18,.8)!important;color:var(--ink-3);font-size:10px}
-  .leaflet-control-attribution a{color:var(--ink-2)}
-  .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#141B24;color:var(--ink);box-shadow:0 18px 40px rgba(0,0,0,.6)}
-  .leaflet-popup-content-wrapper{border-radius:10px;border:1px solid var(--line-2)}
-  .leaflet-popup-content{font-family:var(--sans);font-size:13.5px}
-  .leaflet-container a.leaflet-popup-close-button{color:var(--ink-3)}
-  .leaflet-container a.leaflet-popup-close-button:hover{color:var(--ink)}
 
   @media (prefers-reduced-motion:reduce){
     .eyebrow .live,.recent-dot{animation:none}
@@ -121,19 +130,19 @@
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a7d4a481ed8b4512a43225404078e7ab"}'></script>
 </head>
 <body>
-
+<a class="skip" href="#main">Skip to content</a>
 <header class="site"><div class="wrap">
-<a class="wordmark" href="/"><svg class="shield" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 1.2 20 4.7v7.6c0 6-4.3 10.2-9 12-4.7-1.8-9-6-9-12V4.7L11 1.2Z" fill="#14564C"/><path d="M6.9 12.7 9.7 15.5 15 9.1" stroke="#F4F0E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>SAFEROUTE</span></a>
+<a class="wordmark" href="/"><span class="shield" aria-hidden="true"></span><span>SAFEROUTE</span></a>
 <nav class="site-nav" aria-label="Site">
-<a href="/safety/">Safety index</a>
+<a href="/safety/">Safety<span class="nav-long"> index</span></a>
 <a href="/check/">Map</a>
-<a class="on" href="/tonight/">Tonight</a>
+<a class="on" aria-current="page" href="/tonight/">Tonight</a>
 <a class="hide-sm" href="/transparency/">Transparency</a>
 <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-tonight&mt=8">Get the app</a>
 </nav>
 </div></header>
 
-<main><div class="wrap">
+<main id="main"><div class="wrap">
   <div class="head">
     <p class="eyebrow"><span class="live"></span>LIVE DISPATCH DATA · SEVEN CITIES</p>
     <h1>What tonight actually looks like.</h1>
@@ -144,10 +153,28 @@
 
   <section class="picker" aria-labelledby="pick-h">
     <h2 id="pick-h">Cities with a live layer</h2>
-    <ul class="citylist" id="citylist"></ul>
+    <ul class="citylist" id="citylist">
+      <li><button class="citybtn" type="button" id="btn-sf" aria-pressed="false" disabled><span class="cb-top"><span class="cb-name">San Francisco</span><span class="badge" id="badge-sf">···</span></span><span class="cb-stat" id="stat-sf"><b>···</b> calls police responded to</span><span class="cb-sub" id="sub-sf">Checking the feed…</span></button></li>
+      <li><button class="citybtn" type="button" id="btn-det" aria-pressed="false" disabled><span class="cb-top"><span class="cb-name">Detroit</span><span class="badge" id="badge-det">···</span></span><span class="cb-stat" id="stat-det"><b>···</b> calls police responded to</span><span class="cb-sub" id="sub-det">Checking the feed…</span></button></li>
+      <li><button class="citybtn" type="button" id="btn-cle" aria-pressed="false" disabled><span class="cb-top"><span class="cb-name">Cleveland</span><span class="badge" id="badge-cle">···</span></span><span class="cb-stat" id="stat-cle"><b>···</b> calls police responded to</span><span class="cb-sub" id="sub-cle">Checking the feed…</span></button></li>
+      <li><button class="citybtn" type="button" id="btn-nola" aria-pressed="false" disabled><span class="cb-top"><span class="cb-name">New Orleans</span><span class="badge" id="badge-nola">···</span></span><span class="cb-stat" id="stat-nola"><b>···</b> calls police responded to</span><span class="cb-sub" id="sub-nola">Checking the feed…</span></button></li>
+      <li><button class="citybtn" type="button" id="btn-mpls" aria-pressed="false" disabled><span class="cb-top"><span class="cb-name">Minneapolis</span><span class="badge" id="badge-mpls">···</span></span><span class="cb-stat" id="stat-mpls"><b>···</b> calls police responded to</span><span class="cb-sub" id="sub-mpls">Checking the feed…</span></button></li>
+      <li><button class="citybtn" type="button" id="btn-lv" aria-pressed="false" disabled><span class="cb-top"><span class="cb-name">Las Vegas</span><span class="badge" id="badge-lv">···</span></span><span class="cb-stat" id="stat-lv"><b>···</b> calls police responded to</span><span class="cb-sub" id="sub-lv">Checking the feed…</span></button></li>
+      <li><button class="citybtn" type="button" id="btn-sea" aria-pressed="false" disabled><span class="cb-top"><span class="cb-name">Seattle</span><span class="badge" id="badge-sea">···</span></span><span class="cb-stat" id="stat-sea"><b>···</b> calls police responded to</span><span class="cb-sub" id="sub-sea">Checking the feed…</span></button></li>
+    </ul>
   </section>
 
-  <div id="mapslot" aria-live="polite"></div>
+  <div id="mapslot">
+    <div class="citycard">
+      <div class="citybar" aria-live="polite">
+        <span class="cityname" id="m-name">&nbsp;</span>
+        <span class="citycount" id="m-count"><b>···</b> calls police responded to · ···</span>
+      </div>
+      <div id="m-map" class="citymap" role="region" aria-label="Map of calls police responded to"></div>
+      <div class="cityfoot"><span id="m-src">&nbsp;</span><span id="m-cad"></span></div>
+      <div class="lagnote" id="m-lag" hidden></div>
+    </div>
+  </div>
 
   <h2>Where this is going next</h2>
   <p>A city joins when its feed passes three tests, measured live — fresh enough to mean
@@ -175,36 +202,45 @@
   sightings. Apps built on alarm have their place; this isn't one of them. SafeRoute's job is the
   walk home — the same data, in a register you can actually use to make a decision.</p>
 
-  <div class="cta-block">
+  <div class="cta">
     <h2>The same night, in your pocket</h2>
     <p>The SafeRoute app shows this view for wherever you're standing — plus the safety index,
     lit-street routing, and safe places open now. Free, no account.</p>
-    <a class="btn" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-tonight&mt=8">Get SafeRoute on the App&nbsp;Store</a>
+    <a class="btn btn-fill" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-tonight&mt=8">Get SafeRoute on the App&nbsp;Store</a>
   </div>
 </div></main>
 
-<footer><div class="wrap">
-  <p><strong>Sources.</strong> Official municipal dispatch data, fetched live: SFPD dispatched calls via <a href="https://datasf.org/opendata/">DataSF</a>; OPCD Calls for Service via <a href="https://data.nola.gov">data.nola.gov</a>; Detroit Police Department 911 calls; LVMPD Calls for Service; Seattle Police CAD via <a href="https://data.seattle.gov">data.seattle.gov</a>; Cleveland Division of Police CAD; and Minneapolis Police 911 incidents. Calls are filtered to offence-describing types; locations are anonymised to block level by the source. This page shows police workload, not verified crime — informational only.</p>
-  <p><a href="/safety/">Neighbourhood safety index</a> · <a href="/check/">Map</a> · <a href="/transparency/">Crime-data transparency index</a> · <a href="/">SafeRoute</a></p>
+<footer class="site"><div class="wrap">
+<p><strong>Sources.</strong> Official municipal dispatch data, fetched live: SFPD dispatched calls via <a href="https://data.sf.gov/">DataSF</a>; Detroit Police Department 911 calls via <a href="https://data.detroitmi.gov/">City of Detroit Open Data</a>; Cleveland Division of Police CAD via <a href="https://data.clevelandohio.gov/">City of Cleveland Open Data</a>; OPCD Calls for Service via <a href="https://datadriven.nola.gov/home/">City of New Orleans Open Data</a>; Minneapolis Police 911 incidents via <a href="https://opendata.minneapolismn.gov/">Minneapolis Open Data</a>; LVMPD Calls for Service via <a href="https://opendata-lvmpd.hub.arcgis.com/">LVMPD Open Data</a>; and Seattle Police CAD via <a href="https://data.seattle.gov/">Seattle Open Data</a>. Calls are filtered to offence-describing types; locations are anonymised to block level by the source. This page shows police workload, not verified crime — informational only.</p>
+<nav class="footlinks" aria-label="Footer"><ul>
+<li><a href="/safety/">Safety index</a></li>
+<li><a href="/check/">Map</a></li>
+<li><a href="/tonight/">Tonight</a></li>
+<li><a href="/transparency/">Transparency</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-support/">Support</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></li>
+</ul></nav>
 </div></footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 const API='https://saferoute-backend-w5yf.onrender.com';
 
-/* Every city the backend serves a live layer for. Ordered here only as a
-   fallback; the list re-sorts freshest-first once the counts answer, so the
-   page always leads with the liveliest map it has rather than with whichever
-   city happens to be written first. `slug` is the deep link (/tonight/#seattle)
-   so a city can be shared or linked to directly. */
+/* Every city the backend serves a live layer for, in the order the list in
+   the HTML shows them: the usual freshness order, San Francisco (minutes) to
+   Seattle (days behind). The list used to re-sort itself freshest-first once
+   the counts answered, which moved every card after it had painted; now it
+   stays put, and the map still opens on whichever city is actually freshest
+   right now. `slug` is the deep link (/tonight/#seattle) so a city can be
+   shared or linked to directly. */
 const CITIES=[
   {id:'sf',    slug:'san-francisco', name:'San Francisco', lat:37.7880, lng:-122.4074, zoom:13},
   {id:'det',   slug:'detroit',       name:'Detroit',       lat:42.3314, lng:-83.0458,  zoom:12},
+  {id:'cle',   slug:'cleveland',     name:'Cleveland',     lat:41.4993, lng:-81.6944,  zoom:12},
+  {id:'nola',  slug:'new-orleans',   name:'New Orleans',   lat:29.9540, lng:-90.0700,  zoom:13},
+  {id:'mpls',  slug:'minneapolis',   name:'Minneapolis',   lat:44.9778, lng:-93.2650,  zoom:12},
   {id:'lv',    slug:'las-vegas',     name:'Las Vegas',     lat:36.1147, lng:-115.1728, zoom:12},
   {id:'sea',   slug:'seattle',       name:'Seattle',       lat:47.6062, lng:-122.3321, zoom:12},
-  {id:'cle',   slug:'cleveland',     name:'Cleveland',     lat:41.4993, lng:-81.6944,  zoom:12},
-  {id:'mpls',  slug:'minneapolis',   name:'Minneapolis',   lat:44.9778, lng:-93.2650,  zoom:12},
-  {id:'nola',  slug:'new-orleans',   name:'New Orleans',   lat:29.9540, lng:-90.0700,  zoom:13},
 ];
 
 const catName=c=>({'violent-crime':'Violence','other-theft':'Theft','vehicle-crime':'Vehicle crime','robbery':'Robbery','burglary':'Burglary','sexual-offences':'Sexual offence','possession-of-weapons':'Weapons','criminal-damage-arson':'Damage / arson','drugs':'Drugs','shoplifting':'Shoplifting','public-order':'Public order','other-crime':'Other'}[c]||c);
@@ -218,31 +254,47 @@ const ago=m=>{
   return `${(m/1440).toFixed(1).replace(/\.0$/,'')} days ago`;
 };
 const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* A hand-edited hash can carry a stray "%", and decodeURIComponent throws on
+   it — which stopped the boot before the map was ever built. */
+const dec=s=>{try{return decodeURIComponent(s)}catch(e){return s}};
 /* A window is stated the way a person would say it, not in raw hours — but
    hours up to two days, because "2 days" beside a "24 hrs" city reads as a
    different kind of measurement when it is the same one. */
 const windowLabel=h=>h==null?'':h<=48?`last ${h} hrs`:h%24===0?`last ${h/24} days`:`last ${h} hrs`;
+const spanLabel=m=>m<2880?`${Math.round(m/60)} hrs`:`${(m/1440).toFixed(1).replace(/\.0$/,'')} days`;
 
-const listEl=document.getElementById('citylist');
-const slot=document.getElementById('mapslot');
+/* Two limits can keep the map short of the window: the backend draws at most
+   800 calls, and a city's feed hands back at most its own row limit, newest
+   first. They mean different things. The backend says which: `count` is every
+   call in the window, `shown` the dots, `capped` that the map holds fewer than
+   `count`, and `countIsFloor` that the feed hit its row limit, so `count` is
+   only a lower bound. Only that last one earns a "+": Seattle's 852 is exact,
+   it just isn't all drawn. An older backend sent the dots as `count` and no
+   flags, so there the payload is read instead: 800 dots, or dots stopping
+   well short of the window's far edge (every uncapped feed measured reaches
+   95%+ of it), mean the window held more than the count. `reach` is how far
+   back the dots go when capped, else null. */
+const MAX_DOTS=800;
+function capInfo(d){
+  const inc=d.incidents||[];
+  const shown=Number.isFinite(d.shown)?d.shown:inc.length;
+  const oldest=inc.length?Math.max(...inc.map(i=>i.minutesAgo||0)):null;
+  const told=typeof d.capped==='boolean';
+  const capped=told?d.capped
+    :(oldest!=null&&(d.count>=MAX_DOTS||oldest<(d.windowHours||24)*60*.9));
+  const floor=told?d.countIsFloor===true:capped;
+  return {capped, shown,
+    count:`${d.count}${floor?'+':''}`,
+    /* which limit bit, for the note; an old payload can only be guessed at */
+    rowLimit:told?floor:capped&&d.count<MAX_DOTS,
+    dotCut:told?shown<d.count:capped&&d.count>=MAX_DOTS,
+    reach:capped&&oldest!=null?oldest:null};
+}
+
 const data={};          // id -> payload, so re-picking a city never refetches
 let map=null, layer=null, current=null;
 
 /* ---- the list ---------------------------------------------------------- */
-
-function row(c){
-  const li=document.createElement('li');
-  li.innerHTML=`<button class="citybtn" type="button" id="btn-${c.id}" aria-pressed="false" disabled>
-      <span class="cb-top">
-        <span class="cb-name">${esc(c.name)}</span>
-        <span class="badge" id="badge-${c.id}">···</span>
-      </span>
-      <span class="cb-stat" id="stat-${c.id}">Checking…</span>
-      <span class="cb-sub" id="sub-${c.id}"></span>
-    </button>`;
-  listEl.appendChild(li);
-  return li;
-}
 
 function fillRow(c,d){
   const badge=document.getElementById(`badge-${c.id}`);
@@ -254,13 +306,13 @@ function fillRow(c,d){
     /* Never let a failed fetch read as a quiet city. */
     badge.textContent='—';
     stat.textContent="Couldn't load right now.";
-    sub.textContent='';
+    sub.textContent='Try again shortly';   // never empty: an empty line would collapse the card
     return;
   }
   const heading=(d.heading||'TONIGHT').toUpperCase();
   badge.textContent=heading;
   if(heading==='TONIGHT') badge.classList.add('now');
-  stat.innerHTML=`<b>${d.count}</b> ${esc(d.label||'calls')}`;
+  stat.innerHTML=`<b>${capInfo(d).count}</b> ${esc(d.label||'calls')}`;
   sub.textContent=`${windowLabel(d.windowHours).toUpperCase()}${d.freshestMinutesAgo!=null?` · NEWEST ${ago(d.freshestMinutesAgo).toUpperCase()}`:''}`;
   btn.disabled=false;
   btn.addEventListener('click',()=>select(c.id,true));
@@ -270,15 +322,6 @@ function fillRow(c,d){
 
 function ensureMap(){
   if(map) return map;
-  slot.innerHTML=`<div class="citycard">
-      <div class="citybar">
-        <span class="cityname" id="m-name"></span>
-        <span class="citycount" id="m-count"></span>
-      </div>
-      <div id="m-map" class="citymap" role="img" aria-label="Map of calls police responded to"></div>
-      <div class="cityfoot"><span id="m-src"></span><span id="m-cad"></span></div>
-      <div class="lagnote" id="m-lag" hidden></div>
-    </div>`;
   map=L.map('m-map',{zoomControl:true,attributionControl:true,scrollWheelZoom:false});
   // Mapbox public token (pk.*) — public BY DESIGN: the same token ships inside
   // the iOS app bundle, and Mapbox's own docs say to embed it client-side. It is
@@ -288,8 +331,23 @@ function ensureMap(){
   L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}{r}?access_token=' + MB_TOKEN,{
     tileSize:512, zoomOffset:-1,
     subdomains:'abcd',maxZoom:19,detectRetina:true,
-    attribution:'© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://www.mapbox.com/map-feedback/">Improve this map</a>',
+    // Final addresses, as on /check/ and the hub maps: the about/maps/ and
+    // map-feedback/ forms Mapbox's docs print both 301.
+    attribution:'© <a href="https://www.mapbox.com/about/maps">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://apps.mapbox.com/feedback/">Improve this map</a>',
   }).addTo(map);
+  // Mapbox's terms require its wordmark on any map drawn from its tiles. The
+  // image, size and placement live in sr.css (.mapbox-logo); this only adds it.
+  L.Control.MapboxLogo = L.Control.extend({
+    options: { position: 'bottomleft' },
+    onAdd: function () {
+      var a = L.DomUtil.create('a', 'mapbox-logo');
+      a.href = 'https://www.mapbox.com/'; a.target = '_blank'; a.rel = 'noopener';
+      a.setAttribute('aria-label', 'Mapbox');
+      L.DomEvent.disableClickPropagation(a);
+      return a;
+    }
+  });
+  new L.Control.MapboxLogo().addTo(map);
   layer=L.layerGroup().addTo(map);
   return map;
 }
@@ -309,31 +367,48 @@ function select(id,userInitiated){
   map.setView([c.lat,c.lng],c.zoom);
   layer.clearLayers();
 
-  const heading=(d.heading||'TONIGHT').toUpperCase();
+  const k=capInfo(d);
+  const win=windowLabel(d.windowHours);
+  /* What the dots are, said from `shown`: "the newest 800 of 852". */
+  const drawn=k.shown<d.count?`the newest ${k.shown} of ${k.count}`:`the newest ${k.shown}`;
   document.getElementById('m-name').textContent=c.name;
   document.getElementById('m-count').innerHTML=
-    `<b>${d.count}</b> ${esc(d.label||'calls')} · ${esc(windowLabel(d.windowHours))}`;
+    `<b>${k.count}</b> ${esc(d.label||'calls')} · ${esc(win)}${k.capped&&k.shown<d.count?`, newest ${k.shown} mapped`:''}`;
   document.getElementById('m-src').textContent=(d.dataSource||'').toUpperCase();
   document.getElementById('m-cad').textContent=
     ((d.cadence||'')+(d.freshestMinutesAgo!=null?` · NEWEST ${ago(d.freshestMinutesAgo)}`:'')).toUpperCase();
-  document.getElementById('m-map').setAttribute('aria-label',
-    `Map of ${c.name} showing ${d.count} calls police responded to over the ${windowLabel(d.windowHours)}`);
+  document.getElementById('m-map').setAttribute('aria-label',k.reach!=null
+    ? `Map of ${c.name} showing ${drawn} calls police responded to in the ${win}, reaching back ${spanLabel(k.reach)}`
+    : `Map of ${c.name} showing ${k.count} calls police responded to over the ${win}`);
 
   /* A batch-published feed can legitimately be near-empty late in its cycle.
-     Say why, so a quiet map never reads as a quiet city. */
-  const lag=document.getElementById('m-lag');
-  if(d.count===0 || (d.freshestMinutesAgo!=null && d.freshestMinutesAgo>720)){
-    lag.hidden=false;
-    lag.textContent=`THIS FEED ${(d.cadence||'updates periodically').toUpperCase()} — SO THE ${windowLabel(d.windowHours).toUpperCase()} CAN LOOK QUIET BECAUSE THE NEXT BATCH HASN'T LANDED, NOT BECAUSE THE CITY WAS.`;
-  }else{
-    lag.hidden=true; lag.textContent='';
+     Say why, so a quiet map never reads as a quiet city. And a capped feed
+     says how far back its dots really go, so a busy map never reads as the
+     whole window either. */
+  const notes=[];
+  if(k.reach!=null){
+    const why=[k.rowLimit&&`THE CITY'S FEED HANDS BACK ITS NEWEST CALLS FIRST AND STOPS AT ITS ROW LIMIT`,
+               (k.dotCut||!k.rowLimit)&&`THE MAP DRAWS AT MOST ${MAX_DOTS} CALLS`].filter(Boolean).join('; ');
+    const span=spanLabel(k.reach), full=win.replace(/^last /,'');
+    /* 800 of 805 can reach back the whole week; then the span says nothing. */
+    notes.push(`SHOWING ${drawn.toUpperCase()} — ${why}${span===full?'':`, SO THESE REACH BACK ${span.toUpperCase()} RATHER THAN THE FULL ${full.toUpperCase()}`}.`);
   }
+  if(d.count===0 || (d.freshestMinutesAgo!=null && d.freshestMinutesAgo>720))
+    notes.push(`THIS FEED ${(d.cadence||'updates periodically').toUpperCase()} — SO THE ${win.toUpperCase()} CAN LOOK QUIET BECAUSE THE NEXT BATCH HASN'T LANDED, NOT BECAUSE THE CITY WAS.`);
+  const lag=document.getElementById('m-lag');
+  lag.hidden=!notes.length;
+  lag.textContent=notes.join(' ');
 
   (d.incidents||[]).forEach(i=>{
-    L.circleMarker([i.lat,i.lng],{radius:5,color:'#FF5A4D',weight:1.5,fillColor:'#FF8A7D',fillOpacity:.9,className:'recent-dot'})
+    const m=L.circleMarker([i.lat,i.lng],{radius:5,color:'#FF5A4D',weight:1.5,fillColor:'#FF8A7D',fillOpacity:.9,className:'recent-dot'})
       .bindTooltip(`<b>${esc(i.type||catName(i.cat))}</b><br>${esc(catName(i.cat))} · ${ago(i.minutesAgo)}`,
-                   {direction:'top',offset:[0,-6],className:'tt'})
-      .addTo(layer);
+                   {direction:'top',offset:[0,-6],className:'tt'});
+    /* A tooltip makes each dot a nameless keyboard stop (Chrome focuses SVG
+       with focus listeners): about 300 empty Tab presses between the city list
+       and the rest of the page. The count and window are in the map's label;
+       the dots stay for the mouse. */
+    m.on('add',()=>{const el=m.getElement(); if(el){el.setAttribute('tabindex','-1'); el.setAttribute('aria-hidden','true');}});
+    m.addTo(layer);
   });
   setTimeout(()=>map.invalidateSize(),80);
 
@@ -346,33 +421,32 @@ function select(id,userInitiated){
 
 /* ---- boot -------------------------------------------------------------- */
 
-CITIES.forEach(row);
-
 Promise.all(CITIES.map(c=>
   fetch(`${API}/public/recent?lat=${c.lat}&lng=${c.lng}`)
     .then(r=>r.ok?r.json():null)
     .catch(()=>null)
     .then(d=>{ data[c.id]=d; fillRow(c,d); return {c,d}; })
 )).then(rs=>{
-  /* Freshest first — the liveliest city should be the one you land on. */
+  /* Open on the freshest city — the liveliest map should be the one you land on. */
   const live=rs.filter(r=>r.d&&r.d.supported&&r.d.available!==false);
   const freshness=r=>r.d.freshestMinutesAgo==null?1e9:r.d.freshestMinutesAgo;
   live.sort((a,b)=>freshness(a)-freshness(b));
-  live.forEach(r=>{
-    const li=document.getElementById(`btn-${r.c.id}`).parentElement;
-    listEl.appendChild(li);
-  });
 
-  const wanted=CITIES.find(c=>c.slug===decodeURIComponent(location.hash.replace('#','')));
+  const wanted=CITIES.find(c=>c.slug===dec(location.hash.replace('#','')));
   const pick=(wanted&&live.some(r=>r.c.id===wanted.id))?wanted.id:(live[0]&&live[0].c.id);
   if(pick) select(pick,false);
-  else slot.innerHTML=`<div class="citycard"><div class="citybar">
-      <span class="citycount">Couldn't load the live layers right now. Please try again shortly.</span>
-    </div></div>`;
+  else{
+    /* Nothing answered. The card keeps its size, so the page does not jump,
+       and says so where the map would have been. */
+    document.getElementById('m-count').textContent="Couldn't load the live layers right now. Please try again shortly.";
+    const mm=document.getElementById('m-map');
+    mm.classList.add('nomap');
+    mm.setAttribute('aria-label','No live layer could be loaded');
+  }
 });
 
 addEventListener('hashchange',()=>{
-  const c=CITIES.find(x=>x.slug===decodeURIComponent(location.hash.replace('#','')));
+  const c=CITIES.find(x=>x.slug===dec(location.hash.replace('#','')));
   if(c&&c.id!==current) select(c.id,false);
 });
 </script>

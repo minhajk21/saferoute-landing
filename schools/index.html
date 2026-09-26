@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>UK schools map — now part of Check an address</title>
+<title>UK schools map — now part of the Map · SafeRoute</title>
 <!-- The schools map was merged into /check/ as a layer, so the site is one map
      rather than several tabs. This page stays as a redirect so every existing
      link and any indexed result still lands somewhere useful. GitHub Pages
      cannot send a real 301; canonical + an immediate meta refresh is what
-     search engines treat as a permanent move. -->
-<link rel="canonical" href="https://safe-route.app/check/?schools">
+     search engines treat as a permanent move. The canonical names /check/
+     itself, not /check/?schools, whose own canonical is /check/: pointing at
+     it would make a chain of two. -->
+<link rel="canonical" href="https://safe-route.app/check/">
 <meta http-equiv="refresh" content="0; url=/check/?schools">
 <meta name="robots" content="noindex, follow">
 <script>location.replace('/check/?schools' + location.hash);</script>

@@ -1,33 +1,14 @@
-/* SafeRoute — /safety/ and /transparency/ specifics.
-   Tokens, type scale, links, buttons and the wordmark all come from the
-   shared sheet; only rules unique to these pages live here.
+/* SafeRoute — /safety/ (2,700 generated pages) and /transparency/ specifics.
+   Every page that links this sheet links /assets/sr.css first, which holds
+   the tokens, type, links, buttons, header, footer, app-download card, band
+   pill and Leaflet chrome. Only what is genuinely the safety section's lives
+   here: the crumbbar, the score furniture, the maps and the ranked tables.
 
-   The @import is a shim for the 1,233 pages already built with a link to
-   this file. render-pages.mjs and render-transparency.mjs now link
-   /assets/sr.css directly, so regenerated pages load both in parallel and
-   the shim costs nothing after the next monthly rebuild. */
-@import url("/assets/sr.css");
-
-/* SafeRoute — shared styles for /safety/ (1,200+ generated pages) and
-   /transparency/.
-   
-   DARK REDESIGN (Aug 2026). Every selector name here is unchanged from the
-   cream version on purpose: 1,233 pages are already built and link this file,
-   so a pure restyle re-skins all of them without a 25-minute regeneration.
-   
-   Two constraints that shape the rules below:
-   1. Band colours are baked into the built HTML as inline styles
-      (style="color:#9C5220"), which no stylesheet can rewrite. They are
-      mid-tone values chosen for a cream background, so on dark they are
-      brightened with a filter — this keeps each band visually distinct
-      instead of flattening them all to one override colour.
-   2. --teal-deep does double duty as link colour (must be bright on dark)
-      and as the .cta block background (needs to stay deep behind white
-      text), so .cta sets its own background rather than reusing the token. */
-/* The site header lives in /assets/sr.css now — one definition for every
-   surface, instead of a copy here and an inline copy each in /, /check/
-   and /tonight/. This sheet keeps only what is genuinely the safety
-   section's: the crumbbar, the score furniture, the .cta card. */
+   Selector names still date from the cream design (--cream-deep and so on
+   are dark values now), because the markup is generated and renaming them
+   would buy nothing. The area page's gauge still carries the cream-era band
+   fill as an inline style, so it is brightened with a filter below; all
+   band-coloured TEXT, the big score included, uses the --band-* tokens. */
 .crumbbar{background:var(--paper);border-bottom:1px solid var(--line)}
 .crumbbar .wrap{padding-top:7px;padding-bottom:7px}
 .crumbbar .crumbs{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
@@ -38,21 +19,31 @@
 .crumbs a:hover{color:var(--teal)}
 main{padding:34px 0 56px}
 .scorecard{display:flex;gap:26px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin:26px 0}
-/* Inline band colours were picked for cream; lift them for a dark surface
-   without flattening the distinction between bands. */
-.scorenum{font-family:var(--mono);font-weight:600;font-size:56px;line-height:1;white-space:nowrap;filter:brightness(1.5) saturate(1.1)}
-.scorenum small{font-size:22px;color:var(--ink-3);font-weight:500;filter:none}
+/* The score is coloured with the --band-* token, the pill's own colour, so the
+   number and the pill beside it match (a filter over the old cream fill used
+   to brighten "/100" too, which a child's filter:none cannot undo). */
+.scorenum{font-family:var(--mono);font-weight:600;font-size:56px;line-height:1;white-space:nowrap}
+.scorenum small{font-size:22px;color:var(--ink-3);font-weight:500}
 .scoremeta{font-size:14.5px;color:var(--ink-2)}
-.band{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em;padding:4px 10px;border-radius:999px;margin-bottom:6px}
-.band.low{background:rgba(67,196,106,.14);color:var(--green)}
-.band.moderate{background:rgba(232,163,61,.14);color:var(--amber)}
-.band.elevated{background:rgba(232,118,61,.15);color:var(--coral)}
-.band.high{background:rgba(255,90,77,.15);color:var(--red)}
 .gaugebar{height:8px;background:var(--cream-deep);border-radius:999px;overflow:hidden;margin-top:10px}
+/* The inline band fill was picked for cream; lift it for a dark surface
+   without flattening the distinction between bands. */
 .gaugebar i{display:block;height:100%;border-radius:999px;filter:brightness(1.5) saturate(1.1)}
 figure.map{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;margin:22px 0 12px}
 figure.map svg{display:block;width:100%;height:auto}
 figcaption{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-top:10px}
+/* The area map's dot legend, moved out of the SVG into the caption, where it
+   stays 12px at any width. Its two dots are the ends of the ramp the map's
+   dots are drawn in (render-pages.mjs mapSVG). The map's own labels and
+   scale bar would render at about 5px on a phone, so they go below 640px. */
+.dotkey{display:block;margin-bottom:4px}
+.dotkey i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;vertical-align:1px;opacity:.78}
+.dotkey i.lo{background:#E89286}
+.dotkey i.hi{background:#8C3834;width:8px;height:8px;margin-right:8px}
+@media(max-width:640px){figure.map .mlabel,figure.map .mscale{display:none}}
+/* The night page's city-wide chart is the area page's 300-unit chart. Full
+   width, it drew its labels at 22-24px; capped, they match the area pages'. */
+figure.todwide svg{max-width:360px;margin:0 auto}
 a.checkmap{display:inline-flex;align-items:center;gap:8px;margin:0 0 10px;font-family:var(--mono);font-size:12.5px;font-weight:500;letter-spacing:.04em;color:var(--teal);text-decoration:none;border:1px solid var(--line-2);padding:10px 16px;border-radius:10px;transition:border-color .15s,background .15s}
 a.checkmap:hover{border-color:var(--teal);background:var(--paper)}
 a.checkmap .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex:none;box-shadow:0 0 8px var(--teal)}
@@ -66,27 +57,19 @@ table.cats td.n{font-family:var(--mono);text-align:right;white-space:nowrap;colo
 ul.nearby{list-style:none;margin:12px 0}
 ul.nearby li{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:15.5px}
 ul.nearby .s{font-family:var(--mono);color:var(--ink-2);white-space:nowrap}
-/* Deep teal behind white text — the one place --teal-deep's bright value
-   would fail, so the block sets its own background. */
-.cta{background:linear-gradient(150deg,#12433D,#0E3630);border:1px solid #1D6B60;color:#fff;border-radius:14px;padding:26px;margin:38px 0}
-.cta h2{margin:0 0 8px;color:#fff}
-.cta p{color:#BFE6DE;font-size:15.5px;max-width:56ch}
-.cta a.btn{display:inline-block;margin-top:14px;background:var(--teal);color:#04231E;font-weight:680;text-decoration:none;padding:11px 20px;border-radius:10px;transition:background .15s}
-.cta a.btn:hover{background:#5CE8D2}
 details{border-bottom:1px solid var(--line);padding:13px 0}
 details summary{cursor:pointer;font-weight:600;font-size:16.5px}
 details summary::marker{color:var(--teal)}
 details p{margin-top:8px;color:var(--ink-2);font-size:15.5px}
-footer.site{border-top:1px solid var(--line);margin-top:40px;background:var(--paper)}
-footer.site .wrap{padding-top:22px;padding-bottom:30px;font-size:13px;color:var(--ink-3)}
-footer.site p{margin:6px 0}
-footer.site a{color:var(--ink-2)}
-footer.site a:hover{color:var(--teal)}
 /* hub */
 .checker{margin:24px 0}
 .checker input{width:100%;font:inherit;font-size:17px;padding:13px 16px;border:1px solid var(--line-2);border-radius:12px;background:var(--paper);color:var(--ink)}
 .checker input::placeholder{color:var(--ink-3)}
 .checker input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(63,217,192,.14)}
+/* The checker's status line: a match count, or the miss. Empty, it takes no
+   room, but it stays in the page so screen readers announce each update. */
+.ckr-note{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin:8px 0 0}
+.ckr-note:empty{margin:0}
 #ckr-out{list-style:none;margin:10px 0}
 #ckr-out li{background:var(--paper);border:1px solid var(--line);border-radius:10px;margin:6px 0;transition:border-color .15s}
 #ckr-out li:hover{border-color:var(--teal)}
@@ -130,10 +113,10 @@ table.rank tr.self td:first-child{box-shadow:inset 3px 0 0 var(--teal)}
 .recency-chip{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;color:var(--ink-2);border:1px solid var(--line-2);background:var(--paper);padding:5px 10px;border-radius:999px;margin:-10px 0 10px}
 
 /* ── Generated map SVG, re-skinned for dark ──────────────────────────────
-   The per-area map is inlined into each of the 1,233 built pages with its
-   palette hard-coded for cream paper, so it cannot be re-themed by changing
-   a variable. Every colour the generator emits is remapped here by attribute
-   selector instead — a closed set of 14, verified across all built pages.
+   The per-area map is inlined into every area page with its palette
+   hard-coded for cream paper, so it cannot be re-themed by changing a
+   variable. Every colour the generator emits is remapped here by attribute
+   selector instead: a closed set, checked against the built pages.
    Scoped to figure.map so the header shield (which shares #14564C) is
    untouched. render-pages.mjs still emits the original values: this file
    stays the single place the dark palette is defined. */
@@ -148,12 +131,9 @@ figure.map svg [stroke="#DCD3BF"]{stroke:#26313D}      /* minor roads    */
 figure.map svg [fill="#7D7666"]{fill:#8493A3}          /* map labels     */
 figure.map svg [fill="#717F7A"]{fill:#8493A3}
 figure.map svg [fill="#3C514C"]{fill:#A8B6C4}
-figure.map svg [fill="#052926"]{fill:#F3F7FA}          /* legend text    */
-figure.map svg [stroke="#052926"]{stroke:#F3F7FA}
+figure.map svg [stroke="#052926"]{stroke:#F3F7FA}      /* scale bar      */
 figure.map svg [fill="#14564C"]{fill:#3FD9C0}          /* centre marker  */
 figure.map svg [stroke="#14564C"]{stroke:#3FD9C0}
-figure.map svg [fill="#E89286"]{fill:#FF8A7D}          /* lower-severity */
-figure.map svg [fill="#8C1010"]{fill:#FF3B2A}/* high-severity  */
 
 /* ── City-hub map ─────────────────────────────────────────────────────────
    Only city hubs get a pannable map. Area pages keep their static SVG basemap:
@@ -163,19 +143,16 @@ figure.map svg [fill="#8C1010"]{fill:#FF3B2A}/* high-severity  */
    ranked table underneath it. */
 .mapwrap{margin:26px 0 30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
 #citymap{width:100%;height:min(62vh,460px);background:var(--surface-2)}
+/* The map takes keyboard focus (arrows pan, +/- zoom), but .mapwrap's
+   overflow clips an outline, so the ring is drawn inside the map instead. */
+.mapwrap #citymap:focus-visible{outline:none;box-shadow:inset 0 0 0 2px var(--teal)}
 .maplegend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:11px 16px;border-top:1px solid var(--line);
            font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
 .maplegend span{display:inline-flex;align-items:center;gap:6px}
 .maplegend i{width:9px;height:9px;border-radius:50%;flex:none}
 .maplegend .hint{margin-left:auto;text-transform:none;letter-spacing:0;font-size:11px}
 @media(max-width:640px){ .maplegend .hint{margin-left:0;flex-basis:100%} }
-/* Leaflet's chrome is built for light backgrounds. */
-.leaflet-container{background:var(--surface-2);font-family:var(--sans)}
-.leaflet-bar a{background:#141B24;color:var(--ink);border-bottom-color:var(--line-2)}
-.leaflet-bar a:hover{background:#1B2531;color:var(--teal)}
-.leaflet-control-attribution{background:rgba(10,13,18,.8)!important;color:var(--ink-3);font-size:10px}
-.leaflet-control-attribution a{color:var(--ink-2)}
-.leaflet-tooltip{background:var(--surface);border:1px solid var(--line-2);color:var(--ink);
-                 font-family:var(--sans);font-size:12.5px;border-radius:5px;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+/* Leaflet's dark chrome (zoom bar, attribution, tooltips, the Mapbox
+   wordmark) is shared in sr.css. The hub keeps its tooltips arrowless. */
 .leaflet-tooltip::before{display:none}
 .leaflet-interactive{cursor:pointer}
