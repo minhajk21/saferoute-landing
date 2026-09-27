@@ -1576,8 +1576,11 @@ function makeProse(a, ctx) {
 // Set it here, or override per-build with CF_BEACON_TOKEN=... node render-pages.mjs
 // While unset, no script is emitted at all — pages stay clean.
 const CF_BEACON_TOKEN = process.env.CF_BEACON_TOKEN || 'a7d4a481ed8b4512a43225404078e7ab';
+// The beacon itself is injected by /assets/analytics.js, which first honours
+// Global Privacy Control and the /privacy-choices/ opt-out. Set
+// CF_BEACON_TOKEN='' to build pages with no analytics at all.
 const analytics = () => CF_BEACON_TOKEN
-  ? `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "${CF_BEACON_TOKEN}"}'></script>\n`
+  ? `<script defer src="/assets/analytics.js"></script>\n`
   : '';
 
 const head = (title, desc, canonical, jsonld, extraHead = '') => `<!DOCTYPE html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy choices — SafeRoute</title>
+<!-- A settings page, not content: kept out of search. The privacy policy
+     links here as the website's way to object to analytics. -->
+<meta name="robots" content="noindex">
+<meta name="description" content="Switch off SafeRoute's cookieless website analytics in this browser, or see whether your browser's Global Privacy Control already keeps it off.">
+<meta name="theme-color" content="#0A0D12">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sr.css">
+<style>
+  /* Page-specific only — header, footer, buttons and tokens come from sr.css. */
+  main{padding:clamp(34px,6vw,64px) 0 56px}
+  .choice{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:26px 0 0}
+  .choice h2{margin:0 0 6px;font-size:20px}
+  .state{font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--ink-2);margin:14px 0 16px}
+  .state b{color:var(--ink)}
+  .choice .btn[hidden]{display:none}
+  .fine{font-size:15px;color:var(--ink-2);margin-top:22px}
+</style>
+<script defer src="/assets/analytics.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site"><div class="wrap">
+<a class="wordmark" href="/"><span class="shield" aria-hidden="true"></span><span>SAFEROUTE</span></a>
+<nav class="site-nav" aria-label="Site">
+<a href="/safety/">Safety<span class="nav-long"> index</span></a>
+<a href="/check/">Map</a>
+<a href="/tonight/">Tonight</a>
+<a class="hide-sm" href="/transparency/">Transparency</a>
+<a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-home&mt=8">Get the app</a>
+</nav>
+</div></header>
+
+<main id="main"><div class="wrap">
+<p class="eyebrow">Privacy choices</p>
+<h1>Website analytics</h1>
+<p class="lead">This website counts visits with Cloudflare Web Analytics. It sets no cookies and stores nothing on your device, but you can still switch it off.</p>
+
+<section class="choice" aria-labelledby="ch-title">
+  <h2 id="ch-title">Count my visits on this website</h2>
+  <p class="state" id="ch-state" aria-live="polite">Checking this browser…</p>
+  <button type="button" class="btn btn-fill" id="ch-off" hidden>Don't count my visits</button>
+  <button type="button" class="btn btn-ghost" id="ch-on" hidden>Count my visits again</button>
+</section>
+
+<p class="fine">Switching it off keeps one on/off flag in this browser, and nothing else. It applies to this browser on this device only; clearing your site data removes it. If your browser sends <a href="https://globalprivacycontrol.org/">Global Privacy Control</a>, visits are never counted and you don't need to do anything. The SafeRoute app has its own analytics switch in its settings. The <a href="https://minhajk21.github.io/saferoute-privacy/">privacy policy</a> explains what is collected and why.</p>
+</div></main>
+
+<footer class="site"><div class="wrap">
+<p>SafeRoute maps crime from official police and open-data sources. Informational only — not a guarantee of safety.</p>
+<nav class="footlinks" aria-label="Footer"><ul>
+<li><a href="/safety/">Safety index</a></li>
+<li><a href="/check/">Map</a></li>
+<li><a href="/tonight/">Tonight</a></li>
+<li><a href="/transparency/">Transparency</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-support/">Support</a></li>
+<li><a href="https://minhajk21.github.io/saferoute-privacy/">Privacy</a></li>
+</ul></nav>
+</div></footer>
+
+<script>
+// The same key /assets/analytics.js reads. Removing it (rather than writing
+// "0") keeps the promise that nothing is stored unless you opt out.
+(function () {
+  var KEY = 'sr:analytics-optout';
+  var state = document.getElementById('ch-state'), off = document.getElementById('ch-off'), on = document.getElementById('ch-on');
+  function read() { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return null; } }
+  function show() {
+    var gpc = !!navigator.globalPrivacyControl, out = read();
+    off.hidden = on.hidden = true;
+    if (gpc) { state.innerHTML = 'Status: <b>off</b>. Your browser sends Global Privacy Control, so visits are never counted.'; return; }
+    if (out === null) { state.innerHTML = 'Status: <b>unknown</b>. This browser blocks site storage, so the switch can\'t be saved here; turn on Global Privacy Control instead.'; return; }
+    if (out) { state.innerHTML = 'Status: <b>off</b> in this browser.'; on.hidden = false; }
+    else { state.innerHTML = 'Status: <b>on</b>. Visits in this browser are counted, without cookies.'; off.hidden = false; }
+  }
+  off.addEventListener('click', function () { try { localStorage.setItem(KEY, '1'); } catch (e) {} show(); on.focus(); });
+  on.addEventListener('click', function () { try { localStorage.removeItem(KEY); } catch (e) {} show(); off.focus(); });
+  show();
+})();
+</script>
+</body>
+</html>

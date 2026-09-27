@@ -187,7 +187,7 @@ td.bars{width:44%;padding-left:14px}
 @media(max-width:620px){td.bars{width:34%}td.city .src{display:none}}
 </style>
 <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
-${CF_BEACON_TOKEN ? `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "${CF_BEACON_TOKEN}"}'></script>` : ''}
+${CF_BEACON_TOKEN ? `<script defer src="/assets/analytics.js"></script>` : ''}
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
