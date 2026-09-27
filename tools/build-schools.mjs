@@ -264,7 +264,12 @@ const run = async () => {
       fsm: parseFloat(g(r, 'PercentageFSM')) || null,
       censusDate: dmyToIso(g(r, 'CensusDate')),
       sixthForm: g(r, 'OfficialSixthForm (name)') === 'Has a sixth form',
-      boarding: /boarding/i.test(g(r, 'BoardingEstablishment (name)')),
+      // GIAS never says "boarding" in BoardingEstablishment: its values are "Has
+      // boarders" / "Does not have boarders" (and blank for most schools), so the
+      // old /boarding/i test marked 0 of 26,217 schools and the Boarding filter
+      // always came back empty. The "Boarders" field names boarding schools
+      // directly; either one is enough.
+      boarding: g(r, 'BoardingEstablishment (name)') === 'Has boarders' || g(r, 'Boarders (name)') === 'Boarding school',
       nursery: /has nursery/i.test(g(r, 'NurseryProvision (name)')),
       admissions: g(r, 'AdmissionsPolicy (name)'),
       trust: g(r, 'Trusts (name)'),
