@@ -20,11 +20,9 @@
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/fonts/ibm-plex-mono.css">
 <link rel="stylesheet" href="/assets/sr.css">
-<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link href="/assets/vendor/leaflet-1.9.4/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=">
 <style>
   /* AN APP SHELL, NOT A PAGE WITH A MAP IN IT.
      The map used to sit under a 40%-of-the-screen intro band whose right half
@@ -567,7 +565,7 @@
              outcome exists only for English state schools Ofsted has graded
              (about 42% of all rows); phase and size are blank for most Welsh
              rows. -->
-        <p class="meta">Switch on <b>Schools</b> to see every state and private school nearby in England, and state schools in Wales — <span data-fact="schools">26,217</span> of them, with phase and size where published and, where Ofsted has one, the latest inspection outcome.</p>
+        <p class="meta">Switch on <b>Schools</b> to see every state and private school nearby in England, and state schools in Wales — <span data-fact="schools">26,218</span> of them, with phase and size where published and, where Ofsted has one, the latest inspection outcome.</p>
         <p class="meta sch-hint"><span class="sch-start">Starting in central London. </span>Search an address to see the schools around it, and click a pin for its details. Pin colour is the phase, never a rating; hollow pins are private.</p>
         <button type="button" class="btn-sch" id="schOpen"><i></i><span>Show schools</span></button>
       </section>
@@ -650,9 +648,18 @@
   </aside>
 </main>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="/assets/vendor/leaflet-1.9.4/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="></script>
 <script>
 const API = 'https://saferoute-backend-w5yf.onrender.com';
+// A visitor's point never leaves this page finer than its answer needs
+// (Legitimate Interests Assessment, 27 Sep 2026): 3 dp (~100 m) for the area,
+// reverse and search lookups, whose caches work at that grain and whose answer
+// covers 1 km; 2 dp (~1.1 km) for the city-wide 911 and camera layers, which
+// use a point only to pick a city. lookup(), refetchAt() and exploreCity()
+// round on entry, so everything downstream (and the server's log) sees only
+// the rounded point.
+const r3 = x => Math.round(x * 1000) / 1000;
+const r2 = x => Math.round(x * 100) / 100;
 // Labels only: each band's colour is sr.css's --band-* and its .band pill.
 const BAND = { low:'Low risk', moderate:'Moderate', elevated:'Elevated', high:'High risk' };
 const bandOf = b => BAND[b] ? b : 'moderate';
@@ -675,11 +682,17 @@ const ago = m => m==null ? '' : m<90 ? `${m} min ago` : m<2880 ? `${Math.round(m
 // as a different kind of measurement when it is the same one.
 const windowLabel = h => h==null ? '' : h<=48 ? `last ${h} hrs` : h%24===0 ? `last ${h/24} days` : `last ${h} hrs`;
 const cap1 = s => s ? s[0].toUpperCase() + s.slice(1) : s;
-async function fetchRecent(lat,lng,reqId){
+// `region` is /public/area's key for the covering city: the feed is city-wide,
+// so the key answers exactly what a point did and no point is sent. null means
+// no covered region, so there is no feed to ask. Only an older backend that
+// names no region gets a point, and then a 2 dp one.
+async function fetchRecent(lat,lng,reqId,region){
   if(recentLayer){ map.removeLayer(recentLayer); recentLayer=null; }
   const slot=document.getElementById('recent'); if(slot) slot.innerHTML='';
+  if(region===null) return;
+  const ask = typeof region==='string' ? `region=${encodeURIComponent(region)}` : `lat=${r2(lat)}&lng=${r2(lng)}`;
   try{
-    const r=await fetch(`${API}/public/recent?lat=${lat}&lng=${lng}`);
+    const r=await fetch(`${API}/public/recent?${ask}`);
     if(!r.ok) return;                       // quietly absent — the layer is a bonus
     const d=await r.json();
     if(reqId!==lastReqId || !d.supported) return;
@@ -734,11 +747,17 @@ async function fetchRecent(lat,lng,reqId){
 // still (/public/camera-image) into the popup — the image only downloads when
 // a popup opens. Attribution comes with the payload: TfL's licence requires
 // "Powered by TfL Open Data" wherever the imagery is shown.
-async function fetchCameras(lat,lng,reqId){
+// The list is asked for with a 2 dp point (~1.1 km): the backend rounds to that
+// anyway, and "nearby" is its radius, not our precision. Every camera sits in a
+// covered city, so an uncovered point (region null) asks nothing. The stills and
+// clips are keyed by camera id and city key alone: the server never needed the
+// visitor's point to find a camera, so the media URLs carry none.
+async function fetchCameras(lat,lng,reqId,region){
   if(camLayer){ map.removeLayer(camLayer); camLayer=null; }
   const slot=document.getElementById('cams'); if(slot) slot.innerHTML='';
+  if(region===null) return;
   try{
-    const r=await fetch(`${API}/public/cameras?lat=${lat}&lng=${lng}`);
+    const r=await fetch(`${API}/public/cameras?lat=${r2(lat)}&lng=${r2(lng)}`);
     if(!r.ok) return;                       // quietly absent — the layer is a bonus
     const d=await r.json();
     if(reqId!==lastReqId || !d.supported) return;
@@ -765,7 +784,9 @@ async function fetchCameras(lat,lng,reqId){
       : /\bevery minute\b/i.test(d.cadence || '') ? 60000 : 0;
     const MH=Math.max(120, Math.min(222, map.getSize().y - 120));
     const VSTYLE='object-fit:cover;border-radius:8px;margin-top:6px;background:#111;display:block';
-    const still=c=>`${API}/public/camera-image?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}`;
+    const camRegion = typeof d.region==='string' ? d.region : region;
+    const camKey=c=>`${typeof camRegion==='string'?`region=${encodeURIComponent(camRegion)}&`:''}id=${encodeURIComponent(c.id)}`;
+    const still=c=>`${API}/public/camera-image?${camKey(c)}`;
     // Three media kinds, most-live first. A live HLS stream (Las Vegas, and
     // NYC's arterials) is played from the AUTHORITY, not proxied — a live
     // stream cannot be cached, so relaying it would spend bandwidth to buy
@@ -774,7 +795,7 @@ async function fetchCameras(lat,lng,reqId){
     const media=c=> c.streamUrl
       ? `<video class="campop-media" data-stream="${esc(c.streamUrl)}" width="272" height="${MH}" style="${VSTYLE}" autoplay muted playsinline poster="${still(c)}"></video>`
       : c.video
-      ? `<video class="campop-media" width="272" height="${MH}" style="${VSTYLE}" autoplay muted loop playsinline poster="${still(c)}" src="${API}/public/camera-video?lat=${lat}&lng=${lng}&id=${encodeURIComponent(c.id)}"></video>`
+      ? `<video class="campop-media" width="272" height="${MH}" style="${VSTYLE}" autoplay muted loop playsinline poster="${still(c)}" src="${API}/public/camera-video?${camKey(c)}"></video>`
       : `<img class="campop-media"${stillRefreshMs ? ` data-refresh="${stillRefreshMs}"` : ''} src="${still(c)}" width="272" height="${MH}" style="object-fit:cover;border-radius:8px;margin-top:6px;background:#e8e4da" alt="Latest still from ${esc(c.name)}">`;
     const kind=c=> c.streamUrl ? 'Live video' : (c.video ? 'Live clip' : 'Latest still');
     const credit=c=> c.streamUrl ? (d.streamAttribution || d.attribution) : d.attribution;
@@ -1314,11 +1335,13 @@ let camRefreshTmr=null;
 let hlsLib = null;
 function withHls(cb){
   if(window.Hls) return cb(window.Hls);
-  // Resolves with null rather than rejecting when the CDN is unreachable, so
-  // the caller still runs and can try the native path.
+  // Resolves with null rather than rejecting when it cannot load, so the
+  // caller still runs and can try the native path. Served from this site (the
+  // npm 1.5.17 file, byte for byte), not jsDelivr, so opening a camera tells
+  // no CDN the visitor's IP.
   hlsLib = hlsLib || new Promise((res)=>{
     const s=document.createElement('script');
-    s.src='https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js';
+    s.src='/assets/vendor/hls.js-1.5.17/hls.min.js';
     s.onload=()=>res(window.Hls||null); s.onerror=()=>res(null);
     document.head.appendChild(s);
   });
@@ -1611,10 +1634,12 @@ $('#geo').addEventListener('click', ()=>{
   $('#geoMsg')?.remove();
   if(!navigator.geolocation){ geoFail(); return; }
   geoBusy(true);
+  // Low accuracy, rounded to ~100 m at once: the answer covers 1 km, so a
+  // GPS-grade fix (often someone's home) buys nothing and is never sent.
   navigator.geolocation.getCurrentPosition(
-    p=>{ geoBusy(false); lookup(p.coords.latitude, p.coords.longitude, 'Your location', ''); },
+    p=>{ geoBusy(false); lookup(r3(p.coords.latitude), r3(p.coords.longitude), 'Your location', ''); },
     geoFail,
-    { enableHighAccuracy:true, timeout:8000 }
+    { enableHighAccuracy:false, timeout:8000 }
   );
 });
 $('#useLoc')?.addEventListener('click', ()=>$('#geo').click());
@@ -1697,6 +1722,7 @@ const checkingHtml = name => `<div style="display:flex;align-items:center;gap:12
 // link; and it ends any pan refetch, so that refetch's "Updating area…" pill
 // (which only the latest refetch may clear) goes too.
 async function lookup(lat, lng, name, address, opts = {}){
+  lat = r3(lat); lng = r3(lng);   // before any use: see r3
   const reqId = ++lastReqId;
   exploreSeq++;
   showUpdating(false);
@@ -1726,8 +1752,8 @@ async function lookup(lat, lng, name, address, opts = {}){
     // map scrolled off the top. Moves nothing that is already in place.
     revealTool();
     if(hasScore(d)){ drawHex(d); addPubLink(lat, lng, reqId); } else clearArea();
-    fetchRecent(lat, lng, reqId);
-    fetchCameras(lat, lng, reqId);
+    fetchRecent(lat, lng, reqId, d.region);
+    fetchCameras(lat, lng, reqId, d.region);
   }catch{
     if(reqId===lastReqId){ panel.innerHTML=`<p class="note">Something went wrong looking that up. Please try again.</p>`; syncBack(); }
   }finally{
@@ -1837,6 +1863,7 @@ function flyTo(lat,lng){
 // crime data so the label follows the map as you pan.
 let lastName='This area';
 async function refetchAt(lat, lng){
+  lat = r3(lat); lng = r3(lng);   // the map centre is a point like any other
   const reqId = ++lastReqId;
   lastCenter=[lat,lng];
   showUpdating(true);
@@ -1855,8 +1882,8 @@ async function refetchAt(lat, lng){
     lastName = name;
     render(d, name, '');
     if(hasScore(d)){ drawHex(d); addPubLink(lat, lng, reqId); } else clearArea();
-    fetchRecent(lat, lng, reqId);
-    fetchCameras(lat, lng, reqId);
+    fetchRecent(lat, lng, reqId, d.region);
+    fetchCameras(lat, lng, reqId, d.region);
   }catch{}
   // Every exit clears it — including the quiet 429/!ok returns — or the pill
   // sticks forever. Guarded on reqId so a superseded pan does not switch off
@@ -2057,6 +2084,7 @@ function windowPhrase(days){ if(!(days>0)||days<14||days>760) return null; const
 // The name is a nicety, so it gets 2.5s before the plain "city centre" name
 // is used instead.
 async function exploreCity(city, country, lat, lng){
+  lat = r3(lat); lng = r3(lng);   // the reverse lookup below goes out first
   const seq = ++exploreSeq;
   keepFocus();   // before the spinner replaces the button that has it
   q.value = city;

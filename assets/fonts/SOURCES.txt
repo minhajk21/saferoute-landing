@@ -1,0 +1,8 @@
+IBM Plex Mono 400/500/600, the files Google Fonts served on 27 Sep 2026 for
+css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap (fonts.gstatic.com
+/s/ibmplexmono/v20/), one woff2 per weight and unicode-range subset, renamed
+ibm-plex-mono-<weight>-<subset>.woff2. ibm-plex-mono.css repeats Google's
+@font-face rules (same ranges, font-display:swap) against these copies.
+Licence: SIL Open Font License 1.1, ibm-plex-mono/OFL.txt (from
+github.com/google/fonts/ofl/ibmplexmono). Copyright 2017 IBM Corp., Reserved
+Font Name "Plex".

@@ -1225,7 +1225,11 @@ const TITLE_TEST = new Set([
 // -impression non-brand query this site has (seattle safety map, 183
 // impressions at 2.7% CTR; new york safety map, 139 at 1.4%), and until now the
 // page carried the word "Map" in its own <title> and served a table.
-const LEAFLET_CSS = '<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">\n';
+// Served from /assets/vendor (byte-identical to the npm 1.9.4 release, which
+// the SRI hash still proves), not unpkg.com: a CDN sees every visitor's IP for
+// a file we can host ourselves. The page head's IBM Plex Mono is self-hosted
+// for the same reason (/assets/fonts/ibm-plex-mono.css, not Google Fonts).
+const LEAFLET_CSS = '<link href="/assets/vendor/leaflet-1.9.4/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=">\n';
 
 // ── district hubs ───────────────────────────────────────────────────────────
 // A hub page earns roughly 142× what an area page earns. Over the first
@@ -1601,9 +1605,7 @@ const head = (title, desc, canonical, jsonld, extraHead = '') => `<!DOCTYPE html
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/fonts/ibm-plex-mono.css">
 <meta name="theme-color" content="#0A0D12">
 <link rel="stylesheet" href="/assets/sr.css">
 <link rel="stylesheet" href="/safety/assets/safety.css">
@@ -2005,7 +2007,7 @@ ${cta(cfg.name)}
 <p style="font-size:15.5px;color:var(--ink-2)">${cfg.hub.methodology}</p>
 <p style="font-size:15.5px;color:var(--ink-2)">The index compares areas <strong>within ${esc(cfg.hubName)}</strong>. It is not comparable between cities: each police force publishes a different set of offences over a different period — ${esc(cfg.name)}'s figures cannot be read against another city's on the same 0–100 scale.</p>
 ${footer(cfg, cityYm, citySlug, windowDays)}
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="/assets/vendor/leaflet-1.9.4/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="></script>
 <script>
 const IDX=${JSON.stringify(idx)};
 // The city segment is held in a variable so no complete-looking path literal

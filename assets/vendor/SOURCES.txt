@@ -1,0 +1,16 @@
+Third-party code served from this site, so visitors' browsers never contact a
+CDN (unpkg.com, cdn.jsdelivr.net) for it. Each file is byte-identical to the
+published npm release; to upgrade, add a new versioned folder and change the
+references, never edit a file in place (the pages pin Leaflet by SRI hash).
+
+leaflet-1.9.4/     npm leaflet@1.9.4 (tarball sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==)
+                   dist/leaflet.js, dist/leaflet.css, dist/images/*, LICENSE (BSD-2-Clause)
+                   leaflet.js  sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=  (the SRI the pages already pinned)
+                   leaflet.css sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=
+                   Used by /check/, /tonight/ and the /safety/ city hubs.
+hls.js-1.5.17/     npm hls.js@1.5.17 (tarball sha512-wA66nnYFvQa1o4DO/BFgLNRKnBTVXpNeldGRBJ2Y0SvFtdwvFKCbqa9zhHoZLoxHhZ+jYsj3aIBkWQQCPNOhMw==)
+                   dist/hls.min.js, LICENSE (Apache-2.0 notice) + LICENSE-2.0.txt (full text)
+                   hls.min.js  sha256-SEBU6M0D0/bReB+39AK9wxjYpMUn+TOpXGJOJ8yalHA=
+                   Loaded by /check/ only when a live-video camera popup opens.
+Fetched 27 Sep 2026. Source maps are not shipped (the .map comments 404 in
+DevTools only).

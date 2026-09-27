@@ -17,12 +17,10 @@
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://saferoute-backend-w5yf.onrender.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/fonts/ibm-plex-mono.css">
 <link rel="stylesheet" href="/assets/sr.css">
-<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link href="/assets/vendor/leaflet-1.9.4/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=">
 <style>
   /* The same wide pair as the homepage, so the header (which follows the
      page's --maxw) puts the wordmark in the same place on both. */
@@ -222,7 +220,7 @@
 </ul></nav>
 </div></footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="/assets/vendor/leaflet-1.9.4/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="></script>
 <script>
 const API='https://saferoute-backend-w5yf.onrender.com';
 
@@ -232,15 +230,17 @@ const API='https://saferoute-backend-w5yf.onrender.com';
    the counts answered, which moved every card after it had painted; now it
    stays put, and the map still opens on whichever city is actually freshest
    right now. `slug` is the deep link (/tonight/#seattle) so a city can be
-   shared or linked to directly. */
+   shared or linked to directly. `region` is the backend's key for the city:
+   /public/recent is asked for a city by name, never by a point, so every
+   request says what it wants and nothing else (lat/lng only centre the map). */
 const CITIES=[
-  {id:'sf',    slug:'san-francisco', name:'San Francisco', lat:37.7880, lng:-122.4074, zoom:13},
-  {id:'det',   slug:'detroit',       name:'Detroit',       lat:42.3314, lng:-83.0458,  zoom:12},
-  {id:'cle',   slug:'cleveland',     name:'Cleveland',     lat:41.4993, lng:-81.6944,  zoom:12},
-  {id:'nola',  slug:'new-orleans',   name:'New Orleans',   lat:29.9540, lng:-90.0700,  zoom:13},
-  {id:'mpls',  slug:'minneapolis',   name:'Minneapolis',   lat:44.9778, lng:-93.2650,  zoom:12},
-  {id:'lv',    slug:'las-vegas',     name:'Las Vegas',     lat:36.1147, lng:-115.1728, zoom:12},
-  {id:'sea',   slug:'seattle',       name:'Seattle',       lat:47.6062, lng:-122.3321, zoom:12},
+  {id:'sf',    slug:'san-francisco', name:'San Francisco', lat:37.7880, lng:-122.4074, region:'sf',          zoom:13},
+  {id:'det',   slug:'detroit',       name:'Detroit',       lat:42.3314, lng:-83.0458,  region:'detroit',     zoom:12},
+  {id:'cle',   slug:'cleveland',     name:'Cleveland',     lat:41.4993, lng:-81.6944,  region:'cleveland',   zoom:12},
+  {id:'nola',  slug:'new-orleans',   name:'New Orleans',   lat:29.9540, lng:-90.0700,  region:'neworleans',  zoom:13},
+  {id:'mpls',  slug:'minneapolis',   name:'Minneapolis',   lat:44.9778, lng:-93.2650,  region:'minneapolis', zoom:12},
+  {id:'lv',    slug:'las-vegas',     name:'Las Vegas',     lat:36.1147, lng:-115.1728, region:'lasvegas',    zoom:12},
+  {id:'sea',   slug:'seattle',       name:'Seattle',       lat:47.6062, lng:-122.3321, region:'seattle',     zoom:12},
 ];
 
 const catName=c=>({'violent-crime':'Violence','other-theft':'Theft','vehicle-crime':'Vehicle crime','robbery':'Robbery','burglary':'Burglary','sexual-offences':'Sexual offence','possession-of-weapons':'Weapons','criminal-damage-arson':'Damage / arson','drugs':'Drugs','shoplifting':'Shoplifting','public-order':'Public order','other-crime':'Other'}[c]||c);
@@ -422,7 +422,7 @@ function select(id,userInitiated){
 /* ---- boot -------------------------------------------------------------- */
 
 Promise.all(CITIES.map(c=>
-  fetch(`${API}/public/recent?lat=${c.lat}&lng=${c.lng}`)
+  fetch(`${API}/public/recent?region=${encodeURIComponent(c.region)}`)
     .then(r=>r.ok?r.json():null)
     .catch(()=>null)
     .then(d=>{ data[c.id]=d; fillRow(c,d); return {c,d}; })

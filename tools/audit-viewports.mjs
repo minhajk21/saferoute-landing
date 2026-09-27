@@ -91,9 +91,10 @@
 //
 // No npm dependencies: it drives an installed Chrome over the DevTools
 // Protocol using Node's built-in WebSocket, and serves the site itself, so it
-// needs no running preview server. (The pages still load Leaflet and fonts
-// from their CDNs; the SafeRoute backend is never called — the "search" state
-// is reached through the page's own revealTool(), not a real lookup.)
+// needs no running preview server. (Leaflet and the fonts are files in this
+// repo, under /assets/vendor and /assets/fonts, so they are served too; the
+// SafeRoute backend is never called — the "search" state is reached through
+// the page's own revealTool(), not a real lookup.)
 //
 // Usage:
 //   node tools/audit-viewports.mjs                full matrix, exit 1 on any FAIL
