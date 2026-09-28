@@ -1,426 +1,258 @@
-// Build the school data behind the Schools layer on /check/ — every open,
-// geocoded school in England and Wales, cut into 0.25° geographic tiles so the
-// map fetches only the schools around the address being looked at.
+// Build the school data behind the Schools layer on /check/: every open,
+// located school from each source in tools/schools/sources/, clipped to where
+// SafeRoute has crime data (scope rule R2), cut into adaptive geographic tiles
+// so the map fetches only the schools around the address being looked at.
 //
-// ONE OUTPUT SHAPE. This used to also write a national schools.json plus a
-// row-aligned schools-labels.json for a standalone /schools/ page. That page is
-// now a redirect into /check/, which reads tiles; the national files had no
-// reader but this repo's own verifier, so they are gone. If a whole-country
-// view is ever wanted again, build it from the tiles rather than resurrecting a
-// second format that has to be kept in step with the first.
+// This file is the ORCHESTRATOR. It knows nothing about any one country: each
+// source module fetches and normalises its own rows (tools/schools/README.md
+// documents the interface), and this file runs them, merges US rating maps,
+// clips to scope, tiles, and writes index.json v2.
 //
-// RAW DOWNLOADS GO TO /tmp, NEVER INTO THE REPO. The monthly page rebuild
-// commits with `git add -A`; a 62MB CSV left in the tree would be published.
+// THE SAFETY RULE. A source that fails to fetch — or that is not due for a
+// refresh (annual/static sources outside a --refresh run) — re-emits its rows
+// from the CURRENT tiles, with a ::warning::. The tiles are every source's
+// snapshot, so a fetch failure can never empty a country from the map.
 //
-// Usage:  node tools/build-schools.mjs
-// Output: schools/data/tiles/{y}_{x}.json + schools/data/tiles/index.json
+// ONE OUTPUT SHAPE: schools/data/tiles/{key}.json + index.json. If a
+// whole-country view is ever wanted, build it from the tiles rather than
+// resurrecting a second format that has to be kept in step with the first.
+//
+// RAW DOWNLOADS NEVER GO INTO THE REPO. The monthly page rebuild commits with
+// `git add -A`; they go to the OS temp dir (or --raw-dir).
+//
+// Usage:
+//   node tools/build-schools.mjs                   fetch monthly sources, reuse the rest
+//   node tools/build-schools.mjs --only gias,de    fetch exactly these (any cadence); every other source re-emits its snapshot
+//   node tools/build-schools.mjs --refresh ccd     also fetch these annual/static sources (a deliberate new vintage)
+//   options: --raw-dir <dir>   where downloads are cached (default <os tmp>/saferoute-schools)
+//            --frozen          never touch the network; use rawDir's files whatever their age
+//            --out <dir>       tile directory to write (default schools/data/tiles)
+//            --snapshot <dir>  tile directory to read snapshots from (default: --out)
+// Output: <out>/{key}.json + <out>/index.json
 
-import { writeFileSync, mkdirSync, existsSync, readFileSync, statSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { gzipSync } from 'node:zlib';
 import { tmpdir } from 'node:os';
-import { loadOfsted, REPORT_CARD_AREAS } from './fetch-ofsted.mjs';
+import { existsSync, readFileSync } from 'node:fs';
+import { FIELDS, SCHEMA_VERSION, rowProblems } from './schools/lib/schema.mjs';
+import { BASE, MAX_ROWS, MIN_CELL, sortRows, tileRows, tileStats, writeTiles, readRowsFromTiles } from './schools/lib/tiles.mjs';
+import { loadCoverage } from './schools/lib/coverage.mjs';
+import { loadSources, loadRatings } from './schools/lib/modules.mjs';
+import { makeDownloader } from './schools/lib/download.mjs';
+import { composeWhere, composeFilters } from './schools/lib/meta.mjs';
+import { JURIS } from './schools/juris.mjs';
+import { SCOPE_NOTE } from './schools/regions.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const OUT_DIR = join(ROOT, 'schools', 'data');
-
-// GIAS publishes a fresh all-establishments extract every morning under a
-// date-stamped filename. There is no "latest" alias, so walk back a few days:
-// the file for today usually exists, but not always before ~07:00 UK.
-const GIAS_BASE = 'https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public';
-
-function ymd(d) {
-  return `${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, '0')}${String(d.getUTCDate()).padStart(2, '0')}`;
+const argv = process.argv.slice(2);
+if (argv.includes('--help') || argv.includes('-h')) {
+  console.log(readFileSync(fileURLToPath(import.meta.url), 'utf8').split('\n').filter(l => l.startsWith('//')).slice(22, 31).map(l => l.slice(3)).join('\n'));
+  process.exit(0);
 }
+const arg = (n, d) => (argv.includes(n) ? argv[argv.indexOf(n) + 1] : d);
+const list = v => new Set((v || '').split(',').map(s => s.trim()).filter(Boolean));
+const ONLY = argv.includes('--only') ? list(arg('--only')) : null;
+const REFRESH = list(arg('--refresh'));
+const FROZEN = argv.includes('--frozen');
+const RAW_DIR = resolve(arg('--raw-dir', join(tmpdir(), 'saferoute-schools')));
+const OUT = resolve(arg('--out', join(ROOT, 'schools', 'data', 'tiles')));
+const SNAPSHOT = resolve(arg('--snapshot', OUT));
+const RATING_MAPS = join(ROOT, 'tools', 'data', 'schools', 'ratings');
 
-async function fetchGias() {
-  const cached = join(tmpdir(), 'saferoute-gias.csv');
-  // A same-day cache purely so re-running while developing does not re-pull
-  // 62MB. Anything older is refetched rather than trusted.
-  if (existsSync(cached)) {
-    const ageH = (Date.now() - statSync(cached).mtimeMs) / 36e5;
-    if (ageH < 12) {
-      console.log(`  using cached GIAS (${ageH.toFixed(1)}h old)`);
-      return readFileSync(cached);
-    }
-  }
-  for (let back = 0; back < 5; back++) {
-    const d = new Date(Date.now() - back * 864e5);
-    const url = `${GIAS_BASE}/edubasealldata${ymd(d)}.csv`;
-    const res = await fetch(url, { signal: AbortSignal.timeout(180_000) });
-    if (!res.ok) continue;
-    const buf = Buffer.from(await res.arrayBuffer());
-    console.log(`  fetched ${url.split('/').pop()} (${(buf.length / 1e6).toFixed(1)}MB)`);
-    writeFileSync(cached, buf);
-    return buf;
-  }
-  throw new Error('GIAS: no extract found in the last 5 days');
-}
-
-// ── coordinates ─────────────────────────────────────────────────────────────
-// GIAS gives OSGB36 Easting/Northing. Leaflet needs WGS84. Two steps, and both
-// are needed — skipping the datum shift leaves pins ~100m out, which in a dense
-// city puts a school on the wrong side of a road.
-//
-// 1. Inverse Transverse Mercator off the Airy 1830 ellipsoid → OSGB36 lat/lon
-// 2. Helmert 7-parameter transform → WGS84 (~5m, far below pin precision)
-//
-// Hand-rolled rather than pulling in proj4 (~1MB) for one projection. The
-// constants are Ordnance Survey's published values and the result is checked
-// against postcodes.io in verify-schools.mjs, not taken on trust.
-function osgb36ToWgs84(E, N) {
-  const a = 6377563.396, b = 6356256.909;          // Airy 1830
-  const F0 = 0.9996012717;                          // National Grid scale factor
-  const lat0 = 49 * Math.PI / 180, lon0 = -2 * Math.PI / 180;
-  const E0 = 400000, N0 = -100000;
-  const e2 = 1 - (b * b) / (a * a);
-  const n = (a - b) / (a + b), n2 = n * n, n3 = n2 * n;
-
-  let lat = lat0, M = 0;
-  do {
-    lat = (N - N0 - M) / (a * F0) + lat;
-    const dLat = lat - lat0, sLat = lat + lat0;
-    const Ma = (1 + n + 1.25 * n2 + 1.25 * n3) * dLat;
-    const Mb = (3 * n + 3 * n2 + 2.625 * n3) * Math.sin(dLat) * Math.cos(sLat);
-    const Mc = (1.875 * n2 + 1.875 * n3) * Math.sin(2 * dLat) * Math.cos(2 * sLat);
-    const Md = (35 / 24) * n3 * Math.sin(3 * dLat) * Math.cos(3 * sLat);
-    M = b * F0 * (Ma - Mb + Mc - Md);
-  } while (Math.abs(N - N0 - M) >= 0.00001);
-
-  const cosLat = Math.cos(lat), sinLat = Math.sin(lat);
-  const nu = a * F0 / Math.sqrt(1 - e2 * sinLat * sinLat);
-  const rho = a * F0 * (1 - e2) / Math.pow(1 - e2 * sinLat * sinLat, 1.5);
-  const eta2 = nu / rho - 1;
-  const tanLat = Math.tan(lat), tan2 = tanLat * tanLat, tan4 = tan2 * tan2, tan6 = tan4 * tan2;
-  const secLat = 1 / cosLat;
-  const nu3 = nu * nu * nu, nu5 = nu3 * nu * nu, nu7 = nu5 * nu * nu;
-
-  const VII = tanLat / (2 * rho * nu);
-  const VIII = tanLat / (24 * rho * nu3) * (5 + 3 * tan2 + eta2 - 9 * tan2 * eta2);
-  const IX = tanLat / (720 * rho * nu5) * (61 + 90 * tan2 + 45 * tan4);
-  const X = secLat / nu;
-  const XI = secLat / (6 * nu3) * (nu / rho + 2 * tan2);
-  const XII = secLat / (120 * nu5) * (5 + 28 * tan2 + 24 * tan4);
-  const XIIA = secLat / (5040 * nu7) * (61 + 662 * tan2 + 1320 * tan4 + 720 * tan6);
-
-  const dE = E - E0, dE2 = dE * dE, dE3 = dE2 * dE, dE4 = dE2 * dE2,
-        dE5 = dE3 * dE2, dE6 = dE4 * dE2, dE7 = dE5 * dE2;
-  const latO = lat - VII * dE2 + VIII * dE4 - IX * dE6;
-  const lonO = lon0 + X * dE - XI * dE3 + XII * dE5 - XIIA * dE7;
-
-  return helmertToWgs84(latO, lonO);
-}
-
-// OSGB36 → WGS84. OS publish the parameters for WGS84→OSGB36; these are those
-// values negated, which is the standard inverse for a transform this small.
-function helmertToWgs84(lat, lon) {
-  const aFrom = 6377563.396, bFrom = 6356256.909;   // Airy 1830
-  const aTo = 6378137.000, bTo = 6356752.3142;      // WGS84
-  const tx = 446.448, ty = -125.157, tz = 542.060;  // metres
-  const rx = 0.1502 / 3600 * Math.PI / 180;         // arcsec → rad
-  const ry = 0.2470 / 3600 * Math.PI / 180;
-  const rz = 0.8421 / 3600 * Math.PI / 180;
-  const s = -20.4894 / 1e6 + 1;                     // ppm → scale factor
-
-  const e2From = 1 - (bFrom * bFrom) / (aFrom * aFrom);
-  const sinLat = Math.sin(lat), cosLat = Math.cos(lat);
-  const nu = aFrom / Math.sqrt(1 - e2From * sinLat * sinLat);
-  const x1 = nu * cosLat * Math.cos(lon);
-  const y1 = nu * cosLat * Math.sin(lon);
-  const z1 = (1 - e2From) * nu * sinLat;
-
-  const x2 = tx + s * x1 - rz * y1 + ry * z1;
-  const y2 = ty + rz * x1 + s * y1 - rx * z1;
-  const z2 = tz - ry * x1 + rx * y1 + s * z1;
-
-  const e2To = 1 - (bTo * bTo) / (aTo * aTo);
-  const p = Math.sqrt(x2 * x2 + y2 * y2);
-  let latT = Math.atan2(z2, p * (1 - e2To)), nuT;
-  for (let i = 0; i < 10; i++) {
-    nuT = aTo / Math.sqrt(1 - e2To * Math.sin(latT) * Math.sin(latT));
-    const next = Math.atan2(z2 + e2To * nuT * Math.sin(latT), p);
-    if (Math.abs(next - latT) < 1e-12) { latT = next; break; }
-    latT = next;
-  }
-  return [latT * 180 / Math.PI, Math.atan2(y2, x2) * 180 / Math.PI];
-}
-
-// ── CSV ─────────────────────────────────────────────────────────────────────
-// GIAS is Windows-1252, not UTF-8: school names carry curly apostrophes and the
-// occasional é. Decoding as UTF-8 mangles them into replacement characters.
-function parseCsv(buf) {
-  const text = new TextDecoder('windows-1252').decode(buf);
-  const rows = [];
-  let row = [], field = '', inQ = false;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    if (inQ) {
-      if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else inQ = false; }
-      else field += c;
-    } else if (c === '"') inQ = true;
-    else if (c === ',') { row.push(field); field = ''; }
-    else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
-    else if (c !== '\r') field += c;
-  }
-  if (field || row.length) { row.push(field); rows.push(row); }
-  const header = rows.shift();
-  return { header, rows };
-}
-
-// ── normalisation ───────────────────────────────────────────────────────────
-// GIAS spells the same religion several ways ("Roman Catholic" / "Catholic",
-// "Muslim" / "Islam"). Left raw, a filter dropdown shows both and neither
-// selects all the schools it should.
-const RELIGION = new Map([
-  ['Roman Catholic', 'Catholic'], ['Catholic', 'Catholic'],
-  ['Muslim', 'Muslim'], ['Islam', 'Muslim'],
-  ['Church of England', 'Church of England'],
-  ['None', ''], ['Does not apply', ''], ['Unknown', ''],
-]);
-
-// PhaseOfEducation is literally "Not applicable" for every independent school,
-// so phase has to come from the age range or half the private pins lose their
-// most useful filter.
-function derivePhase(phase, lo, hi) {
-  if (phase && phase !== 'Not applicable') return phase;
-  const a = parseInt(lo, 10), b = parseInt(hi, 10);
-  if (!Number.isFinite(a) || !Number.isFinite(b)) return '';
-  if (b <= 11) return 'Primary';
-  if (a >= 16) return 'Sixth form';
-  if (a >= 11) return 'Secondary';
-  return 'All-through';
-}
-
-// Report-card area name -> a short stable key. Ofsted's headings are long and
-// contain spaces; the keys travel in every tile and are read by /check/'s
-// school pane, which lists all seven areas for a report-card school.
-const cardKey = a => 'rc' + a.replace(/[^a-zA-Z]+(.)/g, (_, c) => c.toUpperCase())
-                              .replace(/[^a-zA-Z]/g, '')
-                              .replace(/^./, c => c.toUpperCase());
-
-// GIAS is a register of every educational ESTABLISHMENT, not of schools. It
-// includes universities, offshore schools and an explicit "Miscellaneous" bin.
-// Leaving them in put Falmouth University on a schools map — found by clicking
-// a pin, not by reading the data. Further education and post-16 institutions
-// stay, because 16-19 provision is a real choice a family makes.
-const NOT_A_SCHOOL = new Set([
-  'Higher education institutions',
-  'Miscellaneous',
-  'Offshore schools',          // outside England and Wales entirely
-  // Ministry of Defence schools abroad (Tehran, Sakhalin, Huiyang...). GIAS
-  // registers them to one Canary Wharf postcode, so they were four pins in
-  // east London for schools thousands of miles away.
-  "Service children's education",
-]);
+const warn = m => console.log(`::warning::${m}`);
+const fmt = n => n.toLocaleString('en-GB');
 
 const run = async () => {
-  const { header, rows } = parseCsv(await fetchGias());
-  const col = Object.fromEntries(header.map((h, i) => [h, i]));
-  const g = (r, name) => (r[col[name]] ?? '').trim();
-  // GIAS writes CensusDate as DD-MM-YYYY; every other date on the map is ISO
-  // (Ofsted's come through fetch-ofsted's isoDate). Mixed formats rendered as
-  // "2026 January 15" — normalise here so the page has one format to read.
-  const dmyToIso = v => { const m = /^(\d{2})[-/](\d{2})[-/](\d{4})$/.exec(v); return m ? `${m[3]}-${m[2]}-${m[1]}` : ''; };
+  const cov = loadCoverage();
+  if (cov.stale.length) warn(`regions.mjs has entries the backend no longer covers: ${cov.stale.join(', ')}`);
+  const sources = await loadSources();
+  const ratings = await loadRatings();
+  for (const id of [...(ONLY || []), ...REFRESH]) if (!sources.some(s => s.id === id)) throw new Error(`no source "${id}" in tools/schools/sources/`);
 
-  const out = [];
-  let skippedClosed = 0, skippedNoGeo = 0, skippedNotSchool = 0;
+  // ── snapshots: every row currently published, by source ──────────────────
+  const legacyV1 = sources.find(s => typeof s.fromV1 === 'function');
+  const snap = readRowsFromTiles(SNAPSHOT, { legacy: { v1: legacyV1?.fromV1 } });
+  const prev = snap.index?.version === SCHEMA_VERSION ? snap.index : null;
+  console.log(`  snapshot: ${snap.index ? `${fmt(snap.index.count)} rows in ${snap.index.cells.length} tiles (v${snap.index.version || 1})` : 'none'}`);
 
-  for (const r of rows) {
-    if (r.length < header.length - 2) continue;
-    if (g(r, 'EstablishmentStatus (name)') !== 'Open') { skippedClosed++; continue; }
-    const E = parseFloat(g(r, 'Easting')), N = parseFloat(g(r, 'Northing'));
-    // A school with no coordinate cannot go on a map. Counted, not hidden.
-    if (!Number.isFinite(E) || !Number.isFinite(N) || E === 0 || N === 0) { skippedNoGeo++; continue; }
-    const [lat, lng] = osgb36ToWgs84(E, N);
-    // Great Britain bounding sanity — catches a transposed or junk grid ref
-    // rather than dropping a pin in the Atlantic.
-    if (lat < 49.8 || lat > 61 || lng < -8.7 || lng > 2.1) { skippedNoGeo++; continue; }
-
-    const type = g(r, 'TypeOfEstablishment (name)');
-    if (NOT_A_SCHOOL.has(type)) { skippedNotSchool++; continue; }
-    const religionRaw = g(r, 'ReligiousCharacter (name)');
-
-    out.push({
-      urn: +g(r, 'URN'),
-      name: g(r, 'EstablishmentName'),
-      lat: +lat.toFixed(5), lng: +lng.toFixed(5),
-      type,
-      group: g(r, 'EstablishmentTypeGroup (name)'),
-      // The public/private toggle the map needs, decided once here rather than
-      // by string-matching in the browser.
-      sector: /independent/i.test(type) ? 'private' : 'state',
-      // Explicit, not inferred. The UI previously deduced "not independent and
-      // not in the Ofsted file, therefore Wales", which labelled an English
-      // university as Welsh. GIAS files every Welsh school under this one type.
-      country: type === 'Welsh establishment' ? 'Wales' : 'England',
-      phase: derivePhase(g(r, 'PhaseOfEducation (name)'), g(r, 'StatutoryLowAge'), g(r, 'StatutoryHighAge')),
-      ageLow: +g(r, 'StatutoryLowAge') || null,
-      ageHigh: +g(r, 'StatutoryHighAge') || null,
-      gender: g(r, 'Gender (name)'),
-      religion: RELIGION.has(religionRaw) ? RELIGION.get(religionRaw) : religionRaw,
-      pupils: +g(r, 'NumberOfPupils') || null,
-      capacity: +g(r, 'SchoolCapacity') || null,
-      fsm: parseFloat(g(r, 'PercentageFSM')) || null,
-      censusDate: dmyToIso(g(r, 'CensusDate')),
-      sixthForm: g(r, 'OfficialSixthForm (name)') === 'Has a sixth form',
-      // GIAS never says "boarding" in BoardingEstablishment: its values are "Has
-      // boarders" / "Does not have boarders" (and blank for most schools), so the
-      // old /boarding/i test marked 0 of 26,217 schools and the Boarding filter
-      // always came back empty. The "Boarders" field names boarding schools
-      // directly; either one is enough.
-      boarding: g(r, 'BoardingEstablishment (name)') === 'Has boarders' || g(r, 'Boarders (name)') === 'Boarding school',
-      nursery: /has nursery/i.test(g(r, 'NurseryProvision (name)')),
-      admissions: g(r, 'AdmissionsPolicy (name)'),
-      trust: g(r, 'Trusts (name)'),
-      la: g(r, 'LA (name)'),
-      ward: g(r, 'AdministrativeWard (name)'),
-      postcode: g(r, 'Postcode'),
-      // Which inspectorate — Ofsted for state, ISI and others for independent.
-      // Without this the map cannot explain why a private pin has no Ofsted
-      // grade, and an empty badge reads as "bad" rather than "not applicable".
-      inspectorate: g(r, 'InspectorateName (name)'),
-      // Filled from the Ofsted join below. Declared here so every school has
-      // the key whether or not it has a rating — a school missing the field
-      // entirely would render differently from one with no grade, and half of
-      // them have no grade.
-      // NOTE for the UI: rcSafeguardingStandards is binary (Met / Not met),
-      // NOT the five-point scale the other report-card areas use. Rendering it
-      // on the same colour ramp would show "Met" as if it were a middling
-      // grade. It is a pass, and it is the only one of the seven like this.
-      ratingScheme: 'none',
-      oeifGrade: '',
-      oeifDate: '',
-      cardDate: '',
-      ...Object.fromEntries(REPORT_CARD_AREAS.map(a => [cardKey(a), ''])),
-    });
-  }
-
-  // ── Ofsted join ───────────────────────────────────────────────────────────
-  // Join on URN, which is the only stable key between GIAS and Ofsted. Note
-  // what is NOT done here: no overall grade is synthesised for a report-card
-  // school by averaging its areas. Ofsted deliberately abolished the single
-  // judgement; re-deriving one would be inventing data and would be the most
-  // misleading thing this map could do.
-  //
-  // THREE DIFFERENT THINGS, not one. Collapsing them all to "no rating" would
-  // tell a Cardiff parent their school is awaiting inspection when Ofsted has
-  // no remit in Wales at all:
-  //   'none'        in Ofsted's remit, inspected or not, but carries no grade
-  //                 right now — the modal English state school
-  //   'not-ofsted'  outside Ofsted's remit entirely: Wales (Estyn inspects),
-  //                 and independent schools inspected by ISI
-  const ofsted = await loadOfsted();
-  let matched = 0, graded = 0, outOfRemit = 0;
-  for (const s of out) {
-    const o = ofsted.get(s.urn);
-    if (!o) {
-      // Absent from the state-funded MI. That is Wales, independent schools,
-      // and a handful of other establishment types — not a failed join.
-      s.ratingScheme = 'not-ofsted';
-      outOfRemit++;
-      continue;
+  // ── run each source ──────────────────────────────────────────────────────
+  const results = [];
+  for (const src of sources) {
+    const snapshot = snap.bySrc.get(src.id) || [];
+    const prevMeta = prev?.sources?.[src.id] || null;
+    // --only names exactly what to fetch (whatever its cadence); otherwise
+    // monthly sources fetch, and annual/static ones only on --refresh or when
+    // they have nothing in the tiles yet.
+    const due = REFRESH.has(src.id) || src.cadence === 'monthly' || !snapshot.length;
+    const want = ONLY ? ONLY.has(src.id) : due;
+    const dl = makeDownloader({ rawDir: join(RAW_DIR, src.id), frozen: FROZEN, log: console.log });
+    const stats = {};
+    let vintage = prevMeta?.vintage ?? null;
+    const ctx = {
+      id: src.id, rawDir: join(RAW_DIR, src.id), frozen: FROZEN, refresh: REFRESH.has(src.id),
+      log: (...a) => console.log(...a), warn: m => warn(`${src.id}: ${m}`),
+      download: dl.download, provenance: dl.provenance,
+      stat: (k, n = 1) => { stats[k] = (stats[k] || 0) + n; },
+      vintage: v => { vintage = v; },
+      coverage: cov, snapshot, prev: prevMeta,
+    };
+    console.log(`\n  ── ${src.id} (${src.cadence}) ${want ? 'fetching' : snapshot.length ? 'reusing its snapshot' : 'skipped (no snapshot)'}`);
+    let rows = null, status;
+    if (want) {
+      try {
+        rows = await src.fetch(ctx);
+        if (!Array.isArray(rows) || !rows.length) throw new Error('fetch returned no rows');
+        status = 'fetched';
+      } catch (e) {
+        rows = null;
+        if (snapshot.length) warn(`${src.id}: fetch failed (${e.message}) — re-emitting its ${fmt(snapshot.length)} rows from the current tiles`);
+        else warn(`${src.id}: fetch failed (${e.message}) and it has no snapshot — it is absent from this build`);
+        status = 'failed';
+      }
     }
-    matched++;
-    s.ratingScheme = o.scheme;
-    s.oeifGrade = o.oeifGrade;
-    s.oeifDate = o.oeifDate;
-    s.cardDate = Object.keys(o.card).length ? o.cardDate : '';
-    for (const a of REPORT_CARD_AREAS) s[cardKey(a)] = o.card[a] || '';
-    if (o.scheme !== 'none') graded++;
-  }
-  console.log(`  Ofsted matched       ${matched.toLocaleString()} of ${out.length.toLocaleString()} schools`);
-  console.log(`    with any grade     ${graded.toLocaleString()}  (${(100 * graded / matched).toFixed(1)}% of matched)`);
-  console.log(`    NO grade           ${(matched - graded).toLocaleString()}  (${(100 * (matched - graded) / matched).toFixed(1)}%)  <- normal, not missing`);
-  console.log(`  outside Ofsted remit ${outOfRemit.toLocaleString()}  (Wales/Estyn, ISI-inspected independents)`);
-
-  // Sort north to south so every tile lists its schools in a fixed order. Output
-  // is then deterministic — the same inputs produce byte-identical tiles — which
-  // keeps the monthly diff to real changes rather than reshuffled rows.
-  out.sort((a, b) => a.lat - b.lat || a.lng - b.lng);
-
-  // DELIBERATELY NOT CARRIED, so nobody re-adds them by accident:
-  //   SchoolWebsite  — 188KB gzipped, and every school's GIAS page is derivable
-  //                    from the URN, so the pin links there instead.
-  //   LSOA (code)    — 69KB, only needed to cross-link schools to the crime
-  //                    area pages. Add it back with that feature, not before.
-  //   DateOfLastInspectionVisit — filled for 310 of 27,173 open schools (1%).
-  //                    A date that is absent 99% of the time is not a field.
-
-  // ── geographic tiles ──────────────────────────────────────────────────────
-  // /check/ needs the schools around ONE address, not the country. Serving it
-  // the national file made every visitor download 728KB to look at a square
-  // mile — and three quarters of that page's traffic is US, where the answer is
-  // nothing at all.
-  //
-  // 0.25° cells, chosen from the measured distribution rather than picked:
-  // 389 files, median 34 schools, worst case 1,035 in central London. A
-  // zoom-14 viewport is about 0.02° tall, so it sits inside one cell and a
-  // typical lookup fetches one to four.
-  //
-  // Tiles carry DECODED strings (no enum dictionary — at ~34 schools per cell a
-  // dictionary costs more than it saves) but stay ROW-ARRAY shaped, with the
-  // field list held once in index.json. Plain objects were the obvious first
-  // cut and produced 20.6MB of raw tiles by repeating every key 26,000 times;
-  // this is the same data without that.
-  const CELL = 0.25;
-  // Everything /check/ needs to draw, FILTER and pop up a school, and nothing
-  // else. boarding is here because it is a /check/ filter; sixthForm and the
-  // fields after ageLow are rows in the school detail pane. (The sixth-form
-  // filter was dropped as redundant; the pane still shows the fact.)
-  const TILE_FIELDS = ['urn','name','postcode','lat','lng','type','sector','phase',
-                       'gender','pupils','sixthForm','boarding','country',
-                       'ratingScheme','oeifGrade','oeifDate',
-                       // Detail-pane fields: clicking a school fills the right-hand
-                       // pane on /check/, so everything it shows travels in the tile.
-                       'ageLow','ageHigh','capacity','fsm','censusDate','nursery',
-                       'admissions','la','ward','trust','inspectorate','cardDate',
-                       ...REPORT_CARD_AREAS.map(cardKey)];
-  // Religious character is deliberately NOT here: the religion filter was removed
-  // at the owner's request, and it is not reintroduced through the back door as a
-  // detail row. Add 'religion' above if that decision is ever reversed.
-  const cellKey = (lat, lng) => `${Math.floor(lat / CELL)}_${Math.floor(lng / CELL)}`;
-  const tiles = new Map();
-  for (const s of out) {
-    const k = cellKey(s.lat, s.lng);
-    if (!tiles.has(k)) tiles.set(k, []);
-    tiles.get(k).push(TILE_FIELDS.map(f => s[f]));
+    if (!rows) {
+      rows = snapshot.map(r => ({ ...r }));
+      status = status === 'failed' ? (rows.length ? 'snapshot-after-failure' : 'absent') : (rows.length ? 'snapshot' : 'absent');
+      // A snapshot keeps the provenance of the build that fetched it — not
+      // whatever a failed fetch recorded before it gave up.
+      for (const k of Object.keys(stats)) delete stats[k];
+      Object.assign(stats, prevMeta?.stats || {});
+      vintage = prevMeta?.vintage ?? null;
+      if (!want && src.probe && rows.length) {
+        try { const p = await src.probe(ctx); if (p?.changed) warn(`new vintage for ${src.id}: ${p.vintage} — refresh deliberately with --refresh ${src.id}`); }
+        catch (e) { warn(`${src.id}: vintage probe failed (${e.message})`); }
+      }
+    }
+    const upstream = status === 'fetched' ? dl.provenance.map(({ cached, ...p }) => p) : (prevMeta?.upstream || []);
+    // When every download came from the raw cache (--frozen, or a re-run), the
+    // data is as old as the newest of those downloads, not today's.
+    const dls = dl.provenance.filter(p => 'cached' in p);
+    const newest = dls.map(p => p.fetchedAt || '').sort().pop() || '';
+    const fetched = status !== 'fetched' ? (prevMeta?.fetched || null)
+      : dls.length && dls.every(p => p.cached) && newest ? newest.slice(0, 10) : new Date().toISOString().slice(0, 10);
+    results.push({ src, rows, status, stats, vintage, upstream, fetched });
+    console.log(`     ${fmt(rows.length)} rows (${status})`);
   }
 
-  const TILE_DIR = join(OUT_DIR, 'tiles');
-  mkdirSync(TILE_DIR, { recursive: true });   // recursive: also creates OUT_DIR
-  let tileBytes = 0, biggest = 0;
-  for (const [k, list] of tiles) {
-    const j = JSON.stringify(list);
-    writeFileSync(join(TILE_DIR, `${k}.json`), j);
-    tileBytes += j.length;
-    biggest = Math.max(biggest, gzipSync(Buffer.from(j)).length);
+  // ── validate every row against its source's contract ─────────────────────
+  const problems = [];
+  for (const { src, rows } of results) {
+    for (const r of rows) {
+      const p = rowProblems(r, src);
+      if (p.length) problems.push(`${src.id} ${r.id || '?'}: ${p.join('; ')}`);
+    }
   }
-  // An index of populated cells, so the client never requests a 404. Most of
-  // the bounding box of England and Wales is sea.
-  writeFileSync(join(TILE_DIR, 'index.json'), JSON.stringify({
-    cell: CELL,
+  if (problems.length) throw new Error(`${problems.length} invalid row(s), e.g.\n    ${problems.slice(0, 10).join('\n    ')}`);
+
+  // ── rating maps (US states; built by tools/schools/ratings.mjs) ──────────
+  // Applied only to state schools of the listed sources and jurisdictions. A
+  // school in a rated state that the map does not list keeps the scheme with
+  // an empty value: the pane then says the state publishes a rating but this
+  // school is not in that year's file, never a blank.
+  const usedRatings = [];
+  for (const rm of ratings) {
+    const path = join(RATING_MAPS, `${rm.scheme}.json`);
+    if (!existsSync(path)) { console.log(`  rating ${rm.scheme}: no map at tools/data/schools/ratings/${rm.scheme}.json yet — not applied`); continue; }
+    const map = JSON.parse(readFileSync(path, 'utf8'));
+    let n = 0, hit = 0;
+    for (const { rows } of results) for (const r of rows) {
+      if (!rm.sources.includes(r.src) || !rm.juris.includes(r.juris) || r.sector !== 'state') continue;
+      const v = map.values[r.id];
+      n++; if (v) hit++;
+      r.ratingScheme = rm.scheme; r.rv = v?.rv ?? ''; r.rd = v?.rd ?? '';
+    }
+    usedRatings.push({ rm, meta: map.meta, applied: n, matched: hit });
+    console.log(`  rating ${rm.scheme}: ${fmt(hit)} of ${fmt(n)} schools matched`);
+  }
+
+  // ── scope (R2) and de-duplication ────────────────────────────────────────
+  const all = [], seen = new Set(), regionOf = new Map();
+  for (const res of results) {
+    let out = 0, dup = 0;
+    const kept = [];
+    for (const r of res.rows) {
+      const reg = cov.regionFor(r.lat, r.lng, r.juris);
+      if (!reg) { out++; continue; }
+      const k = `${r.src}\u0000${r.id}`;
+      if (seen.has(k)) { dup++; continue; }
+      seen.add(k);
+      regionOf.set(r, reg);
+      kept.push(r);
+    }
+    if (out) res.stats['dropped.outsideScope'] = out;
+    if (dup) { res.stats['dropped.duplicateId'] = dup; warn(`${res.src.id}: ${dup} duplicate id(s) dropped`); }
+    res.rows = kept;
+    all.push(...kept);
+  }
+  sortRows(all);
+
+  // ── tiles ────────────────────────────────────────────────────────────────
+  const leaves = tileRows(all, { base: BASE, maxRows: MAX_ROWS, minCell: MIN_CELL });
+  const ts = tileStats(leaves);
+
+  // ── index.json v2 ────────────────────────────────────────────────────────
+  const present = results.filter(r => r.rows.length);
+  const presentSources = present.map(r => r.src);
+  const regions = cov.regions.map(reg => {
+    const rows = all.filter(r => regionOf.get(r) === reg);
+    const jurisPresent = reg.juris.filter(j => rows.some(r => r.juris === j));
+    return { ...reg, rows, jurisPresent };
+  }).filter(r => r.rows.length);
+  const jurisCount = {};
+  for (const r of all) jurisCount[r.juris] = (jurisCount[r.juris] || 0) + 1;
+
+  const schemes = {};
+  const usedIds = new Set(all.map(r => r.ratingScheme));
+  for (const { src } of present) for (const [id, s] of Object.entries(src.schemes || {})) {
+    if (!usedIds.has(id)) continue;
+    if (schemes[id] && JSON.stringify(schemes[id]) !== JSON.stringify(s)) throw new Error(`scheme ${id} is defined differently by two sources`);
+    schemes[id] = s;
+  }
+  for (const u of usedRatings) if (usedIds.has(u.rm.scheme)) schemes[u.rm.scheme] = { ...u.rm.record, vintage: u.meta?.vintage ?? null };
+  const unknown = [...usedIds].filter(id => !schemes[id]);
+  if (unknown.length) throw new Error(`rows use rating scheme(s) no source or ratings module defines: ${unknown.join(', ')}`);
+
+  const filters = composeFilters(presentSources, all);
+  const index = {
+    version: SCHEMA_VERSION,
     generated: new Date().toISOString().slice(0, 10),
-    // Read by tools/sync-site-facts.mjs for the homepage's school count, so the
-    // number on the homepage is this file's, never a typed copy.
-    count: out.length,
-    fields: TILE_FIELDS,
-    // Filter dropdown values, so the page does not have to fetch every tile to
-    // discover what a "phase" can be.
-    options: {
-      phase: [...new Set(out.map(x => x.phase))].filter(Boolean).sort(),
-      gender: [...new Set(out.map(x => x.gender))].filter(v => v && v !== 'Not applicable').sort(),
-    },
-    cells: [...tiles.keys()].sort(),
-  }));
+    base: BASE, split: { maxRows: MAX_ROWS, minCell: MIN_CELL },
+    // Read by tools/sync-site-facts.mjs (the homepage count and "where"), and
+    // checked by verify-schools against the rows actually in the tiles.
+    count: all.length,
+    where: composeWhere(regions),
+    // What scope rule R2 means for a reader (the sources list on /check/).
+    scope: SCOPE_NOTE,
+    fields: FIELDS,
+    cells: leaves.map(([k]) => k),
+    regions: regions.map(r => ({ id: r.id, name: r.name, country: r.country, juris: r.jurisPresent, bbox: r.bbox,
+      count: r.rows.length, view: r.view, viewName: r.viewName, ...(r.tz ? { tz: r.tz } : {}),
+      // What else the rectangle holds, not mapped under R2 (regions.mjs).
+      ...(r.outside?.length ? { outside: r.outside } : {}) })),
+    juris: Object.fromEntries(Object.keys(jurisCount).sort().map(j => [j, { ...JURIS[j], count: jurisCount[j] }])),
+    sources: Object.fromEntries(present.map(({ src, rows, status, stats, vintage, upstream, fetched }) => [src.id, {
+      ...src.meta, cadence: src.cadence, juris: [...new Set(rows.map(r => r.juris))].sort(),
+      rows: rows.length, status, vintage, fetched, upstream, stats,
+    }])),
+    schemes,
+    filters,
+    // The design's shape for filter values; the same list as filters[gender].options.
+    options: Object.fromEntries(filters.filter(f => f.options).map(f => [f.field, f.options])),
+  };
+  writeTiles(OUT, leaves, index);
 
-  console.log(`  schools written      ${out.length.toLocaleString()}`);
-  console.log(`    state              ${out.filter(s => s.sector === 'state').length.toLocaleString()}`);
-  console.log(`    private            ${out.filter(s => s.sector === 'private').length.toLocaleString()}`);
-  console.log(`  skipped, closed      ${skippedClosed.toLocaleString()}`);
-  console.log(`  skipped, no coords   ${skippedNoGeo.toLocaleString()}`);
-  console.log(`  skipped, not a school ${skippedNotSchool.toLocaleString()}  (universities, offshore, misc)`);
-  console.log(`  tiles                ${tiles.size} cells at ${CELL}°, ${(tileBytes / 1e6).toFixed(1)}MB raw total, largest ${(biggest / 1024).toFixed(0)}KB gzipped`);
+  // ── report ───────────────────────────────────────────────────────────────
+  console.log(`\n  schools written      ${fmt(all.length)}  (${index.where})`);
+  for (const { src, rows, status } of present) console.log(`    ${src.id.padEnd(10)} ${fmt(rows.length).padStart(7)}  ${status}`);
+  for (const r of index.regions) console.log(`    region ${r.id.padEnd(11)} ${fmt(r.count).padStart(7)}  [${r.juris.join(' ')}]`);
+  console.log(`    state ${fmt(all.filter(s => s.sector === 'state').length)}, private ${fmt(all.filter(s => s.sector === 'private').length)}`);
+  for (const { src, stats } of present) {
+    const s = Object.entries(stats).map(([k, v]) => `${k} ${fmt(v)}`).join(', ');
+    if (s) console.log(`    ${src.id} stats: ${s}`);
+  }
+  console.log(`  tiles                ${ts.files} files (${Object.entries(ts.byLevel).map(([l, n]) => `${n} @${BASE / 2 ** l}°`).join(', ')}), ` +
+    `${(ts.rawBytes / 1e6).toFixed(1)}MB raw, ${(ts.gzBytes / 1e6).toFixed(2)}MB gzipped; median ${(ts.medianGz / 1024).toFixed(1)}KB, ` +
+    `worst ${(ts.worst[0]?.gz / 1024).toFixed(1)}KB gzipped (${ts.worst[0]?.key}, ${fmt(ts.worst[0]?.rows ?? 0)} rows)`);
 };
 
 run().catch(e => { console.error('build-schools failed:', e.message); process.exit(1); });

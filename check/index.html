@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0A0D12">
 <title>Check any address — SafeRoute neighborhood safety</title>
-<!-- Worded to the school data, which is England state and private plus Wales
-     state only, and whose inspection outcomes exist only where Ofsted has
-     graded an English state school (the same claim as #secSchools below). -->
-<meta name="description" content="Type any address for its SafeRoute safety index (0–100) from police crime data, plus nearby schools in England and Wales with the latest Ofsted outcome, if any.">
+<!-- Worded to the school data (schools/data/tiles/index.json "where"): the
+     places listed are exactly where schools are mapped, and an inspection or
+     rating exists only where a school's own authority publishes one (Ofsted,
+     ETI and US states do; Ontario, British Columbia and Mexico do not). Keep
+     this list in step with #secSchools, which sync-site-facts fills. -->
+<meta name="description" content="Type any address for its SafeRoute safety index (0–100) from police crime data, plus nearby schools in England, Wales, Northern Ireland, 26 US cities, Toronto, Vancouver and Mexico City, with each authority's own inspection or rating where one is published.">
 <meta property="og:image" content="https://safe-route.app/assets/og-preview.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:title" content="Check any address — SafeRoute neighborhood safety">
@@ -262,9 +264,9 @@
   /* Shown only while the schools layer is on. */
   .sch-hint{display:none;margin-top:8px}
   body.sch-on .sch-hint{display:block}
-  /* "Starting in central London." only when the map really went there
-     (?schools, or the pane's Show schools). The map's own Schools pill never
-     moves the map. */
+  /* "Starting in {a region's start view}." only when the map really went
+     there (?schools, or the pane's Show schools). The map's own Schools pill
+     never moves the map. */
   .sch-hint .sch-start{display:none}
   body.sch-london .sch-hint .sch-start{display:inline}
   .scale{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:0 0 12px;padding:0}
@@ -288,6 +290,16 @@
   .cov button{font:inherit;color:var(--ink-2);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;
     text-decoration-color:var(--line-2);text-underline-offset:3px}
   .cov button:hover{color:var(--teal);text-decoration-color:var(--teal)}
+  /* "Also at this address": the other schools sharing a school's point, as
+     links that open them (their pins are fanned out around it). */
+  .sch-also{margin-bottom:10px}
+  .sch-also button{display:block;font:inherit;color:var(--ink-2);background:none;border:0;padding:3px 0;cursor:pointer;text-align:left;text-decoration:underline;
+    text-decoration-color:var(--line-2);text-underline-offset:3px}
+  .sch-also button:hover{color:var(--teal);text-decoration-color:var(--teal)}
+  /* Every school data source, its vintage and licence, from index.json. */
+  .sch-sources{margin-top:10px}
+  .sch-sources .src{margin:0 0 8px}
+  .sch-sources .src b{color:var(--ink-2);font-weight:600}
   /* The 26 US names sit in a native disclosure: 26 inline links read as a
      wall, and a closed <details> takes its buttons out of the tab order.
      They stay in the DOM, so the map's coverage dots are still built from
@@ -308,7 +320,7 @@
   /* One visible focus ring for everything this page adds. */
   .chip:focus-visible,.btn-sch:focus-visible,.cov button:focus-visible,#geo:focus-visible,.back:focus-visible,
   .mapbtn:focus-visible,.schbar :focus-visible,
-  .about:focus-visible,.cov-more summary:focus-visible,.linkbtn:focus-visible,.ext:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+  .about:focus-visible,.cov-more summary:focus-visible,.linkbtn:focus-visible,.ext:focus-visible,.sch-also button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
   /* The map is a tab stop (Leaflet's arrow-key panning). The ring is drawn
      over the tiles, inset, because an outline outside the box was clipped
      and one on the container itself sits under the tile panes. */
@@ -360,6 +372,8 @@
     text-transform:uppercase;color:var(--ink-2);border:1px solid var(--line-2);border-radius:999px;padding:7px 11px;cursor:pointer;background:var(--bg)}
   .schbar .chk input{width:auto;accent-color:var(--teal);margin:0;padding:0;border:0}
   .schbar .chk.on{color:var(--ink);border-color:var(--teal)}
+  /* A filter the schools in view do not publish is hidden (see syncSchFilters). */
+  .schbar [hidden]{display:none!important}
   /* Phones: the filters (all optional, defaulting to "all") scroll sideways
      in one row, so the toolbar is a single short row and the map is not
      pushed off the screen. The fade says there is more; it drops once you
@@ -376,7 +390,7 @@
     .schbar .sb-filters::-webkit-scrollbar{display:none}
     .schbar .sb-filters>*{flex:none}
   }
-  /* Colour is PHASE and fill is SECTOR — never quality — and nothing on the
+  /* Colour is STAGE and fill is SECTOR — never quality — and nothing on the
      map said so until now. 34px up: above the Mapbox wordmark that owns the
      bottom-left corner (21px tall, 6px up), which also clears Leaflet's
      attribution strip on the right, one or two lines tall. */
@@ -495,8 +509,9 @@
           <button type="button" data-v="private" aria-pressed="false">Private</button>
         </div>
         <select id="sPhase" aria-label="Phase"><option value="">Any phase</option><option>Nursery</option><option>Primary</option><option>Secondary</option></select>
-        <select id="sGender" aria-label="Gender"><option value="">Any gender</option></select>
-        <label class="chk" id="sBoardL"><input type="checkbox" id="sBoard"> Boarding</label>
+        <!-- Optional filters (Gender, Boarding, …) are added here from
+             index.json's filters: only those some source publishes, each shown
+             only while the schools in view publish it. -->
       </div>
     </div>
     <div id="map" role="region" aria-label="Crime map"></div>
@@ -560,14 +575,21 @@
         </ul>
       </section>
       <section id="secSchools">
-        <h2 class="h3">Schools · England &amp; Wales</h2>
-        <!-- Worded to the data: Wales has state schools only, and an inspection
-             outcome exists only for English state schools Ofsted has graded
-             (about 42% of all rows); phase and size are blank for most Welsh
-             rows. -->
-        <p class="meta">Switch on <b>Schools</b> to see every state and private school nearby in England, and state schools in Wales — <span data-fact="schools">26,218</span> of them, with phase and size where published and, where Ofsted has one, the latest inspection outcome.</p>
-        <p class="meta sch-hint"><span class="sch-start">Starting in central London. </span>Search an address to see the schools around it, and click a pin for its details. Pin colour is the phase, never a rating; hollow pins are private.</p>
+        <h2 class="h3">Schools</h2>
+        <!-- Worded to the data. The count and the places are index.json's own
+             (tools/sync-site-facts.mjs): no page hand-types them. Not "every
+             school": Wales has state schools only, NCES's private-school
+             survey lists about 3 in 4, and schools whose published location
+             is missing or unreliable are counted, not drawn (the sources list
+             below says how many). An inspection or rating is shown only where
+             the school's own authority publishes one, in its own words. -->
+        <p class="meta">Switch on <b>Schools</b> to see the state and private schools near an address — <span data-fact="schools">50,514</span> of them in <span data-fact="schools-where">England, Wales, Northern Ireland, 26 US cities, Toronto, Vancouver and Mexico City</span> — with stage and size where published and, where one exists, the official inspection or rating in its own words. Ratings are never compared across states or countries.</p>
+        <p class="meta sch-hint"><span class="sch-start">Starting in central London. </span>Search an address to see the schools around it, and click a pin for its details. Pin colour is the stage, never a rating; hollow pins are private.</p>
         <button type="button" class="btn-sch" id="schOpen"><i></i><span>Show schools</span></button>
+        <!-- Every source, its vintage and licence, and how many schools it
+             could not place, from index.json when opened (so a visitor who
+             never opens it never downloads it). -->
+        <details class="cov-more sch-sources" id="schSources"><summary>School data sources</summary><div id="schSourcesBody"><p class="src">Loading…</p></div></details>
       </section>
       <section>
         <h2 class="h3">Where it works</h2>
@@ -824,16 +846,20 @@ const map = L.map('map', { zoomControl:true, attributionControl:true, scrollWhee
 // ── Where the map opens ─────────────────────────────────────────────────────
 // It used to open on [39,-98] z4 for everyone: all of North America, mostly
 // Arctic and ocean, with Great Britain off-screen — though about a third of
-// visits are from the UK and the schools layer exists only there.
+// visits are from the UK, where the schools layer began.
 // The browser's time zone is a free, local, prompt-free hint of which covered
 // region a visitor is in. It is read, never sent anywhere, and no geolocation
 // is asked for. Europe → Great Britain and Northern Ireland; Mexico's zones →
 // Mexico City (its only covered city); the rest of the Americas → the lower 48,
 // which also frames Toronto and Vancouver; anywhere else → a view wide enough
 // to hold both the US and the UK coverage.
-// /check/?schools overrides all of that: the layer is England and Wales only,
-// so it opens over central London at a zoom where schools are actually drawn
-// (the old z7 England view drew none and said "Zoom in to see schools").
+// /check/?schools overrides all of that: it opens on the visitor's own school
+// region by time zone (index.json regions[].tz: Manhattan for New York time,
+// the Loop for Chicago's, central London for Europe and for any zone no region
+// names), at a zoom where schools are actually drawn (the old z7 England view
+// drew none and said "Zoom in to see schools"). Until index.json is in, a
+// European or unknown zone starts over central London already and anyone else
+// on their region's wide view (see the IS_SCHOOLS start, below).
 const VIEWS = {
   gb:      [[49.9, -8.2], [56.0, 1.8]],     // England, Wales, NI — Scotland publishes no street-level crime
   us:      [[24.5, -124.8], [49.6, -66.9]],
@@ -846,7 +872,7 @@ const IS_SCHOOLS = /[?&]schools\b/.test(location.search) || location.hash === '#
 const REGION = /^Europe\//.test(TZ) ? 'gb'
   : /^America\/(Mexico_City|Monterrey|Merida|Cancun|Matamoros|Chihuahua|Ciudad_Juarez|Ojinaga|Mazatlan|Bahia_Banderas|Hermosillo|Tijuana)$/.test(TZ) ? 'mx'
   : /^(America|US|Canada)\//.test(TZ) ? 'us' : 'both';
-map.fitBounds(VIEWS[IS_SCHOOLS ? 'schools' : REGION], { padding: [16, 16] });
+map.fitBounds(VIEWS[IS_SCHOOLS && (REGION === 'gb' || REGION === 'both') ? 'schools' : REGION], { padding: [16, 16] });
 const START_ZOOM = map.getZoom();
 
 // Pan status pill — mirrors the app's "Updating area…" caption. Built with DOM
@@ -884,29 +910,104 @@ map.getContainer().appendChild(hexBtn);
 
 // ── schools overlay ─────────────────────────────────────────────────────────
 // OFF by default, and it fetches only the schools AROUND THE ADDRESS rather
-// than the country. The national file is 728KB gzipped; downloading it to look
-// at a square mile was the wrong shape, especially as roughly three quarters of
-// this page's traffic is US, where the answer is nothing at all.
+// than the country. The national file was 728KB gzipped; downloading it to
+// look at a square mile was the wrong shape.
 //
-// The data is tiled into 0.25° cells (389 of them, median 34 schools, worst
-// case 1,035 in central London). A zoom-14 viewport is about 0.02° tall, so it
-// sits inside one cell and a typical lookup pulls one to four at ~5-32KB each.
-// index.json lists the populated cells so we never request a 404 — most of the
-// bounding box of England and Wales is sea.
+// DATA-DRIVEN: nothing below names a country. What the layer covers, which
+// filters exist, how a school's details are labelled and how its inspection or
+// rating is worded all come from /schools/data/tiles/index.json (v2), written by
+// tools/build-schools.mjs from one module per source (tools/schools/README.md).
 //
-// Same rules as /schools/: colour is PHASE, shape is SECTOR, never quality.
+// ADAPTIVE TILES. Schools are cut into 0.25° cells, and any cell holding more
+// than index.split.maxRows is split into quadrants (0.125°, then 0.0625°), so a
+// dense city is several small files rather than one huge one. index.cells
+// lists every leaf, so no request ever 404s; cellsInView() walks down from the
+// 0.25° cells in view to the leaves that exist. A zoom-14 viewport is about
+// 0.02° tall, so a typical lookup pulls one to four tiles, the worst ~26KB.
+//
+// Colour is STAGE and shape is SECTOR, never quality: no rating field is ever
+// read by the marker code. Stage is computed at build time (tools/schools/lib/
+// stage.mjs) from each system's own level field.
 // schPending: a redraw asked for while one is in flight (a filter click, or
 // the moveend from the map shrinking as the toolbar appears) is queued and
 // run once the current one finishes, never dropped.
-let schOn = false, schIndex = null, schFields = {}, schLayer = null, schBusy = false, schPending = false;
-const schTiles = new Map();          // cell key -> rows, fetched once
-const schState = { sector:'', phase:'', gender:'', board:false };
-let schSelected = null;
+let schOn = false, schIndex = null, schIndexP = null, schFields = {}, schLayer = null, schBusy = false, schPending = false;
+const schTiles = new Map();          // leaf key -> rows, fetched once
+let schLeaves = new Set();           // index.cells
+let schBases = new Map();            // 0.25° cell key -> [y, x], for every cell holding any leaf
+// sector and stage are fixed controls; f holds the optional filters index.json
+// declares (id -> the select's value, or the checkbox's checked state).
+const schState = { sector:'', stage:'', f:{} };
+let schFilterEls = [];               // [{ f, el }] built from index.filters
+let schSelected = null;              // "src:id" of the school open in the pane
+const schKey = o => `${o.src}:${o.id}`;
+// A tile row (an array in index.fields order) as an object, looked up by name.
+function schObj(row) { const o = {}; for (const f in schFields) o[f] = row[schFields[f]]; return o; }
+// SCH_NEAR_M: pins closer than this are ONE SITE, fanned out together on the
+// map and listed together as "Also at this address". Exactly equal points were
+// not enough: publishers place distinct records of one school, or schools
+// sharing a building, a metre or two apart (59 pairs of different schools
+// under 2 m; two Charlotte private-school records of one name 4.5 m apart), and a pin
+// 8-10px across hides a neighbour that close even at zoom 19 (about 0.3 m a
+// pixel), so the lower one could not be clicked at all. 5 m is one building.
+const SCH_NEAR_M = 5;
+// Below zoom 12, a view with more pins than this asks to be zoomed into (see
+// drawSchools). 4,000 is above every UK and US view measured (central London
+// at zoom 11 on a desktop is ~3,650), so it only stops Mexico City's 5,900-
+// 7,100-pin views at zoom 10-11 on a phone.
+const SCH_MAX_PINS = 4000;
+const schNear = (a, b) => {
+  const k = Math.PI / 180, x = (b.lng - a.lng) * Math.cos((a.lat + b.lat) / 2 * k);
+  return 6371000 * k * Math.hypot(x, b.lat - a.lat) <= SCH_NEAR_M;
+};
+// The sites among these schools: groups within SCH_NEAR_M of one another
+// (single linkage), found on a grid of SCH_NEAR_M cells so the work stays
+// linear in the number of pins. Each group keeps the list's order.
+function schSites(list) {
+  const cell = SCH_NEAR_M / 111320, grid = new Map(), parent = list.map((_, i) => i);
+  const find = i => { while (parent[i] !== i) i = parent[i] = parent[parent[i]]; return i; };
+  list.forEach((o, i) => {
+    const y = Math.floor(o.lat / cell), x = Math.floor(o.lng * Math.cos(o.lat * Math.PI / 180) / cell);
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+      for (const j of grid.get(`${y + dy}_${x + dx}`) || []) if (schNear(o, list[j])) parent[find(i)] = find(j);
+    }
+    const k = `${y}_${x}`; (grid.get(k) || grid.set(k, []).get(k)).push(i);
+  });
+  const groups = new Map();
+  list.forEach((o, i) => { const r = find(i); (groups.get(r) || groups.set(r, []).get(r)).push(o); });
+  return [...groups.values()];
+}
+// The leaf tile holding a point, or null.
+function schLeafFor(lat, lng) {
+  const base = schIndex.base, maxLevel = Math.round(Math.log2(base / schIndex.split.minCell));
+  for (let l = 0; l <= maxLevel; l++) {
+    const size = base / 2 ** l, k = 'q'.repeat(l) + `${Math.floor(lat / size)}_${Math.floor(lng / size)}`;
+    if (schLeaves.has(k)) return k;
+  }
+  return null;
+}
+// Every other school on this school's site (whatever the filters): read from
+// the loaded tiles within 100 m, since a site can straddle a tile edge.
+function schAt(o) {
+  const d = 100 / 111320, e = d / Math.cos(o.lat * Math.PI / 180), me = schKey(o);
+  const keys = new Set([[0, 0], [-d, -e], [-d, e], [d, -e], [d, e]].map(([a, b]) => schLeafFor(o.lat + a, o.lng + b)).filter(Boolean));
+  const near = [];
+  for (const k of [...keys].sort()) for (const row of schTiles.get(k) || []) {
+    const la = row[schFields.lat], ln = row[schFields.lng];
+    if (Math.abs(la - o.lat) <= d && Math.abs(ln - o.lng) <= e) near.push(schObj(row));
+  }
+  const site = schSites(near).find(g => g.some(x => schKey(x) === me)) || [];
+  return site.filter(x => schKey(x) !== me);
+}
+const schTagged = (o, tag) => (' ' + (o.tags || '') + ' ').includes(' ' + tag + ' ');
 function schPasses(o) {
   if (schState.sector && o.sector !== schState.sector) return false;
-  if (schState.phase  && schStage(o) !== schState.phase) return false;
-  if (schState.gender && o.gender !== schState.gender) return false;
-  if (schState.board  && !o.boarding)  return false;
+  if (schState.stage  && o.stage !== schState.stage) return false;
+  for (const { f } of schFilterEls) {
+    const v = schState.f[f.id];
+    if (!v) continue;
+    if (f.type === 'select' ? o[f.field] !== v : f.tag ? !schTagged(o, f.tag) : !o[f.field]) return false;
+  }
   return true;
 }
 // School pins are SVG in their own pane ABOVE the heatmap (Leaflet's overlay
@@ -953,61 +1054,144 @@ schBtn.addEventListener('click', async () => {
 L.DomEvent.disableClickPropagation(schBtn);
 map.getContainer().appendChild(schBtn);
 
-// Silence would read as breakage. This page covers 30 regions across four
-// countries; the school data is England and Wales only, so a New Yorker who
-// turns the layer on and sees nothing needs to be told which it is.
+// Silence would read as breakage. This page covers crime data in 30 regions
+// across four countries, and school data only where index.json says (its
+// "where"), so a visitor who turns the layer on and sees nothing is told which.
 const schNote = document.createElement('div');
 schNote.className = 'schnote';
 schNote.hidden = true;
 map.getContainer().appendChild(schNote);
 
 const schEsc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-// THREE STAGES, NOT EIGHT PHASES. GIAS has eight phase values, and the filter
-// listed them all ("Middle deemed secondary", "16 plus"...). A parent searches
-// by stage, so the filter and the pin colours use three, grouped the way
-// Ofsted's own "Ofsted phase" groups them: all 161 all-through, 89 middle
-// deemed secondary and the 16-plus state schools it inspects are Secondary,
-// and middle deemed primary is Primary (checked against its management
-// information, Sept 2026). "Sixth form" is this site's label for
-// independents that start at 16, so Secondary too. The pane still shows the
-// official phase.
-const SCH_STAGE = { 'Nursery':'Nursery', 'Primary':'Primary', 'Middle deemed primary':'Primary',
-  'Secondary':'Secondary', 'Middle deemed secondary':'Secondary', 'All-through':'Secondary',
-  '16 plus':'Secondary', 'Sixth form':'Secondary' };
-// ~1,390 Welsh schools come with no phase at all. Where the name says the
-// stage outright it is used — "Primary", "Infants", "C.P." (community
-// primary), "Ysgol Gynradd" (primary school), "High", "Comprehensive", "Ysgol
-// Uwchradd"/"Gyfun" (secondary/comprehensive), "Nursery"/"Meithrin" — in that
-// order, so "Primary and Nursery School" is a primary. The ~550 named only
-// "Ysgol …" ("… School") are NOT guessed: Wales has secondaries named that
-// way (Ysgol Dyffryn Nantlle, Ysgol Brynhyfryd), so they stay out of all three
-// and show only under "Any phase", as "Not published".
-const SCH_SEC = /\b(high|comprehensive|secondary|uwchradd|gyfun|college|grammar)\b/i;
-const SCH_PRI = /\b(primary|infants?|junior|prep|gynradd|babanod|iau|cp)\b|\bc\.\s?p\b/i;
-const SCH_NUR = /\b(nursery|meithrin)\b/i;
-function schStage(o) {
-  if (o.stage !== undefined) return o.stage;
-  let s = SCH_STAGE[o.phase] || null;
-  if (!s && o.type === 'Special post 16 institution') s = 'Secondary';
-  if (!s && o.name) s = SCH_SEC.test(o.name) ? 'Secondary' : SCH_PRI.test(o.name) ? 'Primary' : SCH_NUR.test(o.name) ? 'Nursery' : null;
-  return (o.stage = s);
-}
+// Stage colours: the only colour function. The same four as the key.
 const schColour = st => ({ 'Nursery':'#C77DFF', 'Primary':'#3FD9C0', 'Secondary':'#F2B13C' }[st] || '#8A96A3');
 
-// Which 0.25° cells does the current view touch?
-function cellsInView(cell) {
-  const b = map.getBounds().pad(0.1);
-  const out = [];
-  const y0 = Math.floor(b.getSouth() / cell), y1 = Math.floor(b.getNorth() / cell);
-  const x0 = Math.floor(b.getWest() / cell),  x1 = Math.floor(b.getEast() / cell);
-  // A whole-country view would ask for every cell, which defeats the point, so
-  // cap it — at that zoom individual schools are not readable anyway.
+// index.json, once. A failed fetch is not cached, so the next redraw retries.
+function loadSchIndex() {
+  if (!schIndexP) schIndexP = (async () => {
+    const idx = await (await fetch('/schools/data/tiles/index.json', { cache: 'no-cache' })).json();
+    schFields = Object.fromEntries(idx.fields.map((f, i) => [f, i]));
+    schLeaves = new Set(idx.cells);
+    schBases = new Map();
+    for (const k of idx.cells) {
+      const m = /^(q*)(-?\d+)_(-?\d+)$/.exec(k); if (!m) continue;
+      const d = 2 ** m[1].length, y = Math.floor(+m[2] / d), x = Math.floor(+m[3] / d);
+      schBases.set(`${y}_${x}`, [y, x]);
+    }
+    schIndex = idx;
+    buildSchFilters();
+    return idx;
+  })().catch(e => { schIndexP = null; throw e; });
+  return schIndexP;
+}
+
+// Which leaves does the current view touch? null when the view spans more than
+// 12 of the 0.25° cells: a whole-country view would ask for every tile, and at
+// that zoom individual schools are not readable anyway. `bases` are the 0.25°
+// cells in view, so the notes can tell "no school here" from "no data here".
+function cellsInView() {
+  const b = map.getBounds().pad(0.1), base = schIndex.base;
+  const S = b.getSouth(), N = b.getNorth(), W = b.getWest(), E = b.getEast();
+  const y0 = Math.floor(S / base), y1 = Math.floor(N / base);
+  const x0 = Math.floor(W / base), x1 = Math.floor(E / base);
   if ((y1 - y0 + 1) * (x1 - x0 + 1) > 12) return null;
-  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) out.push(`${y}_${x}`);
-  return out;
+  const maxLevel = Math.round(Math.log2(base / schIndex.split.minCell));
+  const leaves = [], bases = [];
+  const walk = (lvl, y, x) => {
+    const k = 'q'.repeat(lvl) + `${y}_${x}`;
+    if (schLeaves.has(k)) { leaves.push(k); return; }
+    if (lvl >= maxLevel) return;
+    const size = base / 2 ** (lvl + 1);
+    for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) {
+      const cy = 2 * y + dy, cx = 2 * x + dx;
+      if ((cy + 1) * size < S || cy * size > N || (cx + 1) * size < W || cx * size > E) continue;
+      walk(lvl + 1, cy, cx);
+    }
+  };
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+    bases.push(`${y}_${x}`);
+    if (schBases.has(`${y}_${x}`)) walk(0, y, x);
+  }
+  return { leaves, bases };
+}
+// Is there school data anywhere in these bounds? (For the zoomed-out note.)
+function schDataIn(bounds) {
+  const s = schIndex.base;
+  for (const [y, x] of schBases.values()) {
+    if (bounds.intersects(L.latLngBounds([y * s, x * s], [(y + 1) * s, (x + 1) * s]))) return true;
+  }
+  return false;
+}
+// Around a city whose crime-data rectangle reaches across a state, provincial
+// or national line, the map shows schools only on the city's own side (scope
+// rule R2: index.regions[].juris), so an empty view over the other side is
+// not a place without schools. The regions whose rectangle holds the view's
+// centre and that name what lies outside (index.regions[].outside) say which.
+function schOnlyHere() {
+  const c = map.getCenter();
+  const regs = (schIndex.regions || []).filter(r => r.outside?.length && c.lat >= r.bbox[0] && c.lat <= r.bbox[2] && c.lng >= r.bbox[1] && c.lng <= r.bbox[3]);
+  if (!regs.length) return '';
+  const and = (l, w) => (l.length <= 1 ? l.join('') : `${l.slice(0, -1).join(', ')} ${w} ${l[l.length - 1]}`);
+  const home = [...new Set(regs.flatMap(r => r.juris))].map(j => schIndex.juris?.[j]?.area || schIndex.juris?.[j]?.name).filter(Boolean);
+  const out = [...new Set(regs.flatMap(r => r.outside))];
+  return home.length ? ` Here the map shows schools in ${and(home, 'and')} only, not ${and(out, 'or')}.` : '';
+}
+// The region the layer opens on when it has to jump somewhere: the one whose
+// time zones match the visitor's, else the first (the backend's order).
+function schHomeRegion() {
+  const regs = (schIndex?.regions || []).filter(r => r.view);
+  return regs.find(r => { try { return r.tz && new RegExp(r.tz).test(TZ); } catch { return false; } }) || regs[0] || null;
+}
+
+// ── optional filters, from index.filters ──────────────────────────────────
+// A filter exists only if some source publishes it, and its control shows
+// only while the schools in view include one from such a source — or while it
+// is on, so it can always be switched off.
+function buildSchFilters() {
+  const row = document.querySelector('#schbar .sb-filters');
+  for (const { el } of schFilterEls) el.remove();
+  schFilterEls = [];
+  for (const f of schIndex.filters || []) {
+    let el;
+    if (f.type === 'select') {
+      el = document.createElement('select');
+      el.id = `sf-${f.id}`;
+      el.setAttribute('aria-label', f.label);
+      el.append(new Option(f.any || `Any ${f.label.toLowerCase()}`, ''));
+      for (const v of f.options || []) el.append(new Option(v, v));
+      el.addEventListener('change', () => { schState.f[f.id] = el.value; drawSchools(); });
+    } else {
+      el = document.createElement('label');
+      el.className = 'chk'; el.id = `sf-${f.id}-l`;
+      const box = document.createElement('input'); box.type = 'checkbox'; box.id = `sf-${f.id}`;
+      el.append(box, ` ${f.label}`);
+      box.addEventListener('change', () => {
+        schState.f[f.id] = box.checked;
+        el.classList.toggle('on', box.checked);
+        drawSchools();
+      });
+    }
+    row.appendChild(el);
+    schFilterEls.push({ f, el });
+  }
+  syncSbFade();   // the row just gained its controls
+}
+function syncSchFilters(srcsInView) {
+  let changed = false;
+  for (const { f, el } of schFilterEls) {
+    const show = !!schState.f[f.id] || f.publishedBy.some(s => srcsInView.has(s));
+    if (el.hidden === show) { el.hidden = !show; changed = true; }
+  }
+  if (changed) syncSbFade();
 }
 
 // ── school pane ─────────────────────────────────────────────────────────────
+// Row labels come from the school's SOURCE (index.sources[src].labels), so
+// each system is described in its own terms (Ages vs Grades, Local authority vs
+// School district), overridden by its JURISDICTION's (index.juris[j].labels)
+// where one differs. A row is shown only where the value is published.
+const SCH_LABELS = { type:'Type', phase:'Level', span:'Ages', gender:'Gender', pupils:'Pupils', teachers:'Teachers',
+  boarding:'Boarding', admissions:'Admissions', la:'Authority', trust:'Trust' };
 const RC_LABELS = {
   rcSafeguardingStandards:'Safeguarding', rcInclusion:'Inclusion',
   rcCurriculumAndTeaching:'Curriculum and teaching', rcAchievement:'Achievement',
@@ -1027,22 +1211,146 @@ const trustName = t => !t || t !== t.toUpperCase() || /^\S{1,5}$/.test(t) ? t : 
   : i && TRUST_SMALL.has(w) ? w
   : w.replace(/(^|[-(])([a-z])/g, (_, p, c) => p + c.toUpperCase())).join(' ');
 const ukDate = iso => { if (!iso) return ''; const [y, m, d] = iso.split('-'); return `${+d} ${MONTHS[+m - 1]} ${y}`; };
+// A date field is an ISO date ("15 January 2026") or a school year as published ("2024-25").
+const schDate = v => (/^\d{4}-\d{2}-\d{2}$/.test(v || '') ? ukDate(v) : String(v || ''));
+// "{id}" / "{date}" templates from index.json. enc: how each value is encoded.
+const schFill = (t, o, enc = x => x) => String(t || '').replace(/\{(\w+)\}/g, (_, k) => enc(String(o[k] ?? '')));
+// A scheme note applies when every field it names matches (a list = any of);
+// `tag` matches one of the row's space-separated tags.
+const schWhen = (w, o) => Object.entries(w || {}).every(([k, v]) => (k === 'tag' ? schTagged(o, v) : Array.isArray(v) ? v.includes(o[k]) : o[k] === v));
 
-// THE RATING BLOCK IS THE CAREFUL PART. Four states and three of them are not a
-// grade. Every single-word Ofsted grade on this map predates September 2024,
-// when that framework was withdrawn — all 9,775 of them — so the word never
-// appears without its date and that sentence, and never becomes a colour.
-function schRatingHtml(o) {
-  if (o.ratingScheme === 'not-ofsted') {
-    const why = o.country === 'Wales'
-      ? 'This school is in <b>Wales</b>, where <b>Estyn</b> inspects rather than Ofsted. Estyn outcomes are not in this dataset.'
-      : /independent/i.test(o.type)
-        ? (o.inspectorate === 'ISI'
-            ? 'Inspected by the <b>Independent Schools Inspectorate</b>, not Ofsted. ISI publishes reports school by school rather than as open data, so no grade is shown here.'
-            : 'A private school. Independent schools are inspected separately from state schools, and those outcomes are not published as open data.')
-        : 'No Ofsted inspection outcome is published for this establishment in the state-funded dataset.';
-    return `<p class="meta">${why}</p>`;
+// ── display case (BEGIN schCase; tools/schools/test/display-case.test.mjs reads this block) ──
+// Some publishers print names, cities and authorities entirely in capitals
+// (SEP, NCES's private-school survey, several states' NCES records). A source
+// that does says so in index.sources[src].displayCase ('en' | 'es'), and the
+// pane and tooltips show those values in title case. The DATA stays exactly as
+// published; only an all-capitals value is re-cased, since mixed case is the
+// publisher's own styling. Initialisms (known ones, vowel-less short words,
+// and a short word alone in parentheses: "(TUM)", "(OMH)"), roman numerals,
+// dotted abbreviations and anything with a digit keep their capitals. In
+// Spanish a lone "A" stays a capital where it is an initial ("A B C",
+// "Gustavo A Madero"), not the preposition "a". 'es' is proved equal to
+// sources/sep.mjs displayCase() on every Mexico City string in the tiles.
+const CASE_ROMAN = /^(?=[IVXL]{2,}$)(XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
+const CASE_ES = {
+  small: new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'e', 'o', 'u', 'a', 'al', 'en', 'con', 'para', 'por', 'sin']),
+  keep: new Set(['CENDI', 'CADI', 'CAM', 'CCH', 'UNAM', 'UAM', 'IPN', 'IMSS', 'ISSSTE', 'DIF', 'GDF', 'SEP', 'CONALEP', 'CETIS', 'CBTIS',
+    'CECYT', 'CBTA', 'IEMS', 'CONAFE', 'AEFCM', 'INBAL', 'EBDI', 'CDMX', 'UVM', 'ITESM', 'SNTE', 'ISSFAM', 'SEDENA', 'PEMEX', 'CFE', 'DGETI', 'DGB',
+    'CAI', 'CAPEP', 'INPI', 'CTM', 'DF']),
+  // Vowel-less abbreviations that are words, not initialisms (Y counts as a vowel: GYM, MY).
+  word: new Set(['DR', 'SR', 'DN', 'SN', 'ST', 'STS', 'MRS', 'CD', 'MC']),
+  // Given names SEP writes with their initial undotted: "GUSTAVO A MADERO".
+  initialAfter: new Set(['GUSTAVO', 'EZEQUIEL']),
+};
+const CASE_EN = {
+  small: new Set(['of', 'and', 'the', 'for', 'in', 'on', 'at', 'to', 'by', 'an', 'de', 'del']),
+  // Initialisms that contain a vowel (a vowel-less short word is kept anyway).
+  keep: new Set(['ISD', 'CISD', 'CCSD', 'MSD', 'CHSD', 'CSD', 'USD', 'NYC', 'NYS', 'SUNY', 'CUNY', 'KIPP', 'YES', 'IDEA', 'STEM', 'STEAM',
+    'DC', 'ESC', 'DOE', 'MO', 'NC', 'PUC', 'ICEF', 'BASIS', 'SDA', 'SST', 'ABC', 'AECI', 'DBA', 'EC', 'TAG', 'SEED', 'UME', 'ISANA', 'EJE',
+    'JJAEP', 'DAEP', 'AEP', 'ECC', 'PTAA', 'IS', 'KI', 'IB', 'AP', 'US', 'USA', 'P-TECH', 'LAUSD', 'AVID', 'ASDB', 'ELP', 'ELL', 'ESL', 'IEP',
+    'NE', 'SE']),
+  // Vowel-less abbreviations that are words, not initialisms.
+  word: new Set(['DR', 'JR', 'SR', 'MT', 'FT', 'CTR', 'ST', 'STS', 'SCH', 'SCHL', 'SCHLS', 'BLVD', 'HTS', 'CHTR', 'CHRTR', 'LRN', 'PKWY', 'HWY', 'CNTY', 'MRS',
+    'MSGR', 'MGMT', 'LRNG', 'RGNL', 'SRVS', 'HLT', 'PRG', 'LTD']),
+};
+function schCaseWord(core, lang, first) {
+  const L = lang === 'es' ? CASE_ES : CASE_EN;
+  // Capital at the start, after a hyphen, and after a one-letter prefix and
+  // apostrophe (O'FARRILL -> O'Farrill; SEP also writes it O`FARRILL).
+  const cap = w => w.toLowerCase().replace(/(?<=^|-|^\p{L}['’`´])\p{L}/gu, c => c.toUpperCase());
+  if (L.keep.has(core) || CASE_ROMAN.test(core)) return core;
+  if (lang === 'es') {
+    if (/\d/.test(core)) return core;
+    if (!first && L.small.has(core.toLowerCase())) return core.toLowerCase();
+    if (!L.word.has(core) && /^[^AEIOUYÁÉÍÓÚÜ]{2,5}$/u.test(core)) return core;   // CTM, SSP, GGM
+    return cap(core);
   }
+  if (/\d/.test(core)) return core.replace(/^(\d+)(ST|ND|RD|TH)$/, (_, n, s) => n + s.toLowerCase());
+  if (core.includes('-')) return core.split('-').map((p, i) => (p ? schCaseWord(p, lang, first && !i) : p)).join('-');
+  if (core.length === 1) return core;                                      // initials: "J H", "H S"
+  if (L.word.has(core)) return cap(core);
+  if (/^[^AEIOUY]{2,5}$/.test(core)) return core;                          // PS, JHS, MS, CSB, KC
+  if (!first && L.small.has(core.toLowerCase())) return core.toLowerCase();
+  const ap = core.indexOf("'");
+  if (ap > 0) {                                                            // O'HARA, D'ITALIA; MARY'S, INT'L
+    const head = cap(core.slice(0, ap)), rest = core.slice(ap + 1).toLowerCase();
+    return head + "'" + (ap === 1 ? rest.replace(/^\p{L}/u, c => c.toUpperCase()) : rest);
+  }
+  if (/^MC\p{Lu}{3,}$/u.test(core)) return 'Mc' + cap(core.slice(2));      // MCNAIR -> McNair
+  return cap(core);
+}
+function schCase(s, lang) {
+  if (!s || !lang || !/\p{Lu}/u.test(s)) return s;
+  const L = lang === 'es' ? CASE_ES : CASE_EN;
+  return s.split(/(,\s*)/).map(part => {                                   // each comma-separated part starts a new phrase
+    if (/^,/.test(part) || part !== part.toUpperCase()) return part;
+    const cores = (part.match(/[^\s/]+/g) || []).map(w => w.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, ''));
+    let first = true, k = -1;
+    return part.replace(/[^\s/]+/g, w => {
+      k++;
+      const i = w.search(/[\p{L}\p{N}]/u);
+      if (i < 0) return w;
+      const j = w.length - [...w].reverse().join('').search(/[\p{L}\p{N}]/u);
+      const lead = w.slice(0, i), core = w.slice(i, j), tail = w.slice(j);
+      if (lang === 'es' && /["“«(]/.test(lead)) first = true;               // a quotation starts a phrase: "LA CORREGIDORA" -> "La Corregidora"
+      let out;
+      if (/^(\p{Lu}\.)+\p{Lu}$/u.test(core) || (core.length === 1 && tail.startsWith('.'))) out = core;   // A.C., H.S, the "A." in "Gustavo A. Madero"
+      else if (lead.endsWith('(') && tail.startsWith(')') && /^\p{L}{2,5}$/u.test(core) && !L.small.has(core.toLowerCase())) out = core;   // "(TUM)", "(OMH)"; "(THE)" -> "(The)"
+      else if (lang === 'es' && core === 'A' && (cores[k - 1]?.length === 1 || cores[k + 1]?.length === 1 || L.initialAfter.has(cores[k - 1]))) out = core;   // "A B C", "GUSTAVO A MADERO"
+      else out = schCaseWord(core, lang, first || (lang === 'en' && lead.includes('(')));   // "(THE)" -> "(The)"
+      first = false;
+      return lead + out + tail;
+    });
+  }).join('');
+}
+// ── END schCase ──
+// A school's field as the pane shows it: re-cased only for a source that
+// publishes in capitals (index.sources[src].displayCase).
+const schShow = (o, f) => schCase(o[f], schIndex?.sources?.[o.src]?.displayCase);
+
+// THE RATING BLOCK IS THE CAREFUL PART. Each system's rating or inspection is
+// shown only here, as text, in its own words, with its year and source — never
+// as a colour, filter, sort or count, and never compared across states or
+// countries. The wording is index.schemes[school.ratingScheme]; its `kind`
+// picks the renderer.
+function schRatingHtml(o) {
+  const sc = schIndex?.schemes?.[o.ratingScheme];
+  if (!sc) return '';
+  if (sc.kind === 'ofsted') return schOfstedHtml(o);
+  // A per-school link the scheme defines from a row slug (NI: the ETI report, row.ru).
+  // Its own line: it can sit above the scheme's Source link.
+  const link = sc.link && o.ru ? `<div><a class="ext" href="${schEsc(schFill(sc.link.url, o, encodeURIComponent))}" target="_blank" rel="noopener">${schEsc(sc.link.label)} ↗</a></div>` : '';
+  if (sc.kind === 'none') {
+    // No rating here: the first note whose conditions match says why.
+    const n = (sc.notes || []).find(x => schWhen(x.when, o));
+    return (n ? `<p class="meta">${n.html}</p>` : sc.text ? `<p class="meta">${sc.text}</p>` : '') + link;
+  }
+  // 'rating' | 'status'. place names the jurisdiction ("Texas"); rules is how
+  // it reads in "Set under … rules" where that differs ("District of Columbia").
+  const J = schIndex.juris?.[o.juris] || {};
+  const place = J.name || '', rules = J.rules || place;
+  // A status (an ESSA support designation, an ETI report) is not a rating, so
+  // its line does not call it one.
+  const cmp = sc.kind === 'status' ? "other states' or countries' ratings or statuses" : 'ratings from other states or countries';
+  const out = [`<p class="meta"><b>${schEsc(sc.title)}</b></p>`];
+  if (o.rv) out.push(`<p class="meta"><b>${schEsc(o.rv)}</b> — ${schEsc(schDate(o.rd) || sc.year)} ${schEsc(sc.short)}</p>`);
+  else out.push(`<p class="meta">${schEsc(schFill(sc.miss || `{place} publishes this ${sc.kind}, but this school is not in the {year} file. Special education, alternative, pre-K and career centres are often not rated.`, { place, year: sc.year }))}</p>`);
+  if (sc.scale) out.push(`<p class="meta">${schEsc(sc.scale)}</p>`);
+  if (sc.measures) out.push(`<p class="meta">${schEsc(sc.measures)}</p>`);
+  const extra = (sc.notes || []).filter(x => schWhen(x.when, o)).map(x => ' ' + x.html).join('');
+  out.push(`<p class="meta"><span class="caveat">Set under ${schEsc(rules)} rules; it cannot be compared with ${cmp}.${sc.caveat ? ' ' + schEsc(sc.caveat) : ''}${extra}</span></p>`);
+  if (link) out.push(link);
+  if (sc.url) out.push(`<a class="ext" href="${schEsc(sc.url)}" target="_blank" rel="noopener">Source: ${schEsc(sc.publisher)} ↗</a>`);
+  // An openly licensed rating (Washington's, CC BY 4.0) links its licence here too.
+  if (sc.licenceUrl) out.push(`<a class="ext" href="${schEsc(sc.licenceUrl)}" target="_blank" rel="noopener">Licence: ${schEsc(sc.licence || 'licence')} ↗</a>`);
+  return out.join('');
+}
+
+// England & Wales, Ofsted. Four states and three of them are not a grade.
+// Every single-word Ofsted grade on this map predates September 2024, when that
+// framework was withdrawn — all 9,775 of them — so the word never appears
+// without its date and that sentence, and never becomes a colour.
+function schOfstedHtml(o) {
   const out = [];
   const areas = Object.keys(RC_LABELS).filter(k => o[k]);
   if (areas.length) {
@@ -1073,34 +1381,61 @@ function showSchoolPane(o) {
   // Saved first: once the (usually shorter) school view replaces the report
   // the browser clamps the pane's scrollTop and the position is lost.
   if (!panel.classList.contains('off')) panelScroll = side.scrollTop;
-  schSelected = o.urn;
+  schSelected = schKey(o);
+  const src = schIndex?.sources?.[o.src] || {};
+  // Labels: the page's defaults, then the source's (its system's own terms),
+  // then any the jurisdiction overrides (the most specific).
+  const lab = { ...SCH_LABELS, ...(src.labels || {}), ...(schIndex?.juris?.[o.juris]?.labels || {}) };
+  const num = n => n.toLocaleString('en-GB');
   const view = document.getElementById('schview');
   const kv = [];
-  const row = (k, v) => { if (v !== '' && v != null && v !== false) kv.push(`<div class="kv"><span>${k}</span><span>${schEsc(v)}</span></div>`); };
-  row('Type', o.type);
-  row('Phase', o.phase);
-  if (o.ageLow && o.ageHigh) row('Ages', `${o.ageLow}–${o.ageHigh}`);
-  row('Gender', o.gender);
-  if (o.pupils) row('Pupils', o.pupils.toLocaleString('en-GB') + (o.capacity ? ` of ${o.capacity.toLocaleString('en-GB')} places` : ''));
-  if (o.fsm != null && o.fsm !== '') row('Free school meals', `${o.fsm}%`);
-  if (o.sixthForm) row('Sixth form', 'Yes');
-  if (o.boarding) row('Boarding', 'Yes');
-  if (o.nursery) row('Nursery', 'Yes');
-  row('Admissions', o.admissions);
-  row('Local authority', o.la);
-  row('Trust', trustName(o.trust));
+  const row = (k, v) => { if (k && v !== '' && v != null && v !== false) kv.push(`<div class="kv"><span>${schEsc(k)}</span><span>${schEsc(v)}</span></div>`); };
+  row(lab.type, o.type);
+  row(lab.phase, o.phase);
+  row(lab.span, o.span);
+  row(lab.gender, o.gender);
+  if (o.pupils) row(lab.pupils, num(o.pupils) + (o.capacity && lab.capacityOf ? ` of ${num(o.capacity)} ${lab.capacityOf}` : ''));
+  if (o.capacity && lab.capacity && !(o.pupils && lab.capacityOf)) row(lab.capacity, num(o.capacity));
+  if (o.teachers) {
+    row(lab.teachers, num(o.teachers));
+    // "about N" students per teacher, only where both are published and the source labels it.
+    if (o.pupils && lab.ratio) row(lab.ratio, `about ${Math.round(o.pupils / o.teachers)}`);
+  }
+  if (o.meals != null && o.meals !== '') row(lab.meals?.[o.mealsKind], `${o.meals}%`);
+  if (o.sixthForm) row(lab.sixthForm, 'Yes');
+  if (o.boarding) row(lab.boarding, 'Yes');
+  if (o.nursery) row(lab.nursery, 'Yes');
+  for (const t of (o.tags || '').split(' ').filter(Boolean)) row(lab.tags?.[t], 'Yes');
+  row(lab.admissions, o.admissions);
+  row(lab.la, schShow(o, 'la'));
+  row(lab.trust, src.displayCase ? schShow(o, 'trust') : trustName(o.trust));
+  const asOf = o.pupilsAsOf || src.pupilsAsOf;
+  const rec = src.recordUrl ? schFill(src.recordUrl, o, encodeURIComponent) : '';
+  // Schools that share this exact point (a morning and an afternoon school in
+  // one building, an infant and a junior school on one site). Their pins are
+  // fanned out around it; the pane lists them too, so each can be opened.
+  // Two with the same name are told apart by the first of level, type (in
+  // Mexico City it carries the shift) or id that differs between them.
+  const also = schAt(o);
+  const alsoName = x => {
+    const n = schShow(x, 'name'), twins = [o, ...also].filter(y => y !== x && y.name === x.name);
+    const f = twins.length && ['phase', 'type', 'id'].find(k => x[k] && twins.every(y => y[k] !== x[k]));
+    return f ? `${n} (${x[f]})` : n;
+  };
 
   view.innerHTML = `
     <button type="button" class="back" id="schback"></button>
-    <h2 class="place">${schEsc(o.name)}<small>${schEsc([o.postcode, o.ward].filter(Boolean).join(' · '))}</small></h2>
+    <h2 class="place">${schEsc(schShow(o, 'name'))}<small>${schEsc([o.postcode, schShow(o, 'area')].filter(Boolean).join(' · '))}</small></h2>${also.length ? `
+    <p class="meta sch-also">Also at this address:${also.map((x, i) => `<button type="button" data-i="${i}">${schEsc(alsoName(x))}</button>`).join('')}</p>` : ''}
     <div>${schRatingHtml(o)}</div>
     <div class="divider"></div>
     <div><h3 class="h3">Details</h3>${kv.join('')}</div>
-    ${o.censusDate && o.pupils ? `<p class="src">Pupil numbers as at ${schEsc(ukDate(o.censusDate))}.</p>` : ''}
-    <a class="ext" href="https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/${o.urn}" target="_blank" rel="noopener">Full DfE record ↗</a>
-    <p class="src">URN ${o.urn} · DfE Get Information About Schools and Ofsted management information, Open Government Licence v3.0.</p>`;
+    ${asOf && o.pupils && lab.pupilsAsOf ? `<p class="src">${schEsc(schFill(lab.pupilsAsOf, { date: schDate(asOf) }))}</p>` : ''}
+    ${rec ? `<a class="ext" href="${schEsc(rec)}" target="_blank" rel="noopener">${schEsc(src.recordLabel || 'Official record')} ↗</a>` : ''}
+    <p class="src">${schAttribution(src, o)}</p>`;
   syncBack();
   document.getElementById('schback').addEventListener('click', closeSchool);
+  for (const b of view.querySelectorAll('.sch-also button')) b.addEventListener('click', () => showSchoolPane(also[+b.dataset.i]));
 
   panel.classList.add('off');
   view.classList.remove('off');
@@ -1147,32 +1482,21 @@ async function drawSchools() {
   if (schBusy) { schPending = true; return; }
   schBusy = true;
   try {
-    if (!schIndex) {
-      schIndex = await (await fetch('/schools/data/tiles/index.json', { cache: 'no-cache' })).json();
-      schFields = Object.fromEntries(schIndex.fields.map((f, i) => [f, i]));
-      // Phase is the three fixed stages in the markup (see SCH_STAGE).
-      for (const [id, key] of [['sGender','gender']]) {
-        const el = document.getElementById(id);
-        for (const v of (schIndex.options?.[key] || [])) {
-          const o = document.createElement('option'); o.value = v; o.textContent = v; el.appendChild(o);
-        }
-      }
-      syncSbFade();   // the selects just widened to their longest option
-    }
+    await loadSchIndex();
     if (!schOn) return;
-    const want = cellsInView(schIndex.cell);
+    const want = cellsInView();
     if (schLayer) { map.removeLayer(schLayer); schLayer = null; }
 
     if (want === null) {
-      // "Zoom in" is only true advice if England or Wales is in view — over
-      // the US it sent people zooming into a map that will never show one.
-      const gb = L.latLngBounds([49.8, -8.7], [56, 2.1]);
-      schNote.textContent = map.getBounds().intersects(gb) ? 'Zoom in to see schools.'
-                                                           : 'School data covers England and Wales only.';
+      // "Zoom in" is only true advice if there are schools under this view —
+      // over a region with no school data it sent people zooming into a map
+      // that will never show one.
+      schNote.textContent = schDataIn(map.getBounds()) ? 'Zoom in to see schools.'
+                                                        : `No school data here. Schools cover ${schIndex.where}.`;
       schNote.hidden = false;
       return;
     }
-    const live = want.filter(k => schIndex.cells.includes(k));
+    const live = want.leaves;
     await Promise.all(live.filter(k => !schTiles.has(k)).map(async k => {
       try { schTiles.set(k, await (await fetch(`/schools/data/tiles/${k}.json`, { cache: 'no-cache' })).json()); }
       catch { schTiles.set(k, []); }      // cache the failure so it is not retried on every pan
@@ -1181,33 +1505,66 @@ async function drawSchools() {
     if (!schOn) return;
 
     const b = map.getBounds().pad(0.1);
-    const g = L.layerGroup();
-    let n = 0, selectedMarker = null;
+    const inView = [];
     for (const k of live) {
       for (const row of (schTiles.get(k) || [])) {
         const lat = row[schFields.lat], lng = row[schFields.lng];
         if (lat < b.getSouth() || lat > b.getNorth() || lng < b.getWest() || lng > b.getEast()) continue;
-        const o = {};
-        for (const f in schFields) o[f] = row[schFields[f]];
-        if (!schPasses(o)) continue;
-        n++;
-        const priv = o.sector === 'private';
-        const c = schColour(schStage(o));
-        const m = L.circleMarker([lat, lng], {
-          renderer: schRenderer, radius: 4, color: c, weight: priv ? 2 : 1,
-          fillColor: c, fillOpacity: priv ? 0 : .55, opacity: .95,
-        });
-        // Details go in the right-hand pane, not a popup. The popup's only link
-        // was "Open the schools map", which after the merge just reloaded this
-        // same map — a circular link where the details should have been.
-        m.bindTooltip(schEsc(o.name), { className: 'schtip', direction: 'top', offset: [0, -5] });
-        m.on('click', () => showSchoolPane(o));
-        // As an SVG path with a tooltip, each pin would be a nameless Tab stop
-        // (see the coverage dots below) — up to ~740 in central London. They
-        // are a pointer shortcut; the pane is where a school is read.
-        m.on('add', () => { const el = m.getElement(); if (el) { el.setAttribute('tabindex', '-1'); el.setAttribute('aria-hidden', 'true'); } });
-        if (o.urn === schSelected) selectedMarker = m; else g.addLayer(m);
+        inView.push(schObj(row));
       }
+    }
+    const srcs = new Set(inView.map(o => o.src));
+    syncSchFilters(srcs);
+
+    // Pins on one site (within SCH_NEAR_M) would sit on top of each other, and
+    // only the top one could be clicked (40% of Mexico City's schools share a
+    // point with another: morning and afternoon schools in one building).
+    // Among the pins actually drawn, each such group is fanned out in a small
+    // ring around the site's centre, in screen pixels, recomputed on every
+    // redraw so the ring keeps its size at any zoom. A lone pin stays exactly
+    // on its point.
+    const drawn = inView.filter(schPasses);
+    // Too many to draw at once: at zoom 10-11 a phone's view of Mexico City
+    // holds 5,900-7,100 schools, which took 0.6 s a redraw on a phone with a
+    // 4x-slowed CPU and is a solid blob, not a map. Below zoom 12, over
+    // SCH_MAX_PINS, ask for a closer look instead (a filter that brings the
+    // count down draws again).
+    if (drawn.length > SCH_MAX_PINS && map.getZoom() < 12) {
+      schNote.textContent = 'Zoom in to see schools.';
+      schNote.hidden = false;
+      return;
+    }
+    const posOf = new Map();
+    for (const list of schSites(drawn)) {
+      if (list.length < 2) continue;
+      const p = map.latLngToLayerPoint([list.reduce((a, o) => a + o.lat, 0) / list.length, list.reduce((a, o) => a + o.lng, 0) / list.length]);
+      const r = Math.max(7, 2 * list.length);   // ≥ 11px between neighbours' centres: pins (8-10px across) never touch
+      list.forEach((o, i) => {
+        const a = 2 * Math.PI * i / list.length - Math.PI / 2;
+        posOf.set(o, map.layerPointToLatLng(p.add(L.point(r * Math.cos(a), r * Math.sin(a)))));
+      });
+    }
+
+    const g = L.layerGroup();
+    let n = 0, selectedMarker = null;
+    for (const o of drawn) {
+      n++;
+      const priv = o.sector === 'private';
+      const c = schColour(o.stage);
+      const m = L.circleMarker(posOf.get(o) || [o.lat, o.lng], {
+        renderer: schRenderer, radius: 4, color: c, weight: priv ? 2 : 1,
+        fillColor: c, fillOpacity: priv ? 0 : .55, opacity: .95,
+      });
+      // Details go in the right-hand pane, not a popup. The popup's only link
+      // was "Open the schools map", which after the merge just reloaded this
+      // same map — a circular link where the details should have been.
+      m.bindTooltip(schEsc(schShow(o, 'name')), { className: 'schtip', direction: 'top', offset: [0, -5] });
+      m.on('click', () => showSchoolPane(o));
+      // As an SVG path with a tooltip, each pin would be a nameless Tab stop
+      // (see the coverage dots below) — up to ~740 in central London. They
+      // are a pointer shortcut; the pane is where a school is read.
+      m.on('add', () => { const el = m.getElement(); if (el) { el.setAttribute('tabindex', '-1'); el.setAttribute('aria-hidden', 'true'); } });
+      if (schKey(o) === schSelected) selectedMarker = m; else g.addLayer(m);
     }
     if (selectedMarker) {
       selectedMarker.setStyle({ radius: 7, weight: 3, color: '#FFFFFF', fillOpacity: .9 });
@@ -1215,11 +1572,25 @@ async function drawSchools() {
     }
     schLayer = g.addTo(map);
 
-    if (n === 0) {
-      const c = map.getCenter();
-      const inGB = c.lat > 49.8 && c.lat < 61 && c.lng > -8.7 && c.lng < 2.1;
-      schNote.textContent = inGB ? 'No schools in view — try zooming out.'
-                                 : 'School data covers England and Wales only.';
+    // A filter that some schools in view do not publish hides them; say so,
+    // rather than let "Boarding" read as "no boarding schools near Toronto" —
+    // above all when it hides every pin (Gender over a US city, where public
+    // schools publish none), which is exactly when the reader needs to know.
+    const partial = schFilterEls.map(x => x.f).find(f => schState.f[f.id] && inView.some(o => !f.publishedBy.includes(o.src)));
+    if (n === 0 && partial) {
+      schNote.textContent = inView.some(o => partial.publishedBy.includes(o.src))
+        ? `No school in view matches these filters. Only schools that publish ${partial.noun} are shown; it is published for ${partial.where}.`
+        : `No school in view publishes ${partial.noun}. It is published for ${partial.where}.`;
+      schNote.hidden = false;
+    } else if (n === 0) {
+      // "No MAPPED schools": the view may be across a state or national line
+      // from a covered city (Jersey City, Arlington VA, Windsor), where schools
+      // exist but are not on this map (scope rule R2); schOnlyHere says so.
+      schNote.textContent = want.bases.some(k => schBases.has(k)) ? `No mapped schools in view — try zooming out.${schOnlyHere()}`
+                                                                  : `No school data here. Schools cover ${schIndex.where}.`;
+      schNote.hidden = false;
+    } else if (partial) {
+      schNote.textContent = `Showing only schools that publish ${partial.noun}. It is published for ${partial.where}.`;
       schNote.hidden = false;
     } else {
       schNote.hidden = true;
@@ -1231,26 +1602,91 @@ async function drawSchools() {
 }
 map.on('moveend', drawSchools);
 
-// /schools/ used to be its own page and now redirects here with ?schools, so
-// that URL must land in schools mode — over central London (the map was
-// already opened there, see VIEWS) at a zoom where pins are actually drawn,
-// rather than on an England overview that drew none.
-if (IS_SCHOOLS) { document.body.classList.add('sch-london'); setTimeout(() => schBtn.click(), 0); }
+// /schools/ used to be its own page and now redirects here with ?schools, and
+// the homepage's Schools card links here too, so that URL must land in schools
+// mode — over the visitor's own region by time zone (schHomeRegion: about three
+// quarters of visits are from the US), at a zoom where pins are actually
+// drawn, rather than on an overview that draws none. Europe, and any zone no
+// region names, get central London; if index.json cannot be read the map
+// stays where it opened. The pane's hint names where it started.
+if (IS_SCHOOLS) setTimeout(async () => {
+  let reg = null;
+  try { await loadSchIndex(); reg = schHomeRegion(); } catch {}
+  if (reg?.view) map.fitBounds(reg.view, { padding: [16, 16], animate: false });
+  const start = document.querySelector('.sch-hint .sch-start');
+  if (start && reg?.viewName) start.textContent = `Starting in ${reg.viewName}. `;
+  // The hint says where it started only if that is true: the map went to a
+  // region, or it opened over central London (the hint's own default text).
+  document.body.classList.toggle('sch-london', !!reg?.view || REGION === 'gb' || REGION === 'both');
+  schBtn.click();
+}, 0);
 
-// The pane's "Show schools" button. From anywhere outside England and Wales,
-// or from too far out to draw pins, it opens on the same central-London view
-// as ?schools — turning the layer on over Kansas would show nothing at all.
-// body.sch-london marks that it did jump, so the pane's hint may say
-// "Starting in central London."
-function openSchools() {
+// The pane's "Show schools" button. From anywhere without school data, or from
+// too far out to draw pins, it jumps to a region that has schools (the
+// visitor's own, by time zone, else the first) — turning the layer on over an
+// uncovered city would show nothing at all. body.sch-london marks that it did
+// jump, so the pane's hint may say "Starting in {that region's view}."
+async function openSchools() {
   if (!schOn) {
-    const c = map.getCenter();
-    const inGB = c.lat > 49.8 && c.lat < 56 && c.lng > -8.7 && c.lng < 2.1;
-    const jump = !inGB || map.getZoom() < 12;
-    if (jump) map.fitBounds(VIEWS.schools, { padding: [16, 16] });
+    let near = false;
+    try { await loadSchIndex(); const cv = cellsInView(); near = !!cv && cv.bases.some(k => schBases.has(k)); } catch {}
+    const jump = !near || map.getZoom() < 12;
+    if (jump) {
+      const reg = schHomeRegion();
+      map.fitBounds(reg ? reg.view : VIEWS.schools, { padding: [16, 16] });
+      const start = document.querySelector('.sch-hint .sch-start');
+      if (start && reg?.viewName) start.textContent = `Starting in ${reg.viewName}. `;
+    }
     document.body.classList.toggle('sch-london', jump);
   }
   schBtn.click();
+}
+
+// ── "School data sources" (#secSchools), from index.json when first opened ──
+// Every source the build used, where it covers, its vintage and licence, and
+// how many schools it could not place (unmapped.*: no published location, or
+// one that contradicts the school's own address), then the attribution of
+// every rating or status on the map. Nothing here is typed by hand.
+// Each licence is a LINK to its text: CC BY 4.0 requires one, and the Open
+// Government Licences ask for one where possible (verify-schools checks that
+// every source and every openly licensed scheme carries a licenceUrl).
+const schLicence = x => (x.licenceUrl ? `<a href="${schEsc(x.licenceUrl)}" target="_blank" rel="noopener">${schEsc(x.licence || 'Licence')}</a>` : schEsc(x.licence));
+function schSourcesHtml() {
+  const num = n => n.toLocaleString('en-GB');
+  const regs = schIndex.regions || [];
+  const first = s => { const i = regs.findIndex(r => r.juris.some(j => (s.juris || []).includes(j))); return i < 0 ? 1e9 : i; };
+  const list = Object.values(schIndex.sources).sort((a, b) => first(a) - first(b) || b.rows - a.rows);
+  const out = list.map(s => {
+    const unmapped = Object.entries(s.stats || {}).filter(([k]) => k.startsWith('unmapped.')).reduce((a, [, n]) => a + n, 0);
+    return `<p class="src"><b>${schEsc(s.where)}</b> · ${schEsc(s.name)}, from ${schEsc(s.publisher)}.${s.vintage ? ` Data: ${schEsc(s.vintage)}.` : ''} ${schLicence(s)}. ` +
+      `${num(s.rows)} schools on the map${unmapped ? `; ${num(unmapped)} more are not drawn because their published location is missing or unreliable` : ''}.</p>`;
+  });
+  const rated = Object.values(schIndex.schemes || {}).filter(sc => sc.attribution)
+    .map(sc => schEsc(sc.attribution) + (sc.licenceUrl ? ` Licence: ${schLicence(sc)}.` : ''));
+  if (rated.length) out.push(`<p class="src"><b>Ratings and statuses</b> · ${rated.join(' ')}</p>`);
+  // What "around a city" means (scope rule R2), from index.json.
+  if (schIndex.scope) out.push(`<p class="src"><b>Where</b> · ${schEsc(schIndex.scope)}</p>`);
+  return out.join('');
+}
+// A school's attribution line, with its licence's name (or the short form in
+// its brackets: "(CC BY 4.0)") linked to the licence where the line names it.
+function schAttribution(src, o) {
+  const text = schEsc(schFill(src.attribution, o));
+  if (!src.licenceUrl || !src.licence) return text;
+  const names = [src.licence, /\(([^()]+)\)\s*$/.exec(src.licence)?.[1]].filter(Boolean).map(schEsc);
+  const hit = names.find(n => text.includes(n));
+  return hit ? text.replace(hit, `<a href="${schEsc(src.licenceUrl)}" target="_blank" rel="noopener">${hit}</a>`) : text;
+}
+{
+  const d = document.getElementById('schSources');
+  d?.addEventListener('toggle', async () => {
+    if (!d.open || d.dataset.done) return;
+    const body = document.getElementById('schSourcesBody');
+    try { await loadSchIndex(); }
+    catch { body.innerHTML = '<p class="src">The list could not be loaded. Close and reopen to try again.</p>'; return; }
+    d.dataset.done = '1';
+    body.innerHTML = schSourcesHtml();
+  });
 }
 
 // ── schools controls ────────────────────────────────────────────────────────
@@ -1263,13 +1699,7 @@ document.getElementById('sSector').addEventListener('click', e => {
   });
   schState.sector = b.dataset.v; drawSchools();
 });
-document.getElementById('sPhase').addEventListener('change', e => { schState.phase = e.target.value; drawSchools(); });
-document.getElementById('sGender').addEventListener('change', e => { schState.gender = e.target.value; drawSchools(); });
-document.getElementById('sBoard').addEventListener('change', e => {
-  schState.board = e.target.checked;
-  document.getElementById('sBoardL').classList.toggle('on', e.target.checked);
-  drawSchools();
-});
+document.getElementById('sPhase').addEventListener('change', e => { schState.stage = e.target.value; drawSchools(); });
 // Phones scroll the filter row sideways under a fade that says "more this
 // way". Drop the fade once the row is scrolled to its end (or fits), so the
 // last filter is never left half-faded.
@@ -2062,7 +2492,7 @@ function windowPhrase(days){ if(!(days>0)||days<14||days>760) return null; const
   // and visual order always matches tab order.
   if(IS_SCHOOLS){ const s = document.getElementById('secSchools'); if(s) panel.prepend(s); }
   const box = document.getElementById('chips'); if(!box) return;
-  if(REGION === 'gb' || IS_SCHOOLS) box.prepend(...box.querySelectorAll('[data-region="uk"]'));
+  if(REGION === 'gb' || (IS_SCHOOLS && REGION === 'both')) box.prepend(...box.querySelectorAll('[data-region="uk"]'));
   box.addEventListener('click', e => {
     const b = e.target.closest('.chip'); if(!b) return;
     pick({ name: b.dataset.name, address: b.dataset.address, lat: +b.dataset.lat, lng: +b.dataset.lng });

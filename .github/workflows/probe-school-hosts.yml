@@ -1,0 +1,35 @@
+# Phase 0 of the schools design (DESIGN.md §6d): which school-data hosts answer
+# a GitHub runner? Every reachability result so far came from residential IPs,
+# and several of these hosts filter datacenter IPs or user agents (Akamai on
+# datos.gob.mx, michigan.gov's UA rule, Radware on cde.ca.gov). This makes one
+# request per host with the user agent the build uses and writes a table to
+# the run summary. It changes nothing and commits nothing.
+#
+# Dispatch only: run it by hand (Actions → probe-school-hosts → Run workflow)
+# before relying on rebuild-schools.yml, and again whenever a monthly source
+# starts falling back to its snapshot.
+name: probe-school-hosts
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Probe every school-data host from this runner
+        run: node tools/schools/probe-hosts.mjs --json /tmp/probe.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: school-host-probe
+          path: /tmp/probe.json

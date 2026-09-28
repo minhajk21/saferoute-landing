@@ -76,7 +76,8 @@
 //       is not under the header and >= 55% of it is on screen, and on 360x740
 //       and 390x844 the search box is fully visible under the header too
 //       (on a landscape phone only a WARN: there the map wins by design).
-//   /check/?schools
+//   /check/?schools (in the matrix, loaded with the Europe/London time zone,
+//   whatever the machine's, so the contract is the same everywhere)
 //     - the schools layer draws within 3s (pins, not the "Zoom in" note that
 //       the old z7 England view showed), centred on central London at zoom
 //       >= 12 — or, on a map too small to show central London at 12, the
@@ -84,10 +85,18 @@
 //       inside the map's stage, not the column; WARN if the pane keeps < 55%
 //       of the height under the header. On phones the toolbar stays inside
 //       the screen: its filter row scrolls sideways within itself.
+//     - at 1440x900, its "School data sources" list, once opened, links every
+//       source's and every openly licensed scheme's licence (index.json
+//       licenceUrl): CC BY 4.0 requires the link, the OGLs ask for it.
 //   default view by time zone, once per run at 1440x900: Europe/London opens on
 //     Great Britain, America/New_York on the lower 48, America/Mexico_City on
 //     Mexico City, Asia/Tokyo wide enough to hold both London and New York —
-//     and no page load asks for geolocation.
+//     and no page load asks for geolocation. And /check/?schools opens on the
+//     visitor's own school region (index.json regions[].tz): Europe/London on
+//     central London, America/New_York on Midtown, America/Chicago on the
+//     Loop, America/Detroit on Detroit, America/Mexico_City on the Centro,
+//     Asia/Tokyo (no region's zone) on central London — pins drawn, and the
+//     pane's hint naming where it started.
 //
 // No npm dependencies: it drives an installed Chrome over the DevTools
 // Protocol using Node's built-in WebSocket, and serves the site itself, so it
@@ -273,6 +282,13 @@ const TZ_VIEWS = [
   { tz: 'America/New_York',    box: [[24.5, -124.8], [49.6, -66.9]],    minZoom: 4, maxZoom: 5 },
   { tz: 'America/Mexico_City', box: [[19.18, -99.34], [19.6, -98.94]],  minZoom: 10 },
   { tz: 'Asia/Tokyo',          maxZoom: 4, holds: { London: [51.5074, -0.1278], 'New York': [40.7549, -73.984] } },
+];
+
+// The ?schools time-zone pass: zone -> the region whose view it must open on
+// (read from the site's own index.json when the pass runs).
+const TZ_SCHOOLS = [
+  { tz: 'Europe/London', region: 'uk' }, { tz: 'America/New_York', region: 'nyc' }, { tz: 'America/Chicago', region: 'chicago' },
+  { tz: 'America/Detroit', region: 'detroit' }, { tz: 'America/Mexico_City', region: 'mexicocity' }, { tz: 'Asia/Tokyo', region: 'uk' },
 ];
 
 const CHROME = [
@@ -462,11 +478,13 @@ const SCHOOLS = (london) => {
   // The filter row, not just the bar: the bar is always the stage's full
   // width, so its box alone cannot show filters clipped past the edge. On a
   // phone the row must scroll sideways, and its LAST control must come fully
-  // into view (and be the thing under the pointer) once it has.
+  // into view (and be the thing under the pointer) once it has. Its last
+  // VISIBLE control: the page hides a filter no school in view publishes
+  // (Charter over London), and a hidden control has nothing to reach.
   const row = sb?.querySelector('.sb-filters');
   let reach = null;
   if (row && sb.offsetParent) {
-    const last = row.lastElementChild, keep = row.scrollLeft;
+    const last = [...row.children].filter(e => !e.hidden && getComputedStyle(e).display !== 'none').pop(), keep = row.scrollLeft;
     const ox = getComputedStyle(row).overflowX;
     row.scrollLeft = row.scrollWidth;
     const r = last?.getBoundingClientRect(), rr = row.getBoundingClientRect();
@@ -627,6 +645,11 @@ async function main() {
     const heights = [];   // [page, header height] at this size, compared below
     for (const page of PAGES) {
       const isCheck = page.startsWith('/check/');
+      // ?schools opens on the visitor's time-zone region; the matrix holds it
+      // to Europe/London (central London) on every machine. The time-zone
+      // pass below covers the other zones.
+      const schoolsPage = isCheck && /[?&]schools\b|#schools$/.test(page);
+      await c.send('Emulation.setTimezoneOverride', { timezoneId: schoolsPage ? 'Europe/London' : '' });
       await load(base + page);
       // Web fonts swap in after load and change line breaks: the column's on
       // the shell, and the header's everywhere (its tabs are Plex Mono, and
@@ -747,6 +770,22 @@ async function main() {
             // have started wrapping and are pushing the map down the phone.
             flag('WARN', `#schbar is ${x.bar.h}px tall on a phone (want one row, <= 60px)`);
           }
+          // Licence links in "School data sources", once per run.
+          if (vp.w === 1440 && vp.h === 900) {
+            const lic = await ev(`(async () => {
+              const d = document.getElementById('schSources'); if (!d) return { error: 'no #schSources' };
+              d.open = true;
+              for (let i = 0; i < 40 && !d.dataset.done; i++) await new Promise(r => setTimeout(r, 100));
+              const hrefs = new Set([...d.querySelectorAll('a[href]')].map(a => a.href));
+              const want = [...Object.entries(schIndex.sources).map(([k, s]) => ['source ' + k, s.licenceUrl]),
+                ...Object.entries(schIndex.schemes).filter(([, sc]) => sc.licenceUrl).map(([k, sc]) => ['scheme ' + k, sc.licenceUrl])];
+              const missing = want.filter(([, u]) => !u || !hrefs.has(new URL(u, location.href).href)).map(([k]) => k);
+              d.open = false;
+              return { done: !!d.dataset.done, n: want.length, missing };
+            })()`, true) || { error: 'no result' };
+            if (lic.error || !lic.done) flag('FAIL', `School data sources list did not load (${lic.error || 'timeout'})`);
+            else if (lic.missing.length) flag('FAIL', `School data sources list does not link the licence of ${lic.missing.join(', ')}`);
+          }
         }
 
         // ── after a search ──
@@ -813,6 +852,33 @@ async function main() {
         if (s.geo) flag(`geolocation requested on load (${s.geo}x) — only a click may ask`);
       }
       rows.push({ vp: 'time zone 1440x900', page: '/check/', map: `${v.tz}${s.error ? '' : ` opens on ${s.lat.toFixed(2)},${s.lng.toFixed(2)} z${s.zoom}`}`, issues });
+    }
+    // /check/?schools by time zone: the region's own view, pins drawn, the
+    // hint naming it. Regions come from the site's own index.json.
+    let schIdx = null;
+    try { schIdx = JSON.parse(await readFile(join(SITE, 'schools', 'data', 'tiles', 'index.json'), 'utf8')); } catch {}
+    for (const v of TZ_SCHOOLS) {
+      const issues = [];
+      const flag = msg => { issues.push(`FAIL ${msg}`); fails++; };
+      const reg = schIdx?.regions?.find(r => r.id === v.region);
+      if (!reg) { flag(`no region "${v.region}" in schools/data/tiles/index.json`); rows.push({ vp: 'time zone 1440x900', page: '/check/?schools', map: v.tz, issues }); continue; }
+      await c.send('Emulation.setTimezoneOverride', { timezoneId: v.tz });
+      await load(base + '/check/?schools');
+      const s = await ev(`(async () => {
+        for (let i = 0; i < 40; i++) { try { if (schOn && !schBusy && !schPending && (schLayer || !schNote.hidden)) break; } catch {} await new Promise(r => setTimeout(r, 150)); }
+        try { const c = map.getCenter();
+          return { lat: c.lat, lng: c.lng, zoom: map.getZoom(), pins: schLayer ? schLayer.getLayers().length : 0,
+            note: schNote.hidden ? '' : schNote.textContent,
+            start: document.body.classList.contains('sch-london') ? document.querySelector('.sch-hint .sch-start')?.textContent.trim() : '' };
+        } catch (e) { return { error: String(e) }; } })()`, true) || { error: 'no result' };
+      if (s.error) flag(`?schools view not readable (${s.error})`);
+      else {
+        const [[south, west], [north, east]] = reg.view;
+        if (s.lat < south || s.lat > north || s.lng < west || s.lng > east) flag(`?schools centre ${s.lat.toFixed(3)},${s.lng.toFixed(3)} outside ${reg.id}'s view ${JSON.stringify(reg.view)}`);
+        if (!s.pins) flag(`?schools drew no pins (${s.note || 'no note'})`);
+        if (s.start !== `Starting in ${reg.viewName}.`) flag(`?schools hint reads "${s.start}" (want "Starting in ${reg.viewName}.")`);
+      }
+      rows.push({ vp: 'time zone 1440x900', page: '/check/?schools', map: `${v.tz}${s.error ? '' : ` opens on ${s.lat.toFixed(3)},${s.lng.toFixed(3)} z${s.zoom}, ${s.pins} pins`}`, issues });
     }
     await c.send('Emulation.setTimezoneOverride', { timezoneId: '' });
     await c.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: spy.result.identifier });

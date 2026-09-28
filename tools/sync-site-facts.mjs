@@ -20,7 +20,11 @@
 //   areas          total areas in safety/search-index.json (written by
 //                  render-pages.mjs — the same list the in-page lookup searches)
 //   cities         distinct cities in that index
-//   schools        schools on the map (schools/data/tiles/index.json)
+//   schools        schools on the map (schools/data/tiles/index.json count)
+//   schools-where  where they are, as a phrase ("England, Wales, Northern
+//                  Ireland, 26 US cities, Toronto, Vancouver and Mexico City";
+//                  index.json's "where", derived by build-schools from the
+//                  sources actually in the build, so it grows as they do)
 //   city:<slug>    areas in one city
 //
 // A number it cannot compute is left exactly as it was and reported — never
@@ -56,6 +60,7 @@ function computeFacts() {
   if (existsSync(schoolPath)) {
     const s = JSON.parse(readFileSync(schoolPath, 'utf8'));
     if (Number.isFinite(s.count)) facts.schools = fmt(s.count);
+    if (typeof s.where === 'string' && s.where) facts['schools-where'] = s.where;
   }
   return facts;
 }

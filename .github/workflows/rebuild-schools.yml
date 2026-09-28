@@ -1,0 +1,128 @@
+# Rebuilds the Schools layer on /check/ (schools/data/tiles/) once a month.
+# Kept apart from rebuild-safety-pages (2-4 hours, on the 2nd), so a schools
+# failure cannot cost a page rebuild and vice versa.
+#
+# WHAT IT FETCHES. tools/build-schools.mjs runs every source module in
+# tools/schools/sources/ by its cadence (tools/schools/README.md):
+#   monthly  gias (England & Wales), de (Northern Ireland, incl. an incremental
+#            ETI crawl), on-priv (Toronto private), bc (Vancouver)
+#   annual   ccd + pss (US), on-sif (Toronto public), sep (Mexico City): NOT
+#            refetched; they re-emit their rows from the current tiles and only
+#            PROBE upstream, printing "::warning:: new vintage for <src>" when
+#            one appears. Taking a new vintage is a deliberate run of this
+#            workflow with `refresh: <src>`, so annual data never changes shape
+#            unreviewed.
+#   US rating maps (tools/data/schools/ratings/*.json) are built by hand
+#   (tools/schools/ratings.mjs) and only merged here, without the network.
+#
+# THE SAFETY RULE. A source whose fetch fails re-emits its rows from the
+# current tiles (the build prints ::warning::), so an unreachable host can
+# never empty a country from the map. If the build itself fails it writes
+# nothing (tiles are written atomically), and if verify-schools fails nothing
+# is committed: the published tiles stay as they were either way.
+#
+# REACHABILITY. Every host was tested from residential IPs only. Run
+# probe-school-hosts.yml (dispatch) to see which answer GitHub's runners; a
+# monthly source whose host refuses them simply keeps its snapshot, and becomes
+# a hand refresh (node tools/build-schools.mjs --only <src> on a laptop).
+name: rebuild-schools
+
+on:
+  schedule:
+    - cron: '23 5 4 * *'   # 4th of each month, 05:23 UTC (after the safety pages on the 2nd)
+  workflow_dispatch:
+    inputs:
+      refresh:
+        description: 'Annual sources to refetch deliberately (a new vintage), comma-separated, e.g. "ccd,pss". Empty = the normal monthly run.'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rebuild-schools
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    # Measured locally (Sept 2026): a full build of all eight sources fetched
+    # from scratch took 84 s; the monthly run fetches four of them. verify
+    # downloads its position references (postcodes.io, the Census ZCTA
+    # gazetteer, City of Toronto and Vancouver layers, CONALEP) in about a
+    # minute. 45 minutes leaves room for a slow host and the ETI crawl's
+    # 2.5 s pacing without letting a hung request run for six hours.
+    timeout-minutes: 45
+    steps:
+      # One commit is enough: verify-schools reads the previous index.json
+      # from HEAD for its ±5% drift check, and nothing here dates files by
+      # their history.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Passed through env, never pasted into the script by ${{ }}: a value
+      # is data, and cannot become a command.
+      - name: Build school tiles
+        env:
+          REFRESH: ${{ github.event.inputs.refresh }}
+        run: |
+          set -o pipefail
+          if [ -n "$REFRESH" ]; then
+            echo "deliberate refresh of: $REFRESH"
+            node tools/build-schools.mjs --refresh "$REFRESH" | tee /tmp/build.txt
+          else
+            node tools/build-schools.mjs | tee /tmp/build.txt
+          fi
+
+      # Gates the commit. --refresh exempts a deliberately refreshed source
+      # from the ±5% drift check (a new vintage may legitimately move more).
+      # --reference-optional: a position reference the runner cannot reach is
+      # a WARN, not a FAIL (an unreachable host is not wrong data); every
+      # other check still fails the job.
+      - name: Verify school tiles
+        env:
+          REFRESH: ${{ github.event.inputs.refresh }}
+        run: |
+          if [ -n "$REFRESH" ]; then
+            node tools/verify-schools.mjs --reference-optional --refresh "$REFRESH"
+          else
+            node tools/verify-schools.mjs --reference-optional
+          fi
+
+      # The homepage and /check/ quote the school count and where schools are
+      # (data-fact="schools" / "schools-where"), copied from index.json.
+      - name: Keep the school facts on the site true
+        run: node tools/sync-site-facts.mjs
+
+      - name: Commit + push if anything changed
+        env:
+          REFRESH: ${{ github.event.inputs.refresh }}
+        run: |
+          git config user.name "saferoute-bot"
+          git config user.email "minhaj@safe-route.app"
+          # Scoped, never -A: raw downloads go to the OS temp dir, but a
+          # stray file must never be published by accident.
+          git add schools/ index.html check/index.html tools/data/schools/
+          git diff --cached --quiet && { echo "no changes"; exit 0; }
+          # Which sources were fetched, reused or fell back, for the log.
+          summary=$(grep -E '^    [a-z-]+ +[0-9,]+  (fetched|snapshot|snapshot-after-failure)$' /tmp/build.txt | awk '{print $1" "$3}' | paste -sd, - || true)
+          git commit -m "schools: monthly refresh${REFRESH:+ (refresh: $REFRESH)}" -m "${summary:-see the workflow log}"
+          # main may move while this runs. The tiles are generated output and
+          # nothing else writes them, so rebase after committing (never
+          # autostash generated files; see rebuild-safety-pages.yml).
+          for i in 1 2 3; do
+            if git push; then exit 0; fi
+            echo "push rejected (attempt $i) — rebasing onto main"
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo "::error::rebase conflicted with main — re-run the schools rebuild"
+              exit 1
+            fi
+          done
+          echo "::error::push failed three times"
+          exit 1

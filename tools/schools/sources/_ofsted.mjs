@@ -1,4 +1,8 @@
-// Ofsted inspection outcomes, joined to schools by URN.
+// Ofsted inspection outcomes, joined to GIAS schools by URN (a helper of
+// sources/gias.mjs — the leading underscore keeps the build from loading it as
+// a source of its own). Moved from tools/fetch-ofsted.mjs; the logic is
+// unchanged, only the download now goes through the build's cached,
+// provenance-recording downloader.
 //
 // THE CENTRAL FACT, measured on the real file rather than assumed:
 //
@@ -30,21 +34,20 @@
 // shape of the falsely-reassuring bug this repo has already shipped once with
 // crime counts. isGraded() is the only place that judgement is made.
 //
-// Usage:  node tools/fetch-ofsted.mjs        (prints a coverage summary)
-//         import { loadOfsted } from './fetch-ofsted.mjs'
+// Usage:  node tools/schools/sources/_ofsted.mjs     (prints a coverage summary)
+//         import { loadOfsted } from './_ofsted.mjs'  (loadOfsted(ctx))
 
-import { writeFileSync, existsSync, readFileSync, statSync } from 'node:fs';
-import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { parseCsv, columns } from '../lib/csv.mjs';
+import { makeDownloader } from '../lib/download.mjs';
 
 // The landing page, NOT a direct asset URL. GOV.UK asset URLs carry a content
 // hash (…/media/6aa0175392e72b8ac437ef37/…) that changes every publication, and
 // the filename's month spelling is inconsistent across releases — "31_Mar_2026"
 // but "30_June_2026", "31_August_2026". Templating either one breaks silently
 // the next time Ofsted publishes. Resolve the link from the page instead.
-const LANDING = 'https://www.gov.uk/government/statistical-data-sets/monthly-management-information-ofsteds-school-inspections-outcomes';
-
-const CACHE = join(tmpdir(), 'saferoute-ofsted-state.csv');
+export const LANDING = 'https://www.gov.uk/government/statistical-data-sets/monthly-management-information-ofsteds-school-inspections-outcomes';
 
 // Values that mean "no judgement". "NULL" is the literal text in the file.
 const BLANK = new Set(['', 'NULL', 'Not judged', 'NA', 'N/A', 'Not applicable', '-']);
@@ -69,7 +72,7 @@ const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov
 // Parse the date out of an Ofsted filename. Spellings vary between releases —
 // 31_Mar_2026, 30_June_2026, 31_August_2026 — so match a month PREFIX rather
 // than a fixed list of names.
-function dateFromName(url) {
+export function dateFromName(url) {
   const m = /_(\d{1,2})_([A-Za-z]+)_(\d{4})\.csv/.exec(decodeURIComponent(url));
   if (!m) return 0;
   const mi = MONTHS.indexOf(m[2].slice(0, 3).toLowerCase());
@@ -103,38 +106,6 @@ async function resolveCsvUrl() {
   return best.u;
 }
 
-async function fetchCsv() {
-  if (existsSync(CACHE)) {
-    const ageH = (Date.now() - statSync(CACHE).mtimeMs) / 36e5;
-    if (ageH < 12) return readFileSync(CACHE, 'utf8');
-  }
-  const url = await resolveCsvUrl();
-  const res = await fetch(url, { signal: AbortSignal.timeout(300_000) });
-  if (!res.ok) throw new Error(`Ofsted CSV HTTP ${res.status}`);
-  const text = await res.text();
-  writeFileSync(CACHE, text);
-  console.log(`  fetched ${url.split('/').pop()} (${(text.length / 1e6).toFixed(1)}MB)`);
-  return text;
-}
-
-function parseCsv(text) {
-  const rows = [];
-  let row = [], field = '', inQ = false;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    if (inQ) {
-      if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else inQ = false; }
-      else field += c;
-    } else if (c === '"') inQ = true;
-    else if (c === ',') { row.push(field); field = ''; }
-    else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
-    else if (c !== '\r') field += c;
-  }
-  if (field || row.length) { row.push(field); rows.push(row); }
-  const header = rows.shift().map(h => h.replace(/^﻿/, '').trim());
-  return { header, rows };
-}
-
 // Ofsted writes DD/MM/YYYY. Stored as ISO so it sorts and so no reader has to
 // guess whether 03/04 is March or April.
 function isoDate(v) {
@@ -144,18 +115,17 @@ function isoDate(v) {
 }
 
 /**
+ * @param ctx  the build's source context (ctx.download is all that is used)
  * @returns {Promise<Map<number, {scheme:string, oeifGrade:string, oeifDate:string,
  *                                card:Record<string,string>, cardDate:string}>>}
  *          keyed by URN. Schools absent from the map have no Ofsted record at
  *          all — distinct from present-with-no-grade, which is scheme:'none'.
  */
-export async function loadOfsted() {
-  const { header, rows } = parseCsv(await fetchCsv());
-  const col = Object.fromEntries(header.map((h, i) => [h, i]));
-  const need = ['URN', 'Latest OEIF overall effectiveness', ...REPORT_CARD_AREAS];
-  for (const n of need) {
-    if (!(n in col)) throw new Error(`Ofsted CSV is missing the column "${n}" — the schema changed, do not publish a partial join`);
-  }
+export async function loadOfsted(ctx) {
+  const buf = await ctx.download('ofsted-state-funded-latest.csv', resolveCsvUrl, { maxAgeH: 12, timeoutMs: 300_000 });
+  const { header, rows } = parseCsv(buf, { encoding: 'utf-8' });
+  const col = columns(header, ['URN', 'Latest OEIF overall effectiveness', ...REPORT_CARD_AREAS,
+    'Inspection start date of latest OEIF graded inspection', 'Inspection start date'], 'Ofsted CSV');
 
   const out = new Map();
   for (const r of rows) {
@@ -185,7 +155,8 @@ export async function loadOfsted() {
 // Standalone run: report coverage. The point is to make the 50% visible every
 // time anyone touches this, rather than discovering it in the UI.
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const m = await loadOfsted();
+  const dl = makeDownloader({ rawDir: join(tmpdir(), 'saferoute-schools'), log: console.log });
+  const m = await loadOfsted({ download: dl.download });
   const all = [...m.values()];
   const pct = n => `${(100 * n / all.length).toFixed(1)}%`;
   const by = s => all.filter(v => v.scheme === s).length;
