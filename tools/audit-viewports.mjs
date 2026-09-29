@@ -256,8 +256,10 @@ const MAPS = {
 const STACKED_BELOW = 861;
 const MOBILE_BAND = [0.55, 0.80];
 // Where acceptance A7 requires the search box, not just the map, to be on
-// screen after a search.
-const Q_AFTER_SEARCH = new Set(['320x568', '360x740', '390x844']);
+// screen after a search. 844x390 joined on 2026-09-28, once the header stopped
+// pinning itself on a phone on its side: that freed the room, and a strict
+// entry keeps it from quietly coming back as a WARN.
+const Q_AFTER_SEARCH = new Set(['320x568', '360x740', '390x844', '844x390']);
 
 // Sideways overflow that is known and tolerated: { page, w, tag, px }. An entry
 // covers its page, width and offender up to the recorded overflow; a different
@@ -397,7 +399,9 @@ const AUDIT = (mapSel, isCheck) => {
   }
   if (isCheck) {
     out.hdrBottom = +hdrBottom.toFixed(1);
-    out.hdrH = hdr ? hdr.offsetHeight : 0;
+    // What the header can cover: its height while it is pinned, nothing when it
+    // scrolls away with the page (sr.css does that on a phone on its side).
+    out.hdrH = hdr && ['sticky', 'fixed'].includes(getComputedStyle(hdr).position) ? hdr.offsetHeight : 0;
     out.docH = document.documentElement.scrollHeight;
     const h1s = [...document.querySelectorAll('h1')];
     const shown = h1s.filter(h => { const r = h.getBoundingClientRect(); return r.width > 0 && r.height > 0; });

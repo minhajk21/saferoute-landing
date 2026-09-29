@@ -1874,8 +1874,14 @@ about.addEventListener('click', ()=>{
 // two on the narrowest phones, so --hdr is measured rather than assumed. It
 // keeps a scrolled-to pane's "Back" clear of the header (aside's
 // scroll-margin-top).
+// It only covers anything while it is pinned: on a phone on its side sr.css
+// lets it scroll away with the page, and then there is nothing to clear.
+function hdrCover(){
+  const h = document.querySelector('header.site');
+  return h && getComputedStyle(h).position === 'sticky' ? h.offsetHeight : 0;
+}
 function setHdr(){
-  document.documentElement.style.setProperty('--hdr', (document.querySelector('header.site')?.offsetHeight||61)+'px');
+  document.documentElement.style.setProperty('--hdr', hdrCover()+'px');
 }
 setHdr();
 addEventListener('resize', setHdr);
@@ -2099,9 +2105,11 @@ $('#useLoc')?.addEventListener('click', ()=>$('#geo').click());
 // right below it — you can search again without scrolling back up, and the
 // score starts peeking in under the map. That is still the choice when it
 // would trim no more than a tenth off the map's bottom (a 320px phone with the
-// one-row schools toolbar open still keeps 96% of the map). If it would cost
-// more (short landscape phones), the map wins: the stage's top — the toolbar,
-// if open, then the map — goes under the header, as before.
+// one-row schools toolbar open still keeps 96% of the map). On a phone on its
+// side the header is not pinned (sr.css), so hdrCover() is 0 and the whole
+// screen is room: search, toolbar and map all fit down to 360px tall. Were it
+// ever to cost more, the map wins: the stage's top — the toolbar, if open,
+// then the map — goes to the top of the screen.
 // Never moves anything that is already in place, and never animates for people
 // who have asked for reduced motion.
 function revealTool() {
@@ -2111,7 +2119,7 @@ function revealTool() {
     if (window.scrollY > 0) window.scrollTo({ top: 0, behavior });
     return;
   }
-  const hdr = document.querySelector('header.site')?.offsetHeight || 61;
+  const hdr = hdrCover();
   const room = window.innerHeight - hdr;
   const search = document.querySelector('.search').getBoundingClientRect();
   const stage = document.querySelector('.stage').getBoundingClientRect();

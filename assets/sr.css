@@ -146,6 +146,10 @@ header.site{border-bottom:1px solid var(--line);background:rgba(10,13,18,.82);
   /* Above Leaflet, whose panes and controls reach z-index 1000 — /check/ and
      /tonight/ put a map directly under the bar. */
   z-index:1300}
+/* A phone on its side is ~360-430px tall, and a pinned 61px bar would hold a
+   sixth of that for the whole visit. There it scrolls away with the page
+   instead. It is still the first thing on every page, one swipe up. */
+@media(max-width:860px) and (max-height:500px){ header.site{position:relative} }
 header.site .wrap{display:flex;align-items:center;justify-content:space-between;
   gap:18px;padding:14px clamp(16px,1.6vw,28px);max-width:none}
 /* flex-wrap is only a fallback that stops a page from scrolling sideways
