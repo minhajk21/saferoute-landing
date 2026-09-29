@@ -107,7 +107,8 @@
 //       of every other (see "map stack").
 //     - at every size, both sides of New York City's two seams (Queens/Nassau,
 //       Bronx/Yonkers), where the five boroughs' sale prices meet Nassau's and
-//       Westchester's owners' estimates, with schools off and on: the legend
+//       Westchester's owners' estimates, with schools off and on, and of
+//       Charlotte's and Minneapolis's county-line seams: the legend
 //       is shown with its dashed seam line, which names what the colours on
 //       each side show (visible even on an upright phone, whose legend drops
 //       its metric line), and every overlay stays clear (see "map stack").
@@ -341,13 +342,25 @@ const NOTE_STATES = [
   ['both layers across a state line (Jersey City)', [40.72, -74.035], 13, true],
 ];
 
-// /check/?prices, at every size: where New York City's sale prices meet the
-// owners' estimates of Nassau and Westchester. [label, centre, zoom, schools].
+// /check/?prices, at every size: where a city's sale prices meet the owners'
+// estimates of the counties around it (New York City's Nassau and
+// Westchester first). [label, centre, zoom, schools].
 const SEAM_STATES = [
   ['the Queens/Nassau seam, New York City side', [40.728, -73.712], 14, false],
   ['the Queens/Nassau seam, Nassau side', [40.728, -73.695], 14, false],
   ['the Bronx/Yonkers seam, New York City side', [40.9005, -73.87], 14, true],
   ['the Bronx/Yonkers seam, Westchester side', [40.915, -73.87], 14, false],
+  // Charlotte's and Minneapolis's sale prices beside their neighbouring
+  // counties' owners' estimates (points ~300 m either side of the county
+  // line, each checked to lie in the tract it names, Sept 2026). Their scale
+  // names are longer than "Nassau and Westchester": the seam line must still
+  // fit. Denver's pair (Sheridan Blvd, the Denver/Lakewood line: Denver side
+  // [39.7403, -105.0497], Jefferson County side [39.7403, -105.0567]) comes
+  // back when its sale prices do (tools/prices/parked/denver-sales.mjs).
+  ['the Mecklenburg/Cabarrus seam, Charlotte side', [35.3536, -80.7063], 14, false],
+  ['the Mecklenburg/Cabarrus seam, Cabarrus side', [35.358, -80.7089], 14, false],
+  ['the Minneapolis/St Paul seam, Minneapolis side', [44.9854, -93.2083], 14, false],
+  ['the Minneapolis/St Paul seam, St Paul side', [44.9876, -93.2038], 14, false],
 ];
 
 // The time-zone pass (see WHAT IT CHECKS). Boxes are [[south, west], [north, east]].

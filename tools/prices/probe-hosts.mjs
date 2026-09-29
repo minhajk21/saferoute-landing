@@ -60,6 +60,17 @@ const KNOWN = [
   { src: 'nyc-dof-sales', url: 'https://data.cityofnewyork.us/resource/usep-8jbt.json?$select=count(*)', expect: 'JSON' },
   { src: 'nyc-dof-sales', url: 'https://www.nyc.gov/assets/finance/downloads/pdf/rolling_sales/annualized-sales/2025/2025_staten_island.xlsx', expect: 'a data file' },
   { src: 'ct-opm-sales', url: 'https://data.ct.gov/resource/5mzw-sjtu.json?$select=max(listyear)', expect: 'JSON' },
+  // Denver's two layers are on ArcGIS Online (services1.arcgis.com, the host
+  // ons-msoa's boundaries come from, so the probe asks it once); denver-sales
+  // is parked (tools/prices/parked/, licence), asked so its host is known
+  // when it returns. Charlotte's
+  // and Hennepin's are self-hosted county/city ArcGIS Servers with no ArcGIS
+  // Online copy: the kind of host that has refused datacenter IPs in this
+  // project. Charlotte's firewall also answers an over-long URL with an HTML
+  // page and HTTP 200, so JSON is what counts as an answer.
+  { src: 'denver-sales', url: 'https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/ODC_real_property_sales_and_transfers/FeatureServer/60?f=json', expect: 'JSON' },
+  { src: 'charlotte-sales', url: 'https://gis.charlottenc.gov/arcgis/rest/services/CLT_Ex/CLTEx_MoreInfo/MapServer/4?f=json', expect: 'JSON' },
+  { src: 'hennepin-sales', url: 'https://gis.hennepin.us/arcgis/rest/services/HennepinData/LAND_PROPERTY/MapServer/1?f=json', expect: 'JSON' },
 ];
 
 const expectFor = file => (/\.zip$/i.test(file) ? 'a zip' : /\.json$/i.test(file) ? 'JSON' : /\.(csv|dat|xlsx|geojson)$/i.test(file) ? 'a data file' : undefined);

@@ -23,7 +23,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, readdirSync, rmSyn
 import { join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
-import { decisionProblems, PRICE_REGIONS } from '../regions.mjs';
+import { decisionProblems, PRICE_REGIONS, SCALE_NAMES, SEAM_NAME_MAX, scalesFor } from '../regions.mjs';
 import { FIELDS } from '../lib/schema.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
@@ -111,6 +111,15 @@ test('regions.mjs: every coverage region has a prices decision; a missing one is
   assert.match(decisionProblems(['x'], { x: { sources: ['a'], none: 'why', currency: 'USD' } }).join(), /exactly one/);
   assert.match(decisionProblems(['x'], { x: { sources: ['a'] } }).join(), /currency/);
   assert.equal(PRICE_REGIONS.mexicocity.none, 'No open data gives home prices for areas smaller than the whole city.');
+});
+
+test('regions.mjs: every second scale key is named, short enough for the legend seam note', () => {
+  for (const id of Object.keys(PRICE_REGIONS)) {
+    const outer = scalesFor(id)[1];
+    if (!outer || PRICE_REGIONS[id].sources?.[1] !== 'acs-tract') continue;
+    assert.ok(SCALE_NAMES[outer], `${id}: ${outer} has no name in SCALE_NAMES`);
+    assert.ok(SCALE_NAMES[outer].length <= SEAM_NAME_MAX, `${outer}: "${SCALE_NAMES[outer]}" is ${SCALE_NAMES[outer].length} characters (max ${SEAM_NAME_MAX})`);
+  }
 });
 
 test('orchestrator end to end with a fake source: build, verify, snapshot on failure, cadence, violations', async t => {

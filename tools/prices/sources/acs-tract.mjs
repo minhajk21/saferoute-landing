@@ -35,10 +35,11 @@
 // colour scale is the region's first scale key (tools/prices/regions.mjs):
 // its own id, except Los Angeles and Long Beach, whose rectangles overlap,
 // which share 'la-area'. No other pair of rectangles overlaps (checked Sept
-// 2026). Where a region has a sale-price source too (NYC, DC, Hartford,
-// Baltimore), the build hands that source these tracts' polygons, lets its
-// tracts replace these inside its `covers`, and moves the tracts left over to
-// the region's second key (nyc-outer): tools/build-prices.mjs PRECEDENCE.
+// 2026). Where a region has a sale-price source too (NYC, DC, Charlotte,
+// Baltimore, Minneapolis, Hartford), the build hands that source these
+// tracts' polygons, lets its tracts replace these inside its `covers`, and
+// moves the tracts left over to the region's second key (nyc-outer,
+// charlotte-outer, minneapolis-outer): tools/build-prices.mjs PRECEDENCE.
 //
 // Honesty rules (SPEC §1):
 //   - A negative estimate is an ACS annotation ("jam value"), not a figure:

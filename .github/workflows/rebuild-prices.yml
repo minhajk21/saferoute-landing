@@ -3,8 +3,9 @@
 # so a prices failure cannot cost either of them a rebuild, and vice versa.
 #
 # WHAT IT FETCHES. tools/build-prices.mjs runs every source module in
-# tools/prices/sources/ (tools/prices/README.md). The recorded-sales feeds
-# (NYC, DC, Baltimore: cadence monthly) are fetched every run, their window
+# tools/prices/sources/ (tools/prices/README.md; tools/prices/parked/ is never
+# loaded). The recorded-sales feeds (NYC, DC, Baltimore, Charlotte,
+# Minneapolis: cadence monthly) are fetched every run, their window
 # moving with the data; their sales are aggregated into census-tract medians
 # and never published one by one. The rest are annual and
 # semi-annual statistics (ONS MSOA medians, LPS/NISRA ward medians, ACS
@@ -30,7 +31,9 @@
 # REACHABILITY. Every host was tested from residential IPs only. Run
 # probe-price-hosts.yml (dispatch) to see which answer GitHub's runners; a
 # source whose host refuses them simply keeps its snapshot, and becomes a hand
-# refresh (node tools/build-prices.mjs --only <src> on a laptop).
+# refresh (node tools/build-prices.mjs --only <src> on a laptop). The likeliest
+# to refuse are the self-hosted city and county ArcGIS servers with no ArcGIS
+# Online copy: Charlotte's gis.charlottenc.gov and Hennepin's gis.hennepin.us.
 name: rebuild-prices
 
 on:
@@ -57,13 +60,17 @@ jobs:
     # cache are about 300 MB of downloads (ACS tables and tract shapefiles,
     # the ONS workbooks and boundary pages, the OSNI wards GeoJSON, the
     # StatCan tract zip); when upstream has not changed they cost ~50 HEAD
-    # requests. The three MONTHLY sale feeds are downloaded whole on every
-    # run, as the runner starts with an empty cache: about 112 MB a month
+    # requests. The five MONTHLY sale feeds are downloaded whole on every
+    # run, as the runner starts with an empty cache: about 133 MB a month
     # (NYC 78 MB, of which PLUTO 42, the Digital Tax Map condominium tables
     # 14 and DOF's yearly workbooks 17 are reference data that seldom change;
-    # DC 24 MB, 21 of it the whole tax-roll table; Maryland 9 MB). Processing
+    # DC 24 MB, 21 of it the whole tax-roll table; Maryland 9 MB; Charlotte
+    # 13 MB in ~190 queries to gis.charlottenc.gov, most of them parcel
+    # lookups; Hennepin 8 MB in ~16 queries to gis.hennepin.us). Processing
     # is ~15 s. 45 minutes leaves room for ONS's rate limit (Retry-After is
-    # honoured) without letting a hung request run for hours. (A raw-cache
+    # honoured) without letting a hung request run for hours; Charlotte and
+    # Hennepin also give up on their own after 15 and 12 minutes, so a slow
+    # self-hosted server costs only its own city's month. (A raw-cache
     # restore would save little as things stand: the downloader refetches
     # files older than 30 days anyway, about one run's gap.)
     timeout-minutes: 45

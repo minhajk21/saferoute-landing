@@ -32,10 +32,12 @@
 // 6. SPOT CHECKS against what is known to be true (Southwark has 30+ MSOAs;
 //    London's median of MSOA medians is £400k–£900k; NYC has 1,500+ tracts;
 //    Toronto 400+ CTs; and for each recorded-sales source, its tract count,
-//    and Manhattan's median of tract sale medians $700k–$3M). Each prints
-//    what it saw. A phase-1 source missing from the build fails its check; a
-//    sale source's check is SKIPPED only when the source is not in the build.
-//    --no-spot skips them all (tests).
+//    and the median of coloured tract sale medians: Manhattan's $700k–$3M,
+//    Charlotte's $280k–$700k, Minneapolis's $220k–$550k, and the parked
+//    Denver's $350k–$900k; for those three the floor is on coloured
+//    tracts). Each prints what it saw. A phase-1 source missing from
+//    the build fails its check; a sale source's check is SKIPPED only when
+//    the source is not in the build. --no-spot skips them all (tests).
 // 8. SALE PRICES (point-sales sources, SPEC2 §B.5). No tract coloured on
 //    fewer than 10 sales, none with a figure on fewer than 3; figures rounded
 //    to the 1,000; the middle half only from colourMinN sales and around the
@@ -459,6 +461,23 @@ const run = async () => {
     // (acs-tract, Sept 2026), so the floor is set under that instead.
     spot('spot Hartford sales', 'ct-opm-sales', l => ({ ok: tracts(l, 'hartford') > 50, saw: `${fmt(tracts(l, 'hartford'))} Hartford-region tracts (want > 50; the rectangle holds 65)` }), { optional: true });
     spot('spot Baltimore sales', 'md-sdat-sales', l => ({ ok: tracts(l, 'baltimore') > 150, saw: `${fmt(tracts(l, 'baltimore'))} Baltimore-region tracts (want > 150)` }), { optional: true });
+    // The three sources below cover one county each. The build emits every
+    // tract of the county in the rectangle whatever its sales (Denver County
+    // 175, Mecklenburg 305, Hennepin 144, Sept 2026), so the floor is on
+    // COLOURED tracts (10+ sales), which a short read or a lost batch of
+    // parcels would thin: first built (Sept 2026) with 165, 289 and 132. The
+    // bands sit around the medians of coloured tract medians first built
+    // ($558k, $442k, $350k), wide enough for a year's market, narrow enough
+    // to catch a price read from the wrong column or a thousandfold unit.
+    // (denver-sales is parked, tools/prices/parked/: its check SKIPs.)
+    const saleSpot = (label, src, rid, floor, lo, hi) => spot(`spot ${label} sales`, src, l => {
+      const n = tracts(l, rid), v = l.filter(a => a.region === rid && coloured(a)).map(a => a.value), m = median(v);
+      return { ok: v.length > floor && m >= lo && m <= hi,
+        saw: `${fmt(v.length)} of ${fmt(n)} tracts coloured (want > ${fmt(floor)}); median of their medians $${fmt(Math.round(m))} (want $${fmt(lo / 1000)}k–$${fmt(hi / 1000)}k)` };
+    }, { optional: true });
+    saleSpot('Denver', 'denver-sales', 'denver', 150, 350_000, 900_000);
+    saleSpot('Charlotte', 'charlotte-sales', 'charlotte', 265, 280_000, 700_000);
+    saleSpot('Minneapolis', 'hennepin-sales', 'minneapolis', 120, 220_000, 550_000);
     spot('spot Toronto', 'statcan-ct', l => {
       const n = l.filter(a => a.region === 'toronto').length;
       return { ok: n > 400, saw: `${fmt(n)} Toronto census tracts (want > 400)` };

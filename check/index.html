@@ -2217,11 +2217,12 @@ function prShort(v, c) {
 const prSrc = a => prIndex?.sources?.[a.src] || {};
 const prCurOf = a => a.scale?.currency || prSrc(a).currency;
 // A recorded-sales source (index.sources[id].kind 'point-sales': NYC, DC,
-// Hartford, Baltimore): each figure is the median of the sales in a census
-// tract over a window of months, and a tract with fewer than 3 sales has no
-// figure at all (tools/prices/lib/sales.mjs): a figure always rests on at
-// least 3 sales. (Never "no single sale's price is shown": with an odd count
-// the median IS one sale's price, rounded.)
+// Charlotte, Baltimore, Minneapolis, Hartford): each figure is the
+// median of the sales in a census tract over a window of months, and a
+// tract with fewer than 3 sales has no figure at all
+// (tools/prices/lib/sales.mjs): a figure always rests on at least 3 sales.
+// (Never "no single sale's price is shown": with an odd count the median IS
+// one sale's price, rounded.)
 const prIsSales = src => src?.kind === 'point-sales';
 // An owners'-estimate area in a city whose sale prices cover the rest (New
 // York City's Nassau and Westchester edges, around the five boroughs): the
@@ -2581,8 +2582,9 @@ function prLegend(areas) {
   const dashedThere = !dashedHere && [...areas.values()].some(a => a.scale && others.includes(a.scale) && prOuter(a));
   // A sale source's period says which date its window is by: "Sales recorded
   // Sep 2025 – Aug 2026" (DC, Hartford, Baltimore) or "Sales dated …" (NYC,
-  // by date of sale). Its months stay on one line: the line wraps at 300px,
-  // and "Aug 2024 – / Jul 2026" read as two dates.
+  // Charlotte, Minneapolis: by date of sale). Its months stay on one
+  // line: the line wraps at 300px, and "Aug 2024 – / Jul 2026" read as two
+  // dates.
   const per = src.period || '', span = prIsSales(src) && src.window?.span ? src.window.span : '';
   const minN = src.colourMinN;
   const html = `<div class="t1">${prTitle(src.metric)} · ${schEsc(sc.name)}</div>`

@@ -14,7 +14,8 @@
 // it was published with. The tiles are every source's snapshot, so a fetch
 // failure can never empty a region from the map.
 //
-// SALE PRICES. A 'point-sales' source (NYC, DC, Hartford, Baltimore) returns
+// SALE PRICES. A 'point-sales' source (NYC, DC, Charlotte, Baltimore,
+// Minneapolis, Hartford: tools/prices/regions.mjs sales(...)) returns
 // individual recorded sales, not areas. It runs after every areas source, and
 // lib/sales.mjs windows its sales, places them in its GEOMETRY source's tract
 // polygons (acs-tract's) and aggregates them (median, middle half, n; nothing

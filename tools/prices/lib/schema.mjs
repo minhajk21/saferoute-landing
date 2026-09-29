@@ -87,12 +87,40 @@ const WINDOW_KEYS = ['months', 'by', 'lagMonths', 'from', 'to', 'span'];
 const isCount = v => Number.isInteger(v) && v >= 0;
 const isCounts = o => !!o && typeof o === 'object' && !Array.isArray(o) && Object.values(o).every(isCount);
 // Single-sale detail in a sale source's own words (notes, attribution): an
-// exact money amount (not a whole thousand: "$812,345"), or a run of 9+
-// digits (a parcel id such as a BBL). The rules' own figures ("$10,000",
-// "$1,000") pass. A heuristic for text; the lists above are the real guard.
-// (A bare "$1"-"$999" is no home's price: it is where "$1.5 million" stops.)
-const SALE_DETAIL_IN_TEXT = /[$£]\s?\d{1,3}(?:,\d{3})*(?:\.\d+)?(?<!,000)(?!,?\d)(?! (?:thousand|million))|\d{9,}/g;
+// exact money amount (not a whole thousand: "$812,345"), a run of 9+ digits
+// (a parcel id such as a BBL), or a code of 8+ capitals and digits holding 5+
+// digits (Mecklenburg's 8-character PIDs, "07101234", "17332C99"). The rules'
+// own figures ("$10,000", "$1,000") pass. A heuristic for text; the lists
+// above are the real guard. (A bare "$1"-"$999" is no home's price: it is
+// where "$1.5 million" stops.)
+const SALE_DETAIL_IN_TEXT = /[$£]\s?\d{1,3}(?:,\d{3})*(?:\.\d+)?(?<!,000)(?!,?\d)(?! (?:thousand|million))|\d{9,}|\b(?=(?:[0-9A-Z]*\d){5})[0-9A-Z]{8,}\b/g;
 const saleDetail = t => [...t.matchAll(SALE_DETAIL_IN_TEXT)].map(m => m[0]).find(x => !/^[$£]\s?\d{1,3}$/.test(x)) ?? null;
+// A sale's day in a sale source's NOTES ("2026-05-15", "15 May 2026", "May
+// 15, 2026", "5/15/2026"): a note speaks of months and periods, never of the
+// day something sold. (Attribution lines may date a dataset's version: NYC's
+// "data as of 2026-09-15".)
+const MONTHS = '(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*';
+const DAY_IN_TEXT = new RegExp(`\\b\\d{4}-\\d{2}-\\d{2}\\b|\\b\\d{1,2}/\\d{1,2}/\\d{2,4}\\b|\\b\\d{1,2}(?:st|nd|rd|th)? ${MONTHS} \\d{4}\\b|\\b${MONTHS} \\d{1,2}(?:st|nd|rd|th)?,? \\d{4}\\b`);
+// Where a merged or query-string upstream record could carry a sale's parcel:
+// its query (the URL after "?", decoded, and `where`). Ids in a query are a
+// run of 9+ digits (Denver's schedule numbers, Hennepin's PIDs), a quoted
+// code of 8+ capitals and digits with 5+ digits (Mecklenburg's PIDs), or an
+// IN (...) list holding any code with 5+ digits. Maryland's IN list of county
+// codes ('ANNE', 'BACO', …) and CT's town names pass.
+// (A query that will not decode is read as it stands, never skipped.)
+const queryOf = url => {
+  const q = String(url).includes('?') ? String(url).slice(String(url).indexOf('?') + 1) : '';
+  try { return decodeURIComponent(q.replace(/\+/g, ' ')); } catch { return q; }
+};
+function idsInQuery(q) {
+  const hit = q.match(/\d{9,}/) || q.match(/'(?=(?:[0-9A-Z]*\d){5})[0-9A-Z]{8,}'/);
+  if (hit) return hit[0];
+  for (const m of q.matchAll(/\bIN\s*\(([^)]*)\)/gi)) {
+    const id = m[1].split(',').map(x => x.trim().replace(/^'|'$/g, '')).find(x => (x.match(/\d/g) || []).length >= 5);
+    if (id) return `IN (…${id}…)`;
+  }
+  return null;
+}
 
 // Problems with one sources[id] entry as it is (or will be) published.
 export function entryProblems(id, e) {
@@ -122,6 +150,16 @@ export function entryProblems(id, e) {
       const x = Object.keys(r).filter(k => !UPSTREAM_KEYS.includes(k));
       if (x.length) bad(`upstream[${i}] has field(s) ${x.join(', ')} (allowed: ${UPSTREAM_KEYS.join(', ')})`);
       if (Object.values(r).some(v => v !== null && !['string', 'number', 'boolean'].includes(typeof v))) bad(`upstream[${i}] holds a value that is not a plain string or number`);
+      // The free-text fields a module fills. A record that merges many
+      // queries (`queries`) names its layer, never one query: an un-merged
+      // page list would publish every parcel it looked up.
+      if (r.queries != null && typeof r.url === 'string' && r.url.includes('?')) bad(`upstream[${i}] merges ${r.queries} queries but its url carries one query's string; give the bare layer URL`);
+      if (r.item != null && !(typeof r.item === 'string' && /^[0-9a-f]{32}$/.test(r.item))) bad(`upstream[${i}].item must be an ArcGIS item id (32 hex characters)`);
+      for (const k of ['url', 'where']) {
+        if (r[k] == null) continue;
+        const id = idsInQuery(k === 'url' ? queryOf(r[k]) : String(r[k]));
+        if (id) bad(`upstream[${i}].${k} reads like it names a property ("${id}"): an upstream record may say how a layer was queried, never which parcels`);
+      }
     });
   }
   const st = e.stats;
@@ -132,12 +170,17 @@ export function entryProblems(id, e) {
       if (x.length) bad(`stats has field(s) ${x.join(', ')} (allowed: ${STATS_KEYS.join(', ')})`);
       for (const k of ['areas', 'coloured', 'neutral', 'unpublished']) if (st[k] != null && !isCount(st[k])) bad(`stats.${k} is not a count`);
       for (const k of ['dropped', 'replaced']) if (st[k] != null && !isCounts(st[k])) bad(`stats.${k} must be { reason: count }`);
+      // A reason is a camelCase word ("outOfWindow"), and a hand-over is
+      // counted by source id: neither can be a parcel id or an address.
+      if (isCounts(st.dropped)) { const k = Object.keys(st.dropped).find(r => !/^[a-z]+(?:[A-Z][a-z]*)*$/.test(r)); if (k) bad(`stats.dropped reason "${k}" is not a camelCase word`); }
+      if (isCounts(st.replaced)) { const k = Object.keys(st.replaced).find(r => !/^[a-z][a-z0-9-]*$/.test(r)); if (k) bad(`stats.replaced key "${k}" is not a source id`); }
       if (st.sales != null && !(isCounts(st.sales) && Object.keys(st.sales).every(k => ['received', 'used'].includes(k)))) bad('stats.sales must be { received, used } counts');
     }
   }
   if (e.window != null && (typeof e.window !== 'object' || Object.keys(e.window).some(k => !WINDOW_KEYS.includes(k)))) bad(`window may hold only ${WINDOW_KEYS.join(', ')}`);
   if (e.covers != null && (typeof e.covers !== 'object' || Object.keys(e.covers).some(k => !['juris', 'counties'].includes(k)) ||
       Object.values(e.covers).some(v => !Array.isArray(v) || v.some(x => typeof x !== 'string')))) bad('covers may hold only juris and counties, lists of codes');
+  else if (e.covers != null && ((e.covers.juris || []).some(x => !/^[A-Z]{2}-[A-Z0-9]{1,3}$/.test(x)) || (e.covers.counties || []).some(x => !/^\d{5}$/.test(x)))) bad('covers.juris must be ISO 3166-2 codes and covers.counties 5-digit state+county FIPS codes');
   if (e.licences != null && Array.isArray(e.licences) && e.licences.some(l => !l || Object.keys(l).some(k => !['licence', 'licenceUrl'].includes(k)))) bad('licences entries may hold only licence and licenceUrl');
   if (e.regions != null && (!Array.isArray(e.regions) || e.regions.some(r => typeof r !== 'string'))) bad('regions must be a list of region ids');
   for (const k of ['name', 'publisher', 'url', 'licence', 'licenceUrl', 'metric', 'unitNoun', 'currency', 'period', 'areaNoun', 'credit', 'contextLabel',
@@ -146,6 +189,10 @@ export function entryProblems(id, e) {
     for (const t of [...(e.notes || []), ...(e.attribution || [])]) {
       const d = typeof t === 'string' ? saleDetail(t) : null;
       if (d) bad(`a note or attribution line reads like a single sale's detail ("${d}")`);
+    }
+    for (const t of e.notes || []) {
+      const d = typeof t === 'string' ? t.match(DAY_IN_TEXT) : null;
+      if (d) bad(`a note names a day ("${d[0]}"): a sale source's notes speak of months, never of the day a sale was made`);
     }
   }
   return p;

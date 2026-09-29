@@ -396,8 +396,27 @@ test('index.json: a module that adds sales to its meta at fetch time never publi
     [{ stats: { ...clean.stats, sales: { received: 5, used: 2, list: [sale] } } }, /stats\.sales must be/],
     [{ notes: [...clean.notes, 'e.g. 1 Main St, BBL 5012340001, $812,345'] }, /reads like a single sale's detail/],
     [{ window: { ...clean.window, first: sale } }, /window may hold only/],
+    // Free text and keys a module fills (the Sept 2026 review's mutations):
+    // parcels in a query, a merged record under one query's URL, a note with
+    // an 8-character PID or a day, a drop reason or a covered county that is
+    // really an id.
+    [{ upstream: [{ ...clean.upstream[0], url: "https://x/MapServer/3/query?where=PID+IN+('07101234','07101235')&f=json" }] }, /upstream\[0\]\.url reads like it names a property/],
+    [{ upstream: [{ ...clean.upstream[0], where: "PID = '0102924110001'" }] }, /upstream\[0\]\.where reads like it names a property/],
+    [{ upstream: [{ ...clean.upstream[0], where: "PID = '17332C99'" }] }, /names a property \("'17332C99'"\)/],
+    [{ upstream: [{ ...clean.upstream[0], queries: 180, url: 'https://x/MapServer/3/query?where=1%3D1' }] }, /merges 180 queries but its url carries one query/],
+    [{ upstream: [{ ...clean.upstream[0], item: '07101234' }] }, /item must be an ArcGIS item id/],
+    [{ notes: [...clean.notes, 'Parcel 07101234 sold that month.'] }, /reads like a single sale's detail \("07101234"\)/],
+    [{ notes: [...clean.notes, 'One home sold on 15 May 2026.'] }, /a note names a day \("15 May 2026"\)/],
+    [{ notes: [...clean.notes, 'Sold 2026-05-15.'] }, /a note names a day/],
+    [{ stats: { ...clean.stats, dropped: { nominal: 3, p0102924110001: 1 } } }, /stats\.dropped reason "p0102924110001" is not a camelCase word/],
+    [{ covers: { juris: ['US-NY'], counties: ['36047', '07101234'] } }, /covers\.counties 5-digit/],
   ];
   for (const [over, re] of cases) assert.match(entryProblems('s', { ...clean, ...over }).join(' | '), re);
+  // What real sources publish passes: Maryland's IN list of county codes,
+  // a CT town in a query, a dataset's version date in an attribution line.
+  assert.deepEqual(entryProblems('s', { ...clean,
+    upstream: [{ ...clean.upstream[0], url: "https://x/resource/ed4q.json?$where=j+IN+('ANNE',+'BACO')" }, { ...clean.upstream[0], url: "https://x/resource/5mzw.json?$where=listyear=2024+AND+town='East+Hartford'" }],
+    attribution: ['Source: NYC Open Data usep-8jbt, data as of 2026-09-15.'] }), []);
 
   // End to end: the build refuses it, and writes nothing.
   const tmp = mkdtempSync(join(tmpdir(), 'prices-sales-leak-'));

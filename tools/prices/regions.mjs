@@ -53,14 +53,30 @@ export const PRICE_REGIONS = {
   nyc:         sales('nyc-dof-sales', ['nyc', 'nyc-outer']),
   chicago: acs(), sf: acs(), boston: acs(), seattle: acs(), philly: acs(),
   dc:          sales('dc-cama-sales'),
-  denver: acs(), sandiego: acs(),
+  // Denver stays ACS: its recorded-sales module is PARKED
+  // (tools/prices/parked/denver-sales.mjs), not published. The catalog grants
+  // CC BY 3.0, but its Terms of Use card also binds users to the denvergov.org
+  // terms, whose copyright notice says "Commercial use of the materials is
+  // prohibited without the written permission of the City" and forbids
+  // mirroring (read live 29 Sep 2026); house rule: commercial use allowed.
+  // Once the City confirms in writing, move the module back to sources/ and
+  // make this sales('denver-sales', ['denver', 'denver-outer']), with
+  // 'denver-outer': 'Counties around Denver' in SCALE_NAMES.
+  denver:      acs(), sandiego: acs(),
   longbeach:   acs({ scales: ['la-area'] }),
   la:          acs({ scales: ['la-area'] }),
-  dallas:      acs(), detroit: acs(), memphis: acs(), charlotte: acs(),
+  dallas:      acs(), detroit: acs(), memphis: acs(),
+  // The City of Charlotte's copy of Mecklenburg's last sale of each parcel
+  // (CC BY 4.0, re-verified 29 Sep 2026); the rectangle's tracts in the
+  // neighbouring counties stay ACS, on their own scale.
+  charlotte:   sales('charlotte-sales', ['charlotte', 'charlotte-outer']),
   // SDAT recorded sales (licence re-verified 29 Sep 2026: public domain),
   // covering every Maryland county the rectangle's tracts are in.
   baltimore:   sales('md-sdat-sales'),
-  nashville:   acs(), minneapolis: acs(), cleveland: acs(), tucson: acs(), fortworth: acs(),
+  nashville:   acs(), cleveland: acs(), tucson: acs(), fortworth: acs(),
+  // Hennepin County's last sale of each parcel (licence waiver re-verified 29
+  // Sep 2026); the rectangle's Ramsey and Anoka tracts stay ACS, on their own scale.
+  minneapolis: sales('hennepin-sales', ['minneapolis', 'minneapolis-outer']),
   hartford:    sales('ct-opm-sales'),
   kansascity: acs(), houston: acs(), neworleans: acs(), lasvegas: acs(),
   toronto:     statcan,
@@ -71,11 +87,32 @@ export const PRICE_REGIONS = {
 };
 
 // Names for scale keys that are not a region id. Any other key is its
-// region's own id and takes the region's name.
+// region's own id and takes the region's name. The -outer keys hold the
+// acs-tract tracts of a sale-price region outside its sale source's covers.
+// An -outer name is printed in the legend's seam note ("<name>:
+// owners’ estimates, own scale.") and heads those tracts' panes, so it stays
+// at most SEAM_NAME_MAX characters: at 38 ("Adams, Arapahoe and Jefferson
+// counties", Sept 2026) the note grew the legend into the zoom control on a
+// phone on its side (844x390, tools/audit-viewports.mjs), where 27 ("Counties
+// around Mecklenburg") fits. A tract's pane still names its own county.
+// Tract counts measured Sept 2026:
 // nyc-outer: every NYC-rectangle tract outside the five boroughs is in Nassau
-// (36059) or Westchester (36119) — New Jersey is outside R2 (measured Sept
-// 2026: 72 and 54 tracts).
-export const SCALE_NAMES = { ...ITL1, 'la-area': 'Los Angeles area', 'nyc-outer': 'Nassau and Westchester' };
+// (36059) or Westchester (36119) — New Jersey is outside R2 (72 and 54).
+// charlotte-outer: outside Mecklenburg (37119), in Cabarrus, Union, Gaston,
+// Lincoln, Rowan and Iredell (44, 28, 26, 7, 4 and 3).
+// minneapolis-outer: outside Hennepin (27053), in Ramsey (27123) and Anoka
+// (27003) (15 and 7).
+// (denver-outer, while Denver's sales are parked: outside Denver County
+// (08031), in Arapahoe (08005), Jefferson (08059) and Adams (08001): 106, 63
+// and 34.)
+export const SEAM_NAME_MAX = 28;
+export const SCALE_NAMES = {
+  ...ITL1,
+  'la-area': 'Los Angeles area',
+  'nyc-outer': 'Nassau and Westchester',
+  'charlotte-outer': 'Counties around Mecklenburg',
+  'minneapolis-outer': 'Ramsey and Anoka counties',
+};
 
 // What scope rule R2 means for a reader of the sources list on /check/
 // (index.json `scope`). True by construction: sources keep only areas of the
