@@ -369,6 +369,7 @@
   .mapbtn.on .mapbtn-dot{background:#BC3B2E}
   /* Each layer's dot is its own map colour: ember for the crime heat, the
      middle price blue, the primary-school teal. */
+  .mapbtn.cam.on .mapbtn-dot{background:#4AABB5}   /* the camera pins' own border */
   .mapbtn.pr.on .mapbtn-dot{background:#5598e7}
   .mapbtn.sch.on .mapbtn-dot{background:#3FD9C0}
   /* Schools controls. Hidden until the layer is on — the page is an address
@@ -891,6 +892,7 @@ async function fetchRecent(lat,lng,reqId,region){
 // visitor's point to find a camera, so the media URLs carry none.
 async function fetchCameras(lat,lng,reqId,region){
   if(camLayer){ map.removeLayer(camLayer); camLayer=null; }
+  camData=null;
   const slot=document.getElementById('cams'); if(slot) slot.innerHTML='';
   if(region===null) return;
   try{
@@ -903,7 +905,7 @@ async function fetchCameras(lat,lng,reqId,region){
       return;
     }
     if(!d.cameras || !d.cameras.length) return;
-    if(slot) slot.innerHTML=`<div class="meta" style="margin-top:6px"><span style="display:inline-block;width:9px;height:9px;border-radius:2px;border:1.5px solid #2E6B8A;background:#fff;margin-right:6px"></span><b>Street cameras:</b> ${fmt(d.count)} nearby — click a pin for ${d.stream?'a live view':'the latest still'} <span style="color:var(--ink-3)">(${esc(d.attribution)})</span></div>`;
+    camData=d; camSlot();
     // The glyph is decoration: each pin is named by its title (the camera).
     const ico=L.divIcon({className:'cam-pin',html:'<span aria-hidden="true">📷</span>',iconSize:[18,18],iconAnchor:[9,9],popupAnchor:[0,-8]});
     // London's cameras carry ~10s MP4 clips (video:true per camera) → a
@@ -939,8 +941,16 @@ async function fetchCameras(lat,lng,reqId,region){
     const pins=d.cameras.map(c=>
       L.marker([c.lat,c.lng],{icon:ico,title:c.name,keyboard:false})
        .bindPopup(`<div class="campop"><b>${esc(c.name)}</b><br>${media(c)}<div class="src" style="margin-top:4px">${kind(c)}${c.streamUrl?'':' · '+esc(d.cadence||'refreshes about every 2 minutes')} · ${esc(credit(c))}</div></div>`,{maxWidth:296}));
-    camLayer=L.layerGroup(pins).addTo(map);
+    camLayer=L.layerGroup(pins);
+    if(camOn) camLayer.addTo(map);
   }catch{ /* overlay only — never break the main lookup */ }
+}
+// The report's camera line. With the pins switched off, "click a pin" would
+// point at nothing, so it says where they are instead.
+function camSlot(){
+  const slot=document.getElementById('cams'), d=camData;
+  if(!slot || !d) return;
+  slot.innerHTML=`<div class="meta" style="margin-top:6px"><span style="display:inline-block;width:9px;height:9px;border-radius:2px;border:1.5px solid #2E6B8A;background:#fff;margin-right:6px"></span><b>Street cameras:</b> ${fmt(d.count)} nearby — ${camOn?`click a pin for ${d.stream?'a live view':'the latest still'}`:'switch on Cameras on the map to see them'} <span style="color:var(--ink-3)">(${esc(d.attribution)})</span></div>`;
 }
 // Backend timeOfDay is [wkDay, wkEve, wkNight, wkndDay, wkndEve, wkndNight].
 // The old flat label row mislabelled bucket 0 and repeated "Wknd day"; it is
@@ -1113,6 +1123,29 @@ hexBtn.addEventListener('click', () => {
 });
 // Leaflet swallows clicks that reach the map container, so keep them on the button.
 L.DomEvent.disableClickPropagation(hexBtn);
+// Street cameras: their pins (fetchCameras), under the heatmap. Not a fill, so
+// it never touches the heatmap or home values; a preference that holds across
+// searches, on by default as the pins always were. Most cities publish no
+// cameras, so off there changes nothing to see, and nothing breaks.
+let camOn = true, camData = null;
+const camBtn = document.createElement('button');
+camBtn.type = 'button';
+camBtn.className = 'mapbtn cam on';
+camBtn.setAttribute('aria-pressed', 'true');
+const camDot = document.createElement('span'); camDot.className = 'mapbtn-dot';
+camBtn.append(camDot, 'Cameras');
+function setCams(on){
+  camOn = on;
+  camBtn.classList.toggle('on', camOn);
+  camBtn.setAttribute('aria-pressed', camOn ? 'true' : 'false');
+  if(camLayer){ if(camOn) camLayer.addTo(map); else map.removeLayer(camLayer); }
+  camSlot();
+}
+camBtn.addEventListener('click', () => {
+  setCams(!camOn);
+  mapSay(camOn ? 'Street cameras shown.' : 'Street cameras hidden.');
+});
+L.DomEvent.disableClickPropagation(camBtn);
 // Home values: the other fill, beside the heatmap so the two read as "pick
 // one". Its layer is below, after the schools'.
 const prBtn = document.createElement('button');
@@ -1123,7 +1156,7 @@ const prDot = document.createElement('span'); prDot.className = 'mapbtn-dot';
 prBtn.append(prDot, 'Prices');
 prBtn.addEventListener('click', () => setPrices(!prOn));
 L.DomEvent.disableClickPropagation(prBtn);
-mapPills.append(hexBtn, prBtn);
+mapPills.append(hexBtn, camBtn, prBtn);
 // The status under the pills, then the layers' notes in the pills' order:
 // home values, then schools.
 // Silence would read as breakage. This page covers crime data in 30 regions
