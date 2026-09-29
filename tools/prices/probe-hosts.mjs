@@ -44,6 +44,22 @@ const KNOWN = [
   { src: 'acs-tract', url: 'https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_36_tract_500k.zip', expect: 'a zip' },
   { src: 'statcan-ct', url: 'https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lct_000b21a_e.zip', expect: 'a zip' },
   { src: 'statcan-ct', url: 'https://api.statcan.gc.ca/census-recensement/profile/sdmx/rest/codelist/STC_CP/CL_GEO_CMACA', headers: { 'accept-language': 'en' } },
+  // DC's self-hosted ArcGIS Server (the sales and the address points). City
+  // ArcGIS hosts have blocked datacenter IPs elsewhere; SafeRoute's backend
+  // reaches this one from Render, runners are unproven. Then the ArcGIS Online
+  // item and org behind the tax-roll lookup.
+  { src: 'dc-cama-sales', url: 'https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Property_and_Land_WebMercator/MapServer/57?f=json', expect: 'JSON' },
+  { src: 'dc-cama-sales', url: 'https://www.arcgis.com/sharing/rest/content/items/6c3a37dfce05413bb11937dd66cf89b7?f=json', expect: 'JSON' },
+  { src: 'dc-cama-sales', url: 'https://services.arcgis.com/neT9SoYxizqTHZPH/arcgis/rest/services?f=json', expect: 'JSON' },
+  // Socrata behind Cloudflare, whose firewall blocks some queries: a runner
+  // served a block or challenge page gets HTML here, not JSON.
+  { src: 'md-sdat-sales', url: 'https://opendata.maryland.gov/resource/ed4q-f8tm.json?$select=count(*)&$where=jurisdiction_code_mdp_field_jurscode%20IN%20(%27BACI%27)', expect: 'JSON' },
+  // NYC Open Data (the rolling sales, PLUTO, the condominium tables) and the
+  // Department of Finance's own annualized workbooks on www.nyc.gov, which
+  // no SafeRoute server has fetched before.
+  { src: 'nyc-dof-sales', url: 'https://data.cityofnewyork.us/resource/usep-8jbt.json?$select=count(*)', expect: 'JSON' },
+  { src: 'nyc-dof-sales', url: 'https://www.nyc.gov/assets/finance/downloads/pdf/rolling_sales/annualized-sales/2025/2025_staten_island.xlsx', expect: 'a data file' },
+  { src: 'ct-opm-sales', url: 'https://data.ct.gov/resource/5mzw-sjtu.json?$select=max(listyear)', expect: 'JSON' },
 ];
 
 const expectFor = file => (/\.zip$/i.test(file) ? 'a zip' : /\.json$/i.test(file) ? 'JSON' : /\.(csv|dat|xlsx|geojson)$/i.test(file) ? 'a data file' : undefined);

@@ -5,7 +5,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, rmSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { makeCtx, retryAfterMs, politeFetch, UA } from '../lib/ctx.mjs';
@@ -85,4 +85,29 @@ test('politeFetch spaces callers that arrive together, a gap apart', async t => 
   const gaps = at.slice(1).map((x, i) => x - at[i]);
   assert.equal(at.length, 5);
   assert.ok(gaps.every(g => g >= 130), `gaps ${gaps.join(', ')} ms (want >= the 150 ms spacing, less timer slack)`);
+});
+
+test('ctx.discard: a cached answer that failed its format check is asked for again; --frozen keeps the cache', async t => {
+  const tmp = mkdtempSync(join(tmpdir(), 'prices-ctx-discard-'));
+  t.after(() => rmSync(tmp, { recursive: true, force: true }));
+  let hits = 0;
+  const server = createServer((req, res) => { hits++; res.writeHead(200); res.end(hits === 1 ? '<html>Sorry, you have been blocked</html>' : 'a,b\n1,2\n'); });
+  await new Promise(r => server.listen(0, '127.0.0.1', r));
+  t.after(() => server.close());
+  const url = `http://127.0.0.1:${server.address().port}/data.csv`;
+  const quiet = { log: () => {}, warn: () => {} };
+  const ctx = makeCtx({ rawDir: tmp, ...quiet });
+  // A block page served with HTTP 200 is cached like any answer...
+  assert.match((await ctx.download('d.csv', url, { maxAgeH: 24 })).toString(), /blocked/);
+  // ...and without discard would be read back from the cache all day.
+  assert.match((await ctx.download('d.csv', url, { maxAgeH: 24 })).toString(), /blocked/);
+  assert.equal(hits, 1);
+  // --frozen never changes the cache.
+  assert.equal(makeCtx({ rawDir: tmp, frozen: true, ...quiet }).discard('d.csv'), false);
+  assert.ok(existsSync(join(tmp, 'd.csv')));
+  // Discarded: the next download asks the host again.
+  assert.equal(ctx.discard('d.csv'), true);
+  assert.ok(!existsSync(join(tmp, 'd.csv')) && !existsSync(join(tmp, 'd.csv.meta.json')));
+  assert.equal((await ctx.download('d.csv', url, { maxAgeH: 24 })).toString(), 'a,b\n1,2\n');
+  assert.equal(hits, 2);
 });

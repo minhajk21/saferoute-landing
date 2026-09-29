@@ -10,6 +10,7 @@ import { readdirSync, existsSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { processPolys, bboxOf, bboxIntersects } from './geo.mjs';
+import { WINDOW_BY, MIN_COLOUR_N, MAX_WINDOW_MONTHS, CONTEXT_FLAGS } from './sales.mjs';
 import { scalesFor } from '../regions.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -23,7 +24,18 @@ export const INDEX_VERSION = 1;
 //   region   index into index.regions;  scale: index into index.scales
 //   ctx      index into the tile's own `c` array, or null
 //   polys    [[outerRing, hole, ...], ...] encoded rings (lib/geo.mjs)
-export const FIELDS = ['src', 'id', 'name', 'region', 'scale', 'value', 'moe', 'n', 'flags', 'ctx', 'polys'];
+//   iqr      [25th, 75th percentile] of a sale-price area's sales (the pane's
+//            "Middle half"), else null. Added after the first release, at the
+//            END of the row, so every earlier index still resolves by name.
+export const FIELDS = ['src', 'id', 'name', 'region', 'scale', 'value', 'moe', 'n', 'flags', 'ctx', 'polys', 'iqr'];
+// Fields added since the first published tile set. A snapshot written before
+// one existed lacks it and reads it as null (readAreasFromTiles); the page
+// reads rows by name, so it takes either.
+export const ADDED_FIELDS = ['iqr'];
+// What a context line may carry: its label, the figure, its 90% margin of
+// error, a count, and flags about the figure (top- or bottom-coded, too
+// uncertain), all of the context's own source.
+export const CONTEXT_KEYS = ['label', 'value', 'moe', 'n', 'flags'];
 
 // Flags travel as one integer. Suppressed, uncertain, few and bottom-coded
 // make an area NEUTRAL (the "no figure" fill); top-coded still takes its class
@@ -47,12 +59,109 @@ export const MAX_CV = 0.30;
 export const cvOf = a => (a.moe != null && a.value > 0 ? a.moe / 1.645 / a.value : null);
 
 // Never in a tile, whatever a source's raw file calls it (house rule 9, and
-// the PPD address-data clause).
-export const FORBIDDEN_FIELD = /^(address|postcode|paon|saon|street)$/i;
-export const FORBIDDEN_IN_TEXT = /"(address|postcode|paon|saon|street)"\s*:/i;
+// the PPD address-data clause), nor anything of a single sale: where it is,
+// when, for how much, or the parcel it was (SPEC2 §B.6).
+const FORBIDDEN = 'address|postcode|paon|saon|street|lat|lng|lon|latitude|longitude|bbl|ssl|parcel|parcelid|pin|price|date|sales';
+export const FORBIDDEN_FIELD = new RegExp(`^(${FORBIDDEN})$`, 'i');
+export const FORBIDDEN_IN_TEXT = new RegExp(`"(${FORBIDDEN})"\\s*:`, 'i');
 
-export const CADENCES = ['annual', 'semiannual', 'static'];
+// ── what index.json sources[id] may carry ──────────────────────────────────
+// An ALLOWLIST, not a denylist: a source entry is copied from the module's
+// meta, which a module can add to at fetch time (nyc-dof-sales rewrites its
+// meta with the versions it read), so a field nobody listed here would reach
+// the published index unchecked, and a sample of sales under an innocent name
+// ("examples") would pass every forbidden-name check. The build refuses an
+// entry with anything else (nothing written), and verify-prices re-checks the
+// published copy against the same lists.
+//   meta     the module's own fields (the contract's, and the optional ones)
+//   build    what the build adds about the build
+//   upstream one downloaded file's provenance (ctx.download's record, plus
+//            where / item / queries: dc-cama-sales describes an ArcGIS query
+//            it made page by page as one record)
+export const META_KEYS = ['name', 'publisher', 'url', 'licence', 'licenceUrl', 'attribution', 'metric', 'unitNoun', 'currency', 'period',
+  'notes', 'areaNoun', 'colourMinN', 'credit', 'nEstimate', 'licences', 'contextLabel', 'window'];
+export const ENTRY_BUILD_KEYS = ['kind', 'geometry', 'covers', 'cadence', 'regions', 'vintage', 'status', 'fetched', 'upstream', 'inputs', 'stats'];
+export const UPSTREAM_KEYS = ['file', 'url', 'status', 'lastModified', 'etag', 'fetchedAt', 'bytes', 'sha256', 'ua', 'where', 'item', 'queries'];
+export const STATS_KEYS = ['areas', 'coloured', 'neutral', 'unpublished', 'dropped', 'sales', 'replaced'];
+const WINDOW_KEYS = ['months', 'by', 'lagMonths', 'from', 'to', 'span'];
+const isCount = v => Number.isInteger(v) && v >= 0;
+const isCounts = o => !!o && typeof o === 'object' && !Array.isArray(o) && Object.values(o).every(isCount);
+// Single-sale detail in a sale source's own words (notes, attribution): an
+// exact money amount (not a whole thousand: "$812,345"), or a run of 9+
+// digits (a parcel id such as a BBL). The rules' own figures ("$10,000",
+// "$1,000") pass. A heuristic for text; the lists above are the real guard.
+// (A bare "$1"-"$999" is no home's price: it is where "$1.5 million" stops.)
+const SALE_DETAIL_IN_TEXT = /[$£]\s?\d{1,3}(?:,\d{3})*(?:\.\d+)?(?<!,000)(?!,?\d)(?! (?:thousand|million))|\d{9,}/g;
+const saleDetail = t => [...t.matchAll(SALE_DETAIL_IN_TEXT)].map(m => m[0]).find(x => !/^[$£]\s?\d{1,3}$/.test(x)) ?? null;
+
+// Problems with one sources[id] entry as it is (or will be) published.
+export function entryProblems(id, e) {
+  const p = [], bad = m => p.push(`${id}: ${m}`);
+  if (!e || typeof e !== 'object') return [`${id}: not an object`];
+  const extra = Object.keys(e).filter(k => !META_KEYS.includes(k) && !ENTRY_BUILD_KEYS.includes(k));
+  if (extra.length) bad(`field(s) no contract lists: ${extra.join(', ')} (lib/schema.mjs META_KEYS / ENTRY_BUILD_KEYS)`);
+  // Every key at every depth, against the names of single-sale fields (list
+  // items as one: examples[].price). The one allowed: stats.sales, the counts
+  // { received, used }.
+  const named = new Set();
+  const walk = (v, path) => {
+    if (Array.isArray(v)) { for (const x of v) walk(x, `${path}[]`); return; }
+    if (!v || typeof v !== 'object') return;
+    for (const [k, x] of Object.entries(v)) {
+      const at = path ? `${path}.${k}` : k;
+      if (FORBIDDEN_FIELD.test(k) && at !== 'stats.sales') named.add(at);
+      walk(x, at);
+    }
+  };
+  walk(e, '');
+  if (named.size) bad(`carries field(s) named for sale-level data: ${[...named].slice(0, 8).join(', ')}${named.size > 8 ? ', …' : ''}`);
+  if (e.upstream != null) {
+    if (!Array.isArray(e.upstream)) bad('upstream must be a list of file records');
+    else e.upstream.forEach((r, i) => {
+      if (!r || typeof r !== 'object' || Array.isArray(r)) { bad(`upstream[${i}] is not a record`); return; }
+      const x = Object.keys(r).filter(k => !UPSTREAM_KEYS.includes(k));
+      if (x.length) bad(`upstream[${i}] has field(s) ${x.join(', ')} (allowed: ${UPSTREAM_KEYS.join(', ')})`);
+      if (Object.values(r).some(v => v !== null && !['string', 'number', 'boolean'].includes(typeof v))) bad(`upstream[${i}] holds a value that is not a plain string or number`);
+    });
+  }
+  const st = e.stats;
+  if (st != null) {
+    if (typeof st !== 'object' || Array.isArray(st)) bad('stats must be an object of counts');
+    else {
+      const x = Object.keys(st).filter(k => !STATS_KEYS.includes(k));
+      if (x.length) bad(`stats has field(s) ${x.join(', ')} (allowed: ${STATS_KEYS.join(', ')})`);
+      for (const k of ['areas', 'coloured', 'neutral', 'unpublished']) if (st[k] != null && !isCount(st[k])) bad(`stats.${k} is not a count`);
+      for (const k of ['dropped', 'replaced']) if (st[k] != null && !isCounts(st[k])) bad(`stats.${k} must be { reason: count }`);
+      if (st.sales != null && !(isCounts(st.sales) && Object.keys(st.sales).every(k => ['received', 'used'].includes(k)))) bad('stats.sales must be { received, used } counts');
+    }
+  }
+  if (e.window != null && (typeof e.window !== 'object' || Object.keys(e.window).some(k => !WINDOW_KEYS.includes(k)))) bad(`window may hold only ${WINDOW_KEYS.join(', ')}`);
+  if (e.covers != null && (typeof e.covers !== 'object' || Object.keys(e.covers).some(k => !['juris', 'counties'].includes(k)) ||
+      Object.values(e.covers).some(v => !Array.isArray(v) || v.some(x => typeof x !== 'string')))) bad('covers may hold only juris and counties, lists of codes');
+  if (e.licences != null && Array.isArray(e.licences) && e.licences.some(l => !l || Object.keys(l).some(k => !['licence', 'licenceUrl'].includes(k)))) bad('licences entries may hold only licence and licenceUrl');
+  if (e.regions != null && (!Array.isArray(e.regions) || e.regions.some(r => typeof r !== 'string'))) bad('regions must be a list of region ids');
+  for (const k of ['name', 'publisher', 'url', 'licence', 'licenceUrl', 'metric', 'unitNoun', 'currency', 'period', 'areaNoun', 'credit', 'contextLabel',
+    'kind', 'geometry', 'cadence', 'vintage', 'status', 'fetched', 'inputs']) if (e[k] != null && typeof e[k] !== 'string') bad(`${k} must be text`);
+  if (e.kind === 'point-sales') {
+    for (const t of [...(e.notes || []), ...(e.attribution || [])]) {
+      const d = typeof t === 'string' ? saleDetail(t) : null;
+      if (d) bad(`a note or attribution line reads like a single sale's detail ("${d}")`);
+    }
+  }
+  return p;
+}
+
+// 'areas': the source publishes a figure per area (ONS, ACS, StatCan, NI).
+// 'point-sales': it returns individual sales, which the build places in a
+// geometry source's areas and aggregates (lib/sales.mjs).
+export const KINDS = ['areas', 'point-sales'];
+export const isSales = s => s?.kind === 'point-sales';
+// monthly: sale feeds, refetched every run (see tools/build-prices.mjs CADENCE).
+export const CADENCES = ['annual', 'semiannual', 'monthly', 'static'];
 const META_REQUIRED = ['name', 'publisher', 'url', 'licence', 'licenceUrl', 'attribution', 'metric', 'unitNoun', 'currency', 'period', 'areaNoun'];
+// A sale source's period is the window the build finds in its data, and its
+// area noun is its geometry source's: neither is the module's to state.
+const SALES_FILLED = ['period', 'areaNoun'];
 
 // Honesty checks on a metric label (house rule 2): a median is never called
 // an average or a mean, and an owners' estimate is never called a price.
@@ -65,10 +174,15 @@ export function metricProblems(metric) {
 }
 
 // Problems with one source's meta block ([] when clean). Shared with verify,
-// which runs it on index.json's copy.
-export function metaProblems(m = {}) {
+// which runs it on index.json's copy (published: the build's fields are there
+// too, so a sale source's period and window are checked in full).
+export function metaProblems(m = {}, kind = 'areas', { published = false } = {}) {
   const p = [];
-  for (const k of META_REQUIRED) if (m[k] == null || m[k] === '' || (Array.isArray(m[k]) && !m[k].length)) p.push(`meta.${k} is required`);
+  const sales = kind === 'point-sales';
+  for (const k of META_REQUIRED) {
+    if (sales && !published && SALES_FILLED.includes(k)) continue;
+    if (m[k] == null || m[k] === '' || (Array.isArray(m[k]) && !m[k].length)) p.push(`meta.${k} is required`);
+  }
   if (m.licenceUrl && !/^https:\/\//.test(m.licenceUrl)) p.push('meta.licenceUrl must be an https link (the pane links the licence)');
   if (m.url && !/^https?:\/\//.test(m.url)) p.push('meta.url must be a link');
   if (m.attribution && (!Array.isArray(m.attribution) || m.attribution.some(l => typeof l !== 'string' || !l.trim()))) p.push('meta.attribution must be a list of exact lines');
@@ -88,6 +202,31 @@ export function metaProblems(m = {}) {
   if (m.nEstimate != null && typeof m.nEstimate !== 'boolean') p.push('meta.nEstimate must be true or false when given');
   if (m.licences != null && (!Array.isArray(m.licences) || m.licences.some(l => !l?.licence || !/^https:\/\//.test(l.licenceUrl || '')))) p.push('meta.licences must be a list of { licence, licenceUrl (https) }');
   if (m.metric) p.push(...metricProblems(m.metric));
+  if (m.contextLabel != null && (typeof m.contextLabel !== 'string' || !m.contextLabel.trim())) p.push('meta.contextLabel must be a non-empty string when given');
+  if (sales) p.push(...salesMetaProblems(m, published));
+  else if (m.window != null) p.push('meta.window is for point-sales sources only');
+  return p;
+}
+
+// A sale source's own promises (SPEC2 §B): a window it chose and says the
+// date of, colour only from 10 sales, and a metric that is a sale price.
+//   window: { months, by: 'sale' | 'recording', lagMonths? }
+// published: the build has added from, to and span.
+function salesMetaProblems(m, published) {
+  const p = [], w = m.window;
+  if (!w || typeof w !== 'object') p.push("meta.window is required: { months, by: 'sale' | 'recording', lagMonths? }");
+  else {
+    if (!(Number.isInteger(w.months) && w.months >= 1 && w.months <= MAX_WINDOW_MONTHS)) p.push(`meta.window.months must be a whole number of months, 1–${MAX_WINDOW_MONTHS}`);
+    if (!WINDOW_BY.includes(w.by)) p.push(`meta.window.by must say which date the window is by: ${WINDOW_BY.map(x => `'${x}'`).join(' or ')} (the period label says "recorded" or "dated" from it)`);
+    if (w.lagMonths != null && !(Number.isInteger(w.lagMonths) && w.lagMonths >= 0 && w.lagMonths <= 24)) p.push('meta.window.lagMonths must be a whole number of months, 0–24');
+    const allowed = ['months', 'by', 'lagMonths', ...(published ? ['from', 'to', 'span'] : [])];
+    const extra = Object.keys(w).filter(k => !allowed.includes(k));
+    if (extra.length) p.push(`meta.window has field(s) ${extra.join(', ')} (allowed: ${allowed.join(', ')})`);
+    if (published && !(/^\d{4}-\d{2}$/.test(w.from || '') && /^\d{4}-\d{2}$/.test(w.to || '') && w.from <= w.to && typeof w.span === 'string')) p.push('meta.window must carry the from/to/span the build found');
+  }
+  if (!(Number.isInteger(m.colourMinN) && m.colourMinN >= MIN_COLOUR_N)) p.push(`meta.colourMinN must be a whole number of at least ${MIN_COLOUR_N}: no tract is coloured on fewer sales`);
+  if (m.metric && !/\b(sale price|price paid)\b/i.test(m.metric)) p.push(`metric "${m.metric}" does not name a sale price ("Median sale price")`);
+  if (m.nEstimate) p.push('meta.nEstimate: a sale source counts the sales behind each figure, never an estimate');
   return p;
 }
 
@@ -109,14 +248,20 @@ export async function loadSource(path) {
   // keeps build order (the tile's src index relies on it).
   if (!/^[a-z][a-z0-9-]*$/.test(s.id || '')) bad(`id "${s.id}" must be lower-case letters, digits and "-", starting with a letter`);
   if (basename(f, '.mjs') !== s.id) bad(`the file must be named after its id ("${s.id}.mjs")`);
+  if (s.kind != null && !KINDS.includes(s.kind)) bad(`kind "${s.kind}" (want ${KINDS.join(' | ')}; omitted means 'areas')`);
+  const kind = s.kind || 'areas';
   if (!Array.isArray(s.regions) || !s.regions.length) bad('regions must list the coverage ids it serves');
   if (!CADENCES.includes(s.cadence)) bad(`cadence "${s.cadence}" (want ${CADENCES.join(' | ')})`);
   if (typeof s.fetch !== 'function') bad('no fetch(ctx)');
   if (s.probe != null && typeof s.probe !== 'function') bad('probe, when given, must be a function');
-  const mp = metaProblems(s.meta);
+  if (kind === 'point-sales' && !/^[a-z][a-z0-9-]*$/.test(s.geometry || '')) bad('geometry must name the source whose areas its sales are aggregated onto (e.g. "acs-tract")');
+  if (kind !== 'point-sales' && s.geometry != null) bad('geometry is for point-sales sources only');
+  const mp = metaProblems(s.meta, kind);
   if (mp.length) bad(mp.join('; '));
   return s;
 }
+// A source's kind, 'areas' when the module leaves it out.
+export const kindOf = s => s?.kind || 'areas';
 
 const isNum = v => typeof v === 'number' && Number.isFinite(v);
 const isPair = p => Array.isArray(p) && p.length >= 2 && isNum(p[0]) && isNum(p[1]) && p[0] >= -180 && p[0] <= 180 && p[1] >= -90 && p[1] <= 90;
@@ -147,12 +292,20 @@ export function areaProblems(a, src, { raw = true } = {}) {
   }
   if (a.context !== null) {
     const c = a.context;
-    if (!c || typeof c !== 'object' || typeof c.label !== 'string' || !c.label.trim()) p.push('context must be null or { label, value, n }');
+    if (!c || typeof c !== 'object' || typeof c.label !== 'string' || !c.label.trim()) p.push('context must be null or { label, value, moe?, n, flags? }');
     else {
-      if (Object.keys(c).some(k => !['label', 'value', 'n'].includes(k))) p.push(`context has field(s) beyond label/value/n: ${Object.keys(c).join(', ')}`);
+      if (Object.keys(c).some(k => !CONTEXT_KEYS.includes(k))) p.push(`context has field(s) beyond ${CONTEXT_KEYS.join('/')}: ${Object.keys(c).join(', ')}`);
       if (c.value != null && !(isNum(c.value) && c.value > 0)) p.push('context.value must be a positive number or null');
+      if (c.moe != null && !(isNum(c.moe) && c.moe >= 0)) p.push('context.moe must be a non-negative number or null');
       if (c.n != null && !(Number.isInteger(c.n) && c.n >= 0)) p.push('context.n must be a non-negative integer or null');
+      if (c.flags != null && (!Array.isArray(c.flags) || c.flags.some(f => !CONTEXT_FLAGS.includes(f)))) p.push(`context.flags ${JSON.stringify(c.flags)} (allowed: ${CONTEXT_FLAGS.join(', ')})`);
     }
+  }
+  // The middle half of a sale-price area's sales: two ends around its median.
+  if (a.iqr != null) {
+    const q = a.iqr;
+    if (!Array.isArray(q) || q.length !== 2 || !q.every(v => isNum(v) && v > 0) || q[0] > q[1]) p.push(`iqr ${JSON.stringify(q)} must be [25th, 75th percentile], both > 0, in order`);
+    else if (a.value == null || a.value < q[0] || a.value > q[1]) p.push(`iqr ${JSON.stringify(q)} does not hold the median ${a.value}`);
   }
   if (raw) {
     if (!Array.isArray(a.polys) || !a.polys.length) p.push('polys must be a non-empty MultiPolygon');
@@ -163,10 +316,11 @@ export function areaProblems(a, src, { raw = true } = {}) {
 
 // Copy exactly the contract's fields (house rule: strip everything else at
 // parse). Missing optional fields become null / [].
+export const pickContext = c => (c ? { label: c.label, value: c.value ?? null, moe: c.moe ?? null, n: c.n ?? null, flags: [...(c.flags || [])] } : null);
 export const pickArea = a => ({
   id: a.id, name: a.name ?? null, region: a.region, juris: a.juris, scale: a.scale,
   value: a.value ?? null, moe: a.moe ?? null, n: a.n ?? null, flags: [...(a.flags || [])],
-  context: a.context ? { label: a.context.label, value: a.context.value ?? null, n: a.context.n ?? null } : null,
+  context: pickContext(a.context), iqr: a.iqr ? [...a.iqr] : null,
   polys: a.polys,
 });
 

@@ -3,6 +3,8 @@
 //   const ctx = makeCtx({ rawDir, frozen, log });
 //   ctx.download(file, urls, opts)   the schools downloader (cache + provenance
 //                                    sidecars + --frozen), made polite: see below
+//   ctx.discard(file)                forget a cached file that failed the source's
+//                                    format check (see below)
 //   ctx.provenance                   what was downloaded, for index.json upstream
 //   ctx.log / ctx.warn
 //   ctx.coverage                     [{ id, country, bbox: [s, w, n, e] }], backend order
@@ -27,7 +29,7 @@
 // ($TMPDIR/saferoute-prices-raw), shared by every source, so a file one run
 // cached is reused by the next (downloader maxAgeH, default 12 h).
 
-import { existsSync } from 'node:fs';
+import { existsSync, unlinkSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -116,6 +118,18 @@ export function makeCtx({ rawDir = RAW_DIR, frozen = false, log = console.log, w
       const rec = dl.provenance.findLast(p => p.file === file);
       if (rec && ua !== UA) rec.ua = ua ?? null;
       return buf;
+    },
+    // A cached answer that fails a source's format check (a firewall's block
+    // page served with HTTP 200, a cut-off body) would otherwise be served
+    // again, without asking the host, for the rest of its maxAgeH: the source
+    // calls this before it throws, so the next run downloads it afresh.
+    // --frozen never changes the cache: a frozen build must stay reproducible,
+    // and the bad file is the evidence.
+    discard(file) {
+      if (frozen) return false;
+      for (const f of [file, `${file}.meta.json`]) { try { unlinkSync(join(rawDir, f)); } catch {} }
+      log(`  discarded cached ${file}: it failed the format check`);
+      return true;
     },
     provenance: dl.provenance,
     coverage, regions, inBox,

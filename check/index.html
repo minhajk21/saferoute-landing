@@ -468,12 +468,19 @@
   .prkey .bar i{background:var(--c);opacity:.8}
   .prkey .ticks{position:relative;height:14px}
   .prkey .ticks span{position:absolute;top:0;transform:translateX(-50%);white-space:nowrap;color:var(--ink)}
+  .prkey .nw{white-space:nowrap}
   .prkey .nf{display:flex;align-items:center;gap:7px}
   /* Exactly as the map draws "no figure" (prPaint): the grey at .15 under
      its hatch, no border. */
   .prkey .nf i,.prsw.nf{flex:none;width:18px;height:9px;border-radius:2px;
     background:repeating-linear-gradient(135deg,rgba(138,150,163,.6) 0 1px,transparent 1px 4px),rgba(138,150,163,.15)}
   .prkey .seam,.prkey .cr{color:var(--ink-3)}
+  /* The map's dashed outline (prPaint) of the owners'-estimate side of a
+     seam, drawn as the map draws it: white, dashed, on the dark ground. */
+  .prkey .seam.dash{display:flex;align-items:baseline;gap:7px}
+  .prkey .seam.dash i{flex:none;width:18px;height:9px;border:1.2px dashed rgba(255,255,255,.7);border-radius:2px;align-self:center}
+  .prkey .seam .short,.prkey.compact .seam .long{display:none}
+  .prkey.compact .seam .short{display:inline}
   /* The keys let the map take clicks; the credit's link takes its own. */
   .prkey .cr a{pointer-events:auto;color:var(--ink-2)}
   .prkey .cr a:hover{color:var(--teal)}
@@ -510,6 +517,7 @@
   .prval small{font-size:18px;font-weight:500;color:var(--ink-2);letter-spacing:0}
   .prval.none{font-size:26px;color:var(--ink-2)}
   .prmetric{margin-top:6px}
+  #prview .nw,.prrep .nw{white-space:nowrap}
   .prsw{display:inline-block;width:18px;height:9px;border-radius:2px;background:var(--c);vertical-align:1px;margin-right:7px}
   #prices{display:flex;flex-direction:column;gap:18px}
   .prrep p+p{margin-top:6px}
@@ -699,7 +707,7 @@
              index.json's own "where" (data-fact, like schools-where). Colours
              are city- or region-relative, like the safety index, and are never
              compared across places. -->
-        <p class="meta">Switch on <b>Prices</b> to shade official statistical areas by the median home value or sale price their official statistics publish — in <span data-fact="prices-where">England, Wales and Northern Ireland; 26 US cities; Toronto and Vancouver</span> — with colours that compare places within one city or region only.</p>
+        <p class="meta">Switch on <b>Prices</b> to shade official statistical areas by their median home value or sale price, from official statistics or official records of sales — in <span data-fact="prices-where">England, Wales and Northern Ireland; 26 US cities; Toronto and Vancouver</span> — with colours that compare places within one city or region only.</p>
         <p class="meta pr-hint"><span class="pr-start"></span>Click an area for its figure, its period and count, and its source.</p>
         <button type="button" class="btn-sch pr" id="prOpen"><i></i><span>Show home values</span></button>
         <!-- Every source, its period, licence and area count, from index.json
@@ -770,7 +778,7 @@
       </section>
     </div>
     <div id="schview" class="view off" aria-live="polite"></div>
-    <div id="prview" class="view off" aria-live="polite"></div>
+    <div id="prview" class="view off"></div>
 
     <footer class="colophon">
       <p>Crime data from official police / open-data sources. Informational only — each score is calibrated within its own city and cannot be read against another city's.</p>
@@ -1026,10 +1034,15 @@ const mapKeys = document.querySelector('.mapkeys');
 // invisible pan status, which keeps its place in the stack).
 const shownBox = el => { const r = el.getBoundingClientRect(); return !el.hidden && r.width > 0 && r.height > 0 && getComputedStyle(el).opacity !== '0' ? r : null; };
 const boxesMeet = (a, b) => Math.min(a.right, b.right) > Math.max(a.left, b.left) && Math.min(a.bottom, b.bottom) > Math.max(a.top, b.top);
+// The pan status's box even while it is transparent: it fades in over
+// whatever is there on every pan, so the keys must keep out of its place (a
+// 320px phone's two-line seam legend sat under "Updating area…").
+const slotBox = el => { const r = el.getBoundingClientRect(); return !el.hidden && r.width > 0 && r.height > 0 ? r : null; };
 function mapKeysHit() {
   const keys = [...mapKeys.children].map(shownBox).filter(Boolean);
   const m = map.getContainer().getBoundingClientRect();
-  const others = [...mapStack.children, ...map.getContainer().querySelectorAll('.leaflet-control-zoom, .leaflet-control-attribution')].map(shownBox).filter(Boolean);
+  const others = [...[...mapStack.children].map(el => (el === mapStatus ? slotBox : shownBox)(el)),
+    ...[...map.getContainer().querySelectorAll('.leaflet-control-zoom, .leaflet-control-attribution')].map(shownBox)].filter(Boolean);
   return keys.some(k => k.right > m.right + 1 || k.top < m.top - 1 || others.some(o => boxesMeet(k, o)));
 }
 // Does the stack run off the map, or onto one of Leaflet's controls (the
@@ -2109,6 +2122,7 @@ const prLayers = new Map();   // "src:id" -> its polygon, while drawn
 let prSelected = null;        // "src:id" of the area open in #prview
 let prHeatWas = false;        // the heatmap was on when prices took over from it
 let prKeyHtml = '';           // the legend as last drawn, so a pan that changes nothing rewrites nothing
+let prKeyKind = '';           // what its colours show ("sale prices"), to say so when a pan changes it
 
 // Areas are drawn on ONE canvas in their own pane at z 380: under Leaflet's
 // overlay pane (400), which holds the 1 km ring and the centre marker, and
@@ -2202,6 +2216,37 @@ function prShort(v, c) {
 }
 const prSrc = a => prIndex?.sources?.[a.src] || {};
 const prCurOf = a => a.scale?.currency || prSrc(a).currency;
+// A recorded-sales source (index.sources[id].kind 'point-sales': NYC, DC,
+// Hartford, Baltimore): each figure is the median of the sales in a census
+// tract over a window of months, and a tract with fewer than 3 sales has no
+// figure at all (tools/prices/lib/sales.mjs): a figure always rests on at
+// least 3 sales. (Never "no single sale's price is shown": with an odd count
+// the median IS one sale's price, rounded.)
+const prIsSales = src => src?.kind === 'point-sales';
+// An owners'-estimate area in a city whose sale prices cover the rest (New
+// York City's Nassau and Westchester edges, around the five boroughs): the
+// same blues there mean another kind of figure on another scale, so these are
+// outlined dashed on the map (prPaint), and the legend, the hover line and
+// the pane say which is which.
+const prMixed = region => (region?.sources || []).some(id => prIsSales(prIndex?.sources?.[id])) && (region?.sources || []).some(id => !prIsSales(prIndex?.sources?.[id]));
+const prOuter = a => !prIsSales(prSrc(a)) && prMixed(a.region);
+// Screen readers skip an en dash at their default punctuation level, so
+// "Aug 2024 – Jul 2026" and "$610,000 – $1,150,000" ran together: the dash is
+// drawn, and "to" is what is read.
+const PR_TO = '<span aria-hidden="true"> – </span><span class="sr-only"> to </span>';
+const prDashHtml = t => schEsc(t).split(' – ').join(PR_TO);
+const prSaid = t => String(t ?? '').split(' – ').join(' to ');
+// One unbreakable range: on a 320px pane the row's label wraps before the
+// two amounts come apart.
+const prRangeHtml = (lo, hi, cur) => `<span class="nw">${schEsc(prMoney(lo, cur))}${PR_TO}${schEsc(prMoney(hi, cur))}</span>`;
+// "recorded Sep 2025 – Aug 2026" (or "dated …", for a window by date of
+// sale): the words its period says, for "from 412 sales recorded …".
+const prSalesWhen = src => `${src.window?.by === 'recording' ? 'recorded' : 'dated'} ${src.window?.span || ''}`.trim();
+const prOne = (noun, n) => (n === 1 ? noun.replace(/s$/, '') : noun);
+// What a scale's colours show, in two words: where two scales of different
+// kinds meet (the five boroughs' sale prices, Nassau's owners' estimates),
+// the legend says so.
+const prShows = metric => (/estimate/i.test(metric || '') ? 'owners’ estimates' : /\bprice/i.test(metric || '') ? 'sale prices' : prLower(metric));
 // The figure as text. A top-coded value is published as "X or more" (ACS's
 // 2,000,001 is "$2,000,000 or more") and a bottom-coded one as "less than X"
 // (ACS's 9,999 is "less than $10,000"), never as a number.
@@ -2211,10 +2256,13 @@ function prFigure(a) {
   return a.flags & PR_TOPCODED ? `${prMoney(Math.floor(a.value / 1000) * 1000, prCurOf(a))} or more` : prMoney(a.value, prCurOf(a));
 }
 // The hover line's figure, with what makes a grey area grey, so a bare number
-// never reads as a coloured one.
+// never reads as a coloured one; in a city with two kinds of figure, with its
+// kind, as the legend names only the one under the centre.
 function prTip(a) {
+  const src = prSrc(a);
+  if (prIsSales(src) && a.value == null) return a.n ? `no figure, only ${fmt(a.n)} ${prOne(src.unitNoun || 'sales', a.n)}` : `no ${src.unitNoun || 'sales'} in this period`;
   if (a.value == null || a.flags & PR_SUPPRESSED) return 'no figure';
-  const f = prFigure(a);
+  const f = prFigure(a) + (prMixed(a.region) ? (prIsSales(src) ? ' median sale price' : ' owners’ estimate') : '');
   if (prFew(a)) return `${f}, too few ${prSrc(a).unitNoun || 'sales'} to colour`;
   if (a.flags & PR_UNCERTAIN) return `${f}, too uncertain to colour`;
   if (a.flags & PR_BOTTOMCODED) return `${f}, not coloured`;
@@ -2284,6 +2332,9 @@ function prArea(row, ctxs) {
   const ci = v('ctx');
   return { key: `${src}:${v('id')}`, src, id: v('id'), name: v('name'), region: pick(prIndex.regions, v('region'), 'id'),
     scale: pick(prIndex.scales, v('scale'), 'key'), value: v('value'), moe: v('moe'), n: v('n'), flags: v('flags') || 0,
+    // [25th, 75th percentile] of a sale-price tract's sales; absent from an
+    // index written before the field existed.
+    iqr: v('iqr') ?? null,
     ctx: ci == null ? null : ctxs?.[ci] || null, polys, bbox: [s, w, n, e] };
 }
 // A leaf's areas, fetched once and kept while it is among the PR_MAX_TILES
@@ -2359,9 +2410,12 @@ function prOnlyHere() {
   const out = [...new Set(regs.flatMap(r => r.outside))];
   return home.length ? `Here the map shows home values in ${and(home, 'and')} only, not ${and(out, 'or')}.` : '';
 }
-// Share of the view's points on no drawn area, from a 9x7 grid over it: the
-// cue for prOnlyHere. Water counts too (tracts stop at the shore), which is
-// why it takes a quarter of the view.
+// Share of the view's points on no area at all, from a 9x7 grid over it: the
+// cue for prOnlyHere. Areas not drawn count as areas here: a park or a
+// cemetery tract with nothing published (Van Cortlandt Park, Woodlawn) is the
+// city's own ground, not the far side of a state line, and once made the
+// Bronx say "not New Jersey" with no New Jersey in view. Water counts too
+// (tracts stop at the shore), which is why it takes a quarter of the view.
 function prBareShare(areas) {
   const b = map.getBounds(), list = [...areas.values()];
   let bare = 0, n = 0;
@@ -2390,10 +2444,13 @@ function prClass(a) {
 }
 // Fill 0.8: at the crime layer's 0.62 these five blues fall below 2:1 against
 // the dark basemap at the dark end and their steps blur. The outline is the
-// crime hexes' thin white line; a selected area gets a white 2px one.
+// crime hexes' thin white line; a selected area gets a white 2px one. An
+// owners'-estimate area beside sale prices (prOuter) is outlined dashed and
+// brighter: the one mark on the map of where the kind of figure, and its
+// scale, change (the legend's dashed swatch).
 function prPaint(a, sel) {
-  const c = prClass(a);
-  return { color: '#ffffff', weight: sel ? 2 : 0.6, opacity: sel ? 1 : 0.14,
+  const c = prClass(a), outer = !sel && prOuter(a);
+  return { color: '#ffffff', weight: sel ? 2 : outer ? 1.1 : 0.6, opacity: sel ? 1 : outer ? 0.55 : 0.14, dashArray: outer ? '4 3' : null,
     fillColor: c < 0 ? PR_HATCH || PR_NEUTRAL : PR_BLUES[c], fillOpacity: c < 0 ? (PR_HATCH ? 1 : 0.15) : 0.8 };
 }
 function prSelect(key) {
@@ -2431,15 +2488,17 @@ async function drawPrices() {
     if (!prOn) return;
     prTrimTiles(new Set(want.leaves));
     const b = map.getBounds().pad(0.1), S = b.getSouth(), N = b.getNorth(), W = b.getWest(), E = b.getEast();
-    const keep = new Map();
+    const keep = new Map(), near = new Map();   // drawn, and every area (for prBareShare)
     for (const g of got) for (const a of g.value || []) {
-      if (!keep.has(a.key) && prDrawn(a) && a.bbox[0] <= N && a.bbox[2] >= S && a.bbox[1] <= E && a.bbox[3] >= W) keep.set(a.key, a);
+      if (!(a.bbox[0] <= N && a.bbox[2] >= S && a.bbox[1] <= E && a.bbox[3] >= W)) continue;
+      if (!near.has(a.key)) near.set(a.key, a);
+      if (!keep.has(a.key) && prDrawn(a)) keep.set(a.key, a);
     }
     prShow(keep);
     const failed = got.some(g => g.status === 'rejected');
     setNote(prNote, failed ? 'Some home values could not be loaded just now. Move the map to try again.'
       : !keep.size ? (want.bases.some(k => prGrid.bases.has(k)) ? `No home-value figures in view.${prOnlyHere() ? ` ${prOnlyHere()}` : ''}` : prNoData())
-      : prBareShare(keep) >= 0.25 ? prOnlyHere() : '');
+      : prBareShare(near) >= 0.25 ? prOnlyHere() : '');
   } catch {
     prShow(new Map());
     setNote(prNote, 'Home values could not be loaded just now. Switch them off and on to try again.');
@@ -2491,7 +2550,7 @@ function prLegend(areas) {
     if (d < best) { best = d; at = a; }
   }
   const sc = at?.scale;
-  if (!sc) { key.hidden = true; prKeyHtml = ''; return; }
+  if (!sc) { key.hidden = true; prKeyHtml = ''; prKeyKind = ''; return; }
   // Another scale counts only where one of its areas is really in view (a
   // corner or the view's centre), not merely its bounding box: Dartford's box
   // reached into a view of London that showed none of Kent.
@@ -2507,18 +2566,57 @@ function prLegend(areas) {
   const credit = inView.map(s => s.credit || s.publisher).filter(Boolean).join('; ');
   const ticks = (sc.breaks || []).map(v => prShort(v, sc.currency));
   const names = others.map(x => x.name);
+  // Across the seam the colours may also mean another kind of figure (the five
+  // boroughs' sale prices beside Nassau's owners' estimates): said, not left
+  // to be read off two legends.
+  const own = prShows(sc.metric);
+  const differ = [...new Set(others.map(x => prShows(x.metric)))].filter(k => k !== own);
+  // Which side of such a seam is outlined dashed on the map (prPaint): the
+  // owners' estimates beside the sale prices. The swatch sits by the words
+  // for that side, the legend's own ("Owners’ estimates here; …") or the other
+  // ("Nassau and Westchester: owners’ estimates…"), and the scale is said to
+  // change too, not only the kind of figure. So an upright phone, whose legend
+  // drops its metric line, still says what its own colours show.
+  const dashedHere = prOuter(at);
+  const dashedThere = !dashedHere && [...areas.values()].some(a => a.scale && others.includes(a.scale) && prOuter(a));
+  // A sale source's period says which date its window is by: "Sales recorded
+  // Sep 2025 – Aug 2026" (DC, Hartford, Baltimore) or "Sales dated …" (NYC,
+  // by date of sale). Its months stay on one line: the line wraps at 300px,
+  // and "Aug 2024 – / Jul 2026" read as two dates.
+  const per = src.period || '', span = prIsSales(src) && src.window?.span ? src.window.span : '';
+  const minN = src.colourMinN;
   const html = `<div class="t1">${prTitle(src.metric)} · ${schEsc(sc.name)}</div>`
-    + `<div class="mp">${schEsc(src.metric)} · ${schEsc(src.period)}</div>`
+    // Read out once, in the sentence below; the line is for the eye.
+    + `<div class="mp" aria-hidden="true">${schEsc(src.metric)} · ${span && per.endsWith(span) ? `${schEsc(per.slice(0, -span.length))}<span class="nw">${schEsc(span)}</span>` : schEsc(per)}</div>`
     // The bar and ticks are pictures of numbers; a screen reader gets them as
-    // one sentence instead.
-    + `<p class="sr-only">Five colour bands, darkest the lowest: ${[`under ${ticks[0]}`, ...ticks.slice(1).map((t, i) => `${ticks[i]} to ${t}`), `${ticks[3]} and over`].map(schEsc).join('; ')}.</p>`
+    // one sentence instead, with the metric and period (the line above goes
+    // on a narrow map, and its dash would not be read).
+    + `<p class="sr-only">Colours show ${schEsc(prLower(src.metric))}, ${schEsc(prSaid(prLower(per)))}. Five colour bands, darkest the lowest: ${[`under ${ticks[0]}`, ...ticks.slice(1).map((t, i) => `${ticks[i]} to ${t}`), `${ticks[3]} and over`].map(schEsc).join('; ')}.</p>`
     + `<div class="bar" aria-hidden="true">${PR_BLUES.map(x => `<i style="--c:${x}"></i>`).join('')}</div>`
     + `<div class="ticks" aria-hidden="true">${ticks.map((t, i) => `<span style="left:${(i + 1) * 20}%">${schEsc(t)}</span>`).join('')}</div>`
-    + `<div class="nf"><i aria-hidden="true"></i>No figure, too few or too uncertain</div>`
-    + (names.length ? `<div class="seam">Colours restart at the ${schEsc(names.join(' and '))} ${names.length > 1 ? 'boundaries' : 'boundary'}.</div>` : '')
+    // A sale-price scale is never "too uncertain" (that is a survey's margin
+    // of error), and its hatch also covers tracts WITH a figure (3-9 sales).
+    + `<div class="nf"><i aria-hidden="true"></i>${prIsSales(src) && minN ? `No figure, or fewer than ${fmt(minN)} ${schEsc(src.unitNoun || 'sales')}` : 'No figure, too few or too uncertain'}</div>`
+    // Kept to one line of the wide legend: on a phone on its side, a longer
+    // note ran the legend into the zoom control.
+    + (!names.length ? ''
+      : differ.length && (dashedHere || dashedThere)
+        // A narrow map (.compact) has one line of the 300px legend for it
+        // (a 320px phone with both layers on is 364px tall: a second line
+        // ran the keys under the pan status): the dashed side's kind alone.
+        ? `<div class="seam dash"><i aria-hidden="true"></i><span class="long">${dashedHere
+          ? `${schEsc(cap1(own))} here; ${schEsc(names.join(' and '))}: ${schEsc(differ.join(' or '))}, own scale.`
+          : `${schEsc(names.join(' and '))}: ${schEsc(differ.join(' or '))}, own scale.`}</span>`
+          + `<span class="short">${schEsc(cap1(dashedHere ? own : differ.join(' or ')))}, own scale.</span></div>`
+      : `<div class="seam">${differ.length ? `In ${schEsc(names.join(' and '))}, colours show ${schEsc(differ.join(' or '))}`
+        : `Colours restart at the ${schEsc(names.join(' and '))} ${names.length > 1 ? 'boundaries' : 'boundary'}`}.</div>`)
     + (credit ? `<div class="cr">Data: <a href="#prview" class="prcredit">${schEsc(credit)}</a></div>` : '');
   if (html !== prKeyHtml) { key.innerHTML = html; prKeyHtml = html; }
   key.hidden = false;
+  // The legend is not a live region (it changes on every pan); a change in
+  // what its colours SHOW, across the Queens-Nassau line, is said once.
+  if (prKeyKind && prKeyKind !== own) mapSay(`Colours now show ${own}, for ${sc.name}.`);
+  prKeyKind = own;
 }
 // The credit's link opens every source's full lines and licences in the pane.
 document.getElementById('prkey')?.addEventListener('click', e => {
@@ -2557,7 +2655,7 @@ function setPrices(on, restore = true) {
   if (map.hasLayer(prRenderer)) map.removeLayer(prRenderer);
   prLabels(false);
   document.getElementById('prkey').hidden = true;
-  prKeyHtml = '';
+  prKeyHtml = ''; prKeyKind = '';
   setNote(prNote, '');
   document.body.classList.remove('pr-jumped');
   const heat = prHeatWas;
@@ -2616,6 +2714,9 @@ const prFew = a => !!(a.flags & PR_FEW) || !!(prSrc(a).colourMinN && a.n != null
 // Why an area is grey, in the words of its flag.
 function prFlagLine(a) {
   const src = prSrc(a), noun = src.unitNoun || 'sales';
+  if (prIsSales(src) && a.value == null) return a.n
+    ? `Only ${fmt(a.n)} ${schEsc(prOne(noun, a.n))} ${prDashHtml(prSalesWhen(src))}. A figure needs at least 3.`
+    : `No ${schEsc(noun)} ${prDashHtml(prSalesWhen(src))} in this ${schEsc(src.areaNoun || 'area')}.`;
   if (a.value == null || a.flags & PR_SUPPRESSED) return `No figure is published for this ${schEsc(src.areaNoun || 'area')}.`;
   if (prFew(a)) return a.n != null ? `Only ${fmt(a.n)} ${schEsc(noun)} — too few to colour.` : `Too few ${schEsc(noun)} to colour.`;
   if (a.flags & PR_UNCERTAIN) return 'Too uncertain to colour: the margin of error is large next to the estimate.';
@@ -2652,14 +2753,35 @@ function prAttribution(src) {
     + (src.url ? `<a class="ext" href="${schEsc(src.url)}" target="_blank" rel="noopener">Source: ${schEsc(src.publisher || 'publisher')} ↗</a>` : '');
 }
 // Where an area is, under its name: its city; in the UK, whose one region
-// spans four nations, the colour scale's region (London, Wales).
-const prWhere = a => (a.region?.country === 'gb' ? a.scale?.name : a.region?.name) || a.region?.name || '';
-// The wider-area line (NI: the District Electoral Area's median, the label
-// naming its metric), in the source's money.
+// spans four nations, the colour scale's region (London, Wales); and around
+// New York City, an owners'-estimate tract in Nassau or Westchester is named
+// by its own scale ("Nassau and Westchester"), not the city it is not in.
+const prWhere = a => (a.region?.country === 'gb' || prOuter(a) ? a.scale?.name : a.region?.name) || a.region?.name || '';
+// The context line, its label naming its own metric, in the source's money:
+// NI's wider-area median ("… from 212 sales"), or a sale-price tract's ACS
+// owners' estimate, with its margin of error and its top or bottom code
+// ("$2,000,000 or more", with the survey's own caveat), the reading where a
+// tract has too few sales. In bold only where the area has no figure of its
+// own: beside a sale median it is the second number, not a rival one.
 const prContextLine = (a, cur, noun) => {
   const x = a.ctx;
-  return x && x.value != null ? `<p class="meta">${schEsc(x.label)}: <b>${schEsc(prMoney(x.value, cur))}</b>${x.n != null ? ` from ${fmt(x.n)} ${schEsc(noun)}` : ''}.</p>` : '';
+  if (!x || x.value == null) return '';
+  const f = x.flags || 0, coded = f & (PR_TOPCODED | PR_BOTTOMCODED);
+  const fig = f & PR_TOPCODED ? `${prMoney(Math.floor(x.value / 1000) * 1000, cur)} or more` : f & PR_BOTTOMCODED ? `less than ${prMoney(x.value + 1, cur)}` : prMoney(x.value, cur);
+  const caveat = f & PR_TOPCODED ? ' <span style="color:var(--ink-3)">(the survey publishes nothing higher)</span>'
+    : f & PR_BOTTOMCODED ? ' <span style="color:var(--ink-3)">(the survey publishes nothing lower)</span>' : '';
+  // Too uncertain for its own map (CV > 0.30): said, as the ACS pane says it.
+  const moe = x.moe != null && !coded ? ` ± ${schEsc(prMoney(x.moe, cur))} <span style="color:var(--ink-3)">(90% margin of error${f & PR_UNCERTAIN ? '; large next to the estimate' : ''})</span>` : '';
+  return `<p class="meta">${schEsc(x.label)}: ${a.value == null ? `<b>${schEsc(fig)}</b>` : schEsc(fig)}${caveat}${moe}${x.n != null ? ` from ${fmt(x.n)} ${schEsc(noun)}` : ''}.</p>`;
 };
+// Where a sale-price tract's context line comes from (house rule 1: every
+// figure shown is credited): the geometry source's own lines, under the
+// line's label.
+function prContextCredit(a) {
+  const src = prSrc(a), geo = prIsSales(src) && src.geometry ? prIndex?.sources?.[src.geometry] : null;
+  if (!geo || !a.ctx || a.ctx.value == null) return '';
+  return `<div><p class="src">${schEsc(a.ctx.label)}:</p>${prAttribution(geo)}</div>`;
+}
 function showPricePane(a) {
   const src = prSrc(a), cur = prCurOf(a), noun = src.unitNoun || 'sales';
   const topped = a.value != null && a.flags & PR_TOPCODED, floored = a.value != null && a.flags & PR_BOTTOMCODED;
@@ -2667,8 +2789,15 @@ function showPricePane(a) {
     : floored ? `<div class="prval"><small>Less than </small>${schEsc(prMoney(a.value + 1, cur))}</div>`
     : `<div class="prval">${schEsc(prMoney(topped ? Math.floor(a.value / 1000) * 1000 : a.value, cur))}${topped ? '<small> or more</small>' : ''}</div>`;
   const flag = prFlagLine(a), where = prWhere(a);
-  const kv = [['Period', src.period], prCountRow(a)]
-    .filter(r => r && r[1]).map(([k, v]) => `<div class="kv"><span>${schEsc(k)}</span><span>${schEsc(v)}</span></div>`).join('');
+  // A sale-price tract's middle half: the range the middle 50% of its sales
+  // fell in (given from colourMinN sales; lib/sales.mjs). Values are HTML:
+  // a period's months and each amount stay on one line (a 320px pane split
+  // "Aug / 2026"), and the dash is read as "to".
+  const span = prIsSales(src) && src.window?.span, per = src.period || '';
+  const perHtml = span && per.endsWith(span) ? `${schEsc(per.slice(0, -span.length))}<span class="nw">${prDashHtml(span)}</span>` : prDashHtml(per);
+  const count = prCountRow(a);
+  const kv = [['Period', per && perHtml], count && [count[0], schEsc(count[1])], a.iqr ? [`Middle half of ${noun}`, prRangeHtml(a.iqr[0], a.iqr[1], cur)] : null]
+    .filter(r => r && r[1]).map(([k, v]) => `<div class="kv"><span>${schEsc(k)}</span><span>${v}</span></div>`).join('');
   openDetail('prview', `
     <h2 class="place">${schEsc(a.name || a.id)}<small>${schEsc(cap1(src.areaNoun || 'area'))}${where ? ` · ${schEsc(where)}` : ''}</small></h2>
     <div>
@@ -2682,15 +2811,23 @@ function showPricePane(a) {
     ${prBandLine(a)}
     <div class="divider"></div>
     <div>${(src.notes || []).map(t => `<p class="src">${schEsc(t)}</p>`).join('')}</div>
-    <div>${prAttribution(src)}</div>`);
+    <div>${prAttribution(src)}</div>
+    ${prContextCredit(a)}`);
   prSelect(a.key);
+  // The pane is not a live region (its notes and credits run to thousands of
+  // characters, all read out on every click): the map's status says the area
+  // and its figure, once.
+  mapSay(`${a.name || a.id}: ${prFigure(a) === 'No figure' ? 'no figure' : `${prFigure(a)}, ${prLower(src.metric)}`}.`);
 }
 // Every source's full credit, from the legend's "Data:" link: the same list
 // as the pane's "Home value data sources", in the area pane's place.
 async function showPriceSources() {
   try { await loadPrIndex(); } catch { return; }
-  openDetail('prview', `<h2 class="place">Home value data sources<small>Every source on this map, its licence and its credit</small></h2><div>${prSourcesHtml()}</div>`);
+  const v = openDetail('prview', `<h2 class="place" tabindex="-1">Home value data sources<small>Every source on this map, its licence and its credit</small></h2><div>${prSourcesHtml()}</div>`);
   prSelect(null);
+  // Opened from the legend's link, often by keyboard: the reader is taken to
+  // it (the pane is not a live region), and Back returns focus to the link.
+  v.querySelector('h2')?.focus({ preventScroll: true });
 }
 
 // ── the report's "Home values near here" (#prices) ──
@@ -2710,7 +2847,9 @@ async function fillPrices(lat, lng, reqId, region) {
   } catch { return; }
   const slot = document.getElementById('prices');
   if (reqId !== lastReqId || !slot || !(a || miss)) return;
-  const head = '<div class="divider"></div><section class="prrep"><h3 class="h3">Home values near here</h3>';
+  // "Home prices" only over a sale price (house rule 3): not over a sale tract
+  // with no figure of its own, whose only number is the owners' estimate.
+  const head = `<div class="divider"></div><section class="prrep"><h3 class="h3">${a && a.value != null ? prTitle(prSrc(a).metric) : 'Home values'} near here</h3>`;
   if (!a) { slot.innerHTML = `${head}<p class="meta">SafeRoute has no open home-value data for ${schEsc(miss.name)}.</p>${miss.reason ? `<p class="src">${schEsc(miss.reason)}</p>` : ''}</section>`; return; }
   const src = prSrc(a), cur = prCurOf(a), noun = src.unitNoun || 'sales';
   // "Southwark 025, a middle layer super output area, MSOA" — the area noun,
@@ -2719,7 +2858,20 @@ async function fillPrices(lat, lng, reqId, region) {
   const place = `${schEsc(a.name || a.id)}${kind && !(a.name || '').toLowerCase().includes((src.areaNoun || '').toLowerCase()) ? `, an official statistical area (${schEsc(kind)})` : ''}`;
   const metric = schEsc(prLower(src.metric)), period = schEsc(src.period);
   let figure;
-  if (a.value == null) figure = `<p class="meta">No ${metric || 'figure'} is published for this ${schEsc(src.areaNoun || 'area')} for ${period}.</p>`;
+  if (prIsSales(src)) {
+    // "$845,000 — median sale price, from 412 sales recorded Sep 2025 –
+    // Aug 2026." A tract with fewer than 3 sales has no figure (privacy).
+    const when = prDashHtml(prSalesWhen(src)), area = schEsc(src.areaNoun || 'area');
+    if (a.value == null) figure = a.n
+      ? `<p class="meta">No ${metric} is shown for this ${area}: it had only ${fmt(a.n)} ${schEsc(prOne(noun, a.n))} ${when}, and a figure needs at least 3.</p>`
+      : `<p class="meta">No ${schEsc(noun)} ${when} in this ${area}.</p>`;
+    else {
+      const few = prFew(a), fig = schEsc(prFigure(a));
+      figure = `<p class="meta">${few ? `Too few ${schEsc(noun)} to colour on the map: ${fig}` : `<b>${fig}</b>`} — ${metric}, from ${few ? 'only ' : ''}${fmt(a.n)} ${schEsc(noun)} ${when}.</p>`
+        + (a.iqr ? `<p class="meta">Middle half of these ${schEsc(noun)}: ${prRangeHtml(a.iqr[0], a.iqr[1], cur)}.</p>` : '');
+    }
+  }
+  else if (a.value == null) figure = `<p class="meta">No ${metric || 'figure'} is published for this ${schEsc(src.areaNoun || 'area')} for ${period}.</p>`;
   else {
     const moe = a.moe != null ? ` ± ${schEsc(prMoney(a.moe, cur))} (90% margin of error)` : '';
     const count = a.n == null ? '' : src.nEstimate ? '' : prFew(a) ? `, from only ${fmt(a.n)} ${schEsc(noun)}` : `, from ${fmt(a.n)} ${schEsc(noun)}`;
@@ -2734,6 +2886,7 @@ async function fillPrices(lat, lng, reqId, region) {
     <p class="meta">This spot is in ${place}.</p>
     ${prContextLine(a, cur, noun)}
     <div>${prAttribution(src)}</div>
+    ${prContextCredit(a)}
     <button type="button" class="btn-sch pr" id="prShow"><i></i><span>Show home values on the map</span></button></section>`;
   prSyncButtons();
   document.getElementById('prShow').addEventListener('click', () => {
@@ -2747,13 +2900,20 @@ async function fillPrices(lat, lng, reqId, region) {
 // map and its attribution lines in full; the cities with none, and why; then
 // what "around a city" means. Also the pane the legend's credit link opens.
 function prSourcesHtml() {
-  const out = Object.values(prIndex.sources).map(s => {
+  // Where each source's colours are: its scales' names (a scale is one place,
+  // "Nassau and Westchester", "London"), and, for a source whose tracts a
+  // city's recorded sales replace, where that happens.
+  const scaleNames = id => (prIndex.scales || []).filter(sc => sc.source === id).map(sc => sc.name);
+  const listOf = l => (l.length <= 1 ? l.join('') : `${l.slice(0, -1).join(', ')} and ${l[l.length - 1]}`);
+  const out = Object.entries(prIndex.sources).map(([id, s]) => {
+    const here = scaleNames(id), by = Object.entries(prIndex.sources).filter(([, x]) => prIsSales(x) && x.geometry === id).flatMap(([x]) => scaleNames(x));
     // An area with nothing published is not drawn (prDrawn), so it is not
     // "on the map"; the grey ones are.
     const st = s.stats || {}, drawn = (st.areas || 0) - (st.unpublished || 0), grey = (st.neutral || 0) - (st.unpublished || 0);
     const more = (s.licences || []).filter(x => x.licenceUrl && x.licence).map(x => licenceLink(x)).join(', ');
-    return `<p class="src"><b>${schEsc(s.name)}</b> · from ${schEsc(s.publisher)}. ${schEsc(s.metric)}, ${schEsc(s.period)}. ${licenceLink(s)}${more ? `; boundaries also under ${more}` : ''}.`
-      + `${drawn > 0 ? ` ${fmt(drawn)} areas on the map${grey > 0 ? `, ${fmt(grey)} of them without a colour (no figure, too few or too uncertain)` : ''}.` : ''}`
+    return `<p class="src"><b>${schEsc(s.name)}</b> · from ${schEsc(s.publisher)}. ${schEsc(s.metric)}, ${schEsc(prIsSales(s) ? prLower(s.period) : s.period)}. ${licenceLink(s)}${more ? `; boundaries also under ${more}` : ''}.`
+      + `${drawn > 0 ? ` ${fmt(drawn)} areas on the map${grey > 0 ? `, ${fmt(grey)} of them without a colour (${prIsSales(s) && s.colourMinN ? `no figure, or fewer than ${fmt(s.colourMinN)} ${schEsc(s.unitNoun || 'sales')}` : 'no figure, too few or too uncertain'})` : ''}.` : ''}`
+      + `${here.length ? ` Colours for ${schEsc(listOf(here))}.` : ''}${by.length ? ` In ${schEsc(listOf(by))}, recorded sale prices are shown in its place, tract for tract.` : ''}`
       + `${s.status === 'snapshot-after-failure' ? ' Its latest update could not be used, so these are the figures from the build before it.' : ''}</p>`
       + (Array.isArray(s.attribution) ? s.attribution : [s.attribution]).filter(Boolean).map(l => `<p class="src">${prLinkLine(l, s)}</p>`).join('');
   });

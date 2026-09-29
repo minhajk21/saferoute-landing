@@ -3,9 +3,13 @@
 # so a prices failure cannot cost either of them a rebuild, and vice versa.
 #
 # WHAT IT FETCHES. tools/build-prices.mjs runs every source module in
-# tools/prices/sources/ (tools/prices/README.md). They are annual and
+# tools/prices/sources/ (tools/prices/README.md). The recorded-sales feeds
+# (NYC, DC, Baltimore: cadence monthly) are fetched every run, their window
+# moving with the data; their sales are aggregated into census-tract medians
+# and never published one by one. The rest are annual and
 # semi-annual statistics (ONS MSOA medians, LPS/NISRA ward medians, ACS
-# 5-year, the 2021 Census), so the monthly run does not refetch by habit: it
+# 5-year, CT's grand-list-year sales, the 2021 Census), so the monthly run
+# does not refetch those by habit: it
 # asks each upstream file the tiles were built from whether it changed (a
 # HEAD, ETag / Last-Modified; a one-byte ranged GET where HEAD is refused; a
 # small file compared by its bytes; a source's probe() can also report a new
@@ -49,12 +53,19 @@ concurrency:
 jobs:
   rebuild:
     runs-on: ubuntu-latest
-    # Measured locally (Sept 2026): all four sources from a cold cache is
-    # about 300 MB of downloads (ACS tables and tract shapefiles, the ONS
-    # workbooks and boundary pages, the OSNI wards GeoJSON, the StatCan tract
-    # zip) and a few seconds of processing; a monthly run where nothing changed
-    # is ~50 HEAD requests. 45 minutes leaves room for ONS's rate limit
-    # (Retry-After is honoured) without letting a hung request run for hours.
+    # Measured locally (Sept 2026): the four phase-1 sources from a cold
+    # cache are about 300 MB of downloads (ACS tables and tract shapefiles,
+    # the ONS workbooks and boundary pages, the OSNI wards GeoJSON, the
+    # StatCan tract zip); when upstream has not changed they cost ~50 HEAD
+    # requests. The three MONTHLY sale feeds are downloaded whole on every
+    # run, as the runner starts with an empty cache: about 112 MB a month
+    # (NYC 78 MB, of which PLUTO 42, the Digital Tax Map condominium tables
+    # 14 and DOF's yearly workbooks 17 are reference data that seldom change;
+    # DC 24 MB, 21 of it the whole tax-roll table; Maryland 9 MB). Processing
+    # is ~15 s. 45 minutes leaves room for ONS's rate limit (Retry-After is
+    # honoured) without letting a hung request run for hours. (A raw-cache
+    # restore would save little as things stand: the downloader refetches
+    # files older than 30 days anyway, about one run's gap.)
     timeout-minutes: 45
     steps:
       # One commit is enough: verify-prices reads the previous index.json from

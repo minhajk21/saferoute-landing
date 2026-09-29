@@ -142,12 +142,23 @@ test('orchestrator end to end with a fake source: build, verify, snapshot on fai
   await new Promise(r => server.listen(0, '127.0.0.1', r));
   t.after(() => server.close());
   const FAKE_URL = `http://127.0.0.1:${server.address().port}/fake-upstream.txt`;
-  const build = (args = [], env = {}) => run(BUILD, ['--sources', sources, '--out', out, '--raw-dir', raw, ...args], { FAKE_URL, ...env });
+  // --partial: this fake directory holds acs-tract only, and regions.mjs
+  // names ons-msoa, ni-ward, statcan-ct and the sale sources too.
+  const build = (args = [], env = {}) => run(BUILD, ['--sources', sources, '--out', out, '--raw-dir', raw, '--partial', ...args], { FAKE_URL, ...env });
+
+  // ── 0: without --partial, a source regions.mjs names but has no module
+  // fails the build, loudly, and writes nothing ─────────────────────────────
+  const z = await run(BUILD, ['--sources', sources, '--out', out, '--raw-dir', raw], { FAKE_URL });
+  assert.equal(z.code, 1, z.out);
+  assert.match(z.err, /regions\.mjs gives uk the source "ons-msoa", but there is no ons-msoa\.mjs in .*: write the module, or take ons-msoa out of regions\.mjs/);
+  assert.match(z.err, /gives nyc the source "nyc-dof-sales", but there is no nyc-dof-sales\.mjs/);
+  assert.ok(!readdirSync(tmp).includes('out'), 'nothing written');
 
   // ── A: first build ────────────────────────────────────────────────────────
   const a = await build();
   assert.equal(a.code, 0, a.err + a.out);
   assert.match(a.out, /^    acs-tract +[\d,]+  fetched$/m, 'the per-source line the workflow greps');
+  assert.match(a.out, /::warning::tools\/prices\/regions\.mjs gives nyc the source "nyc-dof-sales", but there is no nyc-dof-sales\.mjs .* \(--partial\)/);
   const ia = readIndex(out), ta = readTiles(out);
   const src = ia.sources['acs-tract'];
   assert.equal(src.status, 'fetched');
@@ -170,7 +181,9 @@ test('orchestrator end to end with a fake source: build, verify, snapshot on fai
   assert.deepEqual(ia.juris, { 'US-IL': { name: 'Illinois' }, 'US-NY': { name: 'New York', area: 'New York State' } });
   assert.match(src.inputs, /^[0-9a-f]{16}$/, 'the inputs fingerprint');
   assert.equal(ia.where, 'New York City and Chicago');
+  // No sale source in this build: acs-tract keeps all of NYC on its first key.
   assert.deepEqual(ia.scales.map(s => [s.key, s.name, s.source, s.currency]), [['nyc', 'New York City', 'acs-tract', 'USD'], ['chicago', 'Chicago', 'acs-tract', 'USD']]);
+  assert.equal(src.kind, 'areas');
   for (const s of ia.scales) assert.ok(s.breaks.length === 4 && s.breaks.every((b, i) => !i || b > s.breaks[i - 1]));
   assert.ok(ia.tiles.cells.some(k => k.startsWith('q')), 'the dense block split its cell');
   assert.deepEqual(Object.keys(ta).sort(), ia.tiles.cells.map(k => `${k}.json`).sort());
@@ -241,7 +254,7 @@ test('orchestrator end to end with a fake source: build, verify, snapshot on fai
   assert.equal(up.gets - g3, 2, 'a ranged GET, then the small file itself, compared by sha256');
   up.body = 'release one, corrected';
   // Into a scratch output, reading this one as its snapshot: `out` stays as it was.
-  const c5 = await run(BUILD, ['--sources', sources, '--out', join(tmp, 'scratch-out'), '--snapshot', out, '--raw-dir', raw], { FAKE_URL });
+  const c5 = await run(BUILD, ['--sources', sources, '--out', join(tmp, 'scratch-out'), '--snapshot', out, '--raw-dir', raw, '--partial'], { FAKE_URL });
   assert.match(c5.out, /fetching: fake-upstream\.txt content changed/);
   Object.assign(up, { mode: '', body: 'release one' });
   rmSync(join(tmp, 'scratch-out'), { recursive: true, force: true });
@@ -360,7 +373,7 @@ test('orchestrator end to end with a fake source: build, verify, snapshot on fai
   const narrow = join(tmp, 'sources-narrow');
   mkdirSync(narrow);
   writeFileSync(join(narrow, 'acs-tract.mjs'), FAKE.replace('__REGIONS__', JSON.stringify(['nyc', 'chicago'])));
-  const q = await run(BUILD, ['--sources', narrow, '--out', join(tmp, 'narrow-out'), '--raw-dir', raw], { FAKE_URL });
+  const q = await run(BUILD, ['--sources', narrow, '--out', join(tmp, 'narrow-out'), '--raw-dir', raw, '--partial'], { FAKE_URL });
   assert.equal(q.code, 1, q.out);
   assert.match(q.err, /regions\.mjs gives "sf" the source acs-tract, but sources\/acs-tract\.mjs does not serve it/);
 });

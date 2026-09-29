@@ -18,7 +18,10 @@
 // TILE FILE: { "a": [row, ...], "c": [context, ...] }. Rows are arrays in
 // FIELDS order (lib/schema.mjs), sorted by (source, id), so the same inputs
 // give byte-identical files and the monthly diff shows only real changes.
-// A row's ctx is an index into the same tile's `c`.
+// A row's ctx is an index into the same tile's `c`. A context is
+// { label, value, n } plus, only when it has them, `moe` and `flags` (bits,
+// as a row's): the NI wider-area lines written before those existed stay
+// byte-identical.
 //
 // ATOMIC WRITE. index.json and tiles/ are written into a staging directory
 // that replaces the live one in two renames. A build that dies part-way
@@ -28,7 +31,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, renameSync, rmSync,
 import { join, dirname, basename } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { cellKey, parseKey } from '../../schools/lib/tiles.mjs';
-import { FIELDS, flagsToBits, bitsToFlags } from './schema.mjs';
+import { FIELDS, ADDED_FIELDS, flagsToBits, bitsToFlags } from './schema.mjs';
 import { bboxOfEncoded } from './geo.mjs';
 
 export { cellKey, parseKey };
@@ -54,7 +57,13 @@ export const sortAreas = list => list.sort((a, b) => a.srcIdx - b.srcIdx || ID_C
 // Area object (with srcIdx, regionIdx, scaleIdx, enc) -> row + its context.
 export function toRow(a, ctxIdx) {
   return [a.srcIdx, a.id, a.name ?? null, a.regionIdx, a.scaleIdx, a.value ?? null, a.moe ?? null, a.n ?? null,
-    flagsToBits(a.flags), ctxIdx, a.enc];
+    flagsToBits(a.flags), ctxIdx, a.enc, a.iqr ?? null];
+}
+
+// A context as the tile stores it (see TILE FILE).
+export function contextJson(x) {
+  const bits = flagsToBits(x.flags || []);
+  return { label: x.label, value: x.value ?? null, n: x.n ?? null, ...(x.moe != null ? { moe: x.moe } : {}), ...(bits ? { flags: bits } : {}) };
 }
 
 // The tile JSON for a list of areas (sorted here, so the caller need not).
@@ -63,8 +72,8 @@ export function tileJson(areas) {
   const rows = sortAreas([...areas]).map(a => {
     let ci = null;
     if (a.context) {
-      const k = JSON.stringify([a.context.label, a.context.value ?? null, a.context.n ?? null]);
-      if (!seen.has(k)) { seen.set(k, c.length); c.push({ label: a.context.label, value: a.context.value ?? null, n: a.context.n ?? null }); }
+      const cj = contextJson(a.context), k = JSON.stringify(cj);
+      if (!seen.has(k)) { seen.set(k, c.length); c.push(cj); }
       ci = seen.get(k);
     }
     return toRow(a, ci);
@@ -158,10 +167,19 @@ export function areasFromTile(text, index) {
     // enforces it), so the scale says which.
     juris: index.scales[r[f.scale]]?.juris,
     value: r[f.value], moe: r[f.moe], n: r[f.n], flags: bitsToFlags(r[f.flags]),
-    context: r[f.ctx] == null ? null : { ...t.c[r[f.ctx]] },
+    context: r[f.ctx] == null ? null : contextOfTile(t.c[r[f.ctx]]),
     enc: r[f.polys],
+    // Absent from a tile set written before the field existed.
+    iqr: f.iqr == null ? null : r[f.iqr] ?? null,
   }));
 }
+const contextOfTile = c => ({ label: c.label, value: c.value ?? null, moe: c.moe ?? null, n: c.n ?? null, flags: bitsToFlags(c.flags || 0) });
+
+// Can tiles written with these fields be read by this code? The same list, or
+// an older one that lacks only fields added since (ADDED_FIELDS), which read
+// as null. Anything else would be misread.
+export const readableFields = fields => Array.isArray(fields) && fields.length <= FIELDS.length &&
+  fields.every((k, i) => k === FIELDS[i]) && FIELDS.slice(fields.length).every(k => ADDED_FIELDS.includes(k));
 
 // THE SNAPSHOT READER: every area currently published, once each, grouped by
 // source, with its encoded rings kept as they are, so a source that re-emits
@@ -170,7 +188,7 @@ export function readAreasFromTiles(outDir) {
   const idxPath = join(outDir, 'index.json');
   if (!existsSync(idxPath)) return { index: null, bySrc: new Map() };
   const index = JSON.parse(readFileSync(idxPath, 'utf8'));
-  if (JSON.stringify(index.fields) !== JSON.stringify(FIELDS)) throw new Error(`snapshot: index.fields ${JSON.stringify(index.fields)} is not this build's ${JSON.stringify(FIELDS)} — refusing to misread the tiles`);
+  if (!readableFields(index.fields)) throw new Error(`snapshot: index.fields ${JSON.stringify(index.fields)} is not this build's ${JSON.stringify(FIELDS)} (nor an earlier list of it) — refusing to misread the tiles`);
   const bySrc = new Map(), seen = new Set();
   for (const key of index.tiles.cells) {
     const path = join(outDir, 'tiles', `${key}.json`);

@@ -14,8 +14,20 @@
 // it was published with. The tiles are every source's snapshot, so a fetch
 // failure can never empty a region from the map.
 //
-// CADENCE. These are annual and semi-annual statistics, so the monthly run
-// does not refetch by habit. It asks each upstream file it was built from
+// SALE PRICES. A 'point-sales' source (NYC, DC, Hartford, Baltimore) returns
+// individual recorded sales, not areas. It runs after every areas source, and
+// lib/sales.mjs windows its sales, places them in its GEOMETRY source's tract
+// polygons (acs-tract's) and aggregates them (median, middle half, n; nothing
+// under 3 sales shown). PRECEDENCE: inside the sale source's `covers` its
+// tracts REPLACE the geometry source's same tracts; the geometry source keeps
+// the region's other tracts on a separate colour scale (the region's second
+// scale key, e.g. nyc-outer: one scale, one source, one metric). Each sale
+// tract carries the geometry source's own figure as its context line.
+//
+// CADENCE. The areas sources are annual and semi-annual statistics, so the
+// monthly run does not refetch them by habit (sale feeds are 'monthly' and
+// are fetched every run: their window moves with the data, and their query
+// endpoints rarely carry a validator to ask). It asks each upstream file it was built from
 // whether it changed (a HEAD: ETag, then Last-Modified; where a host refuses
 // HEAD, a one-byte ranged GET; a small file with neither is fetched and
 // compared by sha256; a source's own probe() can also announce a new release
@@ -64,13 +76,16 @@
 //            --out <dir>       output: <dir>/index.json + <dir>/tiles/ (default prices/data)
 //            --snapshot <dir>  where the current tiles are read from (default: --out)
 //            --sources <dir>   source modules (default tools/prices/sources)
+//            --partial         build without the modules regions.mjs names but --sources
+//                              lacks (tests, a half-written source); without it that FAILS
 
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { makeCtx, loadRegions, politeFetch, UA, RAW_DIR as DEFAULT_RAW_DIR } from './prices/lib/ctx.mjs';
-import { INDEX_VERSION, FIELDS, SOURCES_DIR, loadSources, prepareAreas, isColoured, isUnpublished } from './prices/lib/schema.mjs';
+import { INDEX_VERSION, FIELDS, SOURCES_DIR, ENTRY_BUILD_KEYS, loadSources, prepareAreas, areaProblems, entryProblems, isColoured, isUnpublished, isSales, kindOf } from './prices/lib/schema.mjs';
+import { buildSaleAreas, isCovered } from './prices/lib/sales.mjs';
 import { bboxIntersects } from './prices/lib/geo.mjs';
 import { computeBreaks } from './prices/lib/scale.mjs';
 import { BASE, MAX_AREAS, MAX_BYTES, MIN_CELL, tileAreas, tileJson, tileStats, writeOutput, readAreasFromTiles, removeLeftovers } from './prices/lib/tiles.mjs';
@@ -83,7 +98,7 @@ const argv = process.argv.slice(2);
 if (argv.includes('--help') || argv.includes('-h')) {
   const lines = readFileSync(fileURLToPath(import.meta.url), 'utf8').split('\n');
   const at = lines.findIndex(l => l.startsWith('// Usage:'));
-  console.log(lines.slice(at, at + 10).map(l => l.slice(3)).join('\n'));
+  console.log(lines.slice(at, at + 12).map(l => l.slice(3)).join('\n'));
   process.exit(0);
 }
 const arg = (n, d) => (argv.includes(n) ? argv[argv.indexOf(n) + 1] : d);
@@ -91,6 +106,7 @@ const list = v => new Set((v || '').split(',').map(s => s.trim()).filter(Boolean
 const ONLY = argv.includes('--only') ? list(arg('--only')) : null;
 const REFRESH = list(arg('--refresh'));
 const FROZEN = argv.includes('--frozen');
+const PARTIAL = argv.includes('--partial');
 const RAW_DIR = resolve(arg('--raw-dir', DEFAULT_RAW_DIR));
 const OUT = resolve(arg('--out', join(ROOT, 'prices', 'data')));
 const SNAPSHOT = resolve(arg('--snapshot', OUT));
@@ -105,8 +121,17 @@ const violations = [];
 const violate = m => violations.push(m);
 
 // Fields of index.json sources[id] that describe a build, not the source.
-const BUILD_KEYS = ['cadence', 'regions', 'vintage', 'status', 'fetched', 'upstream', 'inputs', 'stats'];
+const BUILD_KEYS = ENTRY_BUILD_KEYS;
 const metaOf = m => Object.fromEntries(Object.entries(m).filter(([k]) => !BUILD_KEYS.includes(k)));
+// A sale source's meta as its module states it: without what the build adds
+// (its period and window dates, and the area noun and privacy note it fills
+// in), so a snapshot's meta can be compared with the module's.
+const moduleMeta = (m, src) => {
+  if (!isSales(src)) return metaOf(m);
+  const { period, areaNoun, window: w, notes, ...rest } = metaOf(m);
+  const { from, to, span, ...win } = w || {};
+  return { ...rest, window: { ...win, lagMonths: win.lagMonths || 0 } };
+};
 
 // ── what a source's areas are made from, besides upstream data ─────────────
 // Bump PIPELINE whenever code every source shares changes what a fetched area
@@ -116,8 +141,11 @@ const metaOf = m => Object.fromEntries(Object.entries(m).filter(([k]) => !BUILD_
 // every build and needs no bump).
 const PIPELINE = 1;
 const LOOKUPS = join(ROOT, 'tools', 'data', 'prices');
-function inputsOf(src, R) {
+// `extra`: for a sale source, what its geometry source's areas were made
+// from (a new ACS vintage re-aggregates the sales onto the new tracts).
+function inputsOf(src, R, extra = '') {
   const h = createHash('sha256').update(`pipeline ${PIPELINE}\n`);
+  if (extra) h.update(`geometry ${extra}\n`);
   h.update(readFileSync(join(SOURCES, `${src.id}.mjs`)));
   // Vendored lookups are named after the source that reads them (ni-ward-crosswalk.json).
   const own = existsSync(LOOKUPS) ? readdirSync(LOOKUPS).filter(f => f.startsWith(`${src.id}-`) || f.startsWith(`${src.id}.`)).sort() : [];
@@ -218,7 +246,8 @@ function sameFiles(now, before = []) {
 }
 
 // Why a fetched area set must not replace the published one ('' when fine):
-// see A SUSPICIOUS FETCH above. `published` is the source's snapshot.
+// see A SUSPICIOUS FETCH above. `published` is the source's snapshot (for a
+// geometry source, with the tracts sale sources showed in its place).
 const MAX_LOSS = 0.10;
 function suspicious(src, areas, published, forced) {
   if (!areas.length) return 'none of its areas is in scope (a swapped lng/lat, or a scope check gone wrong?)';
@@ -228,6 +257,42 @@ function suspicious(src, areas, published, forced) {
   if (!forced && loss > MAX_LOSS) return `${fmt(areas.length)} areas, ${(100 * loss).toFixed(1)}% fewer than the ${fmt(published.length)} published (--refresh ${src.id} accepts that)`;
   return '';
 }
+// And for a sale source, the sales themselves: none placed (a swapped
+// lng/lat lands every sale outside every tract), or unasked, fewer than half
+// of those behind the published figures.
+const MIN_SALES_KEPT = 0.5;
+function suspiciousSales(src, built, prevMeta, forced) {
+  const used = built.stats.sales.used, before = prevMeta?.stats?.sales?.used;
+  if (!used) return `none of its ${fmt(built.stats.sales.received)} sales fell in a covered tract inside the window (a swapped lng/lat, or the wrong covers?)`;
+  if (!forced && before && used < MIN_SALES_KEPT * before) return `${fmt(used)} sales placed, under half the ${fmt(before)} behind the published figures (--refresh ${src.id} accepts that)`;
+  return '';
+}
+
+// A sale dated after the build day is a typo, not a sale (and would drag the
+// window into the future). The build day, not the download day: a source may
+// fetch its sales outside ctx.download (unrecorded) beside a lookup cached
+// weeks ago, and a real sale is never dated after the day it was fetched, so
+// a --frozen rebuild of the same files still gives the same figures.
+const dataDay = () => today();
+
+// Scope rule R2 for a published area of `src`, read back from the tiles.
+function inScope(a, src, R) {
+  const reg = R.regions[a.region];
+  return !!reg && (reg.sources || []).includes(src.id) && src.regions.includes(a.region) && scalesFor(a.region).includes(a.scale) &&
+    reg.juris.includes(a.juris) && bboxIntersects(a.bbox, reg.bbox);
+}
+
+// The tracts a sale source's sales are placed in: its geometry source's areas
+// in its regions, as they stand this build. A geometry source that re-emits
+// its snapshot no longer holds the tracts this source showed last time (they
+// were published as this source's rows, same id, same polygons), so those
+// come from this source's own snapshot, with their old context line.
+function tractsFor(src, geo, own, R) {
+  const byId = new Map();
+  if (geo.status !== 'fetched') for (const a of own) if (inScope(a, src, R)) byId.set(a.id, { ...a, fromSale: true });
+  for (const a of geo.areas) if (src.regions.includes(a.region)) byId.set(a.id, a);
+  return [...byId.values()];
+}
 
 const run = async () => {
   const R = loadRegions();
@@ -236,18 +301,39 @@ const run = async () => {
   for (const id of [...(ONLY || []), ...REFRESH]) if (id !== 'all' && !sources.some(s => s.id === id)) throw new Error(`no source "${id}" in ${SOURCES}`);
   // Both directions: a region regions.mjs gives a source must be one the
   // source serves (else that city would silently get nothing), and a region a
-  // source serves must list it there.
+  // source serves must list it there. A source regions.mjs names must exist:
+  // a deleted or never-written module is a failure, not a quiet fallback
+  // (--partial allows it, for tests and a source still being written).
   const named = new Map();
   for (const [rid, d] of Object.entries(R.regions)) for (const sid of d.sources || []) named.set(sid, [...(named.get(sid) || []), rid]);
   for (const [sid, rids] of named) {
     const s = sources.find(x => x.id === sid);
-    if (!s) warn(`regions.mjs gives ${rids.join(', ')} the source "${sid}", but there is no ${sid}.mjs in ${SOURCES} — no price areas there this build`);
+    if (!s) {
+      const m = `tools/prices/regions.mjs gives ${rids.join(', ')} the source "${sid}", but there is no ${sid}.mjs in ${SOURCES}`;
+      if (PARTIAL) warn(`${m} — no price areas from it this build (--partial)`);
+      else violate(`${m}: write the module, or take ${sid} out of regions.mjs`);
+    }
     else for (const rid of rids) if (!s.regions.includes(rid)) violate(`tools/prices/regions.mjs gives "${rid}" the source ${sid}, but sources/${sid}.mjs does not serve it (its regions list)`);
   }
   for (const s of sources) for (const rid of s.regions) {
     if (!R.regions[rid]) violate(`${s.id}: serves "${rid}", which is not a coverage region`);
     else if (!(R.regions[rid].sources || []).includes(s.id)) violate(`${s.id}: serves "${rid}", but tools/prices/regions.mjs does not list ${s.id} for it`);
     else if (R.regions[rid].currency !== s.meta.currency) violate(`${s.id}: publishes ${s.meta.currency}, but ${rid} is ${R.regions[rid].currency} (nothing converts currencies)`);
+  }
+  // A sale source needs its geometry source in every region it serves: the
+  // tract polygons come from it, and so do the tracts outside its covers.
+  const byId = new Map(sources.map(s => [s.id, s]));
+  for (const s of sources.filter(isSales)) {
+    const g = byId.get(s.geometry);
+    if (!g) { violate(`${s.id}: its geometry source "${s.geometry}" has no module in ${SOURCES}`); continue; }
+    if (isSales(g)) { violate(`${s.id}: its geometry source ${g.id} is a point-sales source too; sales are placed in published areas`); continue; }
+    for (const rid of s.regions) {
+      if (!g.regions.includes(rid) || !(R.regions[rid]?.sources || []).includes(g.id)) violate(`${s.id}: serves ${rid}, but its geometry source ${g.id} does not there (regions.mjs must give ${rid} both)`);
+    }
+  }
+  for (const [rid, d] of Object.entries(R.regions)) {
+    const ps = (d.sources || []).filter(id => isSales(byId.get(id)));
+    if (ps.length > 1) violate(`${rid}: regions.mjs gives it ${ps.length} point-sales sources (${ps.join(', ')}); a region has one sale-price scale`);
   }
   if (violations.length) throw new Error(`contract: ${violations.join('; ')}`);
 
@@ -257,29 +343,54 @@ const run = async () => {
   const snap = readAreasFromTiles(SNAPSHOT);
   const prev = snap.index?.version === INDEX_VERSION ? snap.index : null;
   log(`  snapshot: ${snap.index ? `${fmt([...snap.bySrc.values()].reduce((a, l) => a + l.length, 0))} areas in ${snap.index.tiles.cells.length} tiles` : 'none'}`);
+  // A geometry source's published tracts include those a sale source showed
+  // in its place: what a fresh fetch of it (every tract) is compared with.
+  const family = gid => {
+    const deps = new Set([...sources.filter(s => isSales(s) && s.geometry === gid).map(s => s.id),
+      ...Object.entries(prev?.sources || {}).filter(([, m]) => m.geometry === gid).map(([id]) => id)]);
+    return [...(snap.bySrc.get(gid) || []), ...[...deps].flatMap(id => snap.bySrc.get(id) || [])];
+  };
 
-  // ── run each source ──────────────────────────────────────────────────────
+  // ── run each source: areas sources first, then the sale sources on them ──
   const results = [];
-  for (const src of sources) {
+  for (const src of [...sources.filter(s => !isSales(s)), ...sources.filter(isSales)]) {
+    const sales = isSales(src);
     const snapshot = snap.bySrc.get(src.id) || [];
     const prevMeta = prev?.sources?.[src.id] || null;
     const forced = ONLY ? ONLY.has(src.id) : REFRESH.has(src.id) || REFRESH.has('all');
-    const inputs = inputsOf(src, R);
+    const geo = sales ? results.find(r => r.src.id === src.geometry) : null;
+    const inputs = inputsOf(src, R, geo ? JSON.stringify([geo.inputs, geo.vintage, (geo.upstream || []).map(u => `${u.file} ${u.sha256}`)]) : '');
     const ctx = makeCtx({ rawDir: RAW_DIR, frozen: FROZEN, log, warn: m => warn(`${src.id}: ${m}`), regions: R });
     // speculative: nothing says the upstream data is newer than what is
     // published, so a failed fetch leaves plain `snapshot` (see STATUS).
-    let want, why, speculative = false;
+    let want, why, speculative = false, rehand = false;
     if (ONLY) { want = forced; why = want ? '--only' : 'not named by --only'; }
     else if (forced) { want = true; why = '--refresh'; }
     else if (!snapshot.length) { want = true; why = 'nothing published yet'; }
     else if (prevMeta?.inputs !== inputs) {
-      want = true; speculative = true;
-      why = prevMeta?.inputs ? 'its inputs changed (its module, lookups or regions, or the pipeline)' : 'the published build records no inputs fingerprint';
+      // A monthly feed always has a newer month out, so its failure is a
+      // missed update whatever else changed: never speculative (else a module
+      // edit, or acs-tract's December refresh, would hide the stale notice for
+      // the whole outage, as a failure keeps the old inputs and every later
+      // month would be "inputs changed" again).
+      want = true; speculative = src.cadence !== 'monthly';
+      why = prevMeta?.inputs ? `its inputs changed (its module, lookups or regions, the pipeline${sales ? `, or ${src.geometry}'s areas` : ''})` : 'the published build records no inputs fingerprint';
+    }
+    // Tracts it left off the map last time because the sale source that owns
+    // them could not show them yet (see PRECEDENCE below): its snapshot no
+    // longer holds them, so only a fetch can hand them over.
+    else if (prevMeta?.stats?.dropped?.awaitingSaleSource) {
+      want = true; speculative = true; rehand = true;
+      why = `${fmt(prevMeta.stats.dropped.awaitingSaleSource)} of its tracts are waiting for a sale source to show them`;
     }
     else if (FROZEN) { want = false; why = '--frozen: upstream not checked'; }
     else if (src.cadence === 'static') { want = false; why = 'static data: upstream not checked (--refresh to refetch)'; }
+    // A monthly feed has something new every month, so it is simply fetched
+    // (a failure then is a missed update: snapshot-after-failure). Identical
+    // bytes still keep the snapshot byte-identical, below.
+    else if (src.cadence === 'monthly') { want = true; why = 'monthly data: fetched every run'; }
     else { const c = await upstreamCheck(src, ctx, prevMeta); want = c.state !== 'same'; why = c.why; speculative = c.state === 'unknown'; }
-    log(`\n  ── ${src.id} (${src.cadence}) ${want ? 'fetching' : snapshot.length ? 'reusing its snapshot' : 'skipped (nothing published)'}: ${why}`);
+    log(`\n  ── ${src.id} (${sales ? 'point-sales, ' : ''}${src.cadence}) ${want ? 'fetching' : snapshot.length ? 'reusing its snapshot' : 'skipped (nothing published)'}: ${why}`);
 
     let got = null, status = null;
     // A failure keeps the snapshot; see THE SAFETY RULE and STATUS.
@@ -288,16 +399,23 @@ const run = async () => {
       if (snapshot.length) warn(`${src.id}: ${m} — re-emitting its ${fmt(snapshot.length)} areas from the current tiles${speculative ? ' (nothing newer was known to be out)' : ''}`);
       else warn(`${src.id}: ${m} and nothing is published for it — it is absent from this build`);
     };
+    const tracts = sales ? tractsFor(src, geo, snapshot, R) : null;
+    if (want && sales && !tracts.length) { failed(`its geometry source ${src.geometry} has no areas in ${src.regions.join(', ')} to place sales in`); want = false; }
     if (want) {
       try {
         const out = await src.fetch(ctx);
-        if (!out || !Array.isArray(out.areas) || !out.areas.length) throw new Error('fetch returned no areas');
-        if (typeof out.vintage !== 'string' || !out.vintage) throw new Error('fetch returned no vintage');
+        if (sales) {
+          if (!out || !Array.isArray(out.sales) || !out.sales.length) throw new Error('fetch returned no sales');
+        } else {
+          if (!out || !Array.isArray(out.areas) || !out.areas.length) throw new Error('fetch returned no areas');
+          if (typeof out.vintage !== 'string' || !out.vintage) throw new Error('fetch returned no vintage');
+        }
         got = out; status = 'fetched';
       } catch (e) { failed(`fetch failed (${e.message})`); }
     }
-    // Identical bytes AND identical inputs: nothing could differ.
-    if (got && !forced && snapshot.length && prevMeta && prevMeta.inputs === inputs && sameFiles(ctx.provenance, prevMeta.upstream)) {
+    // Identical bytes AND identical inputs: nothing could differ (except the
+    // tracts the snapshot no longer holds, which is why it was fetched).
+    if (got && !forced && !rehand && snapshot.length && prevMeta && prevMeta.inputs === inputs && sameFiles(ctx.provenance, prevMeta.upstream)) {
       log(`     every upstream file is byte-identical to the published build's — keeping the snapshot`);
       got = null; status = 'unchanged';
     }
@@ -305,26 +423,47 @@ const run = async () => {
     const stats = { dropped: {} };
     const drop = (k, n = 1) => { stats.dropped[k] = (stats.dropped[k] || 0) + n; };
     const areas = [];
-    let meta, vintage, upstream, fetched, used = inputs;
-    if (got) {
+    let meta, vintage, upstream, fetched, covers = null, used = inputs;
+    if (got && sales) {
+      const b = buildSaleAreas({ src, out: got, tracts, geoMeta: geo.meta, now: dataDay(), scaleOf: rid => scalesFor(rid)[0] });
+      const bv = [...b.violations];
+      if (!bv.length) for (const a of b.areas) {
+        const p = areaProblems(a, src, { raw: false });
+        if (p.length) bv.push(`${src.id} ${a.id}: ${p.join('; ')}`);
+      }
+      violations.push(...bv);
+      const bad = bv.length ? '' : suspicious(src, b.areas, snapshot, forced) || suspiciousSales(src, b, prevMeta, forced);
+      if (bad) { failed(`the fetch looks wrong: ${bad}`); got = null; }
+      else if (!bv.length) {
+        ({ meta, vintage, covers } = b);
+        areas.push(...b.areas);
+        Object.assign(stats.dropped, b.stats.dropped);
+        stats.sales = b.stats.sales;
+        const n = k => b.areas.filter(a => a.flags.includes(k)).length;
+        log(`     ${fmt(b.stats.sales.used)} of ${fmt(b.stats.sales.received)} sales placed, ${b.meta.period[0].toLowerCase()}${b.meta.period.slice(1)} (window ${b.window.from}..${b.window.to}); ` +
+          `${fmt(b.areas.length)} tracts: ${fmt(b.areas.filter(isColoured).length)} coloured, ${fmt(n('few'))} too few to colour, ${fmt(n('suppressed'))} under 3 sales`);
+      }
+    } else if (got) {
       const prep = prepareAreas(src, got.areas, R.regions, src.meta);
       violations.push(...prep.violations);
-      const bad = prep.violations.length ? '' : suspicious(src, prep.areas, snapshot, forced);
+      const bad = prep.violations.length ? '' : suspicious(src, prep.areas, family(src.id), forced);
       if (bad) { failed(`the fetch looks wrong: ${bad}`); got = null; }
       else {
         meta = { ...src.meta };
         vintage = got.vintage;
-        upstream = ctx.provenance.map(({ cached, ...p }) => p).sort((x, y) => (x.file < y.file ? -1 : x.file > y.file ? 1 : 0));   // downloads may run in parallel
-        // All from the raw cache: the data is as old as its newest download.
-        const dls = ctx.provenance.filter(p => 'cached' in p), newest = dls.map(p => p.fetchedAt || '').sort().pop() || '';
-        fetched = dls.length && dls.every(p => p.cached) && newest ? newest.slice(0, 10) : today();
         areas.push(...prep.areas);
         Object.assign(stats.dropped, prep.dropped);
-        const { geo, few } = prep;
+        const { geo: g, few } = prep;
         if (stats.dropped.duplicateId) warn(`${src.id}: ${stats.dropped.duplicateId} duplicate id(s) dropped`);
-        log(`     geometry: ${fmt(geo.rings)} rings, ${fmt(geo.pointsIn)} -> ${fmt(geo.pointsOut)} points (${geo.pointsIn ? (100 * geo.pointsOut / geo.pointsIn).toFixed(1) : 0}%), ${fmt(geo.ringsDropped)} ring(s) dropped` +
+        log(`     geometry: ${fmt(g.rings)} rings, ${fmt(g.pointsIn)} -> ${fmt(g.pointsOut)} points (${g.pointsIn ? (100 * g.pointsOut / g.pointsIn).toFixed(1) : 0}%), ${fmt(g.ringsDropped)} ring(s) dropped` +
           (few ? `; ${fmt(few)} area(s) flagged few (n < ${meta.colourMinN})` : ''));
       }
+    }
+    if (got) {
+      upstream = ctx.provenance.map(({ cached, ...p }) => p).sort((x, y) => (x.file < y.file ? -1 : x.file > y.file ? 1 : 0));   // downloads may run in parallel
+      // All from the raw cache: the data is as old as its newest download.
+      const dls = ctx.provenance.filter(p => 'cached' in p), newest = dls.map(p => p.fetchedAt || '').sort().pop() || '';
+      fetched = dls.length && dls.every(p => p.cached) && newest ? newest.slice(0, 10) : today();
     }
     if (!got) {
       // The snapshot keeps the meta it was published with: the period, metric
@@ -335,28 +474,79 @@ const run = async () => {
       vintage = prevMeta?.vintage ?? null;
       upstream = prevMeta?.upstream || [];
       fetched = prevMeta?.fetched ?? null;
+      covers = prevMeta?.covers ?? null;
       used = prevMeta ? prevMeta.inputs ?? null : inputs;
       Object.assign(stats.dropped, prevMeta?.stats?.dropped || {});
-      if (prevMeta && JSON.stringify(metaOf({ ...src.meta })) !== JSON.stringify(meta)) {
+      if (prevMeta?.stats?.sales) stats.sales = { ...prevMeta.stats.sales };
+      if (prevMeta && JSON.stringify(moduleMeta({ ...src.meta }, src)) !== JSON.stringify(moduleMeta(meta, src))) {
         warn(`${src.id}: sources/${src.id}.mjs meta differs from the published build's; it applies when the source is next fetched`);
       }
       for (const a0 of snapshot) {
         const a = { ...a0, flags: [...a0.flags] };
-        const reg = R.regions[a.region];
         // Coverage or decisions can move under a snapshot; R2 still applies.
-        if (!reg || !(reg.sources || []).includes(src.id) || !src.regions.includes(a.region) || !scalesFor(a.region).includes(a.scale) ||
-            !reg.juris.includes(a.juris) || !bboxIntersects(a.bbox, reg.bbox)) { drop('outsideScope'); continue; }
+        if (!inScope(a, src, R)) { drop('outsideScope'); continue; }
         areas.push(a);
       }
       if (areas.length < snapshot.length) warn(`${src.id}: ${snapshot.length - areas.length} snapshot area(s) no longer in scope`);
       status = status === 'failed' ? (areas.length ? 'snapshot-after-failure' : 'absent') : (areas.length ? 'snapshot' : 'absent');
     }
-    results.push({ src, areas, status, meta, vintage, upstream, fetched, inputs: used, stats });
+    results.push({ src, areas, status, meta, vintage, upstream, fetched, inputs: used, stats, covers });
     log(`     ${fmt(areas.length)} areas (${status})`);
   }
   if (violations.length) {
     throw new Error(`${violations.length} contract violation(s); nothing written. e.g.\n    ${violations.slice(0, 15).join('\n    ')}`);
   }
+
+  // ── precedence: a sale source's tracts replace its geometry source's ─────
+  // Same id, same polygon: the geometry source's copy goes. Its other tracts
+  // in that region move to the region's second scale key (nyc-outer): they
+  // are another source, metric and period, so another colour scale. Where no
+  // sale source has areas (none written yet, or it has never published), the
+  // geometry source keeps the whole region on its first key, as before.
+  const withSales = new Map();   // region -> the sale source showing tracts there
+  for (const r of results.filter(r => isSales(r.src))) for (const a of r.areas) withSales.set(a.region, r);
+  for (const g of results.filter(r => !isSales(r.src))) {
+    const deps = results.filter(r => isSales(r.src) && r.src.geometry === g.src.id);
+    if (!deps.length && !sources.some(s => isSales(s) && s.geometry === g.src.id)) continue;
+    const taken = new Set(deps.flatMap(r => r.areas.map(a => `${a.region}\u0000${a.id}`)));
+    // How many of its tracts sale sources show in its place: every tract they
+    // show (a snapshot of this source no longer holds them to be removed).
+    const replaced = Object.fromEntries(deps.filter(r => r.areas.length).map(r => [r.src.id, r.areas.length]));
+    const keep = [], waiting = [];
+    for (const a of g.areas) {
+      const s = withSales.get(a.region);
+      if (s?.src.geometry === g.src.id && taken.has(`${a.region}\u0000${a.id}`)) continue;
+      if (s?.src.geometry === g.src.id) {
+        // Inside the sale source's covers but not among its tracts: the sale
+        // source re-emitted a snapshot from before this tract existed (a new
+        // tract vintage, a moved rectangle) while this source was fetched
+        // afresh. It belongs to the sale source, which has no figure for it
+        // yet: left off the map until that source is next fetched, rather
+        // than shown as an owners' estimate inside the sale-price scale, or
+        // one source's outage stopping every city's build.
+        if (s.covers && isCovered(s.covers, a)) {
+          if (s.status === 'fetched') violate(`${a.region}: ${g.src.id} tract ${a.id} is inside ${s.src.id}'s covers, but ${s.src.id} placed no tract there`);
+          else waiting.push(a);
+          continue;
+        }
+        const outer = scalesFor(a.region)[1];
+        if (!outer) { violate(`${a.region}: ${g.src.id} tract ${a.id} is outside ${s.src.id}'s covers, and tools/prices/regions.mjs gives ${a.region} no second scale key for such tracts`); continue; }
+        a.scale = outer;
+      } else if (sources.some(x => isSales(x) && x.geometry === g.src.id && x.regions.includes(a.region))) a.scale = scalesFor(a.region)[0];
+      keep.push(a);
+    }
+    g.areas = keep;
+    if (waiting.length) {
+      g.stats.dropped.awaitingSaleSource = (g.stats.dropped.awaitingSaleSource || 0) + waiting.length;
+      warn(`${g.src.id}: ${fmt(waiting.length)} tract(s) inside a sale source's covers that its current tiles do not hold (e.g. ${waiting[0].region} ${waiting[0].id}) — not shown until that source is fetched again`);
+    }
+    if (Object.keys(replaced).length) {
+      g.stats.replaced = replaced;
+      log(`  ${g.src.id}: ${Object.entries(replaced).map(([k, v]) => `${fmt(v)} tracts shown by ${k}`).join(', ')}, not by it`);
+    }
+  }
+  if (violations.length) throw new Error(`${violations.length} contract violation(s); nothing written:\n    ${violations.join('\n    ')}`);
+  for (const r of results) r.status = r.areas.length ? r.status : 'absent';
 
   // ── index arrays: sources, regions, scales ───────────────────────────────
   const present = results.filter(r => r.areas.length);
@@ -421,15 +611,19 @@ const run = async () => {
     regions,
     juris: jurisNames,
     scales,
-    sources: Object.fromEntries(present.map(({ src, areas, status, meta, vintage, upstream, fetched, inputs, stats }) => {
+    sources: Object.fromEntries(present.map(({ src, areas, status, meta, vintage, upstream, fetched, inputs, stats, covers }) => {
       const coloured = areas.filter(isColoured).length;
       // Of the neutral ones, those with nothing published and nothing withheld:
       // the page leaves them off the map (only the report names them).
       const unpublished = areas.filter(isUnpublished).length;
       return [src.id, {
-        ...meta, cadence: src.cadence, regions: regionIds.filter(id => areas.some(a => a.region === id)),
+        ...meta, kind: kindOf(src), ...(isSales(src) ? { geometry: src.geometry, covers } : {}),
+        cadence: src.cadence, regions: regionIds.filter(id => areas.some(a => a.region === id)),
         vintage, status, fetched, upstream, inputs,
-        stats: { areas: areas.length, coloured, neutral: areas.length - coloured, unpublished, dropped: stats.dropped },
+        // A sale source: sales received and placed (received = placed + the
+        // build's drops); a geometry source: its tracts a sale source shows.
+        stats: { areas: areas.length, coloured, neutral: areas.length - coloured, unpublished, dropped: stats.dropped,
+          ...(stats.sales ? { sales: stats.sales } : {}), ...(stats.replaced ? { replaced: stats.replaced } : {}) },
       }];
     })),
     missing,
@@ -437,6 +631,11 @@ const run = async () => {
     where: composeWhere(regions),
     scope: SCOPE_NOTE,
   };
+  // Every source entry holds only fields the contract lists (lib/schema.mjs
+  // META_KEYS and friends): a module that adds to its meta at fetch time must
+  // never publish what it added. Refused before anything is written.
+  for (const [id, e] of Object.entries(index.sources)) violations.push(...entryProblems(id, e));
+  if (violations.length) throw new Error(`${violations.length} contract violation(s); nothing written:\n    ${violations.join('\n    ')}`);
 
   // ── tiles ────────────────────────────────────────────────────────────────
   const leaves = tileAreas(all);
@@ -459,8 +658,8 @@ const run = async () => {
   // ── report ───────────────────────────────────────────────────────────────
   // (rebuild-prices.yml greps the per-source lines for its commit message.)
   log(`\n  prices written       ${fmt(all.length)} areas  (${index.where})`);
-  for (const { src, areas, status } of present) log(`    ${src.id.padEnd(12)} ${fmt(areas.length).padStart(7)}  ${status}`);
-  for (const r of results.filter(r => !r.areas.length)) log(`    ${r.src.id.padEnd(12)} ${'0'.padStart(7)}  ${r.status || 'absent'}`);
+  for (const { src, areas, status } of present) log(`    ${src.id.padEnd(13)} ${fmt(areas.length).padStart(7)}  ${status}`);
+  for (const r of results.filter(r => !r.areas.length)) log(`    ${r.src.id.padEnd(13)} ${'0'.padStart(7)}  ${r.status || 'absent'}`);
   for (const { src, stats } of present) {
     const d = Object.entries(stats.dropped).map(([k, v]) => `${k} ${fmt(v)}`).join(', ');
     if (d) log(`    ${src.id} dropped: ${d}`);

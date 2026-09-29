@@ -32,9 +32,13 @@
 // region's crime-data rectangle. A tract overlapping two rectangles belongs to
 // the one containing its centre, else the first in coverage order (the
 // backend's PROVIDERS order, as tools/schools/lib/coverage.mjs does). Its
-// colour scale is the region's scale key (tools/prices/regions.mjs): its own
-// id, except Los Angeles and Long Beach, whose rectangles overlap, which share
-// 'la-area'. No other pair of rectangles overlaps (checked Sept 2026).
+// colour scale is the region's first scale key (tools/prices/regions.mjs):
+// its own id, except Los Angeles and Long Beach, whose rectangles overlap,
+// which share 'la-area'. No other pair of rectangles overlaps (checked Sept
+// 2026). Where a region has a sale-price source too (NYC, DC, Hartford,
+// Baltimore), the build hands that source these tracts' polygons, lets its
+// tracts replace these inside its `covers`, and moves the tracts left over to
+// the region's second key (nyc-outer): tools/build-prices.mjs PRECEDENCE.
 //
 // Honesty rules (SPEC §1):
 //   - A negative estimate is an ACS annotation ("jam value"), not a figure:
@@ -104,6 +108,10 @@ const metaFor = y => ({
   // sampled over the five years), so it is never shown as "based on".
   nEstimate: true,
   credit: 'U.S. Census Bureau',
+  // The label of this figure where it is a sale-price tract's context line
+  // (lib/sales.mjs): the metric itself (house rule 2: a median home value,
+  // and an owners' estimate, not a price), and its survey years.
+  contextLabel: `Median home value (owners’ estimate), ${y - 4}–${String(y).slice(2)} survey`,
 });
 // Set by fetch() from the vintage it actually read; this default is the
 // vintage current when the source was written (released 29 Jan 2026).
@@ -174,10 +182,12 @@ function tractTable(ctx, buf, file, cols, statePrefixes) {
 // ── scope ───────────────────────────────────────────────────────────────────
 const intersects = (a, b) => a[0] <= b[2] && a[2] >= b[0] && a[1] <= b[3] && a[3] >= b[1];
 const regionOf = (ctx, id) => (Array.isArray(ctx.regions) ? ctx.regions.find(r => r.id === id) : ctx.regions?.[id]);
-// A region's one scale key: tools/prices/regions.mjs `scales`, default its id.
+// A region's scale key for these tracts: the first of tools/prices/regions.mjs
+// `scales` (default its id). A second key is only ever for the tracts a
+// sale-price source leaves this one, and the build assigns it.
 function scaleOf(ctx, id) {
   const scales = regionOf(ctx, id)?.scales || [id];
-  if (scales.length !== 1) throw new Error(`${ID}: region ${id} lists ${scales.length} scale keys; a US city has one`);
+  if (scales.length > 2) throw new Error(`${ID}: region ${id} lists ${scales.length} scale keys; a US city has one, and one more beside a sale-price source`);
   return scales[0];
 }
 

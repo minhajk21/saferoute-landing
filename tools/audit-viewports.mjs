@@ -105,12 +105,21 @@
 //       zoomed out; both where neither has data; home values alone there;
 //       both across a state line) keep every overlay inside the map and clear
 //       of every other (see "map stack").
+//     - at every size, both sides of New York City's two seams (Queens/Nassau,
+//       Bronx/Yonkers), where the five boroughs' sale prices meet Nassau's and
+//       Westchester's owners' estimates, with schools off and on: the legend
+//       is shown with its dashed seam line, which names what the colours on
+//       each side show (visible even on an upright phone, whose legend drops
+//       its metric line), and every overlay stays clear (see "map stack").
 //   map stack, on every /check/ page at every size
 //     - no two of the map's overlays overlap: the right-hand stack (pills,
 //       status, notes), the keys (schools, home prices) and Leaflet's
 //       controls (zoom, attribution, the Mapbox wordmark), and each stack item
 //       and key sits inside the map. The stack was once four hard-coded
 //       offsets, where a third pill would have landed on the status.
+//     - no key lies where the pan status appears: it is transparent between
+//       pans but fades in over whatever is there on every pan ("Updating
+//       area…" once covered a 320px phone's legend title after every search).
 //   default view by time zone, once per run at 1440x900: Europe/London opens on
 //     Great Britain, America/New_York on the lower 48, America/Mexico_City on
 //     Mexico City, Asia/Tokyo wide enough to hold both London and New York —
@@ -330,6 +339,15 @@ const NOTE_STATES = [
   ['both layers where neither has data (Paris)', [48.8566, 2.3522], 12, true],
   ['home values alone where there are none (Paris)', [48.8566, 2.3522], 12, false],
   ['both layers across a state line (Jersey City)', [40.72, -74.035], 13, true],
+];
+
+// /check/?prices, at every size: where New York City's sale prices meet the
+// owners' estimates of Nassau and Westchester. [label, centre, zoom, schools].
+const SEAM_STATES = [
+  ['the Queens/Nassau seam, New York City side', [40.728, -73.712], 14, false],
+  ['the Queens/Nassau seam, Nassau side', [40.728, -73.695], 14, false],
+  ['the Bronx/Yonkers seam, New York City side', [40.9005, -73.87], 14, true],
+  ['the Bronx/Yonkers seam, Westchester side', [40.915, -73.87], 14, false],
 ];
 
 // The time-zone pass (see WHAT IT CHECKS). Boxes are [[south, west], [north, east]].
@@ -616,10 +634,16 @@ const STACK = () => {
   const items = [...own, ...ctl].filter(x => x.r);
   const out = [];
   for (const x of items) if (x.own && (x.r.left < m.left - 1 || x.r.right > m.right + 1 || x.r.top < m.top - 1 || x.r.bottom > m.bottom + 1)) out.push(`${x.n} outside the map`);
+  const meet = (a, b) => { const ox = Math.min(a.right, b.right) - Math.max(a.left, b.left), oy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top); return ox > 0.5 && oy > 0.5 ? [ox, oy] : null; };
   for (let i = 0; i < items.length; i++) for (let j = i + 1; j < items.length; j++) {
-    const a = items[i].r, b = items[j].r;
-    const ox = Math.min(a.right, b.right) - Math.max(a.left, b.left), oy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
-    if (ox > 0.5 && oy > 0.5) out.push(`${items[i].n} overlaps ${items[j].n} (${Math.round(ox)}x${Math.round(oy)}px)`);
+    const o = meet(items[i].r, items[j].r);
+    if (o) out.push(`${items[i].n} overlaps ${items[j].n} (${Math.round(o[0])}x${Math.round(o[1])}px)`);
+  }
+  // The pan status while transparent: its place, against the keys only (over
+  // the notes it is laid on purpose in the tight stack; see check/index.html).
+  const st = document.querySelector('.mapstatus'), sr = st && !st.hidden ? st.getBoundingClientRect() : null;
+  if (sr?.width && !(+getComputedStyle(st).opacity)) {
+    for (const el of document.querySelectorAll('.mapkeys > *')) { const r = shown(el), o = r && meet(r, sr); if (o) out.push(`${name(el)} lies where the pan status appears (${Math.round(o[0])}x${Math.round(o[1])}px)`); }
   }
   return out;
 };
@@ -1041,6 +1065,33 @@ async function main() {
           for (const s of ns) {
             if (!s.notes.length) flag('FAIL', `with ${s.label}: no note shown`);
             for (const o of s.overlaps) flag('FAIL', `with ${s.label}: ${o}`);
+          }
+          // Where two kinds of figure meet: the legend's seam line says what
+          // each side shows, visibly, and nothing collides.
+          const ss = await ev(`(async () => {
+            const idle = async () => { for (let i = 0; i < 60; i++) { await new Promise(r => setTimeout(r, 150));
+              try { if (!prBusy && !prPending && (!schOn || (!schBusy && !schPending))) return true; } catch {} } return false; };
+            const c0 = map.getCenter(), z0 = map.getZoom(), out = [];
+            for (const [label, c, z, sch] of ${JSON.stringify(SEAM_STATES)}) {
+              if (schOn !== sch) schBtn.click();
+              map.setView(c, z, { animate: false });
+              await idle(); await new Promise(r => setTimeout(r, 200));
+              const key = document.getElementById('prkey'), seam = key?.querySelector('.seam.dash');
+              const vis = el => !!el && !el.hidden && getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().height > 0;
+              out.push({ label, legend: vis(key), seam: vis(seam) ? seam.innerText : '', overlaps: (${STACK.toString()})() });
+            }
+            if (schOn) schBtn.click();
+            map.setView(c0, z0, { animate: false });
+            await idle();
+            return out;
+          })()`, true) || [];
+          if (!ss.length) flag('FAIL', 'the seam states could not be run');
+          for (const s of ss) {
+            if (!s.legend) flag('FAIL', `at ${s.label}: no legend shown`);
+            // Its dashed side is always named as owners' estimates; on that side
+            // the line also names the sale prices across it.
+            else if (!/owners’ estimates/i.test(s.seam) || (/^owners’ estimates here/i.test(s.seam) && !/sale prices/.test(s.seam))) flag('FAIL', `at ${s.label}: the legend does not say, visibly, what each side's colours show (seam line "${s.seam}")`);
+            for (const o of s.overlaps) flag('FAIL', `at ${s.label}: ${o}`);
           }
         }
 

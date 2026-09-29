@@ -4,7 +4,7 @@
 // round-trips through the published format.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { tileAreas, cellsForBbox, parseKey, tileJson, areasFromTile, removeLeftovers, BASE, MIN_CELL } from '../lib/tiles.mjs';
+import { tileAreas, cellsForBbox, parseKey, tileJson, areasFromTile, removeLeftovers, readableFields, BASE, MIN_CELL } from '../lib/tiles.mjs';
 import { mkdtempSync, mkdirSync, writeFileSync, existsSync, readdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -96,17 +96,43 @@ test('tile rows round-trip, contexts deduplicated per tile', () => {
   assert.deepEqual(t.a.map(r => r[1]), ['N08000101', 'N08000102', 'N08000103'], 'rows sorted by id');
   assert.ok(t.a.every(r => r.length === FIELDS.length));
   assert.equal(t.a[2][FIELDS.indexOf('flags')], 4 | 8);
+  // A context without a margin of error or flags is stored as it always was.
+  assert.deepEqual(t.c[0], ctxA, 'the NI line keeps its phase-1 shape, byte for byte');
   const index = { fields: FIELDS, sources: { x: {} }, regions: [{ id: 'uk' }], scales: [{ key: 'TLN' }] };
   const back = areasFromTile(text, index);
-  assert.deepEqual(back.map(b => [b.id, b.name, b.value, b.n, b.flags, b.context]), [
-    ['N08000101', 'Ward A', 150000, 40, [], null],
-    ['N08000102', 'Ward B', null, null, ['suppressed'], ctxA],
-    ['N08000103', null, 2000001, 7, ['topcoded', 'few'], ctxA],
+  const ctxRead = { ...ctxA, moe: null, flags: [] };
+  assert.deepEqual(back.map(b => [b.id, b.name, b.value, b.n, b.flags, b.context, b.iqr]), [
+    ['N08000101', 'Ward A', 150000, 40, [], null, null],
+    ['N08000102', 'Ward B', null, null, ['suppressed'], ctxRead, null],
+    ['N08000103', null, 2000001, 7, ['topcoded', 'few'], ctxRead, null],
   ]);
+  assert.equal(tileJson(back.map((b, i) => ({ ...b, srcIdx: 0, regionIdx: 0, scaleIdx: 0 }))), text, 'read back and written again: byte-identical');
   assert.deepEqual(back[0].enc, a[1].enc);
   assert.equal(back[0].src, 'x');
   assert.equal(back[0].region, 'uk');
   assert.equal(back[0].scale, 'TLN');
+});
+
+test('a sale tract: its middle half and its context moe/flags round-trip; an older tile set reads iqr as null', () => {
+  const ctx = { label: 'Owners’ estimate, 2020–24 survey', value: 2000001, moe: null, n: null, flags: ['topcoded'] };
+  const ctx2 = { label: 'Owners’ estimate, 2020–24 survey', value: 640000, moe: 52300, n: null, flags: ['uncertain'] };
+  const a = [
+    mk('36061000100', 40.7, -74.0, 0.01, { name: 'Census Tract 1, New York County, NY', value: 1250000, n: 41, iqr: [890000, 2100000], context: ctx, scale: 'nyc' }),
+    mk('36061000200', 40.71, -74.0, 0.01, { name: 'Census Tract 2, New York County, NY', value: null, n: 2, flags: ['suppressed'], context: ctx2, scale: 'nyc' }),
+  ];
+  const text = tileJson(a), t = JSON.parse(text);
+  assert.deepEqual(t.c, [{ label: ctx.label, value: 2000001, n: null, flags: 4 }, { label: ctx2.label, value: 640000, n: null, moe: 52300, flags: 2 }]);
+  assert.deepEqual(t.a[0][FIELDS.indexOf('iqr')], [890000, 2100000]);
+  const index = { fields: FIELDS, sources: { s: {} }, regions: [{ id: 'nyc' }], scales: [{ key: 'nyc' }] };
+  const back = areasFromTile(text, index);
+  assert.deepEqual(back.map(b => [b.iqr, b.context]), [[[890000, 2100000], ctx], [null, ctx2]]);
+  assert.equal(tileJson(back.map(b => ({ ...b, srcIdx: 0, regionIdx: 0, scaleIdx: 0 }))), text, 'byte-identical when re-emitted');
+  // Tiles written before iqr existed: the row is one shorter; it reads as null.
+  const old = JSON.stringify({ a: t.a.map(r => r.slice(0, -1)), c: t.c });
+  const oldIndex = { ...index, fields: FIELDS.slice(0, -1) };
+  assert.ok(readableFields(oldIndex.fields) && readableFields(FIELDS));
+  assert.ok(!readableFields([...FIELDS.slice(0, -2), 'iqr', 'polys']) && !readableFields(FIELDS.slice(0, -2)), 'a reordered or shorter list is refused');
+  assert.deepEqual(areasFromTile(old, oldIndex).map(b => b.iqr), [null, null]);
 });
 
 test('removeLeftovers: a killed build\'s staging goes; its only copy of the output comes back', t => {

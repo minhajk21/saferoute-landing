@@ -10,24 +10,38 @@
 // sample areas (the first coloured one, one near its scale's median, and a
 // neutral one) with their geometry summarised.
 //
-// Usage: node tools/prices/run-source.mjs <id> [--frozen] [--raw-dir <dir>] [--sources <dir>] [--json <file>]
+// A SALE source (kind point-sales) is fetched the same way, and its sales are
+// placed in its geometry source's tracts as published (--snapshot, default
+// prices/data: the geometry source's rows plus the sale source's own), or, if
+// none are published, in the geometry source's own fresh fetch (raw cache).
+// It prints what SPEC2 §C asks each sale source to measure: rows in and each
+// drop reason, sales placed, the window, tracts with n >= 3 and n >= 10 at 12
+// AND 24 months (prefer 12 unless it leaves more than 30% of covered tracts
+// under 10), the median of tract medians per county, and the median of all
+// placed sales (to compare with the publisher's own summary).
+//
+// Usage: node tools/prices/run-source.mjs <id> [--frozen] [--raw-dir <dir>] [--sources <dir>] [--snapshot <dir>] [--json <file>]
 //   --frozen    never touch the network: raw cache only
 //   --json      also write the prepared areas (encoded rings) to <file>, for a
 //               closer look; never into the repo
 // Exit 1 on a fetch failure or any contract violation.
 
-import { join, resolve } from 'node:path';
+import { join, resolve, dirname } from 'node:path';
 import { writeFileSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { makeCtx, loadRegions, RAW_DIR } from './lib/ctx.mjs';
-import { SOURCES_DIR, loadSource, prepareAreas, isColoured } from './lib/schema.mjs';
+import { SOURCES_DIR, loadSource, prepareAreas, areaProblems, isColoured, isSales } from './lib/schema.mjs';
 import { computeBreaks, percentile } from './lib/scale.mjs';
 import { decodePolys } from './lib/geo.mjs';
+import { buildSaleAreas, MIN_SHOWN } from './lib/sales.mjs';
+import { readAreasFromTiles } from './lib/tiles.mjs';
+import { scalesFor } from './regions.mjs';
 
 const argv = process.argv.slice(2);
 const arg = (n, d) => (argv.includes(n) ? argv[argv.indexOf(n) + 1] : d);
-const id = argv.find((a, i) => !a.startsWith('--') && !['--raw-dir', '--sources', '--json'].includes(argv[i - 1]));
+const id = argv.find((a, i) => !a.startsWith('--') && !['--raw-dir', '--sources', '--json', '--snapshot'].includes(argv[i - 1]));
 if (!id || argv.includes('--help')) {
-  console.log('Usage: node tools/prices/run-source.mjs <id> [--frozen] [--raw-dir <dir>] [--sources <dir>] [--json <file>]');
+  console.log('Usage: node tools/prices/run-source.mjs <id> [--frozen] [--raw-dir <dir>] [--sources <dir>] [--snapshot <dir>] [--json <file>]');
   process.exit(id ? 0 : 1);
 }
 const fmt = n => (typeof n === 'number' ? n.toLocaleString('en-GB', { maximumFractionDigits: 2 }) : String(n));
@@ -40,6 +54,7 @@ const run = async () => {
   const bad = src.regions.filter(r => !(R.regions[r]?.sources || []).includes(src.id));
   if (bad.length) console.log(`  CONTRACT: ${src.id} serves ${bad.join(', ')}, but tools/prices/regions.mjs does not give it those regions`);
   const ctx = makeCtx({ rawDir: resolve(arg('--raw-dir', RAW_DIR)), frozen: argv.includes('--frozen'), regions: R });
+  if (isSales(src)) return runSales(src, R, ctx, bad);
 
   console.log(`  ── ${src.id} (${src.cadence}): ${src.meta.metric}, ${src.meta.period}, ${src.meta.currency}`);
   const t0 = Date.now();
@@ -100,5 +115,86 @@ const run = async () => {
   if (typeof out.vintage !== 'string' || !out.vintage || !areas.length || bad.length) process.exit(1);
   console.log('\n  OK: every area meets the contract.');
 };
+
+// ── a sale source ───────────────────────────────────────────────────────────
+async function geometryTracts(src, g, R) {
+  const dir = resolve(arg('--snapshot', join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'prices', 'data')));
+  const snap = readAreasFromTiles(dir);
+  const byId = new Map();
+  for (const a of [...(snap.bySrc.get(src.id) || []), ...(snap.bySrc.get(g.id) || [])]) if (src.regions.includes(a.region)) byId.set(a.id, a);
+  if (byId.size) { console.log(`  tracts: ${fmt(byId.size)} published by ${g.id}${snap.bySrc.has(src.id) ? ` and ${src.id}` : ''} (${dir})`); return [...byId.values()]; }
+  console.log(`  tracts: none published in ${dir}; fetching ${g.id} (raw cache where it can)`);
+  const gctx = makeCtx({ rawDir: resolve(arg('--raw-dir', RAW_DIR)), frozen: argv.includes('--frozen'), regions: R });
+  const out = await g.fetch(gctx);
+  const prep = prepareAreas(g, out.areas, R.regions);
+  if (prep.violations.length) throw new Error(`${g.id}: ${prep.violations.slice(0, 3).join('; ')}`);
+  return prep.areas.filter(a => src.regions.includes(a.region));
+}
+
+async function runSales(src, R, ctx, bad) {
+  const w = src.meta.window || {};
+  console.log(`  ── ${src.id} (point-sales, ${src.cadence}): ${src.meta.metric}, ${w.months} months by ${w.by} date, lag ${w.lagMonths || 0}, ${src.meta.currency}; geometry ${src.geometry}`);
+  const gPath = join(resolve(arg('--sources', SOURCES_DIR)), `${src.geometry}.mjs`);
+  if (!existsSync(gPath)) throw new Error(`no geometry source ${gPath}`);
+  const g = await loadSource(gPath);
+  const tracts = await geometryTracts(src, g, R);
+  const t0 = Date.now();
+  const out = await src.fetch(ctx);
+  console.log(`\n  fetched in ${((Date.now() - t0) / 1000).toFixed(1)}s: ${fmt(out?.sales?.length ?? 0)} sales; covers ${JSON.stringify(out?.covers)}${out?.through ? `; through ${out.through}` : ''}`);
+  for (const p of ctx.provenance) console.log(`    ${p.cached ? 'cached ' : 'fetched'}  ${p.file}  ${(p.bytes / 1e6).toFixed(2)}MB  ${p.lastModified || p.etag || ''}`);
+  const srcDrops = Object.entries(out?.dropped || {});
+  console.log(`  the source left out ${fmt(srcDrops.reduce((t, [, v]) => t + v, 0))} row(s): ${srcDrops.map(([k, v]) => `${k} ${fmt(v)}`).join(', ') || 'none counted'}`);
+
+  const now = new Date().toISOString().slice(0, 10);   // as the build: the build day
+  const geoMeta = g.meta;
+  const build = months => buildSaleAreas({ src: { ...src, meta: { ...src.meta, window: { ...w, months } } }, out, tracts, geoMeta, now, scaleOf: rid => scalesFor(rid)[0], keepPrices: true });
+  const main = build(w.months);
+  if (main.violations.length) {
+    console.log(`\n  ${main.violations.length} CONTRACT VIOLATION(S) — the build would stop here:\n    ${main.violations.slice(0, 20).join('\n    ')}`);
+    process.exit(1);
+  }
+  const probs = main.areas.flatMap(a => areaProblems(a, src, { raw: false }).map(p => `${a.id}: ${p}`));
+  const d = main.stats.dropped;
+  console.log(`  window ${main.window.from}..${main.window.to} — "${main.meta.period}"`);
+  console.log(`  placed ${fmt(main.stats.sales.used)} of ${fmt(main.stats.sales.received)}; the build dropped: ${['futureDate', 'outOfWindow', 'outsideTracts', 'outsideCovers'].map(k => `${k} ${fmt(d[k])}`).join(', ')}`);
+
+  // Coverage at 12 and 24 months (SPEC2 §C: prefer 12 unless it leaves more
+  // than 30% of covered tracts under 10 sales).
+  const minN = src.meta.colourMinN;
+  console.log(`\n  covered tracts: ${fmt(main.areas.length)} (${[...new Set(main.areas.map(a => a.region))].join(', ')})`);
+  for (const months of [12, 24]) {
+    const b = months === w.months ? main : build(months), l = b.areas;
+    const k = f => l.filter(f).length, pct = x => `${(100 * x / (l.length || 1)).toFixed(1)}%`;
+    console.log(`    ${String(months).padStart(2)} months (${b.window.from}..${b.window.to}): ${fmt(b.stats.sales.used)} sales; n >= ${minN} ${fmt(k(a => a.n >= minN))} (${pct(k(a => a.n >= minN))}), ` +
+      `${MIN_SHOWN}–${minN - 1} ${fmt(k(a => a.n >= MIN_SHOWN && a.n < minN))}, 1–${MIN_SHOWN - 1} ${fmt(k(a => a.n > 0 && a.n < MIN_SHOWN))}, none ${fmt(k(a => !a.n))}; ` +
+      `under ${minN}: ${pct(k(a => a.n < minN))}${months === w.months ? '  <- the window this source declares' : ''}`);
+  }
+
+  // Median of tract medians by county, and of every placed sale.
+  const county = a => /,\s*([^,]+),\s*[A-Z]{2}$/.exec(a.name || '')?.[1] || a.id.slice(0, 5);
+  const byCounty = new Map();
+  for (const a of main.areas.filter(isColoured)) { const c = `${county(a)} (${a.id.slice(0, 5)})`; if (!byCounty.has(c)) byCounty.set(c, []); byCounty.get(c).push(a.value); }
+  const med = v => percentile([...v].sort((x, y) => x - y), 0.5);
+  console.log('\n  median of coloured tract medians, by county:');
+  for (const [c, v] of [...byCounty].sort()) console.log(`    ${c.padEnd(32)} ${fmt(v.length).padStart(5)} tracts  ${fmt(Math.round(med(v)))}`);
+  const every = [...main.prices.values()].flat();
+  console.log(`  median of all ${fmt(every.length)} placed sales: ${fmt(Math.round(med(every)))} (compare with the publisher's own summary for ${main.window.span})`);
+  const v = main.areas.filter(isColoured).map(a => a.value).sort((x, y) => x - y);
+  try { console.log(`  breaks it would get: ${computeBreaks(v).breaks.map(fmt).join(' / ')}`); } catch (e) { console.log(`  NO BREAKS (${e.message})`); }
+
+  console.log('\n  samples:');
+  const col = main.areas.filter(isColoured).sort((x, y) => x.value - y.value);
+  for (const a of [col[Math.floor(col.length / 2)], main.areas.find(x => x.flags.includes('few')), main.areas.find(x => x.flags.includes('suppressed'))].filter(Boolean)) {
+    const { enc, bbox, ...rest } = a;
+    console.log(`    ${JSON.stringify(rest)}`);
+  }
+  if (arg('--json')) { writeFileSync(arg('--json'), JSON.stringify({ window: main.window, areas: main.areas })); console.log(`\n  wrote ${arg('--json')}`); }
+  if (probs.length) {
+    console.log(`\n  ${probs.length} CONTRACT VIOLATION(S) — the build would stop here:\n    ${probs.slice(0, 20).join('\n    ')}`);
+    process.exit(1);
+  }
+  if (!main.stats.sales.used || bad.length) process.exit(1);
+  console.log('\n  OK: every tract meets the contract.');
+}
 
 run().catch(e => { console.error(`run-source ${id} failed:`, e.stack || e.message); process.exit(1); });

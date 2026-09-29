@@ -31,8 +31,24 @@
 // 5. SIZE. FAIL above 60 KB gzipped a tile; WARN above 30 KB.
 // 6. SPOT CHECKS against what is known to be true (Southwark has 30+ MSOAs;
 //    London's median of MSOA medians is £400k–£900k; NYC has 1,500+ tracts;
-//    Toronto 400+ CTs). Each prints what it saw, and a source missing from the
-//    build fails its check. --no-spot skips them (tests).
+//    Toronto 400+ CTs; and for each recorded-sales source, its tract count,
+//    and Manhattan's median of tract sale medians $700k–$3M). Each prints
+//    what it saw. A phase-1 source missing from the build fails its check; a
+//    sale source's check is SKIPPED only when the source is not in the build.
+//    --no-spot skips them all (tests).
+// 8. SALE PRICES (point-sales sources, SPEC2 §B.5). No tract coloured on
+//    fewer than 10 sales, none with a figure on fewer than 3; figures rounded
+//    to the 1,000; the middle half only from colourMinN sales and around the
+//    median; nothing of a single sale in a tile (no location, date, price,
+//    address or parcel id: rows are tract aggregates, a sale tract's name is
+//    its census tract's own, its context label its geometry source's, contexts
+//    carry only label/value/moe/n/flags, and no tile holds a day-precise
+//    date) nor in index.json (every source entry holds only the fields
+//    lib/schema.mjs lists, at every depth; entryProblems); every
+//    sale received is placed or counted under a drop reason, and the placed
+//    ones add up to the tracts' n; PRECEDENCE: inside a sale source's covers
+//    only its tracts, outside them only the geometry source's, each on its
+//    own scale.
 // 7. BANDS (warning only): each scale's five colour bands hold between 5% and
 //    45% of its coloured areas; tied or bunched values can make quintile
 //    breaks that leave a band all but empty.
@@ -47,7 +63,8 @@ import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { gzipSync } from 'node:zlib';
-import { FIELDS, FORBIDDEN_FIELD, FORBIDDEN_IN_TEXT, MAX_CV, INDEX_VERSION, metaProblems, isColoured, isUnpublished } from './prices/lib/schema.mjs';
+import { FIELDS, FORBIDDEN_FIELD, FORBIDDEN_IN_TEXT, MAX_CV, INDEX_VERSION, CONTEXT_KEYS, metaProblems, entryProblems, isColoured, isUnpublished } from './prices/lib/schema.mjs';
+import { MIN_SHOWN, MIN_COLOUR_N, ROUND_TO, ORCH_DROPS, isCovered } from './prices/lib/sales.mjs';
 import { parseKey, orphanTiles, areasFromTile, cellsForBbox } from './prices/lib/tiles.mjs';
 import { bboxOfEncoded, bboxIntersects } from './prices/lib/geo.mjs';
 import { computeBreaks, increasing, classOf } from './prices/lib/scale.mjs';
@@ -66,6 +83,7 @@ const DRIFT_AREAS = 0.10, DRIFT_MEDIAN = 0.15;
 
 const results = [];
 const pass = (name, msg) => results.push({ lvl: 'PASS', name, msg });
+const skip = (name, msg) => results.push({ lvl: 'SKIP', name, msg });
 const fail = (name, msg) => results.push({ lvl: 'FAIL', name, msg });
 const warnR = (name, msg) => results.push({ lvl: 'WARN', name, msg });
 const check = (name, problems, okMsg, max = 5) => (problems.length
@@ -90,6 +108,7 @@ const run = async () => {
   const index = JSON.parse(readFileSync(join(DIR, 'index.json'), 'utf8'));
   if (index.version !== INDEX_VERSION) throw new Error(`index.json is version ${index.version}; this verifier reads v${INDEX_VERSION}`);
   const srcIds = Object.keys(index.sources);
+  const salesIds = srcIds.filter(s => index.sources[s].kind === 'point-sales');
 
   // ── 1. structure ─────────────────────────────────────────────────────────
   check('fields', [
@@ -124,7 +143,10 @@ const run = async () => {
     sizes.push({ k, areas: t.a.length, level, gz });
     if ((t.a.length > split.maxAreas || Buffer.byteLength(text) > split.maxBytes) && level < maxLevel) overfull.push(`${k}: ${t.a.length} areas, ${Buffer.byteLength(text)} bytes`);
     if (FORBIDDEN_IN_TEXT.test(text)) forbidden.push(`${k} names a forbidden field`);
-    for (const c of t.c || []) if (Object.keys(c).some(x => !['label', 'value', 'n'].includes(x))) forbidden.push(`${k}: context field(s) ${Object.keys(c).join(', ')}`);
+    if (Object.keys(t).some(x => !['a', 'c'].includes(x))) forbidden.push(`${k}: top-level field(s) ${Object.keys(t).join(', ')}`);
+    // A day-precise date is a single sale's; nothing in a tile is one.
+    if (/\d{4}-\d{2}-\d{2}/.test(text)) forbidden.push(`${k} holds a day-precise date`);
+    for (const c of t.c || []) if (Object.keys(c).some(x => !CONTEXT_KEYS.includes(x))) forbidden.push(`${k}: context field(s) ${Object.keys(c).join(', ')}`);
     const parsed = areasFromTile(text, index);
     t.a.forEach((row, i) => {
       if (row.length !== FIELDS.length) { refs.push(`${k} row ${i}: ${row.length} fields`); return; }
@@ -134,7 +156,7 @@ const run = async () => {
       if (!index.scales[sc]) refs.push(`${k} row ${i}: scale ${sc}`);
       if (ci != null && !t.c?.[ci]) refs.push(`${k} row ${i}: ctx ${ci}`);
       // A context is compared by content: its index differs from tile to tile.
-      const rowText = JSON.stringify([row.slice(0, 9), ci == null ? null : t.c[ci], row[10]]);
+      const rowText = JSON.stringify([row.slice(0, 9), ci == null ? null : t.c[ci], row.slice(10)]);
       const a = parsed[i];
       const key = `${a.src}:${a.id}`;
       a.bbox = bboxOfEncoded(a.enc);
@@ -163,7 +185,7 @@ const run = async () => {
   }
   check('areas in every leaf', missed, `each of ${fmt(areas.size)} areas is in every leaf its bbox touches`);
   check('split threshold', overfull, `no leaf above ${split.maxAreas} areas or ${split.maxBytes} bytes unless at the ${split.minCell}° minimum`);
-  check('forbidden fields', forbidden, 'no address, postcode, paon, saon or street field; contexts carry only label/value/n');
+  check('forbidden fields', forbidden, 'no address, postcode, paon, saon, street or sale-level field (location, date, price, parcel); no day-precise date; contexts carry only label/value/moe/n/flags');
 
   const all = [...areas.values()].map(x => x.a);
   const coloured = isColoured;
@@ -204,8 +226,12 @@ const run = async () => {
   }
   check('values', vals, 'every value > 0, moe >= 0, n a whole number');
   check('nothing neutral coloured', neutral, `suppressed carry no value; under colourMinN or CV > ${MAX_CV} are neutral; coloured areas carry no neutral flag`);
-  check('source meta', srcIds.flatMap(s => metaProblems(index.sources[s]).map(p => `${s}: ${p}`)),
+  check('source meta', srcIds.flatMap(s => metaProblems(index.sources[s], index.sources[s].kind || 'areas', { published: true }).map(p => `${s}: ${p}`)),
     `${srcIds.length} source(s) carry licence + link, attribution, metric, period, currency, unit noun; metrics named honestly`);
+  // An allowlist of every field, at every depth: sale data under a name that
+  // is not forbidden ("examples", upstream[0].sample) is caught here.
+  check('source fields', srcIds.flatMap(s => entryProblems(s, index.sources[s])),
+    'every source entry holds only the fields lib/schema.mjs lists (meta, build, upstream records, counts), no sale-level name at any depth');
   check('source status', srcIds.flatMap(s => ['fetched', 'snapshot', 'snapshot-after-failure'].includes(index.sources[s].status) ? [] : [`${s}: status "${index.sources[s].status}"`]),
     srcIds.map(s => `${s} ${index.sources[s].status}`).join(', ') || 'none');
   for (const s of srcIds) if (index.sources[s].status === 'snapshot-after-failure') warnR(`stale ${s}`, `its last fetch failed; showing the build of ${index.sources[s].fetched} (${index.sources[s].vintage})`);
@@ -217,6 +243,9 @@ const run = async () => {
     if (srcs.length !== 1 || srcs[0] !== sc.source) scaleProbs.push(`${sc.key}: areas from ${srcs.join(',') || 'none'}, index says ${sc.source}`);
     const m = index.sources[sc.source];
     if (!m || m.currency !== sc.currency || m.metric !== sc.metric || m.period !== sc.period) scaleProbs.push(`${sc.key}: currency/metric/period differ from its source's`);
+    // One metric: every area on the scale is from a source naming this metric.
+    const metrics = [...new Set(srcs.map(x => index.sources[x]?.metric))];
+    if (metrics.length !== 1 || metrics[0] !== sc.metric) scaleProbs.push(`${sc.key}: its areas carry ${metrics.length} metric(s): ${metrics.join(' | ')}`);
     for (const rid of new Set(mine.map(a => a.region))) {
       const r = index.regions.find(x => x.id === rid);
       if (r?.currency !== sc.currency) scaleProbs.push(`${sc.key}: region ${rid} is ${r?.currency}, scale is ${sc.currency}`);
@@ -228,7 +257,76 @@ const run = async () => {
       if (JSON.stringify(b.breaks) !== JSON.stringify(sc.breaks) || b.areas !== sc.areas || b.min !== sc.min || b.max !== sc.max) scaleProbs.push(`${sc.key}: its areas give breaks ${b.breaks} (${b.areas} coloured), index says ${sc.breaks} (${sc.areas})`);
     } catch (e) { scaleProbs.push(`${sc.key}: ${e.message}`); }
   });
-  check('scales', scaleProbs, `${index.scales.length} scale(s): one source, one currency, 4 increasing breaks computed from their own areas`);
+  check('scales', scaleProbs, `${index.scales.length} scale(s): one source, one metric, one currency, 4 increasing breaks computed from their own areas`);
+
+  // ── 8. sale prices ───────────────────────────────────────────────────────
+  if (salesIds.length) {
+    const sp = [], counted = [], prec = [];
+    for (const s of salesIds) {
+      const m = index.sources[s], l = bySrc[s] || [], minN = Math.max(MIN_COLOUR_N, m.colourMinN || 0);
+      // Nor in index.json: no field of the source's entry is sale-level.
+      for (const k of Object.keys(m)) if (FORBIDDEN_FIELD.test(k)) sp.push(`${s}: index.json carries a "${k}" field`);
+      for (const a of l) {
+        const key = `${s}:${a.id}`;
+        if (a.moe != null) sp.push(`${key}: a margin of error on a median of sales`);
+        if (a.value != null && a.value % ROUND_TO) sp.push(`${key}: ${a.value} is not rounded to the nearest ${ROUND_TO}`);
+        if (a.value != null && !(a.n >= MIN_SHOWN)) sp.push(`${key}: a figure on n=${a.n} (fewer than ${MIN_SHOWN} sales show none)`);
+        if (a.n != null && a.n < MIN_SHOWN && (a.value != null || a.iqr != null || a.flags.some(f => f !== 'suppressed'))) sp.push(`${key}: n=${a.n} must be withheld entirely`);
+        if (isColoured(a) && !(a.n >= minN)) sp.push(`${key}: coloured on n=${a.n} (< ${minN})`);
+        if (a.value != null && a.n >= minN && !a.iqr) sp.push(`${key}: n=${a.n} but no middle half`);
+        if (a.iqr && (!(a.n >= minN) || a.iqr.some(v => v % ROUND_TO) || !(a.iqr[0] <= a.value && a.value <= a.iqr[1]))) sp.push(`${key}: middle half ${JSON.stringify(a.iqr)} on n=${a.n} around ${a.value}`);
+        if (a.context && (a.context.label === m.metric || /\b(sale price|price paid)\b/i.test(a.context.label))) sp.push(`${key}: its context "${a.context.label}" is not the geometry source's own figure`);
+        // Word for word the geometry source's label: a context line is never
+        // somewhere to put words of a sale's own.
+        const gl = index.sources[m.geometry]?.contextLabel;
+        if (a.context && gl && a.context.label !== gl) sp.push(`${key}: its context label "${a.context.label}" is not ${m.geometry}'s ("${gl}")`);
+        if (m.geometry === 'acs-tract' && !/^\d{11}$/.test(a.id)) sp.push(`${key}: not a census tract GEOID`);
+        // The name is the tract's own official one (or none): never an
+        // address or anything else of a sale. For census tracts, the number
+        // in it is the GEOID's (…024402 -> "Census Tract 244.02, …").
+        if (m.geometry === 'acs-tract' && a.name != null && /^\d{11}$/.test(a.id)) {
+          const t = a.id.slice(5), num = `${+t.slice(0, 4)}${t.slice(4) === '00' ? '' : `.${t.slice(4)}`}`;
+          const mt = /^Census Tract (\d+(?:\.\d+)?), [\p{L} .'’-]+, [A-Z]{2}$/u.exec(a.name);
+          if (!mt || mt[1] !== num) sp.push(`${key}: name "${a.name}" is not census tract ${num}'s official name`);
+        }
+      }
+      // Every sale received is placed or counted under a drop reason; the
+      // placed ones are exactly the tracts' n.
+      const st = m.stats || {}, d = st.dropped || {}, sales = st.sales || {};
+      if (!Number.isInteger(sales.received) || !Number.isInteger(sales.used)) counted.push(`${s}: stats.sales must give received and used`);
+      else {
+        const missing = ORCH_DROPS.filter(k => !Number.isInteger(d[k]));
+        if (missing.length) counted.push(`${s}: no count for ${missing.join(', ')}`);
+        const dropped = ORCH_DROPS.reduce((t, k) => t + (d[k] || 0), 0);
+        if (sales.received !== sales.used + dropped) counted.push(`${s}: ${sales.received} received ≠ ${sales.used} placed + ${dropped} dropped`);
+        const sum = l.reduce((t, a) => t + (a.n || 0), 0);
+        if (d.outsideScope ? sum > sales.used : sum !== sales.used) counted.push(`${s}: the tracts' n add up to ${sum}, not the ${sales.used} sales placed`);
+      }
+      if (Object.values(d).some(v => !(Number.isInteger(v) && v >= 0))) counted.push(`${s}: a drop count is not a whole number`);
+      if (Object.keys(m.stats || {}).some(k => !['areas', 'coloured', 'neutral', 'unpublished', 'dropped', 'sales', 'replaced'].includes(k)) ||
+          Object.keys(sales).some(k => !['received', 'used'].includes(k))) counted.push(`${s}: stats carry more than counts`);
+      // Precedence, in every region the sale source shows.
+      const g = m.geometry, covers = m.covers;
+      if (!g || !index.sources[g]) { prec.push(`${s}: its geometry source ${g} is not in the build`); continue; }
+      if (!covers?.juris) { prec.push(`${s}: no covers`); continue; }
+      for (const rid of new Set(l.map(a => a.region))) {
+        const mine = l.filter(a => a.region === rid), theirs = (bySrc[g] || []).filter(a => a.region === rid);
+        const ids = new Set(mine.map(a => a.id)), [first, second] = scalesFor(rid);
+        for (const a of theirs) {
+          if (ids.has(a.id)) prec.push(`${rid}: tract ${a.id} is shown by both ${s} and ${g}`);
+          if (isCovered(covers, a)) prec.push(`${rid}: ${g} tract ${a.id} is inside ${s}'s covers`);
+          if (a.scale !== second) prec.push(`${rid}: ${g} tract ${a.id} is on scale ${a.scale}, not ${second}`);
+        }
+        for (const a of mine) {
+          if (!isCovered(covers, a)) prec.push(`${rid}: ${s} tract ${a.id} is outside its covers`);
+          if (a.scale !== first) prec.push(`${rid}: ${s} tract ${a.id} is on scale ${a.scale}, not ${first}`);
+        }
+      }
+    }
+    check('sale figures', sp, `${salesIds.join(', ')}: nothing coloured under ${MIN_COLOUR_N} sales, no figure under ${MIN_SHOWN}, figures to the ${ROUND_TO}, middle half only from colourMinN and around the median, contexts are the geometry source's own figure`);
+    check('sales counted', counted, salesIds.map(s => { const x = index.sources[s].stats; return `${s} ${fmt(x.sales?.received)} received = ${fmt(x.sales?.used)} placed + ${ORCH_DROPS.map(k => `${fmt(x.dropped?.[k] || 0)} ${k}`).join(' + ')}`; }).join('; '));
+    check('precedence', prec, `inside each sale source's covers only its tracts, outside them only its geometry source's, on separate scales`);
+  }
 
   const noneRegions = Object.entries(PRICE_REGIONS).filter(([, d]) => d.none).map(([id]) => id);
   check('no-data regions', noneRegions.flatMap(id => [
@@ -267,8 +365,11 @@ const run = async () => {
     // excused, not even by --refresh.
     const gives = (rid, s) => (PRICE_REGIONS[rid]?.sources || []).includes(s);
     const givenAnywhere = s => Object.keys(PRICE_REGIONS).some(rid => gives(rid, s));
+    // A geometry source is compared with the tracts it and the sale sources
+    // placed on it showed together: precedence moves tracts between them.
+    const family = x => (x?.stats?.areas == null ? null : x.stats.areas + Object.values(x.stats.replaced || {}).reduce((t, v) => t + v, 0));
     for (const s of srcIds) {
-      const p = prev.sources?.[s]?.stats?.areas, n = index.sources[s].stats.areas;
+      const p = family(prev.sources?.[s]), n = family(index.sources[s]);
       if (p == null || refreshed(s)) continue;
       const d = (n - p) / p;
       if (Math.abs(d) > DRIFT_AREAS) drift.push(`${s}: ${fmt(p)} -> ${fmt(n)} areas (${(100 * d).toFixed(1)}%)`);
@@ -278,10 +379,13 @@ const run = async () => {
       if (givenAnywhere(s)) lost.push(`${s}: ${fmt(prev.sources[s].stats?.areas)} areas last build, absent now`);
       else if (!refreshed(s)) drift.push(`${s}: ${fmt(prev.sources[s].stats?.areas)} areas last build, absent now (no region takes it any more)`);
     }
+    // A geometry source whose every tract in a city is now shown by a sale
+    // source placed on it (all of DC) has handed the city over, not lost it.
+    const handedOver = (rid, s) => salesIds.some(x => index.sources[x].geometry === s && all.some(a => a.region === rid && a.src === x));
     for (const pr of prev.regions || []) {
       const r = index.regions.find(x => x.id === pr.id);
       for (const s of pr.sources || []) {
-        if (gives(pr.id, s) && !all.some(a => a.region === pr.id && a.src === s)) lost.push(`${pr.id}: had ${s} areas last build, has none now`);
+        if (gives(pr.id, s) && !all.some(a => a.region === pr.id && a.src === s) && !handedOver(pr.id, s)) lost.push(`${pr.id}: had ${s} areas last build, has none now`);
       }
       if (r && pr.areas != null && r.areas != null && !(pr.sources || []).some(refreshed)) {
         const d = (r.areas - pr.areas) / pr.areas;
@@ -292,15 +396,19 @@ const run = async () => {
       if (index.scales.some(x => x.key === ps.key)) continue;
       if (Object.keys(PRICE_REGIONS).some(rid => gives(rid, ps.source) && scalesFor(rid).includes(ps.key))) lost.push(`colour scale ${ps.key} (${ps.name}) existed last build, is gone now`);
     }
+    const moved = [];
     for (const sc of index.scales) {
       const p = (prev.scales || []).find(x => x.key === sc.key);
+      // A scale that changed source (ACS to recorded sales) changed metric:
+      // its median is not comparable, and that is a decision, not drift.
+      if (p && p.source && p.source !== sc.source) { moved.push(`${sc.key}: ${p.source} -> ${sc.source}`); continue; }
       if (!p?.median || refreshed(sc.source)) continue;
       const d = (sc.median - p.median) / p.median;
       if (Math.abs(d) > DRIFT_MEDIAN) drift.push(`scale ${sc.key}: median ${fmt(p.median)} -> ${fmt(sc.median)} (${(100 * d).toFixed(1)}%)`);
     }
     check('nothing lost', lost, `every source, city and colour scale of the previous build is still here`, 8);
     check('drift', drift, `areas per source and per city within ±${DRIFT_AREAS * 100}% and scale medians within ±${DRIFT_MEDIAN * 100}% of the previous build` +
-      (REFRESH.size ? ` (refreshed: ${[...REFRESH].join(', ')})` : ''));
+      (REFRESH.size ? ` (refreshed: ${[...REFRESH].join(', ')})` : '') + (moved.length ? `; not compared, as their source changed: ${moved.join(', ')}` : ''));
   }
 
   // ── 5. size ──────────────────────────────────────────────────────────────
@@ -319,8 +427,10 @@ const run = async () => {
   // ── 6. spot checks ───────────────────────────────────────────────────────
   if (!SPOT) warnR('spot checks', 'skipped (--no-spot)');
   else {
-    const spot = (name, src, fn) => {
-      if (!index.sources[src]) { fail(name, `${src} is not in this build`); return; }
+    // optional: a sale source's check, skipped (and said so) while that
+    // source is not in the build; every other missing source fails its check.
+    const spot = (name, src, fn, { optional = false } = {}) => {
+      if (!index.sources[src]) { (optional ? skip : fail)(name, `${src} is not in this build`); return; }
       const { ok, saw } = fn(bySrc[src] || []);
       (ok ? pass : fail)(name, saw);
     };
@@ -332,10 +442,23 @@ const run = async () => {
       const v = l.filter(a => a.scale === 'TLI' && coloured(a)).map(a => a.value), m = median(v);
       return { ok: m >= 400_000 && m <= 900_000, saw: `median of ${fmt(v.length)} London MSOA medians £${fmt(Math.round(m))} (want £400k–£900k)` };
     });
-    spot('spot NYC', 'acs-tract', l => {
-      const n = l.filter(a => a.region === 'nyc').length;
-      return { ok: n > 1500, saw: `${fmt(n)} NYC tracts (want > 1,500)` };
+    // Every NYC tract, whichever source shows it (acs-tract hands the five
+    // boroughs to nyc-dof-sales).
+    spot('spot NYC', 'acs-tract', () => {
+      const n = all.filter(a => a.region === 'nyc').length, by = srcIds.map(s => [s, all.filter(a => a.region === 'nyc' && a.src === s).length]).filter(([, k]) => k);
+      return { ok: n > 1500, saw: `${fmt(n)} NYC tracts (${by.map(([s, k]) => `${fmt(k)} ${s}`).join(', ')}; want > 1,500)` };
     });
+    const tracts = (l, rid) => l.filter(a => a.region === rid).length;
+    spot('spot NYC sales', 'nyc-dof-sales', l => {
+      const n = tracts(l, 'nyc'), v = l.filter(a => a.id.startsWith('36061') && coloured(a)).map(a => a.value), m = median(v);
+      return { ok: n > 1500 && m >= 700_000 && m <= 3_000_000,
+        saw: `${fmt(n)} tracts (want > 1,500); median of ${fmt(v.length)} coloured Manhattan tract medians $${fmt(Math.round(m))} (want $700k–$3M)` };
+    }, { optional: true });
+    spot('spot DC sales', 'dc-cama-sales', l => ({ ok: tracts(l, 'dc') > 150, saw: `${fmt(tracts(l, 'dc'))} DC tracts (want > 150)` }), { optional: true });
+    // SPEC2 asked for > 100: the Hartford rectangle holds only 65 tracts
+    // (acs-tract, Sept 2026), so the floor is set under that instead.
+    spot('spot Hartford sales', 'ct-opm-sales', l => ({ ok: tracts(l, 'hartford') > 50, saw: `${fmt(tracts(l, 'hartford'))} Hartford-region tracts (want > 50; the rectangle holds 65)` }), { optional: true });
+    spot('spot Baltimore sales', 'md-sdat-sales', l => ({ ok: tracts(l, 'baltimore') > 150, saw: `${fmt(tracts(l, 'baltimore'))} Baltimore-region tracts (want > 150)` }), { optional: true });
     spot('spot Toronto', 'statcan-ct', l => {
       const n = l.filter(a => a.region === 'toronto').length;
       return { ok: n > 400, saw: `${fmt(n)} Toronto census tracts (want > 400)` };
@@ -357,8 +480,8 @@ const run = async () => {
 
   // ── report ───────────────────────────────────────────────────────────────
   for (const r of results) console.log(`  ${r.lvl.padEnd(4)}  ${r.name.padEnd(24)} ${r.msg}`);
-  const fails = results.filter(r => r.lvl === 'FAIL').length, warns = results.filter(r => r.lvl === 'WARN').length;
-  console.log(`\n  ${fails ? 'FAIL' : 'PASS'} — ${results.length - fails - warns} passed, ${fails} failed, ${warns} warning(s); ${fmt(all.length)} areas, ${index.where}.`);
+  const fails = results.filter(r => r.lvl === 'FAIL').length, warns = results.filter(r => r.lvl === 'WARN').length, skips = results.filter(r => r.lvl === 'SKIP').length;
+  console.log(`\n  ${fails ? 'FAIL' : 'PASS'} — ${results.length - fails - warns - skips} passed, ${fails} failed, ${warns} warning(s)${skips ? `, ${skips} skipped` : ''}; ${fmt(all.length)} areas, ${index.where}.`);
   if (fails) process.exit(1);
 };
 
