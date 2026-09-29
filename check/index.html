@@ -363,13 +363,20 @@
   .schbar .seg button:focus-visible{outline:2px solid var(--teal);outline-offset:-4px}
   .schbar .seg button.on:focus-visible{outline-color:#04231E}
   .schbar select{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--ink);background:var(--bg);border:1px solid var(--line-2);border-radius:999px;padding:7px 11px;outline:none}
+    color:var(--ink);border:1px solid var(--line-2);border-radius:999px;padding:7px 30px 7px 11px;outline:none;cursor:pointer;
+    /* Our own chevron: the native one sits hard against the right edge,
+       padding or not, which on a pill crowds it into the curve. Inset 13px
+       (the text's 11px plus the curve), in --ink-2. */
+    -webkit-appearance:none;appearance:none;
+    background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23A8B6C4' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 13px center/9px 6px}
   /* Without a cap a select is as wide as its longest option ("Middle deemed
      secondary"). */
   .schbar select{max-width:160px}
   .schbar select:focus{border-color:var(--teal)}
   .schbar .chk{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
-    text-transform:uppercase;color:var(--ink-2);border:1px solid var(--line-2);border-radius:999px;padding:7px 11px;cursor:pointer;background:var(--bg)}
+    text-transform:uppercase;color:var(--ink-2);border:1px solid var(--line-2);border-radius:999px;padding:5px 11px;cursor:pointer;background:var(--bg)}
+  /* 5px, not the others' 7px: the checkbox box is taller than a line of 11px
+     text, and at 7px this pill stood 4px taller than its neighbours. */
   .schbar .chk input{width:auto;accent-color:var(--teal);margin:0;padding:0;border:0}
   .schbar .chk.on{color:var(--ink);border-color:var(--teal)}
   /* A filter the schools in view do not publish is hidden (see syncSchFilters). */
