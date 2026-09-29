@@ -25,6 +25,10 @@
 //                  Ireland, 26 US cities, Toronto, Vancouver and Mexico City";
 //                  index.json's "where", derived by build-schools from the
 //                  sources actually in the build, so it grows as they do)
+//   prices-where   where the home-prices layer covers ("England, Wales and
+//                  Northern Ireland; 26 US cities; Toronto and Vancouver";
+//                  prices/data/index.json's "where", derived by build-prices
+//                  from the areas actually built)
 //   city:<slug>    areas in one city
 //
 // A number it cannot compute is left exactly as it was and reported — never
@@ -61,6 +65,11 @@ function computeFacts() {
     const s = JSON.parse(readFileSync(schoolPath, 'utf8'));
     if (Number.isFinite(s.count)) facts.schools = fmt(s.count);
     if (typeof s.where === 'string' && s.where) facts['schools-where'] = s.where;
+  }
+  const pricesPath = join(ROOT, 'prices', 'data', 'index.json');
+  if (existsSync(pricesPath)) {
+    const p = JSON.parse(readFileSync(pricesPath, 'utf8'));
+    if (typeof p.where === 'string' && p.where) facts['prices-where'] = p.where;
   }
   return facts;
 }

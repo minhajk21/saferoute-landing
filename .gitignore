@@ -13,3 +13,8 @@
 data/raw/
 *.csv
 !tools/**/*.csv
+
+# A home-prices build killed part-way leaves prices/data.staging-<pid> or
+# prices/data.old-<pid> (tools/prices/lib/tiles.mjs writeOutput; the next build
+# removes them). Never published: the monthly workflow runs `git add prices/`.
+/prices/data.*

@@ -24,6 +24,11 @@
 //
 // frozen: never touch the network; use whatever is in rawDir whatever its age,
 // and fail if a file is missing. For reproducible before/after comparisons.
+//
+// fetchImpl: optional stand-in for the global fetch (same signature). The
+// home-prices build passes one that paces requests per host and waits out a
+// 429's Retry-After (tools/prices/lib/ctx.mjs); schools passes nothing, so its
+// requests are exactly as before.
 
 import { existsSync, readFileSync, writeFileSync, statSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -31,7 +36,7 @@ import { createHash } from 'node:crypto';
 
 const sha256 = buf => createHash('sha256').update(buf).digest('hex');
 
-export function makeDownloader({ rawDir, frozen = false, log = () => {} }) {
+export function makeDownloader({ rawDir, frozen = false, log = () => {}, fetchImpl = null }) {
   mkdirSync(rawDir, { recursive: true });
   const provenance = [];
 
@@ -58,7 +63,7 @@ export function makeDownloader({ rawDir, frozen = false, log = () => {} }) {
       const h = { ...headers };
       if (ua !== undefined) h['user-agent'] = ua;
       let res;
-      try { res = await fetch(url, { headers: h, signal: AbortSignal.timeout(timeoutMs) }); }
+      try { res = await (fetchImpl || fetch)(url, { headers: h, signal: AbortSignal.timeout(timeoutMs) }); }
       catch (e) { tried.push(`${url.split('/').pop()}: ${e.message}`); continue; }
       if (!res.ok) { tried.push(`${url.split('/').pop()}: HTTP ${res.status}`); continue; }
       const buf = Buffer.from(await res.arrayBuffer());

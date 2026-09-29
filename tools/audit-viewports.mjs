@@ -88,6 +88,29 @@
 //     - at 1440x900, its "School data sources" list, once opened, links every
 //       source's and every openly licensed scheme's licence (index.json
 //       licenceUrl): CC BY 4.0 requires the link, the OGLs ask for it.
+//   /check/?prices (in the matrix, Europe/London like ?schools)
+//     - the home-prices layer draws within 3s (areas, not a note), its pill is
+//       pressed and the Heatmap pill is not (the two fills are exclusive),
+//       centred on central London at zoom >= index.minZoom, and at least 12
+//       where central London fits at 12. Its legend is shown, inside the map.
+//       The prices pane is aria-hidden and holds no Tab stop.
+//     - the map's corners stay clear with the SCHOOLS layer on as well (the
+//       two keys, the stack and Leaflet's controls; see "map stack", below).
+//     - at 1440x900: the "Home value data sources" list links every source's
+//       licence; a real mouse click on an area (on a point with nothing drawn
+//       over it) opens #prview inside #side, with its attribution, its licence
+//       linked and the area outlined, and Back returns to the report; a school
+//       pin drawn over a price area is still the thing under the pointer.
+//     - at every size, the states that show the layers' notes (both layers
+//       zoomed out; both where neither has data; home values alone there;
+//       both across a state line) keep every overlay inside the map and clear
+//       of every other (see "map stack").
+//   map stack, on every /check/ page at every size
+//     - no two of the map's overlays overlap: the right-hand stack (pills,
+//       status, notes), the keys (schools, home prices) and Leaflet's
+//       controls (zoom, attribution, the Mapbox wordmark), and each stack item
+//       and key sits inside the map. The stack was once four hard-coded
+//       offsets, where a third pill would have landed on the status.
 //   default view by time zone, once per run at 1440x900: Europe/London opens on
 //     Great Britain, America/New_York on the lower 48, America/Mexico_City on
 //     Mexico City, Asia/Tokyo wide enough to hold both London and New York —
@@ -96,7 +119,11 @@
 //     central London, America/New_York on Midtown, America/Chicago on the
 //     Loop, America/Detroit on Detroit, America/Mexico_City on the Centro,
 //     Asia/Tokyo (no region's zone) on central London — pins drawn, and the
-//     pane's hint naming where it started.
+//     pane's hint naming where it started. /check/?prices likewise, from
+//     prices/data/index.json: Europe/London on central London, New York on
+//     Midtown, Toronto on downtown, and Tokyo and Mexico City (no price data)
+//     on the index's first region — areas drawn, and the hint naming it (for
+//     Mexico City, saying there is no open home-value data there).
 //
 // No npm dependencies: it drives an installed Chrome over the DevTools
 // Protocol using Node's built-in WebSocket, and serves the site itself, so it
@@ -179,7 +206,7 @@ const VIEWPORTS = [
 // phone sideways by up to 264px while Peckham, the other area page here, was
 // fine. /404.html is what Pages serves for every missing path, so it is a
 // page type of its own with the same header and footer.
-const ALL_PAGES = ['/', '/check/', '/check/?schools', '/tonight/#seattle', '/safety/', '/safety/london/', '/safety/london/peckham/',
+const ALL_PAGES = ['/', '/check/', '/check/?schools', '/check/?prices', '/tonight/#seattle', '/safety/', '/safety/london/', '/safety/london/peckham/',
   '/safety/baltimore/medfield-hampden-woodberry-remington/', '/transparency/', '/404.html'];
 // The tab each page type is ON, by its nav link's href (null: none — the
 // homepage and the 404 page are not one of the tabs).
@@ -221,6 +248,25 @@ const MAPS = {
           if (typeof schLayer !== 'undefined' && schLayer && map.hasLayer(schLayer)) return true;
         } catch {}
         return note()?.hidden === false;
+      };
+      for (let i = 0; i < 20; i++) {
+        if (drawn()) return 'ok';
+        await new Promise(r => setTimeout(r, 150));
+      }
+      return drawn() ? 'ok' : 'timeout';
+    })()` },
+  // The home-prices layer has no toolbar, so the map keeps /check/'s own
+  // floors. Its prepare waits, like ?schools', until the layer has DRAWN
+  // (areas on the canvas, or its note shown), not merely switched on.
+  '/check/?prices':   { sel: '#map', desktopMin: 0.85, desktopWidthMin: 0.55, strict: true, prices: true,
+    areaMin: [[861, 0.50], [1024, 0.55], [1280, 0.63], [1366, 0.66], [1440, 0.67], [1920, 0.70], [2560, 0.74]],
+    prepare: `(async () => {
+      const drawn = () => {
+        try {
+          if (prBusy || prPending) return false;
+          if (prOn && prLayers.size) return true;
+          return prOn && prNote.hidden === false;
+        } catch { return false; }
       };
       for (let i = 0; i < 20; i++) {
         if (drawn()) return 'ok';
@@ -277,6 +323,14 @@ const SHELL_MIN_H = 540;
 // Where ?schools must open: central London, the densest schools data and the
 // page's own VIEWS.schools box. [[south, west], [north, east]].
 const CENTRAL_LONDON = [[51.47, -0.165], [51.535, -0.055]];
+// /check/?prices, at every size: [label, centre, zoom, schools on too]. Each
+// shows at least one note (zoom in; no data here; only this state's side).
+const NOTE_STATES = [
+  ['both layers zoomed out (z10 London)', [51.5, -0.12], 10, true],
+  ['both layers where neither has data (Paris)', [48.8566, 2.3522], 12, true],
+  ['home values alone where there are none (Paris)', [48.8566, 2.3522], 12, false],
+  ['both layers across a state line (Jersey City)', [40.72, -74.035], 13, true],
+];
 
 // The time-zone pass (see WHAT IT CHECKS). Boxes are [[south, west], [north, east]].
 const TZ_VIEWS = [
@@ -291,6 +345,13 @@ const TZ_VIEWS = [
 const TZ_SCHOOLS = [
   { tz: 'Europe/London', region: 'uk' }, { tz: 'America/New_York', region: 'nyc' }, { tz: 'America/Chicago', region: 'chicago' },
   { tz: 'America/Detroit', region: 'detroit' }, { tz: 'America/Mexico_City', region: 'mexicocity' }, { tz: 'Asia/Tokyo', region: 'uk' },
+];
+// The ?prices time-zone pass: zone -> region (null: the index's first region,
+// the page's fallback). Mexico City has no open price data, so its visitors
+// get the fallback too, never an empty map.
+const TZ_PRICES = [
+  { tz: 'Europe/London', region: 'uk' }, { tz: 'America/New_York', region: 'nyc' }, { tz: 'America/Toronto', region: 'toronto' },
+  { tz: 'America/Mexico_City', region: null }, { tz: 'Asia/Tokyo', region: null },
 ];
 
 const CHROME = [
@@ -518,6 +579,51 @@ const SCHOOLS = (london) => {
   };
 };
 
+// Runs inside the page, ?prices only: the layer's own state after prepare.
+// fitZoom is as for SCHOOLS.
+const PRICES = (london) => {
+  const note = document.querySelector('.prnote'), key = document.getElementById('prkey');
+  const m = document.getElementById('map').getBoundingClientRect();
+  const kr = key && !key.hidden ? key.getBoundingClientRect() : null;
+  const out = { noteVisible: !!(note && !note.hidden && note.getBoundingClientRect().height > 0), noteText: note?.textContent.trim() || '',
+    key: kr && kr.height > 0 ? { inMap: kr.left >= m.left - 1 && kr.right <= m.right + 1 && kr.top >= m.top - 1 && kr.bottom <= m.bottom + 1, title: key.innerText.split('\n')[0] } : null };
+  try {
+    const c = map.getCenter();
+    Object.assign(out, { zoom: map.getZoom(), centre: [+c.lat.toFixed(4), +c.lng.toFixed(4)],
+      fitZoom: map.getBoundsZoom(L.latLngBounds(london), false, L.point(32, 32)), minZoom: prIndex?.minZoom ?? null, drawn: prLayers.size,
+      pr: prBtn.getAttribute('aria-pressed'), heat: hexBtn.getAttribute('aria-pressed'),
+      paneHidden: map.getPane('prices')?.getAttribute('aria-hidden') === 'true',
+      tabStops: document.querySelectorAll('.leaflet-prices-pane a, .leaflet-prices-pane button, .leaflet-prices-pane [tabindex]:not([tabindex="-1"])').length });
+  } catch (e) { out.error = String(e); }
+  return out;
+};
+
+// Runs inside the page: every pair of the map's overlays that overlap, and
+// any stack item or key outside the map. "Overlays" are the right-hand stack
+// (.mapstack: pills, status, notes), the keys (.mapkeys) and Leaflet's
+// controls (zoom, attribution, the Mapbox wordmark). Only what is drawn
+// counts: a hidden note, or the pan status while it is transparent, has
+// nothing to collide.
+const STACK = () => {
+  const shown = el => { const cs = getComputedStyle(el); if (el.hidden || cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity === 0) return null;
+    const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r : null; };
+  const name = el => el.id ? '#' + el.id : '.' + [...el.classList].filter(c => c !== 'on' && c !== 'leaflet-bar').slice(0, 2).join('.');
+  const map = document.getElementById('map');
+  if (!map) return ['no #map'];
+  const m = map.getBoundingClientRect();
+  const own = [...document.querySelectorAll('.mapstack > *, .mapkeys > *')].map(el => ({ n: name(el), r: shown(el), own: true }));
+  const ctl = [...map.querySelectorAll('.leaflet-control')].map(el => ({ n: name(el), r: shown(el) }));
+  const items = [...own, ...ctl].filter(x => x.r);
+  const out = [];
+  for (const x of items) if (x.own && (x.r.left < m.left - 1 || x.r.right > m.right + 1 || x.r.top < m.top - 1 || x.r.bottom > m.bottom + 1)) out.push(`${x.n} outside the map`);
+  for (let i = 0; i < items.length; i++) for (let j = i + 1; j < items.length; j++) {
+    const a = items[i].r, b = items[j].r;
+    const ox = Math.min(a.right, b.right) - Math.max(a.left, b.left), oy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+    if (ox > 0.5 && oy > 0.5) out.push(`${items[i].n} overlaps ${items[j].n} (${Math.round(ox)}x${Math.round(oy)}px)`);
+  }
+  return out;
+};
+
 // Runs inside the page: the state right after a search. revealTool() is what a
 // search calls to bring the answer into view. It may scroll smoothly, so wait
 // until the scroll position has held still before measuring.
@@ -649,11 +755,11 @@ async function main() {
     const heights = [];   // [page, header height] at this size, compared below
     for (const page of PAGES) {
       const isCheck = page.startsWith('/check/');
-      // ?schools opens on the visitor's time-zone region; the matrix holds it
-      // to Europe/London (central London) on every machine. The time-zone
-      // pass below covers the other zones.
-      const schoolsPage = isCheck && /[?&]schools\b|#schools$/.test(page);
-      await c.send('Emulation.setTimezoneOverride', { timezoneId: schoolsPage ? 'Europe/London' : '' });
+      // ?schools and ?prices open on the visitor's time-zone region; the
+      // matrix holds them to Europe/London (central London) on every machine.
+      // The time-zone pass below covers the other zones.
+      const layerPage = isCheck && /[?&](schools|prices)\b|#(schools|prices)$/.test(page);
+      await c.send('Emulation.setTimezoneOverride', { timezoneId: layerPage ? 'Europe/London' : '' });
       await load(base + page);
       // Web fonts swap in after load and change line breaks: the column's on
       // the shell, and the header's everywhere (its tabs are Plex Mono, and
@@ -662,7 +768,7 @@ async function main() {
       const hd = (await ev(`(${HEADER.toString()})()`)) || { missing: true };
       // An unlisted /check/ URL is still the app shell: it takes the contract
       // of the variant it is (schools mode or not), never none.
-      const mapCfg = MAPS[page] || (isCheck ? MAPS[/[?&]schools\b|#schools$/.test(page) ? '/check/?schools' : '/check/'] : null);
+      const mapCfg = MAPS[page] || (isCheck ? MAPS[/[?&]schools\b|#schools$/.test(page) ? '/check/?schools' : /[?&]prices\b|#prices$/.test(page) ? '/check/?prices' : '/check/'] : null);
       const mapSel = mapCfg ? mapCfg.sel : null;
       let prepared = null;
       if (mapCfg?.prepare) {
@@ -792,6 +898,152 @@ async function main() {
           }
         }
 
+        // ── /check/?prices ──
+        if (mapCfg?.prices) {
+          const x = await ev(`(${PRICES.toString()})(${JSON.stringify(CENTRAL_LONDON)})`) || {};
+          if (prepared !== 'ok') flag('FAIL', 'prices layer did not draw within 3s');
+          if (x.error) flag('FAIL', `prices layer not readable (${x.error})`);
+          else {
+            if (x.pr !== 'true') flag('FAIL', `Prices pill aria-pressed="${x.pr}" with the layer on`);
+            if (x.heat !== 'false') flag('FAIL', `Heatmap pill aria-pressed="${x.heat}" with prices on (the two fills are exclusive)`);
+            const zFloor = Math.max(x.minZoom ?? 11, Math.min(12, x.fitZoom ?? 12));
+            if (x.zoom == null || x.zoom < zFloor) flag('FAIL', `prices view at zoom ${x.zoom} (want >= ${zFloor})`);
+            const [[s, w], [n, e]] = CENTRAL_LONDON;
+            if (!x.centre || x.centre[0] < s || x.centre[0] > n || x.centre[1] < w || x.centre[1] > e) flag('FAIL', `prices view not centred on central London (${x.centre ? x.centre.join(',') : 'no map'})`);
+            if (!x.drawn) flag('FAIL', 'prices layer drew no areas');
+            if (x.noteVisible) flag('FAIL', `.prnote visible — "${x.noteText}"`);
+            if (!x.key) flag('FAIL', 'home-values legend (#prkey) not shown');
+            else if (!x.key.inMap) flag('FAIL', `home-values legend (${x.key.title}) runs outside the map`);
+            if (!x.paneHidden || x.tabStops) flag('FAIL', `prices pane ${x.paneHidden ? '' : 'not aria-hidden'}${x.tabStops ? ` has ${x.tabStops} Tab stop(s)` : ''}`);
+          }
+          // Both layers on: the two keys stack beside the pills and the zoom
+          // control without touching them, and (at 1440x900) a school pin
+          // over a price area is still what the pointer finds.
+          const probePin = vp.w === 1440 && vp.h === 900;
+          const both = await ev(`(async () => {
+            const wait = async () => { for (let i = 0; i < 40; i++) { await new Promise(r => setTimeout(r, 150));
+              try { if (schOn && !schBusy && !schPending && (schLayer || !schNote.hidden) && !prBusy && !prPending) return true; } catch {} } return false; };
+            schBtn.click();
+            const drew = await wait();
+            await new Promise(r => setTimeout(r, 250));
+            const overlaps = (${STACK.toString()})();
+            let pin = null;
+            if (${probePin} && schLayer) {
+              const m = document.getElementById('map').getBoundingClientRect();
+              for (const l of schLayer.getLayers()) {
+                const ll = l.getLatLng();
+                if (![...prLayers.values()].some(x => prContains(x.prArea, ll.lat, ll.lng))) continue;
+                const p = map.latLngToContainerPoint(ll), x = m.left + p.x, y = m.top + p.y;
+                if (x < m.left + 60 || x > m.right - 200 || y < m.top + 60 || y > m.bottom - 200) continue;
+                const hit = document.elementFromPoint(x, y);
+                if (!hit || hit.closest('.mapstack, .mapkeys, .leaflet-control, .leaflet-tooltip')) continue;
+                pin = { ok: !!hit.closest('.leaflet-schools-pane'), hit: hit.tagName.toLowerCase() + (hit.closest('.leaflet-pane') ? ' in ' + hit.closest('.leaflet-pane').className.split(' ').pop() : '') };
+                break;
+              }
+            }
+            schBtn.click();
+            await new Promise(r => setTimeout(r, 300));
+            return { drew, overlaps, pin };
+          })()`, true) || { drew: false, overlaps: [] };
+          if (!both.drew) flag('FAIL', 'schools did not draw with prices on');
+          for (const o of both.overlaps || []) flag('FAIL', `with schools on too: ${o}`);
+          if (probePin && x.drawn && (!both.pin || !both.pin.ok)) flag('FAIL', `a school pin over a price area is not under the pointer (${both.pin ? both.pin.hit : 'no pin over an area found'})`);
+          // The sources list and an area's pane, once per run. The area is
+          // opened by a REAL click (the DevTools input API) on a point of it
+          // with nothing drawn over it, so what is tested is what a pointer
+          // reaches, not Leaflet's own event.
+          if (probePin) {
+            const pv = await ev(`(async () => {
+              const d = document.getElementById('prSources'); if (!d) return { error: 'no #prSources' };
+              d.open = true;
+              for (let i = 0; i < 40 && !d.dataset.done; i++) await new Promise(r => setTimeout(r, 100));
+              if (!d.dataset.done || !prIndex) { d.open = false; return { done: false, error: 'it never filled: is prices/data/index.json there?' }; }
+              const hrefs = new Set([...d.querySelectorAll('a[href]')].map(a => a.href));
+              const missing = Object.entries(prIndex.sources).filter(([, s]) => !s.licenceUrl || !hrefs.has(new URL(s.licenceUrl, location.href).href)).map(([k]) => k);
+              d.open = false;
+              const m = document.getElementById('map').getBoundingClientRect(), b = map.getBounds();
+              // Well inside: every point 6px around it is in the area too
+              // (Leaflet hit-tests the shape it drew, smoothed by a pixel).
+              const deep = (a, p) => [[-6, 0], [6, 0], [0, -6], [0, 6], [-4, -4], [4, 4], [-4, 4], [4, -4]]
+                .every(([dx, dy]) => { const q = map.containerPointToLatLng([p.x + dx, p.y + dy]); return prContains(a, q.lat, q.lng); });
+              for (const l of prLayers.values()) {
+                const a = l.prArea, [s, w, n, e] = a.bbox;
+                for (let i = 1; i < 8; i++) for (let j = 1; j < 8; j++) {
+                  const la = s + (n - s) * i / 8, ln = w + (e - w) * j / 8;
+                  if (!b.contains([la, ln]) || !prContains(a, la, ln)) continue;
+                  const p = map.latLngToContainerPoint([la, ln]), x = m.left + p.x, y = m.top + p.y;
+                  if (!deep(a, p)) continue;
+                  if (x < m.left + 60 || x > m.right - 240 || y < m.top + 60 || y > m.bottom - 240) continue;
+                  const hit = document.elementFromPoint(x, y);
+                  if (!hit?.closest('.leaflet-prices-pane')) continue;
+                  return { done: true, missing, key: a.key, x, y };
+                }
+              }
+              return { done: true, missing, error: 'no area point in view with nothing over it' };
+            })()`, true) || { error: 'no result' };
+            if (pv.key) {
+              for (const type of ['mouseMoved', 'mousePressed', 'mouseReleased']) {
+                await c.send('Input.dispatchMouseEvent', { type, x: pv.x, y: pv.y, button: 'left', buttons: type === 'mousePressed' ? 1 : 0, clickCount: type === 'mouseMoved' ? 0 : 1 });
+              }
+              await sleep(200);
+              Object.assign(pv, await ev(`(() => {
+                const key = ${JSON.stringify(pv.key)}, l = prLayers.get(key);
+                const v = document.getElementById('prview'), side = document.getElementById('side');
+                const vr = v.getBoundingClientRect(), sr = side.getBoundingClientRect(), src = prIndex.sources[l.prArea.src];
+                const res = { open: !v.classList.contains('off') && panel.classList.contains('off') && prSelected === key,
+                  inSide: side.contains(v) && vr.width > 0 && vr.left >= sr.left - 1 && vr.right <= sr.right + 1,
+                  attribution: [].concat(src.attribution).every(t => v.textContent.includes(t)),
+                  licence: [...v.querySelectorAll('a[href]')].some(a => a.href === new URL(src.licenceUrl, location.href).href),
+                  outlined: l.options.weight === 2 && l.options.color === '#ffffff' };
+                document.getElementById('prback')?.click();
+                res.back = !panel.classList.contains('off') && v.classList.contains('off') && prSelected === null;
+                return res;
+              })()`) || { error: 'no result after the click' });
+            }
+            // One FAIL for a missing prerequisite, not one per check after it.
+            if (!pv.done) flag('FAIL', `Home value data sources list did not load (${pv.error || 'timeout'})`);
+            else {
+              if (pv.missing.length) flag('FAIL', `Home value data sources list does not link the licence of ${pv.missing.join(', ')}`);
+              if (pv.error) flag('FAIL', pv.error);
+              else {
+                if (!pv.open || !pv.inSide) flag('FAIL', 'a real click on an area does not open its #prview inside #side');
+                if (!pv.attribution || !pv.licence) flag('FAIL', `#prview lacks the source's ${!pv.attribution ? 'attribution lines' : 'licence link'}`);
+                if (!pv.outlined) flag('FAIL', 'the clicked area is not outlined');
+                if (!pv.back) flag('FAIL', 'Back from #prview does not return to the report');
+              }
+            }
+          }
+        }
+
+        // ── map stack: no two overlays overlap ──
+        for (const o of (await ev(`(${STACK.toString()})()`)) || ['no result']) flag('FAIL', `map overlays: ${o}`);
+        // ...and in the states where the layers show their notes, which the
+        // default view never does: on a short map two notes under three pills
+        // once ran off the map over the attribution (UX review, Sept 2026).
+        // ?prices only, at every size; the view is put back afterwards.
+        if (mapCfg?.prices) {
+          const ns = await ev(`(async () => {
+            const idle = async () => { for (let i = 0; i < 60; i++) { await new Promise(r => setTimeout(r, 150));
+              try { if (!prBusy && !prPending && (!schOn || (!schBusy && !schPending))) return true; } catch {} } return false; };
+            const c0 = map.getCenter(), z0 = map.getZoom(), out = [];
+            for (const [label, c, z, sch] of ${JSON.stringify(NOTE_STATES)}) {
+              if (schOn !== sch) schBtn.click();
+              map.setView(c, z, { animate: false });
+              await idle(); await new Promise(r => setTimeout(r, 200));
+              out.push({ label, notes: [...document.querySelectorAll('.mapnote')].filter(n => !n.hidden).map(n => n.textContent), overlaps: (${STACK.toString()})() });
+            }
+            if (schOn) schBtn.click();
+            map.setView(c0, z0, { animate: false });
+            await idle();
+            return out;
+          })()`, true) || [];
+          if (!ns.length) flag('FAIL', 'the note states could not be run');
+          for (const s of ns) {
+            if (!s.notes.length) flag('FAIL', `with ${s.label}: no note shown`);
+            for (const o of s.overlaps) flag('FAIL', `with ${s.label}: ${o}`);
+          }
+        }
+
         // ── after a search ──
         a.after = await ev(AFTER_SEARCH, true);
         const af = a.after;
@@ -883,6 +1135,38 @@ async function main() {
         if (s.start !== `Starting in ${reg.viewName}.`) flag(`?schools hint reads "${s.start}" (want "Starting in ${reg.viewName}.")`);
       }
       rows.push({ vp: 'time zone 1440x900', page: '/check/?schools', map: `${v.tz}${s.error ? '' : ` opens on ${s.lat.toFixed(3)},${s.lng.toFixed(3)} z${s.zoom}, ${s.pins} pins`}`, issues });
+    }
+    // /check/?prices by time zone, from the served prices index (the overlay's
+    // when --root gives one). A zone no region names, and Mexico City's (a
+    // covered city with no open price data), open on the index's first region.
+    let prIdx = null;
+    try { const f = (OVERLAY && await resolveIn(OVERLAY, '/prices/data/index.json')) || await resolveIn(SITE, '/prices/data/index.json'); prIdx = f && JSON.parse(await readFile(f, 'utf8')); } catch {}
+    const prRegs = (prIdx?.regions || []).filter(r => r.view && (!Array.isArray(r.sources) || r.sources.length));
+    for (const v of TZ_PRICES) {
+      const issues = [];
+      const flag = msg => { issues.push(`FAIL ${msg}`); fails++; };
+      const reg = v.region ? prRegs.find(r => r.id === v.region) : prRegs[0];
+      if (!reg) { flag(`no region ${v.region ? `"${v.region}" ` : ''}in prices/data/index.json`); rows.push({ vp: 'time zone 1440x900', page: '/check/?prices', map: v.tz, issues }); continue; }
+      await c.send('Emulation.setTimezoneOverride', { timezoneId: v.tz });
+      await load(base + '/check/?prices');
+      const s = await ev(`(async () => {
+        for (let i = 0; i < 40; i++) { try { if (prOn && !prBusy && !prPending && (prLayers.size || !prNote.hidden)) break; } catch {} await new Promise(r => setTimeout(r, 150)); }
+        try { const c = map.getCenter();
+          return { lat: c.lat, lng: c.lng, zoom: map.getZoom(), areas: prLayers.size, note: prNote.hidden ? '' : prNote.textContent,
+            start: document.body.classList.contains('pr-jumped') ? document.querySelector('.pr-hint .pr-start')?.textContent.trim() : '' };
+        } catch (e) { return { error: String(e) }; } })()`, true) || { error: 'no result' };
+      if (s.error) flag(`?prices view not readable (${s.error})`);
+      else {
+        const [[south, west], [north, east]] = reg.view;
+        if (s.lat < south || s.lat > north || s.lng < west || s.lng > east) flag(`?prices centre ${s.lat.toFixed(3)},${s.lng.toFixed(3)} outside ${reg.id}'s view ${JSON.stringify(reg.view)}`);
+        if (!s.areas) flag(`?prices drew no areas (${s.note || 'no note'})`);
+        // A visitor from a covered city with no price data is told why the
+        // map starts elsewhere (index.missing[].tz).
+        const miss = (prIdx.missing || []).find(m => { try { return m.tz && new RegExp(m.tz).test(v.tz); } catch { return false; } });
+        const hint = miss ? `SafeRoute has no open home-value data for ${miss.name}, so this starts in ${reg.viewName}.` : `Starting in ${reg.viewName}.`;
+        if (reg.viewName && s.start !== hint) flag(`?prices hint reads "${s.start}" (want "${hint}")`);
+      }
+      rows.push({ vp: 'time zone 1440x900', page: '/check/?prices', map: `${v.tz}${s.error ? '' : ` opens on ${s.lat.toFixed(3)},${s.lng.toFixed(3)} z${s.zoom}, ${s.areas} areas`}`, issues });
     }
     await c.send('Emulation.setTimezoneOverride', { timezoneId: '' });
     await c.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: spy.result.identifier });

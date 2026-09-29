@@ -9,8 +9,11 @@
      places listed are exactly where schools are mapped, and an inspection or
      rating exists only where a school's own authority publishes one (Ofsted,
      ETI and US states do; Ontario, British Columbia and Mexico do not). Keep
-     this list in step with #secSchools, which sync-site-facts fills. -->
-<meta name="description" content="Type any address for its SafeRoute safety index (0–100) from police crime data, plus nearby schools in England, Wales, Northern Ireland, 26 US cities, Toronto, Vancouver and Mexico City, with each authority's own inspection or rating where one is published.">
+     this list in step with #secSchools, which sync-site-facts fills. The
+     home-values clause is worded to prices/data/index.json: official medians
+     by area, sale prices in the UK and owners' estimates elsewhere, and none
+     for Mexico City, so it names no places of its own. -->
+<meta name="description" content="Type any address for its SafeRoute safety index (0–100) from police crime data, plus nearby schools in England, Wales, Northern Ireland, 26 US cities, Toronto, Vancouver and Mexico City, with each authority's own inspection or rating where one is published, and official median home values by area where they are published.">
 <meta property="og:image" content="https://safe-route.app/assets/og-preview.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:title" content="Check any address — SafeRoute neighborhood safety">
@@ -142,8 +145,8 @@
      step too — 13-14px text read at arm's length on a 27" 1440p screen is
      small. zoom scales the column's own px sizes together; the map is not
      touched. Browsers without zoom simply keep the base size. */
-  @media(min-width:1800px) and (min-height:1000px){ .head,aside,.schbar,.mapbtn,.mapstatus,.schnote,.schkey,.leaflet-control-zoom{zoom:1.08} }
-  @media(min-width:2300px) and (min-height:1300px){ .head,aside,.schbar,.mapbtn,.mapstatus,.schnote,.schkey,.leaflet-control-zoom{zoom:1.16} }
+  @media(min-width:1800px) and (min-height:1000px){ .head,aside,.schbar,.mapstack>*,.mapkeys>*,.leaflet-control-zoom{zoom:1.08} }
+  @media(min-width:2300px) and (min-height:1300px){ .head,aside,.schbar,.mapstack>*,.mapkeys>*,.leaflet-control-zoom{zoom:1.16} }
   /* Phones and small tablets stack: head, map, pane. The map deliberately
      stops short of full height: on a touch screen one-finger drag pans a map,
      so a full-height map traps the page and you cannot scroll to the pane.
@@ -266,9 +269,13 @@
   body.sch-on .sch-hint{display:block}
   /* "Starting in {a region's start view}." only when the map really went
      there (?schools, or the pane's Show schools). The map's own Schools pill
-     never moves the map. */
+     never moves the map. The prices hint works the same way. */
   .sch-hint .sch-start{display:none}
   body.sch-london .sch-hint .sch-start{display:inline}
+  .pr-hint{display:none;margin-top:8px}
+  body.pr-on .pr-hint{display:block}
+  .pr-hint .pr-start{display:none}
+  body.pr-jumped .pr-hint .pr-start{display:inline}
   .scale{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:0 0 12px;padding:0}
   .scale li{font-size:12px;line-height:1.3;color:var(--ink-2)}
   .scale li::before{content:"";display:block;height:6px;border-radius:2px;background:var(--c);margin-bottom:7px}
@@ -282,6 +289,7 @@
   .btn-sch:hover{border-color:var(--teal)}
   .btn-sch i{width:8px;height:8px;border-radius:2px;background:var(--line-2)}
   .btn-sch.on i{background:#3FD9C0}
+  .btn-sch.pr.on i{background:#5598e7}
   .cov{margin:0;font-size:13.5px;line-height:1.6}
   .cov dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink);margin-top:12px}
   .cov dt:first-child{margin-top:0}
@@ -327,11 +335,31 @@
   #map:focus-visible{outline:none}
   #map:focus-visible::after{content:"";position:absolute;inset:0;z-index:1000;pointer-events:none;box-shadow:inset 0 0 0 2px var(--teal)}
 
-  /* Pan status. The map refetches as you drag (see refetchAt) and until that
-     lands the panel still shows the PREVIOUS area's numbers — so say so, the
-     way the app's "Updating area…" caption does, rather than letting stale
-     figures read as current. Top-RIGHT because Leaflet owns the top-left. */
-  .mapbtn{position:absolute;top:14px;right:14px;z-index:1200;display:flex;align-items:center;gap:8px;
+  /* THE MAP STACK. Top-RIGHT because Leaflet owns the top-left. Top to
+     bottom: the Heatmap, Prices and Schools pills (.mappills, one width, so
+     their edges line up), the "Updating area…" status, then the layers'
+     notes in the pills' order — one flex column (.mapstack, built in the
+     script). It used to be four hard-coded offsets (14/56/98/140px), so each
+     new pill or note had to be fitted by hand and a third pill would have
+     landed on the status; now nothing in it can overlap anything else, and
+     tools/audit-viewports.mjs checks that at every size. The column itself
+     lets clicks through to the map; only its buttons take them. 72px of the
+     width stay clear: the zoom control holds the top-left (10px in, 34px
+     wide).
+     A SHORT MAP (a phone on its side, a 320px phone with both layers on) has
+     no room for three stacked pills, the status's reserved line and two
+     notes: they ran off the bottom over the attribution. fitMapOverlays()
+     then sets .tight: the pills in a row, the notes wider (fewer lines), and
+     the pan status laid over the top of the notes while a pan runs instead
+     of keeping a line of its own. */
+  .mapstack{position:absolute;top:14px;right:14px;z-index:1200;display:flex;flex-direction:column;align-items:flex-end;gap:8px;
+    max-width:calc(100% - 72px);pointer-events:none}
+  .mappills{display:flex;flex-direction:column;align-items:stretch;gap:8px;max-width:100%;pointer-events:none}
+  .mappills>.mapbtn{pointer-events:auto}
+  .mapstack.tight .mappills{flex-direction:row;flex-wrap:wrap;justify-content:flex-end}
+  .mapstack.tight .mapnote{max-width:min(300px,100%)}
+  .mapstack.tight .mapstatus{position:absolute;right:0;top:var(--status-top,0)}
+  .mapbtn{display:flex;align-items:center;gap:8px;
     padding:8px 13px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);
     color:var(--ink-3);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
     cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.35);transition:color .15s ease,border-color .15s ease}
@@ -339,7 +367,10 @@
   .mapbtn .mapbtn-dot{width:8px;height:8px;border-radius:2px;background:var(--line-2);transition:background .15s ease}
   .mapbtn.on{color:var(--ink)}
   .mapbtn.on .mapbtn-dot{background:#BC3B2E}
-  .mapbtn.second{top:56px}
+  /* Each layer's dot is its own map colour: ember for the crime heat, the
+     middle price blue, the primary-school teal. */
+  .mapbtn.pr.on .mapbtn-dot{background:#5598e7}
+  .mapbtn.sch.on .mapbtn-dot{background:#3FD9C0}
   /* Schools controls. Hidden until the layer is on — the page is an address
      checker first, and a filter row for a layer you have not enabled is noise.
      A toolbar across the top of the map, not rows in the column: in the
@@ -397,26 +428,67 @@
     .schbar .sb-filters::-webkit-scrollbar{display:none}
     .schbar .sb-filters>*{flex:none}
   }
+  /* THE MAP KEYS, bottom-left: the schools key over the home-values legend,
+     one flex column (the legend is first in the DOM, so column-reverse puts it
+     at the bottom) so the two stack and never collide. 34px up: above the
+     Mapbox wordmark that owns the bottom-left corner (21px tall, 6px up),
+     which also clears Leaflet's attribution strip on the right, one or two
+     lines tall. On a short map with both keys up (a phone on its side) the
+     column would reach the zoom control or the pills, so fitMapKeys() puts
+     them side by side (.row), the schools key wrapping beside the legend. */
+  .mapkeys{position:absolute;left:12px;bottom:34px;z-index:1100;display:flex;flex-direction:column-reverse;align-items:flex-start;gap:8px;
+    max-width:calc(100% - 24px);pointer-events:none}
+  .mapkeys.row{flex-direction:row;align-items:flex-end}
+  .mapkeys.row .prkey{flex:none}
+  .mapkeys.row .schkey{flex:0 1 auto;min-width:0}
   /* Colour is STAGE and fill is SECTOR — never quality — and nothing on the
-     map said so until now. 34px up: above the Mapbox wordmark that owns the
-     bottom-left corner (21px tall, 6px up), which also clears Leaflet's
-     attribution strip on the right, one or two lines tall. */
-  .schkey{position:absolute;left:12px;bottom:34px;z-index:1100;display:none;flex-wrap:wrap;gap:4px 13px;max-width:calc(100% - 24px);
+     map said so until now. */
+  .schkey{display:none;flex-wrap:wrap;gap:4px 13px;max-width:100%;
     padding:7px 11px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);box-shadow:0 6px 20px rgba(0,0,0,.35);
-    font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--ink-2);pointer-events:none}
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--ink-2)}
   .sch-on .schkey{display:flex}
   .schkey span{display:inline-flex;align-items:center;gap:6px}
   .schkey i{width:9px;height:9px;border-radius:50%;background:var(--c);border:1.5px solid var(--c)}
   .schkey i.hollow{background:none}
+  /* The home-values legend: which scale the colours are, in that place's own
+     money, and the one swatch for "no figure". Text in ink tokens, never the
+     swatch colours. The blocks are drawn at the map's 0.8 fill opacity so
+     they look like the areas they explain. Letter-spacing 0 below the title,
+     and 300px wide: the real line "Median price paid · 12 months to March
+     2026" is 43 characters, which at 290px left "2026" alone on a line. */
+  .prkey{display:flex;flex-direction:column;gap:4px;width:300px;max-width:100%;padding:8px 11px 9px;border-radius:8px;
+    border:1px solid var(--line-2);background:var(--surface);box-shadow:0 6px 20px rgba(0,0,0,.35);
+    font-family:var(--mono);font-size:10.5px;letter-spacing:0;line-height:1.4;color:var(--ink-2)}
+  .prkey[hidden]{display:none}
+  /* fitMapKeys: on a short map, one line per item, as wide as that takes. */
+  .prkey.wide{width:max-content;max-width:min(460px,100%)}
+  .prkey .t1{color:var(--ink);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  .prkey .bar{display:grid;grid-template-columns:repeat(5,1fr);height:8px;margin-top:2px;border-radius:2px;overflow:hidden}
+  .prkey .bar i{background:var(--c);opacity:.8}
+  .prkey .ticks{position:relative;height:14px}
+  .prkey .ticks span{position:absolute;top:0;transform:translateX(-50%);white-space:nowrap;color:var(--ink)}
+  .prkey .nf{display:flex;align-items:center;gap:7px}
+  /* Exactly as the map draws "no figure" (prPaint): the grey at .15 under
+     its hatch, no border. */
+  .prkey .nf i,.prsw.nf{flex:none;width:18px;height:9px;border-radius:2px;
+    background:repeating-linear-gradient(135deg,rgba(138,150,163,.6) 0 1px,transparent 1px 4px),rgba(138,150,163,.15)}
+  .prkey .seam,.prkey .cr{color:var(--ink-3)}
+  /* The keys let the map take clicks; the credit's link takes its own. */
+  .prkey .cr a{pointer-events:auto;color:var(--ink-2)}
+  .prkey .cr a:hover{color:var(--teal)}
+  /* A narrow map (a phone upright): the metric line goes (the pane and the
+     report carry it), so the legend covers less of a small map. */
+  .prkey.compact .mp{display:none}
 
-  /* The right-hand stack, top to bottom: Heatmap (14), Schools (56), the
-     "Updating area…" status (98) and this note (140), so the two that come and
-     go never sit on a pill or on each other. */
-  .schnote{position:absolute;top:140px;right:14px;z-index:1200;max-width:190px;padding:7px 11px;border-radius:8px;
+  /* A layer's note, in the map stack: what it shows and why ("Zoom in…",
+     "No school data here…"). Two layers asking for the same zoom share one
+     note (renderNotes). */
+  .mapnote{max-width:190px;padding:7px 11px;border-radius:8px;
     border:1px solid var(--line-2);background:var(--surface);color:var(--ink-3);font-family:var(--mono);
     font-size:10px;letter-spacing:.04em;line-height:1.5;box-shadow:0 6px 20px rgba(0,0,0,.35);pointer-events:none}
-  .mapbtn.second.on .mapbtn-dot{background:#3FD9C0}
-  .mapstatus{position:absolute;top:98px;right:14px;z-index:1200;display:flex;align-items:center;gap:9px;
+  /* In flow even while it is invisible, so the notes under it never jump when
+     a pan starts or ends. */
+  .mapstatus{display:flex;align-items:center;gap:9px;
     padding:8px 13px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);
     color:var(--ink-2);font-size:13px;line-height:1;white-space:nowrap;pointer-events:none;
     box-shadow:0 6px 20px rgba(0,0,0,.35);
@@ -429,7 +501,22 @@
     .spinner,#geo[aria-busy="true"] svg{animation-duration:1.6s}
   }
   .note{font-size:13.5px;color:var(--ink-2);line-height:1.55;background:var(--cream-deep);border:1px solid var(--line);padding:14px 16px;border-radius:10px}
-  #pub:empty,#nearby:empty,#recent:empty,#cams:empty{display:none}
+  #pub:empty,#nearby:empty,#recent:empty,#cams:empty,#prices:empty{display:none}
+  /* ── Home values: an area's pane (#prview) and the report's slot (#prices) ──
+     The figure in the pane is as large as the score in the report, but never
+     in a band colour: a price is a magnitude, not good or bad. */
+  .prval{font-family:var(--mono);font-size:40px;font-weight:600;line-height:1.05;color:var(--ink);letter-spacing:-.01em;overflow-wrap:anywhere}
+  .prval small{font-size:18px;font-weight:500;color:var(--ink-2);letter-spacing:0}
+  .prval.none{font-size:26px;color:var(--ink-2)}
+  .prmetric{margin-top:6px}
+  .prsw{display:inline-block;width:18px;height:9px;border-radius:2px;background:var(--c);vertical-align:1px;margin-right:7px}
+  #prices{display:flex;flex-direction:column;gap:18px}
+  .prrep p+p{margin-top:6px}
+  .prrep>div{margin-top:10px}
+  .prrep .btn-sch{margin-top:12px}
+  /* School pins keep their contrast over the lighter price blues (1.1-1.5:1
+     without it): a thin dark halo, only while that fill is on. */
+  body.pr-on .leaflet-schools-pane svg{filter:drop-shadow(0 0 1px rgba(4,8,12,.95))}
   .publink{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.03em;color:var(--teal);text-decoration:none;border:1px solid var(--line-2);padding:9px 14px;border-radius:9px;transition:border-color .15s,background .15s}
   .publink:hover{border-color:var(--teal);background:var(--cream-deep)}
   .publink .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex:none}
@@ -522,21 +609,26 @@
       </div>
     </div>
     <div id="map" role="region" aria-label="Crime map"></div>
-    <!-- Schools key, on the map it explains. Shown only with the layer on. -->
-    <div class="schkey" id="schkey">
-      <span><i style="--c:#C77DFF"></i>Nursery</span>
-      <span><i style="--c:#3FD9C0"></i>Primary</span>
-      <span><i style="--c:#F2B13C"></i>Secondary</span>
-      <span><i style="--c:#8A96A3"></i>Not published</span>
-      <span><i class="hollow" style="--c:var(--ink-2)"></i>Private</span>
+    <!-- The keys, on the map they explain, each shown only with its layer on:
+         home values (filled by drawPrices from index.json) and schools. -->
+    <div class="mapkeys">
+      <div class="prkey" id="prkey" hidden></div>
+      <div class="schkey" id="schkey">
+        <span><i style="--c:#C77DFF"></i>Nursery</span>
+        <span><i style="--c:#3FD9C0"></i>Primary</span>
+        <span><i style="--c:#F2B13C"></i>Secondary</span>
+        <span><i style="--c:#8A96A3"></i>Not published</span>
+        <span><i class="hollow" style="--c:var(--ink-2)"></i>Private</span>
+      </div>
     </div>
   </div>
 
-  <!-- Two views sharing one pane. #panel is the address result, which fills
-       in stages (score first; #pub, #nearby, #recent and #cams arrive from
-       separate requests). A school click must not overwrite it, or those late
-       sections land nowhere and "back" has nothing to return to — so a school
-       gets its own view, and the two are swapped rather than rewritten. -->
+  <!-- Three views sharing one pane. #panel is the address result, which fills
+       in stages (score first; #pub, #nearby, #recent, #cams and #prices arrive
+       from separate requests). A school or price-area click must not overwrite
+       it, or those late sections land nowhere and "back" has nothing to return
+       to — so each gets its own detail view (openDetail), swapped with the
+       report rather than rewritten over it. -->
   <aside id="side" aria-label="Results">
     <div id="panel" class="view">
       <section>
@@ -597,6 +689,21 @@
              could not place, from index.json when opened (so a visitor who
              never opens it never downloads it). -->
         <details class="cov-more sch-sources" id="schSources"><summary>School data sources</summary><div id="schSourcesBody"><p class="src">Loading…</p></div></details>
+      </section>
+      <section id="secPrices">
+        <h2 class="h3">Home values</h2>
+        <!-- Worded to the data: "home value or sale price", because the US and
+             Canadian figures are owners' own estimates and only the UK's are
+             sale prices; the pane names each metric exactly. The places are
+             index.json's own "where" (data-fact, like schools-where). Colours
+             are city- or region-relative, like the safety index, and are never
+             compared across places. -->
+        <p class="meta">Switch on <b>Prices</b> to shade official statistical areas by the median home value or sale price their official statistics publish — in <span data-fact="prices-where">England, Wales and Northern Ireland; 26 US cities; Toronto and Vancouver</span> — with colours that compare places within one city or region only.</p>
+        <p class="meta pr-hint"><span class="pr-start"></span>Click an area for its figure, its period and count, and its source.</p>
+        <button type="button" class="btn-sch pr" id="prOpen"><i></i><span>Show home values</span></button>
+        <!-- Every source, its period, licence and area count, from index.json
+             when opened (a visitor who never opens it never downloads it). -->
+        <details class="cov-more sch-sources" id="prSources"><summary>Home value data sources</summary><div id="prSourcesBody"><p class="src">Loading…</p></div></details>
       </section>
       <section>
         <h2 class="h3">Where it works</h2>
@@ -662,6 +769,7 @@
       </section>
     </div>
     <div id="schview" class="view off" aria-live="polite"></div>
+    <div id="prview" class="view off" aria-live="polite"></div>
 
     <footer class="colophon">
       <p>Crime data from official police / open-data sources. Informational only — each score is calibrated within its own city and cannot be read against another city's.</p>
@@ -867,53 +975,248 @@ const map = L.map('map', { zoomControl:true, attributionControl:true, scrollWhee
 // drew none and said "Zoom in to see schools"). Until index.json is in, a
 // European or unknown zone starts over central London already and anyone else
 // on their region's wide view (see the IS_SCHOOLS start, below).
+// /check/?prices (and #prices) does the same with the home-prices layer, from
+// prices/data/index.json's regions (see the IS_PRICES start).
 const VIEWS = {
   gb:      [[49.9, -8.2], [56.0, 1.8]],     // England, Wales, NI — Scotland publishes no street-level crime
   us:      [[24.5, -124.8], [49.6, -66.9]],
   mx:      [[19.18, -99.34], [19.6, -98.94]],
   both:    [[19, -124], [58.6, 1.8]],
-  schools: [[51.47, -0.165], [51.535, -0.055]],
+  schools: [[51.47, -0.165], [51.535, -0.055]],   // central London: where ?schools and ?prices start for Europe
 };
 const TZ = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch { return ''; } })();
 const IS_SCHOOLS = /[?&]schools\b/.test(location.search) || location.hash === '#schools';
+const IS_PRICES = /[?&]prices\b/.test(location.search) || location.hash === '#prices';
 const REGION = /^Europe\//.test(TZ) ? 'gb'
   : /^America\/(Mexico_City|Monterrey|Merida|Cancun|Matamoros|Chihuahua|Ciudad_Juarez|Ojinaga|Mazatlan|Bahia_Banderas|Hermosillo|Tijuana)$/.test(TZ) ? 'mx'
   : /^(America|US|Canada)\//.test(TZ) ? 'us' : 'both';
-map.fitBounds(VIEWS[IS_SCHOOLS && (REGION === 'gb' || REGION === 'both') ? 'schools' : REGION], { padding: [16, 16] });
+map.fitBounds(VIEWS[(IS_SCHOOLS || IS_PRICES) && (REGION === 'gb' || REGION === 'both') ? 'schools' : REGION], { padding: [16, 16] });
 const START_ZOOM = map.getZoom();
 
+// The right-hand map stack (see .mapstack): the pills, the status and the
+// notes, appended below in the order they show, which is also their Tab order.
+const mapStack = document.createElement('div');
+mapStack.className = 'mapstack';
+const mapPills = document.createElement('div');
+mapPills.className = 'mappills';
+mapStack.append(mapPills);
+map.getContainer().appendChild(mapStack);
+// The keys' layout (see .mapkeys): a column, unless the column would run into
+// the stack or the zoom control. Then side by side (a phone on its side); then
+// the same two again with the home-values legend WIDE, each of its lines on
+// one line (a short, wide map: the real legend's "12 months to March 2026"
+// and its "Colours restart…" note wrap at 290px and cost it two lines); or,
+// where none of that fits (a narrow phone), still a column but with the upper
+// key, the schools one, wrapped into the room left of the stack.
+// Measured rather than guessed from the screen size: the keys' heights depend
+// on the legend's wording and on which layers are on. Run whenever a key or
+// note comes or goes and when the map resizes.
+const mapKeys = document.querySelector('.mapkeys');
+// The box of an element as drawn, or null when it is not (hidden, or the
+// invisible pan status, which keeps its place in the stack).
+const shownBox = el => { const r = el.getBoundingClientRect(); return !el.hidden && r.width > 0 && r.height > 0 && getComputedStyle(el).opacity !== '0' ? r : null; };
+const boxesMeet = (a, b) => Math.min(a.right, b.right) > Math.max(a.left, b.left) && Math.min(a.bottom, b.bottom) > Math.max(a.top, b.top);
+function mapKeysHit() {
+  const keys = [...mapKeys.children].map(shownBox).filter(Boolean);
+  const m = map.getContainer().getBoundingClientRect();
+  const others = [...mapStack.children, ...map.getContainer().querySelectorAll('.leaflet-control-zoom, .leaflet-control-attribution')].map(shownBox).filter(Boolean);
+  return keys.some(k => k.right > m.right + 1 || k.top < m.top - 1 || others.some(o => boxesMeet(k, o)));
+}
+// Does the stack run off the map, or onto one of Leaflet's controls (the
+// attribution, the zoom control, the Mapbox wordmark)?
+function mapStackHit() {
+  const m = map.getContainer().getBoundingClientRect();
+  const ctl = [...map.getContainer().querySelectorAll('.leaflet-control')].map(shownBox).filter(Boolean);
+  return [...mapStack.children].map(shownBox).filter(Boolean).some(k => k.bottom > m.bottom + 1 || k.left < m.left - 1 || ctl.some(o => boxesMeet(k, o)));
+}
+// Everything on the map that is not the map, laid out so nothing collides:
+// the stack as a column when it fits, else .tight (see .mapstack); then the
+// keys around it (fitMapKeys). The legend drops its metric line on a narrow
+// map. Measured, not guessed from the screen size: the notes' and keys'
+// heights depend on their wording and on which layers are on. Run whenever a
+// note, key or pill comes or goes and when the map resizes.
+function fitMapOverlays() {
+  const w = map.getContainer().clientWidth;
+  document.getElementById('prkey')?.classList.toggle('compact', w > 0 && w < 420);
+  mapStack.classList.remove('tight');
+  mapStatus.style.removeProperty('--status-top');
+  fitMapKeys();
+  if (!mapStackHit() && !mapKeysHit()) return;
+  mapStack.classList.add('tight');
+  mapStatus.style.setProperty('--status-top', `${mapPills.offsetHeight + 8}px`);
+  fitMapKeys();
+}
+function fitMapKeys() {
+  if (!mapKeys) return;
+  const upper = document.getElementById('schkey'), legend = document.getElementById('prkey');
+  mapKeys.classList.remove('row');
+  legend.classList.remove('wide');
+  upper.style.maxWidth = '';
+  if (!mapKeysHit()) return;
+  mapKeys.classList.add('row');
+  if (!mapKeysHit()) return;
+  if (!legend.hidden) {
+    legend.classList.add('wide');
+    mapKeys.classList.remove('row');
+    if (!mapKeysHit()) return;
+    mapKeys.classList.add('row');
+    if (!mapKeysHit()) return;
+    legend.classList.remove('wide');
+  }
+  mapKeys.classList.remove('row');
+  const room = Math.min(...[...mapStack.children].map(shownBox).filter(Boolean).map(r => r.left)) - mapKeys.getBoundingClientRect().left - 8;
+  if (room >= 120) upper.style.maxWidth = `${Math.floor(room)}px`;
+}
 // Pan status pill — mirrors the app's "Updating area…" caption. Built with DOM
 // calls (not innerHTML) for the same reason as the publink: no URL-shaped
 // string literals for Googlebot to scrape out of this script.
+// It is also the map's one role=status: mapSay() announces what a pill did to
+// the layers ("Crime heatmap hidden while home values are shown") through a
+// visually hidden line in it, so what is hidden from a screen reader while no
+// pan is running is the caption, not the whole region.
 const mapStatus = document.createElement('div');
 mapStatus.className = 'mapstatus';
 mapStatus.setAttribute('role', 'status');
 mapStatus.setAttribute('aria-live', 'polite');
-mapStatus.setAttribute('aria-hidden', 'true');
-const mapStatusSpin = document.createElement('span'); mapStatusSpin.className = 'spinner';
-mapStatus.append(mapStatusSpin, 'Updating area\u2026');
-map.getContainer().appendChild(mapStatus);
+const mapStatusSpin = document.createElement('span'); mapStatusSpin.className = 'spinner'; mapStatusSpin.setAttribute('aria-hidden', 'true');
+const mapStatusText = document.createElement('span'); mapStatusText.textContent = 'Updating area\u2026'; mapStatusText.setAttribute('aria-hidden', 'true');
+const mapSayEl = document.createElement('span'); mapSayEl.className = 'sr-only';
+mapStatus.append(mapStatusSpin, mapStatusText, mapSayEl);
+// The same words twice in a row are still announced: a trailing no-break
+// space makes the second one a change.
+function mapSay(text){ mapSayEl.textContent = mapSayEl.textContent === text ? text + '\u00a0' : text; }
 // Heatmap toggle. The hexes are the densest thing on the map and sometimes you
 // just want to read the streets (or see the camera pins under them), so this
 // shows/hides the incident layer only — the 1 km ring and centre marker stay,
 // since they are the frame of reference rather than the data.
+// It is one of two FILLS, with home values, and the two never show together:
+// two translucent fills blend into colours that encode neither, and invite a
+// "cheap = dangerous" reading. So pressing Heatmap while prices are on
+// switches prices off and the heatmap on (see setPrices).
 let hexOn = true;
 const hexBtn = document.createElement('button');
 hexBtn.type = 'button';
-hexBtn.className = 'mapbtn on';
+hexBtn.className = 'mapbtn hex on';
 hexBtn.setAttribute('aria-pressed', 'true');
 const hexDot = document.createElement('span'); hexDot.className = 'mapbtn-dot';
 hexBtn.append(hexDot, 'Heatmap');
-hexBtn.addEventListener('click', () => {
-  hexOn = !hexOn;
+function setHeat(on){
+  hexOn = on;
   hexBtn.classList.toggle('on', hexOn);
   hexBtn.setAttribute('aria-pressed', hexOn ? 'true' : 'false');
   if(!incLayer) return;
   if(hexOn) incLayer.addTo(map); else map.removeLayer(incLayer);
+}
+hexBtn.addEventListener('click', () => {
+  if(prOn){ setPrices(false, false); setHeat(true); mapSay('Home values hidden; crime heatmap shown.'); return; }
+  setHeat(!hexOn);
 });
 // Leaflet swallows clicks that reach the map container, so keep them on the button.
 L.DomEvent.disableClickPropagation(hexBtn);
-map.getContainer().appendChild(hexBtn);
+// Home values: the other fill, beside the heatmap so the two read as "pick
+// one". Its layer is below, after the schools'.
+const prBtn = document.createElement('button');
+prBtn.type = 'button';
+prBtn.className = 'mapbtn pr';
+prBtn.setAttribute('aria-pressed', 'false');
+const prDot = document.createElement('span'); prDot.className = 'mapbtn-dot';
+prBtn.append(prDot, 'Prices');
+prBtn.addEventListener('click', () => setPrices(!prOn));
+L.DomEvent.disableClickPropagation(prBtn);
+mapPills.append(hexBtn, prBtn);
+// The status under the pills, then the layers' notes in the pills' order:
+// home values, then schools.
+// Silence would read as breakage. This page covers crime data in 30 regions
+// across four countries, and school and price data only where each index.json
+// says (its "where"), so a visitor who turns a layer on and sees nothing is
+// told which.
+mapStack.append(mapStatus);
+const prNote = document.createElement('div'), schNote = document.createElement('div');
+prNote.className = 'mapnote prnote';
+schNote.className = 'mapnote schnote';
+prNote.hidden = schNote.hidden = true;
+mapStack.append(prNote, schNote);
+// Each layer says which note it wants (setNote); renderNotes shows them.
+// "Zoom in to see home values." and "Zoom in to see schools." become one
+// note: on a short map two notes saying the same thing cost the room the
+// map needs.
+function setNote(el, text) {
+  el.dataset.want = text || '';
+  renderNotes();
+}
+function renderNotes() {
+  const p = prNote.dataset.want || '', s = schNote.dataset.want || '';
+  const zoom = /^Zoom in to see (.+)\.$/, zp = zoom.exec(p), zs = zoom.exec(s);
+  if (zp && zs) {
+    prNote.textContent = `Zoom in to see ${zp[1]} and ${zs[1]}.`;
+    prNote.hidden = false; schNote.hidden = true;
+  } else {
+    prNote.textContent = p; prNote.hidden = !p;
+    schNote.textContent = s; schNote.hidden = !s;
+  }
+  fitMapOverlays();
+}
+
+// ── adaptive tiles, shared by the schools and home-prices layers ────────────
+// Both layers publish the same tiling (tools/schools/lib/tiles.mjs, which
+// tools/prices reuses): 0.25° cells, each split into quadrants while it is too
+// big, down to a minimum cell, with an index that lists every leaf, so no
+// request ever 404s. A grid is one such index, read once: its leaves, and the
+// 0.25° cells that hold any (so a note can tell "nothing here" from "no data
+// here").
+function tileGrid(cells, base, minCell) {
+  const leaves = new Set(cells), bases = new Map();
+  for (const k of cells) {
+    const m = /^(q*)(-?\d+)_(-?\d+)$/.exec(k); if (!m) continue;
+    const d = 2 ** m[1].length, y = Math.floor(+m[2] / d), x = Math.floor(+m[3] / d);
+    bases.set(`${y}_${x}`, [y, x]);
+  }
+  return { base, leaves, bases, maxLevel: Math.round(Math.log2(base / minCell)) };
+}
+// The leaf tile holding a point, or null.
+function leafFor(g, lat, lng) {
+  for (let l = 0; l <= g.maxLevel; l++) {
+    const size = g.base / 2 ** l, k = 'q'.repeat(l) + `${Math.floor(lat / size)}_${Math.floor(lng / size)}`;
+    if (g.leaves.has(k)) return k;
+  }
+  return null;
+}
+// Which leaves does the current view (padded by 10%) touch? null when it spans
+// more than maxBases of the 0.25° cells, which a layer takes as "zoom in".
+// `bases` are the 0.25° cells in view. It walks down from them to the leaves
+// that exist.
+function tilesInView(g, maxBases) {
+  const b = map.getBounds().pad(0.1), base = g.base;
+  const S = b.getSouth(), N = b.getNorth(), W = b.getWest(), E = b.getEast();
+  const y0 = Math.floor(S / base), y1 = Math.floor(N / base);
+  const x0 = Math.floor(W / base), x1 = Math.floor(E / base);
+  if ((y1 - y0 + 1) * (x1 - x0 + 1) > maxBases) return null;
+  const leaves = [], bases = [];
+  const walk = (lvl, y, x) => {
+    const k = 'q'.repeat(lvl) + `${y}_${x}`;
+    if (g.leaves.has(k)) { leaves.push(k); return; }
+    if (lvl >= g.maxLevel) return;
+    const size = base / 2 ** (lvl + 1);
+    for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) {
+      const cy = 2 * y + dy, cx = 2 * x + dx;
+      if ((cy + 1) * size < S || cy * size > N || (cx + 1) * size < W || cx * size > E) continue;
+      walk(lvl + 1, cy, cx);
+    }
+  };
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+    bases.push(`${y}_${x}`);
+    if (g.bases.has(`${y}_${x}`)) walk(0, y, x);
+  }
+  return { leaves, bases };
+}
+// Is there any data in these bounds? (For the zoomed-out notes.)
+function dataIn(g, bounds) {
+  const s = g.base;
+  for (const [y, x] of g.bases.values()) {
+    if (bounds.intersects(L.latLngBounds([y * s, x * s], [(y + 1) * s, (x + 1) * s]))) return true;
+  }
+  return false;
+}
 
 // ── schools overlay ─────────────────────────────────────────────────────────
 // OFF by default, and it fetches only the schools AROUND THE ADDRESS rather
@@ -940,8 +1243,7 @@ map.getContainer().appendChild(hexBtn);
 // run once the current one finishes, never dropped.
 let schOn = false, schIndex = null, schIndexP = null, schFields = {}, schLayer = null, schBusy = false, schPending = false;
 const schTiles = new Map();          // leaf key -> rows, fetched once
-let schLeaves = new Set();           // index.cells
-let schBases = new Map();            // 0.25° cell key -> [y, x], for every cell holding any leaf
+let schGrid = null;                  // tileGrid(index.cells): the leaves, and the 0.25° cells holding any
 // sector and stage are fixed controls; f holds the optional filters index.json
 // declares (id -> the select's value, or the checkbox's checked state).
 const schState = { sector:'', stage:'', f:{} };
@@ -985,14 +1287,7 @@ function schSites(list) {
   return [...groups.values()];
 }
 // The leaf tile holding a point, or null.
-function schLeafFor(lat, lng) {
-  const base = schIndex.base, maxLevel = Math.round(Math.log2(base / schIndex.split.minCell));
-  for (let l = 0; l <= maxLevel; l++) {
-    const size = base / 2 ** l, k = 'q'.repeat(l) + `${Math.floor(lat / size)}_${Math.floor(lng / size)}`;
-    if (schLeaves.has(k)) return k;
-  }
-  return null;
-}
+const schLeafFor = (lat, lng) => leafFor(schGrid, lat, lng);
 // Every other school on this school's site (whatever the filters): read from
 // the loaded tiles within 100 m, since a site can straddle a tile edge.
 function schAt(o) {
@@ -1029,7 +1324,7 @@ const schRenderer = L.svg({ pane: 'schools', padding: 0.3 });
 
 const schBtn = document.createElement('button');
 schBtn.type = 'button';
-schBtn.className = 'mapbtn second';
+schBtn.className = 'mapbtn sch';
 schBtn.setAttribute('aria-pressed', 'false');
 const schDot = document.createElement('span'); schDot.className = 'mapbtn-dot';
 schBtn.append(schDot, 'Schools');
@@ -1048,26 +1343,22 @@ schBtn.addEventListener('click', async () => {
     open.lastChild.textContent = schOn ? 'Hide schools' : 'Show schools';
   }
   if (!schOn) {
-    // An open school closes back to the report where the reader left it.
-    if (document.getElementById('schview').classList.contains('off')) showAreaView(); else closeSchool();
+    // An open school closes back to the report where the reader left it (an
+    // open price area stays open).
+    if (!document.getElementById('schview').classList.contains('off')) closeDetail();
+    schSelected = null;
     if (schLayer) { map.removeLayer(schLayer); schLayer = null; }
     document.body.classList.remove('sch-london');
-    schNote.hidden = true;
+    setNote(schNote, '');
     return;
   }
   syncSbFade();
   await drawSchools();
 });
 L.DomEvent.disableClickPropagation(schBtn);
-map.getContainer().appendChild(schBtn);
-
-// Silence would read as breakage. This page covers crime data in 30 regions
-// across four countries, and school data only where index.json says (its
-// "where"), so a visitor who turns the layer on and sees nothing is told which.
-const schNote = document.createElement('div');
-schNote.className = 'schnote';
-schNote.hidden = true;
-map.getContainer().appendChild(schNote);
+// The pills: Heatmap, Prices, then Schools. (Its note, schNote, is in the
+// stack under the home-values one: see setNote.)
+mapPills.append(schBtn);
 
 const schEsc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 // Stage colours: the only colour function. The same four as the key.
@@ -1078,13 +1369,7 @@ function loadSchIndex() {
   if (!schIndexP) schIndexP = (async () => {
     const idx = await (await fetch('/schools/data/tiles/index.json', { cache: 'no-cache' })).json();
     schFields = Object.fromEntries(idx.fields.map((f, i) => [f, i]));
-    schLeaves = new Set(idx.cells);
-    schBases = new Map();
-    for (const k of idx.cells) {
-      const m = /^(q*)(-?\d+)_(-?\d+)$/.exec(k); if (!m) continue;
-      const d = 2 ** m[1].length, y = Math.floor(+m[2] / d), x = Math.floor(+m[3] / d);
-      schBases.set(`${y}_${x}`, [y, x]);
-    }
+    schGrid = tileGrid(idx.cells, idx.base, idx.split.minCell);
     schIndex = idx;
     buildSchFilters();
     return idx;
@@ -1092,43 +1377,11 @@ function loadSchIndex() {
   return schIndexP;
 }
 
-// Which leaves does the current view touch? null when the view spans more than
-// 12 of the 0.25° cells: a whole-country view would ask for every tile, and at
-// that zoom individual schools are not readable anyway. `bases` are the 0.25°
-// cells in view, so the notes can tell "no school here" from "no data here".
-function cellsInView() {
-  const b = map.getBounds().pad(0.1), base = schIndex.base;
-  const S = b.getSouth(), N = b.getNorth(), W = b.getWest(), E = b.getEast();
-  const y0 = Math.floor(S / base), y1 = Math.floor(N / base);
-  const x0 = Math.floor(W / base), x1 = Math.floor(E / base);
-  if ((y1 - y0 + 1) * (x1 - x0 + 1) > 12) return null;
-  const maxLevel = Math.round(Math.log2(base / schIndex.split.minCell));
-  const leaves = [], bases = [];
-  const walk = (lvl, y, x) => {
-    const k = 'q'.repeat(lvl) + `${y}_${x}`;
-    if (schLeaves.has(k)) { leaves.push(k); return; }
-    if (lvl >= maxLevel) return;
-    const size = base / 2 ** (lvl + 1);
-    for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) {
-      const cy = 2 * y + dy, cx = 2 * x + dx;
-      if ((cy + 1) * size < S || cy * size > N || (cx + 1) * size < W || cx * size > E) continue;
-      walk(lvl + 1, cy, cx);
-    }
-  };
-  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
-    bases.push(`${y}_${x}`);
-    if (schBases.has(`${y}_${x}`)) walk(0, y, x);
-  }
-  return { leaves, bases };
-}
-// Is there school data anywhere in these bounds? (For the zoomed-out note.)
-function schDataIn(bounds) {
-  const s = schIndex.base;
-  for (const [y, x] of schBases.values()) {
-    if (bounds.intersects(L.latLngBounds([y * s, x * s], [(y + 1) * s, (x + 1) * s]))) return true;
-  }
-  return false;
-}
+// The school leaves the current view touches, or null when the view spans more
+// than 12 of the 0.25° cells: a whole-country view would ask for every tile,
+// and at that zoom individual schools are not readable anyway.
+const cellsInView = () => tilesInView(schGrid, 12);
+const schDataIn = bounds => dataIn(schGrid, bounds);
 // Around a city whose crime-data rectangle reaches across a state, provincial
 // or national line, the map shows schools only on the city's own side (scope
 // rule R2: index.regions[].juris), so an empty view over the other side is
@@ -1143,12 +1396,15 @@ function schOnlyHere() {
   const out = [...new Set(regs.flatMap(r => r.outside))];
   return home.length ? ` Here the map shows schools in ${and(home, 'and')} only, not ${and(out, 'or')}.` : '';
 }
-// The region the layer opens on when it has to jump somewhere: the one whose
+// The region a layer opens on when it has to jump somewhere: the one whose
 // time zones match the visitor's, else the first (the backend's order).
-function schHomeRegion() {
-  const regs = (schIndex?.regions || []).filter(r => r.view);
+// Shared with the home-prices layer, whose index.json regions carry the same
+// view, viewName and tz.
+function homeRegion(regions) {
+  const regs = (regions || []).filter(r => r.view);
   return regs.find(r => { try { return r.tz && new RegExp(r.tz).test(TZ); } catch { return false; } }) || regs[0] || null;
 }
+const schHomeRegion = () => homeRegion(schIndex?.regions);
 
 // ── optional filters, from index.filters ──────────────────────────────────
 // A filter exists only if some source publishes it, and its control shows
@@ -1380,21 +1636,57 @@ function schOfstedHtml(o) {
   return out.join('');
 }
 
-// Where the report was scrolled to when a school replaced it, so "Back"
+// ── detail views: a school (#schview) or a price area (#prview) ─────────────
+// Each REPLACES the address report in the pane without rewriting it, so the
+// report's late fills still land and "Back" has something to return to. One
+// helper opens either, so both get the same Back, the same scroll memory and
+// the same phone behaviour, and opening one closes the other.
+const DETAIL_VIEWS = ['schview', 'prview'];
+// Where the report was scrolled to when a detail view replaced it, so "Back"
 // returns the reader to the same line rather than to the top of the report.
-let panelScroll = 0;
-function showSchoolPane(o) {
+// On a phone the page itself scrolls (the pane is under the map), so its
+// position is kept too, and Back puts the map back where the reader was. And
+// the keyboard focus: what opened the view (a pin's "Also at" button, the
+// legend's credit link) gets it back, else the report's heading, rather than
+// the next Tab starting from the top of the page.
+let panelScroll = 0, pageScroll = null, detailOpener = null;
+function openDetail(id, html) {
   const side = document.getElementById('side');
-  // Saved first: once the (usually shorter) school view replaces the report
+  // Saved first: once the (usually shorter) detail view replaces the report
   // the browser clamps the pane's scrollTop and the position is lost.
-  if (!panel.classList.contains('off')) panelScroll = side.scrollTop;
+  if (!panel.classList.contains('off')) {
+    panelScroll = side.scrollTop;
+    pageScroll = matchMedia(STACKED).matches ? window.scrollY : null;
+    const f = document.activeElement;
+    detailOpener = f && f !== document.body && !DETAIL_VIEWS.some(v => document.getElementById(v).contains(f)) ? f : null;
+  }
+  for (const v of DETAIL_VIEWS) document.getElementById(v).classList.toggle('off', v !== id);
+  // The other view's selection goes with it.
+  if (id !== 'schview' && schSelected) { schSelected = null; drawSchools(); }
+  if (id !== 'prview') prSelect(null);
+  const view = document.getElementById(id);
+  view.innerHTML = `<button type="button" class="back" id="${id === 'schview' ? 'schback' : 'prback'}"></button>${html}`;
+  view.querySelector('.back').addEventListener('click', () => closeDetail(true));
+  syncBack();
+  panel.classList.add('off');
+  side.scrollTop = 0;
+  foldIntro();
+  // On a phone the pane sits BELOW the map, so a tap would otherwise change
+  // something off-screen with no visible response.
+  if (matchMedia(STACKED).matches) {
+    const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    side.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+  }
+  return view;
+}
+
+function showSchoolPane(o) {
   schSelected = schKey(o);
   const src = schIndex?.sources?.[o.src] || {};
   // Labels: the page's defaults, then the source's (its system's own terms),
   // then any the jurisdiction overrides (the most specific).
   const lab = { ...SCH_LABELS, ...(src.labels || {}), ...(schIndex?.juris?.[o.juris]?.labels || {}) };
   const num = n => n.toLocaleString('en-GB');
-  const view = document.getElementById('schview');
   const kv = [];
   const row = (k, v) => { if (k && v !== '' && v != null && v !== false) kv.push(`<div class="kv"><span>${schEsc(k)}</span><span>${schEsc(v)}</span></div>`); };
   row(lab.type, o.type);
@@ -1430,8 +1722,7 @@ function showSchoolPane(o) {
     return f ? `${n} (${x[f]})` : n;
   };
 
-  view.innerHTML = `
-    <button type="button" class="back" id="schback"></button>
+  const view = openDetail('schview', `
     <h2 class="place">${schEsc(schShow(o, 'name'))}<small>${schEsc([o.postcode, schShow(o, 'area')].filter(Boolean).join(' · '))}</small></h2>${also.length ? `
     <p class="meta sch-also">Also at this address:${also.map((x, i) => `<button type="button" data-i="${i}">${schEsc(alsoName(x))}</button>`).join('')}</p>` : ''}
     <div>${schRatingHtml(o)}</div>
@@ -1439,47 +1730,46 @@ function showSchoolPane(o) {
     <div><h3 class="h3">Details</h3>${kv.join('')}</div>
     ${asOf && o.pupils && lab.pupilsAsOf ? `<p class="src">${schEsc(schFill(lab.pupilsAsOf, { date: schDate(asOf) }))}</p>` : ''}
     ${rec ? `<a class="ext" href="${schEsc(rec)}" target="_blank" rel="noopener">${schEsc(src.recordLabel || 'Official record')} ↗</a>` : ''}
-    <p class="src">${schAttribution(src, o)}</p>`;
-  syncBack();
-  document.getElementById('schback').addEventListener('click', closeSchool);
+    <p class="src">${schAttribution(src, o)}</p>`);
   for (const b of view.querySelectorAll('.sch-also button')) b.addEventListener('click', () => showSchoolPane(also[+b.dataset.i]));
-
-  panel.classList.add('off');
-  view.classList.remove('off');
-  side.scrollTop = 0;
-  foldIntro();
-  // On a phone the pane sits BELOW the map, so a tap would otherwise change
-  // something off-screen with no visible response.
-  if (matchMedia('(max-width: 860px)').matches) {
-    const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
-    side.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
-  }
   drawSchools();   // redraw so the selected pin is highlighted
 }
 
 // "Back" names the address it returns to — but only if one was actually
 // checked; lastName defaults to 'This area' before any search, so the area
 // view's own title is the honest test. Re-read whenever the report behind an
-// open school changes (render(), a failed lookup), or it names a report that
-// a pan or a still-loading search has since replaced.
+// open detail view changes (render(), a failed lookup), or it names a report
+// that a pan or a still-loading search has since replaced.
 function syncBack() {
-  const back = document.getElementById('schback'); if (!back) return;
   const areaTitle = panel.querySelector('.place');
-  back.textContent = areaTitle ? `← Back to ${areaTitle.firstChild.textContent.trim()}` : '× Close';
+  const text = areaTitle ? `← Back to ${areaTitle.firstChild.textContent.trim()}` : '× Close';
+  for (const v of DETAIL_VIEWS) { const back = document.querySelector(`#${v} > .back`); if (back) back.textContent = text; }
 }
 
 // Back to the report, at the line the reader left it. Here, not in
 // showAreaView, which lookup() also calls on its way to a brand-new report
-// that should start at the top. Used by "Back" and by switching the schools
-// layer off while a school is open.
-function closeSchool() {
+// that should start at the top. Used by "Back" and by switching a layer off
+// while one of its details is open.
+// back: the Back button, which also returns the page's scroll (phones) and
+// the focus; a layer switched off closes its view and leaves both alone.
+function closeDetail(back = false) {
+  const wasOpen = DETAIL_VIEWS.some(v => !document.getElementById(v).classList.contains('off'));
   showAreaView();
   document.getElementById('side').scrollTop = panelScroll;
+  if (!wasOpen || !back) return;
+  if (pageScroll != null && matchMedia(STACKED).matches) window.scrollTo(0, pageScroll);
+  const to = detailOpener?.isConnected && detailOpener.getClientRects().length ? detailOpener : panel.querySelector('.place, h2');
+  if (to) {
+    if (to === detailOpener) to.focus({ preventScroll: true });
+    else { to.setAttribute('tabindex', '-1'); to.focus({ preventScroll: true }); }
+  }
+  detailOpener = null; pageScroll = null;
 }
 
 function showAreaView() {
   schSelected = null;
-  document.getElementById('schview').classList.add('off');
+  prSelect(null);
+  for (const v of DETAIL_VIEWS) document.getElementById(v).classList.add('off');
   panel.classList.remove('off');
   if (schOn) drawSchools();
 }
@@ -1498,9 +1788,7 @@ async function drawSchools() {
       // "Zoom in" is only true advice if there are schools under this view —
       // over a region with no school data it sent people zooming into a map
       // that will never show one.
-      schNote.textContent = schDataIn(map.getBounds()) ? 'Zoom in to see schools.'
-                                                        : `No school data here. Schools cover ${schIndex.where}.`;
-      schNote.hidden = false;
+      setNote(schNote, schDataIn(map.getBounds()) ? 'Zoom in to see schools.' : `No school data here. Schools cover ${schIndex.where}.`);
       return;
     }
     const live = want.leaves;
@@ -1537,8 +1825,7 @@ async function drawSchools() {
     // SCH_MAX_PINS, ask for a closer look instead (a filter that brings the
     // count down draws again).
     if (drawn.length > SCH_MAX_PINS && map.getZoom() < 12) {
-      schNote.textContent = 'Zoom in to see schools.';
-      schNote.hidden = false;
+      setNote(schNote, 'Zoom in to see schools.');
       return;
     }
     const posOf = new Map();
@@ -1585,25 +1872,23 @@ async function drawSchools() {
     // schools publish none), which is exactly when the reader needs to know.
     const partial = schFilterEls.map(x => x.f).find(f => schState.f[f.id] && inView.some(o => !f.publishedBy.includes(o.src)));
     if (n === 0 && partial) {
-      schNote.textContent = inView.some(o => partial.publishedBy.includes(o.src))
+      setNote(schNote, inView.some(o => partial.publishedBy.includes(o.src))
         ? `No school in view matches these filters. Only schools that publish ${partial.noun} are shown; it is published for ${partial.where}.`
-        : `No school in view publishes ${partial.noun}. It is published for ${partial.where}.`;
-      schNote.hidden = false;
+        : `No school in view publishes ${partial.noun}. It is published for ${partial.where}.`);
     } else if (n === 0) {
       // "No MAPPED schools": the view may be across a state or national line
       // from a covered city (Jersey City, Arlington VA, Windsor), where schools
       // exist but are not on this map (scope rule R2); schOnlyHere says so.
-      schNote.textContent = want.bases.some(k => schBases.has(k)) ? `No mapped schools in view — try zooming out.${schOnlyHere()}`
-                                                                  : `No school data here. Schools cover ${schIndex.where}.`;
-      schNote.hidden = false;
+      setNote(schNote, want.bases.some(k => schGrid.bases.has(k)) ? `No mapped schools in view — try zooming out.${schOnlyHere()}`
+                                                                : `No school data here. Schools cover ${schIndex.where}.`);
     } else if (partial) {
-      schNote.textContent = `Showing only schools that publish ${partial.noun}. It is published for ${partial.where}.`;
-      schNote.hidden = false;
+      setNote(schNote, `Showing only schools that publish ${partial.noun}. It is published for ${partial.where}.`);
     } else {
-      schNote.hidden = true;
+      setNote(schNote, '');
     }
   } finally {
     schBusy = false;
+    fitMapOverlays();
     if (schPending) { schPending = false; drawSchools(); }
   }
 }
@@ -1636,7 +1921,7 @@ if (IS_SCHOOLS) setTimeout(async () => {
 async function openSchools() {
   if (!schOn) {
     let near = false;
-    try { await loadSchIndex(); const cv = cellsInView(); near = !!cv && cv.bases.some(k => schBases.has(k)); } catch {}
+    try { await loadSchIndex(); const cv = cellsInView(); near = !!cv && cv.bases.some(k => schGrid.bases.has(k)); } catch {}
     const jump = !near || map.getZoom() < 12;
     if (jump) {
       const reg = schHomeRegion();
@@ -1657,7 +1942,9 @@ async function openSchools() {
 // Each licence is a LINK to its text: CC BY 4.0 requires one, and the Open
 // Government Licences ask for one where possible (verify-schools checks that
 // every source and every openly licensed scheme carries a licenceUrl).
-const schLicence = x => (x.licenceUrl ? `<a href="${schEsc(x.licenceUrl)}" target="_blank" rel="noopener">${schEsc(x.licence || 'Licence')}</a>` : schEsc(x.licence));
+// Shared with the home-prices sources list and pane (x: any record with
+// licence + licenceUrl).
+const licenceLink = x => (x.licenceUrl ? `<a href="${schEsc(x.licenceUrl)}" target="_blank" rel="noopener">${schEsc(x.licence || 'Licence')}</a>` : schEsc(x.licence));
 function schSourcesHtml() {
   const num = n => n.toLocaleString('en-GB');
   const regs = schIndex.regions || [];
@@ -1665,25 +1952,27 @@ function schSourcesHtml() {
   const list = Object.values(schIndex.sources).sort((a, b) => first(a) - first(b) || b.rows - a.rows);
   const out = list.map(s => {
     const unmapped = Object.entries(s.stats || {}).filter(([k]) => k.startsWith('unmapped.')).reduce((a, [, n]) => a + n, 0);
-    return `<p class="src"><b>${schEsc(s.where)}</b> · ${schEsc(s.name)}, from ${schEsc(s.publisher)}.${s.vintage ? ` Data: ${schEsc(s.vintage)}.` : ''} ${schLicence(s)}. ` +
+    return `<p class="src"><b>${schEsc(s.where)}</b> · ${schEsc(s.name)}, from ${schEsc(s.publisher)}.${s.vintage ? ` Data: ${schEsc(s.vintage)}.` : ''} ${licenceLink(s)}. ` +
       `${num(s.rows)} schools on the map${unmapped ? `; ${num(unmapped)} more are not drawn because their published location is missing or unreliable` : ''}.</p>`;
   });
   const rated = Object.values(schIndex.schemes || {}).filter(sc => sc.attribution)
-    .map(sc => schEsc(sc.attribution) + (sc.licenceUrl ? ` Licence: ${schLicence(sc)}.` : ''));
+    .map(sc => schEsc(sc.attribution) + (sc.licenceUrl ? ` Licence: ${licenceLink(sc)}.` : ''));
   if (rated.length) out.push(`<p class="src"><b>Ratings and statuses</b> · ${rated.join(' ')}</p>`);
   // What "around a city" means (scope rule R2), from index.json.
   if (schIndex.scope) out.push(`<p class="src"><b>Where</b> · ${schEsc(schIndex.scope)}</p>`);
   return out.join('');
 }
-// A school's attribution line, with its licence's name (or the short form in
-// its brackets: "(CC BY 4.0)") linked to the licence where the line names it.
-function schAttribution(src, o) {
-  const text = schEsc(schFill(src.attribution, o));
-  if (!src.licenceUrl || !src.licence) return text;
-  const names = [src.licence, /\(([^()]+)\)\s*$/.exec(src.licence)?.[1]].filter(Boolean).map(schEsc);
+// An attribution line (already escaped) with its licence's name (or the short
+// form in its brackets: "(CC BY 4.0)") linked to the licence where the line
+// names it. Returns the line unchanged when it does not.
+function linkLicence(text, x) {
+  if (!x.licenceUrl || !x.licence) return text;
+  const names = [x.licence, /\(([^()]+)\)\s*$/.exec(x.licence)?.[1]].filter(Boolean).map(schEsc);
   const hit = names.find(n => text.includes(n));
-  return hit ? text.replace(hit, `<a href="${schEsc(src.licenceUrl)}" target="_blank" rel="noopener">${hit}</a>`) : text;
+  return hit ? text.replace(hit, `<a href="${schEsc(x.licenceUrl)}" target="_blank" rel="noopener">${hit}</a>`) : text;
 }
+// A school's attribution line, with its licence linked.
+const schAttribution = (src, o) => linkLicence(schEsc(schFill(src.attribution, o)), src);
 {
   const d = document.getElementById('schSources');
   d?.addEventListener('toggle', async () => {
@@ -1724,17 +2013,765 @@ sbFilters?.addEventListener('focusin', e => {
   (e.target.closest('.sb-filters > *') || e.target).scrollIntoView({ inline: 'nearest', block: 'nearest' });
 });
 
+// ── home values overlay ─────────────────────────────────────────────────────
+// OFF by default, like Schools: /check/ is an address checker first. Each
+// official statistical area (an MSOA, a census tract, a Northern Ireland ward)
+// is shaded by the home-value figure its statistics office publishes. It is
+// all static tiles on this site, so no price provider ever sees a visitor's
+// view or point.
+//
+// DATA-DRIVEN, like the schools layer: nothing below names a country. The
+// sources (their exact metric, period, count noun, licence and attribution),
+// the regions and each place's colour scale come from /prices/data/index.json,
+// written by tools/build-prices.mjs (tools/prices/README.md), and the tiles are
+// the schools tiling (tileGrid above).
+//
+// THE HOUSE RULES, as this page keeps them:
+// - The metric is named exactly: a "Median price paid" is never called an
+//   owners' estimate or the reverse, and neither is ever an "average". Every
+//   figure carries its period and its count, and a count that is itself a
+//   survey estimate (ACS, the Canadian census) is never shown as the sample
+//   the figure is "based on". Words that cover both kinds of figure say "home
+//   values"; only the pill keeps the contract's short "Prices".
+// - Suppress, never guess. An area whose figure is withheld (suppressed),
+//   too few sales, too uncertain an estimate or known only as "less than
+//   $10,000" takes the one neutral, hatched grey, never a colour, and the pane
+//   says which. An area its publisher gives no figure at all (an ACS tract
+//   with no owner-occupied sample, a park) is not drawn; the report still
+//   names it, "no figure is published" (prDrawn).
+// - Colours compare places within one scale region only (a city, or a UK ITL1
+//   region like London), in quintile breaks fixed at build time. There is no
+//   cross-region legend, rank or average, and a price never sits beside the
+//   safety score: the report gives it its own section, after the crime source.
+// - Every source is credited while its areas are on the map: the legend names
+//   it and links its full attribution lines (the OGL and the Statistics Canada
+//   licence ask for the credit in the product, not only behind a click).
+// - The two fills are exclusive: prices and the crime heatmap never show
+//   together (setPrices, and the Heatmap pill).
+const PR_BLUES = ['#1c5cab', '#2a78d6', '#5598e7', '#86b6ef', '#cde2fb'];   // 5 classes, dark = lower
+const PR_NEUTRAL = '#8A96A3';
+// index.fields "flags" bits. Top-coded values ARE coloured (the top class):
+// "$2,000,000 or more" is still above the top break. The others are not.
+const PR_SUPPRESSED = 1, PR_UNCERTAIN = 2, PR_TOPCODED = 4, PR_FEW = 8, PR_BOTTOMCODED = 16;
+const PR_UNCOLOURED = PR_SUPPRESSED | PR_UNCERTAIN | PR_FEW | PR_BOTTOMCODED;
+// Drawn at all: a figure, or one the publisher withheld. Nothing published and
+// nothing withheld is left off the map (tools/prices/README.md), not greyed.
+const prDrawn = a => a.value != null || !!(a.flags & PR_SUPPRESSED);
+// Base cells in the padded view before the layer asks to be zoomed into.
+// It draws nothing below index.minZoom (11) anyway, and z11 on a 2560x1440
+// monitor spans about 36.
+const PR_MAX_BASES = 64;
+// Decoded leaves kept for a session. Without a cap, wandering the map grew
+// the page's memory without end (49 MB to 159 MB over 509 leaves); a view
+// needs at most PR_MAX_BASES' worth.
+const PR_MAX_TILES = 200;
+// index.json is read once, then asked again (a conditional request) at most
+// this often while the layer draws: a tab left open across the monthly
+// rebuild would otherwise read the new tiles against the old index's scales.
+const PR_INDEX_RECHECK_MS = 10 * 60e3;
+let prOn = false, prIndex = null, prIndexP = null, prIndexText = '', prIndexAt = 0;
+let prFields = {}, prSrcIds = [], prGrid = null, prBusy = false, prPending = false;
+const prTiles = new Map();    // leaf key -> Promise<[area, …]>, least recently used first
+const prLayers = new Map();   // "src:id" -> its polygon, while drawn
+let prSelected = null;        // "src:id" of the area open in #prview
+let prHeatWas = false;        // the heatmap was on when prices took over from it
+let prKeyHtml = '';           // the legend as last drawn, so a pan that changes nothing rewrites nothing
+
+// Areas are drawn on ONE canvas in their own pane at z 380: under Leaflet's
+// overlay pane (400), which holds the 1 km ring and the centre marker, and
+// under the schools' SVG pins (450), whose empty space lets the pointer
+// through, so a pin over an area stays clickable. A canvas, not SVG: a z11
+// view of London holds about a thousand areas of up to a hundred points each.
+// The pane is aria-hidden and nothing in it is a Tab stop: every value is text
+// in the pane and the report. Padding 0.1 (Leaflet's own): at 0.3 a 2x screen
+// at 2560x1440 kept a 6464x4412 canvas, about 114 MB.
+map.createPane('prices').style.zIndex = 380;
+map.getPane('prices').setAttribute('aria-hidden', 'true');
+const prRenderer = L.canvas({ pane: 'prices', padding: 0.1 });
+const prGroup = L.layerGroup();
+// Hover names an area where there is a pointer to hover with; on a touch
+// screen the tap opens its pane instead, and a stuck tooltip would sit on it.
+const PR_HOVER = matchMedia('(hover: hover)').matches;
+// "No figure": the neutral grey at .15 under a thin hatch. A flat grey that
+// faint looked like bare basemap (areas not drawn, or outside the layer) and,
+// darker than the lightest blue, read as "cheaper than the cheapest"; hatching
+// is the map convention for "no data" and is neither. Drawn once, repeated by
+// the canvas; the legend's swatch is the same hatch (.prkey .nf i).
+const PR_HATCH = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 6;
+  const g = c.getContext('2d');
+  if (!g) return null;
+  g.fillStyle = 'rgba(138,150,163,.15)'; g.fillRect(0, 0, 6, 6);
+  g.strokeStyle = 'rgba(138,150,163,.6)'; g.lineWidth = 1;
+  g.beginPath(); g.moveTo(-1, 1); g.lineTo(1, -1); g.moveTo(0, 6); g.lineTo(6, 0); g.moveTo(5, 7); g.lineTo(7, 5); g.stroke();
+  return g.createPattern(c, 'repeat');
+})();
+
+// ── the basemap's labels, above the fill ──
+// The dark basemap's place and street names are raster, drawn UNDER the
+// fill: at the fill's 0.8 only a fifth of a label shows through, so over the
+// lighter blues (central London, Manhattan) SOHO or Mayfair all but vanished.
+// Lowering the fill would blur the five classes instead. So while areas are
+// drawn, the same basemap tiles (the browser's cached copies) are drawn again
+// in a pane just above the fill, through an SVG filter that keeps only what
+// is brighter than any road — the labels — as light text on a thin dark halo,
+// transparent everywhere else. Nothing is fetched that is not already on
+// screen; the pane takes no pointer events and is hidden from assistive tech.
+map.createPane('prlabels').style.zIndex = 390;
+{
+  const p = map.getPane('prlabels');
+  p.setAttribute('aria-hidden', 'true');
+  p.style.pointerEvents = 'none';
+  // The filter's region in the pane's own pixels, far wider than any view: a
+  // Leaflet pane is a 0x0 box, which a region in % of it would clip to nothing.
+  const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('width', '0'); svg.setAttribute('height', '0'); svg.setAttribute('aria-hidden', 'true');
+  svg.style.position = 'absolute';
+  svg.innerHTML = '<filter id="prlab" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse" x="-40000" y="-40000" width="80000" height="80000">'
+    // Luminance to alpha, then only what is brighter than the roads (about
+    // 0.25): the labels, their anti-aliased edges included.
+    + '<feColorMatrix type="luminanceToAlpha" result="L"/>'
+    + '<feComponentTransfer in="L" result="T"><feFuncA type="linear" slope="12" intercept="-3"/></feComponentTransfer>'
+    + '<feMorphology in="T" operator="dilate" radius="1" result="D"/><feGaussianBlur in="D" stdDeviation="0.8" result="H"/>'
+    + '<feFlood flood-color="#141414" flood-opacity="0.8"/><feComposite in2="H" operator="in" result="HALO"/>'
+    + '<feFlood flood-color="#f2f4f6"/><feComposite in2="T" operator="in" result="TEXT"/>'
+    + '<feMerge><feMergeNode in="HALO"/><feMergeNode in="TEXT"/></feMerge></filter>';
+  document.body.appendChild(svg);
+  p.style.filter = 'url(#prlab)';
+}
+let prLabelLayer = null;
+// Blink only. WebKit (Safari, and so every browser on an iPhone) does not apply
+// this filter to the pane: iOS 26 Safari drew the second basemap UNfiltered,
+// over the whole fill, and the layer showed no colour at all (29 Sep 2026, iOS
+// Simulator, real tiles). Firefox was never checked. So the labels are lifted
+// only where they were seen to work; elsewhere the fill sits over them, fainter
+// but readable, which is how the layer was designed before this pass existed.
+// navigator.userAgentData is Chromium's alone (not Chrome on iOS, which is WebKit).
+const PR_LABELS_OK = 'userAgentData' in navigator;
+function prLabels(on) {
+  if (!PR_LABELS_OK) return;
+  if (on && !prLabelLayer) prLabelLayer = L.tileLayer(MB_URL, { ...MB_OPTS, pane: 'prlabels' });
+  if (!prLabelLayer) return;
+  if (on && !map.hasLayer(prLabelLayer)) prLabelLayer.addTo(map);
+  else if (!on && map.hasLayer(prLabelLayer)) map.removeLayer(prLabelLayer);
+}
+
+// ── money ──
+// Each figure in its own currency, never converted: £, $, CA$. The legend's
+// ticks are short (breaks are already 2 significant figures), and keep that
+// second figure: £460k, $1.0M, $1.2M ("$1M" beside "$1.1M" read as rounder).
+const PR_CUR = { GBP: '£', USD: '$', CAD: 'CA$' };
+const prSym = c => PR_CUR[c] ?? (c ? c + ' ' : '');
+const prMoney = (v, c) => prSym(c) + Math.round(v).toLocaleString('en-GB');
+function prShort(v, c) {
+  if (v >= 995000) return prSym(c) + (v >= 9.95e6 ? String(+(v / 1e6).toPrecision(2)) : (v / 1e6).toFixed(1)) + 'M';
+  return prSym(c) + +(v / 1e3).toPrecision(3) + 'k';
+}
+const prSrc = a => prIndex?.sources?.[a.src] || {};
+const prCurOf = a => a.scale?.currency || prSrc(a).currency;
+// The figure as text. A top-coded value is published as "X or more" (ACS's
+// 2,000,001 is "$2,000,000 or more") and a bottom-coded one as "less than X"
+// (ACS's 9,999 is "less than $10,000"), never as a number.
+function prFigure(a) {
+  if (a.value == null) return 'No figure';
+  if (a.flags & PR_BOTTOMCODED) return `Less than ${prMoney(a.value + 1, prCurOf(a))}`;
+  return a.flags & PR_TOPCODED ? `${prMoney(Math.floor(a.value / 1000) * 1000, prCurOf(a))} or more` : prMoney(a.value, prCurOf(a));
+}
+// The hover line's figure, with what makes a grey area grey, so a bare number
+// never reads as a coloured one.
+function prTip(a) {
+  if (a.value == null || a.flags & PR_SUPPRESSED) return 'no figure';
+  const f = prFigure(a);
+  if (prFew(a)) return `${f}, too few ${prSrc(a).unitNoun || 'sales'} to colour`;
+  if (a.flags & PR_UNCERTAIN) return `${f}, too uncertain to colour`;
+  if (a.flags & PR_BOTTOMCODED) return `${f}, not coloured`;
+  return f;
+}
+// "Median price paid" in running text reads "median price paid"; an acronym
+// ("ACS…") keeps its capitals.
+const prLower = s => (s && /^\p{Lu}\p{Ll}/u.test(s) ? s[0].toLowerCase() + s.slice(1) : s || '');
+// What the layer is called where one scale is meant: a sale-price median is
+// "Home prices", an owners' estimate "Home values" (never a price).
+const prTitle = metric => (/\bprice\b/i.test(metric || '') ? 'Home prices' : 'Home values');
+
+// ── data ──
+// index.json, once. A failed fetch is not cached, so the next draw retries.
+function prUseIndex(text) {
+  const idx = JSON.parse(text);
+  prFields = Object.fromEntries(idx.fields.map((f, i) => [f, i]));
+  // A row's src is the source's position in index.sources.
+  prSrcIds = Object.keys(idx.sources || {});
+  prGrid = tileGrid(idx.tiles.cells, idx.tiles.base, idx.tiles.split?.minCell ?? idx.tiles.base / 4);
+  prIndex = idx; prIndexText = text; prIndexAt = Date.now();
+  return idx;
+}
+function loadPrIndex() {
+  if (!prIndexP) prIndexP = (async () => {
+    const r = await fetch('/prices/data/index.json', { cache: 'no-cache' });
+    if (!r.ok) throw new Error(`prices index ${r.status}`);
+    return prUseIndex(await r.text());
+  })().catch(e => { prIndexP = null; throw e; });
+  return prIndexP;
+}
+// Is the index still the published one? Asked at most every
+// PR_INDEX_RECHECK_MS. A new one replaces the old, and every decoded leaf and
+// drawn area goes with it: an area carries its scale from the index it was
+// read with, so the two can never be mixed.
+async function prRecheckIndex() {
+  if (!prIndex || Date.now() - prIndexAt < PR_INDEX_RECHECK_MS) return;
+  prIndexAt = Date.now();
+  let text;
+  try { const r = await fetch('/prices/data/index.json', { cache: 'no-cache' }); if (!r.ok) return; text = await r.text(); } catch { return; }
+  if (text === prIndexText) return;
+  try { prUseIndex(text); } catch { return; }
+  prTiles.clear();
+  prGroup.clearLayers(); prLayers.clear();
+  prKeyHtml = '';
+}
+// A ring as the build encodes it: [lat, lng] x 1e5 as integers, the first
+// point absolute and each after it a delta, so the numbers stay short. Back to
+// [[lat, lng], …]; a closing point that repeats the first is dropped (Leaflet
+// closes rings itself). Integer sums, so the decoded corners are exact.
+function prRing(enc) {
+  const out = [];
+  let la = 0, ln = 0;
+  for (let i = 0; i + 1 < enc.length; i += 2) { la += enc[i]; ln += enc[i + 1]; out.push([la / 1e5, ln / 1e5]); }
+  if (out.length > 1 && out[0][0] === out[out.length - 1][0] && out[0][1] === out[out.length - 1][1]) out.pop();
+  return out;
+}
+// A tile row (index.fields order) as an area. region and scale are positions
+// in index.regions and index.scales; ctx is a position in the tile's own `c`.
+function prArea(row, ctxs) {
+  const v = k => row[prFields[k]];
+  const pick = (list, x, key) => (typeof x === 'number' ? list?.[x] : list?.find(o => o[key] === x)) || null;
+  const src = typeof v('src') === 'number' ? prSrcIds[v('src')] : v('src');
+  const polys = (v('polys') || []).map(p => p.map(prRing));
+  let s = 90, w = 180, n = -90, e = -180;
+  for (const p of polys) for (const [la, ln] of p[0] || []) { if (la < s) s = la; if (la > n) n = la; if (ln < w) w = ln; if (ln > e) e = ln; }
+  const ci = v('ctx');
+  return { key: `${src}:${v('id')}`, src, id: v('id'), name: v('name'), region: pick(prIndex.regions, v('region'), 'id'),
+    scale: pick(prIndex.scales, v('scale'), 'key'), value: v('value'), moe: v('moe'), n: v('n'), flags: v('flags') || 0,
+    ctx: ci == null ? null : ctxs?.[ci] || null, polys, bbox: [s, w, n, e] };
+}
+// A leaf's areas, fetched once and kept while it is among the PR_MAX_TILES
+// used last. A failed fetch (or an HTTP error) is NOT kept: the next draw
+// asks again, and until then its areas are missing and the note says so.
+function prLoadTile(k) {
+  let p = prTiles.get(k);
+  if (p) { prTiles.delete(k); prTiles.set(k, p); return p; }
+  p = (async () => {
+    const r = await fetch(`/prices/data/tiles/${k}.json`, { cache: 'no-cache' });
+    if (!r.ok) throw new Error(`prices tile ${k}: HTTP ${r.status}`);
+    const t = await r.json();
+    return (t.a || []).map(row => prArea(row, t.c));
+  })();
+  prTiles.set(k, p);
+  p.catch(() => { if (prTiles.get(k) === p) prTiles.delete(k); });
+  return p;
+}
+// Forget the leaves used longest ago, never one in `keep` (the view's).
+function prTrimTiles(keep) {
+  for (const k of [...prTiles.keys()]) {
+    if (prTiles.size <= PR_MAX_TILES) break;
+    if (!keep.has(k)) prTiles.delete(k);
+  }
+}
+// Point in area: even-odd over every ring of every part, so a hole is outside.
+function prContains(a, lat, lng) {
+  const [s, w, n, e] = a.bbox;
+  if (lat < s || lat > n || lng < w || lng > e) return false;
+  let inside = false;
+  for (const p of a.polys) for (const ring of p) for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [yi, xi] = ring[i], [yj, xj] = ring[j];
+    if ((yi > lat) !== (yj > lat) && lng < (xj - xi) * (lat - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+// The area at a point, from the one leaf that holds it, or null.
+async function prAreaAt(lat, lng) {
+  const k = leafFor(prGrid, lat, lng);
+  if (!k) return null;
+  return (await prLoadTile(k)).find(a => prContains(a, lat, lng)) || null;
+}
+// A covered crime city with no open home-value source (index.missing: Mexico
+// City). Its rectangle is the missing entry's bbox, else its region's.
+function prMissingAt(lat, lng) {
+  for (const m of prIndex?.missing || []) {
+    const bb = m.bbox || (prIndex.regions || []).find(r => r.id === m.region)?.bbox;
+    if (bb && lat >= bb[0] && lat <= bb[2] && lng >= bb[1] && lng <= bb[3]) return m;
+  }
+  return null;
+}
+const prHomeRegion = () => homeRegion((prIndex?.regions || []).filter(r => !Array.isArray(r.sources) || r.sources.length));
+// The covered city with no price data whose time zones are the visitor's
+// (Mexico City's): the layer has to start somewhere else, and says why.
+const prHomeMissing = () => (prIndex?.missing || []).find(m => { try { return m.tz && new RegExp(m.tz).test(TZ); } catch { return false; } }) || null;
+// "Starting in central London." — or, for a visitor from a covered city with
+// no price data, why it starts there.
+function prStartText(reg) {
+  const m = prHomeMissing();
+  return m ? `SafeRoute has no open home-value data for ${m.name}, so this starts in ${reg.viewName}. ` : `Starting in ${reg.viewName}. `;
+}
+// Around a city whose rectangle reaches across a state, provincial or
+// national line, only the city's own side is mapped (scope rule R2), so the
+// other side is bare basemap: Jersey City beside Manhattan, the Kansas side
+// of Kansas City. Said, as the schools layer says it (schOnlyHere), from the
+// region under the view's centre (index.regions[].outside, index.juris).
+function prOnlyHere() {
+  const c = map.getCenter();
+  const regs = (prIndex?.regions || []).filter(r => r.outside?.length && c.lat >= r.bbox[0] && c.lat <= r.bbox[2] && c.lng >= r.bbox[1] && c.lng <= r.bbox[3]);
+  if (!regs.length) return '';
+  const and = (l, w) => (l.length <= 1 ? l.join('') : `${l.slice(0, -1).join(', ')} ${w} ${l[l.length - 1]}`);
+  const home = [...new Set(regs.flatMap(r => r.juris))].map(j => prIndex.juris?.[j]?.area || prIndex.juris?.[j]?.name).filter(Boolean);
+  const out = [...new Set(regs.flatMap(r => r.outside))];
+  return home.length ? `Here the map shows home values in ${and(home, 'and')} only, not ${and(out, 'or')}.` : '';
+}
+// Share of the view's points on no drawn area, from a 9x7 grid over it: the
+// cue for prOnlyHere. Water counts too (tracts stop at the shore), which is
+// why it takes a quarter of the view.
+function prBareShare(areas) {
+  const b = map.getBounds(), list = [...areas.values()];
+  let bare = 0, n = 0;
+  for (let i = 1; i <= 7; i++) for (let j = 1; j <= 9; j++) {
+    const lat = b.getSouth() + (b.getNorth() - b.getSouth()) * i / 8, lng = b.getWest() + (b.getEast() - b.getWest()) * j / 10;
+    n++;
+    if (!list.some(a => prContains(a, lat, lng))) bare++;
+  }
+  return bare / n;
+}
+
+// ── colour ──
+// The class (0-4, dark = lower) against the area's own scale, or -1 for the
+// neutral hatch: no figure, a suppressed, uncertain, too-few or bottom-coded
+// flag, or fewer than the source's colourMinN (the build flags those too;
+// this is the same rule read again, so a tile can never colour one).
+function prClass(a) {
+  if (a.value == null || a.flags & PR_UNCOLOURED) return -1;
+  const min = prSrc(a).colourMinN;
+  if (min && a.n != null && a.n < min) return -1;
+  const br = a.scale?.breaks;
+  if (!br || br.length !== 4) return -1;
+  let i = 0;
+  while (i < 4 && a.value >= br[i]) i++;
+  return i;
+}
+// Fill 0.8: at the crime layer's 0.62 these five blues fall below 2:1 against
+// the dark basemap at the dark end and their steps blur. The outline is the
+// crime hexes' thin white line; a selected area gets a white 2px one.
+function prPaint(a, sel) {
+  const c = prClass(a);
+  return { color: '#ffffff', weight: sel ? 2 : 0.6, opacity: sel ? 1 : 0.14,
+    fillColor: c < 0 ? PR_HATCH || PR_NEUTRAL : PR_BLUES[c], fillOpacity: c < 0 ? (PR_HATCH ? 1 : 0.15) : 0.8 };
+}
+function prSelect(key) {
+  if (prSelected === key) return;
+  const old = prSelected && prLayers.get(prSelected);
+  prSelected = key;
+  if (old) old.setStyle(prPaint(old.prArea, false));
+  const l = key && prLayers.get(key);
+  if (l) { l.setStyle(prPaint(l.prArea, true)); l.bringToFront(); }
+}
+// The 1 km ring is dark teal at .55, made for the dark basemap: over the
+// blues it all but vanished (1.05:1 on the darkest). White while prices show.
+const ringStyle = () => (prOn ? { color: '#ffffff', weight: 1.6, opacity: 0.85 } : { color: '#14564C', weight: 1.4, opacity: 0.55 });
+
+// ── drawing ──
+// Tiles for the view padded by 10%; each area once (by src:id), though an area
+// crossing a tile edge is in every leaf it touches. Only what changed is added
+// or removed, so a pan keeps the canvas's existing areas.
+async function drawPrices() {
+  if (!prOn) return;
+  if (prBusy) { prPending = true; return; }
+  prBusy = true;
+  try {
+    await loadPrIndex();
+    await prRecheckIndex();
+    if (!prOn) return;
+    const want = map.getZoom() >= (prIndex.minZoom ?? 11) ? tilesInView(prGrid, PR_MAX_BASES) : null;
+    if (!want) {
+      // "Zoom in" only where zooming in would show something.
+      prShow(new Map());
+      setNote(prNote, dataIn(prGrid, map.getBounds()) ? 'Zoom in to see home values.' : prNoData());
+      return;
+    }
+    const got = await Promise.allSettled(want.leaves.map(prLoadTile));
+    if (!prOn) return;
+    prTrimTiles(new Set(want.leaves));
+    const b = map.getBounds().pad(0.1), S = b.getSouth(), N = b.getNorth(), W = b.getWest(), E = b.getEast();
+    const keep = new Map();
+    for (const g of got) for (const a of g.value || []) {
+      if (!keep.has(a.key) && prDrawn(a) && a.bbox[0] <= N && a.bbox[2] >= S && a.bbox[1] <= E && a.bbox[3] >= W) keep.set(a.key, a);
+    }
+    prShow(keep);
+    const failed = got.some(g => g.status === 'rejected');
+    setNote(prNote, failed ? 'Some home values could not be loaded just now. Move the map to try again.'
+      : !keep.size ? (want.bases.some(k => prGrid.bases.has(k)) ? `No home-value figures in view.${prOnlyHere() ? ` ${prOnlyHere()}` : ''}` : prNoData())
+      : prBareShare(keep) >= 0.25 ? prOnlyHere() : '');
+  } catch {
+    prShow(new Map());
+    setNote(prNote, 'Home values could not be loaded just now. Switch them off and on to try again.');
+  } finally {
+    prBusy = false;
+    fitMapOverlays();
+    if (prPending) { prPending = false; drawPrices(); }
+  }
+}
+map.on('moveend', drawPrices);
+// Where there is no data, say why: a covered city without an open source is
+// named (never silence, never a guess); anywhere else, where the layer covers.
+function prNoData() {
+  const c = map.getCenter(), m = prMissingAt(c.lat, c.lng);
+  return m ? `SafeRoute has no open home-value data for ${m.name}.` : `No home-value data here. Home values cover ${prIndex.where}.`;
+}
+function prShow(keep) {
+  for (const [k, l] of prLayers) if (!keep.has(k)) { prGroup.removeLayer(l); prLayers.delete(k); }
+  for (const [k, a] of keep) {
+    if (prLayers.has(k)) continue;
+    const l = L.polygon(a.polys, { renderer: prRenderer, ...prPaint(a, k === prSelected) });
+    l.prArea = a;
+    l.on('click', () => showPricePane(a));
+    l.on('mouseover', () => { if (k !== prSelected) l.setStyle({ weight: 1.4, opacity: 0.7 }); });
+    l.on('mouseout', () => { if (k !== prSelected) l.setStyle(prPaint(a, false)); });
+    if (PR_HOVER) l.bindTooltip(`${schEsc(a.name || a.id)} · ${schEsc(prTip(a))}`, { className: 'schtip', sticky: true, direction: 'top', offset: [0, -8] });
+    prGroup.addLayer(l);
+    prLayers.set(k, l);
+  }
+  prLayers.get(prSelected)?.bringToFront();
+  prLabels(prOn && keep.size > 0);
+  prLegend(keep);
+}
+// The legend: the scale of the area at (else nearest) the map centre, its
+// metric and period, its four breaks in its own money, the hatch, and the
+// credit of every source on the map, linked to their full lines. Where the
+// view shows areas of another scale region, whose colours mean different
+// money, it says where they restart.
+function prLegend(areas) {
+  const key = document.getElementById('prkey');
+  const c = map.getCenter(), vb = map.getBounds(), k = Math.cos(c.lat * Math.PI / 180);
+  let at = null, best = Infinity;
+  for (const a of areas.values()) {
+    if (!a.scale) continue;
+    const [s, w, n, e] = a.bbox;
+    const dy = Math.max(s - c.lat, 0, c.lat - n), dx = Math.max(w - c.lng, 0, c.lng - e) * k;
+    // Inside the box is distance 0; actually inside the shape wins outright.
+    const d = dx || dy ? Math.hypot(dx, dy) : prContains(a, c.lat, c.lng) ? -1 : 0;
+    if (d < best) { best = d; at = a; }
+  }
+  const sc = at?.scale;
+  if (!sc) { key.hidden = true; prKeyHtml = ''; return; }
+  // Another scale counts only where one of its areas is really in view (a
+  // corner or the view's centre), not merely its bounding box: Dartford's box
+  // reached into a view of London that showed none of Kent.
+  const others = [];
+  for (const a of areas.values()) {
+    if (!a.scale || a.scale === sc || others.includes(a.scale)) continue;
+    const [s, w, n, e] = a.bbox;
+    if (s > vb.getNorth() || n < vb.getSouth() || w > vb.getEast() || e < vb.getWest()) continue;
+    if (a.polys.some(p => (p[0] || []).some(([la, ln]) => vb.contains([la, ln]))) || prContains(a, c.lat, c.lng)) others.push(a.scale);
+  }
+  const src = prIndex.sources[sc.source] || {};
+  const inView = [...new Set([...areas.values()].map(a => a.src))].map(s => prIndex.sources[s]).filter(Boolean);
+  const credit = inView.map(s => s.credit || s.publisher).filter(Boolean).join('; ');
+  const ticks = (sc.breaks || []).map(v => prShort(v, sc.currency));
+  const names = others.map(x => x.name);
+  const html = `<div class="t1">${prTitle(src.metric)} · ${schEsc(sc.name)}</div>`
+    + `<div class="mp">${schEsc(src.metric)} · ${schEsc(src.period)}</div>`
+    // The bar and ticks are pictures of numbers; a screen reader gets them as
+    // one sentence instead.
+    + `<p class="sr-only">Five colour bands, darkest the lowest: ${[`under ${ticks[0]}`, ...ticks.slice(1).map((t, i) => `${ticks[i]} to ${t}`), `${ticks[3]} and over`].map(schEsc).join('; ')}.</p>`
+    + `<div class="bar" aria-hidden="true">${PR_BLUES.map(x => `<i style="--c:${x}"></i>`).join('')}</div>`
+    + `<div class="ticks" aria-hidden="true">${ticks.map((t, i) => `<span style="left:${(i + 1) * 20}%">${schEsc(t)}</span>`).join('')}</div>`
+    + `<div class="nf"><i aria-hidden="true"></i>No figure, too few or too uncertain</div>`
+    + (names.length ? `<div class="seam">Colours restart at the ${schEsc(names.join(' and '))} ${names.length > 1 ? 'boundaries' : 'boundary'}.</div>` : '')
+    + (credit ? `<div class="cr">Data: <a href="#prview" class="prcredit">${schEsc(credit)}</a></div>` : '');
+  if (html !== prKeyHtml) { key.innerHTML = html; prKeyHtml = html; }
+  key.hidden = false;
+}
+// The credit's link opens every source's full lines and licences in the pane.
+document.getElementById('prkey')?.addEventListener('click', e => {
+  if (!e.target.closest('a.prcredit')) return;
+  e.preventDefault();
+  showPriceSources();
+});
+
+// ── on / off ──
+// restore: put the heatmap back if prices took it over. The Heatmap pill
+// passes false, as it turns the heatmap on itself.
+function setPrices(on, restore = true) {
+  if (on === prOn) return;
+  prOn = on;
+  prBtn.classList.toggle('on', on);
+  prBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  document.body.classList.toggle('pr-on', on);
+  // The map is named for what it shows.
+  document.getElementById('map').setAttribute('aria-label', on ? 'Home values map' : 'Crime map');
+  ringLayer?.setStyle(ringStyle());
+  prSyncButtons();
+  if (on) {
+    prHeatWas = hexOn;
+    if (hexOn && incLayer) { setHeat(false); mapSay('Crime heatmap hidden while home values are shown.'); }
+    else { if (hexOn) setHeat(false); mapSay('Home values shown.'); }
+    prGroup.addTo(map);
+    drawPrices();
+    return;
+  }
+  // An open area closes back to the report where the reader left it.
+  if (!document.getElementById('prview').classList.contains('off')) closeDetail();
+  prSelect(null);
+  map.removeLayer(prGroup);
+  prGroup.clearLayers(); prLayers.clear();
+  // The empty canvas would still take every pointer event in its pane.
+  if (map.hasLayer(prRenderer)) map.removeLayer(prRenderer);
+  prLabels(false);
+  document.getElementById('prkey').hidden = true;
+  prKeyHtml = '';
+  setNote(prNote, '');
+  document.body.classList.remove('pr-jumped');
+  const heat = prHeatWas;
+  prHeatWas = false;
+  if (!restore) return;
+  if (heat) setHeat(true);
+  // "Shown again" only if there is a heatmap to show: a ?prices deep link has
+  // none until an address is searched.
+  mapSay(heat && incLayer ? 'Home values hidden; crime heatmap shown again.' : 'Home values hidden.');
+}
+// The pane's buttons say what a press WILL do, so they carry no aria-pressed
+// (as with "Show schools").
+function prSyncButtons() {
+  const open = document.getElementById('prOpen');
+  if (open) { open.classList.toggle('on', prOn); open.lastChild.textContent = prOn ? 'Hide home values' : 'Show home values'; }
+  const show = document.getElementById('prShow');
+  if (show) { show.classList.toggle('on', prOn); show.lastChild.textContent = prOn ? 'Hide home values' : 'Show home values on the map'; }
+}
+// The pane's "Show home values", like openSchools: from a view with no price
+// data, or from too far out to draw any, it jumps to the visitor's region by
+// time zone (else the first) — turning the layer on over nothing would show
+// nothing. On a phone the map is above the button, so it is brought into view.
+async function openPrices() {
+  if (!prOn) {
+    let jump = false, reg = null;
+    try {
+      await loadPrIndex();
+      const cv = map.getZoom() >= (prIndex.minZoom ?? 11) ? tilesInView(prGrid, PR_MAX_BASES) : null;
+      jump = !cv || !cv.bases.some(k => prGrid.bases.has(k));
+      reg = jump ? prHomeRegion() : null;
+    } catch {}
+    if (reg?.view) {
+      map.fitBounds(reg.view, { padding: [16, 16], animate: !matchMedia('(prefers-reduced-motion: reduce)').matches });
+      const start = document.querySelector('.pr-hint .pr-start');
+      if (start && reg.viewName) start.textContent = prStartText(reg);
+    }
+    document.body.classList.toggle('pr-jumped', !!reg?.view);
+  }
+  setPrices(!prOn);
+  if (prOn && matchMedia(STACKED).matches) revealTool();
+}
+
+// ── an area's pane (#prview) ──
+// In the contract's order: the official name, the figure and its exact metric,
+// the margin of error, period, count, why it is not coloured, the wider-area
+// context, its colour band (within its own scale only), the source's notes and
+// its attribution, word for word, with the licence linked.
+const PR_ORD = ['1st', '2nd', '3rd', '4th', '5th'];
+function prBandLine(a) {
+  const c = prClass(a), name = schEsc(a.scale?.name || '');
+  return c < 0 || !name ? '' : `<p class="meta"><span class="prsw" style="--c:${PR_BLUES[c]}" aria-hidden="true"></span>In the ${PR_ORD[c]} of 5 colour bands for ${name} — colours compare places within ${name} only.</p>`;
+}
+// Too few behind the figure to colour it: the 'few' flag, or under the
+// source's colourMinN.
+const prFew = a => !!(a.flags & PR_FEW) || !!(prSrc(a).colourMinN && a.n != null && a.n < prSrc(a).colourMinN);
+// Why an area is grey, in the words of its flag.
+function prFlagLine(a) {
+  const src = prSrc(a), noun = src.unitNoun || 'sales';
+  if (a.value == null || a.flags & PR_SUPPRESSED) return `No figure is published for this ${schEsc(src.areaNoun || 'area')}.`;
+  if (prFew(a)) return a.n != null ? `Only ${fmt(a.n)} ${schEsc(noun)} — too few to colour.` : `Too few ${schEsc(noun)} to colour.`;
+  if (a.flags & PR_UNCERTAIN) return 'Too uncertain to colour: the margin of error is large next to the estimate.';
+  if (a.flags & PR_BOTTOMCODED) return `The survey publishes only “${schEsc(prLower(prFigure(a)))}” here, so it is not coloured.`;
+  if (a.flags & PR_TOPCODED) return `${schEsc(prFigure(a))}: the survey publishes nothing more exact above that.`;
+  return '';
+}
+// The count row. Sales ARE what a sale-price median is computed from ("Based
+// on 412 sales"), where there is a figure; with none it is just the count. A
+// survey's count is an estimate of how many homes the area has, not the
+// answers behind the median (1,153 owner-occupied homes behind a ± $963,821
+// estimate), so it is labelled as what it is.
+function prCountRow(a) {
+  const src = prSrc(a), noun = src.unitNoun || 'sales';
+  if (a.n == null) return null;
+  if (src.nEstimate) return [cap1(noun), `${fmt(a.n)} (survey estimate)`];
+  return a.value == null ? [cap1(noun), fmt(a.n)] : ['Based on', `${fmt(a.n)} ${noun}`];
+}
+// An attribution line (escaped) with its licence linked where it names it —
+// the source's own licence and any other it names (the StatCan boundary line
+// names the Open Government Licence – Canada).
+function prLinkLine(line, src) {
+  let h = linkLicence(schEsc(line), src);
+  for (const x of src.licences || []) if (!h.includes(`>${schEsc(x.licence)}<`)) h = linkLicence(h, x);
+  return h;
+}
+// The attribution lines as published, each with its licence linked where it
+// names it, and the licence as its own link where no line does.
+function prAttribution(src) {
+  const lines = (Array.isArray(src.attribution) ? src.attribution : [src.attribution]).filter(Boolean).map(l => prLinkLine(l, src));
+  const linked = lines.some(l => l.includes(`href="${schEsc(src.licenceUrl)}"`));
+  return lines.map(l => `<p class="src">${l}</p>`).join('')
+    + (!linked && src.licence ? `<p class="src">Licence: ${licenceLink(src)}</p>` : '')
+    + (src.url ? `<a class="ext" href="${schEsc(src.url)}" target="_blank" rel="noopener">Source: ${schEsc(src.publisher || 'publisher')} ↗</a>` : '');
+}
+// Where an area is, under its name: its city; in the UK, whose one region
+// spans four nations, the colour scale's region (London, Wales).
+const prWhere = a => (a.region?.country === 'gb' ? a.scale?.name : a.region?.name) || a.region?.name || '';
+// The wider-area line (NI: the District Electoral Area's median, the label
+// naming its metric), in the source's money.
+const prContextLine = (a, cur, noun) => {
+  const x = a.ctx;
+  return x && x.value != null ? `<p class="meta">${schEsc(x.label)}: <b>${schEsc(prMoney(x.value, cur))}</b>${x.n != null ? ` from ${fmt(x.n)} ${schEsc(noun)}` : ''}.</p>` : '';
+};
+function showPricePane(a) {
+  const src = prSrc(a), cur = prCurOf(a), noun = src.unitNoun || 'sales';
+  const topped = a.value != null && a.flags & PR_TOPCODED, floored = a.value != null && a.flags & PR_BOTTOMCODED;
+  const value = a.value == null ? '<div class="prval none">No figure</div>'
+    : floored ? `<div class="prval"><small>Less than </small>${schEsc(prMoney(a.value + 1, cur))}</div>`
+    : `<div class="prval">${schEsc(prMoney(topped ? Math.floor(a.value / 1000) * 1000 : a.value, cur))}${topped ? '<small> or more</small>' : ''}</div>`;
+  const flag = prFlagLine(a), where = prWhere(a);
+  const kv = [['Period', src.period], prCountRow(a)]
+    .filter(r => r && r[1]).map(([k, v]) => `<div class="kv"><span>${schEsc(k)}</span><span>${schEsc(v)}</span></div>`).join('');
+  openDetail('prview', `
+    <h2 class="place">${schEsc(a.name || a.id)}<small>${schEsc(cap1(src.areaNoun || 'area'))}${where ? ` · ${schEsc(where)}` : ''}</small></h2>
+    <div>
+      ${value}
+      <p class="meta prmetric">${schEsc(src.metric)}</p>
+      ${a.moe != null && a.value != null ? `<p class="meta">± ${schEsc(prMoney(a.moe, cur))} <span style="color:var(--ink-3)">(90% margin of error)</span></p>` : ''}
+    </div>
+    ${kv ? `<div>${kv}</div>` : ''}
+    ${flag ? `<p class="note">${flag}</p>` : ''}
+    ${prContextLine(a, cur, noun)}
+    ${prBandLine(a)}
+    <div class="divider"></div>
+    <div>${(src.notes || []).map(t => `<p class="src">${schEsc(t)}</p>`).join('')}</div>
+    <div>${prAttribution(src)}</div>`);
+  prSelect(a.key);
+}
+// Every source's full credit, from the legend's "Data:" link: the same list
+// as the pane's "Home value data sources", in the area pane's place.
+async function showPriceSources() {
+  try { await loadPrIndex(); } catch { return; }
+  openDetail('prview', `<h2 class="place">Home value data sources<small>Every source on this map, its licence and its credit</small></h2><div>${prSourcesHtml()}</div>`);
+  prSelect(null);
+}
+
+// ── the report's "Home values near here" (#prices) ──
+// From index.json and the one tile holding the searched point, which lookup()
+// has already rounded to 3 dp; the point-in-polygon runs here, so no provider
+// sees it. It names the area the figure is for (a figure describes an area,
+// not an address). A covered city with no open source says so, found by its
+// rectangle or by `region`, /public/area's key for the covering city (the
+// coverage ids index.missing uses); anywhere outside every price area it says
+// nothing. The source's attribution lines are printed in full, as in the pane.
+async function fillPrices(lat, lng, reqId, region) {
+  let a = null, miss = null;
+  try {
+    await loadPrIndex();
+    a = await prAreaAt(lat, lng);
+    miss = a ? null : prMissingAt(lat, lng) || (typeof region === 'string' && (prIndex.missing || []).find(m => m.region === region)) || null;
+  } catch { return; }
+  const slot = document.getElementById('prices');
+  if (reqId !== lastReqId || !slot || !(a || miss)) return;
+  const head = '<div class="divider"></div><section class="prrep"><h3 class="h3">Home values near here</h3>';
+  if (!a) { slot.innerHTML = `${head}<p class="meta">SafeRoute has no open home-value data for ${schEsc(miss.name)}.</p>${miss.reason ? `<p class="src">${schEsc(miss.reason)}</p>` : ''}</section>`; return; }
+  const src = prSrc(a), cur = prCurOf(a), noun = src.unitNoun || 'sales';
+  // "Southwark 025, a middle layer super output area, MSOA" — the area noun,
+  // unless the official name already says it ("Census Tract 113, …").
+  const kind = (src.areaNoun || '').replace(/ \(([^()]+)\)$/, ', $1');
+  const place = `${schEsc(a.name || a.id)}${kind && !(a.name || '').toLowerCase().includes((src.areaNoun || '').toLowerCase()) ? `, an official statistical area (${schEsc(kind)})` : ''}`;
+  const metric = schEsc(prLower(src.metric)), period = schEsc(src.period);
+  let figure;
+  if (a.value == null) figure = `<p class="meta">No ${metric || 'figure'} is published for this ${schEsc(src.areaNoun || 'area')} for ${period}.</p>`;
+  else {
+    const moe = a.moe != null ? ` ± ${schEsc(prMoney(a.moe, cur))} (90% margin of error)` : '';
+    const count = a.n == null ? '' : src.nEstimate ? '' : prFew(a) ? `, from only ${fmt(a.n)} ${schEsc(noun)}` : `, from ${fmt(a.n)} ${schEsc(noun)}`;
+    const grey = prFew(a) ? `Too few ${schEsc(noun)} to colour on the map: ` : a.flags & PR_UNCERTAIN ? 'Too uncertain to colour on the map: '
+      : a.flags & PR_BOTTOMCODED ? 'Not coloured on the map: ' : '';
+    // A figure too thin to colour is not set in bold either.
+    const fig = schEsc(prFigure(a));
+    figure = `<p class="meta">${grey}${grey ? fig : `<b>${fig}</b>`}${moe} — ${metric}${count}, ${period}.</p>`
+      + (src.nEstimate && a.n != null ? `<p class="meta">About ${fmt(a.n)} ${schEsc(noun)} in this ${schEsc(src.areaNoun || 'area')} (a survey estimate).</p>` : '');
+  }
+  slot.innerHTML = `${head}${figure}
+    <p class="meta">This spot is in ${place}.</p>
+    ${prContextLine(a, cur, noun)}
+    <div>${prAttribution(src)}</div>
+    <button type="button" class="btn-sch pr" id="prShow"><i></i><span>Show home values on the map</span></button></section>`;
+  prSyncButtons();
+  document.getElementById('prShow').addEventListener('click', () => {
+    setPrices(!prOn);
+    if (prOn && matchMedia(STACKED).matches) revealTool();
+  });
+}
+
+// ── "Home value data sources" (#secPrices), from index.json when first opened ──
+// Every source, its period, licence(s) (linked), how many areas it put on the
+// map and its attribution lines in full; the cities with none, and why; then
+// what "around a city" means. Also the pane the legend's credit link opens.
+function prSourcesHtml() {
+  const out = Object.values(prIndex.sources).map(s => {
+    // An area with nothing published is not drawn (prDrawn), so it is not
+    // "on the map"; the grey ones are.
+    const st = s.stats || {}, drawn = (st.areas || 0) - (st.unpublished || 0), grey = (st.neutral || 0) - (st.unpublished || 0);
+    const more = (s.licences || []).filter(x => x.licenceUrl && x.licence).map(x => licenceLink(x)).join(', ');
+    return `<p class="src"><b>${schEsc(s.name)}</b> · from ${schEsc(s.publisher)}. ${schEsc(s.metric)}, ${schEsc(s.period)}. ${licenceLink(s)}${more ? `; boundaries also under ${more}` : ''}.`
+      + `${drawn > 0 ? ` ${fmt(drawn)} areas on the map${grey > 0 ? `, ${fmt(grey)} of them without a colour (no figure, too few or too uncertain)` : ''}.` : ''}`
+      + `${s.status === 'snapshot-after-failure' ? ' Its latest update could not be used, so these are the figures from the build before it.' : ''}</p>`
+      + (Array.isArray(s.attribution) ? s.attribution : [s.attribution]).filter(Boolean).map(l => `<p class="src">${prLinkLine(l, s)}</p>`).join('');
+  });
+  for (const m of prIndex.missing || []) out.push(`<p class="src"><b>${schEsc(m.name)}</b> · ${schEsc(m.reason)}</p>`);
+  if (prIndex.scope) out.push(`<p class="src"><b>Where</b> · ${schEsc(prIndex.scope)}</p>`);
+  return out.join('');
+}
+{
+  const d = document.getElementById('prSources');
+  d?.addEventListener('toggle', async () => {
+    if (!d.open || d.dataset.done) return;
+    const body = document.getElementById('prSourcesBody');
+    try { await loadPrIndex(); }
+    catch { body.innerHTML = '<p class="src">The list could not be loaded. Close and reopen to try again.</p>'; return; }
+    d.dataset.done = '1';
+    body.innerHTML = prSourcesHtml();
+  });
+}
+
+// /check/?prices and #prices open the layer like ?schools: over the visitor's
+// own region by time zone (index.json regions[].tz; Europe and any zone no
+// region names get central London), at a zoom where areas are drawn. A
+// visitor from a covered city with no price data (Mexico City) is told why it
+// starts elsewhere. With ?schools as well, the schools start decides the
+// view. If index.json cannot be read the map stays where it opened and the
+// layer's note says so.
+if (IS_PRICES) setTimeout(async () => {
+  let reg = null;
+  try { await loadPrIndex(); reg = prHomeRegion(); } catch {}
+  if (reg?.view && !IS_SCHOOLS) map.fitBounds(reg.view, { padding: [16, 16], animate: false });
+  const start = document.querySelector('.pr-hint .pr-start');
+  if (start && reg?.viewName) start.textContent = prStartText(reg);
+  document.body.classList.toggle('pr-jumped', !!reg?.view && !IS_SCHOOLS);
+  setPrices(true);
+}, 0);
+
 function showUpdating(on){
   mapStatus.classList.toggle('on', on);
-  mapStatus.setAttribute('aria-hidden', on ? 'false' : 'true');
+  mapStatusText.setAttribute('aria-hidden', on ? 'false' : 'true');
 }
 // Mapbox public token (pk.*) — public BY DESIGN: the same token ships inside
 // the iOS app bundle, and Mapbox's own docs say to embed it client-side. It is
 // assembled from parts only so GitHub push protection stops false-positive
 // blocking the deploy; this is not secrecy and must never be treated as any.
 const MB_TOKEN = ['pk.eyJ1IjoibWluaGFqazIxIiwiYSI','6ImNtdGJjc2IzYjA5ZDUyeXE2bW1ma','nA3NnkifQ.E1GM4huWJAv7fWwjKir4BA'].join('');
-L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}{r}?access_token=' + MB_TOKEN, {
-  tileSize:512, zoomOffset:-1, maxZoom:19,
+// URL and options are named because the home-values layer draws the same
+// tiles a second time for their labels (prLabels).
+const MB_URL = 'https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}{r}?access_token=' + MB_TOKEN;
+const MB_OPTS = { tileSize:512, zoomOffset:-1, maxZoom:19 };
+L.tileLayer(MB_URL, {
+  ...MB_OPTS,
   // Final addresses, as on /tonight/ and the hub maps: the about/maps/ and
   // map-feedback/ forms Mapbox's docs print both 301.
   attribution:'© <a href="https://www.mapbox.com/about/maps">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://apps.mapbox.com/feedback/">Improve this map</a>',
@@ -1754,7 +2791,7 @@ L.Control.MapboxLogo = L.Control.extend({
 new L.Control.MapboxLogo().addTo(map);
 // Leaflet measures the container on init; inside a grid that's still resolving,
 // invalidateSize once layout settles fixes a clipped/greyed map.
-if(window.ResizeObserver){ new ResizeObserver(()=>map.invalidateSize()).observe(document.getElementById('map')); }
+if(window.ResizeObserver){ new ResizeObserver(()=>{ map.invalidateSize(); fitMapOverlays(); }).observe(document.getElementById('map')); }
 setTimeout(()=>map.invalidateSize(), 200);
 let incLayer=null, ringLayer=null, ctrLayer=null, recentLayer=null, camLayer=null;
 // Re-poll a still whose network refreshes about every minute while its popup
@@ -1954,7 +2991,7 @@ document.addEventListener('click', e=>{ if(!$('.search').contains(e.target)) cle
 // the map still shows the wide both-sides-of-the-Atlantic start view, whose
 // centre is open sea.
 function nearParam(){
-  if(REGION==='both' && !IS_SCHOOLS && !lastCenter && map.getZoom() <= START_ZOOM) return '';
+  if(REGION==='both' && !IS_SCHOOLS && !IS_PRICES && !lastCenter && map.getZoom() <= START_ZOOM) return '';
   const c=map.getCenter();
   return `&lat=${c.lat.toFixed(3)}&lng=${c.lng.toFixed(3)}`;
 }
@@ -2172,7 +3209,7 @@ async function lookup(lat, lng, name, address, opts = {}){
   exploreSeq++;
   showUpdating(false);
   keepFocus();
-  document.body.classList.remove('sch-london');   // the map is leaving the start view
+  document.body.classList.remove('sch-london', 'pr-jumped');   // the map is leaving the start view
   showAreaView();   // a new search replaces any open school
   document.getElementById('side').scrollTop = 0;   // a new report starts at its top (a no-op on phones)
   revealTool();
@@ -2196,7 +3233,7 @@ async function lookup(lat, lng, name, address, opts = {}){
     // anchoring then held the view at the end as the report grew, with the
     // map scrolled off the top. Moves nothing that is already in place.
     revealTool();
-    if(hasScore(d)){ drawHex(d); addPubLink(lat, lng, reqId); } else clearArea();
+    if(hasScore(d)){ drawHex(d); addPubLink(lat, lng, reqId); fillPrices(lat, lng, reqId, d.region); } else clearArea();
     fetchRecent(lat, lng, reqId, d.region);
     fetchCameras(lat, lng, reqId, d.region);
   }catch{
@@ -2281,6 +3318,7 @@ function render(d, name, address){
     ${tod?`<div class="divider"></div><div><h3 class="h3">When it happens</h3><div class="todwrap">${[['Weekday',tod.slice(0,3)],['Weekend',tod.slice(3,6)]].map(g=>`<div class="todgrp"><div class="tod">${g[1].map(v=>`<div class="b" style="height:${Math.max(3,Math.round(v/maxTod*50))}px"></div>`).join('')}</div><div class="tod-x">${TOD3.map(t=>`<span>${t}</span>`).join('')}</div><div class="todlbl">${g[0]}</div></div>`).join('')}</div><p class="tiny">Severity-weighted share of reported incidents by time of day.</p></div>`:''}
     <div class="divider"></div>
     <p class="src">${esc(d.dataSource||'Police open data')}${d.crimeDate?` · through ${monthName(d.crimeDate)}`:''}. Locations are anonymised by the source. Informational only.</p>
+    <div id="prices"></div>
     <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-check-result&mt=8">Route here safely with the app</a>`;
   syncBack();
 }
@@ -2326,7 +3364,7 @@ async function refetchAt(lat, lng){
     const name = (rev && rev.name) ? rev.name : 'This area';
     lastName = name;
     render(d, name, '');
-    if(hasScore(d)){ drawHex(d); addPubLink(lat, lng, reqId); } else clearArea();
+    if(hasScore(d)){ drawHex(d); addPubLink(lat, lng, reqId); fillPrices(lat, lng, reqId, d.region); } else clearArea();
     fetchRecent(lat, lng, reqId, d.region);
     fetchCameras(lat, lng, reqId, d.region);
   }catch{}
@@ -2386,7 +3424,7 @@ function drawHex(d){
   }
   incLayer=L.layerGroup(hexes);
   if(hexOn) incLayer.addTo(map);
-  ringLayer=L.circle([cLat,cLng],{radius:(d.radiusMetres||1000),color:'#14564C',weight:1.4,dashArray:'3 4',fill:false,opacity:0.55}).addTo(map);
+  ringLayer=L.circle([cLat,cLng],{radius:(d.radiusMetres||1000),dashArray:'3 4',fill:false,...ringStyle()}).addTo(map);
   ctrLayer=L.circleMarker([cLat,cLng],{radius:6,color:'#04231E',weight:2,fillColor:'#3FD9C0',fillOpacity:1}).addTo(map);
 }
 
@@ -2502,17 +3540,19 @@ function windowPhrase(days){ if(!(days>0)||days<14||days>760) return null; const
 // Visitors whose time zone is in Europe see the London ones first.
 (function(){
   // /check/?schools (the homepage Schools card, and the old /schools/ URL)
-  // came for schools, so their section goes first. Once, here, before anyone
-  // can interact — never on a later toggle, so there is no focus to rescue
-  // and visual order always matches tab order.
+  // came for schools, so their section goes first; /check/?prices likewise.
+  // Once, here, before anyone can interact — never on a later toggle, so
+  // there is no focus to rescue and visual order always matches tab order.
+  if(IS_PRICES){ const s = document.getElementById('secPrices'); if(s) panel.prepend(s); }
   if(IS_SCHOOLS){ const s = document.getElementById('secSchools'); if(s) panel.prepend(s); }
   const box = document.getElementById('chips'); if(!box) return;
-  if(REGION === 'gb' || (IS_SCHOOLS && REGION === 'both')) box.prepend(...box.querySelectorAll('[data-region="uk"]'));
+  if(REGION === 'gb' || ((IS_SCHOOLS || IS_PRICES) && REGION === 'both')) box.prepend(...box.querySelectorAll('[data-region="uk"]'));
   box.addEventListener('click', e => {
     const b = e.target.closest('.chip'); if(!b) return;
     pick({ name: b.dataset.name, address: b.dataset.address, lat: +b.dataset.lat, lng: +b.dataset.lng });
   });
   document.getElementById('schOpen')?.addEventListener('click', openSchools);
+  document.getElementById('prOpen')?.addEventListener('click', openPrices);
 })();
 
 // Coverage: each city in "Where it works" is a button, and the same buttons

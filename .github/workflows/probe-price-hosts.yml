@@ -1,0 +1,36 @@
+# Which home-price data hosts answer a GitHub runner? Every reachability
+# result so far came from a residential IP, and several of these hosts filter
+# datacenter IPs or user agents (www.ons.gov.uk behind Cloudflare with a rate
+# limit, admin.opendatani.gov.uk refusing some user agents, a flaky
+# www12.statcan.gc.ca). This makes ONE request per host with the user agent
+# the build uses for it and writes a table to the run summary
+# (tools/prices/probe-hosts.mjs). It changes nothing and commits nothing.
+#
+# Dispatch only: run it by hand (Actions → probe-price-hosts → Run workflow)
+# before relying on rebuild-prices.yml, and again whenever a source starts
+# falling back to its snapshot.
+name: probe-price-hosts
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Probe every home-price data host from this runner
+        run: node tools/prices/probe-hosts.mjs --json /tmp/probe.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: price-host-probe
+          path: /tmp/probe.json
