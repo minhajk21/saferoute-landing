@@ -130,7 +130,7 @@ const CITIES = {
     forCity: 'for Chicago',
     acrossCity: 'across Chicago',
     faqCalc: (name) => `SafeRoute weights each incident reported to the Chicago Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0–100 scale — higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
-    sources: (dateLine) => `Crime data: Chicago Police Department "Crimes — 2001 to Present" via the <a href="https://data.cityofchicago.org/">Chicago Data Portal</a>${dateLine}. Neighborhood boundaries: City of Chicago community areas (all 77). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
+    sources: (dateLine) => `Crime data: Chicago Police Department, from its <a href="https://gis.chicagopolice.org/">CLEARMAP</a> crime layer for the past 365 days${dateLine}. Neighborhood boundaries: City of Chicago community areas (all 77). Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis © SafeRoute.`,
     basemapCredit: 'basemap © OpenStreetMap contributors',
     hub: {
       title: (n) => `Chicago Neighborhood Safety Map & Rankings (${n} community areas) — SafeRoute`,
@@ -140,7 +140,7 @@ const CITIES = {
       placeholder: 'Check a neighborhood — e.g. Lincoln Park, Hyde Park, Logan Square…',
       rankHeading: (n) => `All ${n} community areas, safest first`,
       notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center — they are informational, not a judgment of any community. Note: to protect victims' privacy, the Chicago Police Department publishes incident locations at block level, so dots mark blocks, not addresses. Citywide median index: <strong>${median}/100</strong>.`,
-      methodology: `Each incident reported to the Chicago Police Department (via the Chicago Data Portal) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of Chicago's 77 official community areas, the stable units the city itself reports on. Time-of-day charts use Chicago PD incident timestamps, severity-weighted. Locations are published at block level for victim privacy. Pages regenerate as new data is published.`,
+      methodology: `Each incident reported to the Chicago Police Department (from CPD's CLEARMAP data) is weighted by severity — violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide crime rates onto a 0–100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of Chicago's 77 official community areas, the stable units the city itself reports on. Time-of-day charts use Chicago PD incident timestamps, severity-weighted. Locations are published at block level for victim privacy. Pages regenerate as new data is published.`,
     },
   },
   'la': {
