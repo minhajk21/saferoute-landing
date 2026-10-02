@@ -893,6 +893,11 @@ async function fetchRecent(lat,lng,reqId,region){
 // still (/public/camera-image) into the popup — the image only downloads when
 // a popup opens. Attribution comes with the payload: TfL's licence requires
 // "Powered by TfL Open Data" wherever the imagery is shown.
+// NYC DOT's stills are the exception to PROXIED (since 2026-10-01): nyctmc.org
+// refuses our server, so /public/camera-image answers 302 and the browser loads
+// the picture from NYC DOT itself. The <img> carries referrerpolicy="no-referrer"
+// so no browser tells NYC DOT which page it was on, whatever it makes of the
+// redirect's own Referrer-Policy header (the privacy policy relies on this).
 // The list is asked for with a 2 dp point (~1.1 km): the backend rounds to that
 // anyway, and "nearby" is its radius, not our precision. Every camera sits in a
 // covered city, so an uncovered point (region null) asks nothing. The stills and
@@ -943,7 +948,7 @@ async function fetchCameras(lat,lng,reqId,region){
       ? `<video class="campop-media" data-stream="${esc(c.streamUrl)}" width="272" height="${MH}" style="${VSTYLE}" autoplay muted playsinline poster="${still(c)}"></video>`
       : c.video
       ? `<video class="campop-media" width="272" height="${MH}" style="${VSTYLE}" autoplay muted loop playsinline poster="${still(c)}" src="${API}/public/camera-video?${camKey(c)}"></video>`
-      : `<img class="campop-media"${stillRefreshMs ? ` data-refresh="${stillRefreshMs}"` : ''} src="${still(c)}" width="272" height="${MH}" style="object-fit:cover;border-radius:8px;margin-top:6px;background:#e8e4da" alt="Latest still from ${esc(c.name)}">`;
+      : `<img class="campop-media"${stillRefreshMs ? ` data-refresh="${stillRefreshMs}"` : ''} referrerpolicy="no-referrer" src="${still(c)}" width="272" height="${MH}" style="object-fit:cover;border-radius:8px;margin-top:6px;background:#e8e4da" alt="Latest still from ${esc(c.name)}">`;
     const kind=c=> c.streamUrl ? 'Live video' : (c.video ? 'Live clip' : 'Latest still');
     const credit=c=> c.streamUrl ? (d.streamAttribution || d.attribution) : d.attribution;
     const pins=d.cameras.map(c=>
