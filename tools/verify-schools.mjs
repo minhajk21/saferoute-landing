@@ -20,11 +20,13 @@
 // 4. SCHEMA AND HONESTY INVARIANTS. stage is one of the three stages or '';
 //    sector state|private; (src, id) unique; every rating scheme is defined; a
 //    scheme's rv is in its allowed values; NO private school carries a rating
-//    value; gender/boarding/charter only where the source declares it publishes
-//    them; mealsKind set exactly when meals is; no religion-type field exists;
-//    every source carries a licence and an attribution, and a link to the
-//    licence that /check/ renders; plus each source's own offline invariants
-//    (sources/<id>.mjs invariants(rows): NI, no ETI report left unlinked).
+//    value; a value appears only under its own source's scheme or a rating map
+//    that tools/schools/licence.mjs licenses; gender/boarding/charter only
+//    where the source declares it publishes them; mealsKind set exactly when
+//    meals is; no religion-type field exists; every source carries a licence
+//    and an attribution, and a link to the licence that /check/ renders; plus
+//    each source's own offline invariants (sources/<id>.mjs invariants(rows):
+//    NI, no ETI report left unlinked).
 // 5. SIZE. No tile over 50KB gzipped; no leaf over the split threshold unless it
 //    is already at the minimum cell size.
 // 6. POSITION, per jurisdiction, against an independent reference that each
@@ -48,6 +50,7 @@ import { parseKey, orphanTiles } from './schools/lib/tiles.mjs';
 import { loadSources, schemeProblems } from './schools/lib/modules.mjs';
 import { inBox, COVERAGE_PATH } from './schools/lib/coverage.mjs';
 import { FILTERS } from './schools/filters.mjs';
+import { LICENSED_RATINGS, ratingLicensed } from './schools/licence.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);
@@ -198,6 +201,17 @@ const run = async () => {
   check('unique ids', dupes, '(src, id) unique across all rows');
   check('row values', bad, 'stage, sector, juris and coordinates well-formed on every row');
   check('ratings', ratings, 'every scheme defined; values allowed; no private school carries a rating');
+  // THE LICENCE RULE (tools/schools/licence.mjs). A value is published only
+  // under a scheme its row's own source defines (that source's own data, under
+  // its meta.licence: NI's ETI outcomes) or under a rating map whose values are
+  // licensed for reuse. Anything else is a state's data we have no licence to republish.
+  {
+    const own = new Map((await loadSources()).map(m => [m.id, new Set(Object.keys(m.schemes || {}))]));
+    const by = {};
+    for (const o of rows) if (o.rv && !own.get(o.src)?.has(o.ratingScheme) && !ratingLicensed(o.ratingScheme)) by[o.ratingScheme] = (by[o.ratingScheme] || 0) + 1;
+    check('rating licence', Object.entries(by).map(([id, n]) => `${fmt(n)} value(s) under ${id}, which tools/schools/licence.mjs does not license`),
+      `values only under their source's own schemes or a licensed rating map (${Object.keys(LICENSED_RATINGS).join(', ')})`);
+  }
   check('published fields', pub, 'gender, boarding and filter tags only where the source declares them');
   check('meals', meals, 'mealsKind set exactly when meals is');
   const schemeProbs = Object.entries(index.schemes).flatMap(([id, s]) => schemeProblems(id, s));

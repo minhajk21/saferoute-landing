@@ -6,14 +6,20 @@
 <meta name="theme-color" content="#0A0D12">
 <title>Check any address — SafeRoute neighborhood safety</title>
 <!-- Worded to the school data (schools/data/tiles/index.json "where"): the
-     places listed are exactly where schools are mapped, and an inspection or
-     rating exists only where a school's own authority publishes one (Ofsted,
-     ETI and US states do; Ontario, British Columbia and Mexico do not). Keep
-     this list in step with #secSchools, which sync-site-facts fills. The
+     places listed are exactly where schools are mapped. "Where the map has
+     one": the map has Ofsted's outcomes (England, state schools), ETI's
+     reports (Northern Ireland) and, for US states, only the ratings a state
+     explicitly allows to be reused (Connecticut and Washington:
+     tools/schools/licence.mjs). It has none for Wales (Estyn), ISI-inspected
+     or other private schools in England, or Northern Ireland's independent
+     schools. The 16 other US states that publish a rating or a federal
+     support status are named, and linked to, in each school's details;
+     Missouri, Minnesota, Ontario, British Columbia and Mexico publish none.
+     Keep this list in step with #secSchools, which sync-site-facts fills. The
      home-values clause is worded to prices/data/index.json: official medians
      by area, sale prices in the UK and owners' estimates elsewhere, and none
      for Mexico City, so it names no places of its own. -->
-<meta name="description" content="Type any address for its SafeRoute safety index (0–100) from police crime data, plus nearby schools in England, Wales, Northern Ireland, 26 US cities, Toronto, Vancouver and Mexico City, with each authority's own inspection or rating where one is published, and official median home values by area where they are published.">
+<meta name="description" content="Type any address for its SafeRoute safety index (0–100) from police crime data, plus nearby schools in England, Wales, Northern Ireland, 26 US cities, Toronto, Vancouver and Mexico City, with the official inspection or rating where the map has one (for US states, only where the state allows its reuse), and official median home values by area where they are published.">
 <meta property="og:image" content="https://safe-route.app/assets/og-preview.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:title" content="Check any address — SafeRoute neighborhood safety">
@@ -689,9 +695,13 @@
              school": Wales has state schools only, NCES's private-school
              survey lists about 3 in 4, and schools whose published location
              is missing or unreliable are counted, not drawn (the sources list
-             below says how many). An inspection or rating is shown only where
-             the school's own authority publishes one, in its own words. -->
-        <p class="meta">Switch on <b>Schools</b> to see the state and private schools near an address — <span data-fact="schools">50,516</span> of them in <span data-fact="schools-where">England, Wales, Northern Ireland, 26 US cities, Toronto, Vancouver and Mexico City</span> — with stage and size where published and, where one exists, the official inspection or rating in its own words. Ratings are never compared across states or countries.</p>
+             below says how many). An inspection or rating is shown, in its own
+             words, only where the map has one (see the note at the top of this
+             file); a US state's only where the state explicitly allows its
+             reuse (tools/schools/licence.mjs). In the other US states, the
+             pane names what the state publishes and links to the state's own
+             site. Missouri and Minnesota publish none. -->
+        <p class="meta">Switch on <b>Schools</b> to see the state and private schools near an address — <span data-fact="schools">50,516</span> of them in <span data-fact="schools-where">England, Wales, Northern Ireland, 26 US cities, Toronto, Vancouver and Mexico City</span> — with stage and size where published and, where the map has one, the official inspection or rating in its own words. A US state's rating is shown only where the state explicitly allows its reuse; in the other US states that publish one, the school's details name it and link to the state's own site. Ratings are never compared across states or countries.</p>
         <p class="meta sch-hint"><span class="sch-start">Starting in central London. </span>Search an address to see the schools around it, and click a pin for its details. Pin colour is the stage, never a rating; hollow pins are private.</p>
         <button type="button" class="btn-sch" id="schOpen"><i></i><span>Show schools</span></button>
         <!-- Every source, its vintage and licence, and how many schools it

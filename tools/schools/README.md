@@ -32,7 +32,8 @@ tools/schools/regions.mjs ┤   (per region: home jurisdictions, start view)
 sources/<id>.mjs  ── fetch(ctx) ─► v2 rows ─┐
    … on failure / not due: rows from the current tiles (snapshot)
                                             ▼
-ratings maps (tools/data/schools/ratings/<scheme>.json) ─► merged by row id
+ratings maps (tools/data/schools/ratings/<scheme>.json) ─► merged by row id,
+   licensed schemes only (licence.mjs); every other state keeps its source's line
                                             ▼
                  validate (lib/schema.mjs rowProblems) → scope R2 → dedupe (src,id)
                                             ▼
@@ -57,6 +58,9 @@ ratings maps (tools/data/schools/ratings/<scheme>.json) ─► merged by row id
 | `tools/schools/sources/_template.mjs` | Copy this to start a source. |
 | `tools/schools/ratings/<scheme>.mjs` | One module per US state rating scheme (18; `_us.mjs` is their shared helper: zip, xlsx, CCD state ids, joins). `_template.mjs` to start. |
 | `tools/schools/ratings.mjs` | Runner that builds one rating map by hand. |
+| `tools/schools/licence.mjs` | Which rating maps may publish VALUES: only schemes whose state explicitly licenses reuse (Connecticut, Washington). Every other state links out. |
+| `tools/schools/lib/ratings-apply.mjs` | Reset rows to their source's default scheme, apply the licensed maps, compose `index.schemes`. Shared by the build and `apply-rating-licence.mjs`. |
+| `tools/schools/apply-rating-licence.mjs` | Applies `licence.mjs` to the published tiles without a build (`--check` to test only). Changes only `ratingScheme`/`rv`/`rd` and `index.schemes`. |
 | `tools/schools/probe-hosts.mjs` | Phase 0: one request per upstream host with the build's own user agent; run from GitHub's runner by `.github/workflows/probe-school-hosts.yml` (dispatch only). |
 | `tools/schools/regions.mjs` | Region id → name, home jurisdictions (R2), start view, time zones. |
 | `tools/schools/juris.mjs` | Every ISO 3166-2 jurisdiction a row may carry, with its name. Pre-filled for every planned place. |
@@ -191,7 +195,7 @@ ratings module (`record`). `kind` picks the renderer on `/check/`:
 
 | kind | For | Renders |
 |---|---|---|
-| `none` | no rating published / not applicable | the **first** note whose `when` matches (else `text`), as one line. E&W `not-ofsted` (Wales / ISI / private / default), `us-none-mo`, `ca-bc-none`, `mx-none`, `us-private`, NI "no report since 2016" … |
+| `none` | no rating published / not applicable / not licensed | the **first** note whose `when` matches (else `text`), as one line. E&W `not-ofsted` (Wales / ISI / private / default), `us-none-mo`, `ca-bc-none`, `mx-none`, `us-private`, NI "no report since 2016", and `us-pending` (a US state whose values are not licensed: what it publishes, why the map does not show it, and a link to it) … |
 | `rating` | an official summative rating | the pattern below |
 | `status` | a status that is **not a rating** (NY/PA/CA ESSA, …) | the same pattern; its `scale` must say it is not a rating |
 | `ofsted` | England's Ofsted (report card areas + legacy OEIF) | the dedicated E&W renderer, unchanged |
@@ -241,6 +245,17 @@ export default {
   value, or an empty `rv` (the pane's miss line). A missing map file means the
   scheme is simply not applied yet (rows keep their source's default scheme,
   e.g. a "not shown yet" note).
+- **Only licensed maps are merged** (`licence.mjs`, owner decision of 2 October
+  2026): a value is shown only where the state explicitly licenses reuse
+  (Connecticut, public domain; Washington, CC BY 4.0). Before merging, every row
+  of a source with `defaultScheme(row)` (ccd) goes back to that scheme with no
+  value, so a value carried in from the snapshot cannot outlive its licence.
+  The other 16 states' rows keep `us-pending`, which names what the state
+  publishes, says the map shows a state's ratings only where it explicitly
+  allows reuse, and links to the state. To license a state: record its licence
+  in `licence.mjs`, then run `node tools/schools/apply-rating-licence.mjs` (or
+  wait for the monthly build). `verify-schools` fails any value under a scheme
+  that is neither licensed nor its source's own.
 
 ## Filters
 
@@ -336,6 +351,7 @@ node tools/build-schools.mjs --frozen --raw-dir DIR  # reproducible: never fetch
 node tools/build-schools.mjs --out DIR --snapshot schools/data/tiles   # build somewhere else
 node tools/verify-schools.mjs                        # [--reference-optional]: an unreachable position reference WARNs (CI)
 node tools/schools/ratings.mjs --scheme us-tx-af
+node tools/schools/apply-rating-licence.mjs          # apply licence.mjs to the published tiles now ([--check])
 node tools/schools/probe-hosts.mjs                   # which upstream hosts answer (Phase 0; CI: probe-school-hosts.yml)
 node tools/schools/lib/coverage-from-backend.mjs --check
 node --test tools/schools/test/*.test.mjs

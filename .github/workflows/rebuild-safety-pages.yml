@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   rebuild:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Explicit, because the default is 6 hours. Sized from measured runs:
     #   run #4  2026-09-02  10 cities  1,222 areas   58m33s data step
     #   run #6  2026-09-11  20 cities  1,917 areas  118m20s

@@ -6,7 +6,9 @@
 // 390MB), some hosts are fragile, and a rating must never change shape
 // unreviewed. So each scheme is built by hand (or workflow_dispatch) with this
 // runner, the map is committed, and build-schools.mjs merges the committed map
-// into the tiles every month without touching the network.
+// into the tiles every month without touching the network, if
+// tools/schools/licence.mjs licenses the scheme's values (this runner says so
+// when it does not).
 //
 //   node tools/schools/ratings.mjs --scheme us-tx-af [--raw-dir <dir>] [--frozen] [--tiles <dir>]
 //
@@ -27,6 +29,7 @@ import { tmpdir } from 'node:os';
 import { loadRatings, loadSources } from './lib/modules.mjs';
 import { readRowsFromTiles } from './lib/tiles.mjs';
 import { makeDownloader } from './lib/download.mjs';
+import { ratingLicensed } from './licence.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const argv = process.argv.slice(2);
@@ -40,6 +43,7 @@ const run = async () => {
   if (!SCHEME) throw new Error('usage: node tools/schools/ratings.mjs --scheme <id>');
   const rm = (await loadRatings()).find(r => r.scheme === SCHEME);
   if (!rm) throw new Error(`no tools/schools/ratings/${SCHEME}.mjs`);
+  if (!ratingLicensed(SCHEME)) console.log(`  note: tools/schools/licence.mjs does not license ${SCHEME}'s values, so build-schools.mjs will not apply this map (its schools keep their link-out line). It is built only to be checked.`);
   const sources = await loadSources();
   const legacy = sources.find(s => typeof s.fromV1 === 'function');
   const snap = readRowsFromTiles(TILES, { legacy: { v1: legacy?.fromV1 } });

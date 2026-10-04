@@ -5,8 +5,8 @@
 //
 // This file is the ORCHESTRATOR. It knows nothing about any one country: each
 // source module fetches and normalises its own rows (tools/schools/README.md
-// documents the interface), and this file runs them, merges US rating maps,
-// clips to scope, tiles, and writes index.json v2.
+// documents the interface), and this file runs them, merges licensed US rating
+// maps (schools/licence.mjs), clips to scope, tiles, and writes index.json v2.
 //
 // THE SAFETY RULE. A source that fails to fetch — or that is not due for a
 // refresh (annual/static sources outside a --refresh run) — re-emits its rows
@@ -33,7 +33,7 @@
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
-import { existsSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { FIELDS, SCHEMA_VERSION, rowProblems } from './schools/lib/schema.mjs';
 import { BASE, MAX_ROWS, MIN_CELL, sortRows, tileRows, tileStats, writeTiles, readRowsFromTiles } from './schools/lib/tiles.mjs';
 import { loadCoverage } from './schools/lib/coverage.mjs';
@@ -42,6 +42,7 @@ import { makeDownloader } from './schools/lib/download.mjs';
 import { composeWhere, composeFilters } from './schools/lib/meta.mjs';
 import { JURIS } from './schools/juris.mjs';
 import { SCOPE_NOTE } from './schools/regions.mjs';
+import { applyRatingMaps, composeSchemes } from './schools/lib/ratings-apply.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);
@@ -149,21 +150,14 @@ const run = async () => {
   // school in a rated state that the map does not list keeps the scheme with
   // an empty value: the pane then says the state publishes a rating but this
   // school is not in that year's file, never a blank.
-  const usedRatings = [];
-  for (const rm of ratings) {
-    const path = join(RATING_MAPS, `${rm.scheme}.json`);
-    if (!existsSync(path)) { console.log(`  rating ${rm.scheme}: no map at tools/data/schools/ratings/${rm.scheme}.json yet — not applied`); continue; }
-    const map = JSON.parse(readFileSync(path, 'utf8'));
-    let n = 0, hit = 0;
-    for (const { rows } of results) for (const r of rows) {
-      if (!rm.sources.includes(r.src) || !rm.juris.includes(r.juris) || r.sector !== 'state') continue;
-      const v = map.values[r.id];
-      n++; if (v) hit++;
-      r.ratingScheme = rm.scheme; r.rv = v?.rv ?? ''; r.rd = v?.rd ?? '';
-    }
-    usedRatings.push({ rm, meta: map.meta, applied: n, matched: hit });
-    console.log(`  rating ${rm.scheme}: ${fmt(hit)} of ${fmt(n)} schools matched`);
-  }
+  //
+  // THE LICENCE RULE (tools/schools/licence.mjs): only maps whose values are
+  // licensed for reuse are applied, after every row of a source that declares
+  // defaultScheme() goes back to that scheme with no value (a row re-emitted
+  // from the snapshot still carries the last build's value, which must not
+  // outlive its licence). lib/ratings-apply.mjs, shared with
+  // tools/schools/apply-rating-licence.mjs.
+  const usedRatings = applyRatingMaps(results, ratings, RATING_MAPS);
 
   // ── scope (R2) and de-duplication ────────────────────────────────────────
   const all = [], seen = new Set(), regionOf = new Map();
@@ -201,16 +195,7 @@ const run = async () => {
   const jurisCount = {};
   for (const r of all) jurisCount[r.juris] = (jurisCount[r.juris] || 0) + 1;
 
-  const schemes = {};
-  const usedIds = new Set(all.map(r => r.ratingScheme));
-  for (const { src } of present) for (const [id, s] of Object.entries(src.schemes || {})) {
-    if (!usedIds.has(id)) continue;
-    if (schemes[id] && JSON.stringify(schemes[id]) !== JSON.stringify(s)) throw new Error(`scheme ${id} is defined differently by two sources`);
-    schemes[id] = s;
-  }
-  for (const u of usedRatings) if (usedIds.has(u.rm.scheme)) schemes[u.rm.scheme] = { ...u.rm.record, vintage: u.meta?.vintage ?? null };
-  const unknown = [...usedIds].filter(id => !schemes[id]);
-  if (unknown.length) throw new Error(`rows use rating scheme(s) no source or ratings module defines: ${unknown.join(', ')}`);
+  const schemes = composeSchemes(presentSources, all, usedRatings);
 
   const filters = composeFilters(presentSources, all);
   const index = {

@@ -1,5 +1,8 @@
-// Arizona: ADE A–F school letter grade, 2024-25 (Tucson). Shown WITH CAVEATS
-// (owner decision, DESIGN.md Q7).
+// Arizona: ADE A–F school letter grade, 2024-25 (Tucson). NOT APPLIED, by
+// owner decision of 2 October 2026, ending the exception in DESIGN.md Q7: the
+// data has no licence, so tools/schools/licence.mjs does not license its
+// values. Tucson's public schools link to ADE instead (sources/ccd.mjs
+// us-pending).
 //   node tools/schools/ratings.mjs --scheme us-az-af
 // Source: the Arizona Department of Education's own AZ School Report Cards
 // site (azreportcards.azed.gov), through the data service its search page

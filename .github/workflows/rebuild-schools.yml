@@ -13,7 +13,8 @@
 #            workflow with `refresh: <src>`, so annual data never changes shape
 #            unreviewed.
 #   US rating maps (tools/data/schools/ratings/*.json) are built by hand
-#   (tools/schools/ratings.mjs) and only merged here, without the network.
+#   (tools/schools/ratings.mjs) and only merged here, without the network,
+#   and only for the schemes tools/schools/licence.mjs licenses.
 #
 # THE SAFETY RULE. A source whose fetch fails re-emits its rows from the
 # current tiles (the build prints ::warning::), so an unreachable host can
@@ -46,7 +47,7 @@ concurrency:
 
 jobs:
   rebuild:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Measured locally (Sept 2026): a full build of all eight sources fetched
     # from scratch took 84 s; the monthly run fetches four of them. verify
     # downloads its position references (postcodes.io, the Census ZCTA

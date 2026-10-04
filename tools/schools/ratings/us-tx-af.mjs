@@ -1,6 +1,9 @@
 // Texas: TEA A–F accountability rating, 2026 (school year 2025-26)
-// (Dallas, Fort Worth, Houston). SHOWN with TEA attribution and a link: the
-// owner accepted the risk in TEA's copyright notice (DESIGN.md Q2).
+// (Dallas, Fort Worth, Houston). NOT APPLIED, by owner decision of 2 October
+// 2026, ending the exception in DESIGN.md Q2: TEA's copyright notice asks
+// anyone outside Texas for written approval, so tools/schools/licence.mjs
+// does not license its values. The three cities' public schools link to
+// TXschools.gov instead (sources/ccd.mjs us-pending).
 //   node tools/schools/ratings.mjs --scheme us-tx-af
 // File: TEA "2026 statewide multi-year ratings spreadsheet" (18.6MB), first
 // sheet ("2011-2026 Summary"), campus rows, column "2026 Overall Rating".
@@ -25,7 +28,7 @@ export default {
     year: YEAR,
     publisher: 'Texas Education Agency',
     attribution: '\u00a9 Texas Education Agency, 2026 statewide multi-year ratings.',
-    licence: '\u00a9 Texas Education Agency (TEA copyright notice; shown with attribution and a link, by owner decision)',
+    licence: '\u00a9 Texas Education Agency (TEA copyright notice; reuse outside Texas needs TEA\u2019s written approval)',
     url: 'https://tea.texas.gov/school-and-district-leaders/accountability/academic-accountability/performance-reporting/2026-accountability-rating-system',
     values: VALUES,
     miss: MISS('rating'),

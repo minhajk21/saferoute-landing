@@ -55,7 +55,7 @@ concurrency:
 
 jobs:
   rebuild:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Measured locally (Sept 2026): the four phase-1 sources from a cold
     # cache are about 300 MB of downloads (ACS tables and tract shapefiles,
     # the ONS workbooks and boundary pages, the OSNI wards GeoJSON, the

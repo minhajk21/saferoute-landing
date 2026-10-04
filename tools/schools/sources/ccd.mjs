@@ -28,10 +28,13 @@
 // file names in _nces.mjs, so a new vintage never changes shape unreviewed.
 //
 // Ratings: none here. A US state rating map (tools/schools/ratings/us-*.mjs,
-// joined through ST_SCHID) replaces `us-pending` on this state's rows when its
-// committed map exists. Until then the pane says, truthfully, that the state
-// publishes one and that the map does not show it yet. Missouri and Minnesota
-// publish no single school rating, so their line is final.
+// joined through ST_SCHID) replaces `us-pending` on this state's rows only when
+// tools/schools/licence.mjs licenses its values AND its committed map exists.
+// Otherwise the pane says, truthfully, what the state publishes, links to it,
+// and says why the map does not show it: for a state whose values are not
+// licensed, the licence rule; for a licensed one whose map is not built yet,
+// that it is not shown yet. Missouri and Minnesota publish no single school
+// rating, so their line is final.
 
 import { createHash } from 'node:crypto';
 import { unlinkSync } from 'node:fs';
@@ -39,6 +42,7 @@ import { join } from 'node:path';
 import { usPublicStage } from '../lib/stage.mjs';
 import { REGIONS } from '../regions.mjs';
 import { JURIS } from '../juris.mjs';
+import { jurisRatingLicensed } from '../licence.mjs';
 import {
   CCD_029, CCD_129, CCD_029_NEXT, CCD_YEAR, ccdTable, count, fte, r5, ccdSpan, zipInState, positionChecks,
 } from './_nces.mjs';
@@ -58,12 +62,14 @@ const MAX_AGE_H = 24 * 30;
 // in regions.mjs is covered without editing this file.
 const US_JURIS = [...new Set(Object.values(REGIONS).flatMap(r => r.juris).filter(j => j.startsWith('US-')))].sort();
 
-// ── rating lines (Phase 2: directory only) ──────────────────────────────────
+// ── rating lines: what each state publishes, where no value is shown ────────
 // Each is one `when: { juris }` note of the `us-pending` scheme (kind 'none').
 // Wording: the measure's name in the state's own terms (DESIGN.md §4), who
 // publishes it, and the state's landing page (each checked to answer HTTP 200
-// in a browser, Sept 2026). NY, PA and CA publish a federal support status,
-// which is NOT a rating, and are worded that way.
+// in a browser, Sept 2026), then why the map does not show it (notShown).
+// NY, PA and CA publish a federal support status, which is NOT a rating, and
+// are worded that way. Every line is true of every public school in its state,
+// rated or not, because it describes the state's publication, not the school.
 const PENDING = {
   'US-AZ': ['an A–F letter grade for its public schools', 'Arizona Department of Education', 'https://azreportcards.azed.gov/'],
   'US-CO': ['a School Performance Framework plan type for each public school', 'Colorado Department of Education', 'https://www.cde.state.co.us/accountability/performanceframeworks'],
@@ -83,17 +89,22 @@ const PENDING = {
 };
 // Federal (ESSA) support statuses: not ratings, and never worded as one.
 const PENDING_STATUS = {
-  'US-NY': ['New York identifies some public schools for extra support under federal law (its ESSA accountability status). That status is not a rating, and it is not shown on this map yet.', 'New York State Education Department', 'https://data.nysed.gov/'],
-  'US-PA': ['Pennsylvania designates some public schools for extra support under federal law (its ESSA school designation). That designation is not a rating, and it is not shown on this map yet.', 'Pennsylvania Department of Education (Future Ready PA Index)', 'https://www.futurereadypa.org/'],
-  'US-CA': ['California does not give its schools an overall rating. It identifies some schools for extra support under federal law (its ESSA assistance status); that status is not shown on this map yet.', 'California Department of Education', 'https://www.cde.ca.gov/sp/sw/t1/csi.asp'],
+  'US-NY': ['New York identifies some public schools for extra support under federal law (its ESSA accountability status). That status is not a rating.', 'New York State Education Department', 'https://data.nysed.gov/'],
+  'US-PA': ['Pennsylvania designates some public schools for extra support under federal law (its ESSA school designation). That designation is not a rating.', 'Pennsylvania Department of Education (Future Ready PA Index)', 'https://www.futurereadypa.org/'],
+  'US-CA': ['California does not give its schools an overall rating. It identifies some schools for extra support under federal law (its ESSA assistance status).', 'California Department of Education', 'https://www.cde.ca.gov/sp/sw/t1/csi.asp'],
 };
+// Why the map shows no value. tools/schools/licence.mjs decides which: a state
+// whose values are licensed is only waiting for its map to be built.
+const notShown = j => (jurisRatingLicensed(j)
+  ? 'It is not shown on this map yet.'
+  : 'This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.');
 const escHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const link = (publisher, url) => `<span class="caveat"><a class="ext" href="${escHtml(url)}" target="_blank" rel="noopener">Source: ${escHtml(publisher)} ↗</a></span>`;
 const pendingNote = j => {
-  if (PENDING_STATUS[j]) { const [text, pub, url] = PENDING_STATUS[j]; return { when: { juris: j }, html: `${escHtml(text)} ${link(pub, url)}` }; }
+  if (PENDING_STATUS[j]) { const [text, pub, url] = PENDING_STATUS[j]; return { when: { juris: j }, html: `${escHtml(text)} ${escHtml(notShown(j))} ${link(pub, url)}` }; }
   const [what, pub, url] = PENDING[j];
   const name = JURIS[j].name.replace(/^the /, 'The ');
-  return { when: { juris: j }, html: `${escHtml(name)} publishes ${escHtml(what)}. It is not shown on this map yet. ${link(pub, url)}` };
+  return { when: { juris: j }, html: `${escHtml(name)} publishes ${escHtml(what)}. ${escHtml(notShown(j))} ${link(pub, url)}` };
 };
 const SCHEMES = {
   'us-pending': {
@@ -307,6 +318,11 @@ export default {
     },
   },
   schemes: SCHEMES,
+  // The scheme a row carries before any rating map. build-schools.mjs puts
+  // every ccd row back on it, with no value, before it applies the licensed
+  // maps: the tiles are the snapshot, so a re-emitted row still carries the
+  // last build's scheme and value, and an unlicensed one must not survive.
+  defaultScheme: row => schemeFor(row.juris),
   fetch: fetchRows,
   probe,
   verify: (rows, h) => positionChecks(rows, h, 'NCES public'),

@@ -1663,9 +1663,12 @@ const rootFooter = () => `</div></main><footer class="site"><div class="wrap">
 ${footRow()}
 </div></footer></body></html>`;
 
+// No "check in when you arrive": no released version of the app has shown an
+// arrival check-in (privacy policy section 13, correction of 30 September
+// 2026), so these pages do not promise one. Same for the night pages' FAQ.
 const cta = (name) => `<div class="cta">
 <h2>Walking in ${esc(name)} at night?</h2>
-<p>SafeRoute scores every walking route against the same official crime data on this page — and shows how much of each route runs on lit streets. Compare the routes, share your walk, and check in when you arrive. Free, no account.</p>
+<p>SafeRoute scores every walking route against the same official crime data on this page — and shows how much of each route runs on lit streets. Compare the routes and share your walk. Free, no account.</p>
 <a class="btn" href="${APP_URL}">Get SafeRoute on the App&nbsp;Store</a>
 </div>`;
 
@@ -2254,7 +2257,7 @@ ${footer(cfg, cityYm, citySlug, windowDays)}`;
       { q: `Which ${cfg.areaWord} changes most after dark?`,
         a: `${conc.a.name} is the most night-concentrated in ${cfg.name}: ${pct(conc.share)} of what is reported there happens between 6pm and 6am, against a ${cfg.name} median of ${pct(medShare)}. A high share does not mean a high total — a quiet ${cfg.areaWord} whose few incidents mostly happen at night will rank high here — which is why the table shows the count beside it.` },
       { q: `How does SafeRoute use this at night?`,
-        a: `The app scores each walking route against the same ${cfg.dataName}, and can weight it toward the time you are actually walking rather than a flat all-day average. It also shows how much of each route runs on lit streets, and lets you share a walk and check in on arrival.` },
+        a: `The app scores each walking route against the same ${cfg.dataName}, and can weight it toward the time you are actually walking rather than a flat all-day average. It also shows how much of each route runs on lit streets, and lets you share a walk.` },
     ];
 
     const title = fitTitle(`Is ${cfg.name} Safe at Night? Night-Time Crime Map — SafeRoute`);

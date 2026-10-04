@@ -427,12 +427,12 @@
         </p>
         <div class="cards cards-2" style="margin-top:30px">
           <div class="card"><h3>No sign-up</h3><p>Open it and it works. Nothing to create, nothing to remember.</p></div>
-          <div class="card"><h3>Opt-out analytics</h3><p>Anonymous: no searches or locations, and in the app only a pseudonymous per-install ID. One switch turns it off in the app; on this website it sets no cookies, never runs if your browser sends Global Privacy Control, and can be <a href="/privacy-choices/">switched off here</a>.</p></div>
+          <div class="card"><h3>Opt-out analytics</h3><p>No searches or locations, and in the app only a pseudonymous per-install ID. One switch turns it off in the app; on this website it sets no cookies, never runs if your browser sends Global Privacy Control, and can be <a href="/privacy-choices/">switched off here</a>.</p></div>
         </div>
       </div>
       <div class="row-media reveal">
         <div class="phone"><img src="assets/shot-alerts-settings.webp" width="620" height="1347" loading="lazy"
-          alt="SafeRoute's About screen, with switches for Area heads-up, Fresh incident nearby and anonymous analytics"></div>
+          alt="SafeRoute's About screen, with switches for Area heads-up and Fresh incident nearby, and the analytics switch (labelled 'Anonymous analytics' in this version)"></div>
       </div>
     </div>
   </div>
@@ -497,10 +497,15 @@
         <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5 12 5l9 4.5-9 4.5-9-4.5Z"/><path d="M7 11.5V16c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-4.5"/></svg></div>
         <h3>Schools</h3>
         <!-- The count and the places are schools/data/tiles/index.json's own,
-             copied by tools/sync-site-facts.mjs. "Where one is published":
-             Ofsted, ETI and US states publish an inspection or rating;
-             Ontario, British Columbia and Mexico do not. -->
-        <p><span data-fact="schools">50,516</span> schools across <span data-fact="schools-where">England, Wales, Northern Ireland, 26 US cities, Toronto, Vancouver and Mexico City</span>, state and private — stage, size and, where one is published, the official inspection or rating. Search any address to see the schools around it.</p>
+             copied by tools/sync-site-facts.mjs. "Where the map has one":
+             Ofsted (England's state schools), ETI (Northern Ireland) and, for
+             US states, only Connecticut and Washington, the states that
+             explicitly allow reuse (tools/schools/licence.mjs). The 16 other
+             US states that publish one are named and linked to on /check/;
+             Wales (Estyn) and private schools in England and Northern Ireland
+             have none on the map; Missouri, Minnesota, Ontario, British
+             Columbia and Mexico publish none. -->
+        <p><span data-fact="schools">50,516</span> schools across <span data-fact="schools-where">England, Wales, Northern Ireland, 26 US cities, Toronto, Vancouver and Mexico City</span>, state and private — stage, size and, where the map has one, the official inspection or rating (for US states, only where the state allows its reuse). Search any address to see the schools around it.</p>
         <span class="card-go">Find schools →</span>
       </a>
       <a class="card card-link reveal" style="--i:2" href="/safety/">

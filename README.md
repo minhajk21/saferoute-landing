@@ -54,10 +54,12 @@ and Vancouver. The homepage's own counts are kept current by
     school census and available places, and the Education and Training
     Inspectorate's reports (Open Government Licence v3.0).
   - US cities: NCES Common Core of Data and EDGE school locations (public
-    schools) and the Private School Universe Survey (public domain), plus each
-    state's own school rating or support status where it publishes one, with
-    that agency's attribution (Texas: © Texas Education Agency; Washington:
-    OSPI, CC BY 4.0).
+    schools) and the Private School Universe Survey (public domain), plus the
+    state's own school rating where the state explicitly allows its reuse
+    (Connecticut: CSDE, public domain; Washington: OSPI, CC BY 4.0). In the
+    other states except Missouri and Minnesota, which publish no single school
+    rating, each school's details name what the state publishes and link to
+    the state's own site instead.
   - Toronto: the Ontario Ministry of Education's school information and
     private school lists (Open Government Licence – Ontario).
   - Vancouver: the BC Ministry of Education and Child Care's schools list and
@@ -76,8 +78,8 @@ any police force.
 
 No accounts, no ads and no cookies. The website counts page views with
 Cloudflare Web Analytics, which is cookieless and stores nothing on your
-device. The app's anonymous usage analytics can be switched off with one
-setting. Details are in the
+device. The app's usage analytics can be switched off with one setting.
+They carry a pseudonymous identifier for each installation. Details are in the
 [privacy policy](https://minhajk21.github.io/saferoute-privacy/); questions go
 to the [support page](https://minhajk21.github.io/saferoute-support/).
 

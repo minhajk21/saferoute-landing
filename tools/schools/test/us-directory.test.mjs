@@ -11,6 +11,7 @@ import pss, { RELIGIOUS } from '../sources/pss.mjs';
 import { rowProblems } from '../lib/schema.mjs';
 import { loadCoverage } from '../lib/coverage.mjs';
 import { schemeProblems } from '../lib/modules.mjs';
+import { jurisRatingLicensed } from '../licence.mjs';
 
 // A minimal zip writer (deflate), the mirror of _nces.mjs's reader.
 function zip(files, { stored = false } = {}) {
@@ -104,8 +105,14 @@ test('ccd/pss: scheme records are well-formed and every US jurisdiction has its 
   for (const j of ccd.juris) assert.ok(pending.has(j) || j === 'US-MO' || j === 'US-MN', `${j} has no rating line`);
   for (const n of ccd.schemes['us-pending'].notes) {
     assert.match(n.html, /href="https:\/\/[^"]+" target="_blank" rel="noopener">Source: /, n.when.juris);
-    assert.match(n.html, /not shown on this map yet/, n.when.juris);
+    // A state whose values tools/schools/licence.mjs licenses is only waiting
+    // for its map; every other state's line gives the licence rule instead.
+    if (jurisRatingLicensed(n.when.juris)) assert.match(n.html, /not shown on this map yet/, n.when.juris);
+    else assert.match(n.html, /only where the state explicitly allows them to be reused, so it does not show this one\./, n.when.juris);
+    assert.doesNotMatch(n.html, jurisRatingLicensed(n.when.juris) ? /explicitly allows/ : /not shown on this map yet/, n.when.juris);
   }
+  assert.equal(ccd.defaultScheme({ juris: 'US-TX' }), 'us-pending');
+  assert.equal(ccd.defaultScheme({ juris: 'US-MO' }), 'us-none-mo');
   // The ESSA statuses are never worded as ratings.
   for (const j of ['US-NY', 'US-PA']) assert.match(ccd.schemes['us-pending'].notes.find(n => n.when.juris === j).html, /not a rating/);
   assert.match(ccd.schemes['us-pending'].notes.find(n => n.when.juris === 'US-CA').html, /does not give its schools an overall rating/);

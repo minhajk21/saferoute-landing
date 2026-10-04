@@ -6,13 +6,17 @@
 // can only be US public schools of the right state, no secrets in provenance).
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { join, dirname } from 'node:path';
+import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { deflateRawSync, crc32 } from 'node:zlib';
 import { unzip, xlsx, sheetRecords, xmlText, nameKey, stars, num } from '../ratings/_us.mjs';
 import { loadRatings, schemeProblems } from '../lib/modules.mjs';
 import { readRowsFromTiles } from '../lib/tiles.mjs';
+import { applyRatingMaps, composeSchemes } from '../lib/ratings-apply.mjs';
+import { LICENSED_RATINGS, ratingLicensed } from '../licence.mjs';
+import ccdSource from '../sources/ccd.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const MAPS = join(ROOT, 'tools', 'data', 'schools', 'ratings');
@@ -146,5 +150,43 @@ test('committed maps against the current tiles (once the ccd source is in them)'
     assert.ok(rated / inScope.length >= r.floor, `${r.scheme}: ${rated}/${inScope.length} of today's tiles rated, under floor ${r.floor} — re-run node tools/schools/ratings.mjs --scheme ${r.scheme}`);
     const stray = Object.keys(values).filter(id => !ids.has(id));
     assert.ok(stray.length <= 0.02 * Object.keys(values).length, `${r.scheme}: ${stray.length} map ids are not ${r.juris[0]} ccd rows in the tiles`);
+  }
+});
+
+// THE LICENCE RULE (tools/schools/licence.mjs): only a licensed map puts values
+// on rows, and a value a row carries in from the snapshot cannot outlive its
+// licence, even when that state's map is still committed.
+test('licence rule: licensed schemes are real modules, and only their values are applied', () => {
+  for (const [scheme, l] of Object.entries(LICENSED_RATINGS)) {
+    const rm = ratings.find(r => r.scheme === scheme);
+    assert.ok(rm, `${scheme} is licensed but has no ratings module`);
+    assert.deepEqual(rm.juris, [l.juris], scheme);
+    assert.ok(rm.record.licence?.startsWith(l.licence), `${scheme}: its record should name ${l.licence}`);
+  }
+  assert.ok(!ratingLicensed('us-tx-af') && !ratingLicensed('us-az-af'));
+
+  const dir = mkdtempSync(join(tmpdir(), 'saferoute-licence-test-'));
+  try {
+    for (const [scheme, id, rv] of [['us-ct-ngas', 'ct1', 'Category 2'], ['us-tx-af', 'tx1', 'B']]) {
+      writeFileSync(join(dir, `${scheme}.json`), JSON.stringify({ meta: { vintage: 'test' }, values: { [id]: { rv } } }));
+    }
+    const row = (id, juris, ratingScheme = '', rv = '') => ({ src: 'ccd', id, juris, sector: 'state', ratingScheme, rv, rd: '' });
+    const rows = [
+      row('tx1', 'US-TX', 'us-tx-af', 'A'),          // re-emitted from the tiles with an old value
+      row('ct1', 'US-CT', 'us-pending'),
+      row('mo1', 'US-MO', 'us-none-mo'),
+    ];
+    const use = ratings.filter(r => ['us-ct-ngas', 'us-tx-af'].includes(r.scheme));
+    const used = applyRatingMaps([{ src: ccdSource, rows }], use, dir, () => {});
+    assert.deepEqual(used.map(u => u.rm.scheme), ['us-ct-ngas']);
+    assert.deepEqual(rows.map(r => [r.id, r.ratingScheme, r.rv]), [
+      ['tx1', 'us-pending', ''], ['ct1', 'us-ct-ngas', 'Category 2'], ['mo1', 'us-none-mo', '']]);
+    const schemes = composeSchemes([ccdSource], rows, used);
+    assert.deepEqual(Object.keys(schemes), ['us-pending', 'us-none-mo', 'us-ct-ngas']);
+    assert.equal(schemes['us-ct-ngas'].vintage, 'test');
+    const tx = schemes['us-pending'].notes.find(n => n.when.juris === 'US-TX').html;
+    assert.match(tx, /^Texas publishes an A–F accountability rating for its public schools\. This map shows/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
   }
 });
