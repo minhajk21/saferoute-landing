@@ -18,3 +18,7 @@ data/raw/
 # prices/data.old-<pid> (tools/prices/lib/tiles.mjs writeOutput; the next build
 # removes them). Never published: the monthly workflow runs `git add prices/`.
 /prices/data.*
+
+# App packs (tools/build-app-packs.mjs): built for the iPhone app, never served
+# or committed. The site is the repo root, so anything left here would publish.
+/out/
