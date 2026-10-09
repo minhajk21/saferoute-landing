@@ -1,4 +1,4 @@
-// node --test tools/app-packs/test/
+// node --test tools/app-packs/test/*.test.mjs
 // Every web tile row comes back exactly from the pack, for both layers, read
 // the way the app will read it: only the pack's JSON and .bin, rows by field
 // name. Independent of the builder's own reproduction gate.
@@ -90,7 +90,8 @@ test('prices: every web tile row is rebuilt from the leaf map and the chunks (co
       rows++;
     });
   });
-  assert.equal(rows, 33557);   // the web's copies, one per leaf an area touches (c97230057)
+  assert.equal(rows, input.tiles.reduce((n, [, t]) => n + JSON.parse(t).a.length, 0));   // the web's copies, one per leaf an area touches
+  assert.ok(keys.size < rows, 'areas are stored once, not once per leaf');
   assert.equal(keys.size, index.regions.reduce((n, r) => n + r.areas, 0));
 });
 
@@ -103,6 +104,9 @@ test('prices: the slimmed index drops only the download records', async () => {
     const { upstream, inputs, ...rest } = input.index.sources[id];
     assert.deepEqual(s, rest, id);
   }
+  // Rows name their source through pack.sourceIds (JSON object order is not
+  // something every parser keeps), which is the index's own order.
+  assert.deepEqual(JSON.parse(built.json).pack.sourceIds, Object.keys(input.index.sources));
   // The denver region is legitimate: owners' estimates from acs-tract.
   const denver = index.regions.find(r => r.id === 'denver');
   assert.deepEqual(denver?.sources, ['acs-tract']);

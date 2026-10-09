@@ -22,6 +22,9 @@ export default {
     publisher: 'Connecticut State Department of Education',
     attribution: 'Connecticut State Department of Education, Next Generation Accountability System 2024-25 (data.ct.gov).',
     licence: 'Public Domain (data.ct.gov dataset licence)',
+    // Public Domain has no licence deed: this is the dataset page whose
+    // licence field states it (the place licence.mjs cites).
+    licenceUrl: 'https://data.ct.gov/Education/Next-Generation-Accountability-System/h28j-iix5',
     url: 'https://portal.ct.gov/sde/performance/performance-and-accountability/next-generation-accountability-system',
     values: ['Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5'],
     miss: MISS('category'),

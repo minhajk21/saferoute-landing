@@ -1,4 +1,4 @@
-// node --test tools/app-packs/test/
+// node --test tools/app-packs/test/*.test.mjs
 // The container: zlib.deflateRawSync output round-trips (every block type:
 // stored, fixed and dynamic Huffman, past the 32 KB window), is deterministic,
 // and a pack's table, sizes and sha256 are checked when it is opened.

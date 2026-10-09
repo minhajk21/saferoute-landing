@@ -8,8 +8,9 @@
 //                      compression_decode_buffer call. Nothing else is in the
 //                      file: no header, no timestamp.
 //   <layer>-pack.json  the layer's slimmed index, plus `pack`:
-//                      { version, layer, generated, landingCommit, sha256,
-//                        bytes, chunks: [[offset, length, rows, rawLength], …], … }
+//                      { version, layer, generated, landingCommit, rulesCommit,
+//                        encoder, sha256, bytes,
+//                        chunks: [[offset, length, rows, rawLength], …], … }
 //                      offset/length locate the compressed chunk in the .bin,
 //                      rows is the number of rows it holds, rawLength the size
 //                      of the inflated chunk (the decode buffer the app needs).
@@ -17,7 +18,8 @@
 //
 // DETERMINISM. Chunks are compressed with fixed parameters and the JSON is
 // written from data whose order is fixed by the inputs, so the same landing
-// commit gives byte-identical files (on the same zlib; Node bundles its own).
+// commit gives byte-identical files (on the same zlib; Node bundles its own,
+// and pack.encoder.zlib records which).
 // `generated` is the landing commit's date, never the time of the run.
 
 import { deflateRawSync, inflateRawSync, constants } from 'node:zlib';
@@ -29,6 +31,11 @@ export const PACK_VERSION = 1;
 
 // Fixed, so a rebuild is byte-identical. Level 9: the packs ship in the app.
 export const DEFLATE_OPTS = Object.freeze({ level: 9, memLevel: 8, windowBits: 15, strategy: constants.Z_DEFAULT_STRATEGY });
+
+// What made the .bin's bytes. Node bundles its own zlib, and its DEFLATE
+// output is what the sha256 pins: a build under another zlib may give other
+// (equally valid) bytes, and this says why. Recorded in pack.encoder.
+export const encoder = () => ({ format: 'deflate-raw', level: DEFLATE_OPTS.level, zlib: process.versions.zlib });
 
 export const sha256 = buf => createHash('sha256').update(buf).digest('hex');
 export const deflate = buf => deflateRawSync(buf, DEFLATE_OPTS);

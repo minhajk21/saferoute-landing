@@ -162,6 +162,7 @@ test('licence rule: licensed schemes are real modules, and only their values are
     assert.ok(rm, `${scheme} is licensed but has no ratings module`);
     assert.deepEqual(rm.juris, [l.juris], scheme);
     assert.ok(rm.record.licence?.startsWith(l.licence), `${scheme}: its record should name ${l.licence}`);
+    assert.match(rm.record.licenceUrl || '', /^https:\/\//, `${scheme}: its record should link its licence (https), which the app packs require`);
   }
   assert.ok(!ratingLicensed('us-tx-af') && !ratingLicensed('us-az-af'));
 

@@ -21,6 +21,10 @@
 // (each source's `upstream` download records) and with:
 //   - sources[].displayCase removed (already applied; pack.displayCase records it);
 //   - schemes limited to those the rows use;
+//   - a licensed state scheme that was published without a licenceUrl gets
+//     the one its ratings module records at the builder's HEAD (listed in
+//     pack.ratingLicence.licenceUrlAdded), so every republished value links
+//     its licence;
 //   - each scheme note's trailing `<span class="caveat">…<a …>label</a></span>`
 //     split into plain fields, so no HTML but <b> reaches the app:
 //       { when?, html, caveat?, link?: { url, label } }
@@ -28,8 +32,8 @@
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { assemble, packJson, openPack, sha256, PACK_VERSION } from './container.mjs';
-import { gate, GateError, forbiddenFieldProblems, filterProblems, licenceUrlProblems, sourceIdProblems, noteHtmlProblems, ratingLicenceProblems } from './gates.mjs';
+import { assemble, packJson, openPack, sha256, encoder, PACK_VERSION } from './container.mjs';
+import { gate, GateError, forbiddenFieldProblems, fieldListProblems, labelProblems, filterProblems, licenceUrlProblems, sourceIdProblems, noteHtmlProblems, ratingLicenceProblems, ratingSchemeProblems } from './gates.mjs';
 
 export const LAYER = 'schools';
 export const CASED_FIELDS = Object.freeze(['name', 'area', 'la', 'trust']);
@@ -63,7 +67,7 @@ export function joinNote(n) {
 const obj = (row, fields) => Object.fromEntries(fields.map((f, i) => [f, row[i]]));
 
 // Does the licence rule take this row's value (or scheme) away?
-const needsStrip = (o, rules) => /^US-/.test(o.juris || '') && (
+export const needsStrip = (o, rules) => /^US-/.test(o.juris || '') && (
   (o.rv !== '' && o.rv != null && !rules.ratingLicensed(o.ratingScheme)) ||
   (rules.ratingSchemes.includes(o.ratingScheme) && !rules.ratingLicensed(o.ratingScheme)));
 
@@ -97,7 +101,7 @@ export const regionOf = (regions, o) => regions.find(r => r.juris.includes(o.jur
 
 // ── build ──────────────────────────────────────────────────────────────────
 // input: readSchoolsInput(); rules: loadPageRules() + loadSchoolsRules();
-// landing: { landingCommit, generated }. Returns { json, bin, gates, report }
+// landing: { landingCommit, generated, rulesCommit }. Returns { json, bin, gates, report }
 // or throws GateError with every gate's result.
 export function packSchools(input, rules, landing) {
   const web = input.index;
@@ -131,32 +135,46 @@ export function packSchools(input, rules, landing) {
     if (def) schemes[id] = structuredClone(def);
   }
   for (const sc of Object.values(schemes)) if (sc.notes) sc.notes = sc.notes.map(splitNote);
+  // A licensed scheme's licence link, from its ratings module at HEAD when
+  // the published scheme has none; a published one that disagrees fails.
+  const licenceUrlAdded = [], licenceConflicts = [];
+  for (const id of rules.licensed) {
+    const sc = schemes[id], url = rules.licensedRecords?.[id]?.licenceUrl;
+    if (!sc || !url) continue;
+    if (sc.licenceUrl == null) { sc.licenceUrl = url; licenceUrlAdded.push(id); }
+    else if (sc.licenceUrl !== url) licenceConflicts.push(`scheme ${id}: published licenceUrl ${sc.licenceUrl}, its ratings module says ${url}`);
+  }
   index.schemes = schemes;
 
   // The container.
   const { bin, table } = assemble(leaves.map(l => ({ raw: Buffer.from(JSON.stringify(l.out)), rows: l.out.length })));
   const pack = {
     version: PACK_VERSION, layer: LAYER,
-    generated: landing.generated, landingCommit: landing.landingCommit,
+    generated: landing.generated, landingCommit: landing.landingCommit, rulesCommit: landing.rulesCommit ?? null,
+    encoder: encoder(),
     sha256: sha256(bin), bytes: bin.length,
     chunkOf: 'cells',
     chunks: table,
     displayCase: { applied: true, fields: [...CASED_FIELDS], sources: displayCase, rule: 'check/index.html schCase (sources with displayCase), trustName (trust, other sources)' },
-    ratingLicence: { licensed: [...rules.licensed], rowsReset: stripped, valuesRemoved },
+    ratingLicence: { licensed: [...rules.licensed], rowsReset: stripped, valuesRemoved, licenceUrlAdded },
   };
   const json = packJson(index, pack);
 
   // ── gates ──
   const gates = [];
   const idxAndPack = { ...index, pack };
-  gates.push(gate('forbidden-fields', forbiddenFieldProblems(idxAndPack), `${fields.length} row fields and every index key`));
-  gates.push(gate('filter-ids', filterProblems(index), (index.filters || []).map(f => f.id).join(', ')));
-  gates.push(gate('licence-urls', licenceUrlProblems(index), `${Object.keys(index.sources || {}).length} sources`));
+  const opened = openPack(json, bin);
+  const back = index.cells.map((k, i) => [JSON.parse(opened.chunk(i)), `chunk ${i} (leaf ${k})`]);
+  gates.push(gate('forbidden-fields', [...forbiddenFieldProblems(idxAndPack), ...fieldListProblems(fields, rules.FIELDS), ...labelProblems(index)], `${fields.length} row fields = tools/schools/lib/schema.mjs FIELDS; every index key; source, filter and scheme labels`));
+  gates.push(gate('filter-ids', filterProblems(index, rules.FILTERS), `${(index.filters || []).map(f => f.id).join(', ')}, each as tools/schools/filters.mjs defines it; sources publish only these`));
+  const valueSchemes = [...new Set(packRows.filter(o => rules.ratingSchemes.includes(o.ratingScheme) && o.rv !== '' && o.rv != null).map(o => o.ratingScheme))].sort();
+  gates.push(gate('licence-urls', [...licenceUrlProblems(index, valueSchemes), ...licenceConflicts], `${Object.keys(index.sources || {}).length} sources; state schemes with values (${valueSchemes.join(', ') || 'none'}) carry publisher, attribution, licence and an https licenceUrl${licenceUrlAdded.length ? ` (added from the ratings module: ${licenceUrlAdded.join(', ')})` : ''}`));
   const refs = [...new Set(packRows.map(o => o.src))].map(id => ['a row', id]);
   for (const f of index.filters || []) for (const id of f.publishedBy || []) refs.push([`filter ${f.id}.publishedBy`, id]);
   gates.push(gate('source-ids', sourceIdProblems(index, rules.sourceIds, refs), `${Object.keys(index.sources || {}).join(', ')} ⊆ ${rules.sourceIds.length} loaded modules`));
-  gates.push(gate('note-html', noteHtmlProblems(index), `every string in the index; ${Object.values(index.schemes || {}).reduce((n, s) => n + (s.notes?.length || 0), 0)} notes`));
-  gates.push(gate('rating-licence', ratingLicenceProblems(packRows, rules.ratingLicensed, rules.ratingSchemes), `US values only under ${rules.licensed.join(', ')} (tools/schools/licence.mjs); ${valuesRemoved} values stripped, ${stripped} rows reset`));
+  gates.push(gate('note-html', noteHtmlProblems(index, back), `every string in the index (${Object.values(index.schemes || {}).reduce((n, s) => n + (s.notes?.length || 0), 0)} notes) and in every chunk`));
+  gates.push(gate('rating-licence', ratingLicenceProblems(packRows, rules), `state scheme values only under ${rules.licensed.join(', ')} (tools/schools/licence.mjs at the data commit and HEAD), each for its own jurisdiction; ${valuesRemoved} values stripped, ${stripped} rows reset`));
+  gates.push(gate('rating-schemes', ratingSchemeProblems(packRows, index.schemes, rules), `${Object.keys(index.schemes).length} schemes; every row's is defined and is its source's own or licensed`));
   gates.push(gate('totals', totalsProblems(index, json, bin), `${packRows.length} rows = index.count ${index.count}; per source, jurisdiction, region`));
   gates.push(gate('reproduction', reproductionProblems({ web, leaves, index, json, bin, transform, rules }), `${leaves.length} leaves, ${packRows.length} rows re-expanded from the .bin`));
   if (gates.some(g => !g.ok)) throw new GateError(LAYER, gates);
@@ -252,6 +270,7 @@ export function reproductionProblems({ web, leaves, index, json, bin, transform,
   for (const s of Object.values(expect.sources || {})) { delete s.upstream; delete s.displayCase; }
   const back = structuredClone(packed);
   for (const sc of Object.values(back.schemes || {})) if (sc.notes) sc.notes = sc.notes.map(n => { const { caveat, link, ...rest } = n; return { ...rest, html: joinNote(n) }; });
+  for (const id of pack.ratingLicence?.licenceUrlAdded || []) if (back.schemes?.[id] && expect.schemes?.[id]?.licenceUrl == null) delete back.schemes[id].licenceUrl;
   const usedWeb = Object.fromEntries(Object.entries(expect.schemes || {}).filter(([id]) => back.schemes?.[id]));
   for (const id of Object.keys(back.schemes || {})) if (!usedWeb[id]) usedWeb[id] = back.schemes[id];   // a default scheme a strip added
   expect.schemes = usedWeb;

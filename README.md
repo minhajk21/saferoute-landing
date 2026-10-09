@@ -95,6 +95,7 @@ node tools/render-transparency.mjs   # /transparency/ from tools/data/transparen
 node tools/sync-site-facts.mjs       # homepage coverage numbers, from search-index.json
 node tools/audit-viewports.mjs       # every page type at 14 screen sizes in headless Chrome
 node tools/build-icons.mjs           # favicon.ico + apple-touch-icon.png from favicon.svg
+node tools/build-app-packs.mjs       # the iPhone app's schools + home-values packs -> out/app-packs/ (never served; tools/app-packs/README.md)
 ```
 
 `render-pages.mjs` reads the committed gazetteers (`tools/gazetteer/`) and

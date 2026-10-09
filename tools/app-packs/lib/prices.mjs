@@ -16,6 +16,13 @@
 // finds the leaves in view exactly as the page does (tileGrid over
 // tiles.cells) and reads their areas from the chunks.
 //
+// SOURCE ORDER: a row's src is an index into the index's source ids in their
+// published order (tools/prices/lib/schema.mjs). JSON object order does not
+// survive every parser (Foundation's JSONSerialization and Swift's
+// Dictionary/JSONDecoder lose it), so the pack spells it out:
+// pack.sourceIds = Object.keys(index.sources), and the app reads a row's
+// source as index.sources[pack.sourceIds[row.src]], never by key position.
+//
 // THE SLIMMED INDEX: the web index.json without each source's `upstream`
 // download records and `inputs` fingerprint. Everything else is as published.
 //
@@ -25,8 +32,8 @@
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { assemble, packJson, openPack, sha256, PACK_VERSION } from './container.mjs';
-import { gate, GateError, forbiddenFieldProblems, filterProblems, licenceUrlProblems, sourceIdProblems, noteHtmlProblems } from './gates.mjs';
+import { assemble, packJson, openPack, sha256, encoder, PACK_VERSION } from './container.mjs';
+import { gate, GateError, forbiddenFieldProblems, fieldListProblems, filterProblems, licenceUrlProblems, sourceIdProblems, noteHtmlProblems } from './gates.mjs';
 
 export const LAYER = 'prices';
 // The colour rule of tools/prices/lib/schema.mjs: coloured = a value and no
@@ -100,9 +107,11 @@ export function packPrices(input, rules, landing) {
   const { bin, table } = assemble(chunks);
   const pack = {
     version: PACK_VERSION, layer: LAYER,
-    generated: landing.generated, landingCommit: landing.landingCommit,
+    generated: landing.generated, landingCommit: landing.landingCommit, rulesCommit: landing.rulesCommit ?? null,
+    encoder: encoder(),
     sha256: sha256(bin), bytes: bin.length,
     chunkOf: 'scales',
+    sourceIds: srcIds,
     chunks: table,
     leaves,
   };
@@ -111,7 +120,8 @@ export function packPrices(input, rules, landing) {
   // ── gates ──
   const gates = [];
   const ctxKeys = [...new Set([...areas.values()].flatMap(a => (a.ctx ? Object.keys(a.ctx) : [])))];
-  gates.push(gate('forbidden-fields', forbiddenFieldProblems({ ...index, pack: { ...pack, leaves: [] } }, [ctxKeys, ['a', 'c']]), `${fields.length} row fields, context keys and every index key`));
+  const ctxExtra = ctxKeys.filter(k => !(rules.CONTEXT_KEYS || []).includes(k)).map(k => `context key "${k}" is not in tools/prices/lib/schema.mjs CONTEXT_KEYS`);
+  gates.push(gate('forbidden-fields', [...forbiddenFieldProblems({ ...index, pack: { ...pack, leaves: [] } }, [ctxKeys, ['a', 'c']]), ...fieldListProblems(fields, rules.FIELDS), ...ctxExtra], `${fields.length} row fields = tools/prices/lib/schema.mjs FIELDS; context keys within CONTEXT_KEYS; every index key`));
   gates.push(gate('filter-ids', filterProblems(index), `${(index.filters || []).length} filters (home values has none)`));
   gates.push(gate('licence-urls', licenceUrlProblems(index), `${srcIds.length} sources`));
   const refs = [];
@@ -122,8 +132,11 @@ export function packPrices(input, rules, landing) {
     for (const k of Object.keys(s.stats?.replaced || {})) refs.push([`source ${id}.stats.replaced`, k]);
   }
   for (const a of areas.values()) refs.push(['a row', srcIds[a.row[F.src]] ?? `#${a.row[F.src]}`]);
-  gates.push(gate('source-ids', sourceIdProblems(index, rules.sourceIds, refs), `${srcIds.join(', ')} ⊆ ${rules.sourceIds.length} loaded modules`));
-  gates.push(gate('note-html', noteHtmlProblems(index), 'every string in the index'));
+  const orderProblems = sourceOrderProblems(json, bin);
+  gates.push(gate('source-ids', [...sourceIdProblems(index, rules.sourceIds, refs), ...orderProblems], `${srcIds.join(', ')} ⊆ ${rules.sourceIds.length} loaded modules; pack.sourceIds = the index's order, every row's src within it`));
+  const { chunk: readChunk } = openPack(json, bin);
+  const back = index.scales.map((s, i) => [JSON.parse(readChunk(i)), `chunk ${i} (scale ${s.key})`]);
+  gates.push(gate('note-html', noteHtmlProblems(index, back), 'every string in the index and in every chunk'));
   const tot = totals(index, json, bin);
   gates.push(gate('totals', tot.problems, `${tot.areas} areas = Σ regions ${tot.regionSum}; per region, source, scale`));
   gates.push(gate('reproduction', [...dedupProblems, ...reproductionProblems(input, json, bin)], `${input.tiles.length} web tiles (${occurrences} rows) rebuilt byte for byte from ${areas.size} areas`));
@@ -142,6 +155,20 @@ export function packPrices(input, rules, landing) {
   };
 }
 
+// pack.sourceIds is the index's source order, and every row's src indexes it.
+export function sourceOrderProblems(json, bin) {
+  const p = [];
+  const { index, pack, chunk } = openPack(json, bin);
+  const ids = Object.keys(index.sources || {});
+  if (JSON.stringify(pack.sourceIds) !== JSON.stringify(ids)) p.push(`pack.sourceIds ${JSON.stringify(pack.sourceIds)} is not the index's source order ${JSON.stringify(ids)}`);
+  const F = index.fields.indexOf('src');
+  pack.chunks.forEach((_, ci) => {
+    const bad = JSON.parse(chunk(ci)).a.filter(r => !(Number.isInteger(r[F]) && r[F] >= 0 && r[F] < (pack.sourceIds?.length ?? 0))).length;
+    if (bad) p.push(`chunk ${ci}: ${bad} row(s) whose src is not an index into pack.sourceIds`);
+  });
+  return p;
+}
+
 // Totals read back from the .bin against the index: every area once; per
 // region (regions[].areas), per source (stats areas / coloured / neutral /
 // unpublished) and per scale (scales[].areas = its coloured areas).
@@ -149,7 +176,7 @@ export function totals(index, json, bin) {
   const p = [];
   const { pack, chunk } = openPack(json, bin);
   const F = Object.fromEntries(index.fields.map((f, i) => [f, i]));
-  const srcIds = Object.keys(index.sources || {});
+  const srcIds = pack.sourceIds || [];
   if (pack.chunks.length !== index.scales.length) p.push(`${pack.chunks.length} chunks for ${index.scales.length} scales`);
   const reg = {}, src = {}, scaleCol = {}, seen = new Set();
   let n = 0, vertices = 0, tableRows = 0;

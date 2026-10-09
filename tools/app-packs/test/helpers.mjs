@@ -5,7 +5,9 @@ import { REPO, loadPageRules, loadSchoolsRules, loadPricesRules } from '../lib/l
 import { readSchoolsInput } from '../lib/schools.mjs';
 import { readPricesInput } from '../lib/prices.mjs';
 
-export const LANDING = Object.freeze({ landingCommit: 'test', generated: '2026-01-01T00:00:00Z' });
+// The tests read the working tree for both the data and the rules (on a
+// clean tree that is HEAD, which is what the CLI reads its rules from).
+export const LANDING = Object.freeze({ landingCommit: 'test', generated: '2026-01-01T00:00:00Z', rulesCommit: 'test' });
 
 let schools, prices;
 export async function realSchools() {

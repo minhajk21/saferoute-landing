@@ -1,9 +1,9 @@
-// node --test tools/app-packs/test/
+// node --test tools/app-packs/test/*.test.mjs
 // Apple compatibility, proved on this Mac: test/inflate.swift decodes with the
 // Compression framework (compression_decode_buffer, COMPRESSION_ZLIB), the
 // call the app will make, and its sha256 must equal Node's inflateRawSync.
 //   1. the DEFLATE fixtures (stored, fixed and dynamic Huffman, past the window);
-//   2. the LARGEST chunk of each real pack.
+//   2. EVERY chunk of each real pack.
 // Skipped where there is no swift (not macOS).
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -43,21 +43,23 @@ test('Apple COMPRESSION_ZLIB decodes the deflateRawSync fixtures byte for byte',
 });
 
 for (const [layer, real, pack] of [['schools', realSchools, packSchools], ['prices', realPrices, packPrices]]) {
-  test(`Apple COMPRESSION_ZLIB decodes the largest ${layer} chunk to Node's bytes`, { skip: !hasSwift && 'no swift on this machine' }, async () => {
+  test(`Apple COMPRESSION_ZLIB decodes EVERY ${layer} chunk to Node's bytes`, { skip: !hasSwift && 'no swift on this machine' }, async () => {
     const { input, rules } = await real();
     const b = pack(input, rules, LANDING);
     const { pack: p, chunk } = openPack(b.json, b.bin);
-    const i = p.chunks.reduce((best, c, k) => (c[1] > p.chunks[best][1] ? k : best), 0);
-    const [offset, length, , rawLength] = p.chunks[i];
-    const node = chunk(i);
     const dir = mkdtempSync(join(tmpdir(), `apple-${layer}-`));
     try {
       const path = join(dir, `${layer}-pack.bin`);
       writeFileSync(path, b.bin);
-      const [got] = appleDecode(path, [[offset, length, rawLength]]);
-      assert.equal(got.bytes, rawLength);
-      assert.equal(got.sha256, sha256(node));
-      console.log(`# ${layer}: chunk ${i} (${length} bytes deflated, ${rawLength} raw): Apple sha256 ${got.sha256} = Node`);
+      const got = appleDecode(path, p.chunks.map(([offset, length, , rawLength]) => [offset, length, rawLength]));
+      assert.equal(got.length, p.chunks.length);
+      p.chunks.forEach(([offset, , , rawLength], i) => {
+        assert.equal(got[i].offset, offset, `chunk ${i}`);
+        assert.equal(got[i].bytes, rawLength, `chunk ${i}`);
+        assert.equal(got[i].sha256, sha256(chunk(i)), `chunk ${i}`);
+      });
+      const i = p.chunks.reduce((best, c, k) => (c[1] > p.chunks[best][1] ? k : best), 0);
+      console.log(`# ${layer}: all ${p.chunks.length} chunks decode with Apple's COMPRESSION_ZLIB to Node's sha256 (largest: chunk ${i}, ${p.chunks[i][1]} bytes deflated, ${p.chunks[i][3]} raw)`);
     } finally { rmSync(dir, { recursive: true, force: true }); }
   });
 }
