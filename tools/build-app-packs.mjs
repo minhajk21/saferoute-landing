@@ -5,12 +5,14 @@
 // commit and writes, OUTSIDE the served tree, the packs the iPhone app bundles:
 //   <out>/schools-pack.json + schools-pack.bin
 //   <out>/prices-pack.json  + prices-pack.bin
+//   <out>/schools.es.json   the schools pack's Spanish display text (S7), from
+//                           tools/app-packs/i18n at the builder's HEAD
 // Container, chunking, display rules and gates: tools/app-packs/README.md.
 // Any gate failing stops the build and nothing is written.
 //
 // Usage:
 //   node tools/build-app-packs.mjs [--out DIR] [--layer schools|prices|all]
-//                                  [--commit REV] [--allow-dirty] [--json]
+//                                  [--commit REV] [--allow-dirty] [--strict-es] [--json]
 //   --out          output directory (default out/app-packs, git-ignored). Inside
 //                  any checkout of this repository only its out/ is allowed.
 //   --layer        which pack(s) to build (default all). The other layer's pack
@@ -20,6 +22,8 @@
 //                  changed an input.
 //   --allow-dirty  build from a working tree whose data differs from HEAD (never
 //                  covers the rule paths: licence, filters, schema, modules)
+//   --strict-es    fail if any schools display string has no Spanish (missing
+//                  ones otherwise ship in English, marked "(en inglés)")
 //   --json         print the summary as JSON
 // Exit codes: 0 built, 1 a gate or the build failed, 2 a usage error.
 
@@ -27,7 +31,7 @@ import { parseArgs } from 'node:util';
 import { resolve, join } from 'node:path';
 import { REPO, toolchain } from './app-packs/lib/landing.mjs';
 import { buildPacks, outProblem, removeStale, LAYERS } from './app-packs/lib/build.mjs';
-import { writePack } from './app-packs/lib/container.mjs';
+import { writePack, writeTextFile } from './app-packs/lib/container.mjs';
 import { GateError } from './app-packs/lib/gates.mjs';
 
 const mb = n => `${(n / 1e6).toFixed(2)} MB`;
@@ -51,13 +55,17 @@ function printSummary({ landing, built }, written, tools, removed) {
     console.log(`  largest chunk: ${r.largest.key}${r.largest.name ? ` (${r.largest.name})` : ''}: ${kb(r.largest.len)} deflated, ${kb(r.largest.raw)} raw, ${fmt(r.largest.rows)} rows`);
     console.log(`  sha256 ${r.sha256}`);
     for (const g of b.gates) console.log(`  ${g.ok ? 'PASS' : 'FAIL'} ${g.name}: ${g.ok ? g.detail : g.problems.slice(0, 5).join(' | ')}`);
-    if (written?.[r.layer]) console.log(`  wrote ${written[r.layer].json}\n        ${written[r.layer].bin}`);
+    if (b.text) {
+      const t = b.text.report, st = t.stats;
+      console.log(`  Spanish text (${t.language}): ${st.translated} translated, ${st.keep} licence names kept, ${st.identity} without letters, ${st.missing} missing; ${st.values} Mexico City values without their English gloss; text ${t.textCommit?.slice(0, 9)}; sha256 ${t.sha256}`);
+    }
+    if (written?.[r.layer]) console.log(`  wrote ${written[r.layer].json}\n        ${written[r.layer].bin}${written[r.layer].text ? `\n        ${written[r.layer].text}` : ''}`);
   }
   for (const f of removed) console.log(`removed ${f} (another landing commit's pack)`);
 }
 
 function usage(msg) {
-  console.error(`${msg}\nusage: node tools/build-app-packs.mjs [--out DIR] [--layer schools|prices|all] [--commit REV] [--allow-dirty] [--json]`);
+  console.error(`${msg}\nusage: node tools/build-app-packs.mjs [--out DIR] [--layer schools|prices|all] [--commit REV] [--allow-dirty] [--strict-es] [--json]`);
   process.exit(2);
 }
 
@@ -66,7 +74,7 @@ async function main() {
   try {
     ({ values } = parseArgs({
       args: process.argv.slice(2), strict: true, allowPositionals: false,
-      options: { out: { type: 'string' }, layer: { type: 'string', default: 'all' }, commit: { type: 'string' }, 'allow-dirty': { type: 'boolean', default: false }, json: { type: 'boolean', default: false } },
+      options: { out: { type: 'string' }, layer: { type: 'string', default: 'all' }, commit: { type: 'string' }, 'allow-dirty': { type: 'boolean', default: false }, 'strict-es': { type: 'boolean', default: false }, json: { type: 'boolean', default: false } },
     }));
   } catch (e) { usage(e.message); }
   if (!['schools', 'prices', 'all'].includes(values.layer)) usage(`--layer ${values.layer}: want schools | prices | all`);
@@ -78,13 +86,16 @@ async function main() {
   const bad = outProblem(out);
   if (bad) usage(bad);
   try {
-    const result = await buildPacks({ layers, commit: values.commit ?? null, allowDirty: values['allow-dirty'] });
+    const result = await buildPacks({ layers, commit: values.commit ?? null, allowDirty: values['allow-dirty'], strictEs: values['strict-es'] });
     const written = {};
-    for (const b of result.built) written[b.report.layer] = writePack(out, b.report.layer, b.json, b.bin);
+    for (const b of result.built) {
+      written[b.report.layer] = writePack(out, b.report.layer, b.json, b.bin);
+      if (b.text) written[b.report.layer].text = writeTextFile(out, b.text.report.file, b.text.text);
+    }
     const removed = removeStale(out, layers, result.landing.landingCommit);
     const tools = toolchain();
     if (values.json) {
-      console.log(JSON.stringify({ landing: result.landing, toolchain: tools, removed, packs: result.built.map(b => ({ ...b.report, gates: b.gates.map(g => ({ name: g.name, ok: g.ok, detail: g.detail })), files: written[b.report.layer] })) }, null, 1));
+      console.log(JSON.stringify({ landing: result.landing, toolchain: tools, removed, packs: result.built.map(b => ({ ...b.report, gates: b.gates.map(g => ({ name: g.name, ok: g.ok, detail: g.detail })), files: written[b.report.layer], ...(b.text ? { text: b.text.report } : {}) })) }, null, 1));
     } else printSummary(result, written, tools, removed);
   } catch (e) {
     if (e instanceof GateError) {

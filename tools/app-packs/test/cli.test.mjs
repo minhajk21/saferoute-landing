@@ -61,6 +61,22 @@ test('removeStale: a lone layer\'s pack from another landing commit is removed, 
   } finally { rm(t); }
 });
 
+test('removeStale: the Spanish text goes with a stale schools pack, and alone if it names another pack', () => {
+  const t = tmp('packs-stale-es-');
+  try {
+    const put = (layer, commit) => { writeFileSync(join(t, `${layer}-pack.json`), JSON.stringify({ pack: { landingCommit: commit } })); writeFileSync(join(t, `${layer}-pack.bin`), 'x'); };
+    const es = commit => writeFileSync(join(t, 'schools.es.json'), JSON.stringify({ forPack: { landingCommit: commit } }));
+    put('schools', 'old'); es('old');
+    assert.deepEqual(removeStale(t, ['prices'], 'new').map(f => f.slice(t.length + 1)), ['schools-pack.json', 'schools-pack.bin', 'schools.es.json']);
+    put('schools', 'new'); es('old');
+    assert.deepEqual(removeStale(t, ['prices'], 'new').map(f => f.slice(t.length + 1)), ['schools.es.json']);
+    es('new');
+    assert.deepEqual(removeStale(t, ['prices'], 'new'), []);
+    rmSync(join(t, 'schools-pack.json')); rmSync(join(t, 'schools-pack.bin'));
+    assert.deepEqual(removeStale(t, ['prices'], 'new').map(f => f.slice(t.length + 1)), ['schools.es.json']);
+  } finally { rm(t); }
+});
+
 // ── which landing is read ───────────────────────────────────────────────────
 // A tiny repository with every input path, then a tooling-only commit.
 function tinyRepo() {
@@ -126,7 +142,7 @@ test('INPUT_PATHS is only what the builder reads (not tools/data, which the bot 
 test('CLI: unknown options, empty values and served paths are usage errors (exit 2), nothing is built', () => {
   const t = tmp('packs-cli-');
   try {
-    for (const args of [['--comit', 'HEAD'], ['--commit='], ['--commit', ''], ['--out'], ['--layer', 'roads'], ['--commit', 'HEAD', '--allow-dirty'], ['stray'],
+    for (const args of [['--comit', 'HEAD'], ['--strict-es', 'yes'], ['--commit='], ['--commit', ''], ['--out'], ['--layer', 'roads'], ['--commit', 'HEAD', '--allow-dirty'], ['stray'],
       // A served --out. The bad --commit makes sure that, were the guard ever
       // broken, the build would still fail before writing into the site.
       ['--out', join(REPO, 'schools', 'data'), '--commit', 'deadbeef']]) {

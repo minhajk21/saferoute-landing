@@ -3,6 +3,7 @@
 // git (--commit) against one from the working tree; and --commit HEAD (or
 // any later commit that changed no input) against --commit <the data commit>.
 // No time goes into the .bin, and `generated` is the landing commit's date.
+// The schools pack's Spanish text (schools.es.json) is one of the files.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync, execFileSync } from 'node:child_process';
@@ -10,6 +11,7 @@ import { mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { REPO, INPUT_PATHS, RULE_PATHS } from '../lib/landing.mjs';
+import { I18N_DIR } from '../lib/schools-text.mjs';
 import { packSchools } from '../lib/schools.mjs';
 import { packPrices } from '../lib/prices.mjs';
 import { sha256 } from '../lib/container.mjs';
@@ -23,16 +25,25 @@ const run = (out, ...args) => {
 };
 const hashes = dir => Object.fromEntries(readdirSync(dir).sort().map(f => [f, sha256(readFileSync(join(dir, f)))]));
 const git = (...a) => execFileSync('git', ['-C', REPO, ...a], { encoding: 'utf8' }).trim();
-const clean = () => git('status', '--porcelain', '--', ...INPUT_PATHS, ...RULE_PATHS) === '';
+const clean = () => git('status', '--porcelain', '--', ...INPUT_PATHS, ...RULE_PATHS, I18N_DIR) === '';
 const tmp = p => mkdtempSync(join(tmpdir(), p));
 const rm = (...d) => d.forEach(x => rmSync(x, { recursive: true, force: true }));
 
-test('two builds of the same commit are byte-identical (sha256 of all four files)', { skip: !clean() && 'inputs differ from HEAD' }, () => {
+test('two builds of the same commit are byte-identical (sha256 of all five files)', { skip: !clean() && 'inputs differ from HEAD' }, () => {
   const a = tmp('packs-a-'), b = tmp('packs-b-');
   try {
     const ra = run(a), rb = run(b);
     const ha = hashes(a), hb = hashes(b);
-    assert.deepEqual(Object.keys(ha), ['prices-pack.bin', 'prices-pack.json', 'schools-pack.bin', 'schools-pack.json']);
+    assert.deepEqual(Object.keys(ha), ['prices-pack.bin', 'prices-pack.json', 'schools-pack.bin', 'schools-pack.json', 'schools.es.json']);
+    // The Spanish text: its summary sha256, tied to this schools pack, from i18n/ at HEAD.
+    const sp = ra.packs.find(p => p.layer === 'schools');
+    assert.equal(ha['schools.es.json'], sp.text.sha256);
+    const es = JSON.parse(readFileSync(join(a, 'schools.es.json'), 'utf8'));
+    assert.equal(es.forPack.indexSha256, ha['schools-pack.json']);
+    assert.equal(es.forPack.binSha256, ha['schools-pack.bin']);
+    assert.equal(es.forPack.landingCommit, ra.landing.landingCommit);
+    assert.equal(es.textCommit, git('log', '-1', '--format=%H', 'HEAD', '--', I18N_DIR));
+    assert.ok(sp.gates.some(g => g.name === 'es-orphans' && g.ok));
     assert.deepEqual(ha, hb);
     for (const p of ra.packs) {
       assert.equal(ha[`${p.layer}-pack.bin`], p.sha256, 'pack.sha256 is the .bin file\'s');
@@ -49,7 +60,7 @@ test('two builds of the same commit are byte-identical (sha256 of all four files
   } finally { rm(a, b); }
 });
 
-test('--commit HEAD, --commit <last input change> and the working tree give the same four files', { skip: !clean() && 'inputs differ from HEAD' }, () => {
+test('--commit HEAD, --commit <last input change> and the working tree give the same five files', { skip: !clean() && 'inputs differ from HEAD' }, () => {
   const a = tmp('packs-wt-'), b = tmp('packs-head-'), c = tmp('packs-data-');
   try {
     const ra = run(a), rb = run(b, '--commit', 'HEAD');

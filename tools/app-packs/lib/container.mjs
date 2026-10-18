@@ -97,4 +97,14 @@ export function writePack(outDir, layer, jsonText, bin) {
   return out;
 }
 
+// Writes one text file into outDir atomically (the schools pack's Spanish text).
+export function writeTextFile(outDir, name, text) {
+  mkdirSync(outDir, { recursive: true });
+  const path = join(outDir, name), tmp = `${path}.tmp-${process.pid}`;
+  rmSync(tmp, { force: true });
+  writeFileSync(tmp, text);
+  renameSync(tmp, path);
+  return path;
+}
+
 export const readPackFiles = (jsonPath, binPath) => openPack(readFileSync(jsonPath, 'utf8'), readFileSync(binPath));

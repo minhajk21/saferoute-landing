@@ -183,7 +183,7 @@ export function packSchools(input, rules, landing) {
   const sizes = table.map(([, len, rows, raw], i) => ({ key: index.cells[i], len, rows, raw }));
   const largest = sizes.reduce((a, b) => (b.len > a.len ? b : a));
   return {
-    json, bin, gates,
+    json, bin, gates, rows: packRows,
     report: {
       layer: LAYER, chunks: table.length, rows: packRows.length, rawBytes: sizes.reduce((n, s) => n + s.raw, 0),
       binBytes: bin.length, jsonBytes: Buffer.byteLength(json), sha256: pack.sha256, largest, stripped, valuesRemoved,

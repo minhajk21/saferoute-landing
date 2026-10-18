@@ -5,12 +5,13 @@ landing commit into the packs SafeRoute 1.4 bundles (RELEASE-1.4-SCOPE.md §4.4
 O1; Q3 option a: the app fetches no tiles). It writes **outside the served
 tree** (default `out/app-packs/`, git-ignored) and the packs are never
 committed. O2 (`tools/import-overlay-packs.mjs` in the iOS repo) runs it against
-a given commit and copies the four files into the app.
+a given commit and copies the five files into the app: both packs and the
+schools pack's Spanish display text, `schools.es.json` (S7, below).
 
 ```sh
 node tools/build-app-packs.mjs                       # both packs from the working tree -> out/app-packs/
 node tools/build-app-packs.mjs --commit c97230057    # from git (git archive), whatever is checked out
-node tools/build-app-packs.mjs --layer schools --out /path/outside/the/repo [--json]
+node tools/build-app-packs.mjs --layer schools --out /path/outside/the/repo [--json] [--strict-es]
 node --test tools/app-packs/test/*.test.mjs          # includes the Apple decode of every chunk (swift; skipped off macOS)
 swift tools/app-packs/test/inflate.swift <x-pack.bin> <offset>:<length>:<rawLength> …   # Apple-side decode by hand
 ```
@@ -25,7 +26,8 @@ come from git; without it from the working tree, which must match HEAD
 the **last commit at or before REV (or HEAD) that changed an input**, and
 `generated` is that commit's date in UTC. So `--commit HEAD`, a branch tip, a
 safety-pages-only main commit and the data commit itself all give the same
-four files, and a tooling-only commit changes nothing.
+five files, and a tooling-only commit changes nothing (a translation commit
+changes only `schools.es.json`).
 
 **The rules** the gates hold the data to (the licence allow-list
 `tools/schools/licence.mjs`, `tools/schools/filters.mjs`, both layers'
@@ -86,6 +88,46 @@ is v2, the home-values index is **v1** (as published).
   `licenceUrl` gets its ratings module's (at HEAD), listed in
   `pack.ratingLicence.licenceUrlAdded` (CT at c97230057).
 
+## Spanish display text (`schools.es.json`, S7)
+
+The app shows the schools pack's own words (scheme titles, scales, caveats,
+notes, labels, attributions, place and filter words) through
+`SchoolDataText.display`; in Spanish it looks each one up here.
+`lib/schools-text.mjs` lists those strings by the app's own paths
+(`displayStrings`: per scheme kind, as SchoolDataText's doc says) and builds
+the file from the committed source **`tools/app-packs/i18n/schools.es.src.json`**
+(es-MX, informal tú, with the glossary subset it is checked against). The
+source is read from the builder's committed **HEAD**, like the rules: a dirty
+`i18n/` refuses the build (`--allow-dirty` reads it, recorded `+dirty`; never
+with `--commit`).
+
+| Field | What |
+|---|---|
+| `forPack` | `{ landingCommit, indexSha256, binSha256 }`: the sha256 of the `schools-pack.json` and `.bin` it was built with. The app uses no text that names another pack. |
+| `textCommit` | the last commit at HEAD that changed `tools/app-packs/i18n` |
+| `hash` | the key: the first 16 hex of SHA-256 over the exact UTF-8 of the English, as the app passes it (a template before it is filled); nothing is normalised at run time |
+| `strings` | `{ key: { en, es } }`, in display order |
+| `keep` | the licence names' keys: they stay English (glossary) |
+| `values` | `{ key: { en, es, field } }`: Mexico City's SEP `type`/`phase` values without their English gloss ("Primaria general (primary)" → "Primaria general"). Every other row value (ratings, grades, governance words) stays as published. |
+| `display` | every display string's key; `stats`: translated, keep, identity (no letters), missing (+ `missingKeys`), values, valuesMissing |
+
+A display string with no entry is **missing**: the app shows the English with
+"(en inglés)". That is counted, not a failure, unless `--strict-es`. Gates (any
+one fails the schools build; their results join the schools pack's in the
+summary, which O2 requires all PASS):
+
+| Gate | Fails when |
+|---|---|
+| `es-keys` | a key is not the hash of its English; text that is not NFC, has edge whitespace or is empty; two display strings share a key |
+| `es-orphans` | a source entry whose English this pack does not display (an orphaned key) |
+| `es-form` | different `{placeholder}` sets; a different number of `<b>` runs, any other tag, a raw `<` or an HTML entity in the Spanish; a trailing " ↗" in one language only |
+| `es-licences` | a licence name translated; a licence name (or its bracketed short form) in an English string but not its Spanish; an attribution that would no longer link its licence (the page's `linkLicence`) |
+| `es-words` | a label, title or filter word whose Spanish matches `FORBIDDEN_KEY` or religi/confesi/denominaci/diócesis; "anónimo" anywhere; the formal usted/ustedes |
+| `es-glossary` | an English term without its glossary rendering in the Spanish (internado, chárter, alumnado, aleja el mapa, calificación, estatus, inspección, Fuente:, …); a name in capitals (NCES, ETI, OSSD…) dropped |
+| `es-gloss` | a `values` entry that is not a SEP `type`/`phase` value with exactly one trailing "( … )", whose Spanish is not that value without it, or that occurs as any other value |
+| `es-rating-values` | a display string or an entry equal to a row's rating value (`rv`) |
+| `es-complete` | (`--strict-es` only) a display string or a glossed SEP value with no Spanish |
+
 ## Home values (`prices-pack.*`)
 
 - **Index**: `prices/data/index.json` (v1, as published) without
@@ -115,10 +157,12 @@ is v2, the home-values index is **v1** (as published).
 | `totals` | the pack, read back from the .bin, disagrees with the index: total, per source, jurisdiction and region (schools); per region, source stats and scale (home values) |
 | `reproduction` | re-expanding the .bin does not give back every web tile row: schools row by row (only the documented fields may differ, cased fields only in letter case); home values every web tile rebuilt **byte for byte** from the leaf map and chunks; and the index equals the web index but for the slimming |
 
-Tests: `container` (deflate round trip, container checks), `reproduction`
+Tests: `schools-text` (S7: every Spanish gate on the real pack, and a fixture
+that must fail for each; missing text counted; the file tied to its pack;
+the source read from HEAD), `container` (deflate round trip, container checks), `reproduction`
 (independent re-expansion of both packs), `gates` (a fixture that must fail for
 every gate, including each way the reviews found round one), `determinism`
-(working tree = `--commit HEAD` = `--commit <data commit>`), `cli` (out-path
+(working tree = `--commit HEAD` = `--commit <data commit>`, all five files), `cli` (out-path
 guard, dirty refusals, `--commit` resolution, argument errors, a symlinked
 CLI path, in a throwaway git repo where needed), `apple` (`inflate.swift`
 decodes the fixtures and **every** chunk of both packs; each sha256 must equal
