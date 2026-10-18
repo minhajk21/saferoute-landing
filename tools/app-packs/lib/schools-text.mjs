@@ -270,15 +270,23 @@ export function wordProblems(source, display) {
 }
 
 // 10. The glossary, used consistently: where the English has a term, the
-//     Spanish has its rendering; and every acronym or brand in capitals stays.
+//     Spanish has its rendering; and every acronym or brand in capitals stays,
+//     or is spelled out as the glossary's acronymExpansions say (BC is
+//     "Columbia Británica": to a Mexican reader BC is Baja California).
 export function glossaryProblems(source) {
   const p = [];
   const terms = (source.glossary?.terms || []).map(t => ({ ...t, enRe: new RegExp(t.enPattern, 'iu'), esRe: new RegExp(t.esPattern, 'iu') }));
   const except = new Set(source.glossary?.acronymExceptions || []);
+  const expand = source.glossary?.acronymExpansions || {};
   for (const [k, { en, es } = {}] of Object.entries(source.strings || {})) {
     if (typeof en !== 'string' || typeof es !== 'string') continue;
     for (const t of terms) if (t.enRe.test(en) && !t.esRe.test(es)) p.push(`${k}: "${t.en}" should be "${t.es}" (glossary): ${show(es)}`);
-    for (const a of new Set(en.match(/\b[A-Z][A-Z0-9]+\b/g) || [])) if (!except.has(a) && !new RegExp(`\\b${a}\\b`).test(es)) p.push(`${k}: ${a} (a name) is missing from the Spanish`);
+    for (const a of new Set(en.match(/\b[A-Z][A-Z0-9]+\b/g) || [])) {
+      if (except.has(a) || new RegExp(`\\b${a}\\b`).test(es)) continue;
+      const x = expand[a]?.es;
+      if (x && es.includes(x)) continue;
+      p.push(`${k}: ${a} (a name) is missing from the Spanish${x ? ` (and not spelled out as "${x}")` : ''}`);
+    }
   }
   return p;
 }

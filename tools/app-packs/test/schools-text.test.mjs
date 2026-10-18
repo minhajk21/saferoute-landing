@@ -251,6 +251,10 @@ test('the pure gates on hand-made fixtures', () => {
   assert.deepEqual(wordProblems(src('tú'), display), []);
   assert.equal(glossaryProblems({ strings: { k: { en: 'NCES ID', es: 'ID' } }, glossary: { terms: [] } }).length, 1);
   assert.deepEqual(glossaryProblems({ strings: { k: { en: 'US schools', es: 'escuelas de EE. UU.' } }, glossary: { terms: [], acronymExceptions: ['US'] } }), []);
+  // An acronym may be spelled out, but only as its glossary expansion says.
+  const bc = { acronymExpansions: { BC: { es: 'Columbia Británica' } } };
+  assert.deepEqual(glossaryProblems({ strings: { k: { en: 'BC schools', es: 'escuelas de Columbia Británica' } }, glossary: { terms: [], ...bc } }), []);
+  assert.equal(glossaryProblems({ strings: { k: { en: 'BC schools', es: 'escuelas de la provincia' } }, glossary: { terms: [], ...bc } }).length, 1);
   const index = { sources: { s: { licence: 'Licence X (LX)', attribution: 'From X, LX.' } } };
   const s2 = { strings: { [textKey('From X, LX.')]: { en: 'From X, LX.', es: 'De X.' } } };
   assert.equal(licenceProblems(s2, new Map([['From X, LX.', { kinds: ['source.attribution'] }]]), index).length, 2);
