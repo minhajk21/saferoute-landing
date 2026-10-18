@@ -1690,6 +1690,16 @@ function schOfstedHtml(o) {
     out.push(`<p class="meta"><b>${schEsc(o.oeifGrade)}</b> at its last graded inspection${o.oeifDate ? `, ${schEsc(ukDate(o.oeifDate))}` : ''}.
       <span class="caveat">A single-word judgement under Ofsted's former framework, which was withdrawn in September 2024 and is no longer awarded.</span></p>`);
   }
+  // Under a report card or a grade, "cannot be compared" and the publisher's
+  // Source link, as every other system's value has (the app's SD15, same
+  // words, same conditions: SchoolPane.ofstedBlocks). Not under "No current
+  // Ofsted grade.", which shows no value to compare.
+  if (out.length) {
+    const sc = schIndex?.schemes?.[o.ratingScheme] || {};
+    const place = schIndex?.juris?.[o.juris]?.name || 'England';
+    out.push(`<p class="meta"><span class="caveat">Set under Ofsted's rules for ${schEsc(place)}; it cannot be compared with other countries' or states' inspections or ratings.</span></p>`);
+    if (sc.url) out.push(`<a class="ext" href="${schEsc(sc.url)}" target="_blank" rel="noopener">Source: ${schEsc(sc.publisher || 'Ofsted')} ↗</a>`);
+  }
   if (!out.length) {
     out.push(`<p class="meta"><b>No current Ofsted grade.</b>
       <span class="caveat">Ofsted stopped awarding single-word judgements in September 2024 and is re-inspecting under report cards. Around half of England's state schools have no grade right now — this is the normal state, not missing information.</span></p>`);
