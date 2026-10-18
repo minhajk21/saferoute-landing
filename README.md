@@ -43,8 +43,10 @@ and Vancouver. The homepage's own counts are kept current by
 - **Recent calls:** the police dispatch (911/CAD) feeds that San Francisco,
   New Orleans, Detroit, Las Vegas, Seattle, Cleveland and Minneapolis publish
   (September 2026).
-- **Street cameras:** TfL, 511NY/NYSDOT, Nevada DOT, City of Toronto and City
-  of Vancouver.
+- **Street cameras:** TfL, the New York State Department of Transportation and
+  the NYC Department of Transportation (credited by name, never as "511NY":
+  its terms reserve the name to Developer Access Agreement holders), Nevada
+  DOT, City of Toronto and City of Vancouver.
 - **Schools** (rebuilt monthly by `.github/workflows/rebuild-schools.yml`;
   every source, vintage and licence is also listed on `/check/` under "School
   data sources", and each school's details carry its source's attribution):

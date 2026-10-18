@@ -3539,7 +3539,7 @@ function render(d, name, address){
     ${cats.length?`<div><h3 class="h3">What's reported here</h3>${cats.map(c=>`<div class="cat"><span class="bar" style="width:${Math.round(c.count/maxCat*46)+8}px"></span><span class="lbl">${catName(c.category)}</span><span class="n">${fmt(c.count)}</span></div>`).join('')}</div>`:''}
     ${tod?`<div class="divider"></div><div><h3 class="h3">When it happens</h3><div class="todwrap">${[['Weekday',tod.slice(0,3)],['Weekend',tod.slice(3,6)]].map(g=>`<div class="todgrp"><div class="tod">${g[1].map(v=>`<div class="b" style="height:${Math.max(3,Math.round(v/maxTod*50))}px"></div>`).join('')}</div><div class="tod-x">${TOD3.map(t=>`<span>${t}</span>`).join('')}</div><div class="todlbl">${g[0]}</div></div>`).join('')}</div><p class="tiny">Severity-weighted share of reported incidents by time of day.</p></div>`:''}
     <div class="divider"></div>
-    <p class="src">${esc(d.dataSource||'Police open data')}${d.crimeDate?` · through ${monthName(d.crimeDate)}`:''}. Locations are anonymised by the source. Informational only.</p>
+    <p class="src">${crimeSourceHtml(d)}</p>
     <div id="prices"></div>
     <a class="cta" href="https://apps.apple.com/app/apple-store/id6768244297?pt=128877797&ct=web-check-result&mt=8">Route here safely with the app</a>`;
   syncBack();
@@ -3748,6 +3748,38 @@ function renderNearby(best, bd, nbrs, reqId){
 }
 
 // ── utils ──
+// The crime source line under a score. Where the source's licence binds what we
+// publish from it, the line says so and links the licence: Charlotte's CMPD
+// data is CC BY-NC-SA 4.0, and every Charlotte score is adapted from it, so the
+// scores are offered under that licence too (owner decision, 2026-10-18). The
+// backend sends the notice in dataSource (the text the app shows, with the
+// licence's address spelled out because the app cannot link it) and the
+// licence's name and link in `licence`. Here the name becomes the link and the
+// spelled-out address is dropped. LICENSED_SOURCES says the same thing for a
+// backend that predates the `licence` field, so the notice never depends on
+// which of the two was deployed first.
+const LICENSED_SOURCES = {
+  charlotte: {
+    name: 'CC BY-NC-SA 4.0',
+    url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+    notice: 'Charlotte scores are adapted from Charlotte-Mecklenburg Police Department data and offered under CC BY-NC-SA 4.0 (share-alike).',
+  },
+};
+function crimeSourceHtml(d){
+  const through = d.crimeDate ? monthName(d.crimeDate) : '';
+  const tail = 'Locations are anonymised by the source. Informational only.';
+  const fallback = LICENSED_SOURCES[d.region] || null;
+  const lic = d.licence && d.licence.url && d.licence.name ? d.licence : fallback;
+  if (!lic) return `${esc(d.dataSource||'Police open data')}${through?` · through ${through}`:''}. ${tail}`;
+  let text = String(d.dataSource||'Police open data').replace(/:\s*(https?:\/\/)?creativecommons\.org\/\S*$/i, '').replace(/[.\s]+$/, '');
+  if (!text.includes(lic.name) && fallback) text += `. ${fallback.notice.replace(/[.\s]+$/, '')}`;
+  let h = esc(text);
+  const name = esc(lic.name);
+  h = h.includes(name)
+    ? h.replace(name, `<a href="${esc(lic.url)}" target="_blank" rel="noopener">${name}</a>`)
+    : `${h}. Licence: <a href="${esc(lic.url)}" target="_blank" rel="noopener">${name}</a>`;
+  return `${h}.${through?` Data through ${through}.`:''} ${tail}`;
+}
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function fmt(n){ return Number(n||0).toLocaleString('en-US'); }
 function monthName(ym){ const [y,m]=String(ym).split('-').map(Number); return new Date(Date.UTC(y,(m||1)-1,1)).toLocaleString('en-US',{month:'long',year:'numeric',timeZone:'UTC'}); }
