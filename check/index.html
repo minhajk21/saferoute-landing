@@ -1665,8 +1665,10 @@ function schRatingHtml(o) {
   out.push(`<p class="meta"><span class="caveat">Set under ${schEsc(rules)} rules; it cannot be compared with ${cmp}.${sc.caveat ? ' ' + schEsc(sc.caveat) : ''}${extra}</span></p>`);
   if (link) out.push(link);
   if (sc.url) out.push(`<a class="ext" href="${schEsc(sc.url)}" target="_blank" rel="noopener">Source: ${schEsc(sc.publisher)} ↗</a>`);
-  // An openly licensed rating (Washington's, CC BY 4.0) links its licence here too.
-  if (sc.licenceUrl) out.push(`<a class="ext" href="${schEsc(sc.licenceUrl)}" target="_blank" rel="noopener">Licence: ${schEsc(sc.licence || 'licence')} ↗</a>`);
+  // An openly licensed rating (Washington's, CC BY 4.0; Connecticut's after the
+  // next schools build) links its licence here too, on its own line as the app
+  // has it: .ext is inline, so a bare link would run on from "Source: … ↗".
+  if (sc.licenceUrl) out.push(`<div><a class="ext" href="${schEsc(sc.licenceUrl)}" target="_blank" rel="noopener">Licence: ${schEsc(sc.licence || 'licence')} ↗</a></div>`);
   return out.join('');
 }
 
