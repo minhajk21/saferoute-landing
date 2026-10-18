@@ -1,0 +1,1043 @@
+{
+ "version": 1,
+ "language": "es-MX",
+ "_about": "Mexican Spanish for the schools pack display text (RELEASE-1.4-SCOPE.md §4.5 S7). Keyed by the first 16 hex of SHA-256 over the exact UTF-8 of the English, as the app passes it to SchoolDataText.display (templates before they are filled). tools/app-packs/lib/schools-text.mjs checks every entry against the pack being built and writes schools.es.json. Licence names are not listed: they stay English (glossary). values: Mexico City SEP type/phase values without their English gloss. Informal tú; never \"anónimo\". Needs the Q8 native review (lane2/s7/REVIEWER-PACKET-schools.md in the iOS repo).",
+ "glossary": {
+  "source": "SafeRouteApp p5/glossary.json (register, never-list, terms) + the schools terms decided in S7; Q8 reviewer to confirm",
+  "register": "informal tú, imperative for actions (Toca, Busca, Revisa, Vuelve a compartir, Llama)",
+  "acronymExceptions": [
+   "US"
+  ],
+  "terms": [
+   {
+    "en": "boarding (school)",
+    "es": "internado",
+    "enPattern": "\\bboarding\\b",
+    "esPattern": "internado",
+    "source": "p5/glossary.json"
+   },
+   {
+    "en": "charter (US charter school)",
+    "es": "chárter",
+    "enPattern": "\\bcharter\\b",
+    "esPattern": "chárter",
+    "source": "p5/glossary.json"
+   },
+   {
+    "en": "gender (school filter)",
+    "es": "alumnado",
+    "enPattern": "\\bgender\\b",
+    "esPattern": "alumnado",
+    "source": "p5/glossary.json"
+   },
+   {
+    "en": "zoom out (imperative, map notes)",
+    "es": "aleja el mapa",
+    "enPattern": "\\bzoom(ing)? out\\b",
+    "esPattern": "aleja el mapa",
+    "source": "p5/glossary.json"
+   },
+   {
+    "en": "pin (map)",
+    "es": "marcador",
+    "enPattern": "\\bpins?\\b",
+    "esPattern": "marcador",
+    "source": "catalogue (schools key: marcador)"
+   },
+   {
+    "en": "rating",
+    "es": "calificación",
+    "enPattern": "\\bratings?\\b",
+    "esPattern": "calificaci",
+    "source": "catalogue (schools sheet: calificación)"
+   },
+   {
+    "en": "status (a state status, not a rating)",
+    "es": "estatus",
+    "enPattern": "\\bstatus(es)?\\b",
+    "esPattern": "\\bestatus\\b",
+    "source": "catalogue (schools sheet: estatus)"
+   },
+   {
+    "en": "inspection",
+    "es": "inspección",
+    "enPattern": "\\binspections?\\b",
+    "esPattern": "inspecci",
+    "source": "catalogue (schools sheet: inspección)"
+   },
+   {
+    "en": "Source: …",
+    "es": "Fuente: …",
+    "enPattern": "^Source: ",
+    "esPattern": "^Fuente: ",
+    "source": "catalogue (Source: %@ ↗ = Fuente: %@ ↗)"
+   },
+   {
+    "en": "pupils",
+    "es": "estudiantes",
+    "enPattern": "\\bpupils?\\b",
+    "esPattern": "estudiantes",
+    "source": "catalogue (Pupils = Estudiantes)"
+   },
+   {
+    "en": "teachers",
+    "es": "docentes",
+    "enPattern": "\\bteachers?\\b",
+    "esPattern": "docente",
+    "source": "catalogue (Teachers = Docentes)"
+   },
+   {
+    "en": "public school(s)",
+    "es": "escuela(s) pública(s)",
+    "enPattern": "\\bpublic schools?\\b",
+    "esPattern": "escuelas? públicas?",
+    "source": "new (S7)"
+   },
+   {
+    "en": "school year",
+    "es": "ciclo escolar",
+    "enPattern": "\\bschool year\\b",
+    "esPattern": "ciclo escolar",
+    "source": "new (S7, es-MX)"
+   },
+   {
+    "en": "free school meals",
+    "es": "comidas escolares gratuitas",
+    "enPattern": "\\bfree school meals\\b",
+    "esPattern": "comidas escolares gratuitas",
+    "source": "new (S7)"
+   },
+   {
+    "en": "local authority",
+    "es": "autoridad local",
+    "enPattern": "\\blocal authority\\b",
+    "esPattern": "autoridad local",
+    "source": "new (S7)"
+   },
+   {
+    "en": "Ofsted",
+    "es": "Ofsted (a name, never translated)",
+    "enPattern": "\\bOfsted\\b",
+    "esPattern": "\\bOfsted\\b",
+    "source": "p5/glossary.json (brands)"
+   },
+   {
+    "en": "Estyn",
+    "es": "Estyn (a name, never translated)",
+    "enPattern": "\\bEstyn\\b",
+    "esPattern": "\\bEstyn\\b",
+    "source": "p5/glossary.json (brands)"
+   }
+  ]
+ },
+ "strings": {
+  "12ef25ab61b0ecc0": {
+   "en": "England, Wales, Northern Ireland, 26 US cities, Toronto, Vancouver and Mexico City",
+   "es": "Inglaterra, Gales, Irlanda del Norte, 26 ciudades de EE. UU., Toronto, Vancouver y Ciudad de México"
+  },
+  "de9feaea8b66f7ba": {
+   "en": "gender",
+   "es": "el tipo de alumnado"
+  },
+  "2b1b9b3054abb2d1": {
+   "en": "England & Wales and US private schools",
+   "es": "Inglaterra y Gales, y las escuelas privadas de EE. UU."
+  },
+  "87713743bce6bb3c": {
+   "en": "boarding",
+   "es": "el dato de internado"
+  },
+  "78ce7d353ebd2bb1": {
+   "en": "England & Wales and Mexico City",
+   "es": "Inglaterra y Gales, y Ciudad de México"
+  },
+  "3374015676ff767d": {
+   "en": "charter status",
+   "es": "el estatus de escuela chárter"
+  },
+  "e11676bf71e12d1c": {
+   "en": "US public schools",
+   "es": "las escuelas públicas de EE. UU."
+  },
+  "a246670dbf76f29a": {
+   "en": "Scotland",
+   "es": "Escocia"
+  },
+  "6662e735fe107957": {
+   "en": "the Republic of Ireland",
+   "es": "la República de Irlanda"
+  },
+  "d673fd63d4093bd5": {
+   "en": "New Jersey",
+   "es": "Nueva Jersey"
+  },
+  "29750e2fdcd870e7": {
+   "en": "Indiana",
+   "es": "Indiana"
+  },
+  "0cd76db09cc7f001": {
+   "en": "Maryland",
+   "es": "Maryland"
+  },
+  "0ee033b5f7f9fc3a": {
+   "en": "Virginia",
+   "es": "Virginia"
+  },
+  "8ee0ac9fec8ac98b": {
+   "en": "Baja California",
+   "es": "Baja California"
+  },
+  "eedbe6d96c36d767": {
+   "en": "Ontario",
+   "es": "Ontario"
+  },
+  "da52cfeaefdc2979": {
+   "en": "Arkansas",
+   "es": "Arkansas"
+  },
+  "561c02a6e94bb84c": {
+   "en": "South Carolina",
+   "es": "Carolina del Sur"
+  },
+  "79f6d0732a249abc": {
+   "en": "Kansas",
+   "es": "Kansas"
+  },
+  "2bac18e496704188": {
+   "en": "the State of Mexico",
+   "es": "el Estado de México"
+  },
+  "4f0a77ee6d080e5b": {
+   "en": "Morelos",
+   "es": "Morelos"
+  },
+  "a8224dd462af907c": {
+   "en": "British Columbia",
+   "es": "Columbia Británica"
+  },
+  "c0ea960b065c6aa6": {
+   "en": "England",
+   "es": "Inglaterra"
+  },
+  "304a7ea100d7a5fb": {
+   "en": "Northern Ireland",
+   "es": "Irlanda del Norte"
+  },
+  "0cf3878b94e16c99": {
+   "en": "Wales",
+   "es": "Gales"
+  },
+  "5b3fd9d48dce77d9": {
+   "en": "Mexico City",
+   "es": "Ciudad de México"
+  },
+  "f2274036b50dbde4": {
+   "en": "Arizona",
+   "es": "Arizona"
+  },
+  "cad0535decc38b24": {
+   "en": "California",
+   "es": "California"
+  },
+  "4ae62bf4e80482de": {
+   "en": "Colorado",
+   "es": "Colorado"
+  },
+  "45cb6b43268e49a6": {
+   "en": "Connecticut",
+   "es": "Connecticut"
+  },
+  "a41471ba3c7f43e5": {
+   "en": "the District of Columbia",
+   "es": "el Distrito de Columbia"
+  },
+  "a738163920457006": {
+   "en": "District of Columbia",
+   "es": "Distrito de Columbia"
+  },
+  "39cf050af563dfc3": {
+   "en": "Illinois",
+   "es": "Illinois"
+  },
+  "0aa5052d10321143": {
+   "en": "Louisiana",
+   "es": "Luisiana"
+  },
+  "929e0919ef1c3696": {
+   "en": "Massachusetts",
+   "es": "Massachusetts"
+  },
+  "26325a546fbbb023": {
+   "en": "Michigan",
+   "es": "Michigan"
+  },
+  "6180a0af19cac6f2": {
+   "en": "Minnesota",
+   "es": "Minnesota"
+  },
+  "4257eca8a8413435": {
+   "en": "Missouri",
+   "es": "Misuri"
+  },
+  "8318bbf6a2108829": {
+   "en": "North Carolina",
+   "es": "Carolina del Norte"
+  },
+  "485cb2743137b534": {
+   "en": "Nevada",
+   "es": "Nevada"
+  },
+  "815eca977c7d75f7": {
+   "en": "New York",
+   "es": "Nueva York"
+  },
+  "679f95d84e820a52": {
+   "en": "New York State",
+   "es": "el estado de Nueva York"
+  },
+  "438a7d5904cf041b": {
+   "en": "Ohio",
+   "es": "Ohio"
+  },
+  "808ed51137308015": {
+   "en": "Pennsylvania",
+   "es": "Pensilvania"
+  },
+  "0f508660b269e506": {
+   "en": "Tennessee",
+   "es": "Tennessee"
+  },
+  "4b95ce6272018a31": {
+   "en": "Texas",
+   "es": "Texas"
+  },
+  "6b9031df058346a8": {
+   "en": "Washington",
+   "es": "Washington"
+  },
+  "1be6a038bcdfa337": {
+   "en": "BC school number {id} · BC Ministry of Education and Child Care, K-12 schools list and student enrolment by grade. Contains information licensed under the Open Government Licence – British Columbia.",
+   "es": "Número de escuela de BC {id} · Ministerio de Educación y Cuidado Infantil de BC, lista de escuelas K-12 y matrícula por grado. Contiene información con licencia Open Government Licence – British Columbia."
+  },
+  "baaddf70fb5d432b": {
+   "en": "Type",
+   "es": "Tipo"
+  },
+  "1709305c9fa966d1": {
+   "en": "Level",
+   "es": "Nivel"
+  },
+  "fb7b7029d7bdee14": {
+   "en": "Grades",
+   "es": "Grados"
+  },
+  "2a19bb78de3ef043": {
+   "en": "Students",
+   "es": "Estudiantes"
+  },
+  "ddf2fa5ec3bf93f7": {
+   "en": "Design capacity",
+   "es": "Capacidad prevista"
+  },
+  "cdff2c9e6abe4446": {
+   "en": "School district",
+   "es": "Distrito escolar"
+  },
+  "0f62b435014e74cc": {
+   "en": "French immersion",
+   "es": "Inmersión en francés"
+  },
+  "cf64ef9a5365102a": {
+   "en": "Francophone program",
+   "es": "Programa francófono"
+  },
+  "08e96f5617e88696": {
+   "en": "Students and grades from the Ministry's September enrolment count, {date}.",
+   "es": "Estudiantes y grados según el conteo de matrícula de septiembre del Ministerio, {date}."
+  },
+  "abf92a970c5757f4": {
+   "en": "NCES school record",
+   "es": "Ficha de la escuela en NCES"
+  },
+  "63d933f3365ff116": {
+   "en": "NCES ID {id} · U.S. Department of Education, NCES, Common Core of Data 2024-25 and EDGE school locations 2024-25.",
+   "es": "ID de NCES {id} · Departamento de Educación de EE. UU., NCES, Common Core of Data 2024-25 y ubicaciones escolares EDGE 2024-25."
+  },
+  "b1cad3bc5c54e24a": {
+   "en": "School level (NCES)",
+   "es": "Nivel escolar (NCES)"
+  },
+  "9f1fbe9136f4f542": {
+   "en": "Grades (2024-25)",
+   "es": "Grados (2024-25)"
+  },
+  "53b6a1fe23c00755": {
+   "en": "Teachers (FTE)",
+   "es": "Docentes (FTE, equivalentes a tiempo completo)"
+  },
+  "8e221a5971bba480": {
+   "en": "Students per teacher",
+   "es": "Estudiantes por docente"
+  },
+  "0b941f630ab39aef": {
+   "en": "Free or reduced-price lunch eligible",
+   "es": "Con derecho a almuerzo gratuito o a precio reducido"
+  },
+  "c6d98f7ae377715f": {
+   "en": "Directly certified for free meals",
+   "es": "Con certificación directa para comidas gratuitas"
+  },
+  "ec66474458488456": {
+   "en": "Charter school",
+   "es": "Escuela chárter"
+  },
+  "04ff1b11e2213647": {
+   "en": "New address listed for 2025-26 (the pin is the 2024-25 site)",
+   "es": "Nueva dirección registrada para 2025-26 (el marcador está en el sitio de 2024-25)"
+  },
+  "29cea5b160db836e": {
+   "en": "Charter authorizer",
+   "es": "Autorizador de la escuela chárter"
+  },
+  "e4261887ca395807": {
+   "en": "Details as reported to NCES for the {date} school year.",
+   "es": "Datos reportados a NCES para el ciclo escolar {date}."
+  },
+  "825e30c29ad534f0": {
+   "en": "DE reference {id} · Department of Education (Northern Ireland); Education and Training Inspectorate. Contains public sector information licensed under the Open Government Licence v3.0.",
+   "es": "Referencia del DE {id} · Departamento de Educación de Irlanda del Norte (Department of Education); Inspección de Educación y Formación (Education and Training Inspectorate). Contiene información del sector público con licencia Open Government Licence v3.0."
+  },
+  "bcd3f6f1736a7aa2": {
+   "en": "Year groups",
+   "es": "Años escolares"
+  },
+  "1fcea89c730d8c9a": {
+   "en": "Pupils",
+   "es": "Estudiantes"
+  },
+  "4924c4392afff885": {
+   "en": "Approved enrolment 2025/26",
+   "es": "Matrícula autorizada 2025/26"
+  },
+  "b4a3d15938556200": {
+   "en": "Free school meals entitlement",
+   "es": "Con derecho a comidas escolares gratuitas"
+  },
+  "9ad442392d65ad02": {
+   "en": "Irish-medium",
+   "es": "Enseñanza en irlandés"
+  },
+  "a626bc484bb34322": {
+   "en": "Management type",
+   "es": "Tipo de gestión"
+  },
+  "3dcdd4bcb1736890": {
+   "en": "Pupils and year groups from the DE school census, {date}. Approved enrolment is for 2025/26; for primary schools it excludes nursery classes.",
+   "es": "Estudiantes y años escolares según el censo escolar del DE, {date}. La matrícula autorizada es para 2025/26; en las escuelas primarias no incluye los grupos de preescolar."
+  },
+  "989bdfe5af4c3968": {
+   "en": "Full DfE record",
+   "es": "Ficha completa del DfE"
+  },
+  "d9523ff76b56230f": {
+   "en": "URN {id} · DfE Get Information About Schools and Ofsted management information, Open Government Licence v3.0.",
+   "es": "URN {id} · DfE Get Information About Schools e información de gestión de Ofsted, Open Government Licence v3.0."
+  },
+  "46342ec1eec9d78d": {
+   "en": "Phase",
+   "es": "Etapa"
+  },
+  "9decff938ec80c60": {
+   "en": "Ages",
+   "es": "Edades"
+  },
+  "a04630ef8bc3da8c": {
+   "en": "Gender",
+   "es": "Alumnado"
+  },
+  "a48fcb713243b3d4": {
+   "en": "places",
+   "es": "plazas"
+  },
+  "bb4691eb2cef810d": {
+   "en": "Free school meals",
+   "es": "Comidas escolares gratuitas"
+  },
+  "18e3f5939c7738bd": {
+   "en": "Sixth form",
+   "es": "Sixth form (16 a 18 años)"
+  },
+  "e747498767535392": {
+   "en": "Boarding",
+   "es": "Internado"
+  },
+  "8efe9605ccce4ede": {
+   "en": "Nursery",
+   "es": "Preescolar"
+  },
+  "c38fb718057787e3": {
+   "en": "Admissions",
+   "es": "Admisiones"
+  },
+  "366878be6edd0d45": {
+   "en": "Local authority",
+   "es": "Autoridad local"
+  },
+  "ade9248e0132b411": {
+   "en": "Trust",
+   "es": "Fundación (trust)"
+  },
+  "cd343b9f41dbc591": {
+   "en": "Pupil numbers as at {date}.",
+   "es": "Número de estudiantes al {date}."
+  },
+  "44e2c009bc15ad4e": {
+   "en": "Ontario private school number {id} · Ontario Ministry of Education, Private School Location List and private school contact information. Contains information licensed under the Open Government Licence – Ontario.",
+   "es": "Número de escuela privada de Ontario {id} · Ministerio de Educación de Ontario, Private School Location List e información de contacto de escuelas privadas. Contiene información con licencia Open Government Licence – Ontario."
+  },
+  "bee60fb1f1ad79d9": {
+   "en": "Ontario School Finder page",
+   "es": "Página en Ontario School Finder"
+  },
+  "ec8966f8ee21a86a": {
+   "en": "Ontario school number {id} · Ontario Ministry of Education, School information and student demographics {pupilsAsOf}. Contains information licensed under the Open Government Licence – Ontario.",
+   "es": "Número de escuela de Ontario {id} · Ministerio de Educación de Ontario, School information and student demographics {pupilsAsOf}. Contiene información con licencia Open Government Licence – Ontario."
+  },
+  "472c8979d81d95b3": {
+   "en": "Type · language",
+   "es": "Tipo · idioma"
+  },
+  "a1375a2897d9001e": {
+   "en": "Enrolment",
+   "es": "Matrícula"
+  },
+  "73a1a7b4bd65198f": {
+   "en": "School board",
+   "es": "Consejo escolar"
+  },
+  "5904de252edbbd85": {
+   "en": "Enrolment in the {date} school year, rounded by the Ministry to the nearest 5.",
+   "es": "Matrícula del ciclo escolar {date}, redondeada por el Ministerio al múltiplo de 5 más cercano."
+  },
+  "f043bc2a96be193b": {
+   "en": "NCES private school record",
+   "es": "Ficha de la escuela privada en NCES"
+  },
+  "3853b5633d1ad29e": {
+   "en": "NCES private school ID {id} · U.S. Department of Education, NCES, Private School Universe Survey (PSS), 2023-24.",
+   "es": "ID de escuela privada de NCES {id} · Departamento de Educación de EE. UU., NCES, Private School Universe Survey (PSS), 2023-24."
+  },
+  "564d0b848242e5e1": {
+   "en": "Level (PSS)",
+   "es": "Nivel (PSS)"
+  },
+  "735a492e1574d6c2": {
+   "en": "Students (K–12)",
+   "es": "Estudiantes (K–12)"
+  },
+  "95644c58477e2e7d": {
+   "en": "Details as reported to NCES for the {date} school year; the student count leaves out pre-kindergarten.",
+   "es": "Datos reportados a NCES para el ciclo escolar {date}; el conteo de estudiantes no incluye prekínder."
+  },
+  "5557ef7cbd319da6": {
+   "en": "Look it up in SEP’s school finder (SIGED)",
+   "es": "Búscala en el buscador de escuelas de la SEP (SIGED)"
+  },
+  "d66e238ca21faa6f": {
+   "en": "CCT {id} · Fuente: SEP, Catálogo de Centros de Trabajo 2025 y Estadística del Formato 911, ciclo 2024-2025 (datos.gob.mx, CC BY 4.0); adapted by SafeRoute.",
+   "es": "CCT {id} · Fuente: SEP, Catálogo de Centros de Trabajo 2025 y Estadística del Formato 911, ciclo 2024-2025 (datos.gob.mx, CC BY 4.0); adaptado por SafeRoute."
+  },
+  "94f7460479e1f803": {
+   "en": "Funding and shift",
+   "es": "Sostenimiento y turno"
+  },
+  "33c512c6eec15be4": {
+   "en": "Teachers",
+   "es": "Docentes"
+  },
+  "732812d6dbd5ccb3": {
+   "en": "Boarding (internado)",
+   "es": "Internado"
+  },
+  "09c731b577d9a210": {
+   "en": "Education authority",
+   "es": "Autoridad educativa"
+  },
+  "8e62661d58f6557e": {
+   "en": "Students and teachers: SEP’s Formato 911 census at the start of the {date} school year.",
+   "es": "Estudiantes y docentes: censo del Formato 911 de la SEP al inicio del ciclo escolar {date}."
+  },
+  "2df22cb3420c08f6": {
+   "en": "<b>British Columbia publishes no single school rating</b> or inspection grade, for public or independent schools. Its Foundation Skills Assessment results are published separately; they are test results, not a rating, and are not shown here.",
+   "es": "<b>Columbia Británica no publica una calificación escolar única</b> ni una calificación de inspección, ni para escuelas públicas ni para independientes. Los resultados de su Foundation Skills Assessment se publican por separado; son resultados de pruebas, no una calificación, y no se muestran aquí."
+  },
+  "a2f4f0e69839384d": {
+   "en": "Arizona publishes an A–F letter grade for its public schools. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Arizona publica una calificación con letra de la A a la F para sus escuelas públicas. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "2bdeae36b0fff68a": {
+   "en": "Source: Arizona Department of Education ↗",
+   "es": "Fuente: Departamento de Educación de Arizona ↗"
+  },
+  "705719eb6c296c85": {
+   "en": "California does not give its schools an overall rating. It identifies some schools for extra support under federal law (its ESSA assistance status). This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "California no da a sus escuelas una calificación global. Identifica a algunas escuelas para recibir apoyo adicional conforme a la ley federal (su estatus de asistencia ESSA). Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "f2821bc7e335bff9": {
+   "en": "Source: California Department of Education ↗",
+   "es": "Fuente: Departamento de Educación de California ↗"
+  },
+  "980bee4f5b092bda": {
+   "en": "Colorado publishes a School Performance Framework plan type for each public school. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Colorado publica un tipo de plan del School Performance Framework (marco de desempeño escolar) para cada escuela pública. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "0e7f73b15831bacc": {
+   "en": "Source: Colorado Department of Education ↗",
+   "es": "Fuente: Departamento de Educación de Colorado ↗"
+  },
+  "568ea6ecc4ce4f51": {
+   "en": "Connecticut publishes a Next Generation Accountability category for each public school. It is not shown on this map yet.",
+   "es": "Connecticut publica una categoría de Next Generation Accountability para cada escuela pública. Todavía no se muestra en este mapa."
+  },
+  "7461e0bd86b611c8": {
+   "en": "Source: Connecticut State Department of Education (EdSight) ↗",
+   "es": "Fuente: Departamento de Educación del Estado de Connecticut (EdSight) ↗"
+  },
+  "b74408edfcfa6092": {
+   "en": "The District of Columbia publishes an accountability score for each public school on the DC School Report Card. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "El Distrito de Columbia publica una puntuación de rendición de cuentas para cada escuela pública en el DC School Report Card. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "433ba76cb7cc2ec8": {
+   "en": "Source: Office of the State Superintendent of Education (OSSE) ↗",
+   "es": "Fuente: Oficina del Superintendente Estatal de Educación (OSSE) ↗"
+  },
+  "1462c1ad025469d9": {
+   "en": "Illinois publishes a summative designation for each public school. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Illinois publica una designación sumativa para cada escuela pública. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "112d8c40a570a89e": {
+   "en": "Source: Illinois State Board of Education (Illinois Report Card) ↗",
+   "es": "Fuente: Junta de Educación del Estado de Illinois (Illinois Report Card) ↗"
+  },
+  "2d16fb838a9c0fb8": {
+   "en": "Louisiana publishes a School Performance Score and letter grade for its public schools. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Luisiana publica un School Performance Score (puntuación de desempeño escolar) y una calificación con letra para sus escuelas públicas. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "90c9579c6d514ec6": {
+   "en": "Source: Louisiana Department of Education ↗",
+   "es": "Fuente: Departamento de Educación de Luisiana ↗"
+  },
+  "a98383997b5c7a07": {
+   "en": "Massachusetts publishes an accountability classification for each public school. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Massachusetts publica una clasificación de rendición de cuentas para cada escuela pública. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "e47828fdca886f50": {
+   "en": "Source: Massachusetts Department of Elementary and Secondary Education ↗",
+   "es": "Fuente: Departamento de Educación Primaria y Secundaria de Massachusetts ↗"
+  },
+  "906058fc75960f03": {
+   "en": "Maryland publishes a star rating on each public school’s report card. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Maryland publica una calificación con estrellas en el informe de resultados (report card) de cada escuela pública. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "b7b3d41f37047744": {
+   "en": "Source: Maryland State Department of Education (Maryland Report Card) ↗",
+   "es": "Fuente: Departamento de Educación del Estado de Maryland (Maryland Report Card) ↗"
+  },
+  "952cca755b60e3e7": {
+   "en": "Michigan publishes a Michigan School Index score for each public school. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Michigan publica una puntuación del Michigan School Index para cada escuela pública. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "4843df1c8fad7b4b": {
+   "en": "Source: Michigan Department of Education ↗",
+   "es": "Fuente: Departamento de Educación de Michigan ↗"
+  },
+  "901220ac8fff0b28": {
+   "en": "North Carolina publishes an A–F School Performance Grade for its public schools. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Carolina del Norte publica una School Performance Grade (calificación de desempeño escolar) de la A a la F para sus escuelas públicas. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "cf9781372340441a": {
+   "en": "Source: North Carolina Department of Public Instruction (NC School Report Cards) ↗",
+   "es": "Fuente: Departamento de Instrucción Pública de Carolina del Norte (NC School Report Cards) ↗"
+  },
+  "a8f675d7b3d4a262": {
+   "en": "Nevada publishes a star rating for each public school under its School Performance Framework. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Nevada publica una calificación con estrellas para cada escuela pública según su School Performance Framework (marco de desempeño escolar). Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "d060758018933211": {
+   "en": "Source: Nevada Department of Education (Nevada Report Card) ↗",
+   "es": "Fuente: Departamento de Educación de Nevada (Nevada Report Card) ↗"
+  },
+  "8fa339461ee34cef": {
+   "en": "New York identifies some public schools for extra support under federal law (its ESSA accountability status). That status is not a rating. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Nueva York identifica a algunas escuelas públicas para recibir apoyo adicional conforme a la ley federal (su estatus de rendición de cuentas ESSA). Ese estatus no es una calificación. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "e4098f7ad999328b": {
+   "en": "Source: New York State Education Department ↗",
+   "es": "Fuente: Departamento de Educación del Estado de Nueva York ↗"
+  },
+  "3a66ef468cfd8261": {
+   "en": "Ohio publishes an overall star rating on each public school’s report card. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Ohio publica una calificación global con estrellas en el informe de resultados (report card) de cada escuela pública. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "f7a94950acd81908": {
+   "en": "Source: Ohio Department of Education and Workforce (Ohio School Report Cards) ↗",
+   "es": "Fuente: Departamento de Educación y Fuerza Laboral de Ohio (Ohio School Report Cards) ↗"
+  },
+  "840c9d667016cfd1": {
+   "en": "Pennsylvania designates some public schools for extra support under federal law (its ESSA school designation). That designation is not a rating. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Pensilvania designa a algunas escuelas públicas para recibir apoyo adicional conforme a la ley federal (su designación escolar ESSA). Esa designación no es una calificación. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "219616636d67ecc6": {
+   "en": "Source: Pennsylvania Department of Education (Future Ready PA Index) ↗",
+   "es": "Fuente: Departamento de Educación de Pensilvania (Future Ready PA Index) ↗"
+  },
+  "893839eebd038150": {
+   "en": "Tennessee publishes an A–F letter grade for its public schools. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Tennessee publica una calificación con letra de la A a la F para sus escuelas públicas. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "45c4e8d402393c6a": {
+   "en": "Source: Tennessee Department of Education ↗",
+   "es": "Fuente: Departamento de Educación de Tennessee ↗"
+  },
+  "17ea833edea80fea": {
+   "en": "Texas publishes an A–F accountability rating for its public schools. This map shows a state’s school ratings and statuses only where the state explicitly allows them to be reused, so it does not show this one.",
+   "es": "Texas publica una calificación de rendición de cuentas de la A a la F para sus escuelas públicas. Este mapa muestra las calificaciones y los estatus escolares de un estado solo donde el estado permite explícitamente su reutilización; por eso aquí no se muestra."
+  },
+  "7487f0b18498cec3": {
+   "en": "Source: Texas Education Agency (TXschools.gov) ↗",
+   "es": "Fuente: Agencia de Educación de Texas (TXschools.gov) ↗"
+  },
+  "6c4b1a6fefb29947": {
+   "en": "Washington publishes a School Improvement Framework tier and score for each public school. It is not shown on this map yet.",
+   "es": "Washington publica un nivel y una puntuación del School Improvement Framework para cada escuela pública. Todavía no se muestra en este mapa."
+  },
+  "1e8b86993a440a85": {
+   "en": "Source: Office of Superintendent of Public Instruction (Washington State Report Card) ↗",
+   "es": "Fuente: Oficina del Superintendente de Instrucción Pública (Washington State Report Card) ↗"
+  },
+  "bcdb7f91a82c8d45": {
+   "en": "Missouri does not publish an overall rating for each of its schools.",
+   "es": "Misuri no publica una calificación global para cada una de sus escuelas."
+  },
+  "e158e3d406ec04d4": {
+   "en": "Minnesota does not publish a single overall rating for its schools.",
+   "es": "Minnesota no publica una calificación global única para sus escuelas."
+  },
+  "4bc82627afc66c81": {
+   "en": "ETI filed this report under the reference the school had before its management type changed, so the report may give the school's name at the time.",
+   "es": "La ETI archivó este informe con la referencia que tenía la escuela antes de cambiar su tipo de gestión, así que el informe puede dar el nombre que la escuela tenía entonces."
+  },
+  "38f569a757439729": {
+   "en": "Read the report",
+   "es": "Leer el informe"
+  },
+  "d4f804cadb5e4bc3": {
+   "en": "Latest ETI inspection report",
+   "es": "Último informe de inspección de la ETI"
+  },
+  "d4cdb362f6471bcd": {
+   "en": "(date published)",
+   "es": "(fecha de publicación)"
+  },
+  "f019b8b7a6cae965": {
+   "en": "An inspection report, not a rating. The Education and Training Inspectorate stopped giving grades in September 2024; each report now ends with its own conclusion and next steps.",
+   "es": "Un informe de inspección, no una calificación. La Inspección de Educación y Formación (ETI) dejó de dar calificaciones en septiembre de 2024; ahora cada informe termina con su propia conclusión y los siguientes pasos."
+  },
+  "e3940abee71afa09": {
+   "en": "Only the kind of report and the date it was published are shown here; the report itself gives the findings.",
+   "es": "Aquí solo se muestran el tipo de informe y la fecha en que se publicó; los hallazgos están en el propio informe."
+  },
+  "0d2345cbde5fff61": {
+   "en": "since 2016",
+   "es": "desde 2016"
+  },
+  "3edfdd2551a4e32f": {
+   "en": "Education and Training Inspectorate",
+   "es": "Inspección de Educación y Formación (ETI)"
+  },
+  "09c1e1767b171042": {
+   "en": "Made under ETI's previous framework, which has been replaced; its conclusions are not shown here.",
+   "es": "Corresponde al marco anterior de la ETI, que ya se reemplazó; sus conclusiones no se muestran aquí."
+  },
+  "4ef574973ba6ee6d": {
+   "en": "This inspection took place during teachers' action short of strike, and many reports from that period give no judgement. Made under ETI's previous framework, which has been replaced; its conclusions are not shown here.",
+   "es": "Esta inspección se hizo durante una acción sindical docente sin llegar a huelga (action short of strike), y muchos informes de ese periodo no dan ningún juicio. Corresponde al marco anterior de la ETI, que ya se reemplazó; sus conclusiones no se muestran aquí."
+  },
+  "83f8649adc6b3233": {
+   "en": "No ETI inspection report since 2016 is linked to this school.",
+   "es": "Ningún informe de inspección de la ETI desde 2016 está vinculado a esta escuela."
+  },
+  "edabc4567fd97586": {
+   "en": "A private (independent) school. The Education and Training Inspectorate inspects independent schools, including when they register with the Department of Education; no grade is shown here.",
+   "es": "Una escuela privada (independiente). La Inspección de Educación y Formación (ETI) inspecciona las escuelas independientes, incluso cuando se registran ante el Departamento de Educación; aquí no se muestra ninguna calificación."
+  },
+  "606ae94811f91712": {
+   "en": "Read the latest ETI report",
+   "es": "Leer el último informe de la ETI"
+  },
+  "1a6718febf319c37": {
+   "en": "Ofsted",
+   "es": "Ofsted"
+  },
+  "2b7b13c7581ab8fa": {
+   "en": "This school is in <b>Wales</b>, where <b>Estyn</b> inspects rather than Ofsted. Estyn outcomes are not in this dataset.",
+   "es": "Esta escuela está en <b>Gales</b>, donde inspecciona <b>Estyn</b> y no Ofsted. Los resultados de Estyn no están en este conjunto de datos."
+  },
+  "c99f157e68c9089f": {
+   "en": "Inspected by the <b>Independent Schools Inspectorate</b>, not Ofsted. ISI publishes reports school by school rather than as open data, so no grade is shown here.",
+   "es": "Inspeccionada por el <b>Independent Schools Inspectorate</b> (ISI), no por Ofsted. El ISI publica informes escuela por escuela y no como datos abiertos, así que aquí no se muestra ninguna calificación."
+  },
+  "c70322b4ec107fb9": {
+   "en": "A private school. Independent schools are inspected separately from state schools, and those outcomes are not published as open data.",
+   "es": "Una escuela privada. Las escuelas independientes se inspeccionan aparte de las escuelas públicas, y esos resultados no se publican como datos abiertos."
+  },
+  "9780128512e7bc66": {
+   "en": "No Ofsted inspection outcome is published for this establishment in the state-funded dataset.",
+   "es": "No se publica ningún resultado de inspección de Ofsted para este centro en el conjunto de datos de escuelas financiadas con fondos públicos."
+  },
+  "eb61e0158b81510b": {
+   "en": "<b>Offers credits toward the Ontario Secondary School Diploma (OSSD)</b>, according to the Ministry of Education's private school list. The Ministry inspects the OSSD credit courses of private high schools and lets them grant credits only after a successful inspection; it does not inspect premises, health and safety or staffing. Ontario's Ministry of Education does not license, accredit or endorse private schools, and publishes no rating for them.",
+   "es": "<b>Ofrece créditos para el Diploma de Educación Secundaria de Ontario (OSSD)</b>, según la lista de escuelas privadas del Ministerio de Educación. El Ministerio inspecciona los cursos con créditos OSSD de las escuelas secundarias privadas y solo les permite otorgar créditos después de una inspección aprobada; no inspecciona las instalaciones, la salud y seguridad ni el personal. El Ministerio de Educación de Ontario no otorga licencias a las escuelas privadas, no las acredita ni las respalda, y no publica ninguna calificación para ellas."
+  },
+  "56d02469b8313374": {
+   "en": "<b>Applied to offer credits toward the Ontario Secondary School Diploma (OSSD)</b>, according to the Ministry of Education's private school list. The Ministry lets a private high school grant credits only after a successful inspection. Ontario's Ministry of Education does not license, accredit or endorse private schools, and publishes no rating for them.",
+   "es": "<b>Solicitó ofrecer créditos para el Diploma de Educación Secundaria de Ontario (OSSD)</b>, según la lista de escuelas privadas del Ministerio de Educación. El Ministerio solo permite que una escuela secundaria privada otorgue créditos después de una inspección aprobada. El Ministerio de Educación de Ontario no otorga licencias a las escuelas privadas, no las acredita ni las respalda, y no publica ninguna calificación para ellas."
+  },
+  "a3738987e1d79261": {
+   "en": "The Ministry of Education's private school contact list describes this school's Ontario Secondary School Diploma (OSSD) credits in wording this map does not yet recognise, so its status is not shown here. Ontario's Ministry of Education does not license, accredit or endorse private schools, and publishes no rating for them.",
+   "es": "La lista de contacto de escuelas privadas del Ministerio de Educación describe los créditos para el Diploma de Educación Secundaria de Ontario (OSSD) de esta escuela con una redacción que este mapa todavía no reconoce, así que su estatus no se muestra aquí. El Ministerio de Educación de Ontario no otorga licencias a las escuelas privadas, no las acredita ni las respalda, y no publica ninguna calificación para ellas."
+  },
+  "924e8d4c41b835f5": {
+   "en": "This school is not in the Ministry of Education's private school contact list, which records whether a school offers credits toward the Ontario Secondary School Diploma. Ontario's Ministry of Education does not license, accredit or endorse private schools, and publishes no rating for them.",
+   "es": "Esta escuela no está en la lista de contacto de escuelas privadas del Ministerio de Educación, que registra si una escuela ofrece créditos para el Diploma de Educación Secundaria de Ontario. El Ministerio de Educación de Ontario no otorga licencias a las escuelas privadas, no las acredita ni las respalda, y no publica ninguna calificación para ellas."
+  },
+  "ed68d490d8f712c2": {
+   "en": "<b>A private school not listed as offering credits toward the Ontario Secondary School Diploma (OSSD).</b> The Ministry of Education does not inspect private elementary schools, or private high schools that do not offer OSSD credits. Ontario's Ministry of Education does not license, accredit or endorse private schools, and publishes no rating for them.",
+   "es": "<b>Una escuela privada que no figura como oferente de créditos para el Diploma de Educación Secundaria de Ontario (OSSD).</b> El Ministerio de Educación no inspecciona las escuelas primarias privadas ni las escuelas secundarias privadas que no ofrecen créditos OSSD. El Ministerio de Educación de Ontario no otorga licencias a las escuelas privadas, no las acredita ni las respalda, y no publica ninguna calificación para ellas."
+  },
+  "f7db7d7f88b73957": {
+   "en": "<b>Ontario publishes no single school rating</b> or inspection grade for its publicly funded schools. Its testing agency, EQAO, publishes provincial test results separately; they are not a rating and are not shown here.",
+   "es": "<b>Ontario no publica una calificación escolar única</b> ni una calificación de inspección para sus escuelas financiadas con fondos públicos. Su agencia de evaluación, EQAO, publica por separado los resultados de las pruebas provinciales; no son una calificación y no se muestran aquí."
+  },
+  "6b84da0fd1457d48": {
+   "en": "No official rating is published for this private school.",
+   "es": "No se publica ninguna calificación oficial para esta escuela privada."
+  },
+  "d086a2e434e5fdde": {
+   "en": "US private schools come from NCES’s 2023-24 Private School Universe Survey, which lists only the schools that answered it (about 3 in 4), so some private schools are not on this map.",
+   "es": "Las escuelas privadas de EE. UU. provienen de la Private School Universe Survey 2023-24 de NCES, que solo incluye las escuelas que la respondieron (cerca de 3 de cada 4), así que algunas escuelas privadas no aparecen en este mapa."
+  },
+  "b3f13294c85e54d0": {
+   "en": "<b>Mexico does not publish an official rating or inspection result for individual schools.</b> PLANEA, the national test whose results were published school by school, was last given in 2019 in lower-secondary schools and in 2022 in upper-secondary schools, and it has not been replaced by any school rating. Mejoredu, the federal body that evaluated education, was abolished by a constitutional reform in December 2024.",
+   "es": "<b>México no publica una calificación oficial ni un resultado de inspección para cada escuela.</b> PLANEA, la prueba nacional cuyos resultados se publicaban escuela por escuela, se aplicó por última vez en 2019 en secundarias y en 2022 en escuelas de educación media superior, y ninguna calificación escolar la ha sustituido. Mejoredu, el organismo federal que evaluaba la educación, se eliminó con una reforma constitucional en diciembre de 2024."
+  },
+  "fd064fbd63628cb7": {
+   "en": "Connecticut accountability category (CSDE)",
+   "es": "Categoría de rendición de cuentas de Connecticut (CSDE)"
+  },
+  "0d43134cb544b611": {
+   "en": "Next Generation Accountability category",
+   "es": "Categoría de Next Generation Accountability"
+  },
+  "77eb4ec914ca639f": {
+   "en": "Category 1 (highest) to Category 5. Categories 1 to 3 follow the school’s accountability index; schools identified for state support (Focus or Turnaround) are in Categories 4 and 5.",
+   "es": "De Category 1 (la más alta) a Category 5. Las categorías 1 a 3 siguen el índice de rendición de cuentas de la escuela; las escuelas identificadas para recibir apoyo estatal (Focus o Turnaround) están en las categorías 4 y 5."
+  },
+  "2a8af23589fc3762": {
+   "en": "Twelve indicators: test achievement and growth, attendance, graduation, college and career readiness, arts access and physical fitness.",
+   "es": "Doce indicadores: logro y crecimiento en las pruebas, asistencia, graduación, preparación para la universidad y la vida laboral, acceso a las artes y condición física."
+  },
+  "1c91f8473468c442": {
+   "en": "A lower category number is better.",
+   "es": "Un número de categoría más bajo es mejor."
+  },
+  "ad369af2cf115ad1": {
+   "en": "{place} publishes this category, but has none for this school in its {year} file. Special education, alternative, pre-K and career centres are often not rated.",
+   "es": "{place} publica esta categoría, pero no tiene ninguna para esta escuela en su archivo de {year}. A menudo no se califican las escuelas de educación especial, las alternativas, las de prekínder ni los centros de formación profesional."
+  },
+  "62d7f9736b2bcb6f": {
+   "en": "Connecticut State Department of Education",
+   "es": "Departamento de Educación del Estado de Connecticut"
+  },
+  "1edba45afc3d8ca3": {
+   "en": "Washington School Improvement Framework (OSPI)",
+   "es": "Marco de mejora escolar de Washington (WSIF, OSPI)"
+  },
+  "a1c1469fd808aaa7": {
+   "en": "WSIF support tier and score (1–10)",
+   "es": "Nivel de apoyo y puntuación del WSIF (1–10)"
+  },
+  "f92c0c8703764d14": {
+   "en": "Foundational supports (not identified), or identified for support: Tier 1 (one or two student groups), Tier 2 (three or more groups) or Tier 3 (all students, or a low graduation rate). The score runs from 1 to 10.",
+   "es": "Foundational supports (apoyos básicos; no identificada) o identificada para recibir apoyo: Tier 1 (uno o dos grupos de estudiantes), Tier 2 (tres o más grupos) o Tier 3 (todos los estudiantes, o una tasa de graduación baja). La puntuación va de 1 a 10."
+  },
+  "46a7bb4e4a44a463": {
+   "en": "State test proficiency and growth, graduation, English learner progress, regular attendance, ninth-grade on-track and dual credit.",
+   "es": "Dominio y crecimiento en las pruebas estatales, graduación, progreso de estudiantes que aprenden inglés, asistencia regular, avance adecuado en noveno grado y créditos duales."
+  },
+  "36e2fb6651071ee0": {
+   "en": "Each measure is scored by decile among Washington schools, so the score shows where a school stands among them; it is not a percentage. Data from OSPI under CC BY 4.0; tier labels lightly reworded.",
+   "es": "Cada medida se puntúa por decil entre las escuelas de Washington, así que la puntuación muestra la posición de una escuela entre ellas; no es un porcentaje. Datos de OSPI bajo CC BY 4.0; las etiquetas de los niveles (tiers) se reformularon ligeramente."
+  },
+  "97bf991365ba529f": {
+   "en": "{place} publishes this tier, but has none for this school in its {year} file. Special education, alternative, pre-K and career centres are often not rated.",
+   "es": "{place} publica este nivel, pero no tiene ninguno para esta escuela en su archivo de {year}. A menudo no se califican las escuelas de educación especial, las alternativas, las de prekínder ni los centros de formación profesional."
+  },
+  "42528eb6caae957d": {
+   "en": "Washington Office of Superintendent of Public Instruction",
+   "es": "Oficina del Superintendente de Instrucción Pública de Washington"
+  }
+ },
+ "values": {
+  "9bae15c776cf0f9a": {
+   "en": "Público · turno matutino (public; morning shift)",
+   "es": "Público · turno matutino",
+   "field": "type"
+  },
+  "3344773bb6e7b84b": {
+   "en": "Preescolar general (preschool)",
+   "es": "Preescolar general",
+   "field": "phase"
+  },
+  "38a9640ea8f58a49": {
+   "en": "Primaria general (primary)",
+   "es": "Primaria general",
+   "field": "phase"
+  },
+  "b38080f0da52f1a0": {
+   "en": "Público · turno vespertino (public; afternoon shift)",
+   "es": "Público · turno vespertino",
+   "field": "type"
+  },
+  "7c978b00448e01ca": {
+   "en": "Público · turno discontinuo (public; split-day shift)",
+   "es": "Público · turno discontinuo",
+   "field": "type"
+  },
+  "046d31a455071f0f": {
+   "en": "Bachillerato general (upper secondary)",
+   "es": "Bachillerato general",
+   "field": "phase"
+  },
+  "3f5c3a4f5463267d": {
+   "en": "Secundaria general (lower secondary)",
+   "es": "Secundaria general",
+   "field": "phase"
+  },
+  "4910d9dd3c1ee52b": {
+   "en": "Privado · turno matutino (private; morning shift)",
+   "es": "Privado · turno matutino",
+   "field": "type"
+  },
+  "c91f783b0772e065": {
+   "en": "Público · turnos matutino y vespertino (public; morning and afternoon shifts)",
+   "es": "Público · turnos matutino y vespertino",
+   "field": "type"
+  },
+  "ec8fa7c8d008bcb1": {
+   "en": "Secundaria técnica (technical lower secondary)",
+   "es": "Secundaria técnica",
+   "field": "phase"
+  },
+  "cbaa484dc5debadc": {
+   "en": "Educación inicial y preescolar (early childhood and preschool)",
+   "es": "Educación inicial y preescolar",
+   "field": "phase"
+  },
+  "570525cc2546d3d3": {
+   "en": "Bachillerato tecnológico (technical upper secondary)",
+   "es": "Bachillerato tecnológico",
+   "field": "phase"
+  },
+  "cfd7c9bddd5d40cf": {
+   "en": "Telesecundaria (lower secondary taught with televised lessons)",
+   "es": "Telesecundaria",
+   "field": "phase"
+  },
+  "cfde14078b4e6289": {
+   "en": "Centro de Atención Múltiple (special education centre)",
+   "es": "Centro de Atención Múltiple",
+   "field": "phase"
+  },
+  "429f98d38229573b": {
+   "en": "Profesional técnico bachiller (vocational upper secondary)",
+   "es": "Profesional técnico bachiller",
+   "field": "phase"
+  },
+  "e7c59c4d4b11d70d": {
+   "en": "Educación inicial (early childhood care and education)",
+   "es": "Educación inicial",
+   "field": "phase"
+  },
+  "9083901c96359bc0": {
+   "en": "Preescolar comunitario (community preschool)",
+   "es": "Preescolar comunitario",
+   "field": "phase"
+  },
+  "cf08f50735330eae": {
+   "en": "Primaria comunitaria (community primary)",
+   "es": "Primaria comunitaria",
+   "field": "phase"
+  },
+  "dd45d623e0431b38": {
+   "en": "Secundaria comunitaria (community lower secondary)",
+   "es": "Secundaria comunitaria",
+   "field": "phase"
+  },
+  "ff1f786442bb0862": {
+   "en": "Privado · turno vespertino (private; afternoon shift)",
+   "es": "Privado · turno vespertino",
+   "field": "type"
+  },
+  "3e753ea4de366bc6": {
+   "en": "Privado · turnos matutino y vespertino (private; morning and afternoon shifts)",
+   "es": "Privado · turnos matutino y vespertino",
+   "field": "type"
+  },
+  "97bca54105969cd3": {
+   "en": "Público autónomo · turno discontinuo (public, autonomous university; split-day shift)",
+   "es": "Público autónomo · turno discontinuo",
+   "field": "type"
+  },
+  "60f52ea8fca6b89c": {
+   "en": "Preescolar (preschool)",
+   "es": "Preescolar",
+   "field": "phase"
+  },
+  "cdc6e8d0f252acdb": {
+   "en": "Público autónomo · turnos matutino y vespertino (public, autonomous university; morning and afternoon shifts)",
+   "es": "Público autónomo · turnos matutino y vespertino",
+   "field": "type"
+  },
+  "9efc115bc0e440a6": {
+   "en": "Público autónomo · turno matutino (public, autonomous university; morning shift)",
+   "es": "Público autónomo · turno matutino",
+   "field": "type"
+  },
+  "d1b9862ae80886af": {
+   "en": "Secundaria para trabajadores (lower secondary for working students)",
+   "es": "Secundaria para trabajadores",
+   "field": "phase"
+  },
+  "7558db69d2de5e32": {
+   "en": "Privado · turno discontinuo (private; split-day shift)",
+   "es": "Privado · turno discontinuo",
+   "field": "type"
+  },
+  "30228bb7433cf636": {
+   "en": "Profesional técnico (vocational technician course)",
+   "es": "Profesional técnico",
+   "field": "phase"
+  },
+  "09bd8569b314c1f5": {
+   "en": "Privado · turnos matutino, vespertino y nocturno (private; morning, afternoon and evening shifts)",
+   "es": "Privado · turnos matutino, vespertino y nocturno",
+   "field": "type"
+  },
+  "29d95d1f304ddcc6": {
+   "en": "Público · turno nocturno (public; evening shift)",
+   "es": "Público · turno nocturno",
+   "field": "type"
+  }
+ }
+}
