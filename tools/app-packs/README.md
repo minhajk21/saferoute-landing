@@ -92,7 +92,8 @@ is v2, the home-values index is **v1** (as published).
 ## Spanish display text (`schools.es.json`, S7)
 
 The app shows the schools pack's own words (scheme titles, scales, caveats,
-notes, labels, attributions, place and filter words) through
+notes, labels, attributions, place and filter words, and About's "School
+data" rows: each source's where, publisher and vintage, and the scope) through
 `SchoolDataText.display`; in Spanish it looks each one up here.
 `lib/schools-text.mjs` lists those strings by the app's own paths
 (`displayStrings`: per scheme kind, as SchoolDataText's doc says) and builds
@@ -109,7 +110,7 @@ never with `--commit`). Each text has its own source file (`TEXT_SOURCES` in
 | `textCommit` | the last commit at HEAD that changed `tools/app-packs/i18n/schools.es.src.json` (that file only: a commit to `prices.es.src.json` beside it leaves this file byte-identical) |
 | `hash` | the key: the first 16 hex of SHA-256 over the exact UTF-8 of the English, as the app passes it (a template before it is filled); nothing is normalised at run time |
 | `strings` | `{ key: { en, es } }`, in display order |
-| `keep` | the licence names' keys: they stay English (glossary) |
+| `keep` | the licence names' and the sources' dataset names' keys: they stay English (glossary; SD19: dataset names kept, agency names translated) |
 | `values` | `{ key: { en, es, field } }`: Mexico City's SEP `type`/`phase` values without their English gloss ("Primaria general (primary)" → "Primaria general"). Every other row value (ratings, grades, governance words) stays as published. |
 | `display` | every display string's key; `stats`: translated, keep, identity (no letters), missing (+ `missingKeys`), values, valuesMissing |
 
@@ -123,7 +124,7 @@ summary, which O2 requires all PASS):
 | `es-keys` | a key is not the hash of its English; text that is not NFC, has edge whitespace or is empty; two display strings share a key |
 | `es-orphans` | a source entry whose English this pack does not display (an orphaned key) |
 | `es-form` | different `{placeholder}` sets; a different number of `<b>` runs, any other tag, a raw `<` or an HTML entity in the Spanish; a trailing " ↗" in one language only |
-| `es-licences` | a licence name translated; a licence name (or its bracketed short form) in an English string but not its Spanish; an attribution that would no longer link its licence (the page's `linkLicence`) |
+| `es-licences` | a licence name or a source's dataset name translated; a licence name (or its bracketed short form) in an English string but not its Spanish; an attribution that would no longer link its licence (the page's `linkLicence`) |
 | `es-words` | a label, title or filter word whose Spanish matches `FORBIDDEN_KEY` or religi/confesi/denominaci/diócesis; "anónimo" anywhere; the formal usted/ustedes |
 | `es-glossary` | an English term without its glossary rendering in the Spanish (internado, chárter, alumnado, aleja el mapa, calificación, estatus, inspección, Fuente:, …); a name in capitals (NCES, ETI, OSSD…) dropped |
 | `es-gloss` | a `values` entry that is not a SEP `type`/`phase` value with exactly one trailing "( … )", whose Spanish is not that value without it, or that occurs as any other value |

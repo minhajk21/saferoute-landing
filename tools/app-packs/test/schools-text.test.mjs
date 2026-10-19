@@ -66,14 +66,21 @@ test('real pack: every Spanish gate passes, nothing is missing, licence names st
 test('the display paths: every kind the app shows, nothing it does not', async () => {
   const { index, display } = await real();
   const kinds = new Set([...display.values()].flatMap(e => e.kinds));
-  for (const k of ['coverage.where', 'filter.noun', 'filter.where', 'region.outside', 'juris.name', 'juris.area', 'source.attribution', 'source.licence', 'source.recordLabel',
+  for (const k of ['coverage.where', 'coverage.scope', 'source.where', 'source.name', 'source.publisher', 'source.vintage', 'filter.noun', 'filter.where', 'region.outside', 'juris.name', 'juris.area', 'source.attribution', 'source.licence', 'source.recordLabel',
     'label', 'label.template', 'label.meals', 'label.tags', 'note.html', 'note.link', 'scheme.title', 'scheme.short', 'scheme.scale', 'scheme.measures', 'scheme.caveat', 'scheme.miss', 'scheme.publisher', 'scheme.licence']) {
     assert.ok(kinds.has(k), k);
   }
   // Not display text: the filters' own label/any/options, region names, row values.
   for (const f of index.filters) { assert.ok(!display.has(f.any)); for (const o of f.options || []) assert.ok(!display.has(o)); }
   const places = new Set(Object.values(index.juris).flatMap(j => [j.name, j.area]).concat(index.regions.flatMap(r => r.outside || [])));
-  for (const r of index.regions) if (!places.has(r.name)) assert.ok(!display.has(r.name), r.name);
+  const wheres = new Set(Object.values(index.sources).map(s => s.where));
+  for (const r of index.regions) if (!places.has(r.name) && !wheres.has(r.name)) assert.ok(!display.has(r.name), r.name);
+  // About (O5): the dataset names are kept in English (SD19), with the licences.
+  const { b, source } = await real();
+  const doc = JSON.parse(run(b, source).text);
+  for (const s of Object.values(index.sources)) assert.ok(doc.keep.includes(textKey(s.name)), s.name);
+  // A source's attribution is a per-school template ({id}): About never prints it.
+  for (const s of Object.values(index.sources)) assert.match(s.attribution, /\{id\}/);
   // Ofsted shows only its publisher.
   assert.ok(display.get('Ofsted').kinds.includes('scheme.publisher'));
 });
@@ -126,6 +133,12 @@ test('es-form: placeholders, <b> runs, other tags, entities and the arrow', asyn
 
 test('es-licences: a translated licence name, a licence name dropped, an attribution that would lose its link', async () => {
   const { b, index, source } = await real();
+  {
+    const s = copy(source);
+    const name = index.sources.gias.name;
+    s.strings[textKey(name)] = { en: name, es: 'Obtener información sobre las escuelas (DfE)' };
+    assert.match(run(b, s).gates.find(g => g.name === 'es-licences').problems.join('\n'), /dataset name .* is translated \(it stays English, SD19\)/);
+  }
   let s = copy(source);
   const lic = index.sources.gias.licence;
   s.strings[textKey(lic)] = { en: lic, es: 'Licencia de Gobierno Abierto v3.0' };
