@@ -51,8 +51,14 @@ const FORMAL = /\busted(es)?\b/i;
 const PROMEDIO = /promedio/i;
 // The standalone word "media"/"medias" (the mean), never "mediana"; "medio"
 // ("por medio de", "en medio") is ordinary Spanish and allowed (§4.6 H5
-// bans "media").
+// bans "media"), but not after the figure's own nouns: "precio medio",
+// "valor medio", "cifra media" all say "average".
 const MEDIA = /(?<!\p{L})medias?(?!\p{L})/iu;
+const MEDIO = /(?<!\p{L})(?:precio|valor|cifra)s?\s+medi[oa]s?(?!\p{L})/iu;
+// Two full stops that are not an ellipsis ("Washington D. C.."): a string's
+// own, or one its sentence will add (the app drops a template's stop after
+// a name that ends in one; this keeps the text itself from carrying two).
+const DOUBLE_STOP = /(?<!\.)\.\.(?!\.)/;
 const PRECIO = /precio/i;
 const PRICE_EN = /price/i;
 const AVERAGE = /average/i;
@@ -138,11 +144,23 @@ export function priceWordProblems(source, display) {
     if (typeof es !== 'string') continue;
     if (PROMEDIO.test(es)) p.push(`${k}: "promedio" (never; the figure is a median): ${show(es)}`);
     if (MEDIA.test(es)) p.push(`${k}: the standalone word "media" (the mean; a median is "mediana"): ${show(es)}`);
+    if (MEDIO.test(es)) p.push(`${k}: "medio"/"media" after precio, valor or cifra (says "average"): ${show(es)}`);
     if (AVERAGE.test(en ?? '')) p.push(`${k}: "average" in the English: ${show(en)}`);
     const d = display.get(en);
     if (d?.estimate && d.kinds.some(x => LABEL_KINDS.has(x)) && PRECIO.test(es)) p.push(`${k}: "precio" in an owners'-estimate label: ${show(es)}`);
     if (ANON.test(es)) p.push(`${k}: "anónimo" (never): ${show(es)}`);
     if (FORMAL.test(es)) p.push(`${k}: formal "usted" (es-MX uses tú): ${show(es)}`);
+  }
+  return p;
+}
+
+// pr-es-form's own addition: no doubled full stop in either language.
+export function stopProblems(source) {
+  const p = [];
+  for (const [k, { en, es } = {}] of Object.entries(source.strings || {})) {
+    for (const [lang, v] of [['en', en], ['es', es]]) {
+      if (typeof v === 'string' && DOUBLE_STOP.test(v)) p.push(`${k}: a doubled full stop in the ${lang === 'es' ? 'Spanish' : 'English'}: ${show(v)}`);
+    }
   }
   return p;
 }
@@ -234,8 +252,8 @@ export function buildPricesText({ json, bin, source, schoolsSource, landingCommi
     gate('pr-periods', periods.problems, `every period (${Object.keys(index.sources || {}).length} sources, ${(index.scales || []).length} scales), window span and ${periods.labels} context labels rebuilt from their fields`),
     gate('pr-es-keys', keyProblems(source, display), `${display.size} display strings, ${Object.keys(S).length} source entries; keys = ${HASH_RULE}; NFC; no collision`),
     gate('pr-es-orphans', orphanProblems(source, display), 'every source entry is a display string of this pack'),
-    gate('pr-es-form', formProblems(source), 'same {placeholders}, no tag, no entity'),
-    gate('pr-es-words', priceWordProblems(source, display), 'never "promedio", a standalone "media" or "average"; no "precio"/"price" in an owners\'-estimate label; tú, never usted; never "anónimo"'),
+    gate('pr-es-form', [...formProblems(source), ...stopProblems(source)], 'same {placeholders}, no tag, no entity, no doubled full stop'),
+    gate('pr-es-words', priceWordProblems(source, display), 'never "promedio", a standalone "media", "precio/valor medio" or "average"; no "precio"/"price" in an owners\'-estimate label; tú, never usted; never "anónimo"'),
     gate('pr-es-money', moneyProblems(source), 'the same numbers; US$ for every US dollar amount, never a bare $; £ and CA$ as published'),
     gate('pr-es-shared', sharedProblems(source, schoolsSource), 'a string the schools text translates has the same Spanish (SD18)'),
     gate('pr-es-licences', priceLicenceProblems(source, display, index), `${keep.length} names and licences kept in English; attribution lines verbatim`),

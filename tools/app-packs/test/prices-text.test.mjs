@@ -11,7 +11,7 @@ import { openPack, sha256 } from '../lib/container.mjs';
 import { REPO } from '../lib/landing.mjs';
 import { textKey, readTextSource, TEXT_SOURCES } from '../lib/schools-text.mjs';
 import {
-  displayStrings, buildPricesText, priceWordProblems, moneyProblems, sharedProblems, oneForm, PRICES_TEXT_GATES, KEEP_KINDS, attributionLines,
+  displayStrings, buildPricesText, priceWordProblems, moneyProblems, sharedProblems, stopProblems, oneForm, PRICES_TEXT_GATES, KEEP_KINDS, attributionLines,
 } from '../lib/prices-text.mjs';
 import { periodProblems } from '../lib/prices-periods.mjs';
 import { realPrices, LANDING } from './helpers.mjs';
@@ -111,6 +111,11 @@ test('pr-es-words: "promedio", a standalone "media", "precio" in an estimate lab
   assert.deepEqual(priceWordProblems({ strings: { a: { en: 'Median sale price', es: 'Mediana del precio de venta' } } }, new Map([['Median sale price', { kinds: ['source.metric'], estimate: false }]])), []);
   assert.deepEqual(priceWordProblems({ strings: { a: { en: 'x', es: 'por medio de la mediana, en medio' } } }, new Map()), []);
   assert.equal(priceWordProblems({ strings: { a: { en: 'x', es: 'la media' } } }, new Map()).length, 1);
+  // "medio" after the figure's nouns says "average" (review 9).
+  for (const es of ['el precio medio', 'Valor medio de la vivienda', 'cifras medias']) {
+    assert.ok(priceWordProblems({ strings: { a: { en: 'x', es } } }, new Map()).some(m => /after precio, valor or cifra/.test(m)), es);
+  }
+  assert.deepEqual(priceWordProblems({ strings: { a: { en: 'x', es: 'el valor de la vivienda en medio de la ciudad' } } }, new Map()), []);
   assert.equal(priceWordProblems({ strings: {} }, new Map([['Average home price (owners’ estimate)', { kinds: ['source.metric'], estimate: true }]])).length, 2);
 });
 
@@ -150,6 +155,10 @@ test('pr-es-shared, pr-es-licences, pr-es-keys, pr-es-orphans, pr-es-form, pr-es
   failsGate(run(b, s, schools), 'pr-es-orphans', /orphaned key/);
   s = copy(source); entry(s, 'London').es = '<i>Londres</i>';
   failsGate(run(b, s, schools), 'pr-es-form', /Spanish has tag/);
+  // A doubled full stop (review 3), never an ellipsis.
+  s = copy(source); entry(s, 'London').es = 'Londres D. C..';
+  failsGate(run(b, s, schools), 'pr-es-form', /doubled full stop in the Spanish/);
+  assert.deepEqual(stopProblems({ strings: { a: { en: 'Wait...', es: 'Washington D. C.' } } }), []);
   s = copy(source); entry(s, 'middle layer super output area (MSOA)').es = 'área estadística intermedia';
   failsGate(run(b, s, schools), 'pr-es-glossary', /MSOA \(a name\) is missing/);
   s = copy(source); entry(s, 'census tract').es = 'distrito censal';
