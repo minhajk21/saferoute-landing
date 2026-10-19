@@ -24,7 +24,10 @@
 //
 // THE SOURCE is tools/app-packs/i18n/schools.es.src.json (es-MX, informal tú,
 // the glossary subset it carries), read from the builder's committed HEAD
-// like the rules; `textCommit` is the last commit that changed i18n/.
+// like the rules; `textCommit` is the last commit that changed THAT FILE (not
+// the whole i18n/ directory: the home values' prices.es.src.json sits beside
+// it, and a commit to one must never restamp the other's text). TEXT_SOURCES
+// names each output file's source, for the builder and for O2's check.
 //
 // THE OUTPUT (schools.es.json, deterministic):
 //   { version, language, hash, forPack: { landingCommit, indexSha256, binSha256 },
@@ -47,6 +50,12 @@ export const TEXT_VERSION = 1;
 export const TEXT_LANGUAGE = 'es-MX';
 export const I18N_DIR = 'tools/app-packs/i18n';
 export const SOURCE_PATH = `${I18N_DIR}/schools.es.src.json`;
+// Each Spanish text file and the one source file its textCommit is taken from
+// (lib/prices-text.mjs writes prices.es.json from the second).
+export const TEXT_SOURCES = Object.freeze({
+  'schools.es.json': SOURCE_PATH,
+  'prices.es.json': `${I18N_DIR}/prices.es.src.json`,
+});
 export const HASH_RULE = 'sha256(utf8(en)) hex, first 16';
 
 export const textKey = s => sha256(Buffer.from(s, 'utf8')).slice(0, 16);
@@ -127,26 +136,29 @@ export function displayStrings(index) {
 const git = (repo, args) => execFileSync('git', ['-C', repo, ...args], { encoding: 'utf8', maxBuffer: 1 << 26, stdio: ['ignore', 'pipe', 'pipe'] });
 
 // The committed translation source at the builder's HEAD, and the last commit
-// that changed it. A working tree that differs is refused unless allowDirty
-// (never with --commit), and then read and recorded "+dirty".
-export function openTextSource({ repo, allowDirty = false, commit = null } = {}) {
-  const dirty = git(repo, ['status', '--porcelain', '--', I18N_DIR]).trim();
-  if (dirty && (commit != null || !allowDirty)) throw new Error(`${I18N_DIR} differs from HEAD (commit the translations first${commit == null ? ', or --allow-dirty' : ''}):\n${dirty.split('\n').slice(0, 10).join('\n')}`);
+// that changed it. `path` is the source file (schools by default; the home
+// values pass TEXT_SOURCES['prices.es.json']): the dirty check and the commit
+// are that file's alone, so each text is refused, and stamped, on its own.
+// A working tree that differs is refused unless allowDirty (never with
+// --commit), and then read and recorded "+dirty".
+export function openTextSource({ repo, allowDirty = false, commit = null, path = SOURCE_PATH } = {}) {
+  const dirty = git(repo, ['status', '--porcelain', '--', path]).trim();
+  if (dirty && (commit != null || !allowDirty)) throw new Error(`${path} differs from HEAD (commit the translations first${commit == null ? ', or --allow-dirty' : ''}):\n${dirty.split('\n').slice(0, 10).join('\n')}`);
   let last = '';
-  try { last = git(repo, ['log', '-1', '--format=%H', 'HEAD', '--', I18N_DIR]).trim(); } catch { /* no commits yet */ }
+  try { last = git(repo, ['log', '-1', '--format=%H', 'HEAD', '--', path]).trim(); } catch { /* no commits yet */ }
   if (dirty) {
-    const p = join(repo, SOURCE_PATH);
-    if (!existsSync(p)) throw new Error(`${SOURCE_PATH} is missing`);
+    const p = join(repo, path);
+    if (!existsSync(p)) throw new Error(`${path} is missing`);
     return { source: JSON.parse(readFileSync(p, 'utf8')), textCommit: `${last || 'none'}+dirty` };
   }
-  if (!last) throw new Error(`${SOURCE_PATH} is not committed at HEAD`);
+  if (!last) throw new Error(`${path} is not committed at HEAD`);
   let text;
-  try { text = git(repo, ['show', `HEAD:${SOURCE_PATH}`]); } catch { throw new Error(`${SOURCE_PATH} is not committed at HEAD`); }
+  try { text = git(repo, ['show', `HEAD:${path}`]); } catch { throw new Error(`${path} is not committed at HEAD`); }
   return { source: JSON.parse(text), textCommit: last };
 }
 
 // The working-tree source (the tests read it; on a clean tree it is HEAD's).
-export const readTextSource = repo => JSON.parse(readFileSync(join(repo, SOURCE_PATH), 'utf8'));
+export const readTextSource = (repo, path = SOURCE_PATH) => JSON.parse(readFileSync(join(repo, path), 'utf8'));
 
 // ── the gates (each a pure function returning problems) ────────────────────
 const show = s => JSON.stringify(s.length > 70 ? `${s.slice(0, 67)}…` : s);

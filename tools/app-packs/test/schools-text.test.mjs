@@ -16,7 +16,7 @@ import { sha256 } from '../lib/container.mjs';
 import {
   displayStrings, buildSchoolsText, readTextSource, openTextSource, textKey, licenceNames, linksLicence,
   keyProblems, orphanProblems, formProblems, licenceProblems, wordProblems, glossaryProblems, glossProblems, ratingValueProblems,
-  SOURCE_PATH, I18N_DIR,
+  SOURCE_PATH, I18N_DIR, TEXT_SOURCES,
 } from '../lib/schools-text.mjs';
 import { realSchools, LANDING } from './helpers.mjs';
 
@@ -279,5 +279,38 @@ test('openTextSource: HEAD\'s committed file and its last commit; a dirty i18n/ 
     assert.throws(() => openTextSource({ repo: r }), /differs from HEAD/);
     assert.throws(() => openTextSource({ repo: r, allowDirty: true, commit: 'HEAD' }), /differs from HEAD/);
     assert.deepEqual(openTextSource({ repo: r, allowDirty: true }), { source: { strings: { a: 2 } }, textCommit: `${c}+dirty` });
+  } finally { rmSync(r, { recursive: true, force: true }); }
+});
+
+// L1 (H5): each text is stamped by its own source file. A commit that touches
+// only the home values' prices.es.src.json leaves the schools text's
+// textCommit (and so schools.es.json) as it was; a dirty prices source is
+// refused for the prices text and does not touch the schools one.
+test('openTextSource: one file each; a prices-only commit or edit leaves the schools text alone', () => {
+  assert.deepEqual(TEXT_SOURCES, { 'schools.es.json': SOURCE_PATH, 'prices.es.json': `${I18N_DIR}/prices.es.src.json` });
+  const r = realpathSync(mkdtempSync(join(tmpdir(), 'packs-i18n-two-')));
+  const g = (...a) => execFileSync('git', ['-C', r, ...a], { encoding: 'utf8' }).trim();
+  const put = (path, s) => { mkdirSync(join(r, I18N_DIR), { recursive: true }); writeFileSync(join(r, path), JSON.stringify(s)); };
+  const prices = TEXT_SOURCES['prices.es.json'];
+  try {
+    g('init', '-q'); g('config', 'user.email', 't@example.org'); g('config', 'user.name', 't'); g('config', 'commit.gpgsign', 'false');
+    put(SOURCE_PATH, { strings: { a: 1 } });
+    g('add', '-A'); g('commit', '-q', '-m', 'schools text');
+    const c1 = g('rev-parse', 'HEAD');
+    // The prices source does not exist yet: refused for prices, schools fine.
+    assert.throws(() => openTextSource({ repo: r, path: prices }), /not committed at HEAD/);
+    put(prices, { strings: { p: 1 } });
+    // Untracked = dirty: the prices text is refused, the schools text is not.
+    assert.throws(() => openTextSource({ repo: r, path: prices }), /prices\.es\.src\.json differs from HEAD/);
+    assert.throws(() => openTextSource({ repo: r, path: prices, allowDirty: true, commit: 'HEAD' }), /differs from HEAD/);
+    assert.deepEqual(openTextSource({ repo: r }), { source: { strings: { a: 1 } }, textCommit: c1 });
+    g('add', '-A'); g('commit', '-q', '-m', 'prices text');
+    const c2 = g('rev-parse', 'HEAD');
+    assert.deepEqual(openTextSource({ repo: r }), { source: { strings: { a: 1 } }, textCommit: c1 });
+    assert.deepEqual(openTextSource({ repo: r, path: prices }), { source: { strings: { p: 1 } }, textCommit: c2 });
+    // An edit to the schools source dirties only the schools text.
+    put(SOURCE_PATH, { strings: { a: 2 } });
+    assert.throws(() => openTextSource({ repo: r }), /schools\.es\.src\.json differs from HEAD/);
+    assert.deepEqual(openTextSource({ repo: r, path: prices }), { source: { strings: { p: 1 } }, textCommit: c2 });
   } finally { rmSync(r, { recursive: true, force: true }); }
 });
