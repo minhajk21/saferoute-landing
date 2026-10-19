@@ -3,7 +3,7 @@
 // git (--commit) against one from the working tree; and --commit HEAD (or
 // any later commit that changed no input) against --commit <the data commit>.
 // No time goes into the .bin, and `generated` is the landing commit's date.
-// The schools pack's Spanish text (schools.es.json) is one of the files.
+// Each pack's Spanish text (schools.es.json, prices.es.json) is one of the files.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync, execFileSync } from 'node:child_process';
@@ -11,7 +11,7 @@ import { mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { REPO, INPUT_PATHS, RULE_PATHS } from '../lib/landing.mjs';
-import { I18N_DIR } from '../lib/schools-text.mjs';
+import { I18N_DIR, TEXT_SOURCES } from '../lib/schools-text.mjs';
 import { packSchools } from '../lib/schools.mjs';
 import { packPrices } from '../lib/prices.mjs';
 import { sha256 } from '../lib/container.mjs';
@@ -29,21 +29,28 @@ const clean = () => git('status', '--porcelain', '--', ...INPUT_PATHS, ...RULE_P
 const tmp = p => mkdtempSync(join(tmpdir(), p));
 const rm = (...d) => d.forEach(x => rmSync(x, { recursive: true, force: true }));
 
-test('two builds of the same commit are byte-identical (sha256 of all five files)', { skip: !clean() && 'inputs differ from HEAD' }, () => {
+test('two builds of the same commit are byte-identical (sha256 of all six files)', { skip: !clean() && 'inputs differ from HEAD' }, () => {
   const a = tmp('packs-a-'), b = tmp('packs-b-');
   try {
     const ra = run(a), rb = run(b);
     const ha = hashes(a), hb = hashes(b);
-    assert.deepEqual(Object.keys(ha), ['prices-pack.bin', 'prices-pack.json', 'schools-pack.bin', 'schools-pack.json', 'schools.es.json']);
-    // The Spanish text: its summary sha256, tied to this schools pack, from i18n/ at HEAD.
+    assert.deepEqual(Object.keys(ha), ['prices-pack.bin', 'prices-pack.json', 'prices.es.json', 'schools-pack.bin', 'schools-pack.json', 'schools.es.json']);
+    // The Spanish texts: each its summary sha256, tied to its own pack, from its own source at HEAD.
     const sp = ra.packs.find(p => p.layer === 'schools');
     assert.equal(ha['schools.es.json'], sp.text.sha256);
     const es = JSON.parse(readFileSync(join(a, 'schools.es.json'), 'utf8'));
     assert.equal(es.forPack.indexSha256, ha['schools-pack.json']);
     assert.equal(es.forPack.binSha256, ha['schools-pack.bin']);
     assert.equal(es.forPack.landingCommit, ra.landing.landingCommit);
-    assert.equal(es.textCommit, git('log', '-1', '--format=%H', 'HEAD', '--', I18N_DIR));
+    assert.equal(es.textCommit, git('log', '-1', '--format=%H', 'HEAD', '--', TEXT_SOURCES['schools.es.json']));
     assert.ok(sp.gates.some(g => g.name === 'es-orphans' && g.ok));
+    const pp = ra.packs.find(p => p.layer === 'prices');
+    assert.equal(ha['prices.es.json'], pp.text.sha256);
+    const pes = JSON.parse(readFileSync(join(a, 'prices.es.json'), 'utf8'));
+    assert.equal(pes.forPack.indexSha256, ha['prices-pack.json']);
+    assert.equal(pes.forPack.binSha256, ha['prices-pack.bin']);
+    assert.equal(pes.textCommit, git('log', '-1', '--format=%H', 'HEAD', '--', TEXT_SOURCES['prices.es.json']));
+    assert.ok(pp.gates.some(g => g.name === 'pr-es-orphans' && g.ok) && pp.gates.some(g => g.name === 'pr-periods' && g.ok));
     assert.deepEqual(ha, hb);
     for (const p of ra.packs) {
       assert.equal(ha[`${p.layer}-pack.bin`], p.sha256, 'pack.sha256 is the .bin file\'s');
@@ -60,7 +67,7 @@ test('two builds of the same commit are byte-identical (sha256 of all five files
   } finally { rm(a, b); }
 });
 
-test('--commit HEAD, --commit <last input change> and the working tree give the same five files', { skip: !clean() && 'inputs differ from HEAD' }, () => {
+test('--commit HEAD, --commit <last input change> and the working tree give the same six files', { skip: !clean() && 'inputs differ from HEAD' }, () => {
   const a = tmp('packs-wt-'), b = tmp('packs-head-'), c = tmp('packs-data-');
   try {
     const ra = run(a), rb = run(b, '--commit', 'HEAD');

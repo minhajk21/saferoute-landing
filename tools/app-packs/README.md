@@ -5,8 +5,9 @@ landing commit into the packs SafeRoute 1.4 bundles (RELEASE-1.4-SCOPE.md §4.4
 O1; Q3 option a: the app fetches no tiles). It writes **outside the served
 tree** (default `out/app-packs/`, git-ignored) and the packs are never
 committed. O2 (`tools/import-overlay-packs.mjs` in the iOS repo) runs it against
-a given commit and copies the five files into the app: both packs and the
-schools pack's Spanish display text, `schools.es.json` (S7, below).
+a given commit and copies the six files into the app: both packs and each
+pack's Spanish display text, `schools.es.json` (S7) and `prices.es.json` (H5),
+below.
 
 ```sh
 node tools/build-app-packs.mjs                       # both packs from the working tree -> out/app-packs/
@@ -26,8 +27,8 @@ come from git; without it from the working tree, which must match HEAD
 the **last commit at or before REV (or HEAD) that changed an input**, and
 `generated` is that commit's date in UTC. So `--commit HEAD`, a branch tip, a
 safety-pages-only main commit and the data commit itself all give the same
-five files, and a tooling-only commit changes nothing (a translation commit
-changes only `schools.es.json`).
+six files, and a tooling-only commit changes nothing (a translation commit
+changes only the text file built from that source).
 
 **The rules** the gates hold the data to (the licence allow-list
 `tools/schools/licence.mjs`, `tools/schools/filters.mjs`, both layers'
@@ -98,13 +99,14 @@ notes, labels, attributions, place and filter words) through
 the file from the committed source **`tools/app-packs/i18n/schools.es.src.json`**
 (es-MX, informal tú, with the glossary subset it is checked against). The
 source is read from the builder's committed **HEAD**, like the rules: a dirty
-`i18n/` refuses the build (`--allow-dirty` reads it, recorded `+dirty`; never
-with `--commit`).
+source file refuses the build (`--allow-dirty` reads it, recorded `+dirty`;
+never with `--commit`). Each text has its own source file (`TEXT_SOURCES` in
+`lib/schools-text.mjs`), and is refused and stamped by that file alone.
 
 | Field | What |
 |---|---|
 | `forPack` | `{ landingCommit, indexSha256, binSha256 }`: the sha256 of the `schools-pack.json` and `.bin` it was built with. The app uses no text that names another pack. |
-| `textCommit` | the last commit at HEAD that changed `tools/app-packs/i18n` |
+| `textCommit` | the last commit at HEAD that changed `tools/app-packs/i18n/schools.es.src.json` (that file only: a commit to `prices.es.src.json` beside it leaves this file byte-identical) |
 | `hash` | the key: the first 16 hex of SHA-256 over the exact UTF-8 of the English, as the app passes it (a template before it is filled); nothing is normalised at run time |
 | `strings` | `{ key: { en, es } }`, in display order |
 | `keep` | the licence names' keys: they stay English (glossary) |
@@ -127,6 +129,47 @@ summary, which O2 requires all PASS):
 | `es-gloss` | a `values` entry that is not a SEP `type`/`phase` value with exactly one trailing "( … )", whose Spanish is not that value without it, or that occurs as any other value |
 | `es-rating-values` | a display string or an entry equal to a row's rating value (`rv`) |
 | `es-complete` | (`--strict-es` only) a display string or a glossed SEP value with no Spanish |
+
+## Spanish display text for home values (`prices.es.json`, H5)
+
+The same shape as `schools.es.json` (version, language, hash, `forPack` for
+the **prices** pack, `textCommit`, strings, keep, `values` (always empty),
+display, stats), so the app reads both with one loader. `lib/prices-text.mjs`
+lists the strings the app passes through `PriceDataText.display`: `where`,
+`scope`; each source's metric, unit noun (and its one-form, "sales" → "sale",
+as the page's `prOne` makes it), area noun and notes; each scale's name and
+metric; region names and `outside`; jurisdiction names and areas; the
+missing cities' names and reasons. The source is
+**`tools/app-packs/i18n/prices.es.src.json`** (es-MX, informal tú, with the
+glossary it is checked against), read from HEAD; `textCommit` is the last
+commit that changed that file.
+
+- **Kept in English (`keep`, HD12):** licence names, and each source's dataset
+  `name`, `publisher` and `credit`, which sit beside the verbatim English
+  attribution lines that name them.
+- **Not display text:** attribution lines (verbatim English, licence linked as
+  published) and **periods and context labels**, which the app rebuilds in
+  its own language from their fields (`lib/prices-periods.mjs`): the sale
+  window ("Sales dated/recorded {span}"), "12 months to {Month} {yyyy}",
+  "{a}–{b} (5-year survey)", "Calendar year {y}", "{y} Census (May {y})"; the
+  ACS context "{metric}, {a}–{yy} survey" and NI's "{metric}, wider area
+  ({DEA}), {y}". Month names come from a fixed table (en-GB's `toLocaleString`
+  writes "Sept"; the pack writes "Sep").
+- **A refreshed pack** whose note text moved (Hennepin's months and amounts
+  change with each rebuild) has a new key for it: the old entry becomes an
+  orphan and the build fails until the source is updated, so a 1.4.x pack
+  refresh needs its changed notes translated (or `--allow-dirty` to see them).
+
+| Gate | Fails when |
+|---|---|
+| `pr-periods` | a source's or scale's period, a window's span, or a row's context label (and a source's `contextLabel`) is not exactly the rebuild from its fields; a period or label of a shape the rebuild does not know; a window whose vintage is not `{from}..{to}` |
+| `pr-es-keys`, `pr-es-orphans`, `pr-es-form` | as `es-keys`, `es-orphans` and `es-form` above (the same functions): the hash rule, NFC, no collision; no orphaned entry; the same `{placeholders}`, no tag, no entity |
+| `pr-es-words` | "promedio" anywhere, or the standalone word "media"/"medias" (the mean; "mediana" and the ordinary "medio" pass); "precio" in a label (metric, unit or area noun, scale name or metric) reached from an owners'-estimate source (`acs-tract`, `statcan-ct`), or "price" in its English; "average" in any English; the formal usted; "anónimo". Notes may say "no son precios de venta": the rule is the labels' (§4.6 H5) |
+| `pr-es-money` | the numbers differ between the English and the Spanish (as a multiset, grouping ignored: never converted, never dropped); a bare `$` in the Spanish, or not one `US$` for each US dollar amount (HD1); a different count of `£` or `CA$` |
+| `pr-es-shared` | a string `schools.es.src.json` also translates (England, Wales, Northern Ireland, New York, the District of Columbia…) with other Spanish (SD18) |
+| `pr-es-licences` | a kept string (licence, dataset name, publisher, credit) with a translation; a licence name in an English string but not its Spanish; an attribution line with a translation |
+| `pr-es-glossary` | an English term without its glossary rendering (mediana, sector censal, estimación de los propietarios, precio de venta, margen de error, partes independientes, escritura, predio, departamento…); a name in capitals (ONS, HMRC, LPS, MSOA, NYC…) dropped, unless spelled out as `acronymExpansions` says (US → EE. UU., UK → Reino Unido, DC → D. C.) |
+| `pr-es-complete` | (`--strict-es` only) a display string with no Spanish |
 
 ## Home values (`prices-pack.*`)
 
@@ -159,10 +202,12 @@ summary, which O2 requires all PASS):
 
 Tests: `schools-text` (S7: every Spanish gate on the real pack, and a fixture
 that must fail for each; missing text counted; the file tied to its pack;
-the source read from HEAD), `container` (deflate round trip, container checks), `reproduction`
+the source read from HEAD, one file per text), `prices-text` and
+`prices-periods` (H5: the same for `prices.es.json`, and every period, span
+and context label rebuilt), `container` (deflate round trip, container checks), `reproduction`
 (independent re-expansion of both packs), `gates` (a fixture that must fail for
 every gate, including each way the reviews found round one), `determinism`
-(working tree = `--commit HEAD` = `--commit <data commit>`, all five files), `cli` (out-path
+(working tree = `--commit HEAD` = `--commit <data commit>`, all six files), `cli` (out-path
 guard, dirty refusals, `--commit` resolution, argument errors, a symlinked
 CLI path, in a throwaway git repo where needed), `apple` (`inflate.swift`
 decodes the fixtures and **every** chunk of both packs; each sha256 must equal
