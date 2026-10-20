@@ -1,0 +1,77 @@
+// node --test tools/test/*.test.mjs
+// The time-of-day gate (tools/time-of-day.mjs), and the built /safety/ pages
+// it governs. A mix flagged timeOfDayIsRealData:false must never be drawn or
+// quoted: San Diego and Vancouver send a date only, Minneapolis and Long Beach
+// the time a report was filed.
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { realTimeOfDay } from '../time-of-day.mjs';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
+
+test('gate: a real six-bucket mix passes through unchanged', () => {
+  const tod = [0.3, 0.2, 0.1, 0.2, 0.1, 0.1];
+  assert.equal(realTimeOfDay({ timeOfDay: tod, timeOfDayIsRealData: true }), tod);
+});
+test('gate: an explicit false withholds the mix (San Diego date-only shape)', () => {
+  // tools/data-cache/sandiego/balboa-park.json as fetched
+  assert.equal(realTimeOfDay({ timeOfDay: [0.7, 0, 0, 0.3, 0, 0], timeOfDayIsRealData: false }), null);
+});
+test('gate: a cache record with no flag counts as real, as it always has', () => {
+  const tod = [0.3, 0.2, 0.1, 0.2, 0.1, 0.1];
+  assert.equal(realTimeOfDay({ timeOfDay: tod }), tod);
+});
+test('gate: no mix, a short mix or no record gives null', () => {
+  assert.equal(realTimeOfDay({ timeOfDay: null, timeOfDayIsRealData: false }), null);
+  assert.equal(realTimeOfDay({ timeOfDay: null, timeOfDayIsRealData: true }), null);
+  assert.equal(realTimeOfDay({ timeOfDay: [0.5, 0.5], timeOfDayIsRealData: true }), null);
+  assert.equal(realTimeOfDay({ timeOfDay: 'x'.repeat(6), timeOfDayIsRealData: true }), null);
+  assert.equal(realTimeOfDay(null), null);
+  assert.equal(realTimeOfDay(undefined), null);
+});
+
+// The built pages against the committed data cache. Run after render-pages.mjs.
+const TOD_HEADING = '<h2>When it happens</h2>';
+// The area page's timing sentence (three wordings) and its "safe at night?" share.
+const TOD_PROSE = /severity-weighted (reports|incidents)[^<]*overnight|overnight \(midnight|between 6 p\.m\. and 6 a\.m\./;
+
+let byFlag;
+function pagesByFlag() {
+  return byFlag ??= readPages();
+}
+function readPages() {
+  const cache = join(ROOT, 'tools', 'data-cache');
+  const out = { fake: [], real: [] };
+  for (const city of readdirSync(cache)) {
+    const dir = join(cache, city);
+    if (city.endsWith('-basemap') || !existsSync(join(ROOT, 'safety', city))) continue;
+    let files;
+    try { files = readdirSync(dir).filter(f => f.endsWith('.json')); } catch { continue; }
+    for (const f of files) {
+      const a = JSON.parse(readFileSync(join(dir, f), 'utf8'));
+      const page = join(ROOT, 'safety', city, a.slug, 'index.html');
+      if (!existsSync(page)) continue;            // below the publish floor
+      const real = realTimeOfDay(a) != null;
+      if (!real && !(Array.isArray(a.timeOfDay) && a.timeOfDay.length >= 6)) continue;
+      const html = readFileSync(page, 'utf8');
+      const row = { city, slug: a.slug, hasHeading: html.includes(TOD_HEADING), hasProse: TOD_PROSE.test(html) };
+      (real ? out.real : out.fake).push(row);
+    }
+  }
+  return out;
+}
+
+test('pages: no area page draws or quotes a mix that is not real', () => {
+  const { fake } = pagesByFlag();
+  const bad = fake.filter(p => p.hasHeading || p.hasProse).map(p => `${p.city}/${p.slug}`);
+  assert.deepEqual(bad, [], `${bad.length} of ${fake.length} pages still show a time-of-day mix`);
+});
+test('pages: areas with a real mix still get the section', () => {
+  const { real } = pagesByFlag();
+  assert.ok(real.length > 0);
+  const missing = real.filter(p => !p.hasHeading).map(p => `${p.city}/${p.slug}`);
+  assert.deepEqual(missing, []);
+});

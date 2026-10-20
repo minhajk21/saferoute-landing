@@ -24,6 +24,7 @@ import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from 
 import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { realTimeOfDay } from './time-of-day.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://safe-route.app';
@@ -335,12 +336,12 @@ const CITIES = {
     basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
     hub: {
       title: (n) => `Minneapolis Neighborhood Safety Map & Rankings (${n} neighborhoods) \u2014 SafeRoute`,
-      desc: (n, date) => `How safe is your Minneapolis neighborhood? Safety index (0\u2013100) for ${n} Minneapolis neighborhoods from MPD reported-crime data through ${date} \u2014 ranked by community, with crime maps and night-time patterns.`,
+      desc: (n, date) => `How safe is your Minneapolis neighborhood? Safety index (0\u2013100) for ${n} Minneapolis neighborhoods from MPD reported-crime data through ${date} \u2014 ranked by community, with crime maps.`,
       h1: 'How safe is your Minneapolis neighborhood?',
       lead: `SafeRoute scores every Minneapolis neighborhood 0\u2013100 from incidents reported to the Minneapolis Police Department \u2014 severity-weighted, within 1 km of each neighborhood's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
       placeholder: 'Check a neighborhood \u2014 e.g. Uptown, Linden Hills, Powderhorn Park\u2026',
       notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center \u2014 they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
-      methodology: `Each incident reported to the Minneapolis Police Department (via Minneapolis Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the city's own 87 neighborhoods, grouped by its own 11 communities. Minneapolis wraps its neighborhoods around real lakes, so a centre that would otherwise land on open water is moved to the built-up part of the same neighborhood \u2014 never onto a neighbouring one. Time-of-day charts use MPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
+      methodology: `Each incident reported to the Minneapolis Police Department (via Minneapolis Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted incidents within 1 km of its center, and normalize against citywide rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the city's own 87 neighborhoods, grouped by its own 11 communities. Minneapolis wraps its neighborhoods around real lakes, so a centre that would otherwise land on open water is moved to the built-up part of the same neighborhood \u2014 never onto a neighbouring one. The time SafeRoute reads is when an incident was reported, not when it occurred, so time-of-day patterns are not shown. Pages regenerate as new data is published.`,
     },
   },
   'cleveland': {
@@ -458,13 +459,13 @@ const CITIES = {
     basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
     hub: {
       title: (n) => `Birmingham Ward Safety Map & Rankings (${n} wards) \u2014 SafeRoute`,
-      desc: (n, date) => `How safe is your Birmingham ward? Safety index (0\u2013100) for all ${n} Birmingham wards from West Midlands Police data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      desc: (n, date) => `How safe is your Birmingham ward? Safety index (0\u2013100) for all ${n} Birmingham wards from West Midlands Police data through ${date} \u2014 ranked citywide, with crime maps.`,
       h1: 'How safe is your Birmingham ward?',
       lead: `SafeRoute scores every Birmingham ward 0\u2013100 from street-level incidents reported to West Midlands Police \u2014 severity-weighted, within 1 km of each ward's centre, normalised against Birmingham. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
       placeholder: 'Check a ward \u2014 e.g. Ladywood, Handsworth, Moseley\u2026',
       rankHeading: (n) => `All ${n} Birmingham wards, safest first`,
       notice: (median) => `These figures describe <strong>reported</strong> crime around each ward's centre \u2014 they are informational, not a judgment of any community. Birmingham median index: <strong>${median}/100</strong>.`,
-      methodology: `Each street-level incident published by West Midlands Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Birmingham's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the 69 Birmingham City Council wards from the ONS ward set. <strong>The scale is calibrated to Birmingham and cannot be read against another city's number</strong> \u2014 a Birmingham 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year, and a typical Birmingham ward carries fewer incidents than a typical inner-London one \u2014 which means figures here move more from month to month, and small differences between neighbouring wards are not meaningful. Three ward centres (Sutton Vesey, Sutton Walmley &amp; Minworth, Edgbaston) sit in large parks or green belt and have been moved to the built-up part of the same ward, because a circle drawn over parkland reads as safe when it is really empty. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
+      methodology: `Each street-level incident published by West Midlands Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Birmingham's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the 69 Birmingham City Council wards from the ONS ward set. <strong>The scale is calibrated to Birmingham and cannot be read against another city's number</strong> \u2014 a Birmingham 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year, and a typical Birmingham ward carries fewer incidents than a typical inner-London one \u2014 which means figures here move more from month to month, and small differences between neighbouring wards are not meaningful. Three ward centres (Sutton Vesey, Sutton Walmley &amp; Minworth, Edgbaston) sit in large parks or green belt and have been moved to the built-up part of the same ward, because a circle drawn over parkland reads as safe when it is really empty. data.police.uk does not publish incident times, so time-of-day patterns are not shown. Pages regenerate as new data is published.`,
     },
   },
   'liverpool': {
@@ -498,13 +499,13 @@ const CITIES = {
     basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
     hub: {
       title: (n) => `Liverpool Ward Safety Map & Rankings (${n} wards) \u2014 SafeRoute`,
-      desc: (n, date) => `How safe is your Liverpool ward? Safety index (0\u2013100) for all ${n} Liverpool wards from Merseyside Police data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      desc: (n, date) => `How safe is your Liverpool ward? Safety index (0\u2013100) for all ${n} Liverpool wards from Merseyside Police data through ${date} \u2014 ranked citywide, with crime maps.`,
       h1: 'How safe is your Liverpool ward?',
       lead: `SafeRoute scores every Liverpool ward 0\u2013100 from street-level incidents reported to Merseyside Police \u2014 severity-weighted, within 1 km of each ward's centre, normalised against Liverpool. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
       placeholder: 'Check a ward \u2014 e.g. Anfield, Toxteth, Woolton\u2026',
       rankHeading: (n) => `All ${n} Liverpool wards, safest first`,
       notice: (median) => `These figures describe <strong>reported</strong> crime around each ward's centre \u2014 they are informational, not a judgment of any community. Liverpool median index: <strong>${median}/100</strong>.`,
-      methodology: `Each street-level incident published by Merseyside Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Liverpool's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the 64 Liverpool City Council wards from the ONS ward set. <strong>The scale is calibrated to Liverpool and cannot be read against another city's number</strong> \u2014 a Liverpool 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year, and a typical Liverpool ward carries fewer incidents than a typical inner-London one \u2014 so figures here move more from month to month, and small differences between neighbouring wards are not meaningful. Liverpool sits on the Mersey and several waterfront wards have a 1&nbsp;km circle that is partly river or dock water; where a ward is mostly parkland or dock rather than housing its page says so, because an empty circle reads as a quiet street when it is really no street at all. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
+      methodology: `Each street-level incident published by Merseyside Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Liverpool's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the 64 Liverpool City Council wards from the ONS ward set. <strong>The scale is calibrated to Liverpool and cannot be read against another city's number</strong> \u2014 a Liverpool 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year, and a typical Liverpool ward carries fewer incidents than a typical inner-London one \u2014 so figures here move more from month to month, and small differences between neighbouring wards are not meaningful. Liverpool sits on the Mersey and several waterfront wards have a 1&nbsp;km circle that is partly river or dock water; where a ward is mostly parkland or dock rather than housing its page says so, because an empty circle reads as a quiet street when it is really no street at all. data.police.uk does not publish incident times, so time-of-day patterns are not shown. Pages regenerate as new data is published.`,
     },
   },
   'bristol': {
@@ -526,13 +527,13 @@ const CITIES = {
     basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
     hub: {
       title: (n) => `Bristol Ward Safety Map & Rankings (${n} wards) \u2014 SafeRoute`,
-      desc: (n, date) => `How safe is your Bristol ward? Safety index (0\u2013100) for all ${n} Bristol wards from Avon and Somerset Police data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      desc: (n, date) => `How safe is your Bristol ward? Safety index (0\u2013100) for all ${n} Bristol wards from Avon and Somerset Police data through ${date} \u2014 ranked citywide, with crime maps.`,
       h1: 'How safe is your Bristol ward?',
       lead: `SafeRoute scores every Bristol ward 0\u2013100 from street-level incidents reported to Avon and Somerset Police \u2014 severity-weighted, within 1 km of each ward's centre, normalised against Bristol. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
       placeholder: 'Check a ward \u2014 e.g. Clifton, Bedminster, Easton\u2026',
       rankHeading: (n) => `All ${n} Bristol wards, safest first`,
       notice: (median) => `These figures describe <strong>reported</strong> crime around each ward's centre \u2014 they are informational, not a judgment of any community. Bristol median index: <strong>${median}/100</strong>.`,
-      methodology: `Each street-level incident published by Avon and Somerset Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Bristol's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the Bristol council wards from the ONS ward set. <strong>The scale is calibrated to Bristol and cannot be read against another city's number</strong> \u2014 a Bristol 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year. A typical Bristol ward carries fewer incidents than a typical inner-London one, so figures here move more from month to month and small differences between neighbouring wards are not meaningful. Bristol runs down to the Severn and one ward centre sat in the container port rather than the housing the ward is half named for; it has been moved to the built-up part of the same ward, because a circle drawn over a dock reads as safe when it is really empty. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
+      methodology: `Each street-level incident published by Avon and Somerset Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Bristol's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the Bristol council wards from the ONS ward set. <strong>The scale is calibrated to Bristol and cannot be read against another city's number</strong> \u2014 a Bristol 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year. A typical Bristol ward carries fewer incidents than a typical inner-London one, so figures here move more from month to month and small differences between neighbouring wards are not meaningful. Bristol runs down to the Severn and one ward centre sat in the container port rather than the housing the ward is half named for; it has been moved to the built-up part of the same ward, because a circle drawn over a dock reads as safe when it is really empty. data.police.uk does not publish incident times, so time-of-day patterns are not shown. Pages regenerate as new data is published.`,
     },
   },
   'cardiff': {
@@ -556,13 +557,13 @@ const CITIES = {
     basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
     hub: {
       title: (n) => `Cardiff Ward Safety Map & Rankings (${n} wards) \u2014 SafeRoute`,
-      desc: (n, date) => `How safe is your Cardiff ward? Safety index (0\u2013100) for all ${n} Cardiff wards from South Wales Police data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      desc: (n, date) => `How safe is your Cardiff ward? Safety index (0\u2013100) for all ${n} Cardiff wards from South Wales Police data through ${date} \u2014 ranked citywide, with crime maps.`,
       h1: 'How safe is your Cardiff ward?',
       lead: `SafeRoute scores every Cardiff ward 0\u2013100 from street-level incidents reported to South Wales Police \u2014 severity-weighted, within 1 km of each ward's centre, normalised against Cardiff. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
       placeholder: 'Check a ward \u2014 e.g. Roath, Canton, Grangetown\u2026',
       rankHeading: (n) => `All ${n} Cardiff wards, safest first`,
       notice: (median) => `These figures describe <strong>reported</strong> crime around each ward's centre \u2014 they are informational, not a judgment of any community. Cardiff median index: <strong>${median}/100</strong>.`,
-      methodology: `Each street-level incident published by South Wales Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Cardiff's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the Cardiff council wards from the ONS ward set. <strong>The scale is calibrated to Cardiff and cannot be read against another city's number</strong> \u2014 a Cardiff 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year. <strong>Cardiff is the thinnest city published here</strong> \u2014 a typical ward sees about 126 incidents a month against inner London's 476 \u2014 so these figures move more from month to month than any other city's, and a small difference between two neighbouring wards is not meaningful. Where a ward is mostly farmland rather than town its page says so, because an empty circle reads as a quiet street when it is really no street at all. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
+      methodology: `Each street-level incident published by South Wales Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Cardiff's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the Cardiff council wards from the ONS ward set. <strong>The scale is calibrated to Cardiff and cannot be read against another city's number</strong> \u2014 a Cardiff 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year. <strong>Cardiff is the thinnest city published here</strong> \u2014 a typical ward sees about 126 incidents a month against inner London's 476 \u2014 so these figures move more from month to month than any other city's, and a small difference between two neighbouring wards is not meaningful. Where a ward is mostly farmland rather than town its page says so, because an empty circle reads as a quiet street when it is really no street at all. data.police.uk does not publish incident times, so time-of-day patterns are not shown. Pages regenerate as new data is published.`,
     },
   },
   'leeds': {
@@ -609,7 +610,7 @@ const CITIES = {
       placeholder: 'Check a ward \u2014 e.g. Headingley, Chapel Allerton, Horsforth\u2026',
       rankHeading: (n) => `All ${n} Leeds wards, safest first`,
       notice: (median) => `These figures describe <strong>reported</strong> crime around each ward's centre \u2014 they are informational, not a judgment of any community. Leeds median index: <strong>${median}/100</strong>.`,
-      methodology: `Each street-level incident published by West Yorkshire Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Leeds's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the 33 Leeds City Council wards from the ONS ward set. <strong>The scale is calibrated to Leeds and cannot be read against another city's number</strong> \u2014 a Leeds 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. Leeds wards are large by British standards \u2014 the council area is 552&nbsp;km\u00b2, so an outer ward can span a town, a village and several miles of farmland \u2014 and this index describes the kilometre around each ward's centre rather than the whole ward. Where the published centre sat in open country rather than in the built-up part of a ward, it has been moved onto the town or village the ward is named for. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year, and small differences between neighbouring wards are not meaningful. Time-of-day charts use the category mix, as data.police.uk does not publish incident times. Pages regenerate as new data is published.`,
+      methodology: `Each street-level incident published by West Yorkshire Police is weighted by severity \u2014 violence counts for more than shoplifting. For every ward we sum weighted incidents within 1 km of its centre, and normalise against Leeds's own rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the 33 Leeds City Council wards from the ONS ward set. <strong>The scale is calibrated to Leeds and cannot be read against another city's number</strong> \u2014 a Leeds 55 and a London 55 both mean &ldquo;typical for this city&rdquo;, not the same amount of crime. Leeds wards are large by British standards \u2014 the council area is 552&nbsp;km\u00b2, so an outer ward can span a town, a village and several miles of farmland \u2014 and this index describes the kilometre around each ward's centre rather than the whole ward. Where the published centre sat in open country rather than in the built-up part of a ward, it has been moved onto the town or village the ward is named for. data.police.uk publishes one calendar month at a time, so these pages describe a single month rather than a year, and small differences between neighbouring wards are not meaningful. data.police.uk does not publish incident times, so time-of-day patterns are not shown. Pages regenerate as new data is published.`,
     },
   },
   'dallas': {
@@ -835,7 +836,7 @@ const CITIES = {
     basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
     hub: {
       title: (n) => `Long Beach Neighborhood Safety Map & Rankings (${n} neighborhoods) \u2014 SafeRoute`,
-      desc: (n, date) => `How safe is your Long Beach neighborhood? Safety index (0\u2013100) for ${n} Long Beach neighborhoods from Long Beach Police incident data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      desc: (n, date) => `How safe is your Long Beach neighborhood? Safety index (0\u2013100) for ${n} Long Beach neighborhoods from Long Beach Police incident data through ${date} \u2014 ranked citywide, with crime maps.`,
       h1: 'How safe is your Long Beach neighborhood?',
       lead: `SafeRoute scores every Long Beach neighborhood 0\u2013100 from incidents reported to the Long Beach Police Department \u2014 severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
       placeholder: 'Check a neighborhood \u2014 e.g. Belmont Shore, Bixby Knolls, Alamitos Beach\u2026',
@@ -951,7 +952,7 @@ const CITIES = {
     basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
     hub: {
       title: (n) => `San Diego Community Safety Map & Rankings (${n} communities) \u2014 SafeRoute`,
-      desc: (n, date) => `How safe is your San Diego community? Safety index (0\u2013100) for ${n} San Diego communities from San Diego Police incident data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      desc: (n, date) => `How safe is your San Diego community? Safety index (0\u2013100) for ${n} San Diego communities from San Diego Police incident data through ${date} \u2014 ranked citywide, with crime maps.`,
       h1: 'How safe is your San Diego community?',
       lead: `SafeRoute scores every San Diego community 0\u2013100 from incidents reported to the San Diego Police Department \u2014 severity-weighted, within 1 km of each area's center, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes.`,
       placeholder: 'Check a community \u2014 e.g. North Park, Pacific Beach, La Jolla\u2026',
@@ -979,13 +980,13 @@ const CITIES = {
     basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
     hub: {
       title: (n) => `Vancouver Neighbourhood Safety Map & Rankings (${n} local areas) \u2014 SafeRoute`,
-      desc: (n, date) => `How safe is your Vancouver neighbourhood? Safety index (0\u2013100) for all ${n} Vancouver local areas from VPD crime data through ${date} \u2014 ranked citywide, with crime maps and night-time patterns.`,
+      desc: (n, date) => `How safe is your Vancouver neighbourhood? Safety index (0\u2013100) for all ${n} Vancouver local areas from VPD crime data through ${date} \u2014 ranked citywide, with crime maps.`,
       h1: 'How safe is your Vancouver neighbourhood?',
       lead: `SafeRoute scores every Vancouver local area 0\u2013100 from incidents reported to the Vancouver Police Department \u2014 severity-weighted, within 1 km of each area's centre, normalized citywide. Higher is safer. The same data powers the SafeRoute app's crime-aware walking routes, and Vancouver's live street cameras in the app's Live tab.`,
       placeholder: 'Check a neighbourhood \u2014 e.g. Downtown, Mount Pleasant, Kitsilano\u2026',
       rankHeading: (n) => `All ${n} Vancouver local areas, safest first`,
       notice: (median) => `These figures describe <strong>reported</strong> crime around each area's centre \u2014 they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
-      methodology: `Each incident reported to the Vancouver Police Department (via the VPD GeoDASH open data service) is weighted by severity \u2014 violence counts for more than shoplifting. For every local area we sum weighted incidents within 1 km of its centre, and normalize against citywide crime rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of Vancouver's 22 official local areas \u2014 the coarsest set on this site, so each page covers a genuinely distinct part of the city rather than a block or two. VPD anonymises incident locations to the nearest block, so maps show the reported block, not an exact address. Time-of-day charts use VPD incident timestamps, severity-weighted. Pages regenerate as new data is published.`,
+      methodology: `Each incident reported to the Vancouver Police Department (via the VPD GeoDASH open data service) is weighted by severity \u2014 violence counts for more than shoplifting. For every local area we sum weighted incidents within 1 km of its centre, and normalize against citywide crime rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City of Vancouver's 22 official local areas \u2014 the coarsest set on this site, so each page covers a genuinely distinct part of the city rather than a block or two. VPD anonymises incident locations to the nearest block, so maps show the reported block, not an exact address. The incident date SafeRoute reads carries no time of day, so time-of-day patterns are not shown. Pages regenerate as new data is published.`,
     },
   },
   'philly': {
@@ -1432,6 +1433,7 @@ ${ground}${rings}${streetLabels}${dots}
 }
 
 // ── SVG: time-of-day chart (only for cities with real per-incident times) ────
+// It draws whatever mix it is given; callers pass only realTimeOfDay() mixes.
 function todSVG(a, cfg) {
   const tod = a.timeOfDay;
   if (!tod || tod.length < 6) return '';
@@ -1462,7 +1464,10 @@ function makeProse(a, ctx) {
   const diff = a.safetyScore - median;
   const top = (a.breakdown || [])[0];
   const topShare = top ? Math.round(100 * top.count / Math.max(1, a.totalIncidents)) : 0;
-  const tod = a.timeOfDay || [];
+  // Null unless the feed has real incident times, so `when` stays empty and
+  // the "safe at night?" answer quotes no share for date-only and report-time
+  // feeds (see time-of-day.mjs).
+  const tod = realTimeOfDay(a) || [];
   const night = tod.length >= 6 ? (tod[2] + tod[5]) : null;
   const evening = tod.length >= 6 ? (tod[1] + tod[4]) : null;
 
@@ -1546,8 +1551,9 @@ function makeProse(a, ctx) {
       // severity-weighted incidents happen between 6 p.m. and 6 a.m." — a claim
       // that is not merely wrong but reassuring in the exact way this project
       // refuses to be, and it sat inside FAQPage acceptedAnswer, the field
-      // eligible for rich results. Gate it on the provider's own honesty flag.
-      a: (night != null && a.timeOfDayIsRealData !== false)
+      // eligible for rich results. `night` is null unless the provider's own
+      // honesty flag allows it (realTimeOfDay, above).
+      a: night != null
         ? `${bandWord[a.band]} overall (safety index ${a.safetyScore}/100). About ${Math.round((night + evening) * 100)}% of severity-weighted incidents in ${a.name} are ${cfg.recordedWord ?? 'reported'} between 6 p.m. and 6 a.m. ${a.band === 'low' ? (cfg.lowCrimeNote ?? `Reported crime is low ${cfg.forCity}, but stick to lit, busier streets late.`) : 'At night, prefer lit, busier streets — a block or two of detour often avoids the clusters on the map above.'}`
         : `${bandWord[a.band]} overall (safety index ${a.safetyScore}/100). ${a.band === 'low' ? `Reported crime is low ${cfg.forCity}, but stick to lit, busier streets late.` : 'At night, prefer lit, busier streets — a short detour often avoids the clusters on the map above.'}`,
     },
@@ -1804,8 +1810,7 @@ function renderCity(citySlug) {
   // Decided here rather than where the night page is written, because the city
   // hub renders first and needs to know whether there is a page to link to.
   const NIGHT = [1, 2, 4, 5];
-  const todAreas = areas.filter(a => a.timeOfDayIsRealData !== false
-    && Array.isArray(a.timeOfDay) && a.timeOfDay.length >= 6);
+  const todAreas = areas.filter(a => realTimeOfDay(a));
   const nightPage = todAreas.length >= Math.max(8, areas.length * 0.8);
   // The night page's only inbound link used to be its hub. Area and district
   // pages carry it too, below the time-of-day chart it expands on. It brings
@@ -1875,7 +1880,11 @@ function renderCity(citySlug) {
     const nearbyRows = p.neighbors.map(nb =>
       `<li><a href="/safety/${citySlug}/${nb.slug}/">${esc(nb.name)}</a><span class="s">${nb.safetyScore}/100 · ${bandWord[nb.band]}</span></li>`).join('');
 
-    const hasTod = a.timeOfDay && a.timeOfDay.length >= 6;
+    // Gated on the provider's flag, not just on the mix being there: San Diego,
+    // Vancouver, Minneapolis and Long Beach send a mix with no real incident
+    // time behind it, and this section captions it "from police incident
+    // timestamps".
+    const hasTod = realTimeOfDay(a) != null;
     const rightPanel = hasTod ? `
 <section>
 <h2>When it happens</h2>
