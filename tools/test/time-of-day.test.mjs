@@ -75,3 +75,29 @@ test('pages: areas with a real mix still get the section', () => {
   const missing = real.filter(p => !p.hasHeading).map(p => `${p.city}/${p.slug}`);
   assert.deepEqual(missing, []);
 });
+
+// A city with no real mix in any area has no chart and no night page, so its
+// hubs must not promise either: the methodology once said "Time-of-day charts
+// use ... incident timestamps" for Minneapolis and Vancouver, and eight hub
+// descriptions said "night-time patterns".
+const HUB_CLAIM = /Time-of-day charts use|night-time patterns/;
+test('hubs: a city with no real mix neither promises a chart nor has a night page', () => {
+  const cache = join(ROOT, 'tools', 'data-cache');
+  const bad = [];
+  let checked = 0;
+  for (const city of readdirSync(cache)) {
+    const site = join(ROOT, 'safety', city);
+    if (city.endsWith('-basemap') || !existsSync(join(site, 'index.html'))) continue;
+    const areas = readdirSync(join(cache, city)).filter(f => f.endsWith('.json'))
+      .map(f => JSON.parse(readFileSync(join(cache, city, f), 'utf8')));
+    if (areas.some(a => realTimeOfDay(a))) continue;
+    checked++;
+    const districts = join(site, 'district');
+    const hubs = [join(site, 'index.html'), ...(existsSync(districts)
+      ? readdirSync(districts).map(d => join(districts, d, 'index.html')).filter(existsSync) : [])];
+    for (const h of hubs) if (HUB_CLAIM.test(readFileSync(h, 'utf8'))) bad.push(h.slice(ROOT.length + 1));
+    if (existsSync(join(site, 'night'))) bad.push(`safety/${city}/night/`);
+  }
+  assert.ok(checked > 0);
+  assert.deepEqual(bad, []);
+});
