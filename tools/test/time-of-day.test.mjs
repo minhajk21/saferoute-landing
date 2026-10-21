@@ -35,7 +35,12 @@ test('gate: no mix, a short mix or no record gives null', () => {
 
 // The built pages against the committed data cache. Run after render-pages.mjs.
 const TOD_HEADING = '<h2>When it happens</h2>';
-// The area page's timing sentence (three wordings) and its "safe at night?" share.
+// The area page's timing sentence, by the end of each of its three wordings
+// (makeProse `when`), and the share its "safe at night?" answer quotes.
+const TOD_WHEN = /overnight \(midnight–6 a\.m\.\)|\(6 p\.m\.–midnight\) and \d+% overnight\./;
+const TOD_NIGHT = /between 6 p\.m\. and 6 a\.m\./;
+// Any of the above, plus a looser net for a reworded sentence, for the pages
+// that must quote none of it.
 const TOD_PROSE = /severity-weighted (reports|incidents)[^<]*overnight|overnight \(midnight|between 6 p\.m\. and 6 a\.m\./;
 
 let byFlag;
@@ -57,7 +62,9 @@ function readPages() {
       const real = realTimeOfDay(a) != null;
       if (!real && !(Array.isArray(a.timeOfDay) && a.timeOfDay.length >= 6)) continue;
       const html = readFileSync(page, 'utf8');
-      const row = { city, slug: a.slug, hasHeading: html.includes(TOD_HEADING), hasProse: TOD_PROSE.test(html) };
+      const hasWhen = TOD_WHEN.test(html), hasNight = TOD_NIGHT.test(html);
+      const row = { city, slug: a.slug, hasHeading: html.includes(TOD_HEADING), hasWhen, hasNight,
+        hasProse: hasWhen || hasNight || TOD_PROSE.test(html) };
       (real ? out.real : out.fake).push(row);
     }
   }
@@ -69,11 +76,18 @@ test('pages: no area page draws or quotes a mix that is not real', () => {
   const bad = fake.filter(p => p.hasHeading || p.hasProse).map(p => `${p.city}/${p.slug}`);
   assert.deepEqual(bad, [], `${bad.length} of ${fake.length} pages still show a time-of-day mix`);
 });
-test('pages: areas with a real mix still get the section', () => {
+// The other side of the gate: a real mix keeps the chart AND both sentences
+// built from it. Checking the heading alone would pass a gate that withheld
+// the timing sentence or the night share from cities whose times are real.
+test('pages: areas with a real mix keep the chart, the timing sentence and the night share', () => {
   const { real } = pagesByFlag();
   assert.ok(real.length > 0);
-  const missing = real.filter(p => !p.hasHeading).map(p => `${p.city}/${p.slug}`);
-  assert.deepEqual(missing, []);
+  const missing = real.flatMap(p => [
+    ...(p.hasHeading ? [] : [`${p.city}/${p.slug}: chart`]),
+    ...(p.hasWhen ? [] : [`${p.city}/${p.slug}: timing sentence`]),
+    ...(p.hasNight ? [] : [`${p.city}/${p.slug}: night share`]),
+  ]);
+  assert.deepEqual(missing, [], `${missing.length} gaps across ${real.length} pages with a real mix`);
 });
 
 // A city with no real mix in any area has no chart and no night page, so its
