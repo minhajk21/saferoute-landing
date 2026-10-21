@@ -3521,7 +3521,14 @@ function render(d, name, address){
   const b = bandOf(d.band);
   const cats = (d.breakdown||[]).slice().sort((a,c)=>c.count-a.count).slice(0,5);
   const maxCat = Math.max(1,...cats.map(c=>c.count));
-  const tod = d.timeOfDayIsRealData && (d.timeOfDay||[]).some(x=>x>0) ? d.timeOfDay : null;
+  // Both readings built from incident times, the chart and the "Right now"
+  // score, show only when the feed's own flag says those times are real (the
+  // /safety/ pages use the same flag: tools/time-of-day.mjs). This page sends
+  // no tod today, so /public/area returns no safetyScoreNow and the line stays
+  // hidden; the flag keeps it hidden for date-only and report-time feeds if
+  // that ever changes.
+  const realTimes = !!d.timeOfDayIsRealData;
+  const tod = realTimes && (d.timeOfDay||[]).some(x=>x>0) ? d.timeOfDay : null;
   const span = windowPhrase(d.windowDays);
   const maxTod = tod?Math.max(...tod):1;
   panel.innerHTML = `
@@ -3530,7 +3537,7 @@ function render(d, name, address){
       <span class="score" style="color:var(--band-${b})">${d.safetyScore}<span class="of">\u002F100</span></span>
       <span class="band ${b}">${BAND[b]}</span>
     </div>
-    <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported ${esc(d.reportedTo||'to police')} within 1&nbsp;km${span?` over ${span}${d.crimeDate?` to ${monthName(d.crimeDate)}`:''}`:d.crimeDate?` in the data through ${monthName(d.crimeDate)}`:''} — a higher index means fewer severity-weighted reported incidents. ${d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
+    <div class="meta"><b>${fmt(d.totalIncidents)}</b> incidents reported ${esc(d.reportedTo||'to police')} within 1&nbsp;km${span?` over ${span}${d.crimeDate?` to ${monthName(d.crimeDate)}`:''}`:d.crimeDate?` in the data through ${monthName(d.crimeDate)}`:''} — a higher index means fewer severity-weighted reported incidents. ${realTimes&&d.safetyScoreNow!=null&&d.safetyScoreNow!==d.safetyScore?`Right now it reads <b>${d.safetyScoreNow}</b>.`:''}</div>
     <div id="pub"></div>
     <div id="nearby"></div>
     <div id="recent"></div>
