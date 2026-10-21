@@ -2337,10 +2337,14 @@ if (!rendered.length) throw new Error('no cities with data');
   // transparency dataset, which measures every feed the backend serves, so it
   // cannot drift the way a typed "30-city coverage" did.
   const usCities = TRANSPARENCY ? Object.values(TRANSPARENCY).filter(r => r.country === 'US').length : 0;
-  const html = `${head('Neighborhood Safety Maps & Crime Data — SafeRoute', fitDesc(`${fmt(areaTotal)} neighborhoods in ${rendered.length} cities: 0–100 safety indexes, crime maps and night-time patterns from official police data. By the SafeRoute walking app.`), url, null)}${chrome(null)}
+  // Time of day is promised only "where the data includes incident times":
+  // the UK feed has none, and San Diego, Vancouver, Minneapolis and Long Beach
+  // have no real incident time (time-of-day.mjs), so their pages carry no
+  // time section. This page once offered "night-time patterns" for all of them.
+  const html = `${head('Neighborhood Safety Maps & Crime Data — SafeRoute', fitDesc(`${fmt(areaTotal)} neighborhoods in ${rendered.length} cities: 0–100 safety indexes and crime maps from official police data. By the SafeRoute walking app.`), url, null)}${chrome(null)}
 <p class="eyebrow">SafeRoute safety index</p>
 <h1>Neighborhood safety, from official police data</h1>
-<p class="lead">The data behind SafeRoute's crime-aware walking routes, published as browsable neighborhood pages: a 0–100 safety index, a crime map, what's reported, and when it happens.</p>
+<p class="lead">The data behind SafeRoute's crime-aware walking routes, published as browsable neighborhood pages: a 0–100 safety index, a crime map, what's reported and, where the data includes incident times, when it happens.</p>
 <h2>Cities</h2>
 <table class="rank"><tbody>
 ${rows}
