@@ -793,7 +793,11 @@ const CITIES = {
     forCity: 'for Denver',
     acrossCity: 'across Denver',
     faqCalc: (name) => `SafeRoute weights each incident reported to the Denver Police Department by severity (violence weighs more than shoplifting), sums the last available period within 1 km of the ${name} center, and normalizes against citywide crime rates onto a 0\u2013100 scale \u2014 higher is safer. It describes reported crime only; it is not a guarantee of safety.`,
-    sources: (dateLine) => `Crime data: Denver Police Department offense records via <a href="https://opendata-geospatialdenver.hub.arcgis.com/">Denver Open Data</a>${dateLine}. Neighborhood boundaries: City and County of Denver official statistical neighborhoods. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
+    // The catalog's Terms of Use (CC BY 3.0) ask for credit to the "City of
+    // Denver Open Data Catalog" linked to data.denvergov.org, and "CC BY 3.0"
+    // linked to the licence. That address redirects to the hub site, but it is
+    // the one the terms name, so it is kept rather than the final address.
+    sources: (dateLine) => `Crime data: Denver Police Department offense records via the <a href="https://data.denvergov.org/">City of Denver Open Data Catalog</a>${dateLine}, licensed under <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>. Neighborhood boundaries: City and County of Denver official statistical neighborhoods. Basemap \u00a9 <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). Analysis \u00a9 SafeRoute.`,
     basemapCredit: 'basemap \u00a9 OpenStreetMap contributors',
     hub: {
       title: (n) => `Denver Neighborhood Safety Map & Rankings (${n} neighborhoods) \u2014 SafeRoute`,
@@ -803,7 +807,7 @@ const CITIES = {
       placeholder: 'Check a neighborhood \u2014 e.g. Five Points, Capitol Hill, Baker\u2026',
       rankHeading: (n) => `All ${n} Denver neighborhoods, safest first`,
       notice: (median) => `These figures describe <strong>reported</strong> crime around each neighborhood's center \u2014 they are informational, not a judgment of any community. Citywide median index: <strong>${median}/100</strong>.`,
-      methodology: `Each offense reported to the Denver Police Department (via Denver Open Data) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted offenses within 1 km of its center, and normalize against citywide crime rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City and County of Denver's official statistical neighborhoods. Denver's neighborhoods are relatively large, so 1&nbsp;km circles overlap less than in denser cities and adjacent areas separate more cleanly. Time-of-day charts use DPD offense timestamps, severity-weighted. Pages regenerate as new data is published.`,
+      methodology: `Each offense reported to the Denver Police Department (via the City of Denver Open Data Catalog) is weighted by severity \u2014 violence counts for more than shoplifting. For every neighborhood we sum weighted offenses within 1 km of its center, and normalize against citywide crime rates onto a 0\u2013100 index, higher&nbsp;=&nbsp;safer. Boundaries are the City and County of Denver's official statistical neighborhoods. Denver's neighborhoods are relatively large, so 1&nbsp;km circles overlap less than in denser cities and adjacent areas separate more cleanly. Time-of-day charts use DPD offense timestamps, severity-weighted. Pages regenerate as new data is published.`,
     },
   },
   'longbeach': {

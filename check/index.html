@@ -3755,6 +3755,7 @@ function renderNearby(best, bd, nbrs, reqId){
 }
 
 // ── utils ──
+// ── BEGIN crimeSource (tools/test/crime-source.test.mjs runs this block) ──
 // The crime source line under a score. Where the source's licence binds what we
 // publish from it, the line says so and links the licence: Charlotte's CMPD
 // data is CC BY-NC-SA 4.0, and every Charlotte score is adapted from it, so the
@@ -3765,11 +3766,24 @@ function renderNearby(best, bd, nbrs, reqId){
 // spelled-out address is dropped. LICENSED_SOURCES says the same thing for a
 // backend that predates the `licence` field, so the notice never depends on
 // which of the two was deployed first.
+//
+// Denver (2026-10-22): the City of Denver Open Data Catalog's Terms of Use
+// license its data under CC BY 3.0 and ask, where links are possible, for the
+// credit "City of Denver Open Data Catalog" linked to data.denvergov.org and
+// "CC BY 3.0" linked to the licence. The backend's `licence.attribution` names
+// the credit and its address; that name becomes the second link, and the
+// address the app spells out after it, "(data.denvergov.org)", is dropped.
 const LICENSED_SOURCES = {
   charlotte: {
     name: 'CC BY-NC-SA 4.0',
     url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
     notice: 'Charlotte scores and maps are adapted from Charlotte-Mecklenburg Police Department data and offered under CC BY-NC-SA 4.0 (share-alike).',
+  },
+  denver: {
+    name: 'CC BY 3.0',
+    url: 'https://creativecommons.org/licenses/by/3.0/',
+    attribution: { name: 'City of Denver Open Data Catalog', url: 'https://data.denvergov.org/' },
+    notice: 'Crime data from the City of Denver Open Data Catalog, licensed under CC BY 3.0.',
   },
 };
 function crimeSourceHtml(d){
@@ -3778,15 +3792,19 @@ function crimeSourceHtml(d){
   const fallback = LICENSED_SOURCES[d.region] || null;
   const lic = d.licence && d.licence.url && d.licence.name ? d.licence : fallback;
   if (!lic) return `${esc(d.dataSource||'Police open data')}${through?` · through ${through}`:''}. ${tail}`;
+  const attr = lic.attribution && lic.attribution.name && lic.attribution.url ? lic.attribution : null;
   let text = String(d.dataSource||'Police open data').replace(/:\s*(https?:\/\/)?creativecommons\.org\/\S*$/i, '').replace(/[.\s]+$/, '');
+  if (attr) text = text.replace(` (${attr.url.replace(/^https?:\/\//, '').replace(/\/$/, '')})`, '');
   if (!text.includes(lic.name) && fallback) text += `. ${fallback.notice.replace(/[.\s]+$/, '')}`;
   let h = esc(text);
   const name = esc(lic.name);
   h = h.includes(name)
     ? h.replace(name, `<a href="${esc(lic.url)}" target="_blank" rel="noopener">${name}</a>`)
     : `${h}. Licence: <a href="${esc(lic.url)}" target="_blank" rel="noopener">${name}</a>`;
+  if (attr && h.includes(esc(attr.name))) h = h.replace(esc(attr.name), `<a href="${esc(attr.url)}" target="_blank" rel="noopener">${esc(attr.name)}</a>`);
   return `${h}.${through?` Data through ${through}.`:''} ${tail}`;
 }
+// ── END crimeSource ──
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function fmt(n){ return Number(n||0).toLocaleString('en-US'); }
 function monthName(ym){ const [y,m]=String(ym).split('-').map(Number); return new Date(Date.UTC(y,(m||1)-1,1)).toLocaleString('en-US',{month:'long',year:'numeric',timeZone:'UTC'}); }
