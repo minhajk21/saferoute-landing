@@ -128,5 +128,5 @@ test('root hub: no blanket time-of-day promise while some cities have none', () 
   assert.ok(citiesWithNoRealMix().length > 0);
   const root = readFileSync(join(ROOT, 'safety', 'index.html'), 'utf8');
   assert.doesNotMatch(root, HUB_CLAIM);
-  assert.doesNotMatch(root, /what's reported, and when it happens/);
+  assert.doesNotMatch(root.replace(/where the data includes incident times, when it happens/, ''), /when it happens/i);
 });
