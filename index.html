@@ -11,7 +11,7 @@
 
 <meta property="og:url" content="https://safe-route.app/">
 <meta property="og:title" content="SafeRoute — See your street before you walk it">
-<meta property="og:description" content="Check any address against official police data, plan a route scored street by street, and see recent 911 calls and live street cameras. UK · US · Canada · Mexico.">
+<meta property="og:description" content="Check any address against official police data, plan a route scored street by street, and see recent 911 calls and street cameras. UK · US · Canada · Mexico.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://safe-route.app/assets/og-preview.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -132,6 +132,17 @@
   a.card-link p{flex:1}
   .card-go{margin-top:16px;font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;
            text-transform:uppercase;color:var(--teal)}
+  /* "Also in the app" on a web card, above its link line. Sized so the
+     longest ("Also in the app from 1.4") stays on one line at 4 across. */
+  .card-also{margin-top:14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;
+             text-transform:uppercase;color:var(--text-3)}
+  .card-also + .card-go{margin-top:6px}
+  /* App cards (New in 1.4): not links themselves, so the link line is a real
+     <a> at the foot of the card, lined up across the pair. */
+  .card-app{display:flex;flex-direction:column}
+  .card-app p{flex:1}
+  .card-app a.card-go{align-self:flex-start}
+  .also-new{margin-top:26px;color:var(--text-2);max-width:62ch}
   /* Exactly four: 4 across, then 2x2, then stacked. auto-fit broke them 3+1 and
      stranded the last card on its own row at common laptop widths. */
   .cards-4{grid-template-columns:repeat(4,1fr)}
@@ -207,12 +218,12 @@
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <div class="eyebrow reveal" style="--i:0">Version 1.3 — now with live data</div>
+        <div class="eyebrow reveal" style="--i:0">Version 1.4 — now with schools and home values</div>
         <h1 class="h1-hero reveal" style="--i:1">See your street<br><span class="grad">before you walk it.</span></h1>
         <p class="lede reveal" style="--i:2">
           SafeRoute scores any address from official police data, plans walking routes
           by reported incidents, and — in a growing list of cities — shows you recent
-          911 calls and live street cameras. No accounts. No ads.
+          911 calls and street cameras. No accounts. No ads.
         </p>
         <form class="check reveal" style="--i:3" action="/check/"
               onsubmit="location.href='/check/#q='+encodeURIComponent(this.q.value.trim());return false">
@@ -253,11 +264,54 @@
   </div></div>
 </div>
 
-<!-- ══════════ LIVE ══════════ -->
-<section class="sec" id="live" style="border-top:none">
+<!-- ══════════ NEW IN 1.4 ══════════ -->
+<!-- Worded from the 1.4 App Store text (SUBMISSION.md desc-en, whatsnew-en).
+     House rules: never "average"; an owners' estimate is never a "price";
+     no home-value figure or card next to a safety score (the Nearby shot
+     with its 21/100 stays two sections away); never name the publisher of
+     the Canadian figures (its licence bars use in marketing); school
+     pin colour is the stage, never a rating; "15 other US states and DC",
+     never "16 states". No counts here: the app's data is fixed at its
+     version, so a data-fact number (which follows the website's monthly
+     rebuilds) would drift from it. -->
+<section class="sec" id="new" style="border-top:none">
   <div class="wrap">
     <div class="reveal" style="max-width:62ch">
-      <div class="eyebrow">New in 1.3</div>
+      <div class="eyebrow">New in 1.4</div>
+      <h2>Schools and home values, on the Nearby map.</h2>
+      <p class="lede" style="margin-top:18px">
+        Open the full-screen map from Nearby and switch on Schools or Home
+        values. School and home-value data is built into the app, so it isn't
+        downloaded as you browse.
+      </p>
+    </div>
+    <div class="cards cards-2">
+      <div class="card card-app reveal" style="--i:0">
+        <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5 12 5l9 4.5-9 4.5-9-4.5Z"/><path d="M7 11.5V16c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-4.5"/></svg></div>
+        <h3>Schools</h3>
+        <p>Official school data for England, Wales and Northern Ireland, 26 US cities, Toronto, Vancouver and Mexico City. Pin colours show the stage, never a rating. Where the publisher allows reuse, a school's details show its Ofsted inspection, its latest ETI report (Northern Ireland) or its Connecticut or Washington rating; for 15 other US states and DC the app links to the state.</p>
+        <a class="card-go" href="/check/?schools">Also on the web map →</a>
+      </div>
+      <div class="card card-app reveal" style="--i:1">
+        <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M10 20v-5.5h4V20"/></svg></div>
+        <h3>Home values</h3>
+        <p>A separate map layer of official figures by area, each with its source and period: median sale prices in England, Wales, Northern Ireland, New York City, Washington DC, Baltimore, Charlotte, Hartford and Minneapolis, and owners' estimates of home value elsewhere in our US cities and in Toronto and Vancouver. None for Mexico City. Colours compare areas within one city or region only.</p>
+        <a class="card-go" href="/check/?prices">Also on the web map →</a>
+      </div>
+    </div>
+    <p class="also-new reveal">
+      Also in 1.4: when the app detects you've arrived, sharing stops and your
+      contact's page says you've arrived. And Spanish throughout, including the
+      widgets and Apple&nbsp;Watch.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ LIVE ══════════ -->
+<section class="sec" id="live">
+  <div class="wrap">
+    <div class="reveal" style="max-width:62ch">
+      <div class="eyebrow">The Live tab</div>
       <h2>The city, as it is right now.</h2>
       <p class="lede" style="margin-top:18px">
         Crime statistics tell you about last month. The Live tab tells you about
@@ -282,7 +336,15 @@
           </p>
           <p class="note">
             Dispatch calls are not confirmed crimes, and the app says so on every
-            one. They never touch your safety scores.
+            one. They never touch your safety scores, except in New Orleans, which
+            publishes no crime reports with locations, so its scores use 911 calls
+            for crimes.
+          </p>
+          <p class="note" style="margin-top:10px">
+            Correction, 24 October 2026: until then this note said dispatch calls
+            never touch your safety scores. That was not true for New Orleans,
+            whose scores have used the City's 911 calls for crimes since it was
+            added in June 2026.
           </p>
         </div>
         <div class="row-media">
@@ -293,7 +355,7 @@
 
       <div class="row flip reveal">
         <div>
-          <span class="tagpill"><i class="dot dot-cam"></i>Live cameras</span>
+          <span class="tagpill"><i class="dot dot-cam"></i>Street cameras</span>
           <h3 style="font-size:clamp(24px,2.6vw,30px)">Look down the street before you turn onto it.</h3>
           <p>
             In London, tap any of hundreds of Transport for London traffic cameras
@@ -311,7 +373,7 @@
         </div>
         <div class="row-media">
           <div class="phone"><img src="assets/shot-clip.webp" width="620" height="1347" loading="lazy"
-            alt="A live TfL camera clip of Piccadilly Circus playing inside the SafeRoute app"></div>
+            alt="A TfL camera clip of Piccadilly Circus playing inside the SafeRoute app"></div>
         </div>
       </div>
 
@@ -432,7 +494,7 @@
       </div>
       <div class="row-media reveal">
         <div class="phone"><img src="assets/shot-alerts-settings.webp" width="620" height="1347" loading="lazy"
-          alt="SafeRoute's About screen, with switches for Area heads-up and Fresh incident nearby, and the analytics switch (labelled 'Anonymous analytics' in this version)"></div>
+          alt="SafeRoute's About screen in version 1.4: under Alerts, Area heads-up and Fresh incident nearby are on; under Privacy &amp; Support, Usage analytics is on and Mapbox map data is off"></div>
       </div>
     </div>
   </div>
@@ -454,7 +516,7 @@
       <div class="cov-item reveal" style="--i:0">
         <div class="n">United Kingdom</div>
         <h3>Most of the UK</h3>
-        <p>England, Wales &amp; Northern Ireland via data.police.uk — every force that publishes street-level crime, which is all but Greater Manchester and Gloucestershire. Scotland doesn't publish. Plus live TfL street cameras across London.</p>
+        <p>England, Wales &amp; Northern Ireland via data.police.uk — every force that publishes street-level crime, which is all but Greater Manchester and Gloucestershire. Scotland doesn't publish. Plus TfL street cameras across London.</p>
       </div>
       <div class="cov-item reveal" style="--i:1">
         <div class="n">United States · 26 cities</div>
@@ -464,7 +526,7 @@
       <div class="cov-item reveal" style="--i:2">
         <div class="n">Canada</div>
         <h3>Toronto &amp; Vancouver</h3>
-        <p>Toronto Police Service and Vancouver Police open data — with Toronto and Vancouver city traffic cameras live in the app.</p>
+        <p>Toronto Police Service and Vancouver Police open data — with Toronto and Vancouver city traffic cameras in the app.</p>
       </div>
       <div class="cov-item reveal" style="--i:3">
         <div class="n">Mexico</div>
@@ -491,6 +553,7 @@
         <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div>
         <h3>Map</h3>
         <p>Type any street, neighborhood or landmark and see its safety index on a live crime heatmap — most of the UK (England, Wales, Northern Ireland), 26 US cities, Toronto, Vancouver and Mexico City.</p>
+        <span class="card-also">Also in the app</span>
         <span class="card-go">Open the map →</span>
       </a>
       <a class="card card-link reveal" style="--i:1" href="/check/?schools">
@@ -500,12 +563,13 @@
              copied by tools/sync-site-facts.mjs. "Where the map has one":
              Ofsted (England's state schools), ETI (Northern Ireland) and, for
              US states, only Connecticut and Washington, the states that
-             explicitly allow reuse (tools/schools/licence.mjs). The 16 other
-             US states that publish one are named and linked to on /check/;
+             explicitly allow reuse (tools/schools/licence.mjs). The 15 other
+             US states and DC that publish one are named and linked to on /check/;
              Wales (Estyn) and private schools in England and Northern Ireland
              have none on the map; Missouri, Minnesota, Ontario, British
              Columbia and Mexico publish none. -->
         <p><span data-fact="schools">50,516</span> schools across <span data-fact="schools-where">England, Wales, Northern Ireland, 26 US cities, Toronto, Vancouver and Mexico City</span>, state and private — stage, size and, where the map has one, the official inspection or rating (for US states, only where the state allows its reuse). Search any address to see the schools around it.</p>
+        <span class="card-also">Also in the app from 1.4</span>
         <span class="card-go">Find schools →</span>
       </a>
       <a class="card card-link reveal" style="--i:2" href="/safety/">
@@ -518,6 +582,7 @@
         <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></div>
         <h3>Tonight</h3>
         <p>Live police dispatch maps for the US cities that publish fast enough — what officers were sent to over the last day to the last week, depending on the city.</p>
+        <span class="card-also">Also in the app</span>
         <span class="card-go">See tonight →</span>
       </a>
     </div>

@@ -188,9 +188,14 @@
   <h2>How it works — and what it deliberately isn't</h2>
   <p>The dots are 911 calls police responded to, from each city's official dispatch feed, kept
   only when the call type describes an actual offence — a burglary call survives, a noise
-  complaint doesn't. Locations are block-level as published by the source. The layer never touches
-  the <a href="/safety/">safety index</a>, which stays on report-grade data: dispatch tells you
-  about tonight, reports tell you about an area. Mixing them would corrupt both.</p>
+  complaint doesn't. Locations are block-level as published by the source. The layer itself never
+  touches the <a href="/safety/">safety index</a>. Everywhere except New Orleans, the index is built
+  from filed police reports: dispatch tells you about tonight, reports tell you about an area. New
+  Orleans publishes no crime reports with locations, so <a href="/safety/neworleans/">its index</a>
+  uses the City's 911 calls, keeping only calls for crimes, and says so.</p>
+  <p>Correction, 24 October 2026: until then this paragraph said the safety index stays on
+  report-grade data. That was not true for New Orleans, whose scores have used the City's 911 calls
+  for crimes since it was added (June 2026 in the app, September 2026 on this site).</p>
   <p>The window differs by city because the publishing does. San Francisco posts calls within
   minutes, so it is a genuine "tonight". Seattle publishes a few days behind, so it is shown as a
   week and labelled that way rather than pretending to be live. Each city states its own window
