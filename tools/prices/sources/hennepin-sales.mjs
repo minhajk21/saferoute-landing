@@ -192,6 +192,11 @@ const meta = {
   licenceUrl: `${HUB}/pages/open-data`,
   attribution: [
     'Source: Hennepin County GIS, Hennepin County Survey Division, Hennepin County Property Tax: County Parcels (Hennepin GIS Open Data). SafeRoute kept home sales only and turned them into census-tract medians.',
+    // Hennepin GIS asked, when it confirmed this use and the credit (email of
+    // 27 Oct 2026, correspondence/SENT-LOG.md), for its open-data disclaimer
+    // to go with the data. Its words, unchanged, beside the credit and before
+    // the licence line.
+    'Hennepin County’s disclaimer for its GIS open data: “This data (i) is furnished ‘AS IS’ with no representation as to completeness or accuracy; (ii) is furnished with no warranty of any kind; and (iii) is not suitable for legal, engineering or surveying purposes. Hennepin County shall not be liable for any damage, injury or loss resulting from this data.”',
   ],
   credit: 'Hennepin County',
   metric: 'Median sale price',
