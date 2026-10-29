@@ -286,7 +286,7 @@ region's `outside` names what else its rectangle holds, for the map note.
 - `tools/data/coverage.json` is generated: `node tools/schools/lib/coverage-from-backend.mjs [--backend ../saferoute-backend] [--check]`.
   It parses each provider's `covers()` (or an exported `BBOX`), then imports the
   backend and **probes the real `covers()`** inside and just outside every
-  rectangle; refined regions (boston, la, houston) are recorded as such.
+  rectangle; refined regions (uk, boston, la, houston) are recorded as such.
 - **The build fails if coverage.json has a region with no `regions.mjs` entry**:
   a new crime city forces a schools decision.
 - `juris.mjs` already lists every planned jurisdiction; add one only for a new place.
