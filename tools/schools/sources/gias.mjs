@@ -56,6 +56,15 @@ const NOT_A_SCHOOL = new Set([
   "Service children's education",
 ]);
 
+// "Boarders (name)" values that count as boarding. FE residential accommodation
+// and the children's home GIAS files as a boarding school are included by the
+// owner's decision; "No boarders" and "Not applicable" are not.
+const BOARDERS = new Set([
+  'Boarding school',
+  'College / FE residential accommodation',
+  "Children's home (Boarding school)",
+]);
+
 // PhaseOfEducation is literally "Not applicable" for every independent school,
 // so phase has to come from the age range or half the private pins lose their
 // most useful filter.
@@ -142,8 +151,9 @@ async function fetchRows(ctx) {
       sixthForm: g(r, 'OfficialSixthForm (name)') === 'Has a sixth form',
       // GIAS never says "boarding" in BoardingEstablishment: its values are "Has
       // boarders" / "Does not have boarders" (and blank for most schools). The
-      // "Boarders" field names boarding schools directly; either one is enough.
-      boarding: g(r, 'BoardingEstablishment (name)') === 'Has boarders' || g(r, 'Boarders (name)') === 'Boarding school',
+      // "Boarders" field names boarding schools directly (see BOARDERS); either
+      // one is enough.
+      boarding: g(r, 'BoardingEstablishment (name)') === 'Has boarders' || BOARDERS.has(g(r, 'Boarders (name)')),
       nursery: /has nursery/i.test(g(r, 'NurseryProvision (name)')),
       admissions: g(r, 'AdmissionsPolicy (name)'),
       trust: g(r, 'Trusts (name)'),
