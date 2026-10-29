@@ -77,6 +77,20 @@ test('removeStale: the Spanish text goes with a stale schools pack, and alone if
   } finally { rm(t); }
 });
 
+test('removeStale: prices.es.json goes with a stale prices pack, and alone if it names another pack', () => {
+  const t = tmp('packs-stale-pr-es-');
+  try {
+    const put = (layer, commit) => { writeFileSync(join(t, `${layer}-pack.json`), JSON.stringify({ pack: { landingCommit: commit } })); writeFileSync(join(t, `${layer}-pack.bin`), 'x'); };
+    const es = commit => writeFileSync(join(t, 'prices.es.json'), JSON.stringify({ forPack: { landingCommit: commit } }));
+    put('prices', 'old'); es('old');
+    assert.deepEqual(removeStale(t, ['schools'], 'new').map(f => f.slice(t.length + 1)), ['prices-pack.json', 'prices-pack.bin', 'prices.es.json']);
+    put('prices', 'new'); es('old');
+    assert.deepEqual(removeStale(t, ['schools'], 'new').map(f => f.slice(t.length + 1)), ['prices.es.json']);
+    es('new');
+    assert.deepEqual(removeStale(t, ['schools'], 'new'), []);
+  } finally { rm(t); }
+});
+
 // ── which landing is read ───────────────────────────────────────────────────
 // A tiny repository with every input path, then a tooling-only commit.
 function tinyRepo() {

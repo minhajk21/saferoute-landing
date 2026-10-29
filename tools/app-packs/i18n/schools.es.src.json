@@ -16,6 +16,10 @@
    "FTE": {
     "es": "equivalente a tiempo completo",
     "why": "the label sits beside its value; the English acronym says nothing in Spanish"
+   },
+   "UK": {
+    "es": "Reino Unido",
+    "why": "spelled out, as the place names are (home values do the same)"
    }
   },
   "terms": [
@@ -896,6 +900,86 @@
   "42528eb6caae957d": {
    "en": "Washington Office of Superintendent of Public Instruction",
    "es": "Oficina del Superintendente de Instrucción Pública de Washington"
+  },
+  "da4c3b69ca94ecb1": {
+   "en": "Around each city outside the UK, schools are mapped inside the same rectangle as the city’s crime data, and only in the city’s own state, province or entity. So a city’s schools can include neighbouring towns in that state: around New York City they include Yonkers, Mount Vernon and New Rochelle in Westchester County, and towns in western Nassau County such as Valley Stream and Great Neck.",
+   "es": "Alrededor de cada ciudad fuera del Reino Unido, las escuelas se muestran dentro del mismo rectángulo que los datos de delincuencia de la ciudad, y solo en el estado, la provincia o la entidad de la propia ciudad. Así, las escuelas de una ciudad pueden incluir poblaciones vecinas de ese estado: alrededor de la Ciudad de Nueva York incluyen Yonkers, Mount Vernon y New Rochelle, en el condado de Westchester, y poblaciones del oeste del condado de Nassau como Valley Stream y Great Neck."
+  },
+  "8825cf951da1f43f": {
+   "en": "Vancouver",
+   "es": "Vancouver"
+  },
+  "37e18f55cdab4830": {
+   "en": "British Columbia Ministry of Education and Child Care",
+   "es": "Ministerio de Educación y Cuidado Infantil de Columbia Británica"
+  },
+  "7a2b59c607cf43ac": {
+   "en": "K-12 schools list 2025/26; enrolment 2025/26 (September count)",
+   "es": "lista de escuelas K-12 2025/26; matrícula 2025/26 (conteo de septiembre)"
+  },
+  "07dc7810a1a92d87": {
+   "en": "U.S. Department of Education, National Center for Education Statistics (NCES)",
+   "es": "Departamento de Educación de EE. UU., Centro Nacional de Estadísticas Educativas (NCES)"
+  },
+  "e2bda0530987855f": {
+   "en": "CCD 2024-25 (029 v1a, 129 v1a; closures from 2025-26 preliminary); EDGE locations 2024-25",
+   "es": "CCD 2024-25 (029 v1a, 129 v1a; cierres según el preliminar de 2025-26); ubicaciones EDGE 2024-25"
+  },
+  "cae4b2081aa90ab4": {
+   "en": "Department of Education (Northern Ireland); Education and Training Inspectorate",
+   "es": "Departamento de Educación (Irlanda del Norte); Inspección de Educación y Formación (ETI)"
+  },
+  "b9b9f33147f4cc96": {
+   "en": "DE register 2026-10-04; school census 2025/26 (2025-10-10); available places 2025/26; ETI reports to 2026-09-07",
+   "es": "registro del DE 2026-10-04; censo escolar 2025/26 (2025-10-10); lugares disponibles 2025/26; informes de la ETI hasta 2026-09-07"
+  },
+  "a268f58248aed59c": {
+   "en": "England & Wales",
+   "es": "Inglaterra y Gales"
+  },
+  "4e7f8d3c3a187750": {
+   "en": "Department for Education; Ofsted",
+   "es": "Departamento de Educación (DfE); Ofsted"
+  },
+  "77a5d1f1202419c0": {
+   "en": "GIAS 2026-10-04; Ofsted MI as at 2026-08-31",
+   "es": "GIAS 2026-10-04; Ofsted MI al 2026-08-31"
+  },
+  "04365fb9eb6b0a15": {
+   "en": "Toronto private schools",
+   "es": "las escuelas privadas de Toronto"
+  },
+  "aba41fa2de546b0d": {
+   "en": "Ontario Ministry of Education",
+   "es": "Ministerio de Educación de Ontario"
+  },
+  "55124b430020cb2e": {
+   "en": "location list 2025-2026 notices of intention; contact list updated 2026-09-25",
+   "es": "lista de ubicaciones de los avisos de intención 2025-2026; lista de contactos actualizada el 2026-09-25"
+  },
+  "42b217c250db83ec": {
+   "en": "Toronto public and Catholic schools",
+   "es": "las escuelas públicas y católicas de Toronto"
+  },
+  "ac64efc4cf072b04": {
+   "en": "2024-25 final table (Ministry extract 2026-07-17)",
+   "es": "tabla final 2024-25 (extracto del Ministerio 2026-07-17)"
+  },
+  "b7866f569cc6137f": {
+   "en": "US private schools",
+   "es": "las escuelas privadas de EE. UU."
+  },
+  "771a779b2a680792": {
+   "en": "PSS 2023-24 public-use file (22,510 responding schools nationally)",
+   "es": "archivo de uso público PSS 2023-24 (22,510 escuelas que respondieron en todo el país)"
+  },
+  "3bdbb2c979c22893": {
+   "en": "Secretaría de Educación Pública (SEP), on datos.gob.mx",
+   "es": "Secretaría de Educación Pública (SEP), en datos.gob.mx"
+  },
+  "e25d1e13a84f2e6a": {
+   "en": "CNCT 2025 (cut 13 Nov 2025); Formato 911 2024-25",
+   "es": "CNCT 2025 (corte del 13 de noviembre de 2025); Formato 911 2024-25"
   }
  },
  "values": {

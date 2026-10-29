@@ -1,0 +1,638 @@
+{
+ "version": 1,
+ "language": "es-MX",
+ "_about": "Mexican Spanish for the home-values pack display text (RELEASE-1.4-SCOPE.md §4.6 H5). Keyed by the first 16 hex of SHA-256 over the exact UTF-8 of the English, as the app passes it to PriceDataText.display. tools/app-packs/lib/prices-text.mjs checks every entry against the pack being built and writes prices.es.json. Not listed, because they stay English (HD12): licence names, and each source’s dataset name, publisher and credit; attribution lines are verbatim and not display text. Periods and context labels are rebuilt by the app from their fields (lib/prices-periods.mjs), never keyed. Informal tú; US dollars are US$ (HD1); never “promedio”, a standalone “media”, or “precio” in an owners’-estimate label. A string the schools text also has keeps its Spanish (SD18). Needs the Q8 native review (lane2/h5/REVIEWER-PACKET-prices-data.md beside the iOS repo).",
+ "glossary": {
+  "source": "SafeRouteApp p5/glossary.json + the home-values terms of H3 (lane2/h3/REVIEWER-PACKET-prices.md) + those decided in H5; Q8 reviewer to confirm",
+  "register": "informal tú; descriptive notes in the impersonal se (se excluyen, se incluyen)",
+  "acronymExceptions": [],
+  "acronymExpansions": {
+   "US": {
+    "es": "EE. UU.",
+    "why": "the usual Spanish abbreviation"
+   },
+   "UK": {
+    "es": "Reino Unido",
+    "why": "spelled out, as the place names are"
+   },
+   "DC": {
+    "es": "D. C.",
+    "why": "Washington D. C., as Spanish writes it"
+   }
+  },
+  "terms": [
+   {
+    "en": "median",
+    "es": "mediana",
+    "enPattern": "\\bmedian\\b",
+    "esPattern": "mediana",
+    "source": "H3 (never media or promedio)"
+   },
+   {
+    "en": "census tract",
+    "es": "sector censal",
+    "enPattern": "\\bcensus tracts?\\b",
+    "esPattern": "sector(es)? censal(es)?",
+    "source": "new (H5)"
+   },
+   {
+    "en": "owners’ estimate",
+    "es": "estimación de los propietarios",
+    "enPattern": "owners’ (own )?estimate",
+    "esPattern": "estimación de los propietarios",
+    "source": "H3 (never precio)"
+   },
+   {
+    "en": "sale price(s)",
+    "es": "precio(s) de venta",
+    "enPattern": "\\bsale prices?\\b",
+    "esPattern": "precios? de venta",
+    "source": "H3"
+   },
+   {
+    "en": "margin of error",
+    "es": "margen de error",
+    "enPattern": "\\bmargin of error\\b",
+    "esPattern": "margen de error",
+    "source": "H3"
+   },
+   {
+    "en": "at arm’s length",
+    "es": "entre partes independientes",
+    "enPattern": "arm’s[- ]length",
+    "esPattern": "partes (no )?independientes",
+    "source": "new (H5)"
+   },
+   {
+    "en": "warranty (deed)",
+    "es": "(escritura de) garantía",
+    "enPattern": "\\bwarranty\\b",
+    "esPattern": "garantía",
+    "source": "new (H5)"
+   },
+   {
+    "en": "deed",
+    "es": "escritura",
+    "enPattern": "\\bdeeds?\\b",
+    "esPattern": "escrituras?",
+    "source": "new (H5)"
+   },
+   {
+    "en": "foreclosure",
+    "es": "ejecución hipotecaria",
+    "enPattern": "\\bforeclosures?\\b",
+    "esPattern": "ejecuci(ón|ones) hipotecarias?",
+    "source": "new (H5)"
+   },
+   {
+    "en": "parcel",
+    "es": "predio",
+    "enPattern": "\\bparcels?\\b",
+    "esPattern": "predios?",
+    "source": "new (H5, es-MX)"
+   },
+   {
+    "en": "vacant land",
+    "es": "terrenos baldíos",
+    "enPattern": "\\bvacant land\\b",
+    "esPattern": "terrenos baldíos",
+    "source": "new (H5, es-MX)"
+   },
+   {
+    "en": "condominium",
+    "es": "condominio",
+    "enPattern": "\\bcondominiums?\\b",
+    "esPattern": "condominios?",
+    "source": "new (H5)"
+   },
+   {
+    "en": "co-op (apartment)",
+    "es": "(departamento en) cooperativa",
+    "enPattern": "\\bco-op\\b",
+    "esPattern": "cooperativa",
+    "source": "new (H5)"
+   },
+   {
+    "en": "apartment",
+    "es": "departamento",
+    "enPattern": "\\bapartments?\\b",
+    "esPattern": "departamentos?",
+    "source": "new (H5, es-MX: not piso)"
+   }
+  ]
+ },
+ "strings": {
+  "701771b95fda5941": {
+   "en": "England, Wales and Northern Ireland; 26 US cities; Toronto and Vancouver",
+   "es": "Inglaterra, Gales e Irlanda del Norte; 26 ciudades de EE. UU.; Toronto y Vancouver"
+  },
+  "7434175419a0e5eb": {
+   "en": "Outside the UK, each city’s home values cover the official areas that overlap the same rectangle as the city’s crime data, and only in the city’s own state or province, so a city’s map can include neighbouring towns in that state. Areas at the edge of the rectangle are shown whole. In the UK they cover England, Wales and Northern Ireland; Scotland is not included.",
+   "es": "Fuera del Reino Unido, el valor de la vivienda de cada ciudad cubre las zonas oficiales que se superponen con el mismo rectángulo que los datos de delincuencia de la ciudad, y solo en el estado o la provincia de la propia ciudad, así que el mapa de una ciudad puede incluir poblaciones vecinas de ese estado. Las zonas en el borde del rectángulo se muestran completas. En el Reino Unido cubre Inglaterra, Gales e Irlanda del Norte; Escocia no está incluida."
+  },
+  "eeba195bf248aa48": {
+   "en": "Median home value (owners’ estimate)",
+   "es": "Mediana del valor de la vivienda (estimación de los propietarios)"
+  },
+  "02bb6da913b69656": {
+   "en": "owner-occupied homes",
+   "es": "viviendas ocupadas por sus propietarios"
+  },
+  "23626bd13df2f2ff": {
+   "en": "owner-occupied home",
+   "es": "vivienda ocupada por sus propietarios"
+  },
+  "46f9d719b1e4b51d": {
+   "en": "census tract",
+   "es": "sector censal"
+  },
+  "e0ff5850948f07f4": {
+   "en": "Owners’ own estimate of what their home would sell for, not sale prices. Renters’ homes are not included. A sample survey: each figure has a margin of error.",
+   "es": "La estimación de los propietarios sobre en cuánto se vendería su vivienda, no precios de venta. No se incluyen las viviendas rentadas. Es una encuesta por muestreo: cada cifra tiene un margen de error."
+  },
+  "55929590ce74cd70": {
+   "en": "Answers were collected across 2020–2024, so the figures describe those years, not today’s market.",
+   "es": "Las respuestas se recopilaron entre 2020 y 2024, así que las cifras describen esos años, no el mercado actual."
+  },
+  "7b38e9b9d266d614": {
+   "en": "Median sale price",
+   "es": "Mediana del precio de venta"
+  },
+  "fdd69c47ccecf756": {
+   "en": "verified sales",
+   "es": "ventas verificadas"
+  },
+  "8d6c166326420a1b": {
+   "en": "verified sale",
+   "es": "venta verificada"
+  },
+  "1bc61769723a0ac7": {
+   "en": "electoral ward",
+   "es": "distrito electoral"
+  },
+  "c53d8463d6c780e8": {
+   "en": "The middle price of homes sold in the calendar year, all property types: sales recorded by HMRC and verified by Land & Property Services against the NI Valuation List.",
+   "es": "La mediana de los precios de las viviendas vendidas en el año calendario, de todos los tipos de propiedad: ventas registradas por HMRC y verificadas por Land & Property Services con la NI Valuation List."
+  },
+  "20c3d9045fbd2149": {
+   "en": "LPS publishes a ward median only where at least 30 of the year’s sales could be used in its price model. Where it does not, the median for the wider District Electoral Area is shown instead, labelled as such.",
+   "es": "LPS publica la mediana de un distrito electoral solo cuando al menos 30 de las ventas del año pudieron usarse en su modelo de precios. Cuando no la publica, se muestra en su lugar la mediana de la zona más amplia, la District Electoral Area, indicada como tal."
+  },
+  "a4a258194e71a541": {
+   "en": "Median price paid",
+   "es": "Mediana del precio pagado"
+  },
+  "e04eb29020eaa961": {
+   "en": "sales",
+   "es": "ventas"
+  },
+  "1f7101fe71011ba0": {
+   "en": "sale",
+   "es": "venta"
+  },
+  "bd273a828041f2a7": {
+   "en": "middle layer super output area (MSOA)",
+   "es": "área estadística intermedia (MSOA)"
+  },
+  "adb5bb3e41eb8963": {
+   "en": "The middle price paid for homes sold in the 12 months, all property types, from HM Land Registry’s record of sales.",
+   "es": "La mediana del precio pagado por las viviendas vendidas en los 12 meses, de todos los tipos de propiedad, según el registro de ventas de HM Land Registry."
+  },
+  "75ea9b7bb504ee3a": {
+   "en": "ONS publishes no median for an area with fewer than 5 sales. Areas with fewer than 10 sales show their figure but are not coloured.",
+   "es": "La ONS no publica una mediana para las zonas con menos de 5 ventas. Las zonas con menos de 10 ventas muestran su cifra, pero no se colorean."
+  },
+  "03c5d57250a98099": {
+   "en": "owner households",
+   "es": "hogares propietarios"
+  },
+  "a8979fef44dca910": {
+   "en": "owner household",
+   "es": "hogar propietario"
+  },
+  "4632d485a0f96df7": {
+   "en": "Owners’ own estimate of what their home would sell for, from the 2021 Census long-form questionnaire (a 25% sample), not sale prices. Renters’ homes are not included.",
+   "es": "La estimación de los propietarios sobre en cuánto se vendería su vivienda, tomada del cuestionario ampliado del Censo de 2021 (una muestra del 25%), no precios de venta. No se incluyen las viviendas rentadas."
+  },
+  "c3e8d6479287afe6": {
+   "en": "The figures describe May 2021, not today’s market. Statistics Canada withholds figures that are too unreliable or could identify a household.",
+   "es": "Las cifras describen mayo de 2021, no el mercado actual. Statistics Canada no publica las cifras que son demasiado poco confiables o que podrían identificar a un hogar."
+  },
+  "8a02ae03850f5c6b": {
+   "en": "Sales of single-family houses (including buildings of two to four homes), townhouses, condominiums and manufactured homes in Mecklenburg County, from the City of Charlotte’s copy of the county’s parcel records. Apartment buildings, commercial property and vacant land are left out.",
+   "es": "Ventas de casas unifamiliares (incluidos los edificios de dos a cuatro viviendas), casas adosadas, condominios y casas prefabricadas en el condado de Mecklenburg, a partir de la copia que tiene la Ciudad de Charlotte de los registros de predios del condado. Se excluyen los edificios de departamentos, las propiedades comerciales y los terrenos baldíos."
+  },
+  "75304a76fdc563a4": {
+   "en": "The City’s table carries no mark of which sales were at arm’s length (the county’s own sales records have one, but are not published under an open licence), so only sales on a warranty or special warranty deed at $10,000 or more are counted. Quitclaim, non-warranty, trustee’s, foreclosure and court-ordered deeds, sales of several properties for one price, and nominal transfers are left out. A sale between relatives on a warranty deed at a real price can still be included.",
+   "es": "La tabla de la Ciudad no indica qué ventas fueron entre partes independientes (los registros de ventas del propio condado sí lo indican, pero no se publican con una licencia abierta), así que solo se cuentan las ventas con escritura de garantía (warranty deed) o de garantía especial por US$10,000 o más. Se excluyen las escrituras de renuncia (quitclaim), sin garantía, de fiduciario, de ejecución hipotecaria y por orden judicial, las ventas de varias propiedades por un solo precio y las transmisiones nominales. Aun así, puede incluirse una venta entre familiares con escritura de garantía a un precio real."
+  },
+  "78e0b3d92b25d5aa": {
+   "en": "The records keep only the latest transfer of each property. A home sold twice in this period counts once, at its later price, and a sale followed by any later transfer (for example into a trust) is not seen at all, so these figures rest on fewer sales than took place, by a few percent (perhaps up to about one in ten), most in the earliest months. The sales missed are often a home’s earlier, lower price before a quick resale, so figures may lean slightly high.",
+   "es": "Los registros solo guardan la transmisión más reciente de cada propiedad. Una vivienda vendida dos veces en este periodo cuenta una sola vez, a su precio posterior, y una venta seguida de cualquier transmisión posterior (por ejemplo, a un fideicomiso) no se ve en absoluto, así que estas cifras se basan en menos ventas de las que hubo, un pequeño porcentaje menos (quizá hasta alrededor de una de cada diez), sobre todo en los primeros meses. Las ventas que faltan suelen ser el precio anterior, más bajo, de una vivienda antes de una reventa rápida, así que las cifras pueden inclinarse un poco al alza."
+  },
+  "a891af75992f665b": {
+   "en": "Newly built homes sold before the county has valued the house carry no property use yet, and are left out: where many homes are new, the figure leans toward older homes.",
+   "es": "Las viviendas nuevas vendidas antes de que el condado haya valuado la casa todavía no tienen un uso de propiedad asignado y se excluyen: donde muchas viviendas son nuevas, la cifra se inclina hacia las viviendas más antiguas."
+  },
+  "db63b361fda63d72": {
+   "en": "Each sale is placed at its parcel; a condominium is placed at its building, so a complex that straddles a tract boundary counts wholly in one tract. Dated by the date of sale. Sales reach the county’s records some weeks after they close, so the period ends with the latest month that is complete.",
+   "es": "Cada venta se ubica en su predio; un condominio se ubica en su edificio, así que un conjunto que cruza el límite de un sector censal cuenta completo en un solo sector. Se fechan por la fecha de venta. Las ventas llegan a los registros del condado algunas semanas después de cerrarse, así que el periodo termina con el último mes completo."
+  },
+  "9b465e2150296dd3": {
+   "en": "Each figure is the median of the sales in that census tract, rounded to the nearest $1,000. A figure always rests on at least 3 sales: a census tract with fewer shows none, and one with fewer than 10 is not coloured. “Middle half” is the range the middle 50% of its sales fell in, shown where a census tract has 10 or more.",
+   "es": "Cada cifra es la mediana de las ventas en ese sector censal, redondeada a los US$1,000 más cercanos. Una cifra siempre se basa en al menos 3 ventas: un sector censal con menos no muestra ninguna, y uno con menos de 10 no se colorea. “Mitad central” es el rango en el que cayó el 50% central de sus ventas, y se muestra cuando un sector censal tiene 10 o más."
+  },
+  "c8d5aab220baefd3": {
+   "en": "Sales of single-family homes, condominiums and two- to four-family houses, as recorded by Connecticut town assessors and reported to the Office of Policy and Management. Buildings of five or more homes are not included.",
+   "es": "Ventas de viviendas unifamiliares, condominios y casas de dos a cuatro familias, según las registran los tasadores municipales de Connecticut y las reportan a la Office of Policy and Management. No se incluyen los edificios de cinco o más viviendas."
+  },
+  "c9f6ddeda0b48525": {
+   "en": "Sales the town assessor marked as not a usable market sale are left out: sales between family members or related companies, foreclosures, court, tax and auction sales, part interests, and sales of properties changed since they were assessed (such as new construction).",
+   "es": "Se excluyen las ventas que el tasador municipal marcó como no aptas como venta de mercado: ventas entre familiares o empresas relacionadas, ejecuciones hipotecarias, ventas judiciales, fiscales y en subasta, participaciones parciales y ventas de propiedades modificadas desde su avalúo (como las construcciones nuevas)."
+  },
+  "1ac7af39bfb1b1cb": {
+   "en": "Each sale is placed at the location the state publishes with it. Sales with no location, or placed outside their own town, are left out rather than guessed.",
+   "es": "Cada venta se ubica en el lugar que el estado publica con ella. Las ventas sin ubicación, o ubicadas fuera de su propio municipio, se excluyen en lugar de adivinar dónde están."
+  },
+  "b3e5b4f0a779f17d": {
+   "en": "Connecticut publishes each year of sales (1 October to 30 September) about a year after it ends, so these figures run about a year behind the market.",
+   "es": "Connecticut publica cada año de ventas (del 1 de octubre al 30 de septiembre) aproximadamente un año después de que termina, así que estas cifras van alrededor de un año detrás del mercado."
+  },
+  "47e421f2e9479945": {
+   "en": "Sales recorded in DC’s land records that the Office of Tax and Revenue’s assessors mark as “qualified”: a single property sold at arm’s length at a market price. Sales between related parties, foreclosures, tax-sale deeds, sales of several properties for one price, other transfers the assessors judged not to be market sales, and sales under $10,000 are left out.",
+   "es": "Ventas inscritas en los registros de la propiedad de Washington D. C. que los tasadores de la Office of Tax and Revenue marcan como “qualified” (calificadas): una sola propiedad vendida entre partes independientes a precio de mercado. Se excluyen las ventas entre partes relacionadas, las ejecuciones hipotecarias, las escrituras de ventas fiscales, las ventas de varias propiedades por un solo precio, otras transmisiones que los tasadores no consideraron ventas de mercado y las ventas de menos de US$10,000."
+  },
+  "b923871a1e96e04a": {
+   "en": "Homes only, by each property’s current use code on the tax roll: row, semi-detached and detached houses, condominium apartments, and buildings of two to four flats. Apartment buildings of five or more units, garages and parking spaces, vacant land, and shops or offices are left out. Co-op apartments are not included at all: a co-op apartment is not a separate property on DC’s tax roll, so its sale cannot be told from a sale of the whole building.",
+   "es": "Solo viviendas, según el código de uso actual de cada propiedad en el padrón fiscal: casas en hilera, pareadas e independientes, departamentos en condominio y edificios de dos a cuatro departamentos. Se excluyen los edificios de departamentos de cinco o más unidades, los garajes y lugares de estacionamiento, los terrenos baldíos y los locales u oficinas. Los departamentos en cooperativa no se incluyen en absoluto: un departamento en cooperativa no es una propiedad aparte en el padrón fiscal de Washington D. C., así que su venta no se puede distinguir de la venta del edificio completo."
+  },
+  "e565c8d73b52be4f": {
+   "en": "Each sale is placed at its property’s official address point; a sale whose property has no address point is left out.",
+   "es": "Cada venta se ubica en el punto de dirección oficial de su propiedad; se excluye una venta cuya propiedad no tiene punto de dirección."
+  },
+  "39a5b021a6547815": {
+   "en": "Rebuilt monthly. The assessors keep reviewing recent sales, so figures for the newest months can shift slightly from one update to the next.",
+   "es": "Se reconstruye cada mes. Los tasadores siguen revisando las ventas recientes, así que las cifras de los meses más nuevos pueden cambiar un poco de una actualización a la siguiente."
+  },
+  "030aef8575f98f8d": {
+   "en": "Sales of houses, townhouses, condominiums and two- and three-unit homes in Hennepin County, by each property’s type on the county’s tax records. Co-op apartments, garage and storage units, apartment and low-income rental buildings, vacant land, seasonal cabins, properties that are partly shops, offices or farmland, and property types the county does not name are not included.",
+   "es": "Ventas de casas, casas adosadas, condominios y viviendas de dos y tres unidades en el condado de Hennepin, según el tipo de cada propiedad en los registros fiscales del condado. No se incluyen los departamentos en cooperativa, las unidades de garaje y de almacenamiento, los edificios de departamentos y de renta para personas de bajos ingresos, los terrenos baldíos, las cabañas de temporada, las propiedades que son en parte locales, oficinas o tierras de cultivo, ni los tipos de propiedad que el condado no nombra."
+  },
+  "8a0768cb4f643260": {
+   "en": "Only warranty-deed and contract-for-deed sales are counted. Sales the county excludes from its sales-ratio studies (its check that a sale was an open-market sale), sales of several parcels for one price, sales of vacant land, quit-claim and probate deeds, sales under $10,000 and prices of $20 million or more (recording errors) are left out.",
+   "es": "Solo se cuentan las ventas con escritura de garantía (warranty deed) y con contrato de compraventa a plazos (contract for deed). Se excluyen las ventas que el condado deja fuera de sus estudios de relación de ventas (su comprobación de que una venta fue de mercado abierto), las ventas de varios predios por un solo precio, las ventas de terrenos baldíos, las escrituras de renuncia (quit-claim) y sucesorias, las ventas de menos de US$10,000 y los precios de US$20 millones o más (errores de registro)."
+  },
+  "f60b7a7f6ec1980a": {
+   "en": "Sales on other kinds of deed are left out too, because the county’s records do not say which kind (a trustee’s, a personal representative’s or a limited warranty deed, for example), even where the county did not exclude the sale from its ratio studies. From Aug 2025 to Jul 2026 they were about one in eight of the county’s home sales, and countywide they sold for more than the rest (a median of about $457,000 against $390,000). In the Minneapolis tracts, leaving them out moved most tracts’ figures by under 5%, a few by up to about a sixth either way, and raised the median of the tracts’ figures by about 2%.",
+   "es": "También se excluyen las ventas con otros tipos de escritura, porque los registros del condado no dicen de qué tipo son (por ejemplo, de fiduciario, de representante personal o de garantía limitada), incluso cuando el condado no excluyó la venta de sus estudios de relación. De agosto de 2025 a julio de 2026 fueron alrededor de una de cada ocho ventas de vivienda del condado, y en todo el condado se vendieron por más que el resto (una mediana de unos US$457,000 frente a US$390,000). En los sectores censales de Minneapolis, excluirlas movió las cifras de la mayoría de los sectores menos de un 5%, las de unos pocos hasta alrededor de una sexta parte en uno u otro sentido, y subió la mediana de las cifras de los sectores alrededor de un 2%."
+  },
+  "11d7e55959f6b5e4": {
+   "en": "Hennepin County publishes only the most recent sale of each property. A home sold twice in the period counts once, at its later price, and one sold in the period and again since then (even by a transfer that is not a sale) is not counted at all, so these figures rest on fewer sales than took place, by a few percent (perhaps up to about one in ten), most in the earliest months. The sales missed are often a home’s earlier, lower price before a quick resale, so figures may lean slightly high.",
+   "es": "El condado de Hennepin solo publica la venta más reciente de cada propiedad. Una vivienda vendida dos veces en el periodo cuenta una sola vez, a su precio posterior, y una vendida en el periodo y de nuevo desde entonces (aunque sea por una transmisión que no es una venta) no se cuenta en absoluto, así que estas cifras se basan en menos ventas de las que hubo, un pequeño porcentaje menos (quizá hasta alrededor de una de cada diez), sobre todo en los primeros meses. Las ventas que faltan suelen ser el precio anterior, más bajo, de una vivienda antes de una reventa rápida, así que las cifras pueden inclinarse un poco al alza."
+  },
+  "c501426b99171ad4": {
+   "en": "The county gives the month of each sale, not the day. The newest month is left out until the county’s monthly extract holds it in full. Each sale is placed at the centre of its parcel as the county publishes it.",
+   "es": "El condado da el mes de cada venta, no el día. El mes más reciente se excluye hasta que el extracto mensual del condado lo contiene completo. Cada venta se ubica en el centro de su predio, tal como lo publica el condado."
+  },
+  "bf94a780c3c44ef0": {
+   "en": "Sales of houses, town houses and condominium homes recorded by the Maryland State Department of Assessments and Taxation. Buildings of five or more homes, parking spaces and storage units are not included.",
+   "es": "Ventas de casas, casas adosadas y viviendas en condominio registradas por el Maryland State Department of Assessments and Taxation. No se incluyen los edificios de cinco o más viviendas, los lugares de estacionamiento ni las bodegas."
+  },
+  "f36ddc74c217bd1c": {
+   "en": "Only sales the Department codes as private arm’s-length sales of a built property are counted. Foreclosures, gifts, auctions and other non-arm’s-length transfers, sales of vacant land, and transfers under $10,000 are left out. So are sales of several properties for one price where the records show it: the Department’s own code, one seller’s deed behind several sales, or three or more sales on one day at the same uneven price.",
+   "es": "Solo se cuentan las ventas que el Departamento codifica como ventas privadas entre partes independientes de una propiedad construida. Se excluyen las ejecuciones hipotecarias, las donaciones, las subastas y otras transmisiones entre partes no independientes, las ventas de terrenos baldíos y las transmisiones de menos de US$10,000. También se excluyen las ventas de varias propiedades por un solo precio cuando los registros lo muestran: el propio código del Departamento, la escritura de un mismo vendedor detrás de varias ventas, o tres o más ventas en un mismo día al mismo precio no redondo."
+  },
+  "93801625ad485d42": {
+   "en": "The median counts every arm’s-length sale of a home, whatever its condition, so where many sales are of houses needing major repair it can sit far below the price of a home ready to live in.",
+   "es": "La mediana cuenta toda venta de vivienda entre partes independientes, sea cual sea su estado, así que donde muchas ventas son de casas que necesitan reparaciones mayores puede quedar muy por debajo del precio de una vivienda lista para habitar."
+  },
+  "5fe2e554c8f420c5": {
+   "en": "Dated by the transfer date the Department records, which follows the recording of the deed. Each sale is placed at the parcel point the Maryland Department of Planning publishes; sales with no point are left out rather than guessed.",
+   "es": "Se fechan por la fecha de transmisión que registra el Departamento, posterior al registro de la escritura. Cada venta se ubica en el punto del predio que publica el Maryland Department of Planning; las ventas sin punto se excluyen en lugar de adivinar dónde están."
+  },
+  "46a5a0c6f856574a": {
+   "en": "The Department adds a sale to its records some weeks after the deed is recorded, so the latest month is left out until it is complete.",
+   "es": "El Departamento agrega una venta a sus registros algunas semanas después de que se registra la escritura, así que el último mes se excluye hasta que está completo."
+  },
+  "c2a385b6b57d85e5": {
+   "en": "Sales of one-to-three-family homes, condominium apartments and co-op apartments recorded by the NYC Department of Finance, by the date of sale. Transfers under $10,000 (usually between family members) and sales of several properties for one price are left out, and so are one-to-three-family homes sold for under $200,000, the floor the Department of Finance uses in its own summaries of these sales. The Department of Finance does not mark sales between relatives or other related parties, so a few may remain.",
+   "es": "Ventas de viviendas de una a tres familias, departamentos en condominio y departamentos en cooperativa registradas por el NYC Department of Finance, por fecha de venta. Se excluyen las transmisiones de menos de US$10,000 (por lo general entre familiares) y las ventas de varias propiedades por un solo precio, y también las viviendas de una a tres familias vendidas por menos de US$200,000, el mínimo que usa el Department of Finance en sus propios resúmenes de estas ventas. El Department of Finance no marca las ventas entre familiares u otras partes relacionadas, así que pueden quedar algunas."
+  },
+  "86c5b04ad33b673e": {
+   "en": "North East England",
+   "es": "Noreste de Inglaterra"
+  },
+  "a0af78cf75e1d9c5": {
+   "en": "North West England",
+   "es": "Noroeste de Inglaterra"
+  },
+  "1456ea09e9147e14": {
+   "en": "Yorkshire and the Humber",
+   "es": "Yorkshire y Humber"
+  },
+  "2762331b372a08c2": {
+   "en": "East Midlands",
+   "es": "Midlands del Este"
+  },
+  "a4add22a3e53216a": {
+   "en": "West Midlands",
+   "es": "Midlands del Oeste"
+  },
+  "0c0934e5ee3329bb": {
+   "en": "East of England",
+   "es": "Este de Inglaterra"
+  },
+  "ecc0e7dc084f141b": {
+   "en": "London",
+   "es": "Londres"
+  },
+  "7783d003ce94e5dd": {
+   "en": "South East England",
+   "es": "Sureste de Inglaterra"
+  },
+  "dc1bbcaf239fce7a": {
+   "en": "South West England",
+   "es": "Suroeste de Inglaterra"
+  },
+  "0cf3878b94e16c99": {
+   "en": "Wales",
+   "es": "Gales"
+  },
+  "304a7ea100d7a5fb": {
+   "en": "Northern Ireland",
+   "es": "Irlanda del Norte"
+  },
+  "5a59ef2e40c5f89a": {
+   "en": "New York City",
+   "es": "Ciudad de Nueva York"
+  },
+  "bbc14156f6c8a9f8": {
+   "en": "Nassau and Westchester",
+   "es": "Nassau y Westchester"
+  },
+  "0f5d983d203189bb": {
+   "en": "Chicago",
+   "es": "Chicago"
+  },
+  "5aa34886f7f3741d": {
+   "en": "San Francisco",
+   "es": "San Francisco"
+  },
+  "a06522bc4aab38ee": {
+   "en": "Boston",
+   "es": "Boston"
+  },
+  "52235717290f5d20": {
+   "en": "Seattle",
+   "es": "Seattle"
+  },
+  "17194da4baa38b8b": {
+   "en": "Philadelphia",
+   "es": "Filadelfia"
+  },
+  "493e253f44a2a0b0": {
+   "en": "Washington DC",
+   "es": "Washington D. C."
+  },
+  "fcdeb8c07d4a0e1d": {
+   "en": "Denver",
+   "es": "Denver"
+  },
+  "d6f11805e14b50ac": {
+   "en": "San Diego",
+   "es": "San Diego"
+  },
+  "9e44790866249418": {
+   "en": "Los Angeles area",
+   "es": "Área de Los Ángeles"
+  },
+  "4eb1b68df1329b72": {
+   "en": "Dallas",
+   "es": "Dallas"
+  },
+  "08382a413cd3de61": {
+   "en": "Detroit",
+   "es": "Detroit"
+  },
+  "3a361d05d29256d4": {
+   "en": "Baltimore",
+   "es": "Baltimore"
+  },
+  "034e4554eaa313d2": {
+   "en": "Memphis",
+   "es": "Memphis"
+  },
+  "2e7041b7d708dfe8": {
+   "en": "Charlotte",
+   "es": "Charlotte"
+  },
+  "4e0814053b5108e7": {
+   "en": "Counties around Mecklenburg",
+   "es": "Condados alrededor de Mecklenburg"
+  },
+  "eee3bed8a15458f9": {
+   "en": "Nashville",
+   "es": "Nashville"
+  },
+  "7ab5775182359ac0": {
+   "en": "Minneapolis",
+   "es": "Minneapolis"
+  },
+  "7bf8f1f41213751c": {
+   "en": "Ramsey and Anoka counties",
+   "es": "Condados de Ramsey y Anoka"
+  },
+  "54f638abe78f4a16": {
+   "en": "Cleveland",
+   "es": "Cleveland"
+  },
+  "f29245398096de20": {
+   "en": "Tucson",
+   "es": "Tucson"
+  },
+  "518db6c298ca9402": {
+   "en": "Fort Worth",
+   "es": "Fort Worth"
+  },
+  "3f3f5e940934ee9c": {
+   "en": "Hartford",
+   "es": "Hartford"
+  },
+  "8e04f51c6b3cdfd3": {
+   "en": "Kansas City",
+   "es": "Kansas City"
+  },
+  "00cc7d9b5e8b0123": {
+   "en": "Houston",
+   "es": "Houston"
+  },
+  "1be71e6a8923b2e5": {
+   "en": "New Orleans",
+   "es": "Nueva Orleans"
+  },
+  "2bd25cd960aba8b7": {
+   "en": "Las Vegas",
+   "es": "Las Vegas"
+  },
+  "121730bd619d2df5": {
+   "en": "Toronto",
+   "es": "Toronto"
+  },
+  "8825cf951da1f43f": {
+   "en": "Vancouver",
+   "es": "Vancouver"
+  },
+  "8d23a6e37e0a6431": {
+   "en": "United Kingdom",
+   "es": "Reino Unido"
+  },
+  "a246670dbf76f29a": {
+   "en": "Scotland",
+   "es": "Escocia"
+  },
+  "6662e735fe107957": {
+   "en": "the Republic of Ireland",
+   "es": "la República de Irlanda"
+  },
+  "d673fd63d4093bd5": {
+   "en": "New Jersey",
+   "es": "Nueva Jersey"
+  },
+  "29750e2fdcd870e7": {
+   "en": "Indiana",
+   "es": "Indiana"
+  },
+  "0cd76db09cc7f001": {
+   "en": "Maryland",
+   "es": "Maryland"
+  },
+  "0ee033b5f7f9fc3a": {
+   "en": "Virginia",
+   "es": "Virginia"
+  },
+  "8ee0ac9fec8ac98b": {
+   "en": "Baja California",
+   "es": "Baja California"
+  },
+  "c7302978fb095248": {
+   "en": "Long Beach",
+   "es": "Long Beach"
+  },
+  "8b6e049472304733": {
+   "en": "Los Angeles",
+   "es": "Los Ángeles"
+  },
+  "eedbe6d96c36d767": {
+   "en": "Ontario",
+   "es": "Ontario"
+  },
+  "da52cfeaefdc2979": {
+   "en": "Arkansas",
+   "es": "Arkansas"
+  },
+  "561c02a6e94bb84c": {
+   "en": "South Carolina",
+   "es": "Carolina del Sur"
+  },
+  "79f6d0732a249abc": {
+   "en": "Kansas",
+   "es": "Kansas"
+  },
+  "a8224dd462af907c": {
+   "en": "British Columbia",
+   "es": "Columbia Británica"
+  },
+  "c0ea960b065c6aa6": {
+   "en": "England",
+   "es": "Inglaterra"
+  },
+  "f2274036b50dbde4": {
+   "en": "Arizona",
+   "es": "Arizona"
+  },
+  "cad0535decc38b24": {
+   "en": "California",
+   "es": "California"
+  },
+  "4ae62bf4e80482de": {
+   "en": "Colorado",
+   "es": "Colorado"
+  },
+  "45cb6b43268e49a6": {
+   "en": "Connecticut",
+   "es": "Connecticut"
+  },
+  "a41471ba3c7f43e5": {
+   "en": "the District of Columbia",
+   "es": "el Distrito de Columbia"
+  },
+  "39cf050af563dfc3": {
+   "en": "Illinois",
+   "es": "Illinois"
+  },
+  "0aa5052d10321143": {
+   "en": "Louisiana",
+   "es": "Luisiana"
+  },
+  "929e0919ef1c3696": {
+   "en": "Massachusetts",
+   "es": "Massachusetts"
+  },
+  "26325a546fbbb023": {
+   "en": "Michigan",
+   "es": "Michigan"
+  },
+  "6180a0af19cac6f2": {
+   "en": "Minnesota",
+   "es": "Minnesota"
+  },
+  "4257eca8a8413435": {
+   "en": "Missouri",
+   "es": "Misuri"
+  },
+  "8318bbf6a2108829": {
+   "en": "North Carolina",
+   "es": "Carolina del Norte"
+  },
+  "485cb2743137b534": {
+   "en": "Nevada",
+   "es": "Nevada"
+  },
+  "815eca977c7d75f7": {
+   "en": "New York",
+   "es": "Nueva York"
+  },
+  "679f95d84e820a52": {
+   "en": "New York State",
+   "es": "el estado de Nueva York"
+  },
+  "438a7d5904cf041b": {
+   "en": "Ohio",
+   "es": "Ohio"
+  },
+  "808ed51137308015": {
+   "en": "Pennsylvania",
+   "es": "Pensilvania"
+  },
+  "0f508660b269e506": {
+   "en": "Tennessee",
+   "es": "Tennessee"
+  },
+  "4b95ce6272018a31": {
+   "en": "Texas",
+   "es": "Texas"
+  },
+  "6b9031df058346a8": {
+   "en": "Washington",
+   "es": "Washington"
+  },
+  "5b3fd9d48dce77d9": {
+   "en": "Mexico City",
+   "es": "Ciudad de México"
+  },
+  "2b005a367b6006dc": {
+   "en": "No open data gives home prices for areas smaller than the whole city.",
+   "es": "No hay datos abiertos de precios de la vivienda para zonas más pequeñas que toda la ciudad."
+  }
+ }
+}

@@ -6,7 +6,10 @@
 //   <out>/schools-pack.json + schools-pack.bin
 //   <out>/prices-pack.json  + prices-pack.bin
 //   <out>/schools.es.json   the schools pack's Spanish display text (S7), from
-//                           tools/app-packs/i18n at the builder's HEAD
+//                           tools/app-packs/i18n/schools.es.src.json at the
+//                           builder's HEAD
+//   <out>/prices.es.json    the home-values pack's Spanish display text (H5),
+//                           from tools/app-packs/i18n/prices.es.src.json
 // Container, chunking, display rules and gates: tools/app-packs/README.md.
 // Any gate failing stops the build and nothing is written.
 //
@@ -22,8 +25,9 @@
 //                  changed an input.
 //   --allow-dirty  build from a working tree whose data differs from HEAD (never
 //                  covers the rule paths: licence, filters, schema, modules)
-//   --strict-es    fail if any schools display string has no Spanish (missing
-//                  ones otherwise ship in English, marked "(en inglés)")
+//   --strict-es    fail if any schools or home-values display string has no
+//                  Spanish (missing ones otherwise ship in English, marked
+//                  "(en inglés)")
 //   --json         print the summary as JSON
 // Exit codes: 0 built, 1 a gate or the build failed, 2 a usage error.
 
@@ -57,7 +61,9 @@ function printSummary({ landing, built }, written, tools, removed) {
     for (const g of b.gates) console.log(`  ${g.ok ? 'PASS' : 'FAIL'} ${g.name}: ${g.ok ? g.detail : g.problems.slice(0, 5).join(' | ')}`);
     if (b.text) {
       const t = b.text.report, st = t.stats;
-      console.log(`  Spanish text (${t.language}): ${st.translated} translated, ${st.keep} licence names kept, ${st.identity} without letters, ${st.missing} missing; ${st.values} Mexico City values without their English gloss; text ${t.textCommit?.slice(0, 9)}; sha256 ${t.sha256}`);
+      const kept = r.layer === 'schools' ? 'licence names kept' : 'names, publishers, credits and licences kept';
+      const gloss = st.values != null ? `; ${st.values} Mexico City values without their English gloss` : '';
+      console.log(`  Spanish text ${t.file} (${t.language}): ${st.translated} translated, ${st.keep} ${kept}, ${st.identity} without letters, ${st.missing} missing${gloss}; text ${t.textCommit?.slice(0, 9)}; sha256 ${t.sha256}`);
     }
     if (written?.[r.layer]) console.log(`  wrote ${written[r.layer].json}\n        ${written[r.layer].bin}${written[r.layer].text ? `\n        ${written[r.layer].text}` : ''}`);
   }

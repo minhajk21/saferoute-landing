@@ -3,7 +3,8 @@
 //
 // WHAT IS TRANSLATED. Exactly the pack strings the app passes through
 // SchoolDataText.display (SafeRoute/Core/Overlays/SchoolFilters.swift), found
-// here by the same paths (displayStrings): the coverage line, the filters'
+// here by the same paths (displayStrings): the coverage line and scope, each
+// source's where, publisher and vintage (About's "School data", O5), the filters'
 // nouns and places, the regions' "outside" names, the jurisdictions' names,
 // areas, rules and labels, the sources' record labels, attributions, licences
 // and labels, and per scheme kind:
@@ -24,14 +25,19 @@
 //
 // THE SOURCE is tools/app-packs/i18n/schools.es.src.json (es-MX, informal tú,
 // the glossary subset it carries), read from the builder's committed HEAD
-// like the rules; `textCommit` is the last commit that changed i18n/.
+// like the rules; `textCommit` is the last commit that changed THAT FILE (not
+// the whole i18n/ directory: the home values' prices.es.src.json sits beside
+// it, and a commit to one must never restamp the other's text). TEXT_SOURCES
+// names each output file's source, for the builder and for O2's check.
 //
 // THE OUTPUT (schools.es.json, deterministic):
 //   { version, language, hash, forPack: { landingCommit, indexSha256, binSha256 },
 //     textCommit, strings: { key: { en, es } }, keep: [key], values: { key: { en, es, field } },
 //     display: [key], stats: { translated, keep, identity, missing, missingKeys, values, valuesMissing } }
-// `display` is every display string's key; `keep` the licence names, which
-// stay English (glossary); a string with no letters passes through as it is.
+// `display` is every display string's key; `keep` the licence names and the
+// sources' dataset names, which stay English (glossary; SD19: dataset names
+// are kept, agency names translated); a string with no letters passes
+// through as it is.
 // A display string with no entry is "missing": the app shows it in English
 // marked "(en inglés)". Missing text does not fail the build unless
 // --strict-es; everything else below does (an orphaned key first of all).
@@ -47,12 +53,21 @@ export const TEXT_VERSION = 1;
 export const TEXT_LANGUAGE = 'es-MX';
 export const I18N_DIR = 'tools/app-packs/i18n';
 export const SOURCE_PATH = `${I18N_DIR}/schools.es.src.json`;
+// Each Spanish text file and the one source file its textCommit is taken from
+// (lib/prices-text.mjs writes prices.es.json from the second).
+export const TEXT_SOURCES = Object.freeze({
+  'schools.es.json': SOURCE_PATH,
+  'prices.es.json': `${I18N_DIR}/prices.es.src.json`,
+});
 export const HASH_RULE = 'sha256(utf8(en)) hex, first 16';
 
 export const textKey = s => sha256(Buffer.from(s, 'utf8')).slice(0, 16);
 
 // Kinds whose strings are licence names: they stay English.
 export const LICENCE_KINDS = Object.freeze(['source.licence', 'scheme.licence']);
+// Kinds kept in English: the licence names, and the sources' dataset names
+// (SD19), which About shows beside their publisher.
+export const KEEP_KINDS = Object.freeze([...LICENCE_KINDS, 'source.name']);
 // Kinds the forbidden-word check applies to in Spanish too (what a user reads
 // as a label, a title or a filter word).
 const LABEL_KINDS = /^(label|label\..+|scheme\.title|scheme\.short|filter\.noun|filter\.where|source\.recordLabel)$/;
@@ -85,6 +100,7 @@ export function displayStrings(index) {
     }
   };
   add(index.where, 'coverage.where', 'where');
+  add(index.scope, 'coverage.scope', 'scope');
   (index.filters || []).forEach((f, i) => { add(f.noun, 'filter.noun', `filters[${i}].noun`); add(f.where, 'filter.where', `filters[${i}].where`); });
   (index.regions || []).forEach((r, i) => (r.outside || []).forEach((o, j) => add(o, 'region.outside', `regions[${i}].outside[${j}]`)));
   for (const [id, j] of Object.entries(index.juris || {})) {
@@ -94,6 +110,11 @@ export function displayStrings(index) {
     labels(j.labels, `juris.${id}.labels`);
   }
   for (const [id, s] of Object.entries(index.sources || {})) {
+    // About's "School data" rows (O5): where, dataset name (kept), publisher, vintage.
+    add(s.where, 'source.where', `sources.${id}.where`);
+    add(s.name, 'source.name', `sources.${id}.name`);
+    add(s.publisher, 'source.publisher', `sources.${id}.publisher`);
+    add(s.vintage, 'source.vintage', `sources.${id}.vintage`);
     if (s.recordUrl) add(s.recordLabel, 'source.recordLabel', `sources.${id}.recordLabel`);
     add(s.attribution, 'source.attribution', `sources.${id}.attribution`);
     add(s.licence, 'source.licence', `sources.${id}.licence`);
@@ -127,26 +148,29 @@ export function displayStrings(index) {
 const git = (repo, args) => execFileSync('git', ['-C', repo, ...args], { encoding: 'utf8', maxBuffer: 1 << 26, stdio: ['ignore', 'pipe', 'pipe'] });
 
 // The committed translation source at the builder's HEAD, and the last commit
-// that changed it. A working tree that differs is refused unless allowDirty
-// (never with --commit), and then read and recorded "+dirty".
-export function openTextSource({ repo, allowDirty = false, commit = null } = {}) {
-  const dirty = git(repo, ['status', '--porcelain', '--', I18N_DIR]).trim();
-  if (dirty && (commit != null || !allowDirty)) throw new Error(`${I18N_DIR} differs from HEAD (commit the translations first${commit == null ? ', or --allow-dirty' : ''}):\n${dirty.split('\n').slice(0, 10).join('\n')}`);
+// that changed it. `path` is the source file (schools by default; the home
+// values pass TEXT_SOURCES['prices.es.json']): the dirty check and the commit
+// are that file's alone, so each text is refused, and stamped, on its own.
+// A working tree that differs is refused unless allowDirty (never with
+// --commit), and then read and recorded "+dirty".
+export function openTextSource({ repo, allowDirty = false, commit = null, path = SOURCE_PATH } = {}) {
+  const dirty = git(repo, ['status', '--porcelain', '--', path]).trim();
+  if (dirty && (commit != null || !allowDirty)) throw new Error(`${path} differs from HEAD (commit the translations first${commit == null ? ', or --allow-dirty' : ''}):\n${dirty.split('\n').slice(0, 10).join('\n')}`);
   let last = '';
-  try { last = git(repo, ['log', '-1', '--format=%H', 'HEAD', '--', I18N_DIR]).trim(); } catch { /* no commits yet */ }
+  try { last = git(repo, ['log', '-1', '--format=%H', 'HEAD', '--', path]).trim(); } catch { /* no commits yet */ }
   if (dirty) {
-    const p = join(repo, SOURCE_PATH);
-    if (!existsSync(p)) throw new Error(`${SOURCE_PATH} is missing`);
+    const p = join(repo, path);
+    if (!existsSync(p)) throw new Error(`${path} is missing`);
     return { source: JSON.parse(readFileSync(p, 'utf8')), textCommit: `${last || 'none'}+dirty` };
   }
-  if (!last) throw new Error(`${SOURCE_PATH} is not committed at HEAD`);
+  if (!last) throw new Error(`${path} is not committed at HEAD`);
   let text;
-  try { text = git(repo, ['show', `HEAD:${SOURCE_PATH}`]); } catch { throw new Error(`${SOURCE_PATH} is not committed at HEAD`); }
+  try { text = git(repo, ['show', `HEAD:${path}`]); } catch { throw new Error(`${path} is not committed at HEAD`); }
   return { source: JSON.parse(text), textCommit: last };
 }
 
 // The working-tree source (the tests read it; on a clean tree it is HEAD's).
-export const readTextSource = repo => JSON.parse(readFileSync(join(repo, SOURCE_PATH), 'utf8'));
+export const readTextSource = (repo, path = SOURCE_PATH) => JSON.parse(readFileSync(join(repo, path), 'utf8'));
 
 // ── the gates (each a pure function returning problems) ────────────────────
 const show = s => JSON.stringify(s.length > 70 ? `${s.slice(0, 67)}…` : s);
@@ -239,6 +263,7 @@ export function licenceProblems(source, display, index) {
   const es = en => S[textKey(en)]?.en === en ? S[textKey(en)].es : null;
   for (const [en, e] of display) {
     if (e.kinds.some(k => LICENCE_KINDS.includes(k)) && es(en) != null && es(en) !== en) p.push(`licence name ${show(en)} is translated (it stays English)`);
+    else if (e.kinds.every(k => KEEP_KINDS.includes(k)) && es(en) != null && es(en) !== en) p.push(`dataset name ${show(en)} is translated (it stays English, SD19)`);
   }
   const names = licenceNames(index);
   for (const [k, e] of Object.entries(S)) {
@@ -349,7 +374,7 @@ export function buildSchoolsText({ json, bin, rows, source, landingCommit, textC
   for (const [en, e] of display) {
     const k = textKey(en);
     all.push(k);
-    if (e.kinds.every(x => LICENCE_KINDS.includes(x))) { keep.push(k); continue; }
+    if (e.kinds.every(x => KEEP_KINDS.includes(x))) { keep.push(k); continue; }
     if (!hasLetter(en)) { identity++; continue; }
     if (S[k]?.en === en && typeof S[k].es === 'string') strings[k] = { en, es: S[k].es };
     else missingKeys.push(k);
@@ -363,7 +388,7 @@ export function buildSchoolsText({ json, bin, rows, source, landingCommit, textC
     gate('es-keys', keyProblems(source, display), `${display.size} display strings, ${Object.keys(S).length} source entries; keys = ${HASH_RULE}; NFC; no collision`),
     gate('es-orphans', orphanProblems(source, display), 'every source entry is a display string of this pack'),
     gate('es-form', formProblems(source), 'same {placeholders}, same <b> runs (no other tag), same trailing " ↗"'),
-    gate('es-licences', licenceProblems(source, display, index), `${keep.length} licence names kept in English; each attribution still links its licence`),
+    gate('es-licences', licenceProblems(source, display, index), `${keep.length} licence and dataset names kept in English; each attribution still links its licence`),
     gate('es-words', wordProblems(source, display), 'no religion word in a label, title or filter word; never "anónimo"; tú, never usted'),
     gate('es-glossary', glossaryProblems(source), `${(source.glossary?.terms || []).length} glossary terms; names in capitals kept`),
     gate('es-gloss', gloss.problems, `${stats.values} Mexico City values lose their English gloss in Spanish (SEP type/phase only)`),
