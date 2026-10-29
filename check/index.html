@@ -3644,6 +3644,17 @@ function heatColor(t){ // t 0..1 → dim maroon → hot ember (dark basemap)
 function hexRest(t){
   return { color:'#ffffff', weight:0.5, opacity:0.07, fillColor:heatColor(t), fillOpacity:0.20 + 0.40*t };
 }
+// The hexes have their own pane at z 395: above the home values (380) and
+// their labels (390), which never show with them, and BELOW Leaflet's overlay
+// pane (400), which holds the 1 km ring, the centre marker and the recent-call
+// dots. On the shared overlay pane they were drawn in the order they were
+// added, so switching the heatmap off and on appended every hex after the
+// ring and the dot, and the hexes' fill then sat over both until the next
+// lookup. A pane keeps the order whatever is added when. Its SVG takes the
+// pointer only where a hex is drawn, so a hex's popup still opens through
+// the overlay pane's empty space, and the ring and dot stay on top of it.
+map.createPane('hexes').style.zIndex = 395;
+const hexRenderer = L.svg({ pane: 'hexes' });
 function drawHex(d){
   if(incLayer) map.removeLayer(incLayer);
   if(ringLayer) map.removeLayer(ringLayer);
@@ -3664,7 +3675,7 @@ function drawHex(d){
   for(const b of bins.values()){
     const cx=HEX_M*S3*(b.q+b.r/2), cy=HEX_M*1.5*b.r, corners=[];
     for(let i=0;i<6;i++){ const a=Math.PI/180*(60*i-30); corners.push(toLL(cx+HEX_M*Math.cos(a), cy+HEX_M*Math.sin(a))); }
-    const rest=hexRest(b.w/maxW), poly=L.polygon(corners, rest);
+    const rest=hexRest(b.w/maxW), poly=L.polygon(corners, { ...rest, renderer:hexRenderer });
     // Hover changes only the outline. Leaving restores this hex's own resting
     // style, all of it: it used to restore a fixed outline at .5, not what it
     // was drawn with, so every hex you passed over kept a bright edge.
