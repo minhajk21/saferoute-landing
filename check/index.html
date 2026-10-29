@@ -264,10 +264,17 @@
      across the pane's column, and padded to a 24px target. */
   .view > .linkbtn{align-self:flex-start;margin-top:-10px;padding:4px 0}
   section>.ext{display:inline-block;margin-top:10px;line-height:1.5}
-  /* Heat legend: a real ramp in heatColor()'s own three stops, rather than
-     three hexagon glyphs that read as "three categories". */
+  /* Heat legend: a real ramp, rather than three hexagon glyphs that read as
+     "three categories". Its colours are what a hex looks like ON THE MAP:
+     heatColor(t) at hexRest()'s opacity (.20 + .40t) over the basemap's land
+     (#2a2a2a), at t = 0, .25, .5, .75 and 1. Five stops, because colour and
+     opacity both change with t, so the true ramp is a curve that three stops
+     miss by up to 7/255; these are within 2. heatColor()'s own stops drawn
+     solid would show every step brighter and redder than the hexes now are.
+     Checked against shots of Soho and Times Square: land 42,42,42; the
+     quietest hex 48,42,43; the busiest 170,100,71. */
   .hexkey{display:flex;flex-direction:column;gap:4px;margin:0 0 8px;max-width:260px}
-  .hexkey .grad{display:block;height:8px;border-radius:2px;background:linear-gradient(90deg,rgb(74,44,48),rgb(199,71,55),rgb(255,138,90))}
+  .hexkey .grad{display:block;height:8px;border-radius:2px;background:linear-gradient(90deg,rgb(48,42,43),rgb(70,47,45),rgb(105,54,47),rgb(134,73,57),rgb(170,100,71))}
   .hexkey .ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--ink-2)}
   .hexnote{font-size:13.5px;line-height:1.45;margin:0 0 12px}
   /* Shown only while the schools layer is on. */
@@ -2470,9 +2477,10 @@ function prClass(a) {
   while (i < 4 && a.value >= br[i]) i++;
   return i;
 }
-// Fill 0.8: at the crime layer's 0.62 these five blues fall below 2:1 against
-// the dark basemap at the dark end and their steps blur. The outline is the
-// crime hexes' thin white line; a selected area gets a white 2px one. An
+// Fill 0.8: at 0.62 (the crime hexes' fill when this was written; theirs now
+// follows the heat, see hexRest) these five blues fall below 2:1 against the
+// dark basemap at the dark end and their steps blur. The outline is the thin
+// white line the crime hexes had then; a selected area gets a white 2px one. An
 // owners'-estimate area beside sale prices (prOuter) is outlined dashed and
 // brighter: the one mark on the map of where the kind of figure, and its
 // scale, change (the legend's dashed swatch).
@@ -3605,8 +3613,9 @@ async function refetchAt(lat, lng){
 
 // ── hexagon heat map (matches the app) ──────────────────────────────
 // Incidents are binned into a pointy-top hex grid and each hex is shaded by its
-// severity-weighted total — coral → deep red, the app's heatmap palette. Tap a
-// hex to see how many reports fall in it. Same idea as the app's hex snapshot.
+// severity-weighted total — coral → deep red, the app's heatmap palette — at an
+// opacity that follows the same heat (hexRest). Tap a hex to see how many
+// reports fall in it. Same idea as the app's hex snapshot.
 const HEX_M = 90; // hex circumradius in metres (~180 m across)
 function hexRound(q, r){ // cube-round a fractional axial coord to the nearest hex
   let x=q, z=r, y=-x-z;
@@ -3621,6 +3630,17 @@ function heatColor(t){ // t 0..1 → dim maroon → hot ember (dark basemap)
   for(let i=0;i<s.length-1;i++){ if(t>=s[i][0] && t<=s[i+1][0]){ a=s[i]; b=s[i+1]; break; } }
   const f=(t-a[0])/((b[0]-a[0])||1), c=a[1].map((v,i)=>Math.round(v+(b[1][i]-v)*f));
   return `rgb(${c[0]},${c[1]},${c[2]})`;
+}
+// A hex's resting look at heat t (0..1, its share of the busiest hex in view).
+// The fill's opacity follows the heat as well as its colour: .20 for the
+// quietest, .60 for the busiest. At a flat .62 the streets and labels under the
+// 1 km disc were mostly hidden; this way the many quiet hexes are a light wash
+// the map reads through, and the hot ones keep that old weight, so they stand
+// out at least as much. A floor much over .25 covers the streets again; much
+// under .18, a quiet hex is hard to tell from empty land. The outline is a
+// hairline, just enough to show the grid.
+function hexRest(t){
+  return { color:'#ffffff', weight:0.5, opacity:0.07, fillColor:heatColor(t), fillOpacity:0.20 + 0.40*t };
 }
 function drawHex(d){
   if(incLayer) map.removeLayer(incLayer);
@@ -3642,9 +3662,12 @@ function drawHex(d){
   for(const b of bins.values()){
     const cx=HEX_M*S3*(b.q+b.r/2), cy=HEX_M*1.5*b.r, corners=[];
     for(let i=0;i<6;i++){ const a=Math.PI/180*(60*i-30); corners.push(toLL(cx+HEX_M*Math.cos(a), cy+HEX_M*Math.sin(a))); }
-    const poly=L.polygon(corners, { color:'#ffffff', weight:0.6, opacity:0.14, fillColor:heatColor(b.w/maxW), fillOpacity:0.62 });
+    const rest=hexRest(b.w/maxW), poly=L.polygon(corners, rest);
+    // Hover changes only the outline. Leaving restores this hex's own resting
+    // style, all of it: it used to restore a fixed outline at .5, not what it
+    // was drawn with, so every hex you passed over kept a bright edge.
     poly.on('mouseover', function(){ this.setStyle({weight:1.6, opacity:1, color:'#14564C'}); });
-    poly.on('mouseout',  function(){ this.setStyle({weight:0.6, opacity:0.5, color:'#ffffff'}); });
+    poly.on('mouseout',  function(){ this.setStyle(rest); });
     // Click a hex → what was reported in that block, by category.
     const top=Object.entries(b.cats).sort((x,y)=>y[1]-x[1]);
     const rows=top.map(([c,n])=>`<div class="hexpop"><span>${catName(c)}</span><span>${n}</span></div>`).join('');
