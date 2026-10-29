@@ -2224,10 +2224,12 @@ ${footer(cfg, cityYm, citySlug, windowDays)}`;
   // weekday and weekend.
   //
   // Only rendered where the timestamps are REAL. data.police.uk publishes no
-  // incident times at all, so every UK city derives its chart from the category
-  // mix; a night page built on that would be inventing its central claim. Ten
-  // of the 26 published cities are excluded for this reason, and that is the
-  // right outcome rather than a gap.
+  // incident times at all, so no UK area has a mix to draw, and a night page
+  // built on the category mix would be inventing its central claim. Ten of the
+  // 26 published cities are excluded: the six UK cities for that reason, and
+  // San Diego, Vancouver, Minneapolis and Long Beach because the fields the
+  // backend reads give a date only or the time the report was filed
+  // (tools/time-of-day.mjs). That is the right outcome rather than a gap.
   if (nightPage) {
     const shareOf = a => NIGHT.reduce((s, i) => s + (a.timeOfDay[i] || 0), 0);
     const withNight = todAreas.map(a => ({

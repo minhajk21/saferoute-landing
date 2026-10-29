@@ -3533,8 +3533,10 @@ function render(d, name, address){
   // score, show only when the feed's own flag says those times are real (the
   // /safety/ pages use the same flag: tools/time-of-day.mjs). This page sends
   // no tod today, so /public/area returns no safetyScoreNow and the line stays
-  // hidden; the flag keeps it hidden for date-only and report-time feeds if
-  // that ever changes.
+  // hidden. If that ever changes, the flag keeps it hidden for feeds the
+  // backend flags date-only or report-time. Houston is one of them: backend
+  // PR #4 (merged 22 Oct 2026) set its flag false, since the occurrence date
+  // the provider reads is date-only.
   const realTimes = !!d.timeOfDayIsRealData;
   const tod = realTimes && (d.timeOfDay||[]).some(x=>x>0) ? d.timeOfDay : null;
   const span = windowPhrase(d.windowDays);
