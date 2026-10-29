@@ -1216,13 +1216,16 @@ const TRIM_AREA_SNIPPETS = false;
 //
 // IF IT WINS, roll out to all 2,591 area pages. IF IT LOSES, revert and the
 // next suspect is the meta description, which is the other half of the snippet.
-const TITLE_TEST = new Set([
-  'chicago/jefferson-park', 'london/kilburn', 'chicago/pullman', 'boston/charlestown',
-  'london/streatham-common-vale', 'chicago/ohare', 'london/canary-wharf', 'sandiego/la-jolla',
-  'new-york/hells-kitchen', 'la/watts', 'la/west-adams', 'boston/dorchester',
-  'chicago/lincoln-square', 'london/fulham-town', 'boston/roslindale', 'boston/mattapan',
-  'la/pacoima', 'london/queens-park', 'la/north-hills-west', 'chicago/the-loop',
-]);
+//
+// RESULT, read 29 October 2026 (Search Console, page level; area pages only):
+// it LOST. The 20 test pages went from 0.77% CTR at position 7.6 (23 Aug -
+// 19 Sep) to 0.45% at 6.2 (30 Sep - 27 Oct), 13 clicks on 2,897 impressions
+// where their old rate would have given about 22, although they rose in the
+// results. Every other area page held: 1.48% at 7.2 to 1.51% at 6.5. (The
+// original 20-page control could not be rebuilt exactly, so the comparison is
+// against all other area pages.) Reverted on the owner's approval; the slugs are
+// kept in git history (6d006d9d9, e03836f14).
+const TITLE_TEST = new Set([]);
 
 // Leaflet, for the city-hub map only. Area pages keep their static SVG
 // basemap — they describe ONE place and a pannable map there is noise. A city
