@@ -135,7 +135,8 @@ summary, which O2 requires all PASS):
 
 The same shape as `schools.es.json` (version, language, hash, `forPack` for
 the **prices** pack, `textCommit`, strings, keep, `values` (always empty),
-display, stats), so the app reads both with one loader. `lib/prices-text.mjs`
+display, stats), so the app reads both with one loader, plus `attribution`
+(below), which that loader does not read. `lib/prices-text.mjs`
 lists the strings the app passes through `PriceDataText.display`: `where`,
 `scope`; each source's metric, unit noun (and its one-form, "sales" → "sale",
 as the page's `prOne` makes it), area noun and notes; each scale's name and
@@ -156,6 +157,17 @@ commit that changed that file.
   ACS context "{metric}, {a}–{yy} survey" and NI's "{metric}, wider area
   ({DEA}), {y}". Month names come from a fixed table (en-GB's `toLocaleString`
   writes "Sept"; the pack writes "Sep").
+- **Beside a disclaimer line (`attribution`):** `{ key: { en, es, source,
+  review? } }`, from the source file's own `attribution` section. A
+  publisher's disclaimer that is one of its attribution lines may carry a
+  Spanish rendering, for the app to show *beside* the verbatim English line,
+  never instead of it; the line itself stays out of `strings`, `keep` and
+  `display`, so it is still no display string. Today one: Hennepin County's
+  disclaimer for its GIS open data (hennepin-sales' second line, asked for
+  with its credit on 27 Oct 2026), drafted 29 Oct 2026 and marked `review`
+  for the Q8 native review. `stats.attribution` counts them. The 1.4.2 app
+  shows attribution lines in English only, so until it reads this section
+  the Spanish ships unused.
 - **A refreshed pack** whose note text moved (Hennepin's months and amounts
   change with each rebuild) has a new key for it: the old entry becomes an
   orphan and the build fails until the source is updated, so a 1.4.x pack
@@ -170,6 +182,7 @@ commit that changed that file.
 | `pr-es-shared` | a string `schools.es.src.json` also translates (England, Wales, Northern Ireland, New York, the District of Columbia…) with other Spanish (SD18) |
 | `pr-es-licences` | a kept string (licence, dataset name, publisher, credit) with a translation; a licence name in an English string but not its Spanish; an attribution line with a translation |
 | `pr-es-glossary` | an English term without its glossary rendering (mediana, sector censal, estimación de los propietarios, precio de venta, margen de error, partes independientes, escritura, predio, departamento…); a name in capitals (ONS, HMRC, LPS, MSOA, NYC…) dropped, unless spelled out as `acronymExpansions` says (US → EE. UU., UK → Reino Unido, DC → D. C.) |
+| `pr-es-attribution` | an `attribution` entry whose key is not the hash of its English, or not NFC, padded or empty; whose `source` is not in the pack, or whose English is not exactly one of that source's attribution lines (an orphan: a reworded or dropped disclaimer); whose English does not call itself a disclaimer (a credit line stays English only, HD12), or whose `kind` is not `disclaimer`; that is also a display string or in `strings`; or whose Spanish breaks a display-text rule: `pr-es-form` (with the doubled stop), `pr-es-words`, `pr-es-money`, `pr-es-glossary` (so "warranty" is "garantía", and GIS and AS IS stay), a licence name dropped |
 | `pr-es-complete` | (`--strict-es` only) a display string with no Spanish |
 
 ## Home values (`prices-pack.*`)

@@ -1,7 +1,7 @@
 {
  "version": 1,
  "language": "es-MX",
- "_about": "Mexican Spanish for the home-values pack display text (RELEASE-1.4-SCOPE.md §4.6 H5). Keyed by the first 16 hex of SHA-256 over the exact UTF-8 of the English, as the app passes it to PriceDataText.display. tools/app-packs/lib/prices-text.mjs checks every entry against the pack being built and writes prices.es.json. Not listed, because they stay English (HD12): licence names, and each source’s dataset name, publisher and credit; attribution lines are verbatim and not display text. Periods and context labels are rebuilt by the app from their fields (lib/prices-periods.mjs), never keyed. Informal tú; US dollars are US$ (HD1); never “promedio”, a standalone “media”, or “precio” in an owners’-estimate label. A string the schools text also has keeps its Spanish (SD18). Needs the Q8 native review (lane2/h5/REVIEWER-PACKET-prices-data.md beside the iOS repo).",
+ "_about": "Mexican Spanish for the home-values pack display text (RELEASE-1.4-SCOPE.md §4.6 H5). Keyed by the first 16 hex of SHA-256 over the exact UTF-8 of the English, as the app passes it to PriceDataText.display. tools/app-packs/lib/prices-text.mjs checks every entry against the pack being built and writes prices.es.json. Not listed, because they stay English (HD12): licence names, and each source’s dataset name, publisher and credit; attribution lines are verbatim and not display text, except that a publisher’s disclaimer line may carry a Spanish rendering in `attribution` below, which the app shows beside the verbatim English, never instead of it (pr-es-attribution). Periods and context labels are rebuilt by the app from their fields (lib/prices-periods.mjs), never keyed. Informal tú; US dollars are US$ (HD1); never “promedio”, a standalone “media”, or “precio” in an owners’-estimate label. A string the schools text also has keeps its Spanish (SD18). Needs the Q8 native review (lane2/h5/REVIEWER-PACKET-prices-data.md beside the iOS repo).",
  "glossary": {
   "source": "SafeRouteApp p5/glossary.json + the home-values terms of H3 (lane2/h3/REVIEWER-PACKET-prices.md) + those decided in H5; Q8 reviewer to confirm",
   "register": "informal tú; descriptive notes in the impersonal se (se excluyen, se incluyen)",
@@ -633,6 +633,15 @@
   "2b005a367b6006dc": {
    "en": "No open data gives home prices for areas smaller than the whole city.",
    "es": "No hay datos abiertos de precios de la vivienda para zonas más pequeñas que toda la ciudad."
+  }
+ },
+ "attribution": {
+  "5e203e36e4deafec": {
+   "en": "Hennepin County’s disclaimer for its GIS open data: “This data (i) is furnished ‘AS IS’ with no representation as to completeness or accuracy; (ii) is furnished with no warranty of any kind; and (iii) is not suitable for legal, engineering or surveying purposes. Hennepin County shall not be liable for any damage, injury or loss resulting from this data.”",
+   "es": "Aviso de exención de responsabilidad del condado de Hennepin sobre sus datos abiertos GIS: “Estos datos (i) se proporcionan ‘TAL CUAL’ (AS IS), sin ninguna declaración sobre su integridad o exactitud; (ii) se proporcionan sin garantía de ningún tipo, y (iii) no son adecuados para fines legales, de ingeniería ni de topografía. El condado de Hennepin no será responsable de ningún daño, lesión o pérdida que resulte de estos datos.”",
+   "source": "hennepin-sales",
+   "kind": "disclaimer",
+   "review": "Drafted 2026-10-29 (not by a native speaker); needs the Q8 native review before an app release shows it. Hennepin County’s English is the original and stays on screen beside it."
   }
  }
 }

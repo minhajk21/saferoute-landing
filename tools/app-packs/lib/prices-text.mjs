@@ -16,6 +16,13 @@
 // KEPT IN ENGLISH (`keep`, HD12): licence names, and each source's dataset
 // name, publisher and credit, which sit beside the attribution lines they
 // name. ATTRIBUTION LINES are not display text at all: verbatim English.
+// One exception, outside the display text: a publisher's DISCLAIMER that is
+// an attribution line (Hennepin County's, asked for with its credit on 27 Oct
+// 2026) may carry a Spanish rendering in the file's own `attribution` section,
+// { key: { en, es, source, review? } }, from the source file's `attribution`
+// section. It is for the app to show BESIDE the verbatim English line, never
+// instead of it: the English stays in `attribution` of the pack, not in
+// `strings`, `keep` or `display`. Gate pr-es-attribution (below).
 // PERIODS AND CONTEXT LABELS are not keyed: the app rebuilds them in the
 // interface language from their fields (lib/prices-periods.mjs, gate
 // pr-periods).
@@ -40,7 +47,7 @@ export const PRICES_TEXT_FILE = 'prices.es.json';
 export const PRICES_TEXT_VERSION = 1;
 export const PRICES_TEXT_LANGUAGE = 'es-MX';
 // The gates buildPricesText adds to the prices pack's (O2 requires each).
-export const PRICES_TEXT_GATES = Object.freeze(['pr-periods', 'pr-es-keys', 'pr-es-orphans', 'pr-es-form', 'pr-es-words', 'pr-es-money', 'pr-es-shared', 'pr-es-licences', 'pr-es-glossary']);
+export const PRICES_TEXT_GATES = Object.freeze(['pr-periods', 'pr-es-keys', 'pr-es-orphans', 'pr-es-form', 'pr-es-words', 'pr-es-money', 'pr-es-shared', 'pr-es-licences', 'pr-es-glossary', 'pr-es-attribution']);
 
 // Kinds kept in English (HD12): licence names, dataset names, publishers, credits.
 export const KEEP_KINDS = Object.freeze(['source.licence', 'source.licences', 'source.name', 'source.publisher', 'source.credit']);
@@ -218,6 +225,50 @@ export function priceLicenceProblems(source, display, index) {
   return p;
 }
 
+// pr-es-attribution: the Spanish beside an attribution line (the source
+// file's `attribution` section). Each entry is { en, es, source, review? }:
+// its key is the hash of its English (NFC, no edge whitespace, not empty);
+// `source` is a source of this pack and `en` is, exactly, one of ITS
+// attribution lines (an entry for a line the pack no longer has is an
+// orphan); the line calls itself a disclaimer (a credit, which names the data
+// set and licence, stays verbatim English only, HD12); it is not also a
+// display string. The Spanish is held to the display text's rules: form and
+// doubled stops, the words gate (tú, never "anónimo"…), money, licence names
+// kept, and the glossary (so "warranty" is "garantía", and a name in
+// capitals such as GIS or AS IS stays).
+export const ATTRIBUTION_KINDS = Object.freeze(['disclaimer']);
+const DISCLAIMER = /\bdisclaimer\b/i;
+const NFC = s => s === s.normalize('NFC');
+export function attributionTextProblems(source, index, display) {
+  const p = [], A = source.attribution || {};
+  const sources = index.sources || {};
+  for (const [k, e] of Object.entries(A)) {
+    if (typeof e?.en !== 'string' || typeof e?.es !== 'string') { p.push(`attribution ${k}: not { en, es } strings`); continue; }
+    if (textKey(e.en) !== k) p.push(`attribution ${k}: is not the hash of its English (${textKey(e.en)}) ${show(e.en)}`);
+    for (const [lang, v] of [['en', e.en], ['es', e.es]]) {
+      if (!v) p.push(`attribution ${k}: ${lang} is empty`);
+      if (!NFC(v)) p.push(`attribution ${k}: ${lang} is not NFC`);
+      if (v !== v.trim()) p.push(`attribution ${k}: ${lang} has edge whitespace`);
+    }
+    const src = sources[e.source];
+    if (!src) { p.push(`attribution ${k}: source ${JSON.stringify(e.source)} is not a source of this pack`); continue; }
+    const lines = Array.isArray(src.attribution) ? src.attribution : src.attribution ? [src.attribution] : [];
+    if (!lines.includes(e.en)) p.push(`orphaned attribution ${k}: ${show(e.en)} is not an attribution line of ${e.source} in this pack`);
+    if (!DISCLAIMER.test(e.en)) p.push(`attribution ${k}: ${show(e.en)} is not a disclaimer (a credit line stays verbatim English, HD12)`);
+    if (e.kind != null && !ATTRIBUTION_KINDS.includes(e.kind)) p.push(`attribution ${k}: kind ${JSON.stringify(e.kind)} (want ${ATTRIBUTION_KINDS.join(' | ')})`);
+    if (display.has(e.en)) p.push(`attribution ${k}: ${show(e.en)} is also a display string`);
+    if (source.strings?.[k]) p.push(`attribution ${k}: also in strings (an attribution line is never display text)`);
+  }
+  const as = { ...source, strings: A };
+  for (const x of [...formProblems(as), ...stopProblems(as), ...priceWordProblems(as, new Map()), ...moneyProblems(as), ...glossaryProblems(as)]) p.push(`attribution ${x}`);
+  const names = licenceNames(index);
+  for (const [k, e] of Object.entries(A)) {
+    if (typeof e?.en !== 'string' || typeof e?.es !== 'string') continue;
+    for (const n of names) if (e.en.includes(n) && !e.es.includes(n)) p.push(`attribution ${k}: the licence name ${show(n)} is in the English but not the Spanish`);
+  }
+  return p;
+}
+
 // ── build ──────────────────────────────────────────────────────────────────
 // json, bin: packPrices()'s result; source: the parsed prices.es.src.json;
 // schoolsSource: the parsed schools.es.src.json (pr-es-shared).
@@ -246,7 +297,17 @@ export function buildPricesText({ json, bin, source, schoolsSource, landingCommi
     });
   }
   const periods = periodProblems(index, contexts);
-  const stats = { translated: Object.keys(strings).length, keep: keep.length, identity, missing: missingKeys.length, missingKeys };
+  // The Spanish beside a disclaimer line, in the pack's source order and each
+  // source's line order (the source file's own order would let an edit there
+  // reorder the output).
+  const attribution = {}, A = source.attribution || {};
+  for (const [id, s] of Object.entries(index.sources || {})) {
+    for (const l of Array.isArray(s.attribution) ? s.attribution : s.attribution ? [s.attribution] : []) {
+      const k = textKey(l), e = A[k];
+      if (e?.en === l && e.source === id && typeof e.es === 'string') attribution[k] = { en: l, es: e.es, source: id, ...(e.review ? { review: e.review } : {}) };
+    }
+  }
+  const stats = { translated: Object.keys(strings).length, keep: keep.length, identity, missing: missingKeys.length, missingKeys, attribution: Object.keys(attribution).length };
 
   const gates = [
     gate('pr-periods', periods.problems, `every period (${Object.keys(index.sources || {}).length} sources, ${(index.scales || []).length} scales), window span and ${periods.labels} context labels rebuilt from their fields`),
@@ -258,6 +319,7 @@ export function buildPricesText({ json, bin, source, schoolsSource, landingCommi
     gate('pr-es-shared', sharedProblems(source, schoolsSource), 'a string the schools text translates has the same Spanish (SD18)'),
     gate('pr-es-licences', priceLicenceProblems(source, display, index), `${keep.length} names and licences kept in English; attribution lines verbatim`),
     gate('pr-es-glossary', glossaryProblems(source), `${(source.glossary?.terms || []).length} glossary terms; names in capitals kept`),
+    gate('pr-es-attribution', attributionTextProblems(source, index, display), `${Object.keys(attribution).length} disclaimer line(s) with Spanish beside the verbatim English (${Object.values(attribution).map(e => e.source).join(', ') || 'none'}); every other attribution line English only`),
   ];
   const enOf = new Map([...display.keys()].map(en => [textKey(en), en]));
   if (strictEs) gates.push(gate('pr-es-complete', missingKeys.map(k => `missing ${k}: ${show(enOf.get(k))}`), 'every display string translated (--strict-es)'));
@@ -266,7 +328,7 @@ export function buildPricesText({ json, bin, source, schoolsSource, landingCommi
     version: PRICES_TEXT_VERSION, language: source.language || PRICES_TEXT_LANGUAGE, hash: HASH_RULE,
     forPack: { landingCommit, indexSha256: sha256(Buffer.from(json)), binSha256: sha256(bin) },
     textCommit,
-    strings, keep, values: {}, display: all, stats,
+    strings, keep, values: {}, attribution, display: all, stats,
   };
   const text = `${JSON.stringify(doc, null, 1)}\n`;
   return {

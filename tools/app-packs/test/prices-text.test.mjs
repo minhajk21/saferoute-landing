@@ -12,6 +12,7 @@ import { REPO } from '../lib/landing.mjs';
 import { textKey, readTextSource, TEXT_SOURCES } from '../lib/schools-text.mjs';
 import {
   displayStrings, buildPricesText, priceWordProblems, moneyProblems, sharedProblems, stopProblems, oneForm, PRICES_TEXT_GATES, KEEP_KINDS, attributionLines,
+  attributionTextProblems,
 } from '../lib/prices-text.mjs';
 import { periodProblems } from '../lib/prices-periods.mjs';
 import { realPrices, LANDING } from './helpers.mjs';
@@ -47,7 +48,7 @@ const withIndex = (b, fn) => {
 
 // ── the real pack ───────────────────────────────────────────────────────────
 test('real pack: every gate passes, nothing is missing, names and licences stay English', async () => {
-  const { b, display, source, schools } = await real();
+  const { b, index, display, source, schools } = await real();
   const r = run(b, source, schools, { strictEs: true });
   assert.deepEqual(r.gates.map(g => g.name), [...PRICES_TEXT_GATES, 'pr-es-complete']);
   for (const g of r.gates) assert.ok(g.ok, `${g.name}: ${g.problems.slice(0, 3).join(' | ')}`);
@@ -59,9 +60,23 @@ test('real pack: every gate passes, nothing is missing, names and licences stay 
   // The kept strings are exactly the names, publishers, credits and licences.
   for (const [en, e] of display) assert.equal(doc.keep.includes(textKey(en)), e.kinds.every(x => KEEP_KINDS.includes(x)), en);
   assert.deepEqual(doc.values, {});
-  // The shape the app's one loader reads (as schools.es.json's).
-  assert.deepEqual(Object.keys(doc), ['version', 'language', 'hash', 'forPack', 'textCommit', 'strings', 'keep', 'values', 'display', 'stats']);
+  // The shape the app's one loader reads (as schools.es.json's), plus the
+  // Spanish beside a disclaimer line, which that loader does not read.
+  assert.deepEqual(Object.keys(doc), ['version', 'language', 'hash', 'forPack', 'textCommit', 'strings', 'keep', 'values', 'attribution', 'display', 'stats']);
   assert.equal(doc.language, 'es-MX');
+  // Hennepin County's disclaimer (its second attribution line) has Spanish
+  // beside it, and is still no display string; no other line has any.
+  const hen = index.sources['hennepin-sales'].attribution;
+  assert.equal(hen.length, 2);
+  assert.match(hen[1], /^Hennepin County’s disclaimer for its GIS open data: “This data \(i\) is furnished ‘AS IS’/);
+  assert.deepEqual(Object.keys(doc.attribution), [textKey(hen[1])]);
+  const d = doc.attribution[textKey(hen[1])];
+  assert.equal(d.en, hen[1]);
+  assert.equal(d.source, 'hennepin-sales');
+  assert.match(d.es, /^Aviso de exención de responsabilidad del condado de Hennepin .*‘TAL CUAL’ \(AS IS\).* sin garantía de ningún tipo/);
+  assert.match(d.review, /native review/);
+  assert.equal(doc.stats.attribution, 1);
+  assert.ok(!display.has(hen[1]) && !doc.display.includes(textKey(hen[1])) && !doc.strings[textKey(hen[1])]);
 });
 
 test('the display paths: what PriceDataText shows, never an attribution line or a period', async () => {
@@ -163,6 +178,47 @@ test('pr-es-shared, pr-es-licences, pr-es-keys, pr-es-orphans, pr-es-form, pr-es
   failsGate(run(b, s, schools), 'pr-es-glossary', /MSOA \(a name\) is missing/);
   s = copy(source); entry(s, 'census tract').es = 'distrito censal';
   failsGate(run(b, s, schools), 'pr-es-glossary', /"census tract" should be "sector censal"/);
+});
+
+test('pr-es-attribution: only a disclaimer line, of its own source in this pack, under the display text\'s rules', async () => {
+  const { b, index, display, source, schools } = await real();
+  const hen = index.sources['hennepin-sales'].attribution;
+  const k = textKey(hen[1]);
+  const att = (s, f) => { f(s.attribution[k]); return s; };
+  // No section at all: nothing beside any line, and the gate passes.
+  let s = copy(source); delete s.attribution;
+  let r = run(b, s, schools);
+  assert.ok(r.gates.every(g => g.ok));
+  assert.deepEqual(JSON.parse(r.text).attribution, {});
+  assert.deepEqual(attributionTextProblems({}, index, display), []);
+  // A credit line is not a disclaimer: it stays verbatim English (HD12).
+  s = copy(source); s.attribution[textKey(hen[0])] = { en: hen[0], es: 'Fuente: el condado de Hennepin.', source: 'hennepin-sales', kind: 'disclaimer' };
+  failsGate(run(b, s, schools), 'pr-es-attribution', /is not a disclaimer/);
+  // A line the pack does not have (a refreshed or reworded disclaimer), or
+  // another source's: an orphan.
+  s = copy(source); const old = hen[1].replace('Hennepin County shall', 'The County shall');
+  s.attribution[textKey(old)] = { ...s.attribution[k], en: old }; delete s.attribution[k];
+  failsGate(run(b, s, schools), 'pr-es-attribution', /orphaned attribution .* is not an attribution line of hennepin-sales/);
+  failsGate(run(b, att(copy(source), e => { e.source = 'charlotte-sales'; }), schools), 'pr-es-attribution', /not an attribution line of charlotte-sales/);
+  failsGate(run(b, att(copy(source), e => { e.source = 'denver-sales'; }), schools), 'pr-es-attribution', /is not a source of this pack/);
+  // Keys and form.
+  s = copy(source); s.attribution['0000000000000000'] = s.attribution[k]; delete s.attribution[k];
+  failsGate(run(b, s, schools), 'pr-es-attribution', /not the hash of its English/);
+  failsGate(run(b, att(copy(source), e => { e.es = ` ${e.es}`; }), schools), 'pr-es-attribution', /es has edge whitespace/);
+  failsGate(run(b, att(copy(source), e => { e.es = e.es.replace('TAL CUAL', '<b>TAL CUAL</b>'); }), schools), 'pr-es-attribution', /<b> runs in English/);
+  failsGate(run(b, att(copy(source), e => { e.kind = 'credit'; }), schools), 'pr-es-attribution', /kind "credit"/);
+  // The display text's words, money and glossary rules.
+  failsGate(run(b, att(copy(source), e => { e.es = e.es.replace('Estos datos (i)', 'Usted acepta que estos datos (i)'); }), schools), 'pr-es-attribution', /formal "usted"/);
+  failsGate(run(b, att(copy(source), e => { e.es = e.es.replace('sin garantía', 'sin aval'); }), schools), 'pr-es-attribution', /"warranty \(deed\)" should be "\(escritura de\) garantía"/);
+  failsGate(run(b, att(copy(source), e => { e.es = e.es.replace(' GIS:', ' SIG:'); }), schools), 'pr-es-attribution', /GIS \(a name\) is missing/);
+  failsGate(run(b, att(copy(source), e => { e.es = e.es.replace(' (AS IS)', ''); }), schools), 'pr-es-attribution', /AS \(a name\) is missing/);
+  failsGate(run(b, att(copy(source), e => { e.es = e.es.replace('ningún daño', 'ningún daño de más de 1,000 $'); }), schools), 'pr-es-attribution', /numbers/);
+  // In `strings` instead, it is display text that no display path shows, and
+  // a translated attribution line: the old gates refuse it as before.
+  s = copy(source); s.strings[k] = { en: hen[1], es: s.attribution[k].es };
+  r = run(b, s, schools);
+  assert.match(r.gates.find(g => g.name === 'pr-es-licences').problems.join('\n'), /attribution stays verbatim/);
+  assert.match(r.gates.find(g => g.name === 'pr-es-attribution').problems.join('\n'), /also in strings/);
 });
 
 // ── missing text ────────────────────────────────────────────────────────────
