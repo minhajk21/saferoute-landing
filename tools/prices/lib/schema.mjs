@@ -301,6 +301,9 @@ export async function loadSource(path) {
   if (!CADENCES.includes(s.cadence)) bad(`cadence "${s.cadence}" (want ${CADENCES.join(' | ')})`);
   if (typeof s.fetch !== 'function') bad('no fetch(ctx)');
   if (s.probe != null && typeof s.probe !== 'function') bad('probe, when given, must be a function');
+  // What fetch() stamps into meta.attribution beyond "data as of" dates; left
+  // out when a snapshot's meta is compared with the module's (lib/module-meta.mjs).
+  if (s.stamps != null && (!Array.isArray(s.stamps) || s.stamps.some(r => !(r instanceof RegExp) || !r.global))) bad('stamps, when given, must be a list of global (/…/g) regular expressions');
   if (kind === 'point-sales' && !/^[a-z][a-z0-9-]*$/.test(s.geometry || '')) bad('geometry must name the source whose areas its sales are aggregated onto (e.g. "acs-tract")');
   if (kind !== 'point-sales' && s.geometry != null) bad('geometry is for point-sales sources only');
   const mp = metaProblems(s.meta, kind);

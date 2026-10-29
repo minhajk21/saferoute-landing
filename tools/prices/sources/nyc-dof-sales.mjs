@@ -478,5 +478,11 @@ export default {
   cadence: 'monthly',            // DOF reissues the rolling file each month; the build fetches every run
   geometry: 'acs-tract',         // aggregated onto acs-tract's NYC tract polygons
   meta,
+  // What fetch() stamps into meta.attribution (metaFor's facts) besides each
+  // data set's "data as of" date: the annualized workbooks the window needed,
+  // and PLUTO's release. A snapshot's meta is compared with this module's
+  // without them (lib/module-meta.mjs), so a build that keeps NYC's snapshot
+  // does not report its meta as changed.
+  stamps: [/ and Annualized Sales \d{4} \([^()]*\)/g, /(?<=\bPLUTO) \w+(?= \()/g],
   fetch: ctx => fetchSales(ctx),
 };

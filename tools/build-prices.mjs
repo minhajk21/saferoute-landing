@@ -85,8 +85,9 @@ import { fileURLToPath } from 'node:url';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { makeCtx, loadRegions, politeFetch, UA, RAW_DIR as DEFAULT_RAW_DIR } from './prices/lib/ctx.mjs';
-import { INDEX_VERSION, FIELDS, SOURCES_DIR, ENTRY_BUILD_KEYS, loadSources, prepareAreas, areaProblems, entryProblems, isColoured, isUnpublished, isSales, kindOf } from './prices/lib/schema.mjs';
+import { INDEX_VERSION, FIELDS, SOURCES_DIR, loadSources, prepareAreas, areaProblems, entryProblems, isColoured, isUnpublished, isSales, kindOf } from './prices/lib/schema.mjs';
 import { buildSaleAreas, isCovered } from './prices/lib/sales.mjs';
+import { metaOf, metaDiffers } from './prices/lib/module-meta.mjs';
 import { bboxIntersects } from './prices/lib/geo.mjs';
 import { computeBreaks } from './prices/lib/scale.mjs';
 import { BASE, MAX_AREAS, MAX_BYTES, MIN_CELL, tileAreas, tileJson, tileStats, writeOutput, readAreasFromTiles, removeLeftovers } from './prices/lib/tiles.mjs';
@@ -121,18 +122,11 @@ const today = () => new Date().toISOString().slice(0, 10);
 const violations = [];
 const violate = m => violations.push(m);
 
-// Fields of index.json sources[id] that describe a build, not the source.
-const BUILD_KEYS = ENTRY_BUILD_KEYS;
-const metaOf = m => Object.fromEntries(Object.entries(m).filter(([k]) => !BUILD_KEYS.includes(k)));
-// A sale source's meta as its module states it: without what the build adds
-// (its period and window dates, and the area noun and privacy note it fills
-// in), so a snapshot's meta can be compared with the module's.
-const moduleMeta = (m, src) => {
-  if (!isSales(src)) return metaOf(m);
-  const { period, areaNoun, window: w, notes, ...rest } = metaOf(m);
-  const { from, to, span, ...win } = w || {};
-  return { ...rest, window: { ...win, lagMonths: win.lagMonths || 0 } };
-};
+// metaOf: a source's index entry without the fields that describe a build
+// (ENTRY_BUILD_KEYS). metaDiffers: whether a snapshot's meta is still what its
+// module states, leaving out what the build adds and the attribution's
+// fetch-time stamps ("data as of" dates and a module's own `stamps`):
+// lib/module-meta.mjs.
 
 // ── what a source's areas are made from, besides upstream data ─────────────
 // Bump PIPELINE whenever code every source shares changes what a fetched area
@@ -479,7 +473,7 @@ const run = async () => {
       used = prevMeta ? prevMeta.inputs ?? null : inputs;
       Object.assign(stats.dropped, prevMeta?.stats?.dropped || {});
       if (prevMeta?.stats?.sales) stats.sales = { ...prevMeta.stats.sales };
-      if (prevMeta && JSON.stringify(moduleMeta({ ...src.meta }, src)) !== JSON.stringify(moduleMeta(meta, src))) {
+      if (prevMeta && metaDiffers(src, meta)) {
         warn(`${src.id}: sources/${src.id}.mjs meta differs from the published build's; it applies when the source is next fetched`);
       }
       for (const a0 of snapshot) {
