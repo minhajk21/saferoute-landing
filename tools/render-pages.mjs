@@ -25,6 +25,7 @@ import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { realTimeOfDay } from './time-of-day.mjs';
+import { mostReported } from './most-reported.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://safe-route.app';
@@ -1469,8 +1470,12 @@ function makeProse(a, ctx) {
   const { cfg, bySlug, rankOf, median, count, windowDays, cityYm, lateral } = ctx;
   const rank = rankOf.get(a.slug);
   const diff = a.safetyScore - median;
-  const top = (a.breakdown || [])[0];
+  // The largest by count, not the backend's first (count x severity weight):
+  // the copy below calls it the largest category and the most common crime.
+  const top = mostReported(a.breakdown)[0];
   const topShare = top ? Math.round(100 * top.count / Math.max(1, a.totalIncidents)) : 0;
+  // The table's "Other" is a row label; in a sentence it reads "is other (31%".
+  const topName = top ? (top.category === 'other-crime' ? 'Other crime' : catName(top.category)) : '';
   // Null unless the feed has real incident times, so `when` stays empty and
   // the "safe at night?" answer quotes no share for date-only and report-time
   // feeds (see time-of-day.mjs).
@@ -1529,12 +1534,23 @@ function makeProse(a, ctx) {
   const period = span ? `over ${span} to ${monthName(cityYm)}` : `(data through ${monthName(cityYm)})`;
   const lead = `${bandLead} Its SafeRoute safety index is <strong>${a.safetyScore} out of 100</strong> — ${cmp}, ranking ${ord(rank)} of ${count} ${cfg.rankPool} — based on ${fmt(a.totalIncidents)} incidents ${cfg.reportedTo} within 1 km of the ${cfg.areaWord} ${cfg.centre} ${period}.${sparse}${thin}`;
 
+  // Three wordings, because "not violent" is not "property": every top that was
+  // not violent used to get "Most of what's reported here is property-related",
+  // so 124 pages said it of other, public order or drugs — and by count,
+  // anti-social behaviour leads 99 more. The property wording also claims MOST,
+  // so it needs property categories to be over half the incidents, which 132
+  // pages with a property category on top do not have.
   let mix = '';
   if (top) {
     const violent = ['violent-crime', 'robbery', 'sexual-offences', 'possession-of-weapons'].includes(top.category);
+    const property = ['burglary', 'vehicle-crime', 'other-theft', 'shoplifting', 'bicycle-theft', 'theft-from-the-person', 'criminal-damage-arson'];
+    const propertyShare = (a.breakdown || []).filter(c => property.includes(c.category))
+      .reduce((s, c) => s + c.count, 0) / Math.max(1, a.totalIncidents);
     mix = violent
-      ? `The largest ${cfg.recordedWord ?? 'reported'} category here is <strong>${catName(top.category).toLowerCase()}</strong> (${topShare}% of ${cfg.reportsNoun ?? 'reports'}) — worth taking seriously when walking at night; the full mix is broken down below.`
-      : `Most of ${cfg.whatReported ?? "what's reported"} here is property-related — <strong>${catName(top.category).toLowerCase()}</strong> alone is ${topShare}% of ${cfg.reportsNoun ?? 'reports'} — rather than violence against strangers, though the full mix below is worth a look.`;
+      ? `The largest ${cfg.recordedWord ?? 'reported'} category here is <strong>${topName.toLowerCase()}</strong> (${topShare}% of ${cfg.reportsNoun ?? 'reports'}) — worth taking seriously when walking at night; the full mix is broken down below.`
+      : property.includes(top.category) && propertyShare > 0.5
+        ? `Most of ${cfg.whatReported ?? "what's reported"} here is property-related — <strong>${topName.toLowerCase()}</strong> alone is ${topShare}% of ${cfg.reportsNoun ?? 'reports'} — rather than violence against strangers, though the full mix below is worth a look.`
+        : `The largest ${cfg.recordedWord ?? 'reported'} category here is <strong>${topName.toLowerCase()}</strong> (${topShare}% of ${cfg.reportsNoun ?? 'reports'}); the full mix is broken down below.`;
   }
 
   let when = '';
@@ -1567,7 +1583,7 @@ function makeProse(a, ctx) {
     {
       q: `What is the most common crime in ${a.name}?`,
       a: top
-        ? `${catName(top.category)} — ${fmt(top.count)} of ${fmt(a.totalIncidents)} incidents (${topShare}%) ${cfg.recordedWord ?? 'reported'} within 1 km of the ${cfg.areaWord} ${cfg.centre} ${span ? `over ${span} to` : 'through'} ${monthName(cityYm)}.`
+        ? `${topName} — ${fmt(top.count)} of ${fmt(a.totalIncidents)} incidents (${topShare}%) ${cfg.recordedWord ?? 'reported'} within 1 km of the ${cfg.areaWord} ${cfg.centre} ${span ? `over ${span} to` : 'through'} ${monthName(cityYm)}.`
         : `No dominant category in the current data.`,
     },
     {
@@ -1879,7 +1895,9 @@ function renderCity(citySlug) {
         mainEntity: p.faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
     ];
 
-    const catRows = (a.breakdown || []).slice(0, 6).map(c => {
+    // The six with the most incidents, as the counts and share bars beside them
+    // say; the backend's order (count x weight) put SoHo's 528 above its 607.
+    const catRows = mostReported(a.breakdown).slice(0, 6).map(c => {
       const share = Math.round(100 * c.count / Math.max(1, a.totalIncidents));
       return `<tr><td>${esc(catName(c.category))}</td><td style="width:38%"><div class="sharebar"><i style="width:${share}%"></i></div></td><td class="n">${fmt(c.count)} · ${share}%</td></tr>`;
     }).join('');

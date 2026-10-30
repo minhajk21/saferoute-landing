@@ -828,6 +828,12 @@ const BAND = { low:'Low risk', moderate:'Moderate', elevated:'Elevated', high:'H
 const bandOf = b => BAND[b] ? b : 'moderate';
 const CAT = { 'violent-crime':'Violent crime','sexual-offences':'Sexual offences','robbery':'Robbery','possession-of-weapons':'Weapons','burglary':'Burglary','criminal-damage-arson':'Damage & arson','public-order':'Public order','theft-from-the-person':'Theft from a person','drugs':'Drugs','anti-social-behaviour':'Anti-social behaviour','vehicle-crime':'Vehicle crime','other-theft':'Other theft','other-crime':'Other','shoplifting':'Shoplifting','bicycle-theft':'Bicycle theft' };
 const catName = c => CAT[c] || c.replace(/-/g,' ').replace(/^./,x=>x.toUpperCase());
+// Most reported first, as the counts beside the names say. The backend sends
+// the breakdown by count x severity weight; equal counts keep that order (the
+// more severe first), then go by id, so a list never depends on the order the
+// incidents arrived in. The /safety/ pages (tools/most-reported.mjs) and the
+// app (MostReported.swift) read the same way.
+function byCount(a, b) { return (b.count - a.count) || ((b.weight || 0) - (a.weight || 0)) || (a.category < b.category ? -1 : a.category > b.category ? 1 : 0); }
 
 // ── Recent 911 calls, where a city's dispatch feed earns it ──
 // Served by /public/recent: seven US cities, each with its OWN window — a day
@@ -3527,7 +3533,7 @@ function render(d, name, address){
     return;
   }
   const b = bandOf(d.band);
-  const cats = (d.breakdown||[]).slice().sort((a,c)=>c.count-a.count).slice(0,5);
+  const cats = (d.breakdown||[]).slice().sort(byCount).slice(0,5);
   const maxCat = Math.max(1,...cats.map(c=>c.count));
   // Both readings built from incident times, the chart and the "Right now"
   // score, show only when the feed's own flag says those times are real (the
@@ -3662,7 +3668,7 @@ function drawHex(d){
   const cLat=d.lat, cLng=d.lng, cos=Math.cos(cLat*Math.PI/180), S3=Math.sqrt(3);
   const toM=(lat,lng)=>[(lng-cLng)*111320*cos,(lat-cLat)*111320];
   const toLL=(x,y)=>[cLat+y/111320, cLng+x/(111320*cos)];
-  const bins=new Map();
+  const bins=new Map(), sev=Object.fromEntries((d.breakdown||[]).map(c=>[c.category,c.weight]));
   for(const p of (d.incidents||[])){
     const [x,y]=toM(p.lat,p.lng);
     const [q,r]=hexRound((S3/3*x - 1/3*y)/HEX_M, (2/3*y)/HEX_M);
@@ -3682,8 +3688,9 @@ function drawHex(d){
     poly.on('mouseover', function(){ this.setStyle({weight:1.6, opacity:1, color:'#14564C'}); });
     poly.on('mouseout',  function(){ this.setStyle(rest); });
     // Click a hex → what was reported in that block, by category.
-    const top=Object.entries(b.cats).sort((x,y)=>y[1]-x[1]);
-    const rows=top.map(([c,n])=>`<div class="hexpop"><span>${catName(c)}</span><span>${n}</span></div>`).join('');
+    // Equal counts go by the area's severity, as its breakdown carries it.
+    const top=Object.entries(b.cats).map(([category,count])=>({category,count,weight:sev[category]})).sort(byCount);
+    const rows=top.map(({category:c,count:n})=>`<div class="hexpop"><span>${catName(c)}</span><span>${n}</span></div>`).join('');
     poly.bindPopup(`<b>${b.n}</b> report${b.n===1?'':'s'} in this block${rows?`<div style="margin-top:6px">${rows}</div>`:''}`, { maxWidth:240 });
     hexes.push(poly);
   }
