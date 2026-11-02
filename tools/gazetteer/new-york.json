@@ -3,7 +3,7 @@
  "citySlug": "new-york",
  "country": "US",
  "source": "NYC Open Data — 2020 Neighborhood Tabulation Areas (9nt8-h7nd), residential (ntatype 0)",
- "generatedAt": "2026-10-02",
+ "generatedAt": "2026-11-02",
  "areas": [
   {
    "name": "Allerton",
@@ -640,7 +640,7 @@
    "slug": "douglaston-little-neck",
    "borough": "Queens",
    "nta": "QN1103",
-   "lat": 40.763667,
+   "lat": 40.763668,
    "lng": -73.736875,
    "neighbors": [
     "bayside",
@@ -911,7 +911,7 @@
    "borough": "Queens",
    "nta": "QN0401",
    "lat": 40.7394,
-   "lng": -73.879112,
+   "lng": -73.879111,
    "neighbors": [
     "corona",
     "jackson-heights",
@@ -1001,7 +1001,7 @@
    "borough": "Queens",
    "nta": "QN0707",
    "lat": 40.760213,
-   "lng": -73.831584,
+   "lng": -73.831583,
    "neighbors": [
     "murray-hill-broadway-flushing",
     "east-flushing",
@@ -1540,8 +1540,8 @@
    "slug": "lower-east-side",
    "borough": "Manhattan",
    "nta": "MN0302",
-   "lat": 40.716968,
-   "lng": -73.983838,
+   "lat": 40.716967,
+   "lng": -73.983833,
    "neighbors": [
     "chinatown-two-bridges",
     "east-village",
