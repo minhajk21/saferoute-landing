@@ -149,6 +149,14 @@
   @media(max-width:1080px){.cards-4{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:560px){.cards-4{grid-template-columns:1fr}}
 
+  /* On the walk: the Watch shot overlaps the phone's lower right corner. It
+     stays inside the column on a phone so the page never scrolls sideways. */
+  .walk-media{position:relative}
+  .watch{position:absolute;right:-38px;bottom:64px;width:min(150px,34vw);border-radius:38px;padding:7px;
+    background:linear-gradient(160deg,#2A3644,#141B24);border:1px solid rgba(255,255,255,.09);
+    box-shadow:0 30px 60px -18px rgba(0,0,0,.9)}
+  .watch img{display:block;width:100%;height:auto;border-radius:31px}
+  @media(max-width:560px){.watch{right:-8px;bottom:40px}}
   /* ---------- coverage ---------- */
   .cov{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:40px}
   .cov-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px}
@@ -218,7 +226,7 @@
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <div class="eyebrow reveal" style="--i:0">Version 1.4 — schools, home values</div>
+        <div class="eyebrow reveal" style="--i:0">Version 1.4.1 — schools, home values</div>
         <h1 class="h1-hero reveal" style="--i:1">See your street<br><span class="grad">before you walk it.</span></h1>
         <p class="lede reveal" style="--i:2">
           SafeRoute scores any address from official police and dispatch data, plans walking routes
@@ -278,12 +286,13 @@
 <section class="sec" id="new" style="border-top:none">
   <div class="wrap">
     <div class="reveal" style="max-width:62ch">
-      <div class="eyebrow">New in 1.4</div>
+      <div class="eyebrow">New in 1.4 and 1.4.1</div>
       <h2>Schools and home values, on the Nearby map.</h2>
       <p class="lede" style="margin-top:18px">
-        Open the full-screen map from Nearby and switch on Schools or Home
-        values. School and home-value data is built into the app, so it isn't
-        downloaded as you browse.
+        On Nearby, tap Schools or Home values under the crime heatmap to open
+        the full-screen map on that layer; Home values also opens the details
+        of the area you're looking at. School and home-value data is built into
+        the app, so it isn't downloaded as you browse.
       </p>
     </div>
     <div class="cards cards-2">
@@ -419,20 +428,72 @@
           a 0–100 safety index, what's actually reported nearby, when incidents
           cluster by time of day, and the 24-hour places you could walk into.
         </p>
+        <!-- Lit and dark: the app's route row (RouteResultsList, 1.4.1) shows
+             "% LIT", "% DARK" from 15% and "% UNVERIFIED" from 30%, from
+             OpenStreetMap's lit tags; an untagged street is never counted as
+             lit (backend lighting.js: unknown is reported, never guessed).
+             Widget: SUBMISSION.md desc-en, "Area Safety widget". -->
         <div class="cards cards-2" style="margin-top:32px">
           <div class="card">
             <h3>Routes scored street by street</h3>
             <p>Every candidate walking route is scored on severity, proximity and time of day — then you pick.</p>
           </div>
           <div class="card">
+            <h3>Lit or dark</h3>
+            <p>Each route shows how much of it is lit and how much is dark, from OpenStreetMap's street-lighting records. A street with no record shows as unverified, never as lit.</p>
+          </div>
+          <div class="card">
             <h3>Share your walk</h3>
             <p>Send a live link so someone can watch you get home, with turn-by-turn on iPhone, iPad and Watch. From version 1.4, when the app detects you've arrived, sharing stops and the page says so.</p>
+          </div>
+          <div class="card">
+            <h3>On your Home Screen</h3>
+            <p>The Area Safety widget puts the safety index for wherever you are on your Home Screen or Lock Screen, with what's been reported nearby.</p>
           </div>
         </div>
       </div>
       <div class="row-media reveal">
         <div class="phone"><img src="assets/shot-nearby.webp" width="620" height="1347" loading="lazy"
           alt="SafeRoute Nearby screen: a 23 out of 100 safety index for City of Westminster, a crime heatmap with Schools and Home values buttons, and a category breakdown"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ON THE WALK ══════════ -->
+<!-- Worded from the App Store text (SUBMISSION.md desc-en: "Apple Watch and
+     Live Activity", "Quick access to help"). The shots are the 1.4 App Store
+     pair taken in the same second (r4-screenshots/en-GB/07-navigation-london
+     and watch-01-navigation-glance, the Series 12 retake); 1.4.2 does not
+     retake either. 112 is "most other places", never "everywhere else". -->
+<section class="sec" id="walk">
+  <div class="wrap">
+    <div class="row flip">
+      <div class="reveal">
+        <div class="eyebrow">On the walk</div>
+        <h2>Your next turn on your wrist. Help one tap away.</h2>
+        <p class="lede" style="margin-top:18px">
+          Turn-by-turn walking directions on iPhone, iPad and Apple&nbsp;Watch,
+          with your next turn on the Lock Screen too.
+        </p>
+        <div class="cards cards-2" style="margin-top:32px">
+          <div class="card">
+            <h3>Apple Watch and Live Activity</h3>
+            <p>Your next turn, ETA and distance on your wrist, Lock Screen and Dynamic Island, with safety actions one swipe away on the Watch. Drift off your route and you get a discreet haptic and a banner.</p>
+          </div>
+          <div class="card">
+            <h3>Help, fast</h3>
+            <p>During a walk, your local emergency number is a tap away and confirmed before it dials: 999 in the UK; 911 in the US, Canada and Mexico; 112 in most other places. HELP finds the nearest hospital, police station or 24-hour shop. In the UK, the Strut Safe volunteer walk-home line is there too.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row-media reveal">
+        <div class="walk-media">
+          <div class="phone"><img src="assets/shot-nav.webp" width="620" height="1347" loading="lazy"
+            alt="SafeRoute turn-by-turn navigation in Soho, London: turn right in 150 m, with 999, Strut Safe and HELP buttons beside the map, 35 minutes and 2.9 km to go"></div>
+          <div class="watch"><img src="assets/shot-watch.webp" width="416" height="496" loading="lazy"
+            alt="The same walk on Apple Watch: turn right in 150 m, 35 minutes, 2.9 km left, and Swipe for safety"></div>
+        </div>
       </div>
     </div>
   </div>
