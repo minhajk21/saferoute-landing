@@ -291,7 +291,8 @@
       <p class="lede" style="margin-top:18px">
         On Nearby, tap Schools or Home values under the crime heatmap to open
         the full-screen map on that layer; Home values also opens the details
-        of the area you're looking at. School and home-value data is built into
+        of the area you're looking at, or says why it has no figure. School and
+        home-value data is built into
         the app, so it isn't downloaded as you browse.
       </p>
     </div>
@@ -429,10 +430,17 @@
           cluster by time of day, and the 24-hour places you could walk into.
         </p>
         <!-- Lit and dark: the app's route row (RouteResultsList, 1.4.1) shows
-             "% LIT", "% DARK" from 15% and "% UNVERIFIED" from 30%, from
-             OpenStreetMap's lit tags; an untagged street is never counted as
-             lit (backend lighting.js: unknown is reported, never guessed).
-             Widget: SUBMISSION.md desc-en, "Area Safety widget". -->
+             "% LIT", "% DARK" from 15% and "% UNVERIFIED" from 30%, and no
+             lighting at all when 90% or more of the route is unrecorded or
+             the lighting answer is null (lookup failed, copy unavailable).
+             The backend (lighting.js) matches each 40 m step to the nearest
+             way TAGGED lit or unlit within 25 m; a step with none is unknown,
+             never lit. So "no record nearby", not "no record": an untagged
+             street beside a lit one can count as lit.
+             Widget: no location of its own; it uses the last fix the app
+             recorded while open, if under a day old (AreaSafetyWidget.swift,
+             maxLocationAge; privacy policy section 03), so never "wherever
+             you are". -->
         <div class="cards cards-2" style="margin-top:32px">
           <div class="card">
             <h3>Routes scored street by street</h3>
@@ -440,7 +448,7 @@
           </div>
           <div class="card">
             <h3>Lit or dark</h3>
-            <p>Each route shows how much of it is lit and how much is dark, from OpenStreetMap's street-lighting records. A street with no record shows as unverified, never as lit.</p>
+            <p>Where OpenStreetMap records street lighting along a route, the route shows how much of it is lit and, when that's 15% or more, how much is dark. A stretch with no record nearby is never counted as lit, and with too few records, or when they can't be loaded, a route shows no lighting figures.</p>
           </div>
           <div class="card">
             <h3>Share your walk</h3>
@@ -448,7 +456,7 @@
           </div>
           <div class="card">
             <h3>On your Home Screen</h3>
-            <p>The Area Safety widget puts the safety index for wherever you are on your Home Screen or Lock Screen, with what's been reported nearby.</p>
+            <p>The Area Safety widget puts the safety index on your Home Screen or Lock Screen, with what's been reported nearby, for where you last used SafeRoute in the past day.</p>
           </div>
         </div>
       </div>
@@ -462,16 +470,24 @@
 
 <!-- ══════════ ON THE WALK ══════════ -->
 <!-- Worded from the App Store text (SUBMISSION.md desc-en: "Apple Watch and
-     Live Activity", "Quick access to help"). The shots are the 1.4 App Store
-     pair taken in the same second (r4-screenshots/en-GB/07-navigation-london
-     and watch-01-navigation-glance, the Series 12 retake); 1.4.2 does not
-     retake either. 112 is "most other places", never "everywhere else". -->
+     Live Activity", "Quick access to help"), checked against the app at
+     2f5b329. The shots are the 1.4 App Store pair:
+     r4-screenshots/en-GB/07-navigation-london (21 October) and
+     watch-01-navigation-glance (the Series 12 retake of 22 October), the same
+     route and figures but not the same second; 1.4.2 retakes neither.
+     Numbers (AppRegion.swift): 999 inside the UK outline, which includes the
+     Isle of Man (Jersey and Guernsey only from 1.4.2); 911 in our North
+     American cities, and elsewhere only when the iPhone's region is US, CA
+     or MX (from 1.3.8; support page section 02); 112 otherwise, so "most
+     other places", never "everywhere else". The 999 / Strut Safe / HELP
+     buttons sit behind a shield button (SafetyButtonsOverlay), so "tap the
+     shield", never "one tap". -->
 <section class="sec" id="walk">
   <div class="wrap">
     <div class="row flip">
       <div class="reveal">
         <div class="eyebrow">On the walk</div>
-        <h2>Your next turn on your wrist. Help one tap away.</h2>
+        <h2>Your next turn on your wrist. Help close at hand.</h2>
         <p class="lede" style="margin-top:18px">
           Turn-by-turn walking directions on iPhone, iPad and Apple&nbsp;Watch,
           with your next turn on the Lock Screen too.
@@ -483,7 +499,7 @@
           </div>
           <div class="card">
             <h3>Help, fast</h3>
-            <p>During a walk, your local emergency number is a tap away and confirmed before it dials: 999 in the UK; 911 in the US, Canada and Mexico; 112 in most other places. HELP finds the nearest hospital, police station or 24-hour shop. In the UK, the Strut Safe volunteer walk-home line is there too.</p>
+            <p>During a walk, tap the shield on the map for your local emergency number, confirmed before it dials: 999 in the UK and the Isle of Man; 911 in the US, Canadian and Mexican cities we cover, and elsewhere in North America if your iPhone's region is set to the US, Canada or Mexico; 112 in most other places. HELP, under the same shield, finds the nearest hospital, police station or 24-hour shop. In the UK, the Strut Safe volunteer walk-home line is there too.</p>
           </div>
         </div>
       </div>
