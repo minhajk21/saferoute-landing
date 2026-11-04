@@ -277,20 +277,26 @@
      (SafeRouteApp/release-1.4.2/DRAFT-1.4.2-store-and-review.md, hash-matched
      in SUBMITTED-2026-11-03.md). PUBLISH ONLY ONCE 1.4.2 IS LIVE: until then
      every card here describes something users of 1.4.1 do not have. The
-     pocket claim rests on the device check in DRAFT-1.4.2 ("The pocketed
-     walk on a phone ... is the real check"): the owner confirms it before
-     this goes up. No screenshot here on purpose: the widget shot carries a
+     scene-disconnect fix is proved on an iPad simulator only
+     (nav-reconnect-proof; SpringBoard refuses the disconnect on iPhone),
+     and the pocketed-walk device check was waived by the owner on
+     3 November ("build 36 is fine"), not run. So the page says what the
+     code does (a scene disconnect) and, unlike the store text, does not
+     lead with the pocket; add it back only after a pocketed walk on an
+     iPhone with 1.4.2. No screenshot here on purpose: the widget shot carries a
      safety score, and the next section holds the home-values card (house
-     rule in the next section's comment). -->
+     rule in the next section's comment). The Live section after it has the
+     alerts shot (a Lock Screen widget showing 21/100) as its THIRD row, not
+     next to the card; a reorder that moves that row up breaks the rule. -->
 <section class="sec" id="new" style="border-top:none">
   <div class="wrap">
     <div class="reveal" style="max-width:62ch">
       <div class="eyebrow">New in 1.4.2</div>
-      <h2>Your walk keeps going in your pocket.</h2>
+      <h2>Turn-by-turn that keeps going.</h2>
       <p class="lede" style="margin-top:18px">
-        If iOS disconnects SafeRoute's screen partway through a walk, for example
-        with your phone locked in a pocket, turn-by-turn guidance now carries on.
-        Before, it could stop until you opened SafeRoute again.
+        If iOS disconnects SafeRoute's screen partway through a walk,
+        turn-by-turn guidance now carries on. Before, it could stop until you
+        opened SafeRoute again.
       </p>
     </div>
     <div class="cards">
@@ -300,11 +306,11 @@
       </div>
       <div class="card reveal" style="--i:1">
         <h3>A new look for the crime map</h3>
-        <p>On Nearby, Plan and the large Home Screen widget, the crime shading now sits under the roads, so roads and place names show over it, and its quietest areas are a pale warm sand instead of green.</p>
+        <p>On Nearby, Plan and the large Home Screen widget, the crime shading now sits under the roads, so roads and place names show over it, and its quietest areas are a warm sand instead of green.</p>
       </div>
       <div class="card reveal" style="--i:2">
         <h3>A clearer widget</h3>
-        <p>The large widget's map now comes from Mapbox, in the same map style as the app, and shows the whole 1&nbsp;km area its figures count. Widgets list the most reported categories first.</p>
+        <p>The large widget's map now comes from Mapbox, in the same map style as the app's Nearby and Plan maps, and shows the whole 1&nbsp;km area its figures count. Widgets list the most reported categories first.</p>
       </div>
     </div>
     <p class="also-new reveal">
@@ -329,7 +335,7 @@
 <section class="sec" id="schools-values">
   <div class="wrap">
     <div class="reveal" style="max-width:62ch">
-      <div class="eyebrow">Since 1.4</div>
+      <div class="eyebrow">Since 1.4 and 1.4.1</div>
       <h2>Schools and home values, on the Nearby map.</h2>
       <p class="lede" style="margin-top:18px">
         On Nearby, tap Schools or Home values under the crime heatmap to open
