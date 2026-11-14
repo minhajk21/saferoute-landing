@@ -483,7 +483,8 @@
         <!-- Lit and dark: the app's route row (RouteResultsList, 1.4.1) shows
              "% LIT", "% DARK" from 15% and "% UNVERIFIED" from 30%, and no
              lighting at all when 90% or more of the route is unrecorded or
-             the lighting answer is null (lookup failed, copy unavailable),
+             the lighting answer is null (lookup failed, copy unavailable;
+             from 1.4.3 the row then reads LIGHTING UNKNOWN: RouteLightingLine, 580f430),
              and the whole row is hidden where the app has no crime data for
              the routes (crimeDataMissing, RouteResultsList L478).
              The backend (lighting.js) matches each 40 m step to the nearest
@@ -509,7 +510,7 @@
           </div>
           <div class="card">
             <h3>Lit or dark</h3>
-            <p>Where we have crime data for a route and OpenStreetMap records street lighting along it, the route shows how much of it is lit and, if 15% or more of it is dark, how much is dark. A stretch with no record nearby is never counted as lit, and with too few records, or when they can't be loaded, a route shows no lighting figures.</p>
+            <p>Where we have crime data for a route and OpenStreetMap records street lighting along it, the route shows how much of it is lit and, if 15% or more of it is dark, how much is dark. A stretch with no record nearby is never counted as lit, and with too few records, or when they can't be loaded, a route shows no lighting figures and, from version 1.4.3, says LIGHTING UNKNOWN.</p>
           </div>
           <div class="card">
             <h3>Share your walk</h3>
