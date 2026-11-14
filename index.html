@@ -226,7 +226,7 @@
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <div class="eyebrow reveal" style="--i:0">Version 1.4.2 — a new look for the crime map</div>
+        <div class="eyebrow reveal" style="--i:0">Version 1.4.3 — Area safety on Apple Watch</div>
         <h1 class="h1-hero reveal" style="--i:1">See your street<br><span class="grad">before you walk it.</span></h1>
         <p class="lede reveal" style="--i:2">
           SafeRoute scores any address from official police and dispatch data, plans walking routes
@@ -272,51 +272,53 @@
   </div></div>
 </div>
 
-<!-- ══════════ NEW IN 1.4.2 ══════════ -->
-<!-- Worded from the 1.4.2 What's New as submitted on 3 November 2026
-     (SafeRouteApp/release-1.4.2/DRAFT-1.4.2-store-and-review.md, hash-matched
-     in SUBMITTED-2026-11-03.md). PUBLISH ONLY ONCE 1.4.2 IS LIVE: until then
-     every card here describes something users of 1.4.1 do not have. The
-     scene-disconnect fix is proved on an iPad simulator only
-     (nav-reconnect-proof; SpringBoard refuses the disconnect on iPhone),
-     and the pocketed-walk device check was waived by the owner on
-     3 November ("build 36 is fine"), not run. So the page says what the
-     code does (a scene disconnect) and, unlike the store text, does not
-     lead with the pocket; add it back only after a pocketed walk on an
-     iPhone with 1.4.2. No screenshot here on purpose: the widget shot carries a
-     safety score, and the next section holds the home-values card (house
-     rule in the next section's comment). The Live section after it has the
-     alerts shot (a Lock Screen widget showing 21/100) as its THIRD row, not
-     next to the card; a reorder that moves that row up breaks the rule. -->
+<!-- ══════════ NEW IN 1.4.3 ══════════ -->
+<!-- Worded from the 1.4.3 What's New as submitted on 13 November 2026
+     (SafeRouteApp/release-1.4.3/DRAFT-1.4.3-store-and-review.md, hash-matched
+     in the 1.4.3 SUBMITTED record). PUBLISH ONLY ONCE 1.4.3 IS LIVE: until
+     then every card here describes something users of 1.4.2 do not have.
+     Never "live" (owner, 5 Nov 2026: "Area safety", not "live risk"; the
+     crime data covers weeks or months). The complication: "up to a few
+     minutes", never "4 minutes"; "or the Smart Stack" only if device check
+     DF6 keeps it. No screenshot here unless a Release-build Watch shot is
+     taken (store draft, "Screenshots"). The widget card says "a location
+     SafeRoute recorded on your iPhone or iPad in the past 24 hours", never
+     "where you last used SafeRoute", "follows you" or "wherever you are"
+     (the store own-up), and keeps the permission and 10-minute conditions. -->
 <section class="sec" id="new" style="border-top:none">
   <div class="wrap">
     <div class="reveal" style="max-width:62ch">
-      <div class="eyebrow">New in 1.4.2</div>
-      <h2>Turn-by-turn that keeps going.</h2>
+      <div class="eyebrow">New in 1.4.3</div>
+      <h2>Area safety on your wrist.</h2>
       <p class="lede" style="margin-top:18px">
-        If iOS disconnects SafeRoute's screen partway through a walk,
-        turn-by-turn guidance now carries on. Before, it could stop until you
-        opened SafeRoute again.
+        Between walks, open SafeRoute on Apple&nbsp;Watch to see the level of
+        reported crime in the 1&nbsp;km around you, and how long ago the watch
+        checked where you are.
       </p>
     </div>
     <div class="cards">
       <div class="card reveal" style="--i:0">
-        <h3>Guidance that carries on</h3>
-        <p>Spoken directions, the Live Activity, your Apple&nbsp;Watch, a walk you share with Live location, and arrival all keep going, without SafeRoute planning your route again.</p>
+        <h3>Area safety on Apple&nbsp;Watch</h3>
+        <p>A risk level and safety index like the Nearby tab's, compared with other parts of your city. You turn it on once on the watch, which first tells you what it sends, and you can turn it off there. It uses the watch's location only while SafeRoute is open on it, and your iPhone looks up the area.</p>
       </div>
       <div class="card reveal" style="--i:1">
-        <h3>A new look for the crime map</h3>
-        <p>On Nearby, Plan and the large Home Screen widget, the crime shading now sits under the roads, so roads and place names show over it, and its quietest areas are a warm sand instead of green.</p>
+        <h3>On your watch face</h3>
+        <p>Add Area safety to a watch face or the Smart Stack to see the latest answer your watch holds for up to a few minutes. It doesn't check by itself: tap it to open SafeRoute and check again.</p>
       </div>
       <div class="card reveal" style="--i:2">
-        <h3>A clearer widget</h3>
-        <p>The large widget's map now comes from Mapbox, in the same map style as the app's Nearby and Plan maps, and shows the whole 1&nbsp;km area its figures count. The medium and large widgets list the most reported categories first.</p>
+        <h3>A 24-hour limit for the Area Safety widget</h3>
+        <p>The Area Safety widget now shows a score only for the area around a location SafeRoute recorded on your iPhone or iPad in the past 24 hours. If SafeRoute may use your location, it now records it each time you come back to the app, unless the last location it recorded is under 10 minutes old, or it asked iOS for one for the widget in the last 10 minutes. Up to 1.4.2, after a day the widget went on showing the last area with a score that the app or the widget had checked, which could be a place you had only searched for.</p>
       </div>
     </div>
     <p class="also-new reveal">
-      Also in 1.4.2: in the Channel Islands, SafeRoute now offers 999, the
-      islands' emergency number, instead of 112; and starting navigation no
-      longer crashes when Mapbox's routing service has a server error.
+      Also in 1.4.3: route cards with crime data say LIGHTING UNKNOWN once our
+      lighting check finds no usable figure for the route, and Find Help on
+      iPhone tells you after 20 seconds, not up to a minute, when it gets no
+      answer. An iPhone whose region is set to Puerto Rico, the US Virgin
+      Islands, Guam, the Northern Mariana Islands or American Samoa now counts
+      as set to the US for the emergency number, and an iPhone set to the US
+      or one of those territories is now offered 911 in Guam, the Northern
+      Mariana Islands and American Samoa.
     </p>
   </div>
 </section>
@@ -488,13 +490,18 @@
              way TAGGED lit or unlit within 25 m; a step with none is unknown,
              never lit. So "no record nearby", not "no record": an untagged
              street beside a lit one can count as lit.
-             Widget: no location of its own; it asks for a reading for the
-             last fix the app recorded while open, if under a day old
-             (AreaSafetyWidget.swift, maxLocationAge; privacy policy section
-             03). Past a day, or with no fix, it keeps drawing the last cached
-             reading, which the app writes for every area check, a searched
-             area included. So "the last area SafeRoute checked, usually
-             where you last opened the app", never "wherever you are". -->
+             Widget: no location of its own. From 1.4.3 (8a035d2): a reading only while the app's last fix is
+             under 24 h old (WidgetRequestPolicy.hasRecentFix), then "Open SafeRoute to begin" with no reading
+             (the circular Lock Screen size: an empty gauge and "—"); the app records a fix on each return to
+             the foreground, if it may use the location, unless one, or its last widget request
+             (lastWidgetFixRequestAt), is under 10 min old (LocationService.refreshForWidgetOnReturn).
+             Up to 1.4.2 it kept drawing the last cached
+             reading past a day, which can be a searched area. So "the last location SafeRoute recorded on
+             your iPhone or iPad" (a walk records none as you go, only when you come back to the app,
+             which from 1.4.3 can be mid-walk, or when the watch's Find Help finds no fix from the last
+             minute; a Watch area check records none; and the widget also runs on iPad), never "where
+             you last used SafeRoute" or "wherever you are"; and the permission and 10-minute conditions
+             always go with "each time you come back". -->
         <div class="cards cards-2" style="margin-top:32px">
           <div class="card">
             <h3>Routes scored street by street</h3>
@@ -510,7 +517,8 @@
           </div>
           <div class="card">
             <h3>On your Home Screen</h3>
-            <p>The Area Safety widget puts a safety index on your Home Screen or Lock Screen, with what's been reported nearby. It has no location of its own, so it shows the last area SafeRoute checked, usually where you last opened the app.</p>
+            <p>The Area Safety widget puts a safety index on your Home Screen or Lock Screen, with what's been reported nearby. It has no location of its own. From version 1.4.3, it shows the area around the last location SafeRoute recorded on your iPhone or iPad: if SafeRoute may use your location, it records it each time you come back to the app, unless the last location it recorded is under 10 minutes old, or it asked iOS for one for the widget in the last 10 minutes. After a day with no new location, the widget shows no score and asks you to open the app (the round Lock Screen widget shows an empty dial with a dash instead). In versions before 1.4.3, after a day it goes on showing the last area with a score that the app or the widget checked, which can be a place you only looked up.</p>
+            <p class="note" style="margin-top:10px">Correction, 14 November 2026: until then this card said the widget shows the last area SafeRoute checked. That was not exact. While the last location the app recorded is under a day old, the widget checks the area around that location, never a place you look up afterwards; and in versions before 1.4.3, once that location is a day old, it shows the last area with a score that the app or the widget checked, which need not be the last area checked.</p>
           </div>
         </div>
       </div>
@@ -533,7 +541,9 @@
      includes the Isle of Man and, from 1.4.2, Jersey and Guernsey (with
      Alderney, Sark and Herm); 911 in our North American city boxes, and outside them only when the iPhone's region is
      US, CA or MX AND the walk is inside 14-84 N, 169-52 W (from 1.3.8;
-     support page section 02), so "most of the rest of North America"
+     support page section 02; from 1.4.3 also PR, VI, GU, MP, AS, and for
+     those and US, 911 in the Guam/Marianas and American Samoa boxes:
+     AppRegion.inUSPacificTerritory, 580f430), so "most of the rest of North America"
      (not Panama or Costa Rica, not Nuuk); 112 otherwise, so "most other
      places", never "everywhere else".
      Strut Safe: Fri-Sun evenings, London time (StrutSafeService); the
@@ -559,7 +569,7 @@
           </div>
           <div class="card">
             <h3>Help, fast</h3>
-            <p>During a walk, tap the shield on the map for your local emergency number, confirmed before it dials: 999 in the UK, the Isle of Man and the Channel Islands; 911 in the US, Canadian and Mexican cities we cover, and in most of the rest of North America if your iPhone's region is set to the US, Canada or Mexico; 112 in most other places. HELP, behind the same shield, finds the nearest hospital, police station or 24-hour shop. In the UK, the Strut Safe volunteer walk-home line is there too, on Friday to Sunday evenings.</p>
+            <p>During a walk, tap the shield on the map for your local emergency number, confirmed before it dials: 999 in the UK, the Isle of Man and the Channel Islands; 911 in the US, Canadian and Mexican cities we cover, and in most of the rest of North America if your iPhone's region is set to the US, Canada or Mexico (from version 1.4.3, also Puerto Rico, the US Virgin Islands, Guam, the Northern Mariana Islands or American Samoa), and, from version 1.4.3, in Guam, the Northern Mariana Islands and American Samoa if your iPhone's region is set to the US or one of those five; 112 in most other places. HELP, behind the same shield, finds the nearest hospital, police station or 24-hour shop. In the UK, the Strut Safe volunteer walk-home line is there too, on Friday to Sunday evenings.</p>
           </div>
         </div>
       </div>
